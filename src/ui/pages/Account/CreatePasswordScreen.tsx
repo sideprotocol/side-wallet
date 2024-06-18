@@ -1,7 +1,8 @@
+import { Checkbox } from 'antd';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate as useNavigateRouter } from 'react-router-dom';
 
-import { Button, Column, Content, Input, Layout, Text } from '@/ui/components';
+import { Button, Column, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useWallet, useWalletRequest } from '@/ui/utils';
 
@@ -11,6 +12,7 @@ type Status = '' | 'error' | 'warning' | undefined;
 
 export default function CreatePasswordScreen() {
   const navigate = useNavigate();
+  const navigateRouter = useNavigateRouter();
   const wallet = useWallet();
   const loc = useLocation();
   const params = new URLSearchParams(loc.search);
@@ -21,7 +23,7 @@ export default function CreatePasswordScreen() {
   if (params.size > 0) {
     params.forEach((value, key) => {
       state[key] = value;
-    })
+    });
   }
   const { isNewAccount, isKeystone } = state as { isNewAccount: boolean; isKeystone: boolean };
   const [password, setPassword] = useState('');
@@ -29,6 +31,7 @@ export default function CreatePasswordScreen() {
   const [password2, setPassword2] = useState('');
 
   const [disabled, setDisabled] = useState(true);
+  const [check, setCheck] = useState(false);
 
   const tools = useTools();
   const [run, loading] = useWalletRequest(wallet.boot, {
@@ -65,6 +68,10 @@ export default function CreatePasswordScreen() {
         return;
       }
 
+      if (!check) {
+        return;
+      }
+
       if (password2) {
         if (password === password2) {
           setDisabled(false);
@@ -72,7 +79,7 @@ export default function CreatePasswordScreen() {
         }
       }
     }
-  }, [password, password2]);
+  }, [password, password2, check]);
 
   const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!disabled && 'Enter' == e.key) {
@@ -81,34 +88,84 @@ export default function CreatePasswordScreen() {
   };
 
   return (
-    <Layout>
-      <Content preset="middle">
-        <Column fullX>
-          <Column gap="xl" mt="xxl">
-            <Text text="Create a password" preset="title-bold" textCenter />
-            <Text text="You will use this to unlock your wallet" preset="sub" textCenter />
-            <Input
-              preset="password"
-              onBlur={(e) => {
-                setPassword(e.target.value);
-              }}
-              autoFocus={true}
-            />
-            <Input
-              preset="password"
-              placeholder="Confirm Password"
-              onChange={(e) => {
-                setPassword2(e.target.value);
-              }}
-              onBlur={(e) => {
-                verify(e.target.value);
-              }}
-              onKeyUp={(e) => handleOnKeyUp(e)}
-            />
-            <Button disabled={disabled} text="Continue" preset="primary" onClick={btnClick} />
-          </Column>
-        </Column>
-      </Content>
+    <Layout
+      style={{
+        padding: '24px 16px'
+      }}>
+      <Column
+        style={{
+          flex: 1
+        }}>
+        <Header onBack={() => navigateRouter(-1)} title="Create Password"></Header>
+        <Text
+          text="Your password can unlock your wallet only this local device. if you forget your password,you will not be able to access your wallet on this decice."
+          style={{
+            opacity: 0.5,
+            fontSize: '12px',
+            lineHeight: '18px',
+            marginTop: '36px'
+          }}
+        />
+        <Text
+          text="Password"
+          style={{
+            marginTop: '32px',
+            color: '#828282',
+            fontSize: '14px',
+            lineHeight: '24px'
+          }}
+        />
+        <Input
+          preset="password"
+          onBlur={(e) => {
+            setPassword(e.target.value);
+          }}
+          autoFocus={true}
+        />
+        <Text
+          text="Confirm Password"
+          style={{
+            marginTop: '16px',
+            color: '#828282',
+            fontSize: '14px',
+            lineHeight: '24px'
+          }}
+        />
+        <Input
+          preset="password"
+          placeholder="Confirm Password"
+          onChange={(e) => {
+            setPassword2(e.target.value);
+          }}
+          onBlur={(e) => {
+            verify(e.target.value);
+          }}
+          onKeyUp={(e) => handleOnKeyUp(e)}
+        />
+        <Row
+          style={{
+            marginTop: '16px',
+            alignItems: 'center'
+          }}
+          justifyBetween>
+          <Text
+            text="I understand that I will not be able to access my wallet on this device if I forget my password"
+            style={{
+              color: '#fff',
+              opacity: 0.5,
+              fontSize: '12px',
+              lineHeight: '18px'
+            }}
+          />
+          <Checkbox
+            defaultChecked={check}
+            onChange={(e) => {
+              setCheck(e.target.checked);
+            }}
+          />
+        </Row>
+      </Column>
+      <Button disabled={disabled} text="Next" preset="primary" onClick={btnClick} />
     </Layout>
   );
 }

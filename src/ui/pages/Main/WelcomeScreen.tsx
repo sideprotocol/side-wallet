@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import { Button, Column, Image, Layout, Row } from '@/ui/components';
 import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 import { useWallet } from '@/ui/utils';
@@ -24,7 +23,7 @@ export default function WelcomeScreen() {
             flex: 1,
             alignItems: 'center'
           }}>
-          <Image src="./images/icons/wallet.svg" size={78} />
+          <Image src="./images/img/phone.png" size={174} />
         </Row>
         <Button
           text="Create new wallet"
@@ -39,7 +38,7 @@ export default function WelcomeScreen() {
           }}
         />
         <Button
-          text="I already have a wallet"
+          text="Import an existing wallet"
           preset="default"
           onClick={async () => {
             const isBooted = await wallet.isBooted();

@@ -1,10 +1,6 @@
 import { useMemo } from 'react';
 
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { Column } from '../Column';
-import { Icon } from '../Icon';
 import { Logo } from '../Logo';
 import { Row } from '../Row';
 import { Text } from '../Text';
@@ -13,13 +9,14 @@ import './index.module.less';
 interface HeaderProps {
   onBack?: () => void;
   title?: string;
+  leftTitle?: string;
   LeftComponent?: React.ReactNode;
   RightComponent?: React.ReactNode;
   children?: React.ReactNode;
 }
 
 export function Header(props: HeaderProps) {
-  const { onBack, title, LeftComponent, RightComponent, children } = props;
+  const { onBack, title, leftTitle, LeftComponent, RightComponent, children } = props;
 
   const CenterComponent = useMemo(() => {
     if (children) {
@@ -31,37 +28,38 @@ export function Header(props: HeaderProps) {
     }
   }, [title]);
   return (
-    <div style={{ display: 'block' }}>
-      <Row
-        justifyBetween
-        itemsCenter
-        style={{
-          height: '67.5px',
-          padding: 15
-        }}>
-        <Row full>
-          <Column selfItemsCenter>
-            {LeftComponent}
-            {onBack && (
-              <Row
-                onClick={(e) => {
-                  onBack();
-                }}>
-                <Icon>
-                  <FontAwesomeIcon icon={faArrowLeft} />
-                </Icon>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Row full>
+        <Column selfItemsCenter>
+          {LeftComponent}
+          {onBack && (
+            <Row
+              style={{
+                alignItems: 'center'
+              }}
+              onClick={(e) => {
+                onBack();
+              }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <path
+                  d="M20 8L12 16L20 24"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
 
-                <Text text="Back" preset="regular-bold" />
-              </Row>
-            )}
-          </Column>
-        </Row>
+              {leftTitle && <Text text={leftTitle} preset="regular-bold" />}
+            </Row>
+          )}
+        </Column>
+      </Row>
 
-        <Row itemsCenter>{CenterComponent}</Row>
+      <Row itemsCenter>{CenterComponent}</Row>
 
-        <Row full justifyEnd>
-          <Column selfItemsCenter>{RightComponent}</Column>
-        </Row>
+      <Row full justifyEnd>
+        <Column selfItemsCenter>{RightComponent}</Column>
       </Row>
     </div>
   );

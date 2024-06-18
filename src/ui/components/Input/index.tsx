@@ -54,14 +54,15 @@ const $baseContainerStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  backgroundColor: '#2a2626',
+  backgroundColor: '#1E1E1F',
   paddingLeft: 15.2,
   paddingRight: 15.2,
   paddingTop: 11,
   paddingBottom: 11,
-  borderRadius: 5,
-  minHeight: '46.5px',
-  alignSelf: 'stretch'
+  borderRadius: 10,
+  minHeight: '50px',
+  alignSelf: 'stretch',
+  border: '1px solid #FFFFFF33'
 };
 
 const $baseInputStyle: CSSProperties = Object.assign({}, $textPresets.regular, {
@@ -69,7 +70,7 @@ const $baseInputStyle: CSSProperties = Object.assign({}, $textPresets.regular, {
   flex: 1,
   borderWidth: 0,
   outlineWidth: 0,
-  backgroundColor: 'rgba(0,0,0,0)',
+  background: 'transparent',
   alignSelf: 'stretch'
 });
 
