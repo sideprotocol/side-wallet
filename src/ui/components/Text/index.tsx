@@ -14,7 +14,7 @@ export const $sizeStyles = {
   xl: { fontSize: 20, lineHeight: 'normal' } as CSSProperties,
   lg: { fontSize: 18, lineHeight: 'normal' } as CSSProperties,
   md: { fontSize: 16, lineHeight: 'normal' } as CSSProperties,
-  sm: { fontSize: 14, lineHeight: 'normal' } as CSSProperties,
+  sm: { fontSize: 14, lineHeight: 'none' } as CSSProperties,
   xs: { fontSize: 12, lineHeight: 'normal' } as CSSProperties,
   xxs: { fontSize: 10, lineHeight: 'normal' } as CSSProperties,
   xxxs: { fontSize: 8, lineHeight: 'normal' } as CSSProperties

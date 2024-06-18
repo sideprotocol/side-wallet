@@ -7,6 +7,12 @@ export const svgRegistry = {
   history: './images/icons/clock-solid.svg',
   send: './images/icons/arrow-left-right.svg',
   receive: './images/icons/qrcode.svg',
+  general: './images/icons/settings/general.svg',
+  advance: './images/icons/settings/advance.svg',
+  about: './images/icons/settings/about.svg',
+  expand: './images/icons/settings/expand-view.svg',
+  security: './images/icons/settings/security.svg',
+  lock: './images/icons/settings/lock.svg',
 
   right: './images/icons/arrow-right.svg',
   left: './images/icons/arrow-left.svg',
