@@ -26,7 +26,6 @@ const palette = {
   red: '#ED334B',
   red_light: '#f05266',
 
-  blue_dark: '#1461d1',
   blue: '#1872F6',
   blue_light: '#c6dcfd',
 
@@ -34,7 +33,13 @@ const palette = {
   orange: '#FF7B21',
   orange_light: '#ff8f42',
 
-  gold: '#eac249'
+  gold: '#eac249',
+
+  // side theme color
+  blue_dark: '#0DD4C3',
+  blue_dark2: '#01BEAE',
+
+  grey_dark: '#404045'
 };
 
 export const colors = Object.assign({}, palette, {
@@ -43,8 +48,6 @@ export const colors = Object.assign({}, palette, {
   text: palette.white,
 
   textDim: palette.white_muted,
-
-  background: '#D8E0EF',
 
   error: '#e52937',
 
@@ -65,7 +68,10 @@ export const colors = Object.assign({}, palette, {
   brc20_deploy: '#233933',
   brc20_transfer: '#375e4d',
   brc20_transfer_selected: '#41B530',
-  brc20_other: '#3e3e3e'
+  brc20_other: '#3e3e3e',
+
+  // side theme color
+  background: '#09090A'
 });
 
 export type ColorTypes = keyof typeof colors;

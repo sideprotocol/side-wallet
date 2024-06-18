@@ -55,15 +55,14 @@ export interface ButtonProps {
   full?: boolean;
 }
 
+// button common theme
 const $baseViewStyle: CSSProperties = {
   display: 'flex',
-  minHeight: 36,
-  borderRadius: 4,
+  height: '48px',
+  borderRadius: 14,
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: 'row',
-  // paddingVertical: spacing.small,
-  // paddingHorizontal: spacing.small,
   overflow: 'hidden',
   cursor: 'pointer',
   alignSelf: 'stretch',
@@ -71,55 +70,41 @@ const $baseViewStyle: CSSProperties = {
   paddingRight: spacing.small
 };
 
+// button view theme
 const $viewPresets = {
   default: Object.assign({}, $baseViewStyle, {
-    backgroundColor: colors.black_dark
+    backgroundColor: colors.grey_dark
   }) as CSSProperties,
 
   primary: Object.assign({}, $baseViewStyle, {
-    backgroundColor: colors.yellow,
-    height: '40px'
+    backgroundColor: colors.blue_dark
   } as CSSProperties),
 
   danger: Object.assign({}, $baseViewStyle, {
-    backgroundColor: colors.red,
-    height: '40px'
+    backgroundColor: colors.red
   } as CSSProperties),
 
   approval: Object.assign({}, $baseViewStyle, {
-    backgroundColor: colors.orange,
-    height: '40px'
+    backgroundColor: colors.orange
   } as CSSProperties),
 
   bar: Object.assign({}, $baseViewStyle, {
     backgroundColor: colors.black_dark,
-    height: '75px',
     justifyContent: 'space-between',
-
     paddingTop: spacing.medium,
     paddingBottom: spacing.medium
-  } as CSSProperties),
-
-  defaultV2: Object.assign({}, $baseViewStyle, {
-    borderWidth: 1,
-    minHeight: 50,
-    borderColor: colors.white_muted,
-    borderRadius: 12
-  } as CSSProperties),
-
-  primaryV2: Object.assign({}, $baseViewStyle, {
-    background: 'linear-gradient(103.92deg, #EBB94C 0%, #E97E00 100%)',
-    minHeight: 50,
-    borderRadius: 12
   } as CSSProperties)
 };
 
+// button hover theme
 const $hoverViewPresets: Record<Presets, CSSProperties> = {
   default: {
-    backgroundColor: '#383535'
+    backgroundColor: colors.grey_dark,
+    boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
   },
   primary: {
-    backgroundColor: colors.yellow_dark
+    backgroundColor: colors.blue_dark2,
+    boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
   },
   approval: {
     backgroundColor: colors.orange_dark
@@ -129,17 +114,10 @@ const $hoverViewPresets: Record<Presets, CSSProperties> = {
   },
   bar: {
     backgroundColor: '#383535'
-  },
-  defaultV2: {},
-  primaryV2: {
-    backgroundColor: colors.yellow_dark
   }
 };
 
 const $baseTextStyle: CSSProperties = {
-  // fontSize: 16,
-  // lineHeight: 20,
-  // fontFamily: typography.primary.medium,
   textAlign: 'center',
   flexShrink: 1,
   flexGrow: 0,
@@ -154,20 +132,7 @@ const $textPresets: Record<Presets, CSSProperties> = {
   primary: Object.assign({}, $baseTextStyle, { color: colors.black }),
   approval: Object.assign({}, $baseTextStyle, { color: colors.black }),
   danger: Object.assign({}, $baseTextStyle, { color: colors.white }),
-  bar: Object.assign({}, $baseTextStyle, { textAlign: 'left', fontWeight: 'bold' } as CSSProperties),
-
-  defaultV2: Object.assign({}, $baseTextStyle, {}),
-  primaryV2: Object.assign({}, $baseTextStyle, { color: colors.black })
-};
-
-const $pressedTextPresets: Record<Presets, CSSProperties> = {
-  default: { opacity: 0.9 },
-  primary: { opacity: 0.9 },
-  danger: { opacity: 0.9 },
-  approval: { opacity: 0.9 },
-  bar: { opacity: 0.9 },
-  defaultV2: { opacity: 0.9 },
-  primaryV2: { opacity: 0.9 }
+  bar: Object.assign({}, $baseTextStyle, { textAlign: 'left', fontWeight: 'bold' } as CSSProperties)
 };
 
 const $rightAccessoryStyle: CSSProperties = { marginLeft: spacing.extraSmall, zIndex: 1 };
