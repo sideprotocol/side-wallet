@@ -7,12 +7,11 @@ import { useLocation } from 'react-router-dom';
 
 import { ADDRESS_TYPES, OW_HD_PATH, RESTORE_WALLETS } from '@/shared/constant';
 import { AddressType, RestoreWalletType } from '@/shared/types';
-import { Button, Card, Column, Content, Grid, Header, Input, Layout, Row, Text } from '@/ui/components';
+import { Button, Card, Column, Content, Grid, Header, Input, Layout, Row, StepBar, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { AddressTypeCard2 } from '@/ui/components/AddressTypeCard';
 import { FooterButtonContainer } from '@/ui/components/FooterButtonContainer';
 import { Icon } from '@/ui/components/Icon';
-import { TabBar } from '@/ui/components/TabBar';
 import { useCreateAccountCallback } from '@/ui/state/global/hooks';
 import { fontSizes } from '@/ui/theme/font';
 import { copyToClipboard, satoshisToAmount, useWallet } from '@/ui/utils';
@@ -824,7 +823,10 @@ export default function CreateHDWalletScreen() {
     }
   }, [items, contextData.tabType]);
   return (
-    <Layout>
+    <Layout
+      style={{
+        padding: '24px 16px'
+      }}>
       <Header
         onBack={() => {
           if (fromUnlock) {
@@ -833,19 +835,17 @@ export default function CreateHDWalletScreen() {
             window.history.go(-1);
           }
         }}
-        title={contextData.isRestore ? 'Restore from mnemonics' : 'Create a new HD Wallet'}
+        title={contextData.isRestore ? 'Restore from mnemonics' : 'Create a new wallet'}
       />
       <Content>
         <Row justifyCenter>
-          <TabBar
-            progressEnabled
-            defaultActiveKey={contextData.tabType}
+          <StepBar
             activeKey={contextData.tabType}
             items={items.map((v) => ({
               key: v.key,
               label: v.label
             }))}
-            onTabClick={(key) => {
+            onChange={(key) => {
               const toTabType = key as TabType;
               if (toTabType === TabType.STEP2) {
                 if (!contextData.step1Completed) {
@@ -856,6 +856,11 @@ export default function CreateHDWalletScreen() {
                 }
               }
               updateContextData({ tabType: toTabType });
+            }}
+            rowProps={{
+              style: {
+                marginTop: '20px'
+              }
             }}
           />
         </Row>

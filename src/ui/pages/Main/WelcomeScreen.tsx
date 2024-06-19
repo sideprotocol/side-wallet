@@ -15,7 +15,7 @@ export default function WelcomeScreen() {
         fullX
         fullY
         style={{
-          padding: '0 16px'
+          padding: '24px 16px'
         }}>
         <Row
           justifyCenter
@@ -49,8 +49,7 @@ export default function WelcomeScreen() {
             }
           }}
           style={{
-            marginTop: '24px',
-            marginBottom: '24px'
+            marginTop: '24px'
           }}
         />
       </Column>

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { Column, Content, Layout, Row } from '@/ui/components';
+import { Column, Image, Layout } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { Button } from '@/ui/components/Button';
 import { Input } from '@/ui/components/Input';
-import { Logo } from '@/ui/components/Logo';
 import { Text } from '@/ui/components/Text';
 import { useUnlockCallback } from '@/ui/state/global/hooks';
 import { getUiType, useWallet } from '@/ui/utils';
@@ -54,25 +53,57 @@ export default function UnlockScreen() {
   }, [password]);
   return (
     <Layout>
-      <Content preset="middle">
-        <Column fullX>
-          <Row justifyCenter>
-            <Logo preset="large" />
-          </Row>
-
-          <Column gap="xl" mt="xxl">
-            <Text preset="title-bold" text="Enter your password" textCenter />
-            <Input
-              preset="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyUp={(e) => handleOnKeyUp(e)}
-              autoFocus={true}
-            />
-            <Button disabled={disabled} text="Unlock" preset="primary" onClick={btnClick} />
-          </Column>
+      <Column
+        fullX
+        fullY
+        style={{
+          padding: '24px 16px'
+        }}>
+        <Column
+          justifyCenter
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            gap: '16px'
+          }}>
+          <Image src="./images/img/phone.png" size={174} />
+          <Text
+            text="🎉 Welcome Back"
+            textCenter
+            style={{
+              fontSize: '24px',
+              fontWeight: 600
+            }}
+          />
         </Column>
-      </Content>
+
+        <Text
+          text="Password"
+          style={{
+            color: '#828282',
+            fontSize: '14px',
+            lineHeight: '24px'
+          }}
+        />
+        <Input
+          preset="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyUp={(e) => handleOnKeyUp(e)}
+          autoFocus={true}
+        />
+        <Button disabled={disabled} text="Unlock" preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />
+        <Text
+          text="Forget Password"
+          style={{
+            marginTop: '16px',
+            color: '#828282',
+            fontSize: '14px',
+            lineHeight: '24px'
+          }}
+          textCenter
+        />
+      </Column>
     </Layout>
   );
 }
