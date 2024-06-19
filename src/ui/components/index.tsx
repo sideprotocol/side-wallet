@@ -1,5 +1,6 @@
 import { AddressBar } from './AddressBar';
 import { Button } from './Button';
+import { ButtonGroup } from './ButtonGroup';
 import { Card } from './Card';
 import { Column } from './Column';
 import { Content } from './Content';
@@ -19,6 +20,7 @@ import { TextArea } from './TextArea';
 export {
   AddressBar,
   Button,
+  ButtonGroup,
   Card,
   Column,
   Content,

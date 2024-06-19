@@ -1,4 +1,4 @@
-import { Checkbox, Radio } from 'antd';
+import { Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import * as bip39 from 'bip39';
 import bitcore from 'bitcore-lib';
@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 
 import { ADDRESS_TYPES, OW_HD_PATH, RESTORE_WALLETS } from '@/shared/constant';
 import { AddressType, RestoreWalletType } from '@/shared/types';
-import { Button, Card, Column, Content, Grid, Header, Input, Layout, Row, StepBar, Text } from '@/ui/components';
+import { Button, ButtonGroup, Card, Column, Grid, Header, Input, Layout, Row, StepBar, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { AddressTypeCard2 } from '@/ui/components/AddressTypeCard';
 import { FooterButtonContainer } from '@/ui/components/FooterButtonContainer';
@@ -225,80 +225,89 @@ function Step1_Import({
   };
 
   return (
-    <Column gap="lg">
-      <Text text="Secret Recovery Phrase" preset="title-bold" textCenter />
-      <Text text="Import an existing wallet with your secret recovery phrase" preset="sub" textCenter />
-
-      {wordsItems.length > 1 ? (
-        <Row justifyCenter>
-          <Radio.Group
-            onChange={(e) => {
-              const wordsType = e.target.value;
+    <>
+      <Column
+        style={{
+          marginTop: '16px',
+          border: '1px solid #404045',
+          boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+          backgroundColor: '#222222',
+          borderRadius: '14px'
+        }}>
+        {wordsItems.length > 1 ? (
+          <ButtonGroup
+            rowProps={{
+              justifyCenter: true,
+              style: {
+                marginTop: '16px'
+              }
+            }}
+            list={wordsItems.map((item) => ({
+              key: item.key,
+              label: item.label
+            }))}
+            onChange={(value) => {
+              const wordsType = value as WordsType;
               updateContextData({ wordsType });
               setKeys(new Array(wordsItems[wordsType].count).fill(''));
             }}
-            value={contextData.wordsType}>
-            {wordsItems.map((v) => (
-              <Radio key={v.key} value={v.key}>
-                {v.label}
-              </Radio>
-            ))}
-          </Radio.Group>
+            value={contextData.wordsType}
+          />
+        ) : null}
+
+        <Row justifyCenter style={{ marginTop: '16px' }}>
+          <Grid columns={2}>
+            {keys.map((_, index) => {
+              return (
+                <Row key={index}>
+                  <Card gap="zero">
+                    <Text text={`${index + 1}. `} style={{ width: 25 }} textEnd color="textDim" />
+                    <Input
+                      containerStyle={{ width: 80, minHeight: 25, height: 25, padding: 0 }}
+                      style={{ width: 60 }}
+                      value={_}
+                      onPaste={(e) => {
+                        handleEventPaste(e, index);
+                      }}
+                      onChange={(e) => {
+                        onChange(e, index);
+                      }}
+                      // onMouseOverCapture={(e) => {
+                      //   setHover(index);
+                      // }}
+                      // onMouseLeave={(e) => {
+                      //   setHover(999);
+                      // }}
+                      onFocus={(e) => {
+                        setCurInputIndex(index);
+                      }}
+                      onBlur={(e) => {
+                        setCurInputIndex(999);
+                      }}
+                      onKeyUp={(e) => handleOnKeyUp(e)}
+                      autoFocus={index == curInputIndex}
+                      preset={'password'}
+                      placeholder=""
+                    />
+                  </Card>
+                </Row>
+              );
+            })}
+          </Grid>
         </Row>
-      ) : null}
 
-      <Row justifyCenter>
-        <Grid columns={2}>
-          {keys.map((_, index) => {
-            return (
-              <Row key={index}>
-                <Card gap="zero">
-                  <Text text={`${index + 1}. `} style={{ width: 25 }} textEnd color="textDim" />
-                  <Input
-                    containerStyle={{ width: 80, minHeight: 25, height: 25, padding: 0 }}
-                    style={{ width: 60 }}
-                    value={_}
-                    onPaste={(e) => {
-                      handleEventPaste(e, index);
-                    }}
-                    onChange={(e) => {
-                      onChange(e, index);
-                    }}
-                    // onMouseOverCapture={(e) => {
-                    //   setHover(index);
-                    // }}
-                    // onMouseLeave={(e) => {
-                    //   setHover(999);
-                    // }}
-                    onFocus={(e) => {
-                      setCurInputIndex(index);
-                    }}
-                    onBlur={(e) => {
-                      setCurInputIndex(999);
-                    }}
-                    onKeyUp={(e) => handleOnKeyUp(e)}
-                    autoFocus={index == curInputIndex}
-                    preset={'password'}
-                    placeholder=""
-                  />
-                </Card>
-              </Row>
-            );
-          })}
-        </Grid>
-      </Row>
-
-      <FooterButtonContainer>
-        <Button
-          disabled={disabled}
-          text="Continue"
-          preset="primary"
-          onClick={() => {
-            onNext();
-          }}
-        />
-      </FooterButtonContainer>
-    </Column>
+        <FooterButtonContainer>
+          <Button
+            disabled={disabled}
+            text="Continue"
+            preset="primary"
+            onClick={() => {
+              onNext();
+            }}
+          />
+        </FooterButtonContainer>
+      </Column>
+    </>
   );
 }
 
@@ -835,38 +844,34 @@ export default function CreateHDWalletScreen() {
             window.history.go(-1);
           }
         }}
-        title={contextData.isRestore ? 'Restore from mnemonics' : 'Create a new wallet'}
+        title={contextData.isRestore ? 'Import an existing wallet' : 'Create a new wallet'}
       />
-      <Content>
-        <Row justifyCenter>
-          <StepBar
-            activeKey={contextData.tabType}
-            items={items.map((v) => ({
-              key: v.key,
-              label: v.label
-            }))}
-            onChange={(key) => {
-              const toTabType = key as TabType;
-              if (toTabType === TabType.STEP2) {
-                if (!contextData.step1Completed) {
-                  setTimeout(() => {
-                    updateContextData({ tabType: contextData.tabType });
-                  }, 200);
-                  return;
-                }
-              }
-              updateContextData({ tabType: toTabType });
-            }}
-            rowProps={{
-              style: {
-                marginTop: '20px'
-              }
-            }}
-          />
-        </Row>
+      <StepBar
+        activeKey={contextData.tabType}
+        items={items.map((v) => ({
+          key: v.key,
+          label: v.label
+        }))}
+        onChange={(key) => {
+          const toTabType = key as TabType;
+          if (toTabType === TabType.STEP2) {
+            if (!contextData.step1Completed) {
+              setTimeout(() => {
+                updateContextData({ tabType: contextData.tabType });
+              }, 200);
+              return;
+            }
+          }
+          updateContextData({ tabType: toTabType });
+        }}
+        rowProps={{
+          style: {
+            marginTop: '20px'
+          }
+        }}
+      />
 
-        {currentChildren}
-      </Content>
+      {currentChildren}
     </Layout>
   );
 }
