@@ -7,7 +7,20 @@ import { useLocation } from 'react-router-dom';
 
 import { ADDRESS_TYPES, OW_HD_PATH, RESTORE_WALLETS } from '@/shared/constant';
 import { AddressType, RestoreWalletType } from '@/shared/types';
-import { Button, ButtonGroup, Card, Column, Grid, Header, Input, Layout, Row, StepBar, Text } from '@/ui/components';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Column,
+  Grid,
+  Header,
+  Image,
+  Input,
+  Layout,
+  Row,
+  StepBar,
+  Text
+} from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { AddressTypeCard2 } from '@/ui/components/AddressTypeCard';
 import { FooterButtonContainer } from '@/ui/components/FooterButtonContainer';
@@ -225,46 +238,70 @@ function Step1_Import({
   };
 
   return (
-    <>
+    <Column
+      style={{
+        flex: 1,
+        overflow: 'hidden'
+      }}>
       <Column
         style={{
-          marginTop: '16px',
-          border: '1px solid #404045',
-          boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
-          backgroundColor: '#222222',
-          borderRadius: '14px'
+          flex: 1,
+          overflow: 'auto'
         }}>
-        {wordsItems.length > 1 ? (
-          <ButtonGroup
-            rowProps={{
-              justifyCenter: true,
-              style: {
-                marginTop: '16px'
-              }
-            }}
-            list={wordsItems.map((item) => ({
-              key: item.key,
-              label: item.label
-            }))}
-            onChange={(value) => {
-              const wordsType = value as WordsType;
-              updateContextData({ wordsType });
-              setKeys(new Array(wordsItems[wordsType].count).fill(''));
-            }}
-            value={contextData.wordsType}
-          />
-        ) : null}
+        <Column
+          style={{
+            marginTop: '16px',
+            border: '1px solid #404045',
+            boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+            backgroundColor: '#222222',
+            borderRadius: '14px',
+            padding: '16px'
+          }}>
+          {wordsItems.length > 1 ? (
+            <ButtonGroup
+              rowProps={{
+                justifyCenter: true
+              }}
+              list={wordsItems.map((item) => ({
+                key: item.key,
+                label: item.label
+              }))}
+              onChange={(value) => {
+                const wordsType = value as WordsType;
+                updateContextData({ wordsType });
+                setKeys(new Array(wordsItems[wordsType].count).fill(''));
+              }}
+              value={contextData.wordsType}
+            />
+          ) : null}
 
-        <Row justifyCenter style={{ marginTop: '16px' }}>
-          <Grid columns={2}>
-            {keys.map((_, index) => {
-              return (
-                <Row key={index}>
-                  <Card gap="zero">
-                    <Text text={`${index + 1}. `} style={{ width: 25 }} textEnd color="textDim" />
+          <Row justifyCenter style={{ marginTop: '16px' }}>
+            <Grid columns={2}>
+              {keys.map((_, index) => {
+                return (
+                  <Row
+                    key={index}
+                    style={{
+                      gap: '8px',
+                      height: '32px',
+                      borderRadius: '8px',
+                      border: '1px solid #000'
+                    }}>
+                    <Text
+                      text={`${index + 1}. `}
+                      style={{ width: 25, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+                      textEnd
+                      color="textDim"
+                    />
                     <Input
-                      containerStyle={{ width: 80, minHeight: 25, height: 25, padding: 0 }}
-                      style={{ width: 60 }}
+                      containerStyle={{
+                        minHeight: '30px',
+                        padding: '0 10px',
+                        flex: 1,
+                        border: 'none',
+                        backgroundColor: 'transparent'
+                      }}
+                      style={{ width: '100%' }}
                       value={_}
                       onPaste={(e) => {
                         handleEventPaste(e, index);
@@ -289,25 +326,59 @@ function Step1_Import({
                       preset={'password'}
                       placeholder=""
                     />
-                  </Card>
-                </Row>
-              );
-            })}
-          </Grid>
-        </Row>
+                  </Row>
+                );
+              })}
+            </Grid>
+          </Row>
+        </Column>
 
-        <FooterButtonContainer>
-          <Button
-            disabled={disabled}
-            text="Continue"
-            preset="primary"
-            onClick={() => {
-              onNext();
+        <Column
+          style={{
+            marginTop: '24px',
+            border: '1px solid #404045',
+            boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+            backgroundColor: '#222222',
+            borderRadius: '14px',
+            padding: '10px 16px',
+            gap: '6px'
+          }}>
+          <Row
+            style={{
+              alignItems: 'center'
+            }}>
+            <Image src="/images/icons/info-circle.svg" size={24} />
+            <Text
+              text="Note:"
+              style={{
+                color: '#828282',
+                lineHeight: '20px',
+                fontSize: '14px',
+                fontWeight: 600
+              }}
+            />
+          </Row>
+          <Text
+            text="Enter your recovery phrase here to restore your wallet. Click on any field and paste the entire phrase. Make sure the phrase is in the correct order, without capitalization, punctuation, or extra spaces."
+            style={{
+              color: '#828282',
+              lineHeight: '18px',
+              fontSize: '12px',
+              fontWeight: 400,
+              opacity: 0.5
             }}
           />
-        </FooterButtonContainer>
+        </Column>
       </Column>
-    </>
+      <Button
+        disabled={disabled}
+        text="Continue"
+        preset="primary"
+        onClick={() => {
+          onNext();
+        }}
+      />
+    </Column>
   );
 }
 

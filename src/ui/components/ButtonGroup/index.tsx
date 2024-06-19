@@ -20,30 +20,35 @@ export function ButtonGroup(props: IButtonGroupProps) {
         justifyCenter
         style={{
           backgroundColor: '#1E1E1F',
-          borderRight: '100px',
+          borderRadius: '100px',
           padding: '3px 0'
         }}>
-        {list.map((item) => (
-          <div
-            style={{
-              height: '26px',
-              padding: '0 22px',
-              backgroundColor: value === item.key ? '#404045' : 'transparent',
-              borderRight: '100px',
-              color: '#fff',
-              fontSize: '12px',
-              opacity: 0.8,
-              cursor: 'pointer'
-            }}
-            onClick={() => {
-              if (item.key === value) {
-                return;
-              }
-              onChange(item.key);
-            }}>
-            {item.label}
-          </div>
-        ))}
+        {list.map((item) => {
+          return (
+            <div
+              key={item.key}
+              style={{
+                height: '26px',
+                padding: '0 22px',
+                backgroundColor: value === item.key ? '#404045' : 'transparent',
+                borderRadius: '100px',
+                color: '#fff',
+                fontSize: '12px',
+                opacity: 0.8,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+              onClick={() => {
+                if (item.key === value) {
+                  return;
+                }
+                onChange(item.key);
+              }}>
+              {item.label}
+            </div>
+          );
+        })}
       </Row>
     </Row>
   );
