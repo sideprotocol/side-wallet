@@ -4,13 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { ADDRESS_TYPES, KEYRING_TYPE, NETWORK_TYPES } from '@/shared/constant';
 import { Card, Column, Content, Header, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
-import { Button } from '@/ui/components/Button';
-import { Icon, IconTypes } from '@/ui/components/Icon';
-import { getCurrentTab, useExtensionIsInTab, useOpenExtensionInTab } from '@/ui/features/browser/tabs';
+import { IconTypes } from '@/ui/components/Icon';
+import { getCurrentTab, useExtensionIsInTab } from '@/ui/features/browser/tabs';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
-import { spacing } from '@/ui/theme/spacing';
 import { useWallet } from '@/ui/utils';
 import { RightOutlined } from '@ant-design/icons';
 
@@ -25,121 +23,36 @@ interface Setting {
   right: boolean;
 }
 
-const SettingList: Setting[] = [
-  // {
-  //   label: 'Manage Wallet',
-  //   value: '',
-  //   desc: '',
-  //   action: 'manage-wallet',
-  //   route: '/settings/manage-wallet',
-  //   right: true
-  // },
+const GeneralList: Setting[] = [
+  {
+    label: 'Language',
+    value: 'English',
+    desc: '',
+    action: 'language',
+    route: '/settings/language',
+    right: true
+  },
 
   {
-    label: 'General',
-    value: '',
-    icon: 'general',
+    label: 'Currency',
+    value: 'USD',
     desc: '',
     action: '',
-    route: '/settings/general',
+    route: '/settings/currency',
     right: true
   },
 
   {
-    label: 'Advance',
-    value: '',
-    icon: 'advance',
-    desc: '',
-    action: 'advanced',
-    route: '/settings/advanced',
-    right: true
-  },
-
-  {
-    label: 'Security',
-    value: '',
-    icon: 'security',
+    label: 'Theme',
+    value: 'Black',
     desc: '',
     action: '',
-    route: '/settings/security',
+    route: '/settings/theme',
     right: true
-  },
-
-  {
-    label: 'About',
-    value: '',
-    icon: 'about',
-    desc: '',
-    action: '',
-    route: '/settings/about',
-
-    right: true
-  },
-
-  // {
-  //   label: 'Address Type',
-  //   value: 'Taproot',
-  //   desc: '',
-  //   action: 'addressType',
-  //   route: '/settings/address-type',
-  //   right: true
-  // },
-
-  // {
-  //   label: 'Advanced',
-  //   value: 'Advanced settings',
-  //   desc: '',
-  //   action: 'advanced',
-  //   route: '/settings/advanced',
-  //   right: true
-  // },
-
-  // {
-  //   label: 'Connected Sites',
-  //   value: '',
-  //   desc: '',
-  //   action: 'connected-sites',
-  //   route: '/connected-sites',
-  //   right: true
-  // },
-  // {
-  //   label: 'Network',
-  //   value: 'MAINNET',
-  //   desc: '',
-  //   action: 'networkType',
-  //   route: '/settings/network-type',
-  //   right: true
-  // },
-
-  // {
-  //   label: 'Change Password',
-  //   value: 'Change your lockscreen password',
-  //   desc: '',
-  //   action: 'password',
-  //   route: '/settings/password',
-  //   right: true
-  // },
-  {
-    label: '',
-    value: '',
-    desc: 'Expand View ',
-    action: 'expand-view',
-    route: '/settings/export-privatekey',
-    right: false,
-    icon: 'expand'
-  },
-  {
-    label: '',
-    value: '',
-    desc: 'Lock',
-    icon: 'lock',
-    action: 'lock-wallet',
-    route: '',
-    right: false
   }
 ];
 
-export default function SettingsTabScreen() {
+export default function GeneralTabScreen() {
   const navigate = useNavigate();
 
   const networkType = useNetworkType();
@@ -168,7 +81,7 @@ export default function SettingsTabScreen() {
     return currentKeyring.hdPath !== '' && item.hdPath !== currentKeyring.hdPath;
   }, [currentKeyring]);
 
-  const toRenderSettings = SettingList.filter((v) => {
+  const toRenderSettings = GeneralList.filter((v) => {
     if (v.action == 'manage-wallet') {
       v.value = currentKeyring.alianName;
     }
@@ -201,7 +114,6 @@ export default function SettingsTabScreen() {
   });
 
   const tools = useTools();
-  const openExtensionInTab = useOpenExtensionInTab();
 
   return (
     <Layout>
@@ -209,7 +121,7 @@ export default function SettingsTabScreen() {
         onBack={() => {
           window.history.go(-1);
         }}
-        title="Setting"
+        title="General"
       />
       <Content justifyBetween>
         <Column>
@@ -239,10 +151,10 @@ export default function SettingsTabScreen() {
                     backgroundColor: 'transparent'
                   }}>
                   <Row full justifyBetween>
-                    <Row itemsCenter>
-                      <Icon size={24} icon={item.icon}></Icon>
-                      <Text text={item.label || item.desc} preset="regular" />
-                    </Row>
+                    <Column justifyCenter gap={'sm'}>
+                      <Text text={item.label || item.desc} preset="regular-bold" />
+                      <Text text={item.value} preset="sub" />
+                    </Column>
 
                     <Column justifyCenter>
                       {item.right && <RightOutlined style={{ color: 'rgb(107,107,107)' }} />}
@@ -250,37 +162,6 @@ export default function SettingsTabScreen() {
                   </Row>
                 </Card>
               );
-            })}
-          </div>
-        </Column>
-
-        <Column>
-          <div>
-            {toRenderSettings.map((item) => {
-              if (!item.label) {
-                return (
-                  <Button
-                    key={item.action}
-                    preset={item.action === 'expand-view' ? 'primary' : 'default'}
-                    style={{ marginTop: spacing.small, height: 50 }}
-                    text={item.desc}
-                    onClick={(e) => {
-                      if (item.action == 'expand-view') {
-                        openExtensionInTab();
-                        return;
-                      }
-                      if (item.action == 'lock-wallet') {
-                        wallet.lockWallet();
-                        navigate('/account/unlock');
-                        return;
-                      }
-                      navigate(item.route);
-                    }}
-                    icon={item.icon}
-                  />
-                );
-              }
-              return null;
             })}
           </div>
         </Column>

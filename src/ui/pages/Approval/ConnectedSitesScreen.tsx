@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { ConnectedSite } from '@/background/service/permission';
-import { Icon, Layout, Header, Content, Column, Card, Row, Text, Image } from '@/ui/components';
+import { Card, Column, Content, Header, Image, Layout, Row, Text } from '@/ui/components';
 import { Empty } from '@/ui/components/Empty';
 import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
@@ -33,23 +33,40 @@ export default function ConnectedSitesScreen() {
         title="Connected Sites"
       />
       <Content>
+        {sites.length > 0 && (
+          <Text
+            preset="sub"
+            text={'[Account Name] is connected to these sites. They can view your account address.'}></Text>
+        )}
+
         <Column>
           {sites.length > 0 ? (
-            sites.map((item, index) => {
+            sites.map((item, _) => {
               return (
                 <Card key={item.origin}>
                   <Row full justifyBetween itemsCenter>
                     <Row itemsCenter>
-                      <Image src={item.icon} size={fontSizes.logo} />
-                      <Text text={item.origin} preset="sub" />
+                      <Image
+                        src={item.icon}
+                        style={{
+                          borderRadius: '100%'
+                        }}
+                        size={fontSizes.logo}
+                      />
+                      <Text
+                        style={{
+                          fontSize: '14px'
+                        }}
+                        text={item.origin}
+                      />
                     </Row>
                     <Column justifyCenter>
-                      <Icon
-                        icon="close"
+                      <Text
+                        preset="disconnect"
                         onClick={() => {
                           handleRemove(item.origin);
                         }}
-                      />
+                        text={'Disconnect'}></Text>
                     </Column>
                   </Row>
                 </Card>

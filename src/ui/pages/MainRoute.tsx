@@ -39,18 +39,25 @@ import SignOrdinalsTransactionScreen from './Ordinals/SignOrdinalsTransactionScr
 import SplitOrdinalsInscriptionScreen from './Ordinals/SplitOrdinalsInscriptionScreen';
 import RunesTokenScreen from './Runes/RunesTokenScreen';
 import SendRunesScreen from './Runes/SendRunesScreen';
+import AboutScreen from './Settings/AboutScreen';
 import AddressTypeScreen from './Settings/AddressTypeScreen';
-import AdvancedScreen from './Settings/AdvancedScreen';
+import AdvancedTabScreen from './Settings/AdvancedTabScreen';
+import ChangeEndpointsScreen from './Settings/ChangeEndpointsScreen';
 import ChangePasswordScreen from './Settings/ChangePasswordScreen';
+import CurrencyTypeScreen from './Settings/CurrencyTypeScreen';
 import EditAccountNameScreen from './Settings/EditAccountNameScreen';
 import EditWalletNameScreen from './Settings/EditWalletNameScreen';
 import ExportMnemonicsScreen from './Settings/ExportMnemonicsScreen';
 import ExportPrivateKeyScreen from './Settings/ExportPrivateKeyScreen';
+import GeneralTabScreen from './Settings/GeneralTabScreen';
+import LanguageTypeScreen from './Settings/LangurageTypeScreen';
 import NetworkTypeScreen from './Settings/NetworkTypeScreen';
+import ProtectionScreen from './Settings/ProtectionScreen';
+import SecurityTabScreen from './Settings/SecurityTabScreen';
+import ThemeTypeScreen from './Settings/ThemeTypeScreen';
 import UpgradeNoticeScreen from './Settings/UpgradeNoticeScreen';
 import TestScreen from './Test/TestScreen';
 import HistoryScreen from './Wallet/HistoryScreen';
-import KeystoneSignScreen from './Wallet/KeystoneSignScreen';
 import ReceiveScreen from './Wallet/ReceiveScreen';
 import TxConfirmScreen from './Wallet/TxConfirmScreen';
 import TxCreateScreen from './Wallet/TxCreateScreen';
@@ -172,10 +179,51 @@ const routes = {
     path: '/settings/export-privatekey',
     element: <ExportPrivateKeyScreen />
   },
-  AdvancedScreen: {
-    path: '/settings/advanced',
-    element: <AdvancedScreen />
+  ProtectionScreen: {
+    path: '/settings/protection',
+    element: <ProtectionScreen />
   },
+
+  ChangeEndpointsScreen: {
+    path: '/settings/change-endpoints',
+    element: <ChangeEndpointsScreen />
+  },
+
+  AdvancedTabScreen: {
+    path: '/settings/advanced',
+    element: <AdvancedTabScreen />
+  },
+
+  LanguageTypeScreen: {
+    path: '/settings/language',
+    element: <LanguageTypeScreen />
+  },
+
+  ThemeTypeScreen: {
+    path: '/settings/theme',
+    element: <ThemeTypeScreen />
+  },
+
+  CurrencyTypeScreen: {
+    path: '/settings/currency',
+    element: <CurrencyTypeScreen />
+  },
+
+  GeneralTabScreen: {
+    path: '/settings/general',
+    element: <GeneralTabScreen />
+  },
+
+  SecurityTabScreen: {
+    path: '/settings/security',
+    element: <SecurityTabScreen />
+  },
+
+  AboutScreen: {
+    path: '/settings/about',
+    element: <AboutScreen />
+  },
+
   HistoryScreen: {
     path: '/wallet/history',
     element: <HistoryScreen />

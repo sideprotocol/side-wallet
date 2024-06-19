@@ -88,6 +88,14 @@ const $viewPresets = {
     backgroundColor: colors.orange
   } as CSSProperties),
 
+  reset: Object.assign({}, $baseViewStyle, {
+    backgroundColor: colors.green_light,
+    border: '1px solid #22AB38',
+    maxWidth: 'max-content',
+    padding: '0px 12px',
+    margin: 'auto'
+  } as CSSProperties),
+
   bar: Object.assign({}, $baseViewStyle, {
     backgroundColor: colors.black_dark,
     justifyContent: 'space-between',
@@ -114,7 +122,8 @@ const $hoverViewPresets: Record<Presets, CSSProperties> = {
   },
   bar: {
     backgroundColor: '#383535'
-  }
+  },
+  reset: {}
 };
 
 const $baseTextStyle: CSSProperties = {
@@ -132,7 +141,9 @@ const $textPresets: Record<Presets, CSSProperties> = {
   primary: Object.assign({}, $baseTextStyle, { color: colors.black }),
   approval: Object.assign({}, $baseTextStyle, { color: colors.black }),
   danger: Object.assign({}, $baseTextStyle, { color: colors.white }),
-  bar: Object.assign({}, $baseTextStyle, { textAlign: 'left', fontWeight: 'bold' } as CSSProperties)
+  bar: Object.assign({}, $baseTextStyle, { textAlign: 'left', fontWeight: 'bold' } as CSSProperties),
+
+  reset: Object.assign({}, $baseTextStyle, { fontWeight: 400 } as CSSProperties)
 };
 
 const $rightAccessoryStyle: CSSProperties = { marginLeft: spacing.extraSmall, zIndex: 1 };

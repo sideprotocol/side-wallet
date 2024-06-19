@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 
 import { colors } from '@/ui/theme/colors';
 import { spacingGap } from '@/ui/theme/spacing';
@@ -45,6 +45,24 @@ const $viewPresets = {
     paddingBottom: spacingGap.xs,
     paddingLeft: spacingGap.sm,
     paddingRight: spacingGap.sm
+  }) as CSSProperties,
+  styleChecked: Object.assign({}, $baseViewStyle, {
+    paddingTop: spacingGap.lg,
+    paddingBottom: spacingGap.lg,
+    paddingLeft: spacingGap.lg,
+    paddingRight: spacingGap.lg,
+    minHeight: 50,
+    backgroundColor: colors.green_light,
+    border: `1px solid ${colors.green_light}`,
+    borderRadius: 12
+  }) as CSSProperties,
+  styleNotCheck: Object.assign({}, $baseViewStyle, {
+    paddingTop: spacingGap.lg,
+    paddingBottom: spacingGap.lg,
+    paddingLeft: spacingGap.lg,
+    paddingRight: spacingGap.lg,
+    minHeight: 50,
+    borderRadius: 12
   }) as CSSProperties
 };
 

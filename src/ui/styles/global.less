@@ -26,7 +26,7 @@ iframe {
   height: 24px !important;
   background-color: transparent !important;
   border-width: 1px !important;
-  border-color: #FFFFFF33 !important;
+  border-color: #ffffff33 !important;
 }
 
 .ant-checkbox {
@@ -37,7 +37,7 @@ iframe {
 }
 
 .ant-checkbox-checked {
-  background-color: #0DD4C3 !important;
+  background-color: #0dd4c3 !important;
 }
 
 .ant-switch {
@@ -46,7 +46,11 @@ iframe {
 
 .ant-switch {
   &.ant-switch-checked {
-    background-color: #0DD4C3 !important;
+    background-color: #0dd4c3 !important;
+
+    .ant-switch-handle::before {
+      background-color: #fff;
+    }
   }
 }
 

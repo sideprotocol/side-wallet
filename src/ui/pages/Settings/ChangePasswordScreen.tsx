@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Input, Layout, Header, Content, Column } from '@/ui/components';
+import { Button, Column, Content, Header, Input, Layout, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useWallet } from '@/ui/utils';
 
@@ -44,47 +44,63 @@ export default function ChangePasswordScreen() {
         }}
         title="Change Password"
       />
-      <Content>
+      <Content justifyBetween>
         <Column gap="lg">
-          <Input
-            preset="password"
-            placeholder="Current Password"
-            onChange={(e) => {
-              setOriginPassword(e.target.value);
-            }}
-            autoFocus={true}
-          />
-          <Input
-            preset="password"
-            placeholder="New Password"
-            onBlur={(e) => {
-              if (newPassword.length < 5) {
-                tools.toastWarning('at least five characters');
-                return;
-              }
-              if (newPassword.length > 0 && confirmPassword.length > 0 && newPassword !== confirmPassword) {
-                tools.toastWarning('Entered passwords differ');
-              }
-            }}
-            onChange={(e) => {
-              setNewPassword(e.target.value);
-            }}
-          />
-          <Input
-            preset="password"
-            placeholder="Confirm Password"
-            onBlur={(e) => {
-              if (newPassword.length > 0 && confirmPassword.length > 0 && newPassword !== confirmPassword) {
-                tools.toastWarning('Entered passwords differ');
-              }
-            }}
-            onChange={(e) => {
-              setConfirmPassword(e.target.value);
-            }}
-          />
+          <Column>
+            <Text text={'Old Password'} preset="sub"></Text>
+            <Input
+              preset="password"
+              placeholder="Current Password"
+              onChange={(e) => {
+                setOriginPassword(e.target.value);
+              }}
+              autoFocus={true}
+            />
+          </Column>
+
+          <Column>
+            <Text text={'New Password'} preset="sub"></Text>
+
+            <Input
+              preset="password"
+              placeholder="New Password"
+              onBlur={(e) => {
+                if (newPassword.length < 5) {
+                  tools.toastWarning('at least five characters');
+                  return;
+                }
+                if (newPassword.length > 0 && confirmPassword.length > 0 && newPassword !== confirmPassword) {
+                  tools.toastWarning('Entered passwords differ');
+                }
+              }}
+              onChange={(e) => {
+                setNewPassword(e.target.value);
+              }}
+            />
+          </Column>
+
+          <Column>
+            <Text text={'Confirm Password'} preset="sub"></Text>
+
+            <Input
+              preset="password"
+              placeholder="Confirm Password"
+              onBlur={(e) => {
+                if (newPassword.length > 0 && confirmPassword.length > 0 && newPassword !== confirmPassword) {
+                  tools.toastWarning('Entered passwords differ');
+                }
+              }}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+              }}
+            />
+          </Column>
+        </Column>
+
+        <Column>
           <Button
             disabled={disabled}
-            text="Change Password"
+            text="Confirm"
             preset="primary"
             onClick={() => {
               verify();
