@@ -12,7 +12,7 @@ const Languages = [
 
 function getPropertyPlainText(property) {
   let arr = property.title || property.rich_text;
-  if (arr.length == 0) return '';
+  if (arr.length === 0) return '';
   return arr[0].plain_text;
 }
 
