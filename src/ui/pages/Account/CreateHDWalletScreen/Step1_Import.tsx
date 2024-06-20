@@ -1,13 +1,9 @@
 import * as bip39 from 'bip39';
 import { useEffect, useState } from 'react';
 
-import { OW_HD_PATH } from '@/shared/constant';
-import { AddressType, RestoreWalletType } from '@/shared/types';
 import { Button, ButtonGroup, Column, Grid, Image, Input, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
-import { useCreateAccountCallback } from '@/ui/state/global/hooks';
 
-import { useNavigate } from '../../MainRoute';
 import { ContextData, TabType, UpdateContextDataParams, WORDS_12_ITEM, WORDS_24_ITEM, WordsType } from './type';
 
 export default function Step1_Import({
@@ -71,18 +67,11 @@ export default function Step1_Import({
     //todo
   }, [hover]);
 
-  const createAccount = useCreateAccountCallback();
-  const navigate = useNavigate();
   const tools = useTools();
   const onNext = async () => {
     try {
       const mnemonics = keys.join(' ');
-      if (contextData.restoreWalletType === RestoreWalletType.OW) {
-        await createAccount(mnemonics, OW_HD_PATH, '', AddressType.P2TR, 1);
-        navigate('MainScreen');
-      } else {
-        updateContextData({ mnemonics, tabType: TabType.STEP3 });
-      }
+      updateContextData({ mnemonics, tabType: TabType.STEP2 });
     } catch (e) {
       tools.toastError((e as any).message);
     }

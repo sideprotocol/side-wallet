@@ -100,7 +100,8 @@ export interface WalletController {
     hdPath: string,
     passphrase: string,
     addressType: AddressType,
-    accountCount: number
+    accountCount: number,
+    walletName?: string
   ): Promise<{ address: string; type: string }[]>;
   createKeyringWithKeystone(
     urType: string,

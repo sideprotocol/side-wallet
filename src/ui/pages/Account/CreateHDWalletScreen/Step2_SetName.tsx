@@ -1,5 +1,11 @@
-import { Button, Column, Image, Input, Row, Text } from '@/ui/components';
+import { useMemo, useState } from 'react';
 
+import { ADDRESS_TYPES, RESTORE_WALLETS } from '@/shared/constant';
+import { Button, Column, Image, Input, Row, Text } from '@/ui/components';
+import { useTools } from '@/ui/components/ActionComponent';
+import { useCreateAccountCallback } from '@/ui/state/global/hooks';
+
+import { useNavigate } from '../../MainRoute';
 import { ContextData, UpdateContextDataParams } from './type';
 
 export default function Step2_SetName({
@@ -9,6 +15,52 @@ export default function Step2_SetName({
   contextData: ContextData;
   updateContextData: (params: UpdateContextDataParams) => void;
 }) {
+  const createAccount = useCreateAccountCallback();
+  const navigate = useNavigate();
+  const tools = useTools();
+  const [alianName, setAlianName] = useState('');
+
+  const hdPathOptions = useMemo(() => {
+    const restoreWallet = RESTORE_WALLETS[contextData.restoreWalletType];
+    return ADDRESS_TYPES.filter((v) => {
+      if (v.displayIndex < 0) {
+        return false;
+      }
+      if (!restoreWallet.addressTypes.includes(v.value)) {
+        return false;
+      }
+
+      if (!contextData.isRestore && v.isUnisatLegacy) {
+        return false;
+      }
+
+      if (contextData.customHdPath && v.isUnisatLegacy) {
+        return false;
+      }
+
+      return true;
+    })
+      .sort((a, b) => a.displayIndex - b.displayIndex)
+      .map((v) => {
+        return {
+          label: v.name,
+          hdPath: v.hdPath,
+          addressType: v.value,
+          isUnisatLegacy: v.isUnisatLegacy
+        };
+      });
+  }, [contextData]);
+
+  const onNext = async () => {
+    try {
+      const option = hdPathOptions[contextData.addressTypeIndex];
+      const hdPath = contextData.customHdPath || option.hdPath;
+      await createAccount(contextData.mnemonics, hdPath, contextData.passphrase, contextData.addressType, 1, alianName);
+      navigate('MainScreen');
+    } catch (e) {
+      tools.toastError((e as any).message);
+    }
+  };
   return (
     <Column
       style={{
@@ -50,20 +102,16 @@ export default function Step2_SetName({
               border: '1px solid #FFFFFF33',
               backgroundColor: '#121212'
             }}
-            style={{ width: '100%', color: '#fff', textAlign: 'right' }}
-            value={''}
-            // onChange={(e) => {}}
+            style={{ width: '100%', color: '#fff' }}
+            value={alianName}
+            onChange={(e) => {
+              setAlianName(e.target.value);
+            }}
             placeholder="Set up an account name for this wallet"
           />
         </Column>
       </Column>
-      <Button
-        text="Finish"
-        preset="primary"
-        onClick={() => {
-          // updateContextData({ tabType: TabType.STEP3 });
-        }}
-      />
+      <Button text="Finish" preset="primary" onClick={onNext} />
     </Column>
   );
 }

@@ -17,7 +17,6 @@ import {
   COIN_NAME,
   COIN_SYMBOL,
   KEYRING_TYPE,
-  KEYRING_TYPES,
   NETWORK_TYPES,
   OPENAPI_URL_MAINNET,
   OPENAPI_URL_TESTNET,
@@ -261,7 +260,8 @@ export class WalletController extends BaseController {
     hdPath: string,
     passphrase: string,
     addressType: AddressType,
-    accountCount: number
+    accountCount: number,
+    walletName?: string
   ) => {
     const originKeyring = await keyringService.createKeyringWithMnemonics(
       mnemonic,
@@ -277,7 +277,12 @@ export class WalletController extends BaseController {
       addressType,
       keyringService.keyrings.length - 1
     );
-    const keyring = this.displayedKeyringToWalletKeyring(displayedKeyring, keyringService.keyrings.length - 1);
+    const keyring = this.displayedKeyringToWalletKeyring(
+      displayedKeyring,
+      keyringService.keyrings.length - 1,
+      true,
+      walletName
+    );
     this.changeKeyring(keyring);
     preferenceService.setShowSafeNotice(true);
   };
@@ -1085,7 +1090,12 @@ export class WalletController extends BaseController {
     return accounts;
   };
 
-  displayedKeyringToWalletKeyring = (displayedKeyring: DisplayedKeyring, index: number, initName = true) => {
+  displayedKeyringToWalletKeyring = (
+    displayedKeyring: DisplayedKeyring,
+    index: number,
+    initName?: boolean,
+    walletName?: string
+  ) => {
     const networkType = preferenceService.getNetworkType();
     const addressType = displayedKeyring.addressType;
     const key = 'keyring_' + index;
@@ -1112,7 +1122,8 @@ export class WalletController extends BaseController {
       type === KEYRING_TYPE.HdKeyring || type === KEYRING_TYPE.KeystoneKeyring ? displayedKeyring.keyring.hdPath : '';
     const alianName = preferenceService.getKeyringAlianName(
       key,
-      initName ? `${KEYRING_TYPES[type].alianName} #${index + 1}` : ''
+      // initName ? `${KEYRING_TYPES[type].alianName} #${index + 1}` : ''
+      initName ? walletName || `Wallet ${String.fromCharCode(65 + index)}` : ''
     );
     const keyring: WalletKeyring = {
       index,
