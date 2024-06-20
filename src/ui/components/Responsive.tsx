@@ -7,7 +7,7 @@ export const AppDimensions = (props) => {
     <div
       style={{
         width: extensionIsInTab ? '100vw' : '375px',
-        height: extensionIsInTab ? '100vh' : '750px'
+        height: extensionIsInTab ? '100vh' : '600px'
       }}
       {...props}
     />
