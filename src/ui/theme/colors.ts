@@ -40,7 +40,8 @@ const palette = {
   blue_dark: '#0DD4C3',
   blue_dark2: '#01BEAE',
 
-  grey_dark: '#404045'
+  grey_dark: '#404045',
+  search_icon: '#828282'
 };
 
 export const colors = Object.assign({}, palette, {
@@ -69,6 +70,14 @@ export const colors = Object.assign({}, palette, {
   brc20_transfer: '#375e4d',
   brc20_transfer_selected: '#41B530',
   brc20_other: '#3e3e3e',
+
+  search_icon: '#828282',
+
+  search_box_bg: '#1E1E1F',
+
+  orange: '#FCCD94',
+
+  light_gray: '#F5F5F5',
 
   // side theme color
   background: '#09090A'

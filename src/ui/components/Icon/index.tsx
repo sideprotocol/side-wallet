@@ -59,7 +59,12 @@ export const svgRegistry = {
   risk: '/images/icons/risk.svg',
   'alert-circle': '/images/icons/alert-circle.svg',
   'check-box': '/images/icons/check-box.svg',
-  'auto-lock': '/images/icons/settings/auto-lock.svg'
+  'auto-lock': '/images/icons/settings/auto-lock.svg',
+  'btc-selected': '/images/icons/wallet/btc-selected.svg',
+  'btc-select-dark': '/images/icons/wallet/btc-select-dark.svg',
+  'side-selected': '/images/icons/wallet/side-selected.svg',
+  'side-select-dark': '/images/icons/wallet/side-selected.svg',
+  search: '/images/icons/wallet/search.svg'
 };
 
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];

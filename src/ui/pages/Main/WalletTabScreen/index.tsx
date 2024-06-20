@@ -251,7 +251,7 @@ export default function WalletTabScreen() {
               preset="default"
               icon="receive"
               onClick={(e) => {
-                navigate('ReceiveScreen');
+                navigate('SelectNetworkScreen');
               }}
               full
             />

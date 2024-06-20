@@ -60,6 +60,9 @@ import UpgradeNoticeScreen from './Settings/UpgradeNoticeScreen';
 import TestScreen from './Test/TestScreen';
 import HistoryScreen from './Wallet/HistoryScreen';
 import ReceiveScreen from './Wallet/ReceiveScreen';
+import SelectAddressScreen from './Wallet/SelectAddressScreen';
+import SelectCryptoScreen from './Wallet/SelectCryptoScreen';
+import SelectNetworkScreen from './Wallet/SelectNetworkScreen';
 import TxConfirmScreen from './Wallet/TxConfirmScreen';
 import TxCreateScreen from './Wallet/TxCreateScreen';
 import TxFailScreen from './Wallet/TxFailScreen';
@@ -108,6 +111,22 @@ const routes = {
     path: '/account/unlock',
     element: <UnlockScreen />
   },
+
+  SelectNetworkScreen: {
+    path: '/wallet/select-network',
+    element: <SelectNetworkScreen />
+  },
+
+  SelectCryptoScreen: {
+    path: '/wallet/select-crypto',
+    element: <SelectCryptoScreen />
+  },
+
+  SelectAddressScreen: {
+    path: '/wallet/select-address',
+    element: <SelectAddressScreen />
+  },
+
   SwitchAccountScreen: {
     path: '/account/switch-account',
     element: <SwitchAccountScreen />

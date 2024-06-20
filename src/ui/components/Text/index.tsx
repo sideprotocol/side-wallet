@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 import { colors, ColorTypes } from '@/ui/theme/colors';
 import { typography } from '@/ui/theme/typography';
@@ -64,7 +64,7 @@ const $presets = {
   default: $baseStyle
 };
 export interface TextProps extends BaseViewProps {
-  text?: string | number;
+  text?: string | number | ReactNode;
   preset?: Presets;
   size?: Sizes;
   color?: ColorTypes;
@@ -78,7 +78,18 @@ export interface TextProps extends BaseViewProps {
 export const $textPresets = $presets;
 
 export function Text(props: TextProps) {
-  const { size, text, textCenter, textEnd, wrap, selectText, disableTranslate, style: $styleOverride, ...rest } = props;
+  const {
+    size,
+    text,
+    textCenter,
+    textEnd,
+    wrap,
+    selectText,
+    disableTranslate,
+    style: $styleOverride,
+    children,
+    ...rest
+  } = props;
   const preset: Presets = props.preset || 'regular';
   const $textStyle = Object.assign(
     {},
@@ -93,6 +104,8 @@ export function Text(props: TextProps) {
   return (
     <BaseView style={$style} {...rest}>
       {disableTranslate ? <span translate="no">{text}</span> : text}
+
+      {children}
     </BaseView>
   );
 }
