@@ -1,9 +1,9 @@
 import { AddressType, RestoreWalletType } from '@/shared/types';
 
 export enum TabType {
-  STEP1 = 'STEP1',
-  STEP2 = 'STEP2',
-  STEP3 = 'STEP3'
+  STEP1 = '1',
+  STEP2 = '2',
+  STEP3 = '3'
 }
 
 export enum WordsType {

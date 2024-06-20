@@ -108,18 +108,6 @@ export default function CreateHDWalletScreen() {
           key: v.key,
           label: v.label
         }))}
-        onChange={(key) => {
-          const toTabType = key as TabType;
-          if (toTabType === TabType.STEP2) {
-            if (!contextData.step1Completed) {
-              setTimeout(() => {
-                updateContextData({ tabType: contextData.tabType });
-              }, 200);
-              return;
-            }
-          }
-          updateContextData({ tabType: toTabType });
-        }}
       />
 
       {currentChildren}
