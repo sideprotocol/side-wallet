@@ -57,7 +57,7 @@ export default function UnlockScreen() {
         fullX
         fullY
         style={{
-          padding: '24px 16px'
+          padding: '0 16px 24px'
         }}>
         <Column
           justifyCenter

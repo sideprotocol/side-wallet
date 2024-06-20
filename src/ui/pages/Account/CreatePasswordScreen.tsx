@@ -90,7 +90,7 @@ export default function CreatePasswordScreen() {
   return (
     <Layout
       style={{
-        padding: '24px 16px'
+        padding: '0 16px 24px'
       }}>
       <Column
         style={{
