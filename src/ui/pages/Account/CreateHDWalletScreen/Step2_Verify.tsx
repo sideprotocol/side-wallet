@@ -87,7 +87,8 @@ export default function Step2_Verify({
             backgroundColor: '#222222',
             borderRadius: '14px',
             padding: '24px 16px',
-            marginTop: '24px'
+            marginTop: '24px',
+            width: '100%'
           }}>
           <Row
             style={{
@@ -114,7 +115,7 @@ export default function Step2_Verify({
                 border: '1px solid #FFFFFF33',
                 backgroundColor: '#121212'
               }}
-              style={{ width: '100%', color: '#fff' }}
+              style={{ width: '100%', color: '#fff', textAlign: 'right' }}
               value={firstWordInput}
               onChange={(e) => {
                 setFirstWordInput(e.target.value);
@@ -148,7 +149,7 @@ export default function Step2_Verify({
                 border: '1px solid #FFFFFF33',
                 backgroundColor: '#121212'
               }}
-              style={{ width: '100%', color: '#fff' }}
+              style={{ width: '100%', color: '#fff', textAlign: 'right' }}
               value={secondWordInput}
               onChange={(e) => {
                 setSecondWordInput(e.target.value);

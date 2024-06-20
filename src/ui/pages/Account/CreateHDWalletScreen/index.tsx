@@ -7,6 +7,7 @@ import { Header, Layout, StepBar } from '@/ui/components';
 import { useNavigate } from '../../MainRoute';
 import Step1_Create from './Step1_Create';
 import Step1_Import from './Step1_Import';
+import Step2_SetName from './Step2_SetName';
 import Step2_Verify from './Step2_Verify';
 import { ContextData, TabType, UpdateContextDataParams, WordsType } from './type';
 
@@ -54,7 +55,7 @@ export default function CreateHDWalletScreen() {
         {
           key: TabType.STEP2,
           label: 'Step 2',
-          children: <Step2_Verify contextData={contextData} updateContextData={updateContextData} />
+          children: <Step2_SetName contextData={contextData} updateContextData={updateContextData} />
         }
       ];
     } else {
@@ -69,6 +70,11 @@ export default function CreateHDWalletScreen() {
           key: TabType.STEP2,
           label: 'Step 2',
           children: <Step2_Verify contextData={contextData} updateContextData={updateContextData} />
+        },
+        {
+          key: TabType.STEP3,
+          label: 'Step 3',
+          children: <Step2_SetName contextData={contextData} updateContextData={updateContextData} />
         }
       ];
     }
@@ -79,14 +85,6 @@ export default function CreateHDWalletScreen() {
     return item?.children;
   }, [items, contextData.tabType]);
 
-  const activeTabIndex = useMemo(() => {
-    const index = items.findIndex((v) => v.key === contextData.tabType);
-    if (index === -1) {
-      return 0;
-    } else {
-      return index;
-    }
-  }, [items, contextData.tabType]);
   return (
     <Layout
       style={{
