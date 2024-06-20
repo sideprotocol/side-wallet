@@ -42,6 +42,7 @@ import SendRunesScreen from './Runes/SendRunesScreen';
 import AboutScreen from './Settings/AboutScreen';
 import AddressTypeScreen from './Settings/AddressTypeScreen';
 import AdvancedTabScreen from './Settings/AdvancedTabScreen';
+import AutoLockScreen from './Settings/AutoLockScreen';
 import ChangeEndpointsScreen from './Settings/ChangeEndpointsScreen';
 import ChangePasswordScreen from './Settings/ChangePasswordScreen';
 import CurrencyTypeScreen from './Settings/CurrencyTypeScreen';
@@ -222,6 +223,11 @@ const routes = {
   AboutScreen: {
     path: '/settings/about',
     element: <AboutScreen />
+  },
+
+  AutoLockScreen: {
+    path: '/settings/auto-lock',
+    element: <AutoLockScreen />
   },
 
   HistoryScreen: {

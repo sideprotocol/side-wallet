@@ -48,7 +48,7 @@ const AdvancedList: Setting[] = [
     value: '',
     desc: '',
     action: '',
-    route: '',
+    route: '/settings/auto-lock',
 
     right: true
   }

@@ -58,7 +58,8 @@ export const svgRegistry = {
   burn: ' /images/icons/burn.svg',
   risk: '/images/icons/risk.svg',
   'alert-circle': '/images/icons/alert-circle.svg',
-  'check-box': '/images/icons/check-box.svg'
+  'check-box': '/images/icons/check-box.svg',
+  'auto-lock': '/images/icons/settings/auto-lock.svg'
 };
 
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];
