@@ -47,6 +47,11 @@ const $presets = {
   sub: Object.assign({}, $baseStyle, $sizeStyles.xs, {
     color: colors.white_muted
   }),
+
+  disconnect: Object.assign({}, $baseStyle, $sizeStyles.sm, {
+    color: colors.red_disconnect
+  }),
+
   'sub-bold': Object.assign({}, $baseStyle, $sizeStyles.xs, {
     fontFamily: typography.primary.bold,
     color: colors.white_muted

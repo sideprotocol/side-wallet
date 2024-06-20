@@ -28,7 +28,8 @@ export function Header(props: HeaderProps) {
     }
   }, [title]);
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div
+      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0px 20px 0px' }}>
       <Row full>
         <Column selfItemsCenter>
           {LeftComponent}
@@ -50,7 +51,7 @@ export function Header(props: HeaderProps) {
                 />
               </svg>
 
-              {leftTitle && <Text text={leftTitle} preset="regular-bold" />}
+              {leftTitle && <Text text={leftTitle} preset="title-bold" />}
             </Row>
           )}
         </Column>

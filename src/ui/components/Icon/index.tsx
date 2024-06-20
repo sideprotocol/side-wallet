@@ -13,6 +13,7 @@ export const svgRegistry = {
   expand: './images/icons/settings/expand-view.svg',
   security: './images/icons/settings/security.svg',
   lock: './images/icons/settings/lock.svg',
+  telegram: './images/icons/telegram.svg',
 
   right: './images/icons/arrow-right.svg',
   left: './images/icons/arrow-left.svg',
@@ -39,6 +40,8 @@ export const svgRegistry = {
   eye: '/images/icons/eye.svg',
   'eye-slash': '/images/icons/eye-slash.svg',
   copy: './images/icons/copy-solid.svg',
+  copy2: './images/icons/settings/copy2.svg',
+
   close: './images/icons/xmark.svg',
 
   'circle-check': '/images/icons/circle-check.svg',
@@ -53,7 +56,9 @@ export const svgRegistry = {
   warning: '/images/icons/warning.svg',
   alert: '/images/icons/alert.svg',
   burn: ' /images/icons/burn.svg',
-  risk: '/images/icons/risk.svg'
+  risk: '/images/icons/risk.svg',
+  'alert-circle': '/images/icons/alert-circle.svg',
+  'check-box': '/images/icons/check-box.svg'
 };
 
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];
