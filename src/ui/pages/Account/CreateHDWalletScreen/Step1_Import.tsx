@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { OW_HD_PATH } from '@/shared/constant';
 import { AddressType, RestoreWalletType } from '@/shared/types';
@@ -21,15 +21,7 @@ export default function Step1_Import({
   const [hover, setHover] = useState(999);
   const [disabled, setDisabled] = useState(true);
 
-  const wordsItems = useMemo(() => {
-    if (contextData.restoreWalletType === RestoreWalletType.OW) {
-      return [WORDS_12_ITEM];
-    } else if (contextData.restoreWalletType === RestoreWalletType.XVERSE) {
-      return [WORDS_12_ITEM];
-    } else {
-      return [WORDS_12_ITEM, WORDS_24_ITEM];
-    }
-  }, [contextData]);
+  const wordsItems = [WORDS_12_ITEM, WORDS_24_ITEM];
 
   const [keys, setKeys] = useState<Array<string>>(new Array(wordsItems[contextData.wordsType].count).fill(''));
 
@@ -149,7 +141,8 @@ export default function Step1_Import({
                       gap: '8px',
                       height: '32px',
                       borderRadius: '8px',
-                      border: '1px solid #000'
+                      border: '1px solid #FFFFFF33',
+                      backgroundColor: '#121212'
                     }}>
                     <Text
                       text={`${index + 1}. `}
@@ -165,7 +158,7 @@ export default function Step1_Import({
                         border: 'none',
                         backgroundColor: 'transparent'
                       }}
-                      style={{ width: '100%' }}
+                      style={{ width: '100%', color: '#fff' }}
                       value={_}
                       onPaste={(e) => {
                         handleEventPaste(e, index);

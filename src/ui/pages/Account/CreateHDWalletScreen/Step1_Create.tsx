@@ -1,15 +1,11 @@
-import { Checkbox } from 'antd';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import { Button, Card, Column, Grid, Row, Text } from '@/ui/components';
+import { Button, ButtonGroup, Column, Grid, Image, Input, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
-import { FooterButtonContainer } from '@/ui/components/FooterButtonContainer';
 import { Icon } from '@/ui/components/Icon';
-import { fontSizes } from '@/ui/theme/font';
 import { copyToClipboard, useWallet } from '@/ui/utils';
 
-import { ContextData, TabType, UpdateContextDataParams } from './type';
+import { ContextData, TabType, UpdateContextDataParams, WORDS_12_ITEM, WORDS_24_ITEM } from './type';
 
 export default function Step1_Create({
   contextData,
@@ -18,27 +14,20 @@ export default function Step1_Create({
   contextData: ContextData;
   updateContextData: (params: UpdateContextDataParams) => void;
 }) {
-  const [checked, setChecked] = useState(false);
-
   const wallet = useWallet();
   const tools = useTools();
 
   const init = async () => {
     const _mnemonics = (await wallet.getPreMnemonics()) || (await wallet.generatePreMnemonic());
     updateContextData({
-      mnemonics: _mnemonics
+      mnemonics: _mnemonics,
+      step1Completed: true
     });
   };
 
   useEffect(() => {
     init();
   }, []);
-
-  const onChange = (e: CheckboxChangeEvent) => {
-    const val = e.target.checked;
-    setChecked(val);
-    updateContextData({ step1Completed: val });
-  };
 
   function copy(str: string) {
     copyToClipboard(str).then(() => {
@@ -53,48 +42,200 @@ export default function Step1_Create({
   };
 
   const words = contextData.mnemonics.split(' ');
+  const wordsItems = [WORDS_12_ITEM, WORDS_24_ITEM];
   return (
-    <Column gap="xl">
-      <Text text="Secret Recovery Phrase" preset="title-bold" textCenter />
-      <Text
-        text="This phrase is the ONLY way to recover your wallet. Do NOT share it with anyone!"
-        color="warning"
-        textCenter
-      />
-
-      <Row
-        justifyCenter
-        onClick={(e) => {
-          copy(contextData.mnemonics);
+    <>
+      <Column
+        style={{
+          flex: 1,
+          overflow: 'hidden'
         }}>
-        <Icon icon="copy" color="textDim" />
-        <Text text="Copy to clipboard" color="textDim" />
-      </Row>
+        <Column
+          style={{
+            flex: 1,
+            overflow: 'auto'
+          }}>
+          <Column
+            style={{
+              marginTop: '16px',
+              border: '1px solid #404045',
+              boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+              backgroundColor: '#222222',
+              borderRadius: '14px',
+              padding: '16px'
+            }}>
+            {wordsItems.length > 1 ? (
+              <ButtonGroup
+                rowProps={{
+                  justifyCenter: true
+                }}
+                list={wordsItems.map((item) => ({
+                  key: item.key,
+                  label: item.label
+                }))}
+                onChange={(value) => {
+                  // const wordsType = value as WordsType;
+                  // updateContextData({ wordsType });
+                  // setKeys(new Array(wordsItems[wordsType].count).fill(''));
+                }}
+                value={contextData.wordsType}
+              />
+            ) : null}
+            <Row
+              justifyCenter
+              onClick={(e) => {
+                copy(contextData.mnemonics);
+              }}
+              style={{
+                marginTop: '10px'
+              }}>
+              <Icon icon="copy" color="textDim" size={14} />
+              <Text text="Copy to clipboard" color="textDim" />
+            </Row>
 
-      <Row justifyCenter>
-        <Grid columns={2}>
-          {words.map((v, index) => {
-            return (
-              <Row key={index}>
-                <Text text={`${index + 1}. `} style={{ width: 40 }} />
-                <Card preset="style2" style={{ width: 200 }}>
-                  <Text text={v} selectText disableTranslate />
-                </Card>
-              </Row>
-            );
-          })}
-        </Grid>
-      </Row>
+            <Row justifyCenter style={{ marginTop: '16px' }}>
+              <Grid columns={2}>
+                {words.map((v, index) => {
+                  return (
+                    <Row
+                      key={index}
+                      style={{
+                        gap: '8px',
+                        height: '32px',
+                        borderRadius: '8px',
+                        border: '1px solid #FFFFFF33',
+                        backgroundColor: '#121212'
+                      }}>
+                      <Text
+                        text={`${index + 1}. `}
+                        style={{ width: 25, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+                        textEnd
+                        color="textDim"
+                      />
+                      <Input
+                        containerStyle={{
+                          minHeight: '30px',
+                          padding: '0 10px',
+                          flex: 1,
+                          border: 'none',
+                          backgroundColor: 'transparent'
+                        }}
+                        style={{ width: '100%', color: '#fff' }}
+                        value={v}
+                        disabled
+                        placeholder=""
+                      />
+                    </Row>
+                  );
+                })}
+              </Grid>
+            </Row>
+          </Column>
 
-      <Row justifyCenter>
-        <Checkbox onChange={onChange} checked={checked} style={{ fontSize: fontSizes.sm }}>
-          <Text text="I saved My Secret Recovery Phrase" />
-        </Checkbox>
-      </Row>
+          <Column
+            style={{
+              marginTop: '24px',
+              backgroundColor: 'rgb(240 182 34 / 10%)',
+              borderRadius: '14px',
+              padding: '10px',
+              gap: '4px'
+            }}>
+            <Row
+              style={{
+                alignItems: 'center'
+              }}>
+              <Image src="/images/icons/alert-triangle.svg" size={24} />
+              <Text
+                text="Keep It Private:"
+                style={{
+                  color: '#F0B622',
+                  lineHeight: '20px',
+                  fontSize: '14px',
+                  fontWeight: 600
+                }}
+              />
+            </Row>
+            <Text
+              text="Never share your recovery phrase with anyone. This phrase grants access to your wallet"
+              style={{
+                color: '#fff',
+                lineHeight: '18px',
+                fontSize: '12px',
+                fontWeight: 400
+              }}
+            />
+          </Column>
 
-      <FooterButtonContainer>
-        <Button disabled={!checked} text="Continue" preset="primary" onClick={btnClick} />
-      </FooterButtonContainer>
-    </Column>
+          <Column
+            style={{
+              marginTop: '10px',
+              backgroundColor: 'rgb(240 182 34 / 10%)',
+              borderRadius: '14px',
+              padding: '10px',
+              gap: '4px'
+            }}>
+            <Row
+              style={{
+                alignItems: 'center'
+              }}>
+              <Image src="/images/icons/alert-triangle.svg" size={24} />
+              <Text
+                text="No Recovery Options:"
+                style={{
+                  color: '#F0B622',
+                  lineHeight: '20px',
+                  fontSize: '14px',
+                  fontWeight: 600
+                }}
+              />
+            </Row>
+            <Text
+              text="If you lose your recovery phrase, you will not be able to recover your wallet."
+              style={{
+                color: '#fff',
+                lineHeight: '18px',
+                fontSize: '12px',
+                fontWeight: 400
+              }}
+            />
+          </Column>
+
+          <Column
+            style={{
+              marginTop: '10px',
+              backgroundColor: 'rgb(240 182 34 / 10%)',
+              borderRadius: '14px',
+              padding: '10px',
+              gap: '4px'
+            }}>
+            <Row
+              style={{
+                alignItems: 'center'
+              }}>
+              <Image src="/images/icons/alert-triangle.svg" size={24} />
+              <Text
+                text="Store Securely:"
+                style={{
+                  color: '#F0B622',
+                  lineHeight: '20px',
+                  fontSize: '14px',
+                  fontWeight: 600
+                }}
+              />
+            </Row>
+            <Text
+              text="Write down your recovery phrase and store it in a safe place."
+              style={{
+                color: '#fff',
+                lineHeight: '18px',
+                fontSize: '12px',
+                fontWeight: 400
+              }}
+            />
+          </Column>
+        </Column>
+        <Button text="Next" preset="primary" onClick={btnClick} />
+      </Column>
+    </>
   );
 }

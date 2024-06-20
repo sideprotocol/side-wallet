@@ -58,7 +58,7 @@ export default function CreateHDWalletScreen() {
         }
       ];
     } else {
-      // 1) create a wallet
+      // 1) create a new wallet
       return [
         {
           key: TabType.STEP1,
