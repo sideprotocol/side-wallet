@@ -338,7 +338,7 @@ function TextInput(props: InputProps) {
         type={'text'}
         disabled={disabled}
         autoFocus={autoFocus}
-        style={Object.assign({}, $baseInputStyle, $inputStyleOverride, disabled ? { color: colors.textDim } : {})}
+        style={Object.assign({}, $baseInputStyle, $inputStyleOverride, {})}
         {...rest}
       />
     </div>
