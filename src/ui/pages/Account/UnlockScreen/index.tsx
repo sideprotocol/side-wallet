@@ -20,7 +20,6 @@ export default function UnlockScreen() {
   const unlock = useUnlockCallback();
   const tools = useTools();
   const btnClick = async () => {
-    // run(password);
     try {
       await unlock(password);
       if (!isInNotification) {
@@ -102,6 +101,9 @@ export default function UnlockScreen() {
             lineHeight: '24px'
           }}
           textCenter
+          onClick={() => {
+            navigate('ForgetPasswordScreen');
+          }}
         />
       </Column>
     </Layout>

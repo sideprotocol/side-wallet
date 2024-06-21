@@ -16,6 +16,7 @@ import CreateHDWalletScreen from './Account/CreateHDWalletScreen';
 import CreateKeystoneWalletScreen from './Account/CreateKeystoneWalletScreen';
 import CreatePasswordScreen from './Account/CreatePasswordScreen';
 import CreateSimpleWalletScreen from './Account/CreateSimpleWalletScreen';
+import ForgetPasswordScreen from './Account/ForgetPasswordScreen';
 import SwitchAccountScreen from './Account/SwitchAccountScreen';
 import SwitchKeyringScreen from './Account/SwitchKeyringScreen';
 import UnlockScreen from './Account/UnlockScreen';
@@ -110,6 +111,10 @@ const routes = {
   UnlockScreen: {
     path: '/account/unlock',
     element: <UnlockScreen />
+  },
+  ForgetPasswordScreen: {
+    path: '/account/forget-password',
+    element: <ForgetPasswordScreen />
   },
 
   SelectNetworkScreen: {
