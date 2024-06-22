@@ -59,8 +59,11 @@ export function Header(props: HeaderProps) {
 
       <Row itemsCenter>{CenterComponent}</Row>
 
-      <Row full justifyEnd>
-        <Column selfItemsCenter>{RightComponent}</Column>
+      <Row full justifyEnd style={{
+        marginRight: '10px',
+        marginTop: '10px',
+      }}>
+        <Column >{RightComponent}</Column>
       </Row>
     </div>
   );

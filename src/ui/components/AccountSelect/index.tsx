@@ -13,8 +13,9 @@ const AccountSelect = () => {
 
   return (
     <Row
+      itemsCenter
       justifyBetween
-      px="md"
+      px="xl"
       py="md"
       bg="card"
       rounded

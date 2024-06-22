@@ -4,7 +4,7 @@ import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import { AddressFlagType, KEYRING_TYPE } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { checkAddressFlag } from '@/shared/utils';
-import { Card, Column, Content, Footer, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Card, Column, Content, Footer, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import AccountSelect from '@/ui/components/AccountSelect';
 import { AddressBar } from '@/ui/components/AddressBar';
 import { Button } from '@/ui/components/Button';
@@ -28,7 +28,6 @@ import { useFetchUtxosCallback, useSafeBalance } from '@/ui/state/transactions/h
 import { useAssetTabKey, useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { AssetTabKey, uiActions } from '@/ui/state/ui/reducer';
 import { fontSizes } from '@/ui/theme/font';
-// import walletLogo from '/images/logo/wallet-logo.png';
 import { amountToSatoshis, satoshisToAmount, useWallet } from '@/ui/utils';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
@@ -145,54 +144,37 @@ export default function WalletTabScreen() {
 
   const [buyBtcModalVisible, setBuyBtcModalVisible] = useState(false);
   return (
-    <Layout style={{
-      backgroundColor: '#09090A',
-    }}>
-      {/*<Header*/}
-      {/*  LeftComponent={*/}
-      {/*    <Column>*/}
-      {/*      {connected && (*/}
-      {/*        <Row*/}
-      {/*          itemsCenter*/}
-      {/*          onClick={() => {*/}
-      {/*            navigate('ConnectedSitesScreen');*/}
-      {/*          }}>*/}
-      {/*          <Text text="·" color="green" size="xxl" />*/}
-      {/*          <Text text="Dapp Connected" size="xxs" />*/}
-      {/*        </Row>*/}
-      {/*      )}*/}
-      {/*    </Column>*/}
-      {/*  }*/}
-      {/*  RightComponent={*/}
-      {/*    <Card*/}
-      {/*      preset="style2"*/}
-      {/*      onClick={() => {*/}
-      {/*        navigate('SwitchKeyringScreen');*/}
-      {/*      }}>*/}
-      {/*      <Text text={currentKeyring.alianName} size="xxs" />*/}
-      {/*    </Card>*/}
-      {/*  }*/}
-      {/*/>*/}
-
+    <Layout>
       <Header
-        LeftComponent={<Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} />}
-        title={
-          (currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring) && <AccountSelect />
+        LeftComponent={
+          <Column>
+            {connected && (
+              <Row
+                itemsCenter
+                onClick={() => {
+                  navigate('ConnectedSitesScreen');
+                }}>
+                <Text text="·" color="green" size="xxl" />
+                <Text text="Dapp Connected" size="xxs" />
+              </Row>
+            )}
+          </Column>
         }
-        RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
+        RightComponent={
+          <Card
+            preset="style2"
+            onClick={() => {
+              navigate('SwitchKeyringScreen');
+            }}>
+            <Text text={currentKeyring.alianName} size="xxs" />
+          </Card>
+        }
       />
 
-      {/*<Row justifyBetween>*/}
-      {/*  /!*<Icon icon={'/images/logo/wallet-logo.png'} color="white" />*!/*/}
-      {/*  {currentKeyring.type === KEYRING_TYPE.HdKeyring && <AccountSelect />}*/}
-      {/*</Row>*/}
-
-      <Content style={{
-        backgroundColor: '#09090A',
-      }}>
-        <Column gap="xl" >
-          {/*{currentKeyring.type === KEYRING_TYPE.HdKeyring && <AccountSelect />}*/}
-          {/*{currentKeyring.type === KEYRING_TYPE.KeystoneKeyring && <AccountSelect />}*/}
+      <Content>
+        <Column gap="xl">
+          {currentKeyring.type === KEYRING_TYPE.HdKeyring && <AccountSelect />}
+          {currentKeyring.type === KEYRING_TYPE.KeystoneKeyring && <AccountSelect />}
           {isTestNetwork && <Text text="Bitcoin Testnet activated." color="danger" textCenter />}
 
           {walletConfig.statusMessage && <Text text={walletConfig.statusMessage} color="danger" textCenter />}
@@ -250,41 +232,50 @@ export default function WalletTabScreen() {
             </div>
           </Tooltip>
 
-          {/*<Row itemsCenter justifyCenter>*/}
-          {/*  <AddressBar />*/}
-          {/*  <Row*/}
-          {/*    style={{ marginLeft: 8 }}*/}
-          {/*    itemsCenter*/}
-          {/*    onClick={() => {*/}
-          {/*      window.open(`${blockstreamUrl}/address/${currentAccount.address}`);*/}
-          {/*    }}>*/}
-          {/*    <Text text={'View History'} size="xs" />*/}
-          {/*    <Icon icon="link" size={fontSizes.xs} />*/}
-          {/*  </Row>*/}
-          {/*</Row>*/}
-
           <Row itemsCenter justifyCenter>
-            <Row style={{
-              width: '93%',
-            }}  justifyBetween>
-              <Column  itemsCenter>
-                <Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.iconxLarge} />
-                Receive
-              </Column>
-
-              <Column  itemsCenter>
-                <Image src="/images/icons/main/send-icon.svg" size={fontSizes.iconxLarge} />
-                Send
-              </Column>
-
-              <Column  itemsCenter>
-                <Image src="/images/icons/main/buy-icon.svg" size={fontSizes.iconxLarge} />
-                Buy
-              </Column>
-
+            <AddressBar />
+            <Row
+              style={{ marginLeft: 8 }}
+              itemsCenter
+              onClick={() => {
+                window.open(`${blockstreamUrl}/address/${currentAccount.address}`);
+              }}>
+              <Text text={'View History'} size="xs" />
+              <Icon icon="link" size={fontSizes.xs} />
             </Row>
           </Row>
 
+          <Row justifyBetween>
+            <Button
+              text="Receive"
+              preset="default"
+              icon="receive"
+              onClick={(e) => {
+                navigate('SelectNetworkScreen');
+              }}
+              full
+            />
+
+            <Button
+              text="Send"
+              preset="default"
+              icon="send"
+              onClick={(e) => {
+                resetUiTxCreateScreen();
+                navigate('TxCreateScreen');
+              }}
+              full
+            />
+            <Button
+              text="Buy"
+              preset="default"
+              icon="bitcoin"
+              onClick={(e) => {
+                setBuyBtcModalVisible(true);
+              }}
+              full
+            />
+          </Row>
 
           <Tabs
             size={'small'}
