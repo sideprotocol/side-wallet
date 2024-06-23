@@ -148,31 +148,6 @@ export default function WalletTabScreen() {
     <Layout style={{
       backgroundColor: '#09090A',
     }}>
-      {/*<Header*/}
-      {/*  LeftComponent={*/}
-      {/*    <Column>*/}
-      {/*      {connected && (*/}
-      {/*        <Row*/}
-      {/*          itemsCenter*/}
-      {/*          onClick={() => {*/}
-      {/*            navigate('ConnectedSitesScreen');*/}
-      {/*          }}>*/}
-      {/*          <Text text="·" color="green" size="xxl" />*/}
-      {/*          <Text text="Dapp Connected" size="xxs" />*/}
-      {/*        </Row>*/}
-      {/*      )}*/}
-      {/*    </Column>*/}
-      {/*  }*/}
-      {/*  RightComponent={*/}
-      {/*    <Card*/}
-      {/*      preset="style2"*/}
-      {/*      onClick={() => {*/}
-      {/*        navigate('SwitchKeyringScreen');*/}
-      {/*      }}>*/}
-      {/*      <Text text={currentKeyring.alianName} size="xxs" />*/}
-      {/*    </Card>*/}
-      {/*  }*/}
-      {/*/>*/}
 
       <Header
         LeftComponent={<Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} />}
@@ -267,25 +242,30 @@ export default function WalletTabScreen() {
             <Row style={{
               width: '93%',
             }}  justifyBetween>
-              <Column  itemsCenter>
+              <Column onClick={() => {
+                // navigate('');
+                navigate('SelectNetworkScreen');
+              }} itemsCenter>
                 <Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.iconxLarge} />
                 Receive
               </Column>
 
-              <Column  itemsCenter>
+              <Column onClick={() => {
+                resetUiTxCreateScreen();
+                navigate('TxCreateScreen');
+              }} itemsCenter>
                 <Image src="/images/icons/main/send-icon.svg" size={fontSizes.iconxLarge} />
                 Send
               </Column>
 
-              <Column  itemsCenter>
+              <Column onClick={() => {
+                setBuyBtcModalVisible(true);
+              }} itemsCenter>
                 <Image src="/images/icons/main/buy-icon.svg" size={fontSizes.iconxLarge} />
                 Buy
               </Column>
-
             </Row>
           </Row>
-
-
           <Tabs
             size={'small'}
             defaultActiveKey={assetTabKey as unknown as string}
