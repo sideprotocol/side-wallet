@@ -57,7 +57,7 @@ export const colors = Object.assign({}, palette, {
 
   card: 'rgb(217 217 217 / 10%)',
   warning: palette.orange,
-  primary: palette.yellow,
+  primary: '#0DD4C3',
 
   bg2: '#2a2a2a',
   bg3: '#434242',

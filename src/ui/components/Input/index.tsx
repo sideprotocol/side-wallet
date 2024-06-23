@@ -161,7 +161,7 @@ function AmountInput(props: InputProps) {
             if (onMaxClick) onMaxClick();
           }}
           text={'Max'}
-          color={'yellow'}
+          color={'primary'}
           size="sm"
         />
       ) : null}

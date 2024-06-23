@@ -180,7 +180,7 @@ export default function TxCreateScreen() {
           />
 
           <Row justifyBetween>
-            <Text text="Available" color="gold" />
+            <Text text="Available" color="primary" />
             {spendUnavailableSatoshis > 0 && (
               <Row>
                 <Text text={`${spendUnavailableAmount}`} size="sm" style={{ color: '#65D5F0' }} />
@@ -190,7 +190,7 @@ export default function TxCreateScreen() {
             )}
 
             <Row>
-              <Text text={`${avaiableAmount}`} size="sm" color="gold" />
+              <Text text={`${avaiableAmount}`} size="sm" color="primary" />
               <Text text={`BTC`} size="sm" color="textDim" />
             </Row>
           </Row>
