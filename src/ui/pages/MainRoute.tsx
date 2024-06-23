@@ -17,6 +17,7 @@ import CreateKeystoneWalletScreen from './Account/CreateKeystoneWalletScreen';
 import CreatePasswordScreen from './Account/CreatePasswordScreen';
 import CreateSimpleWalletScreen from './Account/CreateSimpleWalletScreen';
 import ForgetPasswordScreen from './Account/ForgetPasswordScreen';
+import KeyringSettingScreen from './Account/KeyringSettingScreen';
 import SwitchAccountScreen from './Account/SwitchAccountScreen';
 import SwitchKeyringScreen from './Account/SwitchKeyringScreen';
 import UnlockScreen from './Account/UnlockScreen';
@@ -330,6 +331,10 @@ const routes = {
   RunesTokenScreen: {
     path: '/runes/token',
     element: <RunesTokenScreen />
+  },
+  KeyringSettingScreen: {
+    path: '/keyring/setting',
+    element: <KeyringSettingScreen />
   }
 };
 

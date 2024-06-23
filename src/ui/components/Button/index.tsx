@@ -107,6 +107,13 @@ const $viewPresets = {
     justifyContent: 'center',
     paddingTop: spacing.medium,
     paddingBottom: spacing.medium
+  } as CSSProperties),
+
+  ghostDanger: Object.assign({}, $baseViewStyle, {
+    border: `1px solid ${colors.red}`,
+    justifyContent: 'center',
+    paddingTop: spacing.medium,
+    paddingBottom: spacing.medium
   } as CSSProperties)
 };
 
@@ -130,6 +137,7 @@ const $hoverViewPresets: Record<Presets, CSSProperties> = {
     backgroundColor: '#383535'
   },
   ghost: {},
+  ghostDanger: {},
   reset: {}
 };
 
@@ -151,7 +159,8 @@ const $textPresets: Record<Presets, CSSProperties> = {
   bar: Object.assign({}, $baseTextStyle, { textAlign: 'left', fontWeight: 'bold' } as CSSProperties),
 
   reset: Object.assign({}, $baseTextStyle, { fontWeight: 400 } as CSSProperties),
-  ghost: Object.assign({}, $baseTextStyle, { fontWeight: 400, color: colors.blue_dark } as CSSProperties)
+  ghost: Object.assign({}, $baseTextStyle, { fontWeight: 400, color: colors.blue_dark } as CSSProperties),
+  ghostDanger: Object.assign({}, $baseTextStyle, { fontWeight: 400, color: colors.red } as CSSProperties)
 };
 
 const $rightAccessoryStyle: CSSProperties = { marginLeft: spacing.extraSmall, zIndex: 1 };
