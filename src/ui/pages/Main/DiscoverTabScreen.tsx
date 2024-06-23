@@ -53,7 +53,8 @@ export default function DiscoverTabScreen() {
         </Column>
       </Content>
       <Footer px="zero" py="zero">
-        <NavTabBar tab="mint" />
+        {/*<NavTabBar tab="mint" />*/}
+        <NavTabBar tab="swap" />
       </Footer>
     </Layout>
   );

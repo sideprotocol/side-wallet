@@ -147,31 +147,6 @@ export default function WalletTabScreen() {
       style={{
         backgroundColor: '#09090A'
       }}>
-      {/*<Header*/}
-      {/*  LeftComponent={*/}
-      {/*    <Column>*/}
-      {/*      {connected && (*/}
-      {/*        <Row*/}
-      {/*          itemsCenter*/}
-      {/*          onClick={() => {*/}
-      {/*            navigate('ConnectedSitesScreen');*/}
-      {/*          }}>*/}
-      {/*          <Text text="·" color="green" size="xxl" />*/}
-      {/*          <Text text="Dapp Connected" size="xxs" />*/}
-      {/*        </Row>*/}
-      {/*      )}*/}
-      {/*    </Column>*/}
-      {/*  }*/}
-      {/*  RightComponent={*/}
-      {/*    <Card*/}
-      {/*      preset="style2"*/}
-      {/*      onClick={() => {*/}
-      {/*        navigate('SwitchKeyringScreen');*/}
-      {/*      }}>*/}
-      {/*      <Text text={currentKeyring.alianName} size="xxs" />*/}
-      {/*    </Card>*/}
-      {/*  }*/}
-      {/*/>*/}
 
       <Header
         LeftComponent={
@@ -185,7 +160,9 @@ export default function WalletTabScreen() {
               <Text text="Dapp Connected" size="xxs" />
             </Row>
           ) : (
-            <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} />
+            <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} style={{
+              marginLeft: 10
+            }} />
           )
         }
         title={
@@ -286,17 +263,24 @@ export default function WalletTabScreen() {
                 width: '93%'
               }}
               justifyBetween>
-              <Column itemsCenter>
+              <Column onClick={() => {
+                navigate('SelectNetworkScreen');
+              }} itemsCenter>
                 <Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.iconxLarge} />
                 Receive
               </Column>
 
-              <Column itemsCenter>
+              <Column onClick={() => {
+                resetUiTxCreateScreen();
+                navigate('TxCreateScreen');
+              }}  itemsCenter>
                 <Image src="/images/icons/main/send-icon.svg" size={fontSizes.iconxLarge} />
                 Send
               </Column>
 
-              <Column itemsCenter>
+              <Column onClick={() => {
+                setBuyBtcModalVisible(true);
+              }}  itemsCenter>
                 <Image src="/images/icons/main/buy-icon.svg" size={fontSizes.iconxLarge} />
                 Buy
               </Column>

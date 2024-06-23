@@ -48,7 +48,8 @@ export default function AppTabScrren() {
         </Column>
       </Content>
       <Footer px="zero" py="zero">
-        <NavTabBar tab="app" />
+        <NavTabBar tab="activity" />
+        {/*<NavTabBar tab="app" />*/}
       </Footer>
     </Layout>
   );

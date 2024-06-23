@@ -64,7 +64,15 @@ export const svgRegistry = {
   'btc-select-dark': '/images/icons/wallet/btc-select-dark.svg',
   'side-selected': '/images/icons/wallet/side-selected.svg',
   'side-select-dark': '/images/icons/wallet/side-selected.svg',
-  search: '/images/icons/wallet/search.svg'
+  search: '/images/icons/wallet/search.svg',
+  'main-home': '/images/icons/main/home-icon.svg',
+  'main-home-ac': '/images/icons/main/home-ac-icon.svg',
+  'main-swap': '/images/icons/main/swap-icon.svg',
+  'main-swap-ac': '/images/icons/main/swap-ac-icon.svg',
+  'main-activity': '/images/icons/main/activity-icon.svg',
+  'main-activity-ac': '/images/icons/main/activity-ac-icon.svg',
+  'main-setting': '/images/icons/main/settings-icon.svg',
+  'main-setting-ac': '/images/icons/main/settings-ac-icon.svg',
 };
 
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];
