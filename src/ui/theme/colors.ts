@@ -2,7 +2,7 @@
 
 const palette = {
   white: '#ffffff',
-  white_muted: 'rgba(255, 255, 255, 0.5)',
+  white_muted: 'rgb(130 130 130 / 50%)',
   black: '#000000',
   black_muted: 'rgba(0, 0, 0, 0.5)',
   black_muted2: 'rgba(0, 0, 0, 0.)',
@@ -55,7 +55,7 @@ export const colors = Object.assign({}, palette, {
 
   danger: palette.red,
 
-  card: '#262222',
+  card: 'rgb(217 217 217 / 10%)',
   warning: palette.orange,
   primary: palette.yellow,
 

@@ -4,10 +4,8 @@ import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import { AddressFlagType, KEYRING_TYPE } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { checkAddressFlag } from '@/shared/utils';
-import { Card, Column, Content, Footer, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Column, Content, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
 import AccountSelect from '@/ui/components/AccountSelect';
-import { AddressBar } from '@/ui/components/AddressBar';
-import { Button } from '@/ui/components/Button';
 import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPopover';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
@@ -145,9 +143,10 @@ export default function WalletTabScreen() {
 
   const [buyBtcModalVisible, setBuyBtcModalVisible] = useState(false);
   return (
-    <Layout style={{
-      backgroundColor: '#09090A',
-    }}>
+    <Layout
+      style={{
+        backgroundColor: '#09090A'
+      }}>
       {/*<Header*/}
       {/*  LeftComponent={*/}
       {/*    <Column>*/}
@@ -175,9 +174,26 @@ export default function WalletTabScreen() {
       {/*/>*/}
 
       <Header
-        LeftComponent={<Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} />}
+        LeftComponent={
+          connected ? (
+            <Row
+              itemsCenter
+              onClick={() => {
+                navigate('ConnectedSitesScreen');
+              }}>
+              <Text text="·" color="green" size="xxl" />
+              <Text text="Dapp Connected" size="xxs" />
+            </Row>
+          ) : (
+            <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} />
+          )
+        }
         title={
-          (currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring) && <AccountSelect />
+          currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
+            <AccountSelect />
+          ) : (
+            ''
+          )
         }
         RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
       />
@@ -187,10 +203,11 @@ export default function WalletTabScreen() {
       {/*  {currentKeyring.type === KEYRING_TYPE.HdKeyring && <AccountSelect />}*/}
       {/*</Row>*/}
 
-      <Content style={{
-        backgroundColor: '#09090A',
-      }}>
-        <Column gap="xl" >
+      <Content
+        style={{
+          backgroundColor: '#09090A'
+        }}>
+        <Column gap="xl">
           {/*{currentKeyring.type === KEYRING_TYPE.HdKeyring && <AccountSelect />}*/}
           {/*{currentKeyring.type === KEYRING_TYPE.KeystoneKeyring && <AccountSelect />}*/}
           {isTestNetwork && <Text text="Bitcoin Testnet activated." color="danger" textCenter />}
@@ -264,27 +281,27 @@ export default function WalletTabScreen() {
           {/*</Row>*/}
 
           <Row itemsCenter justifyCenter>
-            <Row style={{
-              width: '93%',
-            }}  justifyBetween>
-              <Column  itemsCenter>
+            <Row
+              style={{
+                width: '93%'
+              }}
+              justifyBetween>
+              <Column itemsCenter>
                 <Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.iconxLarge} />
                 Receive
               </Column>
 
-              <Column  itemsCenter>
+              <Column itemsCenter>
                 <Image src="/images/icons/main/send-icon.svg" size={fontSizes.iconxLarge} />
                 Send
               </Column>
 
-              <Column  itemsCenter>
+              <Column itemsCenter>
                 <Image src="/images/icons/main/buy-icon.svg" size={fontSizes.iconxLarge} />
                 Buy
               </Column>
-
             </Row>
           </Row>
-
 
           <Tabs
             size={'small'}

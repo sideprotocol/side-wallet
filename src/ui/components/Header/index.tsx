@@ -8,7 +8,7 @@ import './index.module.less';
 
 interface HeaderProps {
   onBack?: () => void;
-  title?: string;
+  title?: React.ReactNode;
   leftTitle?: string;
   LeftComponent?: React.ReactNode;
   RightComponent?: React.ReactNode;
@@ -59,11 +59,14 @@ export function Header(props: HeaderProps) {
 
       <Row itemsCenter>{CenterComponent}</Row>
 
-      <Row full justifyEnd style={{
-        marginRight: '10px',
-        marginTop: '10px',
-      }}>
-        <Column >{RightComponent}</Column>
+      <Row
+        full
+        justifyEnd
+        style={{
+          marginRight: '10px',
+          marginTop: '10px'
+        }}>
+        <Column>{RightComponent}</Column>
       </Row>
     </div>
   );
