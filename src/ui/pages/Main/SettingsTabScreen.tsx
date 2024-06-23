@@ -122,7 +122,7 @@ const SettingList: Setting[] = [
   {
     label: '',
     value: '',
-    desc: 'Expand View ',
+    desc: ' Expand View',
     action: 'expand-view',
     route: '/settings/export-privatekey',
     right: false,

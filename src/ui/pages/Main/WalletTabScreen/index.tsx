@@ -313,10 +313,8 @@ export default function WalletTabScreen() {
               backgroundColor: '#1E1E1F',
               fontSize: '14px',
             }} itemsCenter justifyCenter>
-
               <Row style={{
                 width: '114px',
-                // border: '1px solid #252629',
                 borderRadius: '20px',
                 backgroundColor: '#404045',
                 padding: '10px 20px'
@@ -325,9 +323,7 @@ export default function WalletTabScreen() {
               </Row>
               <Row style={{
                 width: '114px',
-                // border: '1px solid #252629',
                 borderRadius: '20px',
-                // backgroundColor: '#1E1E1F',
                 padding: '10px 20px'
               }}>
                 Bitcoin
@@ -336,7 +332,6 @@ export default function WalletTabScreen() {
           </Row>
 
           <Row
-            // itemsCenter
             onClick={() => {
               navigate('ConnectedSitesScreen');
             }}>

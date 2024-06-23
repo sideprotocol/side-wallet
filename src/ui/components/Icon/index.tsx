@@ -10,9 +10,9 @@ export const svgRegistry = {
   general: './images/icons/settings/general.svg',
   advance: './images/icons/settings/advance.svg',
   about: './images/icons/settings/about.svg',
-  expand: './images/icons/settings/expand-view.svg',
+  expand: '/images/icons/settings/expand-view.svg',
   security: './images/icons/settings/security.svg',
-  lock: './images/icons/settings/lock.svg',
+  lock: '/images/icons/settings/lock.svg',
   telegram: './images/icons/telegram.svg',
 
   right: './images/icons/arrow-right.svg',

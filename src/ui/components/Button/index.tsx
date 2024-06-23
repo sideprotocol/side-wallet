@@ -6,7 +6,7 @@ import { spacing } from '@/ui/theme/spacing';
 import { Column } from '../Column';
 import { Row } from '../Row';
 import { Text } from '../Text';
-
+import { Icon } from '../Icon';
 type Presets = keyof typeof $viewPresets;
 export interface ButtonProps {
   /**
@@ -234,7 +234,8 @@ export function Button(props: ButtonProps) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>
       {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
-      {icon}
+      {/*{icon}*/}
+      <Icon icon={icon} color="white" />
       {text && <Text style={$textStyle} text={text} preset="regular-bold" />}
       {children}
       {RightAccessory && <div style={$rightAccessoryStyle}>{RightAccessory}</div>}

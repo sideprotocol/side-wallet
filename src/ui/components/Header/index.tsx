@@ -36,6 +36,7 @@ export function Header(props: HeaderProps) {
           {onBack && (
             <Row
               style={{
+                marginLeft: '10px',
                 alignItems: 'center'
               }}
               onClick={(e) => {
@@ -63,7 +64,8 @@ export function Header(props: HeaderProps) {
         full
         justifyEnd
         style={{
-          marginRight: '10px'
+          marginRight: '10px',
+          marginTop: '6px',
         }}>
         <Column>{RightComponent}</Column>
       </Row>
