@@ -3,10 +3,10 @@ import { forwardRef, useMemo, useState } from 'react';
 
 import { KEYRING_TYPE } from '@/shared/constant';
 import { Account } from '@/shared/types';
-import { Column, Icon, Row, Text } from '@/ui/components';
-import { useTools } from '@/ui/components/ActionComponent';
+import { Button, Column, Icon, Row, Text } from '@/ui/components';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { colors } from '@/ui/theme/colors';
@@ -33,13 +33,11 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
   const wallet = useWallet();
   const dispatch = useAppDispatch();
   const keyring = useCurrentKeyring();
+
   if (!account) {
     return <div />;
   }
   const [optionsVisible, setOptionsVisible] = useState(false);
-  const path = keyring.hdPath + '/' + account.index;
-
-  const tools = useTools();
 
   return (
     <>
@@ -55,6 +53,14 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
           background: selected ? '#22AB384D' : '#2E2E2F',
           border: `1px solid ${selected ? '#22AB38' : '#2E2E2F'}`,
           cursor: 'pointer'
+        }}
+        onClick={async (e) => {
+          if (currentAccount.pubkey !== account.pubkey) {
+            await wallet.changeKeyring(keyring, account.index);
+            const _currentAccount = await wallet.getCurrentAccount();
+            dispatch(accountActions.setCurrent(_currentAccount));
+          }
+          if (autoNav) navigate('MainScreen');
         }}>
         <Text
           text={account.alianName}
@@ -86,7 +92,8 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
           )}
           <div
             className="accountOperateBtn"
-            onClick={async (e) => {
+            onClick={(e) => {
+              e.stopPropagation();
               setOptionsVisible(!optionsVisible);
             }}>
             <Image src="./images/icons/dots-vertical.svg" size={24} />
@@ -109,7 +116,8 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                   gap: '16px',
                   alignItems: 'center'
                 }}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   navigate('EditAccountNameScreen', { account });
                 }}>
                 <Image src="./images/icons/edit-03.svg" size={20} />
@@ -129,12 +137,13 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                     gap: '16px',
                     alignItems: 'center'
                   }}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     navigate('ExportPrivateKeyScreen', { account });
                   }}>
                   <Image src="./images/icons/key-02.svg" size={20} />
                   <Text
-                    text="Export Private Key"
+                    text="Show Private Key"
                     color="text"
                     style={{
                       fontSize: '14px',
@@ -154,6 +163,8 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
 
 export default function SwitchAccountScreen() {
   const keyring = useCurrentKeyring();
+  const wallet = useWallet();
+  const [keyword, setKeyword] = useState('');
   const items = useMemo(() => {
     const _items: ItemData[] = keyring.accounts.map((v) => {
       return {
@@ -161,37 +172,70 @@ export default function SwitchAccountScreen() {
         account: v
       };
     });
+    if (keyword) {
+      return _items.filter((item) =>
+        (item.account?.alianName || item.account?.address || '')
+          .toLocaleLowerCase()
+          .includes(keyword.toLocaleLowerCase())
+      );
+    }
     return _items;
-  }, []);
+  }, [keyring.accounts, keyword]);
+
+  const add = async () => {
+    const defaultName = await wallet.getNextAlianName(keyring);
+    await wallet.deriveNewAccountFromMnemonic(keyring, defaultName);
+  };
+
   const ForwardMyItem = forwardRef(MyItem);
 
   return (
     <>
-      <Row
+      <div
         style={{
-          padding: '0px 10px',
-          borderRadius: '12px',
-          backgroundColor: '#1E1E1F',
-          border: '1px solid #FFFFFF33'
-        }}
-        itemsCenter
-        bg="search_box_bg"
-        full>
-        <Icon icon="search" color={'search_icon'} size={20}></Icon>
-
-        <Input
-          containerStyle={{
-            width: '100%',
-            minHeight: '40px',
-            border: 'none',
-            padding: '0'
+          flexGrow: 0
+        }}>
+        <Row
+          style={{
+            padding: '0px 10px',
+            borderRadius: '12px',
+            backgroundColor: '#1E1E1F',
+            border: '1px solid #FFFFFF33'
           }}
-          placeholder="Search crypto"
-        />
-      </Row>
-      <VirtualList data={items} data-id="list" itemHeight={20} itemKey={(item) => item.key}>
+          itemsCenter
+          bg="search_box_bg"
+          full>
+          <Icon icon="search" color={'search_icon'} size={20}></Icon>
+
+          <Input
+            containerStyle={{
+              width: '100%',
+              minHeight: '40px',
+              border: 'none',
+              padding: '0'
+            }}
+            onChange={(event) => {
+              const value = event.target.value.replace(/,/g, '');
+              setKeyword(value);
+            }}
+            placeholder="Search Account"
+          />
+        </Row>
+      </div>
+      <VirtualList
+        data={items}
+        data-id="list"
+        itemHeight={20}
+        itemKey={(item) => item.key}
+        style={{ flex: 1, overflow: 'auto', marginBottom: '16px' }}>
         {(item, index) => <ForwardMyItem account={item.account} autoNav={true} />}
       </VirtualList>
+      <Button
+        text="Add Account"
+        preset="ghost"
+        icon={<Image src="./images/icons/plus.svg" size={20} />}
+        onClick={add}
+      />
     </>
   );
 }

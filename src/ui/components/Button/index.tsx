@@ -4,7 +4,6 @@ import { colors } from '@/ui/theme/colors';
 import { spacing } from '@/ui/theme/spacing';
 
 import { Column } from '../Column';
-import { Icon, IconTypes } from '../Icon';
 import { Row } from '../Row';
 import { Text } from '../Text';
 
@@ -50,7 +49,7 @@ export interface ButtonProps {
    */
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
-  icon?: IconTypes;
+  icon?: React.ReactNode;
   disabled?: boolean;
   full?: boolean;
 }
@@ -101,6 +100,13 @@ const $viewPresets = {
     justifyContent: 'space-between',
     paddingTop: spacing.medium,
     paddingBottom: spacing.medium
+  } as CSSProperties),
+
+  ghost: Object.assign({}, $baseViewStyle, {
+    border: `1px solid ${colors.blue_dark}`,
+    justifyContent: 'center',
+    paddingTop: spacing.medium,
+    paddingBottom: spacing.medium
   } as CSSProperties)
 };
 
@@ -123,6 +129,7 @@ const $hoverViewPresets: Record<Presets, CSSProperties> = {
   bar: {
     backgroundColor: '#383535'
   },
+  ghost: {},
   reset: {}
 };
 
@@ -143,7 +150,8 @@ const $textPresets: Record<Presets, CSSProperties> = {
   danger: Object.assign({}, $baseTextStyle, { color: colors.white }),
   bar: Object.assign({}, $baseTextStyle, { textAlign: 'left', fontWeight: 'bold' } as CSSProperties),
 
-  reset: Object.assign({}, $baseTextStyle, { fontWeight: 400 } as CSSProperties)
+  reset: Object.assign({}, $baseTextStyle, { fontWeight: 400 } as CSSProperties),
+  ghost: Object.assign({}, $baseTextStyle, { fontWeight: 400, color: colors.blue_dark } as CSSProperties)
 };
 
 const $rightAccessoryStyle: CSSProperties = { marginLeft: spacing.extraSmall, zIndex: 1 };
@@ -191,9 +199,12 @@ export function Button(props: ButtonProps) {
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         onClick={disabled ? undefined : onClick}>
-        <Row>
+        <Row
+          style={{
+            gap: spacing.tiny
+          }}>
           {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
-          {icon && <Icon icon={icon} color={'white'} style={{ marginRight: spacing.tiny }} />}
+          {icon}
           <Column justifyCenter gap="zero">
             {text && <Text text={text} style={$textStyle} />}
             {subText && <Text text={subText} style={$subTextStyle} />}
@@ -214,7 +225,7 @@ export function Button(props: ButtonProps) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>
       {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
-      {icon && <Icon icon={icon} style={{ marginRight: spacing.tiny, backgroundColor: $textStyle.color }} />}
+      {icon}
       {text && <Text style={$textStyle} text={text} preset="regular-bold" />}
       {children}
       {RightAccessory && <div style={$rightAccessoryStyle}>{RightAccessory}</div>}

@@ -1,7 +1,6 @@
 import { Drawer } from 'antd';
 import { useState } from 'react';
 
-import { useNavigate } from '@/ui/pages/MainRoute';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { shortAddress } from '@/ui/utils';
@@ -12,11 +11,11 @@ import { Icon } from '../Icon';
 import { Image } from '../Image';
 import { Row } from '../Row';
 import { Text } from '../Text';
+import WalletSelect from '../WalletSelect';
 import SwitchAccountScreen from './SwitchAccountScreen';
 import './index.less';
 
 const AccountSelect = () => {
-  const navigate = useNavigate();
   const currentKeyring = useCurrentKeyring();
   const currentAccount = useCurrentAccount();
 
@@ -77,7 +76,7 @@ const AccountSelect = () => {
           border: '1px solid #2D2D2D'
         }}>
         <Header
-          title={<div>sdfsd</div>}
+          title={<WalletSelect />}
           RightComponent={
             <span
               style={{
