@@ -1,21 +1,33 @@
-.account-select-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.625rem;
-  justify-content: space-between;
+.ant-drawer-content-wrapper {
+  height: 460px !important;
 
-  height: 40px;
+  .ant-drawer-content {
+    background: transparent;
 
-  background: #2a2626;
-  border: none;
-  border-radius: 0.3rem;
-
-  cursor: pointer;
-
-  &:hover {
-    background: #383535;
-    border: none;
-    border-radius: 0.3rem;
+    .ant-drawer-wrapper-body {
+      .ant-drawer-body {
+        padding: 0 16px 16px;
+        display: flex;
+        flex-direction: column;
+      }
+    }
   }
+}
+
+.accountItem:hover {
+  background: '#22AB384D';
+  border: '1px solid #22AB38'
+}
+
+.accountOperateBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.accountOperateBtn:hover {
+  background: rgb(255 255 255 / 10%);
 }
