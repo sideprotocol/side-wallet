@@ -87,7 +87,7 @@
   "This__is__an__imported__account": { "message": "This is an imported account" },
   "Password_must_contain_at_least_5_characters": { "message": "Password must contain at least 5 characters" },
   "appDescription": {
-    "message": "Side Wallet Description"
+    "message": "Settlement Layer for Bitcoin Modular Blockchains"
   },
   "If__you__ever__change__browsers__or__move__computers": {
     "message": "If you ever change browsers or move computers"
