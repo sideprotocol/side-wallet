@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { Account } from '@/shared/types';
-import { Button, Content, Header, Input, Layout } from '@/ui/components';
+import { Button, Column, Header, Input, Layout, Text } from '@/ui/components';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { keyringsActions } from '@/ui/state/keyrings/reducer';
@@ -41,30 +41,57 @@ export default function EditAccountNameScreen() {
   }, [alianName]);
   return (
     <Layout>
-      <Header
-        onBack={() => {
-          window.history.go(-1);
-        }}
-        title={account.alianName}
-      />
-      <Content>
-        <Input
-          placeholder={account.alianName}
-          onChange={(e) => {
-            setAlianName(e.target.value);
+      <Column
+        fullX
+        fullY
+        style={{
+          background: '#09090A',
+          padding: '0 16px 24px'
+        }}>
+        <Header
+          onBack={() => {
+            window.history.go(-1);
           }}
-          onKeyUp={(e) => handleOnKeyUp(e)}
-          autoFocus={true}
+          title="Change Account Name"
         />
+        <Column style={{ flex: 1, gap: '0' }}>
+          <Text
+            text="Previous Account Name"
+            color="white_muted"
+            style={{
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '24px'
+            }}
+          />
+          <Input value={account.alianName} disabled />
+          <Text
+            text="New Account Name"
+            color="white_muted"
+            style={{
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '24px',
+              marginTop: '16px'
+            }}
+          />
+          <Input
+            onChange={(e) => {
+              setAlianName(e.target.value);
+            }}
+            onKeyUp={(e) => handleOnKeyUp(e)}
+            autoFocus={true}
+          />
+        </Column>
         <Button
           disabled={!validName}
-          text="Change Account Name"
+          text="Save"
           preset="primary"
           onClick={(e) => {
             handleOnClick();
           }}
         />
-      </Content>
+      </Column>
     </Layout>
   );
 }

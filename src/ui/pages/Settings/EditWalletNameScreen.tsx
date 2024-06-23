@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { WalletKeyring } from '@/shared/types';
-import { Button, Column, Content, Header, Input, Layout } from '@/ui/components';
+import { Button, Column, Header, Input, Layout, Text } from '@/ui/components';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { keyringsActions } from '@/ui/state/keyrings/reducer';
 import { useWallet } from '@/ui/utils';
@@ -37,32 +37,57 @@ export default function EditWalletNameScreen() {
 
   return (
     <Layout>
-      <Header
-        onBack={() => {
-          window.history.go(-1);
-        }}
-        title={keyring.alianName}
-      />
-      <Content>
-        <Column gap="lg">
+      <Column
+        fullX
+        fullY
+        style={{
+          background: '#09090A',
+          padding: '0 16px 24px'
+        }}>
+        <Header
+          onBack={() => {
+            window.history.go(-1);
+          }}
+          title="Change Wallet Name"
+        />
+        <Column style={{ flex: 1, gap: '0' }}>
+          <Text
+            text="Previous Wallet Name"
+            color="white_muted"
+            style={{
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '24px'
+            }}
+          />
+          <Input value={keyring.alianName} disabled />
+          <Text
+            text="New Wallet Name"
+            color="white_muted"
+            style={{
+              fontSize: '14px',
+              fontWeight: 400,
+              lineHeight: '24px',
+              marginTop: '16px'
+            }}
+          />
           <Input
-            placeholder={keyring.alianName}
             onChange={(e) => {
               setAlianName(e.target.value);
             }}
             onKeyUp={(e) => handleOnKeyUp(e)}
             autoFocus={true}
           />
-          <Button
-            disabled={!isValidName}
-            text="Change Wallet Name"
-            preset="primary"
-            onClick={(e) => {
-              handleOnClick();
-            }}
-          />
         </Column>
-      </Content>
+        <Button
+          disabled={!isValidName}
+          text="Save"
+          preset="primary"
+          onClick={(e) => {
+            handleOnClick();
+          }}
+        />
+      </Column>
     </Layout>
   );
 }
