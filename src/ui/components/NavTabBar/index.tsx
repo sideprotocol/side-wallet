@@ -13,13 +13,13 @@ export function NavTabBar({ tab }: { tab: TabOption }) {
     <Grid columns={4} style={{ width: '100%', height: '66px', backgroundColor: colors.bg2 }}>
       <TabButton tabName="home" icon="main-home" isActive={tab === 'home'} />
       <TabButton tabName="swap" icon="main-swap" isActive={tab === 'swap'} />
-      <TabButton tabName="activity" icon="main-activity" isActive={tab === 'app'} />
+      <TabButton tabName="app" name="activity" icon="main-activity" isActive={tab === 'app'} />
       <TabButton tabName="settings" icon="main-setting" isActive={tab === 'settings'} />
     </Grid>
   );
 }
 
-function TabButton({ tabName, icon, isActive }: { tabName: TabOption; icon: IconTypes; isActive: boolean }) {
+function TabButton({ tabName, icon, isActive, name }: { tabName: TabOption; icon: IconTypes; isActive: boolean, name?: string }) {
   const navigate = useNavigate();
   const unreadApp = useUnreadAppSummary();
   const readTab = useReadTab();
@@ -52,7 +52,7 @@ function TabButton({ tabName, icon, isActive }: { tabName: TabOption; icon: Icon
           fontSize: 15,
           color: isActive ? '#fff' : 'rgb(130 130 130 / 50%)'
         }}>
-          {tabName}
+          {name ? name : tabName}
         </span>
       </Column>
       <BaseView style={{ position: 'relative' }}>

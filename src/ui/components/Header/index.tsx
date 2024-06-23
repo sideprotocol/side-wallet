@@ -29,7 +29,7 @@ export function Header(props: HeaderProps) {
   }, [title]);
   return (
     <div
-      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0px 20px 0px' }}>
+      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0px 20px 0px', marginBottom: '10px' }}>
       <Row full>
         <Column selfItemsCenter>
           {LeftComponent}

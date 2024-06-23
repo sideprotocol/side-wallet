@@ -44,7 +44,7 @@ export default function DiscoverTabScreen() {
   const inscriptionSummary = useInscriptionSummary();
   return (
     <Layout>
-      <Header />
+      <Header title="Side" />
       <Content>
         <Column>
           {inscriptionSummary.mintedList.map((v) => (

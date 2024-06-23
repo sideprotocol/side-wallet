@@ -19,7 +19,9 @@ export default function SelectNetworkScreen() {
         }}
         title="Select network"
       />
-      <Content>
+      <Content style={{
+        backgroundColor: '#09090A'
+      }}>
         <Column onClick={() => handleSelectNetwork()}>
           <Image
             style={{

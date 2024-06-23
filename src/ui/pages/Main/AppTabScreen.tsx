@@ -39,7 +39,7 @@ export default function AppTabScrren() {
   const appSummary = useAppSummary();
   return (
     <Layout>
-      <Header />
+      <Header title="Side" />
       <Content>
         <Column gap="lg">
           {appSummary.apps.map((v) => (
@@ -48,7 +48,7 @@ export default function AppTabScrren() {
         </Column>
       </Content>
       <Footer px="zero" py="zero">
-        <NavTabBar tab="activity" />
+        <NavTabBar tab="app" />
         {/*<NavTabBar tab="app" />*/}
       </Footer>
     </Layout>

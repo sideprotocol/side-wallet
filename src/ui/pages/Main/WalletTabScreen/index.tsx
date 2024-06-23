@@ -40,6 +40,14 @@ const $noBreakStyle: CSSProperties = {
   wordBreak: 'keep-all'
 };
 
+interface Asset {
+  icon: string;
+  name: string;
+  symbol: string;
+  balance: string;
+  value: string;
+}
+
 export default function WalletTabScreen() {
   const navigate = useNavigate();
 
@@ -142,6 +150,15 @@ export default function WalletTabScreen() {
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
 
   const [buyBtcModalVisible, setBuyBtcModalVisible] = useState(false);
+  const assets: Asset[] = [
+    {
+      icon: '/images/img/btc.png',
+      name: 'Bitcoin',
+      symbol: 'BTC',
+      balance: '1',
+      value: '1'
+    }
+  ];
   return (
     <Layout
       style={{
@@ -273,32 +290,106 @@ export default function WalletTabScreen() {
               <Column onClick={() => {
                 resetUiTxCreateScreen();
                 navigate('TxCreateScreen');
-              }}  itemsCenter>
+              }} itemsCenter>
                 <Image src="/images/icons/main/send-icon.svg" size={fontSizes.iconxLarge} />
                 Send
               </Column>
 
               <Column onClick={() => {
                 setBuyBtcModalVisible(true);
-              }}  itemsCenter>
+              }} itemsCenter>
                 <Image src="/images/icons/main/buy-icon.svg" size={fontSizes.iconxLarge} />
                 Buy
               </Column>
             </Row>
           </Row>
 
-          <Tabs
-            size={'small'}
-            defaultActiveKey={assetTabKey as unknown as string}
-            activeKey={assetTabKey as unknown as string}
-            items={tabItems as unknown as any[]}
-            onTabClick={(key) => {
-              dispatch(uiActions.updateAssetTabScreen({ assetTabKey: key as unknown as AssetTabKey }));
-            }}
-          />
+          <Row style={{
+            margin: '20px 0',
+          }} itemsCenter justifyCenter>
+            <Row style={{
+              width: '228px',
+              borderRadius: '20px',
+              backgroundColor: '#1E1E1F',
+              fontSize: '14px',
+            }} itemsCenter justifyCenter>
+
+              <Row style={{
+                width: '114px',
+                // border: '1px solid #252629',
+                borderRadius: '20px',
+                backgroundColor: '#404045',
+                padding: '10px 20px'
+              }}>
+                Side Chain
+              </Row>
+              <Row style={{
+                width: '114px',
+                // border: '1px solid #252629',
+                borderRadius: '20px',
+                // backgroundColor: '#1E1E1F',
+                padding: '10px 20px'
+              }}>
+                Bitcoin
+              </Row>
+            </Row>
+          </Row>
+
+          <Row
+            // itemsCenter
+            onClick={() => {
+              navigate('ConnectedSitesScreen');
+            }}>
+            <Text text="Tokens" size="xxl" />
+          </Row>
+
+          <Column style={{
+            backgroundColor: '#1D1D1F',
+            padding: '10px 20px',
+            borderRadius: 8
+          }} justifyBetween>
+            {assets.map((item) => {
+              return (
+                <Row
+                  onClick={() => {
+                    // navigate('SelectAddressScreen');
+                  }}
+                  full
+                  key={item.symbol + item.name}
+                  justifyBetween
+                  style={{
+                    cursor: 'pointer'
+                  }}>
+                  <Row>
+                    <Image src={item.icon} size={42}></Image>
+                    <Column>
+                      <Text preset="regular" text={item.symbol}></Text>
+                      <Text preset="sub" text={item.name}></Text>
+                    </Column>
+                  </Row>
+
+                  <Column>
+                    <Text preset="regular" text={item.balance}></Text>
+                    <Text preset="sub" text={item.value}></Text>
+                  </Column>
+                </Row>
+              );
+            })}
+          </Column>
+
+          {/*<Tabs*/}
+          {/*  size={'small'}*/}
+          {/*  defaultActiveKey={assetTabKey as unknown as string}*/}
+          {/*  activeKey={assetTabKey as unknown as string}*/}
+          {/*  items={tabItems as unknown as any[]}*/}
+          {/*  onTabClick={(key) => {*/}
+          {/*    dispatch(uiActions.updateAssetTabScreen({ assetTabKey: key as unknown as AssetTabKey }));*/}
+          {/*  }}*/}
+          {/*/>*/}
 
           {/*{tabItems[assetTabKey].children}*/}
         </Column>
+
         {showSafeNotice && (
           <NoticePopover
             onClose={() => {

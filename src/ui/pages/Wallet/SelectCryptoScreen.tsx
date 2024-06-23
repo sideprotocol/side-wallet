@@ -33,7 +33,9 @@ export default function SelecCryptoScreen() {
         }}
         title="Select crypto"
       />
-      <Content>
+      <Content style={{
+        backgroundColor: '#09090A',
+      }}>
         <Column>
           <Row
             style={{
