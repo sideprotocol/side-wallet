@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { Account } from '@/shared/types';
-import { Button, Column, Header, Image, Input, Layout, LongPress, Row, Text } from '@/ui/components';
+import { Button, Column, Header, Image, Input, Layout, LongPress, Mask, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { copyToClipboard, useWallet } from '@/ui/utils';
 
@@ -104,7 +104,7 @@ export default function ExportPrivateKeyScreen() {
               disabled={disabled}
               onClick={btnClick}
               style={{
-                marginTop: '8px'
+                marginTop: '24px'
               }}
             />
           </>
@@ -114,35 +114,37 @@ export default function ExportPrivateKeyScreen() {
               style={{
                 flex: 1
               }}>
-              <div
-                style={{
-                  background: '#222222',
-                  border: '1px solid #404045',
-                  boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
-                  borderRadius: '14px',
-                  padding: '16px'
-                }}>
-                <span
+              <Mask>
+                <div
                   style={{
-                    color: '#fff',
-                    fontSize: '12px',
-                    lineHeight: '20px',
-                    opacity: 0.5,
-                    wordBreak: 'break-word',
-                    marginRight: '4px'
+                    background: '#222222',
+                    border: '1px solid #404045',
+                    boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+                    borderRadius: '14px',
+                    padding: '16px'
                   }}>
-                  {privateKey.wif}
-                </span>
-                <span
-                  style={{
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => {
-                    copy(privateKey.wif);
-                  }}>
-                  <Image src="/images/icons/copy-03.svg" size={16} />
-                </span>
-              </div>
+                  <span
+                    style={{
+                      color: '#fff',
+                      fontSize: '12px',
+                      lineHeight: '20px',
+                      opacity: 0.5,
+                      wordBreak: 'break-word',
+                      marginRight: '4px'
+                    }}>
+                    {privateKey.wif}
+                  </span>
+                  <span
+                    style={{
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => {
+                      copy(privateKey.wif);
+                    }}>
+                    <Image src="/images/icons/copy-03.svg" size={16} />
+                  </span>
+                </div>
+              </Mask>
               <Column
                 style={{
                   marginTop: '24px',

@@ -91,12 +91,9 @@ export default function () {
       </Column>
       <Button
         preset="ghostDanger"
-        text={`Deleate ${keyring?.alianName}`}
+        text={`Delete ${keyring?.alianName}`}
         onClick={() => {
-          if (keyrings.length == 1) {
-            tools.toastError('Removing the last wallet is not allowed');
-            return;
-          }
+          navigate('DeleteWalletScreen', { index: keyring?.index });
         }}
       />
     </Column>

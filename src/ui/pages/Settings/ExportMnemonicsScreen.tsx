@@ -100,7 +100,15 @@ export default function ExportMnemonicsScreen() {
             />
             {error && <Text text={error} preset="regular" color="error" />}
 
-            <Button disabled={disabled} text="View" preset="primary" onClick={btnClick} />
+            <Button
+              disabled={disabled}
+              text="View"
+              preset="primary"
+              onClick={btnClick}
+              style={{
+                marginTop: '24px'
+              }}
+            />
           </>
         ) : (
           <>
