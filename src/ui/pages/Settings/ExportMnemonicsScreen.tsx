@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ADDRESS_TYPES } from '@/shared/constant';
 import { WalletKeyring } from '@/shared/types';
-import { Button, Column, Grid, Header, Input, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Grid, Header, Input, Layout, LongPress, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { copyToClipboard, useLocationState, useWallet } from '@/ui/utils';
 
@@ -168,28 +168,5 @@ export default function ExportMnemonicsScreen() {
         )}
       </Column>
     </Layout>
-  );
-}
-
-function LongPress() {
-  return (
-    <>
-      <div
-        style={{
-          marginTop: '112px',
-          display: 'flex',
-          justifyContent: 'center'
-        }}>
-        Long Press
-      </div>
-      <Text
-        text="Please type in your password to proceed"
-        style={{
-          fontSize: '14px',
-          lineHeight: '24px',
-          textAlign: 'center'
-        }}
-      />
-    </>
   );
 }

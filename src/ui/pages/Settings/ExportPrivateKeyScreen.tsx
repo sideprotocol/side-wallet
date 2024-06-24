@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { Account } from '@/shared/types';
-import { Button, Input, Layout, Icon, Content, Header, Text, Column, Card, Row } from '@/ui/components';
+import { Button, Column, Header, Image, Input, Layout, LongPress, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { copyToClipboard, useWallet } from '@/ui/utils';
 
@@ -58,39 +58,35 @@ export default function ExportPrivateKeyScreen() {
 
   return (
     <Layout>
-      <Header
-        onBack={() => {
-          window.history.go(-1);
-        }}
-        title="Export Private Key"
-      />
-      <Content>
+      <Column
+        fullX
+        fullY
+        style={{
+          gap: '0',
+          padding: '0 16px 24px'
+        }}>
+        <Header
+          onBack={() => {
+            window.history.go(-1);
+          }}
+          title="Show Private Key"
+        />
         {privateKey.wif == '' ? (
-          <Column gap="lg">
-            <Card>
-              <Column gap="lg">
-                <Text text="If you lose your Private Key, your assets will be gone!" preset="title-bold" color="red" />
-
-                <Text
-                  text="If you share the Private Key to others, your assets will be stolen!"
-                  preset="title-bold"
-                  color="red"
-                />
-
-                <Text
-                  text="Private Key is only stored in your browser, it is your responsibilities to keep the Private Key safe!"
-                  preset="title-bold"
-                  color="red"
-                />
-              </Column>
-            </Card>
-
+          <>
+            <Column
+              style={{
+                flex: 1,
+                gap: '16px'
+              }}>
+              <LongPress />
+            </Column>
             <Text
-              text=" Please make sure you have read the security tips above before typing your password"
-              preset="title"
-              color="warning"
-              textCenter
-              my="xl"
+              text="Password"
+              color="white_muted"
+              style={{
+                fontSize: '14px',
+                lineHeight: '24px'
+              }}
             />
             <Input
               preset="password"
@@ -102,55 +98,143 @@ export default function ExportPrivateKeyScreen() {
             />
             {error && <Text text={error} preset="regular" color="error" />}
 
-            <Button text="Show Private Key" preset="primary" disabled={disabled} onClick={btnClick} />
-          </Column>
-        ) : (
-          <Column>
-            <Text
-              text="If you ever change browsers or move computers, you will need this Private Key to access this account. Save it somewhere safe and secret"
-              preset="sub"
-              size="sm"
-              textCenter
+            <Button
+              text="Confirm"
+              preset="primary"
+              disabled={disabled}
+              onClick={btnClick}
+              style={{
+                marginTop: '8px'
+              }}
             />
-
-            <Text text="WIF Private Key:" preset="sub" size="sm" textCenter mt="lg" />
-
-            <Card
-              onClick={(e) => {
-                copy(privateKey.wif);
+          </>
+        ) : (
+          <>
+            <Column
+              style={{
+                flex: 1
               }}>
-              <Row>
-                <Icon icon="copy" color="textDim" />
-                <Text
-                  text={privateKey.wif}
-                  color="textDim"
+              <div
+                style={{
+                  background: '#222222',
+                  border: '1px solid #404045',
+                  boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+                  borderRadius: '14px',
+                  padding: '16px'
+                }}>
+                <span
                   style={{
-                    overflowWrap: 'anywhere'
+                    color: '#fff',
+                    fontSize: '12px',
+                    lineHeight: '20px',
+                    opacity: 0.5,
+                    wordBreak: 'break-word',
+                    marginRight: '4px'
+                  }}>
+                  {privateKey.wif}
+                </span>
+                <span
+                  style={{
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => {
+                    copy(privateKey.wif);
+                  }}>
+                  <Image src="/images/icons/copy-03.svg" size={16} />
+                </span>
+              </div>
+              <Column
+                style={{
+                  marginTop: '24px',
+                  backgroundColor: 'rgb(240 182 34 / 10%)',
+                  borderRadius: '14px',
+                  padding: '10px',
+                  gap: '4px'
+                }}>
+                <Row
+                  style={{
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                  <Image src="/images/icons/alert-triangle.svg" size={24} />
+                  <Text
+                    text="No Recovery Options:"
+                    style={{
+                      color: '#F0B622',
+                      lineHeight: '20px',
+                      fontSize: '14px',
+                      fontWeight: 600
+                    }}
+                  />
+                </Row>
+                <Text
+                  text="If you lose your recovery phrase, you will not be able to recover your wallet."
+                  style={{
+                    color: '#fff',
+                    lineHeight: '18px',
+                    fontSize: '12px',
+                    fontWeight: 400
                   }}
                 />
-              </Row>
-            </Card>
+              </Column>
 
-            <Text text="Hex Private Key:" preset="sub" size="sm" textCenter mt="lg" />
-
-            <Card
-              onClick={(e) => {
-                copy(privateKey.hex);
-              }}>
-              <Row>
-                <Icon icon="copy" color="textDim" />
-                <Text
-                  text={privateKey.hex}
-                  color="textDim"
+              <Column
+                style={{
+                  marginTop: '10px',
+                  backgroundColor: 'rgb(240 182 34 / 10%)',
+                  borderRadius: '14px',
+                  padding: '10px',
+                  gap: '4px'
+                }}>
+                <Row
                   style={{
-                    overflowWrap: 'anywhere'
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}>
+                  <Image src="/images/icons/alert-triangle.svg" size={24} />
+                  <Text
+                    text="Store Securely:"
+                    style={{
+                      color: '#F0B622',
+                      lineHeight: '20px',
+                      fontSize: '14px',
+                      fontWeight: 600
+                    }}
+                  />
+                </Row>
+                <Text
+                  text="Write down your recovery phrase and store it in a safe place."
+                  style={{
+                    color: '#fff',
+                    lineHeight: '18px',
+                    fontSize: '12px',
+                    fontWeight: 400
                   }}
                 />
-              </Row>
-            </Card>
-          </Column>
+              </Column>
+
+              {/* <Text text="Hex Private Key:" preset="sub" size="sm" textCenter mt="lg" />
+
+              <Card
+                onClick={(e) => {
+                  copy(privateKey.hex);
+                }}>
+                <Row>
+                  <Text
+                    text={privateKey.hex}
+                    color="textDim"
+                    style={{
+                      overflowWrap: 'anywhere'
+                    }}
+                  />
+                  <Icon icon="copy" color="textDim" />
+                </Row>
+              </Card> */}
+            </Column>
+            <Button text="Close" preset="primary" onClick={() => window.history.go(-1)} />
+          </>
         )}
-      </Content>
+      </Column>
     </Layout>
   );
 }

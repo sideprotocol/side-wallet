@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import { Button, ButtonGroup, Column, Grid, Image, Input, Row, Text } from '@/ui/components';
+import { Button, ButtonGroup, Column, Grid, Image, Input, Mask, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { copyToClipboard, useWallet } from '@/ui/utils';
 
@@ -142,7 +142,8 @@ export default function Step1_Create({
             }}>
             <Row
               style={{
-                alignItems: 'center'
+                alignItems: 'center',
+                gap: '8px'
               }}>
               <Image src="/images/icons/alert-triangle.svg" size={24} />
               <Text
@@ -176,7 +177,8 @@ export default function Step1_Create({
             }}>
             <Row
               style={{
-                alignItems: 'center'
+                alignItems: 'center',
+                gap: '8px'
               }}>
               <Image src="/images/icons/alert-triangle.svg" size={24} />
               <Text
@@ -210,7 +212,8 @@ export default function Step1_Create({
             }}>
             <Row
               style={{
-                alignItems: 'center'
+                alignItems: 'center',
+                gap: '8px'
               }}>
               <Image src="/images/icons/alert-triangle.svg" size={24} />
               <Text
@@ -237,35 +240,5 @@ export default function Step1_Create({
         <Button text="Next" preset="primary" onClick={btnClick} />
       </Column>
     </>
-  );
-}
-
-function Mask({ children }: { children: React.ReactNode }) {
-  const [visible, setVisible] = useState(true);
-  return (
-    <div
-      style={{
-        position: 'relative'
-      }}>
-      {children}
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-          zIndex: 1,
-          backdropFilter: 'blur(5px)',
-          borderRadius: '14px',
-          display: visible ? 'flex' : 'none',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-        <div onClick={() => setVisible(!visible)}>
-          <Image src="/images/icons/eye-off.svg" size={40} style={{ cursor: 'pointer' }} />
-        </div>
-      </div>
-    </div>
   );
 }
