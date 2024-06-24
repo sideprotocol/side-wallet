@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { ADDRESS_TYPES } from '@/shared/constant';
 import { WalletKeyring } from '@/shared/types';
-import { Button, Input, Layout, Content, Icon, Header, Text, Column, Row, Card, Grid } from '@/ui/components';
+import { Button, Column, Grid, Header, Input, Layout, LongPress, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
-import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { copyToClipboard, useLocationState, useWallet } from '@/ui/utils';
 
 type Status = '' | 'error' | 'warning' | undefined;
@@ -61,44 +60,35 @@ export default function ExportMnemonicsScreen() {
   const pathName = ADDRESS_TYPES.find((v) => v.hdPath === keyring.hdPath)?.name || 'custom';
   return (
     <Layout>
-      <Header
-        onBack={() => {
-          window.history.go(-1);
-        }}
-        title="Secret Recovery Phrase"
-      />
-
-      <Content>
+      <Column
+        fullX
+        fullY
+        style={{
+          gap: '0',
+          padding: '0 16px 24px'
+        }}>
+        <Header
+          onBack={() => {
+            window.history.go(-1);
+          }}
+          title="View Recovery Phrase"
+        />
         {mnemonic == '' ? (
-          <Column>
-            <Card>
-              <Column gap="lg">
-                <Text
-                  text="If you lose your Secret Recovery Phrase, your assets will be gone!"
-                  preset="title-bold"
-                  color="red"
-                />
-
-                <Text
-                  text="If you share the Secret Recovery Phrase to others, your assets will be stolen!"
-                  preset="title-bold"
-                  color="red"
-                />
-
-                <Text
-                  text="Secret Recovery Phrase is only stored in your browser, it is your responsibilities to keep the Private Key safe!"
-                  preset="title-bold"
-                  color="red"
-                />
-              </Column>
-            </Card>
-
+          <>
+            <Column
+              style={{
+                flex: 1,
+                gap: '16px'
+              }}>
+              <LongPress />
+            </Column>
             <Text
-              text=" Please make sure you have read the security tips above before typing your password"
-              preset="title"
-              color="warning"
-              textCenter
-              my="xl"
+              text="Password"
+              color="white_muted"
+              style={{
+                fontSize: '14px',
+                lineHeight: '24px'
+              }}
             />
             <Input
               preset="password"
@@ -110,58 +100,81 @@ export default function ExportMnemonicsScreen() {
             />
             {error && <Text text={error} preset="regular" color="error" />}
 
-            <Button disabled={disabled} text="Show Secret Recovery Phrase" preset="primary" onClick={btnClick} />
-          </Column>
-        ) : (
-          <Column>
-            <Text
-              text="This phrase is the ONLY way to recover your wallet. Do NOT share it with anyone! (click to copy)"
-              color="warning"
-              textCenter
-              mt="xl"
-              mb="xl"
+            <Button
+              disabled={disabled}
+              text="View"
+              preset="primary"
+              onClick={btnClick}
+              style={{
+                marginTop: '24px'
+              }}
             />
-
-            <Row
-              justifyCenter
-              onClick={(e) => {
-                copy(mnemonic);
+          </>
+        ) : (
+          <>
+            <Column
+              style={{
+                flex: 1
               }}>
-              <Icon icon="copy" color="textDim" />
-              <Text text="Copy to clipboard" color="textDim" />
-            </Row>
-
-            <Row justifyCenter>
-              <Grid columns={2}>
-                {words.map((v, index) => {
-                  return (
-                    <Row key={index}>
-                      <Text text={`${index + 1}. `} style={{ width: 40 }} />
-                      <Card preset="style2" style={{ width: 200 }}>
-                        <Text text={v} selectText disableTranslate />
-                      </Card>
-                    </Row>
-                  );
-                })}
-              </Grid>
-            </Row>
-            <Card>
-              <Column>
-                <Text text="Advance Options" />
+              <Column
+                justifyCenter
+                style={{
+                  marginTop: '16px',
+                  border: '1px solid #404045',
+                  boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+                  backgroundColor: '#222222',
+                  borderRadius: '14px',
+                  padding: '16px',
+                  gap: '8px'
+                }}>
+                <Grid columns={2}>
+                  {words.map((v, index) => {
+                    return (
+                      <Row
+                        key={index}
+                        style={{
+                          gap: '8px',
+                          height: '32px',
+                          borderRadius: '8px',
+                          border: '1px solid #FFFFFF33',
+                          backgroundColor: '#121212'
+                        }}>
+                        <Text
+                          text={`${index + 1}. `}
+                          style={{ width: 25, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+                          textEnd
+                          color="textDim"
+                        />
+                        <Input
+                          containerStyle={{
+                            minHeight: '30px',
+                            padding: '0 10px',
+                            flex: 1,
+                            border: 'none',
+                            backgroundColor: 'transparent'
+                          }}
+                          style={{ width: '100%', color: '#fff' }}
+                          value={v}
+                          disabled
+                          placeholder=""
+                        />
+                      </Row>
+                    );
+                  })}
+                </Grid>
                 <Text
-                  text={`Derivation Path: ${keyring.hdPath}/0 (${pathName})`}
-                  preset="sub"
-                  onClick={() => {
-                    copy(keyring.hdPath);
+                  text="Copy to clipboard"
+                  style={{
+                    textAlign: 'center'
                   }}
-                  disableTranslate
+                  onClick={() => copy(mnemonic)}
                 />
-                {passphrase && <Text text={`Passphrase: ${passphrase}`} preset="sub" disableTranslate />}
               </Column>
-            </Card>
-          </Column>
+            </Column>
+            <Button text="Close" preset="primary" onClick={() => window.history.go(-1)} />
+          </>
         )}
-      </Content>
+      </Column>
     </Layout>
   );
 }

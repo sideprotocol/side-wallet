@@ -48,6 +48,7 @@ import AutoLockScreen from './Settings/AutoLockScreen';
 import ChangeEndpointsScreen from './Settings/ChangeEndpointsScreen';
 import ChangePasswordScreen from './Settings/ChangePasswordScreen';
 import CurrencyTypeScreen from './Settings/CurrencyTypeScreen';
+import DeleteWalletScreen from './Settings/DeleteWalletScreen';
 import EditAccountNameScreen from './Settings/EditAccountNameScreen';
 import EditWalletNameScreen from './Settings/EditWalletNameScreen';
 import ExportMnemonicsScreen from './Settings/ExportMnemonicsScreen';
@@ -335,6 +336,10 @@ const routes = {
   KeyringSettingScreen: {
     path: '/keyring/setting',
     element: <KeyringSettingScreen />
+  },
+  DeleteWalletScreen: {
+    path: '/keyring/delete',
+    element: <DeleteWalletScreen />
   }
 };
 

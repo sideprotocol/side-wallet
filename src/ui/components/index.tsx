@@ -12,6 +12,8 @@ import { Image } from './Image';
 import { Input } from './Input';
 import { Layout } from './Layout';
 import { Logo } from './Logo';
+import { LongPress } from './LongPress';
+import { Mask } from './Mask';
 import { Row } from './Row';
 import { StepBar } from './StepBar';
 import { Text } from './Text';
@@ -32,6 +34,8 @@ export {
   Input,
   Layout,
   Logo,
+  LongPress,
+  Mask,
   Row,
   StepBar,
   Text,

@@ -30,14 +30,19 @@ export function Header(props: HeaderProps) {
   }, [title]);
   return (
     <div
-      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0px 20px 0px', marginBottom: '10px' }}>
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '14px 0px 20px 0px',
+        marginBottom: '10px'
+      }}>
       <Row full>
-        <Column selfItemsCenter>
+        <Column selfItemsCenter style={{ gap: '10px' }}>
           {LeftComponent}
           {onBack && (
             <Row
               style={{
-                marginLeft: '10px',
                 alignItems: 'center'
               }}
               onClick={(e) => {
@@ -66,10 +71,9 @@ export function Header(props: HeaderProps) {
         full
         justifyEnd
         style={{
-          marginRight: '10px',
-          marginTop: '6px',
+          marginRight: '10px'
         }}>
-        <Column>{RightComponent}</Column>
+        <Column justifyCenter>{RightComponent}</Column>
       </Row>
     </div>
   );

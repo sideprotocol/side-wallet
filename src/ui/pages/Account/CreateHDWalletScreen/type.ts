@@ -36,6 +36,10 @@ export interface ContextData {
   customHdPath: string;
   addressTypeIndex: number;
   wordsType: WordsType;
+  mnemonicsObj: {
+    mnemonics12: string;
+    mnemonics24: string;
+  };
 }
 
 export interface UpdateContextDataParams {
@@ -50,4 +54,8 @@ export interface UpdateContextDataParams {
   customHdPath?: string;
   addressTypeIndex?: number;
   wordsType?: WordsType;
+  mnemonicsObj?: {
+    mnemonics12: string;
+    mnemonics24: string;
+  };
 }

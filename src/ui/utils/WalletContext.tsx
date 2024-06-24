@@ -92,8 +92,8 @@ export interface WalletController {
     passphrase: string;
   }>;
   createKeyringWithPrivateKey(data: string, addressType: AddressType, alianName?: string): Promise<Account[]>;
-  getPreMnemonics(): Promise<any>;
-  generatePreMnemonic(): Promise<string>;
+  getPreMnemonics(): Promise<{ mnemonics12: any; mnemonics24: any }>;
+  generatePreMnemonic(): Promise<{ mnemonics12: any; mnemonics24: any }>;
   removePreMnemonics(): void;
   createKeyringWithMnemonics(
     mnemonic: string,

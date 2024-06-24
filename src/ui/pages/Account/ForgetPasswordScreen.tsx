@@ -104,7 +104,7 @@ export default function CreateHDWalletScreen() {
           />
         </Row>
       </Column>
-      <Button disabled={!checked1 && !checked2 && !checked3} text="Reset wallet" preset="primary" />
+      <Button disabled={!(checked1 && checked2 && checked3)} text="Reset wallet" preset="primary" />
     </Layout>
   );
 }
