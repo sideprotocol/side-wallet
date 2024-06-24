@@ -8,6 +8,7 @@ import './index.module.less';
 
 interface HeaderProps {
   onBack?: () => void;
+  onClickRight?: () => void;
   title?: React.ReactNode;
   leftTitle?: string;
   LeftComponent?: React.ReactNode;
@@ -16,7 +17,7 @@ interface HeaderProps {
 }
 
 export function Header(props: HeaderProps) {
-  const { onBack, title, leftTitle, LeftComponent, RightComponent, children } = props;
+  const { onBack, title, leftTitle, LeftComponent, RightComponent, onClickRight,children } = props;
 
   const CenterComponent = useMemo(() => {
     if (children) {
@@ -61,6 +62,7 @@ export function Header(props: HeaderProps) {
       <Row itemsCenter>{CenterComponent}</Row>
 
       <Row
+        onClick={onClickRight}
         full
         justifyEnd
         style={{

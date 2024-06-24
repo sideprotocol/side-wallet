@@ -235,7 +235,7 @@ export function Button(props: ButtonProps) {
       onMouseLeave={() => setHover(false)}>
       {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
       {/*{icon}*/}
-      <Icon icon={icon} color="white" />
+      <Icon icon={icon} color={icon === 'expand' ? "black" : "white"} />
       {text && <Text style={$textStyle} text={text} preset="regular-bold" />}
       {children}
       {RightAccessory && <div style={$rightAccessoryStyle}>{RightAccessory}</div>}

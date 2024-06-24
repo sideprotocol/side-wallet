@@ -190,6 +190,9 @@ export default function WalletTabScreen() {
           )
         }
         RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
+        onClickRight={() => {
+          navigate('SettingsTabScreen');
+        }}
       />
 
       {/*<Row justifyBetween>*/}
@@ -260,20 +263,6 @@ export default function WalletTabScreen() {
               <Text text={balanceValue + '  BTC'} preset="title-bold" textCenter size="xxxl" />
             </div>
           </Tooltip>
-
-          {/*<Row itemsCenter justifyCenter>*/}
-          {/*  <AddressBar />*/}
-          {/*  <Row*/}
-          {/*    style={{ marginLeft: 8 }}*/}
-          {/*    itemsCenter*/}
-          {/*    onClick={() => {*/}
-          {/*      window.open(`${blockstreamUrl}/address/${currentAccount.address}`);*/}
-          {/*    }}>*/}
-          {/*    <Text text={'View History'} size="xs" />*/}
-          {/*    <Icon icon="link" size={fontSizes.xs} />*/}
-          {/*  </Row>*/}
-          {/*</Row>*/}
-
           <Row itemsCenter justifyCenter>
             <Row
               style={{
