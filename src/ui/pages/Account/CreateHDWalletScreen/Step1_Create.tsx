@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { Button, ButtonGroup, Column, Grid, Image, Input, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
-import { Icon } from '@/ui/components/Icon';
 import { copyToClipboard, useWallet } from '@/ui/utils';
 
 import { ContextData, TabType, UpdateContextDataParams, WORDS_12_ITEM, WORDS_24_ITEM } from './type';
@@ -82,17 +81,6 @@ export default function Step1_Create({
                   value={contextData.wordsType}
                 />
               ) : null}
-              <Row
-                justifyCenter
-                onClick={(e) => {
-                  copy(contextData.mnemonics);
-                }}
-                style={{
-                  marginTop: '10px'
-                }}>
-                <Icon icon="copy" color="textDim" size={14} />
-                <Text text="Copy to clipboard" color="textDim" />
-              </Row>
 
               <Row justifyCenter style={{ marginTop: '16px' }}>
                 <Grid columns={2}>
@@ -130,6 +118,16 @@ export default function Step1_Create({
                     );
                   })}
                 </Grid>
+              </Row>
+              <Row
+                justifyCenter
+                onClick={(e) => {
+                  copy(contextData.mnemonics);
+                }}
+                style={{
+                  marginTop: '8px'
+                }}>
+                <Text text="Copy to clipboard" />
               </Row>
             </Column>
           </Mask>
