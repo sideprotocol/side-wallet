@@ -69,8 +69,7 @@ export function Header(props: HeaderProps) {
         full
         justifyEnd
         style={{
-          marginRight: '10px',
-          marginTop: '6px'
+          marginRight: '10px'
         }}>
         <Column justifyCenter>{RightComponent}</Column>
       </Row>
