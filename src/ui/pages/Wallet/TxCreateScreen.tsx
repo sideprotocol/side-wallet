@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { COIN_DUST } from '@/shared/constant';
 import { RawTxInfo } from '@/shared/types';
-import { Button, Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { RBFBar } from '@/ui/components/RBFBar';
@@ -135,19 +135,52 @@ export default function TxCreateScreen() {
   }, [toInfo, inputAmount, feeRate, enableRBF]);
 
   return (
-    <Layout>
+    <Layout style={{
+      position: 'relative',
+    }}>
       <Header
         onBack={() => {
           window.history.go(-1);
         }}
         title="Send BTC"
       />
-      <Content style={{ padding: '0px 16px 24px' }}>
-        <Row justifyCenter>
+
+      <Row style={{
+        background: '#222',
+        width: '74px',
+        height: '74px',
+        position: 'absolute',
+        top: '66px',
+        left: '50%',
+        borderRadius: '50%',
+        transform: 'translate(-50%, 0)',
+        zIndex: 2,
+        borderTop: '1px solid #404045',
+        boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+      }} justifyCenter>
+        {/*<Image style={{*/}
+        {/*  position: 'absolute',*/}
+        {/*  top: '-23px',*/}
+        {/*  left: '-12px',*/}
+        {/*  zIndex: 3,*/}
+        {/*}} src="/images/icons/wallet/arc-icon.svg" size={74} />*/}
+        <Row style={{
+          marginTop: '6px',
+        }}>
           <Icon icon="btc" size={50} />
         </Row>
+      </Row>
 
-        <Column mt="lg">
+      <Content style={{
+        position: 'relative',
+        borderTop: '1px solid #404045',
+        borderRadius: '10px',
+        background: '#222',
+        padding: '16px 16px 24px',
+        marginTop: '20px',
+        boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+      }}>
+        <Column mt="xxl">
           <Text text="Recipient" preset="regular" color="textDim" />
           <Input
             preset="address"

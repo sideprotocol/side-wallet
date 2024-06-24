@@ -146,6 +146,7 @@ export default function WalletTabScreen() {
     }
   ];
 
+  const [currentTab, setCurrentTab] = useState('side');
   const blockstreamUrl = useBlockstreamUrl();
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
 
@@ -302,16 +303,21 @@ export default function WalletTabScreen() {
               backgroundColor: '#1E1E1F',
               fontSize: '14px',
             }} itemsCenter justifyCenter>
-              <Row style={{
+              <Row justifyCenter onClick={() => {
+                setCurrentTab('side');
+              }} style={{
                 width: '114px',
                 borderRadius: '20px',
-                backgroundColor: '#404045',
+                backgroundColor: currentTab === 'side' ? '#404045' : '',
                 padding: '10px 20px'
               }}>
                 Side Chain
               </Row>
-              <Row style={{
+              <Row justifyCenter onClick={() => {
+                setCurrentTab('btc');
+              }}  style={{
                 width: '114px',
+                backgroundColor: currentTab === 'btc' ? '#404045' : '',
                 borderRadius: '20px',
                 padding: '10px 20px'
               }}>
