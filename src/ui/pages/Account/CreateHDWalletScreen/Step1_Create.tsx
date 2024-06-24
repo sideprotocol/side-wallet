@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button, ButtonGroup, Column, Grid, Image, Input, Mask, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { copyToClipboard, useWallet } from '@/ui/utils';
 
-import { ContextData, TabType, UpdateContextDataParams, WORDS_12_ITEM, WORDS_24_ITEM } from './type';
+import { ContextData, TabType, UpdateContextDataParams, WORDS_12_ITEM, WORDS_24_ITEM, WordsType } from './type';
 
 export default function Step1_Create({
   contextData,
@@ -15,13 +15,30 @@ export default function Step1_Create({
 }) {
   const wallet = useWallet();
   const tools = useTools();
+  const [type, setType] = useState<WordsType>(WordsType.WORDS_12);
 
   const init = async () => {
-    const _mnemonics = (await wallet.getPreMnemonics()) || (await wallet.generatePreMnemonic());
-    updateContextData({
-      mnemonics: _mnemonics,
-      step1Completed: true
-    });
+    const preMnemonics = await wallet.getPreMnemonics();
+    if (!preMnemonics.mnemonics12 || !preMnemonics.mnemonics24) {
+      const generatePreMnemonics = await wallet.generatePreMnemonic();
+      updateContextData({
+        mnemonicsObj: {
+          mnemonics12: generatePreMnemonics.mnemonics12,
+          mnemonics24: generatePreMnemonics.mnemonics24
+        },
+        mnemonics: generatePreMnemonics.mnemonics12,
+        step1Completed: true
+      });
+    } else {
+      updateContextData({
+        mnemonicsObj: {
+          mnemonics12: preMnemonics.mnemonics12,
+          mnemonics24: preMnemonics.mnemonics24
+        },
+        mnemonics: preMnemonics.mnemonics12,
+        step1Completed: true
+      });
+    }
   };
 
   useEffect(() => {
@@ -36,11 +53,15 @@ export default function Step1_Create({
 
   const btnClick = () => {
     updateContextData({
+      mnemonics: curMenemonics,
       tabType: TabType.STEP2
     });
   };
 
-  const words = contextData.mnemonics.split(' ');
+  const curMenemonics =
+    type === WordsType.WORDS_12 ? contextData.mnemonicsObj.mnemonics12 : contextData.mnemonicsObj.mnemonics24;
+
+  const words = curMenemonics.split(' ');
   const wordsItems = [WORDS_12_ITEM, WORDS_24_ITEM];
   return (
     <>
@@ -74,11 +95,10 @@ export default function Step1_Create({
                     label: item.label
                   }))}
                   onChange={(value) => {
-                    // const wordsType = value as WordsType;
-                    // updateContextData({ wordsType });
-                    // setKeys(new Array(wordsItems[wordsType].count).fill(''));
+                    const wordsType = value as WordsType;
+                    setType(wordsType);
                   }}
-                  value={contextData.wordsType}
+                  value={type}
                 />
               ) : null}
 
@@ -122,7 +142,7 @@ export default function Step1_Create({
               <Row
                 justifyCenter
                 onClick={(e) => {
-                  copy(contextData.mnemonics);
+                  copy(curMenemonics);
                 }}
                 style={{
                   marginTop: '8px'

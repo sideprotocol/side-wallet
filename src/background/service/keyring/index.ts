@@ -32,7 +32,10 @@ interface MemStoreState {
   isUnlocked: boolean;
   keyringTypes: any[];
   keyrings: any[];
-  preMnemonics: string;
+  preMnemonics: {
+    word12: string;
+    word24: string;
+  };
 }
 
 export interface DisplayedKeyring {
@@ -145,7 +148,10 @@ class KeyringService extends EventEmitter {
       isUnlocked: false,
       keyringTypes: this.keyringTypes.map((krt) => krt.type),
       keyrings: [],
-      preMnemonics: '',
+      preMnemonics: {
+        word12: '',
+        word24: ''
+      },
       addressTypes: [],
       keystone: null
     });
@@ -206,19 +212,23 @@ class KeyringService extends EventEmitter {
     return keyring;
   };
 
-  private generateMnemonic = (): string => {
-    return bip39.generateMnemonic(128);
+  private generateMnemonic = (): { word12: string; word24: string } => {
+    return {
+      word12: bip39.generateMnemonic(128),
+      word24: bip39.generateMnemonic(256)
+    };
   };
 
-  generatePreMnemonic = async (): Promise<string> => {
+  generatePreMnemonic = async (): Promise<{ mnemonics12: string; mnemonics24: string }> => {
     if (!this.password) {
       throw new Error(i18n.t('you need to unlock wallet first'));
     }
-    const mnemonic = this.generateMnemonic();
-    const preMnemonics = await this.encryptor.encrypt(this.password, mnemonic);
-    this.memStore.updateState({ preMnemonics });
+    const { word12, word24 } = this.generateMnemonic();
+    const preMnemonics12 = await this.encryptor.encrypt(this.password, word12);
+    const preMnemonics24 = await this.encryptor.encrypt(this.password, word24);
+    this.memStore.updateState({ preMnemonics: { word12: preMnemonics12, word24: preMnemonics24 } });
 
-    return mnemonic;
+    return { mnemonics12: word12, mnemonics24: word24 };
   };
 
   getKeyringByType = (type: string) => {
@@ -228,19 +238,41 @@ class KeyringService extends EventEmitter {
   };
 
   removePreMnemonics = () => {
-    this.memStore.updateState({ preMnemonics: '' });
+    this.memStore.updateState({
+      preMnemonics: {
+        word12: '',
+        word24: ''
+      }
+    });
   };
 
-  getPreMnemonics = async (): Promise<any> => {
+  getPreMnemonics = async (): Promise<{ mnemonics12: any; mnemonics24: any }> => {
     if (!this.memStore.getState().preMnemonics) {
-      return '';
+      return {
+        mnemonics12: '',
+        mnemonics24: ''
+      };
     }
 
     if (!this.password) {
       throw new Error(i18n.t('you need to unlock wallet first'));
     }
 
-    return await this.encryptor.decrypt(this.password, this.memStore.getState().preMnemonics);
+    const preMnemonics12 = this.memStore.getState().preMnemonics.word12,
+      preMnemonics24 = this.memStore.getState().preMnemonics.word24;
+    let mnemonics12: any = '',
+      mnemonics24: any = '';
+    if (preMnemonics12) {
+      mnemonics12 = await this.encryptor.decrypt(this.password, preMnemonics12);
+    }
+    if (preMnemonics24) {
+      mnemonics24 = await this.encryptor.decrypt(this.password, preMnemonics24);
+    }
+
+    return {
+      mnemonics12,
+      mnemonics24
+    };
   };
 
   /**
@@ -404,11 +436,22 @@ class KeyringService extends EventEmitter {
     const encryptBooted = await this.encryptor.encrypt(newPassword, 'true');
     this.store.updateState({ booted: encryptBooted });
 
-    if (this.memStore.getState().preMnemonics) {
-      const mnemonic = await this.encryptor.decrypt(oldPassword, this.memStore.getState().preMnemonics);
-      const preMnemonics = await this.encryptor.encrypt(newPassword, mnemonic);
-      this.memStore.updateState({ preMnemonics });
+    let preMnemonics12 = this.memStore.getState().preMnemonics.word12,
+      preMnemonics24 = this.memStore.getState().preMnemonics.word24;
+    if (preMnemonics12) {
+      const mnemonic = await this.encryptor.decrypt(oldPassword, preMnemonics12);
+      preMnemonics12 = await this.encryptor.encrypt(newPassword, mnemonic);
     }
+    if (preMnemonics24) {
+      const mnemonic = await this.encryptor.decrypt(oldPassword, preMnemonics24);
+      preMnemonics24 = await this.encryptor.encrypt(newPassword, mnemonic);
+    }
+    this.memStore.updateState({
+      preMnemonics: {
+        word12: preMnemonics12,
+        word24: preMnemonics24
+      }
+    });
 
     await this.persistAllKeyrings();
     await this._updateMemStoreKeyrings();

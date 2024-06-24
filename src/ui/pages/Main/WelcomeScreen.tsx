@@ -12,9 +12,6 @@ export default function WelcomeScreen() {
   const { state } = useLocation();
   const wallet = useWallet();
   const isInTab = useExtensionIsInTab();
-  const { addWallet } = state as {
-    addWallet: boolean;
-  };
 
   return (
     <Layout>
@@ -25,7 +22,7 @@ export default function WelcomeScreen() {
           gap: '0',
           padding: '0 16px 24px'
         }}>
-        {addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}
+        {state?.addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}
         <Column
           style={{
             flex: 1

@@ -32,7 +32,11 @@ export default function CreateHDWalletScreen() {
     isCustom: false,
     customHdPath: '',
     addressTypeIndex: 0,
-    wordsType: WordsType.WORDS_12
+    wordsType: WordsType.WORDS_12,
+    mnemonicsObj: {
+      mnemonics12: '',
+      mnemonics24: ''
+    }
   });
 
   const updateContextData = useCallback(
