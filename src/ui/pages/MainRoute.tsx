@@ -33,6 +33,9 @@ import AppTabScrren from './Main/AppTabScreen';
 import BoostScreen from './Main/BoostScreen';
 import DiscoverTabScreen from './Main/DiscoverTabScreen';
 import SettingsTabScreen from './Main/SettingsTabScreen';
+import SummonTabScreen from './Main/SummonTabScreen';
+import SwapTabScreen from './Main/SwapTabScreen';
+import BridgeTabScreen from './Main/BridgeTabScreen';
 import WalletTabScreen from './Main/WalletTabScreen';
 import WelcomeScreen from './Main/WelcomeScreen';
 import OrdinalsInscriptionScreen from './Ordinals/OrdinalsInscriptionScreen';
@@ -97,6 +100,18 @@ const routes = {
   SettingsTabScreen: {
     path: '/settings',
     element: <SettingsTabScreen />
+  },
+  SummonTabScreen: {
+    path: '/summon',
+    element: <SummonTabScreen />
+  },
+  BridgeTabScreen: {
+    path: '/bridge',
+    element: <BridgeTabScreen />
+  },
+  SwapTabScreen: {
+    path: '/swap',
+    element: <SwapTabScreen />
   },
   CreateHDWalletScreen: {
     path: '/account/create-hd-wallet',

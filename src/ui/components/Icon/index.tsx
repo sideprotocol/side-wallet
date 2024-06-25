@@ -73,6 +73,10 @@ export const svgRegistry = {
   'main-activity-ac': '/images/icons/main/activity-ac-icon.svg',
   'main-setting': '/images/icons/main/settings-icon.svg',
   'main-setting-ac': '/images/icons/main/settings-ac-icon.svg',
+  'main-bridge': '/images/icons/main/bridge-icon.svg',
+  'main-bridge-ac': '/images/icons/main/bridge-ac-icon.svg',
+  'main-summon': '/images/icons/main/summon-ac-icon.svg',
+  'main-summon-ac': '/images/icons/main/summon-ac-icon.svg',
 };
 
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];

@@ -70,7 +70,7 @@ export function useReadTab() {
   const dispatch = useAppDispatch();
   const appSummary = useAppSummary();
   return useCallback(
-    async (name: 'app' | 'home' | 'settings') => {
+    async (name: 'app' | 'home' | 'settings' | 'bridge' | 'summon') => {
       await wallet.readTab(name);
       if (name == 'app') {
         const appSummary = await wallet.getAppSummary();

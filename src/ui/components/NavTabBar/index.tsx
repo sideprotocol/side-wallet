@@ -13,8 +13,10 @@ export function NavTabBar({ tab }: { tab: TabOption }) {
     <Grid columns={4} style={{ width: '100%', height: '66px', backgroundColor: colors.bg2 }}>
       <TabButton tabName="home" icon="main-home" isActive={tab === 'home'} />
       <TabButton tabName="swap" icon="main-swap" isActive={tab === 'swap'} />
-      <TabButton tabName="app" name="activity" icon="main-activity" isActive={tab === 'app'} />
-      <TabButton tabName="settings" icon="main-setting" isActive={tab === 'settings'} />
+      {/*<TabButton tabName="app" name="activity" icon="main-activity" isActive={tab === 'app'} />*/}
+      <TabButton tabName="bridge" icon="main-bridge" isActive={tab === 'bridge'} />
+      <TabButton tabName="summon" icon="main-summon" isActive={tab === 'summon'} />
+      {/*<TabButton tabName="settings" icon="main-setting" isActive={tab === 'settings'} />*/}
     </Grid>
   );
 }
@@ -35,13 +37,18 @@ function TabButton({ tabName, icon, isActive, name }: { tabName: TabOption; icon
         if (tabName === 'home') {
           navigate('MainScreen');
         } else if (tabName === 'swap') {
-          navigate('DiscoverTabScreen');
-        } else if (tabName === 'app') {
-          navigate('AppTabScrren');
-          readTab('app');
-        } else if (tabName === 'settings') {
-          navigate('SettingsTabScreen');
+          navigate('SwapTabScreen');
+        }  else if (tabName === 'bridge') {
+          navigate('BridgeTabScreen');
+        } else if (tabName === 'summon') {
+          navigate('SummonTabScreen');
         }
+        // else if (tabName === 'app') {
+        //   navigate('AppTabScrren');
+        //   readTab('app');
+        // } else if (tabName === 'settings') {
+        //   navigate('SettingsTabScreen');
+        // }
       }}>
       <Column itemsCenter style={{
         gap: 0
