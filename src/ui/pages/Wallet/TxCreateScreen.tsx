@@ -158,12 +158,6 @@ export default function TxCreateScreen() {
         borderTop: '1px solid #404045',
         boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
       }} justifyCenter>
-        {/*<Image style={{*/}
-        {/*  position: 'absolute',*/}
-        {/*  top: '-23px',*/}
-        {/*  left: '-12px',*/}
-        {/*  zIndex: 3,*/}
-        {/*}} src="/images/icons/wallet/arc-icon.svg" size={74} />*/}
         <Row style={{
           marginTop: '6px',
         }}>
@@ -273,7 +267,7 @@ export default function TxCreateScreen() {
         </Column>
 
         <Column mt="lg">
-          <Text text="Fee" color="textDim" />
+          <Text text="Fee" color="white" />
 
           <FeeRateBar
             onChange={(val) => {

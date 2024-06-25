@@ -59,7 +59,7 @@ export const colors = Object.assign({}, palette, {
   warning: palette.orange,
   primary: '#0DD4C3',
 
-  bg2: '#2a2a2a',
+  bg2: '#09090A',
   bg3: '#434242',
   bg4: '#383535',
 
