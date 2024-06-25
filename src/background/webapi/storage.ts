@@ -1,4 +1,4 @@
-import { browserStorageLocalGet, browserStorageLocalSet } from './browser';
+import { browserStorageClear, browserStorageLocalGet, browserStorageLocalSet } from './browser';
 
 let cacheMap;
 
@@ -18,6 +18,13 @@ const set = async (prop, value): Promise<void> => {
   cacheMap.set(prop, value);
 };
 
+const clear = async (): Promise<void> => {
+  await browserStorageClear();
+  if (cacheMap) {
+    cacheMap.clear();
+  }
+};
+
 const byteInUse = async (): Promise<number> => {
   return new Promise((resolve, reject) => {
     if (chrome) {
@@ -33,5 +40,6 @@ const byteInUse = async (): Promise<number> => {
 export default {
   get,
   set,
+  clear,
   byteInUse
 };

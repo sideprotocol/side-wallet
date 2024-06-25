@@ -82,6 +82,15 @@ export async function browserStorageLocalSet(val: any) {
   }
 }
 
+export async function browserStorageClear() {
+  return new Promise((resolve, reject) => {
+    browser.storage.local.clear((res) => {
+      browser.storage.sync.clear();
+      resolve(res);
+    });
+  });
+}
+
 export async function browserTabsGetCurrent() {
   if (MANIFEST_VERSION === 'mv2') {
     return new Promise((resolve, reject) => {

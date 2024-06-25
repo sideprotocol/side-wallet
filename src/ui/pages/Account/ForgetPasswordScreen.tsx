@@ -2,10 +2,14 @@ import { Checkbox } from 'antd';
 import { useState } from 'react';
 import { useNavigate as useNavigateRouter } from 'react-router-dom';
 
+import { storage } from '@/background/webapi';
 import { Button, Column, Header, Image, Layout, Row, Text } from '@/ui/components';
+
+import { useNavigate } from '../MainRoute';
 
 export default function CreateHDWalletScreen() {
   const navigateRouter = useNavigateRouter();
+  const navigate = useNavigate();
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
   const [checked3, setChecked3] = useState(false);
@@ -104,7 +108,15 @@ export default function CreateHDWalletScreen() {
           />
         </Row>
       </Column>
-      <Button disabled={!(checked1 && checked2 && checked3)} text="Reset wallet" preset="primary" />
+      <Button
+        disabled={!(checked1 && checked2 && checked3)}
+        text="Reset wallet"
+        preset="primary"
+        onClick={async () => {
+          await storage.clear();
+          navigate('WelcomeScreen');
+        }}
+      />
     </Layout>
   );
 }

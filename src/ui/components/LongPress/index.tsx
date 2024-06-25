@@ -1,3 +1,4 @@
+import { Image } from '../Image';
 import { Text } from '../Text';
 
 export function LongPress() {
@@ -9,7 +10,7 @@ export function LongPress() {
           display: 'flex',
           justifyContent: 'center'
         }}>
-        Long Press
+        <Image src="./images/img/long-press.png" size={90} />
       </div>
       <Text
         text="Please type in your password to proceed"
