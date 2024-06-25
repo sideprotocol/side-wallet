@@ -4,13 +4,14 @@ import { forwardRef, useMemo, useState } from 'react';
 import { KEYRING_TYPE } from '@/shared/constant';
 import { Account } from '@/shared/types';
 import { Button, Column, Icon, Row, Text } from '@/ui/components';
+import { useTools } from '@/ui/components/ActionComponent';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { colors } from '@/ui/theme/colors';
-import { useWallet } from '@/ui/utils';
+import { copyToClipboard, useWallet } from '@/ui/utils';
 
 import { Image } from '../Image';
 import { Input } from '../Input';
@@ -33,6 +34,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
   const wallet = useWallet();
   const dispatch = useAppDispatch();
   const keyring = useCurrentKeyring();
+  const tools = useTools();
 
   if (!account) {
     return <div />;
@@ -153,6 +155,28 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                   />
                 </Row>
               )}
+              <Row
+                style={{
+                  gap: '16px',
+                  alignItems: 'center'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  copyToClipboard(account.address);
+                  tools.toastSuccess('copied');
+                  setOptionsVisible(false);
+                }}>
+                <Image src="./images/icons/key-02.svg" size={20} />
+                <Text
+                  text="Copy Address"
+                  color="text"
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    lineHeight: '17px'
+                  }}
+                />
+              </Row>
             </Column>
           )}
         </Column>
