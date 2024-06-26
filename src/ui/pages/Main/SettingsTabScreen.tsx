@@ -76,14 +76,14 @@ const SettingList: Setting[] = [
     right: true
   },
 
-  // {
-  //   label: 'Address Type',
-  //   value: 'Taproot',
-  //   desc: '',
-  //   action: 'addressType',
-  //   route: '/settings/address-type',
-  //   right: true
-  // },
+  {
+    label: 'Address Type',
+    value: 'Taproot',
+    desc: '',
+    action: 'addressType',
+    route: '/settings/address-type',
+    right: true
+  },
 
   // {
   //   label: 'Advanced',
@@ -102,14 +102,14 @@ const SettingList: Setting[] = [
   //   route: '/connected-sites',
   //   right: true
   // },
-  // {
-  //   label: 'Network',
-  //   value: 'MAINNET',
-  //   desc: '',
-  //   action: 'networkType',
-  //   route: '/settings/network-type',
-  //   right: true
-  // },
+  {
+    label: 'Network',
+    value: 'MAINNET',
+    desc: '',
+    action: 'networkType',
+    route: '/settings/network-type',
+    right: true
+  },
 
   // {
   //   label: 'Change Password',
