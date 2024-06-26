@@ -32,8 +32,10 @@ import { amountToSatoshis, satoshisToAmount, useWallet } from '@/ui/utils';
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
 import { AtomicalsTab } from './AtomicalsTab';
+import BtcTokenList from './BtcTokenList';
 import { OrdinalsTab } from './OrdinalsTab';
 import { RunesList } from './RunesList';
+import SideTokenList from './SideTokenList';
 
 const $noBreakStyle: CSSProperties = {
   whiteSpace: 'nowrap',
@@ -354,41 +356,7 @@ export default function WalletTabScreen() {
             <Text text="Tokens" size="xxl" />
           </Row>
 
-          <Column
-            style={{
-              backgroundColor: '#1D1D1F',
-              padding: '10px 20px',
-              borderRadius: 8
-            }}
-            justifyBetween>
-            {assets.map((item) => {
-              return (
-                <Row
-                  onClick={() => {
-                    // navigate('SelectAddressScreen');
-                  }}
-                  full
-                  key={item.symbol + item.name}
-                  justifyBetween
-                  style={{
-                    cursor: 'pointer'
-                  }}>
-                  <Row>
-                    <Image src={item.icon} size={42}></Image>
-                    <Column>
-                      <Text preset="regular" text={item.symbol}></Text>
-                      <Text preset="sub" text={item.name}></Text>
-                    </Column>
-                  </Row>
-
-                  <Column>
-                    <Text preset="regular" text={item.balance}></Text>
-                    <Text preset="sub" text={item.value}></Text>
-                  </Column>
-                </Row>
-              );
-            })}
-          </Column>
+          <Column justifyBetween>{currentTab === 'side' ? <SideTokenList /> : <BtcTokenList />}</Column>
 
           {/*<Tabs*/}
           {/*  size={'small'}*/}
