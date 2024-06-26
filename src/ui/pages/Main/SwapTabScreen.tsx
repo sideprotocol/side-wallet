@@ -14,6 +14,8 @@ import { spacing } from '@/ui/theme/spacing';
 import { useWallet } from '@/ui/utils';
 import { RightOutlined } from '@ant-design/icons';
 import { NavTabBar } from '@/ui/components/NavTabBar';
+import { fontSizes } from '@/ui/theme/font';
+import AccountSelect from '@/ui/pages/Account/AccountSelect';
 
 interface Setting {
   label?: string;
@@ -142,15 +144,14 @@ const SettingList: Setting[] = [
 
 export default function SettingsTabScreen() {
   const navigate = useNavigate();
-
-  const networkType = useNetworkType();
-
-  const isInTab = useExtensionIsInTab();
-
+  //
+  // const networkType = useNetworkType();
+  //
+  // const isInTab = useExtensionIsInTab();
+  //
   const [connected, setConnected] = useState(false);
-
   const currentKeyring = useCurrentKeyring();
-  const currentAccount = useCurrentAccount();
+  // const currentAccount = useCurrentAccount();
   const wallet = useWallet();
   useEffect(() => {
     const run = async () => {
@@ -163,64 +164,43 @@ export default function SettingsTabScreen() {
     };
     run();
   }, []);
-
-  const isCustomHdPath = useMemo(() => {
-    const item = ADDRESS_TYPES[currentKeyring.addressType];
-    return currentKeyring.hdPath !== '' && item.hdPath !== currentKeyring.hdPath;
-  }, [currentKeyring]);
-
-  const toRenderSettings = SettingList.filter((v) => {
-    if (v.action == 'manage-wallet') {
-      v.value = currentKeyring.alianName;
-    }
-
-    if (v.action == 'connected-sites') {
-      v.value = connected ? 'Connected' : 'Not connected';
-    }
-
-    if (v.action == 'networkType') {
-      v.value = NETWORK_TYPES[networkType].label;
-    }
-
-    if (v.action == 'addressType') {
-      const item = ADDRESS_TYPES[currentKeyring.addressType];
-      const hdPath = currentKeyring.hdPath || item.hdPath;
-      if (currentKeyring.type === KEYRING_TYPE.SimpleKeyring) {
-        v.value = `${item.name}`;
-      } else {
-        v.value = `${item.name} (${hdPath}/${currentAccount.index})`;
-      }
-    }
-
-    if (v.action == 'expand-view') {
-      if (isInTab) {
-        return false;
-      }
-    }
-
-    return true;
-  });
-
-  const tools = useTools();
-  const openExtensionInTab = useOpenExtensionInTab();
-
   return (
     <Layout>
       <Header
-        onBack={() => {
-          window.history.go(-1);
+        LeftComponent={
+          connected ? (
+            <Row
+              itemsCenter
+              onClick={() => {
+                navigate('ConnectedSitesScreen');
+              }}>
+              <Text text="·" color="green" size="xxl" />
+              <Text text="Dapp Connected" size="xxs" />
+            </Row>
+          ) : (
+            <Image
+              src="/images/logo/wallet-logo-white.svg"
+              size={fontSizes.xxxl}
+              style={{
+                marginLeft: 10
+              }}
+            />
+          )
+        }
+        title={
+          currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
+            <AccountSelect />
+          ) : (
+            ''
+          )
+        }
+        RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
+        onClickRight={() => {
+          navigate('SettingsTabScreen');
         }}
-        title="Swap"
       />
       <Content justifyCenter itemsCenter>
-        <Column gap={'xl'} justifyCenter itemsCenter>
-          <Row justifyCenter itemsCenter>
-            <Image size={90} src={`/images/icons/main/comimg-soon.svg`} />
-          </Row>
-          <Row>
-            <span> Common soon </span>
-          </Row>
-        </Column>
+        test
       </Content>
       <Footer px="zero" py="zero">
         <NavTabBar tab="swap" />
