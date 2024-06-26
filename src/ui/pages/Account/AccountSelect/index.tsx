@@ -1,17 +1,12 @@
 import { Drawer } from 'antd';
 import { useState } from 'react';
 
+import { Column, Header, Icon, Image, Row, Text } from '@/ui/components';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { shortAddress } from '@/ui/utils';
 
-import { Column } from '../Column';
-import { Header } from '../Header';
-import { Icon } from '../Icon';
-import { Image } from '../Image';
-import { Row } from '../Row';
-import { Text } from '../Text';
-import WalletSelect from '../WalletSelect';
+import KeyringSelect from '../KeyringSelect';
 import SwitchAccountScreen from './SwitchAccountScreen';
 import './index.less';
 
@@ -76,7 +71,7 @@ const AccountSelect = () => {
           border: '1px solid #2D2D2D'
         }}>
         <Header
-          title={<WalletSelect />}
+          title={<KeyringSelect />}
           RightComponent={
             <span
               style={{

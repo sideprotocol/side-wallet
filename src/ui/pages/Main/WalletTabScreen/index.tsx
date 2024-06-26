@@ -1,16 +1,16 @@
-import { Tabs, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 
 import { AddressFlagType, KEYRING_TYPE } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { checkAddressFlag } from '@/shared/utils';
 import { Column, Content, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
-import AccountSelect from '@/ui/components/AccountSelect';
 import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPopover';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
 import { UpgradePopover } from '@/ui/components/UpgradePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
+import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import { useAccountBalance, useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
@@ -24,7 +24,7 @@ import {
 } from '@/ui/state/settings/hooks';
 import { useFetchUtxosCallback, useSafeBalance } from '@/ui/state/transactions/hooks';
 import { useAssetTabKey, useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
-import { AssetTabKey, uiActions } from '@/ui/state/ui/reducer';
+import { AssetTabKey } from '@/ui/state/ui/reducer';
 import { fontSizes } from '@/ui/theme/font';
 // import walletLogo from '/images/logo/wallet-logo.png';
 import { amountToSatoshis, satoshisToAmount, useWallet } from '@/ui/utils';
@@ -165,7 +165,6 @@ export default function WalletTabScreen() {
       style={{
         backgroundColor: '#09090A'
       }}>
-
       <Header
         LeftComponent={
           connected ? (
@@ -178,9 +177,13 @@ export default function WalletTabScreen() {
               <Text text="Dapp Connected" size="xxs" />
             </Row>
           ) : (
-            <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} style={{
-              marginLeft: 10
-            }} />
+            <Image
+              src="/images/logo/wallet-logo-white.svg"
+              size={fontSizes.xxxl}
+              style={{
+                marginLeft: 10
+              }}
+            />
           )
         }
         title={
@@ -270,57 +273,75 @@ export default function WalletTabScreen() {
                 width: '93%'
               }}
               justifyBetween>
-              <Column onClick={() => {
-                navigate('SelectNetworkScreen');
-              }} itemsCenter>
+              <Column
+                onClick={() => {
+                  navigate('SelectNetworkScreen');
+                }}
+                itemsCenter>
                 <Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.iconxLarge} />
                 Receive
               </Column>
 
-              <Column onClick={() => {
-                resetUiTxCreateScreen();
-                navigate('TxCreateScreen');
-              }} itemsCenter>
+              <Column
+                onClick={() => {
+                  resetUiTxCreateScreen();
+                  navigate('TxCreateScreen');
+                }}
+                itemsCenter>
                 <Image src="/images/icons/main/send-icon.svg" size={fontSizes.iconxLarge} />
                 Send
               </Column>
 
-              <Column onClick={() => {
-                setBuyBtcModalVisible(true);
-              }} itemsCenter>
+              <Column
+                onClick={() => {
+                  setBuyBtcModalVisible(true);
+                }}
+                itemsCenter>
                 <Image src="/images/icons/main/buy-icon.svg" size={fontSizes.iconxLarge} />
                 Buy
               </Column>
             </Row>
           </Row>
 
-          <Row style={{
-            margin: '20px 0',
-          }} itemsCenter justifyCenter>
-            <Row style={{
-              width: '228px',
-              borderRadius: '20px',
-              backgroundColor: '#1E1E1F',
-              fontSize: '14px',
-            }} itemsCenter justifyCenter>
-              <Row justifyCenter onClick={() => {
-                setCurrentTab('side');
-              }} style={{
-                width: '114px',
+          <Row
+            style={{
+              margin: '20px 0'
+            }}
+            itemsCenter
+            justifyCenter>
+            <Row
+              style={{
+                width: '228px',
                 borderRadius: '20px',
-                backgroundColor: currentTab === 'side' ? '#404045' : '',
-                padding: '10px 20px'
-              }}>
+                backgroundColor: '#1E1E1F',
+                fontSize: '14px'
+              }}
+              itemsCenter
+              justifyCenter>
+              <Row
+                justifyCenter
+                onClick={() => {
+                  setCurrentTab('side');
+                }}
+                style={{
+                  width: '114px',
+                  borderRadius: '20px',
+                  backgroundColor: currentTab === 'side' ? '#404045' : '',
+                  padding: '10px 20px'
+                }}>
                 Side Chain
               </Row>
-              <Row justifyCenter onClick={() => {
-                setCurrentTab('btc');
-              }}  style={{
-                width: '114px',
-                backgroundColor: currentTab === 'btc' ? '#404045' : '',
-                borderRadius: '20px',
-                padding: '10px 20px'
-              }}>
+              <Row
+                justifyCenter
+                onClick={() => {
+                  setCurrentTab('btc');
+                }}
+                style={{
+                  width: '114px',
+                  backgroundColor: currentTab === 'btc' ? '#404045' : '',
+                  borderRadius: '20px',
+                  padding: '10px 20px'
+                }}>
                 Bitcoin
               </Row>
             </Row>
@@ -333,11 +354,13 @@ export default function WalletTabScreen() {
             <Text text="Tokens" size="xxl" />
           </Row>
 
-          <Column style={{
-            backgroundColor: '#1D1D1F',
-            padding: '10px 20px',
-            borderRadius: 8
-          }} justifyBetween>
+          <Column
+            style={{
+              backgroundColor: '#1D1D1F',
+              padding: '10px 20px',
+              borderRadius: 8
+            }}
+            justifyBetween>
             {assets.map((item) => {
               return (
                 <Row

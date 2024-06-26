@@ -3,7 +3,7 @@ import { forwardRef, useMemo, useState } from 'react';
 
 import { KEYRING_TYPE } from '@/shared/constant';
 import { Account } from '@/shared/types';
-import { Button, Column, Icon, Row, Text } from '@/ui/components';
+import { Button, Column, Icon, Image, Input, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -13,8 +13,6 @@ import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { colors } from '@/ui/theme/colors';
 import { copyToClipboard, useWallet } from '@/ui/utils';
 
-import { Image } from '../Image';
-import { Input } from '../Input';
 import './index.less';
 
 export interface ItemData {
