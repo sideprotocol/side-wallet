@@ -22,6 +22,9 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@babel/core": "^7.16.0",
+    "@cosmjs/stargate": "^0.32.4",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
@@ -102,6 +105,7 @@
     "react-hooks-global-state": "^2.0.0-rc.0",
     "react-i18next": "^11.16.9",
     "react-modal": "^3.15.1",
+    "react-number-format": "^5.4.0",
     "react-redux": "^8.0.1",
     "react-refresh": "^0.11.0",
     "react-router-dom": "^6.3.0",

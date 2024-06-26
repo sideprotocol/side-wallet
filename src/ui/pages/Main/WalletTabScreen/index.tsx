@@ -94,10 +94,7 @@ export default function WalletTabScreen() {
   const [buyBtcModalVisible, setBuyBtcModalVisible] = useState(false);
 
   return (
-    <Layout
-      style={{
-        padding: '0 16px'
-      }}>
+    <Layout>
       <Header
         LeftComponent={
           connected ? (
@@ -113,9 +110,6 @@ export default function WalletTabScreen() {
             <Image
               src="/images/logo/wallet-logo-white.svg"
               size={fontSizes.xxxl}
-              style={{
-                marginLeft: 10
-              }}
             />
           )
         }
@@ -207,7 +201,7 @@ export default function WalletTabScreen() {
 
         <Row
           style={{
-            marginTop: '42px'
+            marginTop: '42px',
           }}
           justifyCenter>
           <ButtonGroup
@@ -233,17 +227,20 @@ export default function WalletTabScreen() {
           />
         </Row>
 
-        <Text
-          text="Tokens"
-          style={{
-            marginTop: '35px',
-            marginBottom: '16px',
-            fontSize: '16px',
-            fontWeight: 600
-          }}
-        />
-
-        {currentTab === 'side' ? <SideTokenList /> : <BtcTokenList />}
+        <Column style={{
+          padding: '0 16px',
+        }}>
+          <Text
+            text="Tokens"
+            style={{
+              marginTop: '35px',
+              marginBottom: '16px',
+              fontSize: '16px',
+              fontWeight: 600
+            }}
+          />
+          {currentTab === 'side' ? <SideTokenList /> : <BtcTokenList />}
+        </Column>
       </Column>
 
       {showSafeNotice && (
