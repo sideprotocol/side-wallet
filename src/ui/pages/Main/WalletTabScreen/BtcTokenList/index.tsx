@@ -20,7 +20,7 @@ const assets: Asset[] = [
 
 export default function BtcTokenList() {
   return (
-    <>
+    <Column>
       {assets.map((item) => {
         return (
           <Row
@@ -57,6 +57,6 @@ export default function BtcTokenList() {
           </Row>
         );
       })}
-    </>
+    </Column>
   );
 }

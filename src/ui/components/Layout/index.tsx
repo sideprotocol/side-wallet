@@ -13,6 +13,7 @@ export function Layout(props: LayoutProps) {
       className="layout"
       style={Object.assign(
         {
+          backgroundColor: '#09090A',
           display: 'flex',
           flexDirection: 'column',
           width: '100vw',

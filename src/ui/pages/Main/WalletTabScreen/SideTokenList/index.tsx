@@ -5,7 +5,7 @@ import useGetSideTokenList from './hooks/useGetSideTokenList';
 export default function SideTokenList() {
   const { data: assets } = useGetSideTokenList();
   return (
-    <>
+    <Column>
       {assets.map((item) => {
         return (
           <Row
@@ -39,6 +39,6 @@ export default function SideTokenList() {
           </Row>
         );
       })}
-    </>
+    </Column>
   );
 }

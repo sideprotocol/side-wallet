@@ -17,7 +17,7 @@ interface HeaderProps {
 }
 
 export function Header(props: HeaderProps) {
-  const { onBack, title, leftTitle, LeftComponent, RightComponent, onClickRight,children } = props;
+  const { onBack, title, leftTitle, LeftComponent, RightComponent, onClickRight, children } = props;
 
   const CenterComponent = useMemo(() => {
     if (children) {

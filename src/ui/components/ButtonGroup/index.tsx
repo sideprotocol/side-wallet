@@ -10,10 +10,15 @@ interface IButtonGroupProps {
   value: ButtonItem['key'];
   onChange: (value: ButtonItem['key']) => void;
   rowProps: RowProps;
+  size?: 'normal' | 'big';
 }
 
 export function ButtonGroup(props: IButtonGroupProps) {
-  const { list, value, onChange, rowProps } = props;
+  const { list, value, onChange, size, rowProps } = props;
+  let height = '26px';
+  if (size === 'big') {
+    height = '34px';
+  }
   return (
     <Row {...rowProps}>
       <Row
@@ -28,7 +33,7 @@ export function ButtonGroup(props: IButtonGroupProps) {
             <div
               key={item.key}
               style={{
-                height: '26px',
+                height,
                 padding: '0 22px',
                 backgroundColor: value === item.key ? '#404045' : 'transparent',
                 borderRadius: '100px',
