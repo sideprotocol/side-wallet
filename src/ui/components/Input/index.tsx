@@ -317,7 +317,7 @@ export const AddressInput = (props: InputProps) => {
             color="yellow"
             text={'More details'}
             onClick={() => {
-              window.open(`https://docs.unisat.io/unisat-wallet/name-recognized-and-resolved`);
+              window.open(`https://side.one/`);
             }}
           />
           <Text preset="sub" size="sm" text={')'} />

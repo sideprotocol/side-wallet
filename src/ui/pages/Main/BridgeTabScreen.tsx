@@ -18,86 +18,6 @@ import { fontSizes } from '@/ui/theme/font';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import { CoinInput } from '@/ui/components/CoinInput';
 
-interface Setting {
-  label?: string;
-  value?: string;
-  desc?: string;
-  danger?: boolean;
-  icon?: IconTypes;
-  action: string;
-  route: string;
-  right: boolean;
-}
-
-const SettingList: Setting[] = [
-  // {
-  //   label: 'Manage Wallet',
-  //   value: '',
-  //   desc: '',
-  //   action: 'manage-wallet',
-  //   route: '/settings/manage-wallet',
-  //   right: true
-  // },
-
-  {
-    label: 'General',
-    value: '',
-    icon: 'general',
-    desc: '',
-    action: '',
-    route: '/settings/general',
-    right: true
-  },
-
-  {
-    label: 'Advance',
-    value: '',
-    icon: 'advance',
-    desc: '',
-    action: 'advanced',
-    route: '/settings/advanced',
-    right: true
-  },
-
-  {
-    label: 'Security',
-    value: '',
-    icon: 'security',
-    desc: '',
-    action: '',
-    route: '/settings/security',
-    right: true
-  },
-
-  {
-    label: 'About',
-    value: '',
-    icon: 'about',
-    desc: '',
-    action: '',
-    route: '/settings/about',
-
-    right: true
-  },
-  {
-    label: '',
-    value: '',
-    desc: ' Expand View',
-    action: 'expand-view',
-    route: '/settings/export-privatekey',
-    right: false,
-    icon: 'expand'
-  },
-  {
-    label: '',
-    value: '',
-    desc: 'Lock',
-    icon: 'lock',
-    action: 'lock-wallet',
-    route: '',
-    right: false
-  }
-];
 
 export default function SettingsTabScreen() {
   const navigate = useNavigate();
@@ -150,7 +70,7 @@ export default function SettingsTabScreen() {
         }
         RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
         onClickRight={() => {
-          navigate('SettingsTabScreen');
+          navigate('/settings');
         }}
       />
       <Content>
@@ -279,7 +199,7 @@ export default function SettingsTabScreen() {
               </Column>
             </Row>
 
-            <Row mt={'xl'}>
+            <Row mt={'md'}>
               <Column full
                       px={'xl'}
                       py={'xl'}
@@ -320,7 +240,7 @@ export default function SettingsTabScreen() {
               </Column>
             </Row>
 
-            <Row mt={'xl'}>
+            <Row mt={'md'}>
               <Column full
                       px={'xl'}
                       py={'xl'}
@@ -368,7 +288,7 @@ export default function SettingsTabScreen() {
                       }}
                     />
                     <div style={{
-                      padding: '5px 10px',
+                      padding: '8px',
                       position: 'absolute',
                       right: '10px',
                       top: '50%',

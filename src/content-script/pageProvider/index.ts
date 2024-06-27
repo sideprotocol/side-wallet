@@ -19,7 +19,7 @@ const log = (event, ...args) => {
   }
 };
 const script = document.currentScript;
-const channelName = script?.getAttribute('channel') || 'UNISAT';
+const channelName = script?.getAttribute('channel') || 'sideWallet';
 
 export interface Interceptor {
   onRequest?: (data: any) => any;
@@ -34,7 +34,7 @@ interface StateProvider {
   isPermanentlyDisconnected: boolean;
 }
 const EXTENSION_CONTEXT_INVALIDATED_CHROMIUM_ERROR = 'Extension context invalidated.';
-export class UnisatProvider extends EventEmitter {
+export class SideProvider extends EventEmitter {
   _selectedAddress: string | null = null;
   _network: string | null = null;
   _isConnected = false;
@@ -362,23 +362,23 @@ export class UnisatProvider extends EventEmitter {
 
 declare global {
   interface Window {
-    unisat: UnisatProvider;
+    sideWallet: SideProvider;
   }
 }
 
-const provider = new UnisatProvider();
+const provider = new SideProvider();
 
-if (!window.unisat) {
-  window.unisat = new Proxy(provider, {
+if (!window.sideWallet) {
+  window.sideWallet = new Proxy(provider, {
     deleteProperty: () => true
   });
 }
 
-Object.defineProperty(window, 'unisat', {
+Object.defineProperty(window, 'sideWallet', {
   value: new Proxy(provider, {
     deleteProperty: () => true
   }),
   writable: false
 });
 
-window.dispatchEvent(new Event('unisat#initialized'));
+window.dispatchEvent(new Event('sideWallet#initialized'));

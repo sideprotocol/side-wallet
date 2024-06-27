@@ -13,7 +13,8 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.BUILD_ENV': JSON.stringify('DEV'),
       'process.env.DEBUG': true,
-      'process.env.TAILWIND_MODE': 'watch'
+      'process.env.TAILWIND_MODE': 'watch',
+      'process.env.SIDE_DEX_CONTRACT': 'watch',
     })
   ]
 };

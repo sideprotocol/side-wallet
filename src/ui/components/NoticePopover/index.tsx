@@ -43,7 +43,7 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
                 setChecked1(e.target.checked);
               }}>
               <div style={{ fontSize: fontSizes.sm }}>
-                for Ordinals assets, <span style={{ color: '#EBB94C' }}>Rare sats </span>are not supported.
+                for Ordinals assets, <span style={{ color: colors.primary }}>Rare sats </span>are not supported.
               </div>
             </Checkbox>
           </div>
@@ -52,7 +52,7 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
           <div>
             <Checkbox checked={checked2} onChange={(e) => setChecked2(e.target.checked)}>
               <div style={{ fontSize: fontSizes.sm }}>
-                for Atomicals assets, <span style={{ color: '#EBB94C' }}>Non-ARC20</span> are not supported yet.
+                for Atomicals assets, <span style={{ color: colors.primary }}>Non-ARC20</span> are not supported yet.
               </div>
             </Checkbox>
           </div>

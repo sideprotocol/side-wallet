@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { swapStore, useSwapStore } from "@/ui/stores/SwapStore";
 import { ADDRESS_TYPES, KEYRING_TYPE, NETWORK_TYPES } from '@/shared/constant';
 import { Card, Column, Content, Footer, Header, Layout, Row, Text, Image } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -17,137 +18,72 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import { fontSizes } from '@/ui/theme/font';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import { CoinInput } from '@/ui/components/CoinInput';
+import { useWalletContext } from "@/ui/components/WalletContext";
+import { SWAP_ASSETS } from "@/ui/constants";
+import BigNumber from 'bignumber.js';
+import { IAsset } from "@/ui/constants/assets";
 
-interface Setting {
-  label?: string;
-  value?: string;
-  desc?: string;
-  danger?: boolean;
-  icon?: IconTypes;
-  action: string;
-  route: string;
-  right: boolean;
-}
 
-const SettingList: Setting[] = [
-  // {
-  //   label: 'Manage Wallet',
-  //   value: '',
-  //   desc: '',
-  //   action: 'manage-wallet',
-  //   route: '/settings/manage-wallet',
-  //   right: true
-  // },
+const InitBalance = () => {
+  const currentAccount = useCurrentAccount();
+  // const { client: curClient, curChain } = useWalletContext();
 
-  {
-    label: 'General',
-    value: '',
-    icon: 'general',
-    desc: '',
-    action: '',
-    route: '/settings/general',
-    right: true
-  },
+  const { reloadDataTrigger } = useSwapStore();
+  // console.log(`currentAccount: `, currentAccount);
+  // debugger;
 
-  {
-    label: 'Advance',
-    value: '',
-    icon: 'advance',
-    desc: '',
-    action: 'advanced',
-    route: '/settings/advanced',
-    right: true
-  },
+  const getBalance = async (asset: IAsset) => {
+    if (!currentAccount?.address) {
+      return {
+        available: '0',
+        raw: '0',
+      };
+    }
 
-  {
-    label: 'Security',
-    value: '',
-    icon: 'security',
-    desc: '',
-    action: '',
-    route: '/settings/security',
-    right: true
-  },
+    const client = await CosmWasmClient.connect('https://devnet-rpc.side.one');
 
-  {
-    label: 'About',
-    value: '',
-    icon: 'about',
-    desc: '',
-    action: '',
-    route: '/settings/about',
+    const balance = await client.getBalance(currentAccount?.address, asset.base);
 
-    right: true
-  },
+    console.log(`client: `, client);
+    console.log(`client: `, balance);
+    debugger;
+    return {
+      available: BigNumber(balance?.amount || '0')
+        .div(BigNumber(10).pow(asset.exponent))
+        .toFixed(),
+      raw: balance.amount,
+    };
+  };
 
-  // {
-  //   label: 'Address Type',
-  //   value: 'Taproot',
-  //   desc: '',
-  //   action: 'addressType',
-  //   route: '/settings/address-type',
-  //   right: true
-  // },
+  const getBalancesAll = async () => {
+    const balances = await Promise.all(SWAP_ASSETS.assets.map((asset) => getBalance(asset)));
+    console.log(`balances: `, balances);
+    debugger;
+    const balancesObject = balances.reduce((acc, cur, index) => {
+      return {
+        ...acc,
+        [SWAP_ASSETS.assets[index].base]: cur,
+      };
+    }, {});
 
-  // {
-  //   label: 'Advanced',
-  //   value: 'Advanced settings',
-  //   desc: '',
-  //   action: 'advanced',
-  //   route: '/settings/advanced',
-  //   right: true
-  // },
+    swapStore.balances = balancesObject;
+  };
 
-  // {
-  //   label: 'Connected Sites',
-  //   value: '',
-  //   desc: '',
-  //   action: 'connected-sites',
-  //   route: '/connected-sites',
-  //   right: true
-  // },
-  // {
-  //   label: 'Network',
-  //   value: 'MAINNET',
-  //   desc: '',
-  //   action: 'networkType',
-  //   route: '/settings/network-type',
-  //   right: true
-  // },
+  useEffect(() => {
+    if (!currentAccount?.address) {
+      swapStore.balances = {};
+      return;
+    }
+    getBalancesAll();
+  }, [currentAccount?.address, reloadDataTrigger]);
 
-  // {
-  //   label: 'Change Password',
-  //   value: 'Change your lockscreen password',
-  //   desc: '',
-  //   action: 'password',
-  //   route: '/settings/password',
-  //   right: true
-  // },
-  {
-    label: '',
-    value: '',
-    desc: ' Expand View',
-    action: 'expand-view',
-    route: '/settings/export-privatekey',
-    right: false,
-    icon: 'expand'
-  },
-  {
-    label: '',
-    value: '',
-    desc: 'Lock',
-    icon: 'lock',
-    action: 'lock-wallet',
-    route: '',
-    right: false
-  }
-];
+  return <></>;
+};
 
-export default function SettingsTabScreen() {
+export default function SwapTabScreen() {
+  const { swapPair, balances } = useSwapStore();
   const navigate = useNavigate();
-  //
   // const networkType = useNetworkType();
-  //
   // const isInTab = useExtensionIsInTab();
   //
   const [connected, setConnected] = useState(false);
@@ -165,6 +101,8 @@ export default function SettingsTabScreen() {
     };
     run();
   }, []);
+  console.log(`swapPair, balances: `, swapPair, balances);
+  debugger;
   return (
     <Layout>
       <Header
@@ -194,7 +132,7 @@ export default function SettingsTabScreen() {
         }
         RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
         onClickRight={() => {
-          navigate('SettingsTabScreen');
+          navigate('/settings');
         }}
       />
       <Content>
@@ -203,7 +141,7 @@ export default function SettingsTabScreen() {
           relative
           rounded={true}
         >
-          {/*<InitBalance></InitBalance>*/}
+          <InitBalance></InitBalance>
 
           <Column relative>
             <Column

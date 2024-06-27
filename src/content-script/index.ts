@@ -36,7 +36,7 @@ function injectScript() {
       pm.dispose();
     });
   } catch (error) {
-    console.error('Unisat: Provider injection failed.', error);
+    console.error('Side: Provider injection failed.', error);
   }
 }
 
@@ -106,12 +106,7 @@ function blockedDomainCheck() {
 }
 
 function iframeCheck() {
-  const isInIframe = self != top;
-  if (isInIframe) {
-    return true;
-  } else {
-    return false;
-  }
+  return self != top;
 }
 
 /**
