@@ -1,4 +1,5 @@
 import {
+  assetService,
   contactBookService,
   keyringService,
   notificationService,
@@ -1938,6 +1939,13 @@ export class WalletController extends BaseController {
   getBuyBtcChannelList = async () => {
     return openapiService.getBuyBtcChannelList();
   };
+
+  setBitcoinTokens = assetService.setBitcoinTokens;
+  setSideTokens = assetService.setSideTokens;
+  getBitcoinTokens = assetService.getBitcoinTokens;
+  getSideTokens = assetService.getSideTokens;
+  setCoingeckoPriceMap = assetService.setCoingeckoPriceMap;
+  getCoingeckoPriceMap = assetService.getCoingeckoPriceMap;
 }
 
 export default new WalletController();

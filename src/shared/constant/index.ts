@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 
 /* constants pool */
-import { AddressType, Chain, NetworkType, RestoreWalletType } from '../types';
+import { AddressType, BitcoinToken, Chain, NetworkType, RestoreWalletType, SideToken } from '../types';
 
 export enum CHAINS_ENUM {
   BTC = 'BTC',
@@ -345,3 +345,35 @@ export const HARDWARE_WALLETS = {
     img: './images/artifacts/trezor.png'
   }
 };
+
+export const SIDE_TOKENS: SideToken[] = [
+  {
+    base: 'uside',
+    symbol: 'SIDE',
+    name: 'Side protocol',
+    exponent: '6',
+    coingecko_id: 'usd-coin',
+    logo: '/images/logo/wallet-logo-white.svg',
+    precision: 6
+  },
+  {
+    base: 'sat',
+    symbol: 'SATS',
+    name: 'SATS',
+    exponent: '8',
+    coingecko_id: 'ssv-network',
+    logo: 'https://assets.coingecko.com/coins/images/30666/standard/_dD8qr3M_400x400.png?1702913020',
+    precision: 6
+  }
+];
+
+export const BITCOIN_TOKENS: BitcoinToken[] = [
+  {
+    icon: '/images/img/btc.png',
+    name: 'Bitcoin',
+    symbol: 'BTC',
+    balance: '1',
+    value: '1',
+    coingecko_id: 'bitcoin'
+  }
+];

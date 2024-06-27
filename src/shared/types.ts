@@ -430,3 +430,22 @@ export interface AddressRunesTokenSummary {
   runeBalance: RuneBalance;
   runeLogo?: Inscription;
 }
+
+export interface BitcoinToken {
+  icon: string;
+  name: string;
+  symbol: string;
+  balance: string;
+  value: string;
+  coingecko_id: string;
+}
+
+export interface SideToken {
+  base: string;
+  symbol: string;
+  name: string;
+  exponent: string;
+  coingecko_id: string;
+  logo: string;
+  precision: number;
+}

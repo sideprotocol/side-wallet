@@ -5,6 +5,7 @@ import { openExtensionInTab } from '@/ui/features/browser/tabs';
 
 import { providerController, walletController } from './controller';
 import {
+  assetService,
   contactBookService,
   keyringService,
   openapiService,
@@ -30,6 +31,8 @@ async function restoreAppState() {
   await permissionService.init();
 
   await contactBookService.init();
+
+  await assetService.init();
 
   appStoreLoaded = true;
 }
