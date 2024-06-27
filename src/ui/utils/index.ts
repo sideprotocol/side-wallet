@@ -177,4 +177,23 @@ export function formatUnitAmount(tokenAmount: string, exponent: string | number)
   return parseFloat(amount.replace(/\.?0+$/, '')).toString();
 }
 
+/**
+ * 返回有效位数
+ * @param value value be format
+ * @param precision decimal places
+ * @param roundMode number
+ * @returns formatted value
+ */
+export const formatWithDP = (
+  value: string,
+  precision: number,
+  roundMode: BigNumber.RoundingMode = BigNumber.ROUND_FLOOR
+): string => {
+  const data = new BigNumber(value).dp(precision, roundMode);
+  if (!data.isFinite() || data.eq(0) || value === 'NaN') {
+    return new BigNumber(0).toFormat(precision, roundMode);
+  }
+  return data.dp(precision, roundMode).toString();
+};
+
 BigNumber.config({ EXPONENTIAL_AT: 1e9, DECIMAL_PLACES: 38 });

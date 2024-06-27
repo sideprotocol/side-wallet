@@ -4,6 +4,7 @@ import { HashRouter, Route, Routes, useNavigate as useNavigateOrigin } from 'rea
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { Content, Icon, Layout } from '../components';
+import useGetTokenPrice from '../hooks/useGetTokenPrice';
 import { accountActions } from '../state/accounts/reducer';
 import { useIsReady, useIsUnlocked } from '../state/global/hooks';
 import { globalActions } from '../state/global/reducer';
@@ -31,11 +32,11 @@ import BRC20SendScreen from './BRC20/BRC20SendScreen';
 import BRC20TokenScreen from './BRC20/BRC20TokenScreen';
 import AppTabScrren from './Main/AppTabScreen';
 import BoostScreen from './Main/BoostScreen';
+import BridgeTabScreen from './Main/BridgeTabScreen';
 import DiscoverTabScreen from './Main/DiscoverTabScreen';
 import SettingsTabScreen from './Main/SettingsTabScreen';
 import SummonTabScreen from './Main/SummonTabScreen';
 import SwapTabScreen from './Main/SwapTabScreen';
-import BridgeTabScreen from './Main/BridgeTabScreen';
 import WalletTabScreen from './Main/WalletTabScreen';
 import WelcomeScreen from './Main/WelcomeScreen';
 import OrdinalsInscriptionScreen from './Ordinals/OrdinalsInscriptionScreen';
@@ -376,6 +377,7 @@ const Main = () => {
 
   const isReady = useIsReady();
   const isUnlocked = useIsUnlocked();
+  useGetTokenPrice();
 
   const selfRef = useRef({
     settingsLoaded: false,
