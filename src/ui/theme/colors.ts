@@ -80,7 +80,8 @@ export const colors = Object.assign({}, palette, {
   light_gray: '#F5F5F5',
 
   // side theme color
-  background: '#09090A'
+  background: '#09090A',
+  swapBg: '#1D1D1F'
 });
 
 export type ColorTypes = keyof typeof colors;

@@ -170,7 +170,7 @@ export default function TxCreateScreen() {
         borderTop: '1px solid #404045',
         borderRadius: '10px',
         background: '#222',
-        padding: '16px 16px 24px',
+        padding: '16px 16px 64px 16px',
         marginTop: '20px',
         boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
       }}>
@@ -194,7 +194,7 @@ export default function TxCreateScreen() {
             defaultValue={inputAmount}
             value={inputAmount}
             onAmountInputChange={(amount) => {
-              if (autoAdjust == true) {
+              if (autoAdjust) {
                 setAutoAdjust(false);
               }
               setUiState({ inputAmount: amount });
@@ -211,20 +211,20 @@ export default function TxCreateScreen() {
             {spendUnavailableSatoshis > 0 && (
               <Row>
                 <Text text={`${spendUnavailableAmount}`} size="sm" style={{ color: '#65D5F0' }} />
-                <Text text={`BTC`} size="sm" color="textDim" />
-                <Text text={`+`} size="sm" color="textDim" />
+                <Text text={'BTC'} size="sm" color="textDim" />
+                <Text text={'+'} size="sm" color="textDim" />
               </Row>
             )}
 
             <Row>
               <Text text={`${avaiableAmount}`} size="sm" color="primary" />
-              <Text text={`BTC`} size="sm" color="textDim" />
+              <Text text={'BTC'} size="sm" color="textDim" />
             </Row>
           </Row>
 
           <Row justifyBetween>
             <Tooltip
-              title={`Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.`}
+              title={'Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.'}
               overlayStyle={{
                 fontSize: fontSizes.xs
               }}>
@@ -247,12 +247,12 @@ export default function TxCreateScreen() {
             {spendUnavailableSatoshis > 0 ? (
               <Row>
                 <Text text={`${unspendUnavailableAmount}`} size="sm" color="textDim" />
-                <Text text={`BTC`} size="sm" color="textDim" />
+                <Text text={'BTC'} size="sm" color="textDim" />
               </Row>
             ) : (
               <Row>
                 <Text text={`${unavailableAmount}`} size="sm" color="textDim" />
-                <Text text={`BTC`} size="sm" color="textDim" />
+                <Text text={'BTC'} size="sm" color="textDim" />
               </Row>
             )}
           </Row>
@@ -261,7 +261,7 @@ export default function TxCreateScreen() {
             <Text text="Total" color="textDim" />
             <Row>
               <Text text={`${totalAmount}`} size="sm" color="textDim" />
-              <Text text={`BTC`} size="sm" color="textDim" />
+              <Text text={'BTC'} size="sm" color="textDim" />
             </Row>
           </Row>
         </Column>
@@ -285,15 +285,16 @@ export default function TxCreateScreen() {
           />
         </Column>
 
-        {error && <Text text={error} color="error" />}
-
-        <Button
-          disabled={disabled}
-          preset="primary"
-          text="Next"
-          onClick={(e) => {
-            navigate('TxConfirmScreen', { rawTxInfo });
-          }}></Button>
+        <Column mt="lg">
+          {error && <Text text={error} color="error" />}
+          <Button
+            disabled={disabled}
+            preset="primary"
+            text="Next"
+            onClick={(e) => {
+              navigate('TxConfirmScreen', { rawTxInfo });
+            }}></Button>
+        </Column>
       </Content>
     </Layout>
   );

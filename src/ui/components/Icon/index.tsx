@@ -77,6 +77,7 @@ export const svgRegistry = {
   'main-bridge-ac': '/images/icons/main/bridge-ac-icon.svg',
   'main-summon': '/images/icons/main/summon-ac-icon.svg',
   'main-summon-ac': '/images/icons/main/summon-ac-icon.svg',
+  'swap-down-icon': '/images/icons/swap/bottom-icon.svg',
 };
 
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];

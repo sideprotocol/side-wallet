@@ -19,7 +19,7 @@ export function Layout(props: LayoutProps) {
           width: '100vw',
           height: '100vh',
           overflowY: 'auto',
-          overflowX: 'hidden'
+          overflowX: 'hidden',
         },
         $styleBase
       )}>
