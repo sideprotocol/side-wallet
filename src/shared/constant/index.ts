@@ -4,7 +4,8 @@
 import { AddressType, Chain, NetworkType, RestoreWalletType } from '../types';
 
 export enum CHAINS_ENUM {
-  BTC = 'BTC'
+  BTC = 'BTC',
+  SIDE = 'SIDE'
 }
 
 export const CHAINS: Record<string, Chain> = {
@@ -245,6 +246,10 @@ export const INTERNAL_REQUEST_SESSION = {
 
 export const OPENAPI_URL_MAINNET = 'https://wallet-api.unisat.io/v5';
 export const OPENAPI_URL_TESTNET = 'https://wallet-api-testnet.unisat.io/v5';
+export const SIDEREST_URL_MAINNET = 'https://testnet-rest.side.one';
+export const SIDEREST_URL_TESTNET = 'https://devnet-rest.side.one';
+export const SIDERPC_URL_MAINNET = 'https://testnet-rpc.side.one';
+export const SIDERPC_URL_TESTNET = 'https://devnet-rpc.side.one';
 
 export const EVENTS = {
   broadcastToUI: 'broadcastToUI',

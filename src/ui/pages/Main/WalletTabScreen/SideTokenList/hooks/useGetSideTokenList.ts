@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-interface Asset {
+export interface Asset {
   base: string;
   symbol: string;
   name: string;
@@ -10,7 +10,7 @@ interface Asset {
   precision: number;
 }
 
-const assets: Asset[] = [
+export const sideAssets: Asset[] = [
   {
     base: 'uside',
     symbol: 'SIDE',
@@ -39,7 +39,7 @@ export default function useGetSideTokenList() {
   }, []);
 
   const getData = async () => {
-    setData(assets);
+    setData(sideAssets);
   };
 
   return {

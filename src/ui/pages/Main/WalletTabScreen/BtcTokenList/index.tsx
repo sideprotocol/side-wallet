@@ -6,22 +6,24 @@ interface Asset {
   symbol: string;
   balance: string;
   value: string;
+  coingecko_id: string;
 }
 
-const assets: Asset[] = [
+const bitcoinAssets: Asset[] = [
   {
     icon: '/images/img/btc.png',
     name: 'Bitcoin',
     symbol: 'BTC',
     balance: '1',
-    value: '1'
+    value: '1',
+    coingecko_id: 'bitcoin'
   }
 ];
 
 export default function BtcTokenList() {
   return (
     <Column>
-      {assets.map((item) => {
+      {bitcoinAssets.map((item) => {
         return (
           <Row
             onClick={() => {

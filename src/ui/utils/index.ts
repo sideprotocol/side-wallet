@@ -169,4 +169,12 @@ export function useLocationState<T>() {
   return state as T;
 }
 
+export function formatUnitAmount(tokenAmount: string, exponent: string | number) {
+  const exp = BigNumber(10).exponentiatedBy(exponent);
+
+  const amount = BigNumber(tokenAmount).div(exp).toFixed(Number(exponent));
+
+  return parseFloat(amount.replace(/\.?0+$/, '')).toString();
+}
+
 BigNumber.config({ EXPONENTIAL_AT: 1e9, DECIMAL_PLACES: 38 });
