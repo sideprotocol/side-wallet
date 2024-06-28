@@ -15,7 +15,7 @@ import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useBlockstreamUrl, useSkipVersionCallback, useVersionInfo, useWalletConfig } from '@/ui/state/settings/hooks';
-import { useAssetTabKey, useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
+import { useAssetTabKey } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
 // import walletLogo from '/images/logo/wallet-logo.png';
 import { getTruncate, useWallet } from '@/ui/utils';
@@ -81,7 +81,6 @@ export default function WalletTabScreen() {
 
   const [currentTab, setCurrentTab] = useState<CHAINS_ENUM>(CHAINS_ENUM.SIDE);
   const blockstreamUrl = useBlockstreamUrl();
-  const resetUiTxCreateScreen = useResetUiTxCreateScreen();
 
   const [buyBtcModalVisible, setBuyBtcModalVisible] = useState(false);
 
@@ -159,7 +158,7 @@ export default function WalletTabScreen() {
           }}>
           <Column
             onClick={() => {
-              navigate('SelectNetworkScreen');
+              navigate('SelectNetworkScreen', { type: 'receive' });
             }}
             itemsCenter>
             <Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.iconxLarge} />
@@ -176,8 +175,7 @@ export default function WalletTabScreen() {
 
           <Column
             onClick={() => {
-              resetUiTxCreateScreen();
-              navigate('TxCreateScreen');
+              navigate('SelectNetworkScreen', { type: 'send' });
             }}
             itemsCenter>
             <Image src="/images/icons/main/send-icon.svg" size={fontSizes.iconxLarge} />

@@ -1,3 +1,6 @@
+import { useLocation } from 'react-router-dom';
+
+import { CHAINS_ENUM } from '@/shared/constant';
 import { Column, Content, Header, Image, Layout } from '@/ui/components';
 
 import { useNavigate } from '../MainRoute';
@@ -6,10 +9,10 @@ export default function SelectNetworkScreen() {
   // TODO: set select network
 
   const navigate = useNavigate();
-
-  function handleSelectNetwork() {
-    navigate('SelectCryptoScreen');
-  }
+  const { state } = useLocation();
+  const { type } = state as {
+    type: 'receive' | 'send';
+  };
 
   return (
     <Layout>
@@ -19,10 +22,17 @@ export default function SelectNetworkScreen() {
         }}
         title="Select network"
       />
-      <Content style={{
-        backgroundColor: '#09090A'
-      }}>
-        <Column onClick={() => handleSelectNetwork()}>
+      <Content
+        style={{
+          backgroundColor: '#09090A'
+        }}>
+        <Column
+          onClick={() => {
+            navigate('SelectCryptoScreen', {
+              chain: CHAINS_ENUM.BTC,
+              type
+            });
+          }}>
           <Image
             style={{
               cursor: 'pointer'
@@ -32,7 +42,13 @@ export default function SelectNetworkScreen() {
           />
         </Column>
 
-        <Column onClick={() => handleSelectNetwork()}>
+        <Column
+          onClick={() => {
+            navigate('SelectCryptoScreen', {
+              chain: CHAINS_ENUM.SIDE,
+              type
+            });
+          }}>
           <Image
             style={{
               cursor: 'pointer'

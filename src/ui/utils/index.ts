@@ -209,7 +209,7 @@ function removeTrailingZeroes(str: string): string {
   return temp;
 }
 
-export function getTruncate(num: string, demical: number) {
+export function getTruncate(num: string, demicals = 2) {
   const fmt = {
     decimalSeparator: '.',
     groupSeparator: ',',
@@ -217,7 +217,7 @@ export function getTruncate(num: string, demical: number) {
     secondaryGroupSize: 3
   };
 
-  const formatNum = BigNumber(num).toFormat(demical, BigNumber.ROUND_DOWN, fmt);
+  const formatNum = BigNumber(num).toFormat(demicals, BigNumber.ROUND_DOWN, fmt);
 
   return removeTrailingZeroes(formatNum);
 }
