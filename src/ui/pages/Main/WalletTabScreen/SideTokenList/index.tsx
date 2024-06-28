@@ -1,28 +1,16 @@
-import BigNumber from 'bignumber.js';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 
 import { SideToken } from '@/shared/types';
 import { Column, Image, Row, Text } from '@/ui/components';
+import { useCalcPrce } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
-import { formatUnitAmount, formatWithDP, getTruncate, useWallet } from '@/ui/utils';
+import { formatUnitAmount, getTruncate } from '@/ui/utils';
 
 function TokenItem({ token }: { token: SideToken }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
-  const wallet = useWallet();
-  const [totalPrice, setTotalPrice] = useState('0');
+  const { data: totalPrice } = useCalcPrce(balanceAmount, token.coingecko_id, token.exponent);
 
-  useEffect(() => {
-    calcPrice();
-  }, [balanceAmount]);
-
-  const calcPrice = async () => {
-    const priceMap = await wallet.getCoingeckoPriceMap();
-    const _totalPrice = new BigNumber(formatUnitAmount(balanceAmount, token.exponent))
-      .multipliedBy(priceMap[token.coingecko_id].usd)
-      .toString();
-    setTotalPrice(formatWithDP(_totalPrice, 2));
-  };
   return (
     <Row
       full
@@ -49,7 +37,7 @@ function TokenItem({ token }: { token: SideToken }) {
           gap: '0px'
         }}>
         <Text preset="regular" text={formatUnitAmount(balanceAmount, token.exponent)} textEnd />
-        <Text preset="sub" text={`$${getTruncate(totalPrice, 2)}`} textEnd />
+        <Text preset="sub" text={`$${getTruncate(totalPrice)}`} textEnd />
       </Column>
     </Row>
   );
