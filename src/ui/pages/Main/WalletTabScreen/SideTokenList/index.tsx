@@ -5,7 +5,7 @@ import { SideToken } from '@/shared/types';
 import { Column, Image, Row, Text } from '@/ui/components';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
-import { formatUnitAmount, formatWithDP, useWallet } from '@/ui/utils';
+import { formatUnitAmount, formatWithDP, getTruncate, useWallet } from '@/ui/utils';
 
 function TokenItem({ token }: { token: SideToken }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
@@ -49,7 +49,7 @@ function TokenItem({ token }: { token: SideToken }) {
           gap: '0px'
         }}>
         <Text preset="regular" text={formatUnitAmount(balanceAmount, token.exponent)} textEnd />
-        <Text preset="sub" text={`$${totalPrice}`} textEnd />
+        <Text preset="sub" text={`$${getTruncate(totalPrice, 2)}`} textEnd />
       </Column>
     </Row>
   );

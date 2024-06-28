@@ -196,4 +196,30 @@ export const formatWithDP = (
   return data.dp(precision, roundMode).toString();
 };
 
+function removeTrailingZeroes(str: string): string {
+  const dotIndex = str.indexOf('.');
+  if (dotIndex === -1) {
+    return str;
+  }
+  let temp = str.slice(0, dotIndex + 1) + str.slice(dotIndex + 1).replace(/0+$/, '');
+
+  if (temp.endsWith('.')) {
+    temp = temp.replace('.', '');
+  }
+  return temp;
+}
+
+export function getTruncate(num: string, demical: number) {
+  const fmt = {
+    decimalSeparator: '.',
+    groupSeparator: ',',
+    groupSize: 3,
+    secondaryGroupSize: 3
+  };
+
+  const formatNum = BigNumber(num).toFormat(demical, BigNumber.ROUND_DOWN, fmt);
+
+  return removeTrailingZeroes(formatNum);
+}
+
 BigNumber.config({ EXPONENTIAL_AT: 1e9, DECIMAL_PLACES: 38 });

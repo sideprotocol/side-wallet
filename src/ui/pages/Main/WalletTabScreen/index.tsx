@@ -18,7 +18,7 @@ import { useBlockstreamUrl, useSkipVersionCallback, useVersionInfo, useWalletCon
 import { useAssetTabKey, useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
 // import walletLogo from '/images/logo/wallet-logo.png';
-import { formatWithDP, useWallet } from '@/ui/utils';
+import { getTruncate, useWallet } from '@/ui/utils';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
@@ -141,7 +141,7 @@ export default function WalletTabScreen() {
               }}
             />
             <Text
-              text={formatWithDP(accountBalanceByUSD, 2)}
+              text={getTruncate(accountBalanceByUSD, 2)}
               style={{
                 fontSize: '38px',
                 fontWeight: 500,
