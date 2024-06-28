@@ -1946,10 +1946,12 @@ export class WalletController extends BaseController {
   getSideTokens = assetService.getSideTokens;
   setCoingeckoPriceMap = assetService.setCoingeckoPriceMap;
   getCoingeckoPriceMap = assetService.getCoingeckoPriceMap;
-  setBitcoinTokenBalance = assetService.setBitcoinTokenBalance;
-  getBitcoinTokenBalance = assetService.getBitcoinTokenBalance;
-  setSideTokenBalance = assetService.setSideTokenBalance;
-  getSideTokenBalance = assetService.getSideTokenBalance;
+  setAccountBitcoinTokenBalance = assetService.setAccountBitcoinTokenBalance;
+  getAccountBitcoinTokenBalance = assetService.getAccountBitcoinTokenBalance;
+  setAccountSideTokenBalance = assetService.setAccountSideTokenBalance;
+  getAccountSideTokenBalance = assetService.getAccountSideTokenBalance;
+  getAccountBitcoinTokenBalanceList = assetService.getAccountBitcoinTokenBalanceList;
+  getAccountSideTokenBalanceList = assetService.getAccountSideTokenBalanceList;
 }
 
 export default new WalletController();

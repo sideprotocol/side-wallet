@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { AddressFlagType, KEYRING_TYPE } from '@/shared/constant';
+import { AddressFlagType, CHAINS_ENUM, KEYRING_TYPE } from '@/shared/constant';
 import { checkAddressFlag } from '@/shared/utils';
 import { ButtonGroup, Column, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
 import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPopover';
@@ -8,8 +8,9 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
 import { UpgradePopover } from '@/ui/components/UpgradePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
+import { useGetAccountBalanceByUSD } from '@/ui/hooks/useGetBalance';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
-import { useAccountBalance, useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
@@ -17,29 +18,20 @@ import { useBlockstreamUrl, useSkipVersionCallback, useVersionInfo, useWalletCon
 import { useAssetTabKey, useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
 // import walletLogo from '/images/logo/wallet-logo.png';
-import { useWallet } from '@/ui/utils';
+import { formatWithDP, useWallet } from '@/ui/utils';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
 import BtcTokenList from './BtcTokenList';
 import SideTokenList from './SideTokenList';
 
-type ChainTabType = 'side' | 'btc';
-
 export default function WalletTabScreen() {
   const navigate = useNavigate();
 
-  const accountBalance = useAccountBalance();
+  const { accountBalanceByUSD } = useGetAccountBalanceByUSD();
 
   const currentKeyring = useCurrentKeyring();
   const currentAccount = useCurrentAccount();
-  const balanceValue = useMemo(() => {
-    if (accountBalance.amount === '0') {
-      return '--';
-    } else {
-      return accountBalance.amount;
-    }
-  }, [accountBalance.amount]);
 
   const wallet = useWallet();
   const [connected, setConnected] = useState(false);
@@ -87,7 +79,7 @@ export default function WalletTabScreen() {
     run();
   }, []);
 
-  const [currentTab, setCurrentTab] = useState<ChainTabType>('side');
+  const [currentTab, setCurrentTab] = useState<CHAINS_ENUM>(CHAINS_ENUM.SIDE);
   const blockstreamUrl = useBlockstreamUrl();
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
 
@@ -107,10 +99,7 @@ export default function WalletTabScreen() {
               <Text text="Dapp Connected" size="xxs" />
             </Row>
           ) : (
-            <Image
-              src="/images/logo/wallet-logo-white.svg"
-              size={fontSizes.xxxl}
-            />
+            <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} />
           )
         }
         title={
@@ -131,16 +120,38 @@ export default function WalletTabScreen() {
           gap: '0px',
           overflow: 'auto'
         }}>
-        <Text
-          text={balanceValue + '  BTC'}
-          preset="title-bold"
-          textCenter
+        <Row
+          justifyCenter
           style={{
             marginTop: '16px',
-            fontSize: '38px',
-            fontWeight: 500
-          }}
-        />
+            gap: '12px',
+            alignItems: 'center'
+          }}>
+          <Row
+            justifyCenter
+            style={{
+              gap: '0px',
+              alignItems: 'flex-end'
+            }}>
+            <Text
+              text="$"
+              style={{
+                fontSize: '24px',
+                fontWeight: 400
+              }}
+            />
+            <Text
+              text={formatWithDP(accountBalanceByUSD, 2)}
+              style={{
+                fontSize: '38px',
+                fontWeight: 500,
+                lineHeight: '32px'
+              }}
+            />
+          </Row>
+          <Image src="/images/icons/eye-off-2.svg" size={20} />
+        </Row>
+
         <Row
           style={{
             justifyContent: 'space-around',
@@ -201,7 +212,7 @@ export default function WalletTabScreen() {
 
         <Row
           style={{
-            marginTop: '42px',
+            marginTop: '42px'
           }}
           justifyCenter>
           <ButtonGroup
@@ -211,25 +222,26 @@ export default function WalletTabScreen() {
             }}
             list={[
               {
-                key: 'side',
+                key: CHAINS_ENUM.SIDE,
                 label: 'Side Chain'
               },
               {
-                key: 'btc',
+                key: CHAINS_ENUM.BTC,
                 label: 'Bitcoin'
               }
             ]}
             onChange={(value) => {
-              const tab = value as ChainTabType;
+              const tab = value as CHAINS_ENUM;
               setCurrentTab(tab);
             }}
             value={currentTab}
           />
         </Row>
 
-        <Column style={{
-          padding: '0 16px',
-        }}>
+        <Column
+          style={{
+            padding: '0 16px'
+          }}>
           <Text
             text="Tokens"
             style={{
@@ -239,7 +251,7 @@ export default function WalletTabScreen() {
               fontWeight: 600
             }}
           />
-          {currentTab === 'side' ? <SideTokenList /> : <BtcTokenList />}
+          {currentTab === CHAINS_ENUM.SIDE ? <SideTokenList /> : <BtcTokenList />}
         </Column>
       </Column>
 

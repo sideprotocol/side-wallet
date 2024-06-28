@@ -1,26 +1,8 @@
 import { Column, Image, Row, Text } from '@/ui/components';
-
-interface Asset {
-  icon: string;
-  name: string;
-  symbol: string;
-  balance: string;
-  value: string;
-  coingecko_id: string;
-}
-
-const bitcoinAssets: Asset[] = [
-  {
-    icon: '/images/img/btc.png',
-    name: 'Bitcoin',
-    symbol: 'BTC',
-    balance: '1',
-    value: '1',
-    coingecko_id: 'bitcoin'
-  }
-];
+import { useGetBitcoinTokenList } from '@/ui/hooks/useGetTokenList';
 
 export default function BtcTokenList() {
+  const { data: bitcoinAssets } = useGetBitcoinTokenList();
   return (
     <Column>
       {bitcoinAssets.map((item) => {

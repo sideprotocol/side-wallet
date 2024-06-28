@@ -1,28 +1,23 @@
-import { useEffect, useMemo, useState } from 'react';
+import BigNumber from 'bignumber.js';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { swapStore, useSwapStore } from "@/ui/stores/SwapStore";
-import { ADDRESS_TYPES, KEYRING_TYPE, NETWORK_TYPES } from '@/shared/constant';
-import { Card, Column, Content, Footer, Header, Layout, Row, Text, Image } from '@/ui/components';
-import { useTools } from '@/ui/components/ActionComponent';
+
+import { KEYRING_TYPE } from '@/shared/constant';
+import { Column, Content, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
-import { Icon, IconTypes } from '@/ui/components/Icon';
-import { getCurrentTab, useExtensionIsInTab, useOpenExtensionInTab } from '@/ui/features/browser/tabs';
+import { CoinInput } from '@/ui/components/CoinInput';
+import { Icon } from '@/ui/components/Icon';
+import { NavTabBar } from '@/ui/components/NavTabBar';
+import { SWAP_ASSETS } from '@/ui/constants';
+import { IAsset } from '@/ui/constants/assets';
+import { getCurrentTab } from '@/ui/features/browser/tabs';
+import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import { useNetworkType } from '@/ui/state/settings/hooks';
-import { spacing } from '@/ui/theme/spacing';
-import { useWallet } from '@/ui/utils';
-import { RightOutlined } from '@ant-design/icons';
-import { NavTabBar } from '@/ui/components/NavTabBar';
+import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { fontSizes } from '@/ui/theme/font';
-import AccountSelect from '@/ui/pages/Account/AccountSelect';
-import { CoinInput } from '@/ui/components/CoinInput';
-import { useWalletContext } from "@/ui/components/WalletContext";
-import { SWAP_ASSETS } from "@/ui/constants";
-import BigNumber from 'bignumber.js';
-import { IAsset } from "@/ui/constants/assets";
-
+import { useWallet } from '@/ui/utils';
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
@@ -36,7 +31,7 @@ const InitBalance = () => {
     if (!currentAccount?.address) {
       return {
         available: '0',
-        raw: '0',
+        raw: '0'
       };
     }
 
@@ -46,23 +41,21 @@ const InitBalance = () => {
 
     console.log(`client: `, client);
     console.log(`client: `, balance);
-    debugger;
     return {
       available: BigNumber(balance?.amount || '0')
         .div(BigNumber(10).pow(asset.exponent))
         .toFixed(),
-      raw: balance.amount,
+      raw: balance.amount
     };
   };
 
   const getBalancesAll = async () => {
     const balances = await Promise.all(SWAP_ASSETS.assets.map((asset) => getBalance(asset)));
     console.log(`balances: `, balances);
-    debugger;
     const balancesObject = balances.reduce((acc, cur, index) => {
       return {
         ...acc,
-        [SWAP_ASSETS.assets[index].base]: cur,
+        [SWAP_ASSETS.assets[index].base]: cur
       };
     }, {});
 
@@ -102,7 +95,6 @@ export default function SwapTabScreen() {
     run();
   }, []);
   console.log(`swapPair, balances: `, swapPair, balances);
-  debugger;
   return (
     <Layout>
       <Header
@@ -117,10 +109,7 @@ export default function SwapTabScreen() {
               <Text text="Dapp Connected" size="xxs" />
             </Row>
           ) : (
-            <Image
-              src="/images/logo/wallet-logo-white.svg"
-              size={fontSizes.xxxl}
-            />
+            <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} />
           )
         }
         title={
@@ -136,27 +125,17 @@ export default function SwapTabScreen() {
         }}
       />
       <Content>
-        <Row
-          full
-          relative
-          rounded={true}
-        >
+        <Row full relative rounded={true}>
           <InitBalance></InitBalance>
 
           <Column relative>
-            <Column
-              mt={'xl'}
-              px={'xl'}
-              py={'xl'}
-              rounded={true}
-              gap={'md'}
-              bg={'swapBg'}
-            >
+            <Column mt={'xl'} px={'xl'} py={'xl'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
-                <div style={{
-                  fontSize: '12px',
-                  color: '#7D7D7D'
-                }}>
+                <div
+                  style={{
+                    fontSize: '12px',
+                    color: '#7D7D7D'
+                  }}>
                   You provide
                 </div>
               </Row>
@@ -168,8 +147,7 @@ export default function SwapTabScreen() {
                   height: '32px',
                   borderRadius: '100px',
                   padding: '20px 0px'
-                }}
-              >
+                }}>
                 {/*<NativeInput />*/}
                 <CoinInput
                   coin={{
@@ -198,9 +176,7 @@ export default function SwapTabScreen() {
               {/*<NativeBalance></NativeBalance>*/}
             </Column>
 
-            <Row
-              relative
-            >
+            <Row relative>
               <div
                 style={{
                   position: 'absolute',
@@ -215,7 +191,7 @@ export default function SwapTabScreen() {
                   border: '4px solid #414142',
                   display: 'flex',
                   justifyContent: 'center',
-                  alignItems: 'center',
+                  alignItems: 'center'
                 }}
                 onMouseEnter={() => {
                   // swapStore.hoverExchange = true;
@@ -237,25 +213,19 @@ export default function SwapTabScreen() {
                   //   ...nativePair,
                   //   amount: "",
                   // };
-                }}
-              >
+                }}>
                 <Icon icon={'swap-down-icon'}></Icon>
                 {/*{!hoverExchange ? <ExchangeDefaultSVG color="black" /> : <ExchangeSVG />}*/}
               </div>
             </Row>
 
-            <Column
-              px={'xl'}
-              py={'xl'}
-              rounded={true}
-              gap={'md'}
-              bg={'swapBg'}
-            >
+            <Column px={'xl'} py={'xl'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
-                <div style={{
-                  fontSize: '12px',
-                  color: '#7D7D7D'
-                }}>
+                <div
+                  style={{
+                    fontSize: '12px',
+                    color: '#7D7D7D'
+                  }}>
                   You get
                 </div>
               </Row>
@@ -267,8 +237,7 @@ export default function SwapTabScreen() {
                   height: '32px',
                   borderRadius: '100px',
                   padding: '20px 0px'
-                }}
-              >
+                }}>
                 {/*<NativeInput />*/}
                 <CoinInput
                   coin={{
@@ -300,15 +269,17 @@ export default function SwapTabScreen() {
 
             {/*<ConfirmButton />*/}
             <Row mt={'xl'} full>
-              <Button full text="Swap"
-                      preset="primary"
-                      onClick={async () => {
-                        alert('Swap');
-                      }} />
+              <Button
+                full
+                text="Swap"
+                preset="primary"
+                onClick={async () => {
+                  alert('Swap');
+                }}
+              />
             </Row>
 
             {/*{showValidDetail && <SwapDetail />}*/}
-
           </Column>
         </Row>
       </Content>

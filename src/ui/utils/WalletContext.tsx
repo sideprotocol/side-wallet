@@ -375,11 +375,14 @@ export interface WalletController {
   setCoingeckoPriceMap(data: CoingeckoPriceType): Promise<void>;
   getCoingeckoPriceMap(): Promise<CoingeckoPriceType>;
 
-  setBitcoinTokenBalance(symbol: string, amount: string): Promise<void>;
-  getBitcoinTokenBalance(symbol: string): Promise<string>;
+  setAccountBitcoinTokenBalance(account: string, symbol: string, amount: string): Promise<void>;
+  getAccountBitcoinTokenBalance(account: string, symbol: string): Promise<string>;
 
-  setSideTokenBalance(base: string, amount: string): Promise<void>;
-  getSideTokenBalance(base: string): Promise<string>;
+  setAccountSideTokenBalance(account: string, base: string, amount: string): Promise<void>;
+  getAccountSideTokenBalance(account: string, base: string): Promise<string>;
+
+  getAccountBitcoinTokenBalanceList(account: string): Promise<{ symbol: string; amount: string }[]>;
+  getAccountSideTokenBalanceList(account: string): Promise<{ base: string; amount: string }[]>;
 }
 
 const WalletContext = createContext<{

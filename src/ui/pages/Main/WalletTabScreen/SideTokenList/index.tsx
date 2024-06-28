@@ -3,10 +3,9 @@ import { Fragment, useEffect, useState } from 'react';
 
 import { SideToken } from '@/shared/types';
 import { Column, Image, Row, Text } from '@/ui/components';
-import useGetSideTokenBalance from '@/ui/hooks/useGetSideTokenBalance';
+import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
+import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { formatUnitAmount, formatWithDP, useWallet } from '@/ui/utils';
-
-import useGetSideTokenList from './hooks/useGetSideTokenList';
 
 function TokenItem({ token }: { token: SideToken }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
