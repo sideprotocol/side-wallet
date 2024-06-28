@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { COIN_DUST } from '@/shared/constant';
 import { RawTxInfo } from '@/shared/types';
-import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { RBFBar } from '@/ui/components/RBFBar';
@@ -20,7 +20,7 @@ import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/ho
 import { fontSizes } from '@/ui/theme/font';
 import { amountToSatoshis, isValidAddress, satoshisToAmount } from '@/ui/utils';
 
-export default function TxCreateScreen() {
+export default function CreateSendBtc() {
   const accountBalance = useAccountBalance();
   const safeBalance = useSafeBalance();
   const navigate = useNavigate();
@@ -135,9 +135,10 @@ export default function TxCreateScreen() {
   }, [toInfo, inputAmount, feeRate, enableRBF]);
 
   return (
-    <Layout style={{
-      position: 'relative',
-    }}>
+    <Layout
+      style={{
+        position: 'relative'
+      }}>
       <Header
         onBack={() => {
           window.history.go(-1);
@@ -145,35 +146,39 @@ export default function TxCreateScreen() {
         title="Send BTC"
       />
 
-      <Row style={{
-        background: '#222',
-        width: '74px',
-        height: '74px',
-        position: 'absolute',
-        top: '66px',
-        left: '50%',
-        borderRadius: '50%',
-        transform: 'translate(-50%, 0)',
-        zIndex: 2,
-        borderTop: '1px solid #404045',
-        boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
-      }} justifyCenter>
-        <Row style={{
-          marginTop: '6px',
-        }}>
+      <Row
+        style={{
+          background: '#222',
+          width: '74px',
+          height: '74px',
+          position: 'absolute',
+          top: '66px',
+          left: '50%',
+          borderRadius: '50%',
+          transform: 'translate(-50%, 0)',
+          zIndex: 2,
+          borderTop: '1px solid #404045',
+          boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
+        }}
+        justifyCenter>
+        <Row
+          style={{
+            marginTop: '6px'
+          }}>
           <Icon icon="btc" size={50} />
         </Row>
       </Row>
 
-      <Content style={{
-        position: 'relative',
-        borderTop: '1px solid #404045',
-        borderRadius: '10px',
-        background: '#222',
-        padding: '16px 16px 64px 16px',
-        marginTop: '20px',
-        boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
-      }}>
+      <Content
+        style={{
+          position: 'relative',
+          borderTop: '1px solid #404045',
+          borderRadius: '10px',
+          background: '#222',
+          padding: '16px 16px 64px 16px',
+          marginTop: '20px',
+          boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
+        }}>
         <Column mt="xxl">
           <Text text="Recipient" preset="regular" color="textDim" />
           <Input
@@ -224,7 +229,9 @@ export default function TxCreateScreen() {
 
           <Row justifyBetween>
             <Tooltip
-              title={'Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.'}
+              title={
+                'Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.'
+              }
               overlayStyle={{
                 fontSize: fontSizes.xs
               }}>

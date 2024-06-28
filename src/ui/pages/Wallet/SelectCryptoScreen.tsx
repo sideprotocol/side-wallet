@@ -55,10 +55,10 @@ function BitCrypto() {
           <Row
             onClick={() => {
               if (type === 'receive') {
-                navigate('SelectAddressScreen', { chain });
+                navigate('SelectAddressScreen', { chain, base: token.symbol });
               } else {
                 resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { chain });
+                navigate('TxCreateScreen', { chain, base: token.symbol });
               }
             }}
             full
@@ -119,10 +119,10 @@ function SideCrypto() {
           <Row
             onClick={() => {
               if (type === 'receive') {
-                navigate('SelectAddressScreen', { chain });
+                navigate('SelectAddressScreen', { chain, base: token.base });
               } else {
                 resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { chain });
+                navigate('TxCreateScreen', { chain, base: token.base });
               }
             }}
             full

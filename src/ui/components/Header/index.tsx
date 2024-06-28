@@ -35,8 +35,8 @@ export function Header(props: HeaderProps) {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '14px 16px 20px',
-        marginBottom: '10px',
-        borderBottom: '1px solid #1E1E1F',
+        marginBottom: '10px'
+        // borderBottom: '1px solid #1E1E1F',
       }}>
       <Row full>
         <Column selfItemsCenter style={{ gap: '10px' }}>
@@ -67,11 +67,7 @@ export function Header(props: HeaderProps) {
 
       <Row itemsCenter>{CenterComponent}</Row>
 
-      <Row
-        onClick={onClickRight}
-        full
-        justifyEnd
-        >
+      <Row onClick={onClickRight} full justifyEnd>
         <Column justifyCenter>{RightComponent}</Column>
       </Row>
     </div>
