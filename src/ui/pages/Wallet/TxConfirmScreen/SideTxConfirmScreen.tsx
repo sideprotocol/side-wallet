@@ -19,10 +19,10 @@ export default function SideTxConfirmScreen() {
         typeUrl: '/cosmos.bank.v1beta1.MsgSend',
         value: {
           fromAddress: currentAccount.address,
-          toAddress: 'tb1qt37585f44pq3xs76xv48l6ks8f7e3ju4mn456q',
+          toAddress: currentAccount.address,
           amount: [
             {
-              amount: parseUnitAmount('10', 6),
+              amount: parseUnitAmount('1', 6),
               denom: 'uside'
             }
           ]
@@ -33,8 +33,7 @@ export default function SideTxConfirmScreen() {
       });
       navigate('TxSuccessScreen', { txid: result.transactionHash });
     } catch (err) {
-      console.log(err);
-      // navigate('TxFailScreen', { error: err });
+      navigate('TxFailScreen', { error: err });
     }
   };
 
