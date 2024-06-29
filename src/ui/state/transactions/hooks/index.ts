@@ -7,11 +7,11 @@ import { satoshisToAmount, satoshisToBTC, sleep, useWallet } from '@/ui/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 
-import { AppState } from '..';
-import { useAccountAddress, useCurrentAccount } from '../accounts/hooks';
-import { accountActions } from '../accounts/reducer';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { transactionsActions } from './reducer';
+import { AppState } from '../..';
+import { useAccountAddress, useCurrentAccount } from '../../accounts/hooks';
+import { accountActions } from '../../accounts/reducer';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { transactionsActions } from '../reducer';
 
 export function useTransactionsState(): AppState['transactions'] {
   return useAppSelector((state) => state.transactions);

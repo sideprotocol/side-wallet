@@ -177,6 +177,14 @@ export function formatUnitAmount(tokenAmount: string, exponent: string | number)
   return parseFloat(amount.replace(/\.?0+$/, '')).toString();
 }
 
+export function parseUnitAmount(tokenAmount: string, exponent: string | number) {
+  const exp = BigNumber(10).exponentiatedBy(exponent);
+
+  const amount = BigNumber(tokenAmount).multipliedBy(exp);
+
+  return amount.toString();
+}
+
 /**
  * 返回有效位数
  * @param value value be format

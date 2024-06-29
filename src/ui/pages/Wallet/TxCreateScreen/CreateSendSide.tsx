@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import { TxType } from '@/shared/types';
 import { Button, Column, Header, Image, Input, Layout, Row, Text } from '@/ui/components';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
@@ -178,8 +179,8 @@ export default function CreateSendSide() {
           }}
           preset="primary"
           text="Next"
-          onClick={(e) => {
-            // navigate('TxConfirmScreen', { rawTxInfo });
+          onClick={() => {
+            navigate('TxConfirmScreen', { type: TxType.SEND_SIDE, sideSendTxInfo: {} });
           }}
         />
       </Column>

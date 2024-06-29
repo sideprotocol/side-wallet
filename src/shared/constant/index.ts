@@ -250,6 +250,8 @@ export const SIDEREST_URL_MAINNET = 'https://testnet-rest.side.one';
 export const SIDEREST_URL_TESTNET = 'https://devnet-rest.side.one';
 export const SIDERPC_URL_MAINNET = 'https://testnet-rpc.side.one';
 export const SIDERPC_URL_TESTNET = 'https://devnet-rpc.side.one';
+export const SIDE_CHAINID_MAINNET = 'devnet';
+export const SIDE_CHAINID_TESTNET = 'S2-testnet-2';
 
 export const EVENTS = {
   broadcastToUI: 'broadcastToUI',

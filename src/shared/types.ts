@@ -1,3 +1,6 @@
+import { EncodeObject } from '@cosmjs/proto-signing';
+import { Coin, SignerData, StdFee } from '@cosmjs/stargate';
+
 import { CHAINS_ENUM } from './constant';
 
 export enum AddressType {
@@ -180,7 +183,8 @@ export enum TxType {
   SIGN_TX,
   SEND_BITCOIN,
   SEND_ORDINALS_INSCRIPTION,
-  SEND_ATOMICALS_INSCRIPTION
+  SEND_ATOMICALS_INSCRIPTION,
+  SEND_SIDE
 }
 
 interface BaseUserToSignInput {
@@ -448,4 +452,86 @@ export interface SideToken {
   coingecko_id: string;
   logo: string;
   precision: number;
+}
+
+export interface SideSendTxInfo {
+  toAddress: string;
+  amount: string;
+  fee?: number;
+  memo?: string;
+}
+
+export interface CosmosTransaction {
+  chainId: string;
+  signerAddress: string;
+  messages: readonly EncodeObject[];
+  fee: StdFee;
+  memo: string;
+  signerData: SignerData;
+}
+
+export interface Attributes {
+  index?: boolean;
+  key: string;
+  value: string;
+}
+
+export interface Tx {
+  '@type'?: string;
+  body: {
+    messages: { '@type': string; amount?: string }[];
+    memo: string;
+    timeout_height: string;
+    extension_options: any[];
+    non_critical_extension_options: any[];
+  };
+  auth_info: {
+    signer_infos: [
+      {
+        public_key: {
+          '@type': string;
+          key: string;
+        };
+        mode_info: {
+          single?: {
+            mode: string;
+          };
+        };
+        sequence: string;
+      }
+    ];
+    fee: {
+      amount: Coin[];
+      gas_limit: string;
+      payer: string;
+      granter: string;
+    };
+  };
+  signatures: string[];
+}
+
+export interface CosmosTxResponse {
+  height: string;
+  txhash: string;
+  codespace: string;
+  code: number;
+  data: string;
+  raw_log: string;
+  logs: [
+    {
+      msg_index: number;
+      log: string;
+      events: Attributes[];
+    }
+  ];
+  info: '';
+  gas_wanted: '204431';
+  gas_used: '202682';
+  tx: Tx;
+  timestamp: '2022-08-13T23:24:54Z';
+  events: {
+    type: string;
+    attributes: Attributes[];
+  }[];
+  transactionHash: string;
 }

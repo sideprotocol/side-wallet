@@ -1,17 +1,14 @@
-import { RawTxInfo, TxType } from '@/shared/types';
+import { TxType } from '@/shared/types';
 import { Header } from '@/ui/components';
 import { usePushBitcoinTxCallback } from '@/ui/state/transactions/hooks';
 import { useLocationState } from '@/ui/utils';
 
-import { SignPsbt } from '../Approval/components';
-import { useNavigate } from '../MainRoute';
+import { SignPsbt } from '../../Approval/components';
+import { useNavigate } from '../../MainRoute';
+import { TxConfirmLocationState } from './index';
 
-interface LocationState {
-  rawTxInfo: RawTxInfo;
-}
-
-export default function TxConfirmScreen() {
-  const { rawTxInfo } = useLocationState<LocationState>();
+export default function BitcoinTxConfirmScreen() {
+  const { rawTxInfo } = useLocationState<TxConfirmLocationState>();
   const navigate = useNavigate();
   const pushBitcoinTx = usePushBitcoinTxCallback();
   return (
