@@ -185,6 +185,11 @@ export function useSignAndBroadcastTxRaw() {
       mode
     };
     const result = await fetch(`${restUrl}/cosmos/tx/v1beta1/txs`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain',
+        Accept: '*/*'
+      },
       body: JSON.stringify(txRaw)
     });
     const res = await result.json();

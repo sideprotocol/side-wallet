@@ -61,6 +61,19 @@ module.exports = {
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_'
       }
+    ],
+    '@typescript-eslint/ban-ts-comment': ['error', { 'ts-nocheck': false }],
+    'no-var': 'off',
+    'prefer-const': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        extendDefaults: true,
+        types: {
+          '{}': false
+        }
+      }
     ]
   },
   settings: {

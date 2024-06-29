@@ -33,7 +33,8 @@ export default function SideTxConfirmScreen() {
       });
       navigate('TxSuccessScreen', { txid: result.transactionHash });
     } catch (err) {
-      navigate('TxFailScreen', { error: err });
+      console.log(err);
+      // navigate('TxFailScreen', { error: err });
     }
   };
 
@@ -53,7 +54,7 @@ export default function SideTxConfirmScreen() {
           flex: 1,
           paddingTop: '40px'
         }}></Column>
-      <Button preset="primary" text="Confirm" onClick={() => handleSubmit} />
+      <Button preset="primary" text="Confirm" onClick={handleSubmit} />
     </Layout>
   );
 }
