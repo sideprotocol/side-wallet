@@ -253,6 +253,12 @@ export const SIDERPC_URL_TESTNET = 'https://devnet-rpc.side.one';
 export const SIDE_CHAINID_MAINNET = 'S2-testnet-2';
 export const SIDE_CHAINID_TESTNET = 'devnet';
 
+export const SIDE_BTC_INDEXER = 'https://index.side.one';
+
+export const SIDE_BTC_VAULT_ADDRESS_TESTNET = 'tb1qef5ffghj84k56pn5zdnkpdjdk88deec0huamq4';
+
+export const SIDE_BTC_VAULT_ADDRESS_MAINNET = '';
+
 export const EVENTS = {
   broadcastToUI: 'broadcastToUI',
   broadcastToBackground: 'broadcastToBackground',
