@@ -253,7 +253,8 @@ export default function WalletTabScreen() {
 
         <Column
           style={{
-            padding: '0 16px'
+            padding: '0 16px',
+            marginBottom: '20px'
           }}>
           <Text
             text="Tokens"
