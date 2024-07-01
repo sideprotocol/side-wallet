@@ -160,7 +160,7 @@ export function useSignAndBroadcastTxRaw() {
     const signature = await wallet.signMessage(signString);
 
     const signedTxBody = {
-      messages: isBitcoinWithdraw ? tx.messages : signed.msgs.map((msg) => this.aminoTypes.fromAmino(msg)),
+      messages: isBitcoinWithdraw ? tx.messages : signed.msgs.map((msg) => aminoTypes.fromAmino(msg)),
       memo: signed.memo
     };
 
