@@ -64,7 +64,7 @@ export default function SideTxConfirmScreen() {
       });
       navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
     } catch (err) {
-      navigate('TxFailScreen', { error: err });
+      // navigate('TxFailScreen', { error: err });
     } finally {
       setLoading(false);
     }
@@ -142,7 +142,8 @@ export default function SideTxConfirmScreen() {
             style={{
               padding: '16px',
               backgroundColor: '#1E1E1F',
-              borderRadius: '14px'
+              borderRadius: '14px',
+              overflow: 'hidden'
             }}>
             <Text
               text="Recipient"
@@ -166,7 +167,8 @@ export default function SideTxConfirmScreen() {
             style={{
               padding: '16px',
               backgroundColor: '#1E1E1F',
-              borderRadius: '14px'
+              borderRadius: '14px',
+              overflow: 'hidden'
             }}>
             <Text
               text="Memo"

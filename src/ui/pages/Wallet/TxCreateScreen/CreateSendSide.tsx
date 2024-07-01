@@ -138,7 +138,6 @@ export default function CreateSendSide() {
         <Input
           preset="amount"
           placeholder={'Amount'}
-          defaultValue={inputAmount}
           value={inputAmount}
           onAmountInputChange={(amount) => {
             setUiState({ inputAmount: amount });

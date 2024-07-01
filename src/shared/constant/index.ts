@@ -377,11 +377,9 @@ export const SIDE_TOKENS: SideToken[] = [
 
 export const BITCOIN_TOKENS: BitcoinToken[] = [
   {
-    icon: '/images/img/btc.png',
+    logo: '/images/img/btc.png',
     name: 'Bitcoin',
     symbol: 'BTC',
-    balance: '1',
-    value: '1',
     coingecko_id: 'bitcoin'
   }
 ];

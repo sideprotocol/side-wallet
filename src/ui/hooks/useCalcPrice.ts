@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { formatUnitAmount, useWallet } from '../utils';
 
-export function useCalcPrice(balanceAmount: string, coingecko_id: string, decimals: number | string = 6) {
+export function useCalcPrice(balanceAmount: string, coingecko_id: string, decimals?: number | string) {
   const wallet = useWallet();
   const [totalPrice, setTotalPrice] = useState('0');
   useEffect(() => {
@@ -11,10 +11,16 @@ export function useCalcPrice(balanceAmount: string, coingecko_id: string, decima
   }, [balanceAmount, coingecko_id]);
 
   const calcPrice = async () => {
+    if (!coingecko_id) {
+      return;
+    }
     const priceMap = await wallet.getCoingeckoPriceMap();
-    const _totalPrice = new BigNumber(formatUnitAmount(balanceAmount, decimals))
-      .multipliedBy(priceMap[coingecko_id].usd)
-      .toString();
+    let amount = balanceAmount;
+    if (decimals) {
+      amount = formatUnitAmount(balanceAmount, decimals);
+    }
+
+    const _totalPrice = new BigNumber(amount).multipliedBy(priceMap[coingecko_id].usd).toString();
     setTotalPrice(_totalPrice);
   };
   return {

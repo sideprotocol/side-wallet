@@ -436,11 +436,9 @@ export interface AddressRunesTokenSummary {
 }
 
 export interface BitcoinToken {
-  icon: string;
+  logo: string;
   name: string;
   symbol: string;
-  balance: string;
-  value: string;
   coingecko_id: string;
 }
 

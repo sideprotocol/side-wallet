@@ -6,19 +6,20 @@ import { Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
+import { useAccountBalance } from '@/ui/state/accounts/hooks';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
 
 function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
-  // const { balanceAmount } = useGetSideTokenBalance(token.);
-  // const { data: totalPrice } = useCalcPrice(balanceAmount, token.coingecko_id, token.exponent);
+  const accountBalance = useAccountBalance();
+  const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.coingecko_id);
 
   return (
     <>
       <Row>
-        <Image src={token.icon} size={42}></Image>
+        <Image src={token.logo} size={42}></Image>
         <Column
           style={{
             gap: '0px'
@@ -32,8 +33,8 @@ function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
         style={{
           gap: '0px'
         }}>
-        <Text preset="regular" textEnd text={token.balance}></Text>
-        <Text preset="sub" textEnd text={token.value}></Text>
+        <Text preset="regular" textEnd text={accountBalance.btc_amount}></Text>
+        <Text preset="sub" textEnd text={`${getTruncate(totalPrice)}`}></Text>
       </Column>
     </>
   );
