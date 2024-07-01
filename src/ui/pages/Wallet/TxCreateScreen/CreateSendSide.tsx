@@ -1,13 +1,14 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { TxType } from '@/shared/types';
 import { Button, Column, Header, Image, Input, Layout, Row, Text } from '@/ui/components';
+import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { useNavigate } from '@/ui/pages/MainRoute';
-import { useUiTxCreateScreen } from '@/ui/state/ui/hooks';
-import { formatUnitAmount } from '@/ui/utils';
+import { useUiTxCreateSendSideScreen, useUpdateUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
+import { formatUnitAmount, isValidAddress } from '@/ui/utils';
 
 export default function CreateSendSide() {
   const navigate = useNavigate();
@@ -15,19 +16,45 @@ export default function CreateSendSide() {
   const { base } = state as {
     base: string;
   };
-  const uiState = useUiTxCreateScreen();
+  const uiState = useUiTxCreateSendSideScreen();
+  const setUiState = useUpdateUiTxCreateSendSideScreen();
 
   const { data: sideTokenList } = useGetSideTokenList();
   const { balanceAmount } = useGetSideTokenBalance(base);
   const toInfo = uiState.toInfo;
+  const inputAmount = uiState.inputAmount;
+  const fee = uiState.fee;
+  const feeDenom = uiState.feeDenom;
+  const memo = uiState.memo;
 
-  const curToken = useMemo(() => {
-    return sideTokenList.find((item) => item.base === base)!;
+  useEffect(() => {
+    setUiState({ base });
+  }, [base]);
+
+  const { curToken, feeToken } = useMemo(() => {
+    const curToken = sideTokenList.find((item) => item.base === base)!;
+    const feeToken = sideTokenList.find((item) => item.base === feeDenom)!;
+    return {
+      curToken,
+      feeToken
+    };
   }, [sideTokenList]);
+
+  const { data: feeByUSD } = useCalcPrice(fee, feeToken?.coingecko_id, feeToken?.exponent || 6);
+  const disabled = useMemo(() => {
+    let _disabled = false;
+    if (!isValidAddress(toInfo.address)) {
+      _disabled = true;
+    } else if (!+inputAmount) {
+      _disabled = true;
+    }
+    return _disabled;
+  }, [toInfo, inputAmount]);
 
   if (!curToken) {
     return <Layout />;
   }
+  const available = formatUnitAmount(balanceAmount, curToken.exponent);
 
   return (
     <Layout>
@@ -77,7 +104,7 @@ export default function CreateSendSide() {
           preset="address"
           addressInputData={toInfo}
           onAddressInputChange={(val) => {
-            // setUiState({ toInfo: val });
+            setUiState({ toInfo: val });
           }}
           autoFocus={true}
         />
@@ -100,7 +127,7 @@ export default function CreateSendSide() {
             }}>
             <Image src="./images/icons/wallet-04.svg" size={24} />
             <Text
-              text={formatUnitAmount(balanceAmount, curToken.exponent)}
+              text={available}
               style={{
                 fontSize: '14px',
                 lineHeight: '24px'
@@ -111,18 +138,14 @@ export default function CreateSendSide() {
         <Input
           preset="amount"
           placeholder={'Amount'}
-          // defaultValue={inputAmount}
-          // value={inputAmount}
+          defaultValue={inputAmount}
+          value={inputAmount}
           onAmountInputChange={(amount) => {
-            // if (autoAdjust) {
-            //   setAutoAdjust(false);
-            // }
-            // setUiState({ inputAmount: amount });
+            setUiState({ inputAmount: amount });
           }}
           enableMax={true}
           onMaxClick={() => {
-            // setAutoAdjust(true);
-            // setUiState({ inputAmount: totalAvailableAmount.toString() });
+            setUiState({ inputAmount: available });
           }}
         />
         <Text
@@ -134,12 +157,16 @@ export default function CreateSendSide() {
             marginTop: '16px'
           }}
         />
-        <Input preset="text" placeholder={'Required for sending to centralized exchanges'} value="" />
+        <Input
+          preset="text"
+          placeholder={'Required for sending to centralized exchanges'}
+          value={memo}
+          onChange={(e) => setUiState({ memo: e.target.value })}
+        />
         <Row
           justifyBetween
           style={{
             padding: '16px 12px',
-            // background: '#1E1E1F',
             borderRadius: '10px'
           }}>
           <Text
@@ -152,7 +179,7 @@ export default function CreateSendSide() {
           />
           <Row>
             <Text
-              text="0.0002249 ATOM"
+              text={`${formatUnitAmount(fee, feeToken.exponent)} ${feeToken.symbol}`}
               style={{
                 fontSize: '16px',
                 fontWeight: 600,
@@ -160,7 +187,7 @@ export default function CreateSendSide() {
               }}
             />
             <Text
-              text="($0.01)"
+              text={`($${feeByUSD})`}
               color="white_muted"
               style={{
                 fontSize: '16px',
@@ -179,8 +206,9 @@ export default function CreateSendSide() {
           }}
           preset="primary"
           text="Next"
+          disabled={disabled}
           onClick={() => {
-            navigate('TxConfirmScreen', { type: TxType.SEND_SIDE, sideSendTxInfo: {} });
+            navigate('TxConfirmScreen', { type: TxType.SEND_SIDE });
           }}
         />
       </Column>

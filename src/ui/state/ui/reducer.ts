@@ -17,6 +17,17 @@ export interface UIState {
     enableRBF: boolean;
     feeRate: number;
   };
+  uiTxCreateSendSideScreen: {
+    toInfo: {
+      address: string;
+      domain: string;
+    };
+    base: string;
+    inputAmount: string;
+    fee: string;
+    feeDenom: string;
+    memo?: string;
+  };
 }
 
 export enum AssetTabKey {
@@ -50,6 +61,17 @@ export const initialState: UIState = {
     inputAmount: '',
     enableRBF: false,
     feeRate: 1
+  },
+  uiTxCreateSendSideScreen: {
+    toInfo: {
+      address: '',
+      domain: ''
+    },
+    base: '',
+    inputAmount: '',
+    fee: '600000',
+    feeDenom: 'uside',
+    memo: ''
   }
 };
 
@@ -110,8 +132,44 @@ const slice = createSlice({
         state.uiTxCreateScreen.feeRate = action.payload.feeRate;
       }
     },
+    updateTxCreateSendSideScreen(
+      state,
+      action: {
+        payload: {
+          toInfo?: {
+            address: string;
+            domain: string;
+          };
+          base?: string;
+          inputAmount?: string;
+          fee?: string;
+          feeDenom?: string;
+          memo?: string;
+        };
+      }
+    ) {
+      if (action.payload.toInfo !== undefined) {
+        state.uiTxCreateSendSideScreen.toInfo = action.payload.toInfo;
+      }
+      if (action.payload.base !== undefined) {
+        state.uiTxCreateSendSideScreen.base = action.payload.base;
+      }
+      if (action.payload.inputAmount !== undefined) {
+        state.uiTxCreateSendSideScreen.inputAmount = action.payload.inputAmount;
+      }
+      if (action.payload.fee !== undefined) {
+        state.uiTxCreateSendSideScreen.fee = action.payload.fee;
+      }
+      if (action.payload.feeDenom !== undefined) {
+        state.uiTxCreateSendSideScreen.feeDenom = action.payload.feeDenom;
+      }
+      if (action.payload.memo !== undefined) {
+        state.uiTxCreateSendSideScreen.memo = action.payload.memo;
+      }
+    },
     resetTxCreateScreen(state) {
       state.uiTxCreateScreen = initialState.uiTxCreateScreen;
+      state.uiTxCreateSendSideScreen = initialState.uiTxCreateSendSideScreen;
     }
   },
   extraReducers: (builder) => {

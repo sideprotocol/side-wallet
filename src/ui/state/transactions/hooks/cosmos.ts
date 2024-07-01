@@ -94,7 +94,7 @@ export function useSignAndBroadcastTxRaw() {
     gas?: string;
     feeAmount?: string;
     feeDenom?: string;
-  }): Promise<{ tx_response: CosmosTxResponse; transactionHash: string }> => {
+  }): Promise<{ tx_response: CosmosTxResponse }> => {
     const acc = await fetch(`${restUrl}/cosmos/auth/v1beta1/accounts/${currentAccount.address}`).then(async (res) => {
       const json = await res.json();
       return json.account;
@@ -193,7 +193,7 @@ export function useSignAndBroadcastTxRaw() {
   const broadcastTx = async (
     bodyBytes: TxRaw,
     mode: BroadcastMode = BroadcastMode.SYNC
-  ): Promise<{ tx_response: CosmosTxResponse; transactionHash: string }> => {
+  ): Promise<{ tx_response: CosmosTxResponse }> => {
     const txbytes = TxRaw.encode(bodyBytes).finish();
     const txString = toBase64(txbytes);
     const txRaw = {

@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { CHAINS_ENUM } from '@/shared/constant';
 import { BitcoinToken, SideToken } from '@/shared/types';
 import { Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
-import { useCalcPrce } from '@/ui/hooks/useCalcPrice';
+import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
@@ -13,7 +13,7 @@ import { useNavigate } from '../MainRoute';
 
 function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
   // const { balanceAmount } = useGetSideTokenBalance(token.);
-  // const { data: totalPrice } = useCalcPrce(balanceAmount, token.coingecko_id, token.exponent);
+  // const { data: totalPrice } = useCalcPrice(balanceAmount, token.coingecko_id, token.exponent);
 
   return (
     <>
@@ -77,7 +77,7 @@ function BitCrypto() {
 
 function SideCryptoItem({ token }: { token: SideToken }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
-  const { data: totalPrice } = useCalcPrce(balanceAmount, token.coingecko_id, token.exponent);
+  const { data: totalPrice } = useCalcPrice(balanceAmount, token.coingecko_id, token.exponent);
 
   return (
     <>

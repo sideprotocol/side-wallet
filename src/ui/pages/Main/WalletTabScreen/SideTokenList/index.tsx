@@ -2,14 +2,14 @@ import { Fragment } from 'react';
 
 import { SideToken } from '@/shared/types';
 import { Column, Image, Row, Text } from '@/ui/components';
-import { useCalcPrce } from '@/ui/hooks/useCalcPrice';
+import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 
 function TokenItem({ token }: { token: SideToken }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
-  const { data: totalPrice } = useCalcPrce(balanceAmount, token.coingecko_id, token.exponent);
+  const { data: totalPrice } = useCalcPrice(balanceAmount, token.coingecko_id, token.exponent);
 
   return (
     <Row

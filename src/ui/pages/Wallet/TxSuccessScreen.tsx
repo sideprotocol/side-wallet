@@ -1,4 +1,5 @@
-import { Layout, Header, Content, Icon, Text, Column, Footer, Button, Row } from '@/ui/components';
+import { CHAINS_ENUM } from '@/shared/constant';
+import { Button, Column, Content, Footer, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
 import { spacing } from '@/ui/theme/spacing';
@@ -6,12 +7,13 @@ import { useLocationState } from '@/ui/utils';
 
 interface LocationState {
   txid: string;
+  chain: CHAINS_ENUM;
 }
 
 export default function TxSuccessScreen() {
-  const { txid } = useLocationState<LocationState>();
+  const { txid, chain } = useLocationState<LocationState>();
   const navigate = useNavigate();
-  const blockstreamUrl = useBlockstreamUrl();
+  const blockstreamUrl = useBlockstreamUrl(chain);
 
   return (
     <Layout>
