@@ -11,13 +11,19 @@ import {
 } from '@/shared/constant';
 import { CosmosTransaction, CosmosTxResponse, NetworkType } from '@/shared/types';
 import { AminoConverter } from '@/ui/codegen/src/side/btcbridge/tx.amino';
+import * as sideBTCBridgeRegistry from '@/ui/codegen/src/side/btcbridge/tx.registry';
 import { useWallet } from '@/ui/utils';
 import { makeSignDoc as makeSignDocAmino } from '@cosmjs/amino';
 import { serializeSignDoc } from '@cosmjs/amino/build/signdoc';
 import { createWasmAminoConverters } from '@cosmjs/cosmwasm-stargate';
 import { fromBase64, fromHex, toBase64 } from '@cosmjs/encoding';
-import { EncodeObject, Registry, TxBodyEncodeObject, makeAuthInfoBytes } from '@cosmjs/proto-signing';
-import { AminoTypes, createDefaultAminoConverters, createIbcAminoConverters } from '@cosmjs/stargate';
+import { EncodeObject, GeneratedType, Registry, TxBodyEncodeObject, makeAuthInfoBytes } from '@cosmjs/proto-signing';
+import {
+  AminoTypes,
+  createDefaultAminoConverters,
+  createIbcAminoConverters,
+  defaultRegistryTypes
+} from '@cosmjs/stargate';
 
 import { useCurrentAccount } from '../../accounts/hooks';
 import { useNetworkType } from '../../settings/hooks';
@@ -59,7 +65,9 @@ const aminoTypes = new AminoTypes({
   ...AminoConverter
 });
 
-const registry = new Registry();
+const sideProtoRegistry: Iterable<[string, GeneratedType]> = [...sideBTCBridgeRegistry.registry];
+
+const registry = new Registry([...defaultRegistryTypes, ...sideProtoRegistry]);
 
 enum BroadcastMode {
   SYNC = 'BROADCAST_MODE_SYNC',
@@ -124,7 +132,15 @@ export function useSignAndBroadcastTxRaw() {
 
     const signMode = SignMode.SIGN_MODE_LEGACY_AMINO_JSON;
 
-    const msgs = tx.messages.map((msg) => aminoTypes.toAmino(msg));
+    const isBitcoinWithdraw = tx.messages.some((msg) => msg.typeUrl.startsWith('/side.btcbridge.'));
+
+    const msgs = isBitcoinWithdraw
+      ? tx.messages.map((msg) => ({
+          amount: msg.value.amount,
+          fee_rate: msg.value.feeRate,
+          sender: msg.value.sender
+        }))
+      : tx.messages.map((msg) => aminoTypes.toAmino(msg));
 
     const signDoc = makeSignDocAmino(
       msgs,
@@ -144,7 +160,7 @@ export function useSignAndBroadcastTxRaw() {
     const signature = await wallet.signMessage(signString);
 
     const signedTxBody = {
-      messages: signed.msgs.map((msg) => aminoTypes.fromAmino(msg)),
+      messages: isBitcoinWithdraw ? tx.messages : signed.msgs.map((msg) => this.aminoTypes.fromAmino(msg)),
       memo: signed.memo
     };
 
