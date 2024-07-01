@@ -27,6 +27,7 @@ import SideTokenList from './SideTokenList';
 
 export default function WalletTabScreen() {
   const navigate = useNavigate();
+  const [balanceVisible, setBalanceVisible] = useState(true);
 
   const { accountBalanceByUSD } = useGetAccountBalanceByUSD();
 
@@ -126,29 +127,43 @@ export default function WalletTabScreen() {
             gap: '12px',
             alignItems: 'center'
           }}>
-          <Row
-            justifyCenter
-            style={{
-              gap: '0px',
-              alignItems: 'flex-end'
-            }}>
-            <Text
-              text="$"
+          {balanceVisible ? (
+            <Row
+              justifyCenter
               style={{
-                fontSize: '24px',
-                fontWeight: 400
-              }}
-            />
+                gap: '0px',
+                alignItems: 'flex-end'
+              }}>
+              <Text
+                text="$"
+                style={{
+                  fontSize: '24px',
+                  fontWeight: 400
+                }}
+              />
+              <Text
+                text={getTruncate(accountBalanceByUSD, 2)}
+                style={{
+                  fontSize: '38px',
+                  fontWeight: 500,
+                  lineHeight: '32px'
+                }}
+              />
+            </Row>
+          ) : (
             <Text
-              text={getTruncate(accountBalanceByUSD, 2)}
+              text="******"
               style={{
                 fontSize: '38px',
                 fontWeight: 500,
                 lineHeight: '32px'
               }}
             />
-          </Row>
-          <Image src="/images/icons/eye-off-2.svg" size={20} />
+          )}
+
+          <span onClick={() => setBalanceVisible(!balanceVisible)}>
+            <Image src="/images/icons/eye-off-2.svg" size={20} />
+          </span>
         </Row>
 
         <Row
@@ -190,7 +205,7 @@ export default function WalletTabScreen() {
             />
           </Column>
 
-          <Column
+          {/* <Column
             onClick={() => {
               setBuyBtcModalVisible(true);
             }}
@@ -205,7 +220,7 @@ export default function WalletTabScreen() {
                 opacity: 0.8
               }}
             />
-          </Column>
+          </Column> */}
         </Row>
 
         <Row
