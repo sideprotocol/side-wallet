@@ -10,6 +10,7 @@ import { Message } from '@/shared/utils';
 import AccountUpdater from '@/ui/state/accounts/updater';
 import '@/ui/styles/global.less';
 
+import { QueryClient, QueryClientProvider } from "react-query";
 import { ActionComponentProvider } from './components/ActionComponent';
 import { AppDimensions } from './components/Responsive';
 import AsyncMainRoute from './pages/MainRoute';
@@ -30,6 +31,14 @@ import { WalletProvider } from './utils';
 // import 'default-passive-events'
 
 // const AsyncMainRoute = lazy(() => import('./pages/MainRoute'));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 message.config({
   maxCount: 1
@@ -152,13 +161,15 @@ function Updaters() {
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <Provider store={store}>
-    <WalletProvider {...antdConfig} wallet={wallet as any}>
-      <ActionComponentProvider>
-        <AppDimensions>
-          <Updaters />
-          <AsyncMainRoute />
-        </AppDimensions>
-      </ActionComponentProvider>
-    </WalletProvider>
+    <QueryClientProvider client={queryClient}>
+      <WalletProvider {...antdConfig} wallet={wallet as any}>
+        <ActionComponentProvider>
+          <AppDimensions>
+            <Updaters />
+            <AsyncMainRoute />
+          </AppDimensions>
+        </ActionComponentProvider>
+      </WalletProvider>
+    </QueryClientProvider>
   </Provider>
 );

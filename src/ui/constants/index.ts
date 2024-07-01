@@ -92,3 +92,5 @@ export const BTC_BRIDGE_VAULT = '';
 export const SIDE_BTC_INDEXER = '';
 //
 export const SIDE_BTC_EXPLORER = '';
+
+export const DEX_CONTRACT = 'bc1peh2aulwsyc9m45ggeznav402xcck4ll0yn0xgtlxyf4zkwch7juqmmvqrs';

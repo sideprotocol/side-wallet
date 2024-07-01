@@ -57,9 +57,9 @@ const WalletConfig: React.FC<IWalletConfig> = ({ children, chains }) => {
     undefined
   );
 
-  useEffect(() => {
-    writeChain(curChain);
-  }, [curChain]);
+  // useEffect(() => {
+  //   writeChain(curChain);
+  // }, [curChain]);
 
   function reAccount() {
     connect(curChain);
