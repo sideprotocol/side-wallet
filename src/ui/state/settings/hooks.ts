@@ -1,7 +1,7 @@
 import compareVersions from 'compare-versions';
 import { useCallback } from 'react';
 
-import { VERSION } from '@/shared/constant';
+import { CHAINS_ENUM, VERSION } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { useWallet } from '@/ui/utils';
 import i18n, { addResourceBundle } from '@/ui/utils/i18n';
@@ -65,8 +65,15 @@ export function useChangeNetworkTypeCallback() {
   );
 }
 
-export function useBlockstreamUrl() {
+export function useBlockstreamUrl(chain?: CHAINS_ENUM) {
   const networkType = useNetworkType();
+  if (chain === CHAINS_ENUM.SIDE) {
+    if (networkType === NetworkType.MAINNET) {
+      return 'https://testnet.ping.pub/side';
+    } else {
+      return 'https://explorer.side.exchange/devnet';
+    }
+  }
   if (networkType === NetworkType.MAINNET) {
     return 'https://mempool.space';
   } else {

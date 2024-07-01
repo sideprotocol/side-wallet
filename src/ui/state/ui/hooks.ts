@@ -45,6 +45,30 @@ export function useUpdateUiTxCreateScreen() {
   };
 }
 
+export function useUiTxCreateSendSideScreen() {
+  const uiState = useUIState();
+  return uiState.uiTxCreateSendSideScreen;
+}
+
+export function useUpdateUiTxCreateSendSideScreen() {
+  const dispatch = useAppDispatch();
+  return ({
+    toInfo,
+    base,
+    inputAmount,
+    fee,
+    memo
+  }: {
+    toInfo?: { address: string; domain: string };
+    base?: string;
+    inputAmount?: string;
+    fee?: string;
+    memo?: string;
+  }) => {
+    dispatch(uiActions.updateTxCreateSendSideScreen({ toInfo, base, inputAmount, fee, memo }));
+  };
+}
+
 export function useResetUiTxCreateScreen() {
   const dispatch = useAppDispatch();
   return () => {
