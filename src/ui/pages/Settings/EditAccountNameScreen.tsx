@@ -41,19 +41,17 @@ export default function EditAccountNameScreen() {
   }, [alianName]);
   return (
     <Layout>
+      <Header
+        onBack={() => {
+          window.history.go(-1);
+        }}
+        title="Change Account Name"
+      />
       <Column
-        fullX
-        fullY
         style={{
-          background: '#09090A',
+          flex: 1,
           padding: '0 16px 24px'
         }}>
-        <Header
-          onBack={() => {
-            window.history.go(-1);
-          }}
-          title="Change Account Name"
-        />
         <Column style={{ flex: 1, gap: '0' }}>
           <Text
             text="Previous Account Name"

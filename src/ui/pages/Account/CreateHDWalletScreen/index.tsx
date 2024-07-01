@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { AddressType, RestoreWalletType } from '@/shared/types';
-import { Header, Layout, StepBar } from '@/ui/components';
+import { Column, Header, Layout, StepBar } from '@/ui/components';
 
 import { useNavigate } from '../../MainRoute';
 import Step1_Create from './Step1_Create';
@@ -90,10 +90,7 @@ export default function CreateHDWalletScreen() {
   }, [items, contextData.tabType]);
 
   return (
-    <Layout
-      style={{
-        padding: '0 16px 24px'
-      }}>
+    <Layout style={{}}>
       <Header
         onBack={() => {
           if (fromUnlock) {
@@ -104,14 +101,19 @@ export default function CreateHDWalletScreen() {
         }}
         title={contextData.isRestore ? 'Import an existing wallet' : 'Create a new wallet'}
       />
-      <StepBar
-        activeKey={contextData.tabType}
-        items={items.map((v) => ({
-          key: v.key,
-          label: v.label
-        }))}
-      />
-
+      <Column
+        style={{
+          flex: 1,
+          padding: '0 16px 24px'
+        }}>
+        <StepBar
+          activeKey={contextData.tabType}
+          items={items.map((v) => ({
+            key: v.key,
+            label: v.label
+          }))}
+        />
+      </Column>
       {currentChildren}
     </Layout>
   );

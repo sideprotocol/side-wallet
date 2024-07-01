@@ -83,10 +83,7 @@ export default function SideTxConfirmScreen() {
   }
 
   return (
-    <Layout
-      style={{
-        padding: '0 16px 24px'
-      }}>
+    <Layout style={{}}>
       <Header
         onBack={() => {
           window.history.go(-1);
@@ -96,136 +93,141 @@ export default function SideTxConfirmScreen() {
       <Column
         style={{
           flex: 1,
-          paddingTop: '40px',
-          gap: '10px'
+          padding: '40px 16px 24px'
         }}>
-        <Row
-          justifyBetween
+        <Column
           style={{
-            alignItems: 'center',
-            padding: '11px 16px',
-            backgroundColor: '#1E1E1F',
-            borderRadius: '14px'
+            flex: 1,
+            gap: '10px'
           }}>
           <Row
+            justifyBetween
             style={{
-              alignItems: 'center'
+              alignItems: 'center',
+              padding: '11px 16px',
+              backgroundColor: '#1E1E1F',
+              borderRadius: '14px'
             }}>
-            <Image
-              src={curToken.logo}
-              size={42}
+            <Row
               style={{
-                borderRadius: '50%'
-              }}
-            />
+                alignItems: 'center'
+              }}>
+              <Image
+                src={curToken.logo}
+                size={42}
+                style={{
+                  borderRadius: '50%'
+                }}
+              />
+              <Text
+                text={curToken.symbol}
+                style={{
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  lineHeight: '24px'
+                }}
+              />
+            </Row>
             <Text
-              text={curToken.symbol}
+              text={inputAmount}
               style={{
-                fontSize: '14px',
+                fontSize: '20px',
                 fontWeight: 600,
                 lineHeight: '24px'
               }}
             />
           </Row>
-          <Text
-            text={inputAmount}
+          <Column
+            justifyBetween
             style={{
-              fontSize: '20px',
+              padding: '16px',
+              backgroundColor: '#1E1E1F',
+              borderRadius: '14px'
+            }}>
+            <Text
+              text="Recipient"
+              color="white_muted"
+              style={{
+                fontSize: '14px',
+                lineHeight: '24px'
+              }}
+            />
+            <Text
+              text={toInfo.address}
+              style={{
+                fontSize: '14px',
+                lineHeight: '16px'
+              }}
+            />
+          </Column>
+
+          <Column
+            justifyBetween
+            style={{
+              padding: '16px',
+              backgroundColor: '#1E1E1F',
+              borderRadius: '14px'
+            }}>
+            <Text
+              text="Memo"
+              color="white_muted"
+              style={{
+                fontSize: '14px',
+                lineHeight: '24px'
+              }}
+            />
+            <Text
+              text={memo}
+              style={{
+                fontSize: '14px',
+                lineHeight: '16px'
+              }}
+            />
+          </Column>
+        </Column>
+        <Row
+          justifyBetween
+          style={{
+            padding: '16px 12px',
+            borderRadius: '10px',
+            backgroundColor: '#1E1E1F'
+          }}>
+          <Text
+            text="Tx Fee:"
+            style={{
+              fontSize: '16px',
               fontWeight: 600,
               lineHeight: '24px'
             }}
           />
+          <Row>
+            <Text
+              text={`${formatUnitAmount(fee, feeToken.exponent)} ${feeToken.symbol}`}
+              style={{
+                fontSize: '16px',
+                fontWeight: 600,
+                lineHeight: '24px'
+              }}
+            />
+            <Text
+              text={`($${feeByUSD})`}
+              color="white_muted"
+              style={{
+                fontSize: '16px',
+                lineHeight: '24px'
+              }}
+            />
+          </Row>
         </Row>
-        <Column
-          justifyBetween
+        <Button
+          preset="primary"
+          text="Confirm"
+          onClick={handleSubmit}
           style={{
-            padding: '16px',
-            backgroundColor: '#1E1E1F',
-            borderRadius: '14px'
-          }}>
-          <Text
-            text="Recipient"
-            color="white_muted"
-            style={{
-              fontSize: '14px',
-              lineHeight: '24px'
-            }}
-          />
-          <Text
-            text={toInfo.address}
-            style={{
-              fontSize: '14px',
-              lineHeight: '16px'
-            }}
-          />
-        </Column>
-
-        <Column
-          justifyBetween
-          style={{
-            padding: '16px',
-            backgroundColor: '#1E1E1F',
-            borderRadius: '14px'
-          }}>
-          <Text
-            text="Memo"
-            color="white_muted"
-            style={{
-              fontSize: '14px',
-              lineHeight: '24px'
-            }}
-          />
-          <Text
-            text={memo}
-            style={{
-              fontSize: '14px',
-              lineHeight: '16px'
-            }}
-          />
-        </Column>
-      </Column>
-      <Row
-        justifyBetween
-        style={{
-          padding: '16px 12px',
-          borderRadius: '10px',
-          backgroundColor: '#1E1E1F'
-        }}>
-        <Text
-          text="Tx Fee:"
-          style={{
-            fontSize: '16px',
-            fontWeight: 600,
-            lineHeight: '24px'
+            marginTop: '12px'
           }}
         />
-        <Row>
-          <Text
-            text={`${formatUnitAmount(fee, feeToken.exponent)} ${feeToken.symbol}`}
-            style={{
-              fontSize: '16px',
-              fontWeight: 600,
-              lineHeight: '24px'
-            }}
-          />
-          <Text
-            text={`($${feeByUSD})`}
-            color="white_muted"
-            style={{
-              fontSize: '16px',
-              lineHeight: '24px'
-            }}
-          />
-        </Row>
-      </Row>
-      <Button
-        preset="primary"
-        text="Confirm"
-        onClick={handleSubmit}
-        style={{
-          marginTop: '12px'
-        }}
-      />
+      </Column>
     </Layout>
   );
 }

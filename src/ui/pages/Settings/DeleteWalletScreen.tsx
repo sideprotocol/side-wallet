@@ -81,6 +81,12 @@ export default function DeleteWalletScreen() {
   };
   return (
     <Layout>
+      <Header
+        onBack={() => {
+          window.history.go(-1);
+        }}
+        title="Delete Wallet"
+      />
       <Column
         fullX
         fullY
@@ -88,12 +94,6 @@ export default function DeleteWalletScreen() {
           gap: '0',
           padding: '0 16px 24px'
         }}>
-        <Header
-          onBack={() => {
-            window.history.go(-1);
-          }}
-          title="Delete Wallet"
-        />
         <Column
           justifyCenter
           style={{

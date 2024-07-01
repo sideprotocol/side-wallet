@@ -15,6 +15,7 @@ export default function WelcomeScreen() {
 
   return (
     <Layout>
+      {state?.addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}
       <Column
         fullX
         fullY
@@ -22,7 +23,6 @@ export default function WelcomeScreen() {
           gap: '0',
           padding: '0 16px 24px'
         }}>
-        {state?.addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}
         <Column
           style={{
             flex: 1

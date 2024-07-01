@@ -60,19 +60,17 @@ export default function ExportMnemonicsScreen() {
   const pathName = ADDRESS_TYPES.find((v) => v.hdPath === keyring.hdPath)?.name || 'custom';
   return (
     <Layout>
+      <Header
+        onBack={() => {
+          window.history.go(-1);
+        }}
+        title="View Recovery Phrase"
+      />
       <Column
-        fullX
-        fullY
         style={{
-          gap: '0',
+          flex: 1,
           padding: '0 16px 24px'
         }}>
-        <Header
-          onBack={() => {
-            window.history.go(-1);
-          }}
-          title="View Recovery Phrase"
-        />
         {mnemonic == '' ? (
           <>
             <Column

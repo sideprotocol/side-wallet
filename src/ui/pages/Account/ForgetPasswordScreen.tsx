@@ -15,108 +15,111 @@ export default function CreateHDWalletScreen() {
   const [checked3, setChecked3] = useState(false);
 
   return (
-    <Layout
-      style={{
-        padding: '0 16px 24px'
-      }}>
+    <Layout style={{}}>
       <Header onBack={() => navigateRouter(-1)} title="Forgot Password"></Header>
       <Column
         style={{
           flex: 1,
-          overflow: 'auto',
-          paddingBottom: '10px'
+          paddingBottom: '10px',
+          padding: '0 16px 24px'
         }}>
-        <Row
-          justifyCenter
+        <Column
           style={{
-            padding: '74px 0'
+            flex: 1,
+            overflow: 'auto'
           }}>
-          <Image src="./images/icons/wallet.svg" size={90} />
-        </Row>
-        <Row
-          style={{
-            alignItems: 'center',
-            padding: '16px',
-            gap: '8px',
-            backgroundColor: '#222222',
-            borderRadius: '14px'
-          }}>
-          <Checkbox
-            checked={checked1}
-            onChange={(e) => {
-              setChecked1(e.target.checked);
-            }}
-          />
-          <Text
-            text="OKX Wallet doesn't store your password and can't help you retrieve it."
+          <Row
+            justifyCenter
             style={{
-              color: '#fff',
-              opacity: 0.5,
-              fontSize: '12px',
-              lineHeight: '18px'
-            }}
-          />
-        </Row>
-        <Row
-          style={{
-            alignItems: 'center',
-            padding: '16px',
-            gap: '8px',
-            backgroundColor: '#222222',
-            borderRadius: '14px',
-            marginTop: '10px'
-          }}>
-          <Checkbox
-            checked={checked2}
-            onChange={(e) => {
-              setChecked2(e.target.checked);
-            }}
-          />
-          <Text
-            text="If you forget your password, you can reset it by resetting your wallet. You can re-import your wallet with its seed phrase or private key without affecting your assets."
+              padding: '74px 0'
+            }}>
+            <Image src="./images/icons/wallet.svg" size={90} />
+          </Row>
+          <Row
             style={{
-              color: '#fff',
-              opacity: 0.5,
-              fontSize: '12px',
-              lineHeight: '18px'
-            }}
-          />
-        </Row>
-        <Row
-          style={{
-            alignItems: 'center',
-            padding: '16px',
-            gap: '8px',
-            backgroundColor: '#222222',
-            borderRadius: '14px',
-            marginTop: '10px'
-          }}>
-          <Checkbox
-            checked={checked3}
-            onChange={(e) => {
-              setChecked3(e.target.checked);
-            }}
-          />
-          <Text
-            text="If you reset the wallet without backing it up, you'll permanently lose it and all assets. Be sure to back up all wallets and keep your seed phrase or private key safe before resetting."
+              alignItems: 'center',
+              padding: '16px',
+              gap: '8px',
+              backgroundColor: '#222222',
+              borderRadius: '14px'
+            }}>
+            <Checkbox
+              checked={checked1}
+              onChange={(e) => {
+                setChecked1(e.target.checked);
+              }}
+            />
+            <Text
+              text="OKX Wallet doesn't store your password and can't help you retrieve it."
+              style={{
+                color: '#fff',
+                opacity: 0.5,
+                fontSize: '12px',
+                lineHeight: '18px'
+              }}
+            />
+          </Row>
+          <Row
             style={{
-              color: '#fff',
-              opacity: 0.5,
-              fontSize: '12px',
-              lineHeight: '18px'
-            }}
-          />
-        </Row>
+              alignItems: 'center',
+              padding: '16px',
+              gap: '8px',
+              backgroundColor: '#222222',
+              borderRadius: '14px',
+              marginTop: '10px'
+            }}>
+            <Checkbox
+              checked={checked2}
+              onChange={(e) => {
+                setChecked2(e.target.checked);
+              }}
+            />
+            <Text
+              text="If you forget your password, you can reset it by resetting your wallet. You can re-import your wallet with its seed phrase or private key without affecting your assets."
+              style={{
+                color: '#fff',
+                opacity: 0.5,
+                fontSize: '12px',
+                lineHeight: '18px'
+              }}
+            />
+          </Row>
+          <Row
+            style={{
+              alignItems: 'center',
+              padding: '16px',
+              gap: '8px',
+              backgroundColor: '#222222',
+              borderRadius: '14px',
+              marginTop: '10px'
+            }}>
+            <Checkbox
+              checked={checked3}
+              onChange={(e) => {
+                setChecked3(e.target.checked);
+              }}
+            />
+            <Text
+              text="If you reset the wallet without backing it up, you'll permanently lose it and all assets. Be sure to back up all wallets and keep your seed phrase or private key safe before resetting."
+              style={{
+                color: '#fff',
+                opacity: 0.5,
+                fontSize: '12px',
+                lineHeight: '18px'
+              }}
+            />
+          </Row>
+        </Column>
+        <Button
+          disabled={!(checked1 && checked2 && checked3)}
+          text="Reset wallet"
+          preset="primary"
+          onClick={async () => {
+            await storage.clear();
+            navigate('WelcomeScreen');
+          }}
+        />
       </Column>
-      <Button
-        disabled={!(checked1 && checked2 && checked3)}
-        text="Reset wallet"
-        preset="primary"
-        onClick={async () => {
-          await storage.clear();
-          navigate('WelcomeScreen');
-        }}
-      />
     </Layout>
   );
 }

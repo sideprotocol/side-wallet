@@ -88,84 +88,87 @@ export default function CreatePasswordScreen() {
   };
 
   return (
-    <Layout
-      style={{
-        padding: '0 16px 24px'
-      }}>
+    <Layout>
+      <Header onBack={() => navigateRouter(-1)} title="Create Password"></Header>
       <Column
         style={{
-          flex: 1
+          flex: 1,
+          padding: '0 16px 24px'
         }}>
-        <Header onBack={() => navigateRouter(-1)} title="Create Password"></Header>
-        <Text
-          text="Your password can unlock your wallet only this local device. if you forget your password,you will not be able to access your wallet on this decice."
+        <Column
           style={{
-            opacity: 0.5,
-            fontSize: '12px',
-            lineHeight: '18px',
-            marginTop: '36px'
-          }}
-        />
-        <Text
-          text="Password"
-          style={{
-            marginTop: '32px',
-            color: '#828282',
-            fontSize: '14px',
-            lineHeight: '24px'
-          }}
-        />
-        <Input
-          preset="password"
-          onBlur={(e) => {
-            setPassword(e.target.value);
-          }}
-          autoFocus={true}
-        />
-        <Text
-          text="Confirm Password"
-          style={{
-            marginTop: '16px',
-            color: '#828282',
-            fontSize: '14px',
-            lineHeight: '24px'
-          }}
-        />
-        <Input
-          preset="password"
-          placeholder="Confirm Password"
-          onChange={(e) => {
-            setPassword2(e.target.value);
-          }}
-          onBlur={(e) => {
-            verify(e.target.value);
-          }}
-          onKeyUp={(e) => handleOnKeyUp(e)}
-        />
-        <Row
-          style={{
-            marginTop: '16px',
-            alignItems: 'center'
-          }}
-          justifyBetween>
+            flex: 1
+          }}>
           <Text
-            text="I understand that I will not be able to access my wallet on this device if I forget my password"
+            text="Your password can unlock your wallet only this local device. if you forget your password,you will not be able to access your wallet on this decice."
             style={{
-              color: '#fff',
               opacity: 0.5,
               fontSize: '12px',
-              lineHeight: '18px'
+              lineHeight: '18px',
+              marginTop: '36px'
             }}
           />
-          <Checkbox
-            defaultChecked={check}
+          <Text
+            text="Password"
+            style={{
+              marginTop: '32px',
+              color: '#828282',
+              fontSize: '14px',
+              lineHeight: '24px'
+            }}
+          />
+          <Input
+            preset="password"
+            onBlur={(e) => {
+              setPassword(e.target.value);
+            }}
+            autoFocus={true}
+          />
+          <Text
+            text="Confirm Password"
+            style={{
+              marginTop: '16px',
+              color: '#828282',
+              fontSize: '14px',
+              lineHeight: '24px'
+            }}
+          />
+          <Input
+            preset="password"
+            placeholder="Confirm Password"
             onChange={(e) => {
-              setCheck(e.target.checked);
+              setPassword2(e.target.value);
             }}
+            onBlur={(e) => {
+              verify(e.target.value);
+            }}
+            onKeyUp={(e) => handleOnKeyUp(e)}
           />
-        </Row>
+          <Row
+            style={{
+              marginTop: '16px',
+              alignItems: 'center'
+            }}
+            justifyBetween>
+            <Text
+              text="I understand that I will not be able to access my wallet on this device if I forget my password"
+              style={{
+                color: '#fff',
+                opacity: 0.5,
+                fontSize: '12px',
+                lineHeight: '18px'
+              }}
+            />
+            <Checkbox
+              defaultChecked={check}
+              onChange={(e) => {
+                setCheck(e.target.checked);
+              }}
+            />
+          </Row>
+        </Column>
+        <Button disabled={disabled} text="Next" preset="primary" onClick={btnClick} />
       </Column>
-      <Button disabled={disabled} text="Next" preset="primary" onClick={btnClick} />
     </Layout>
   );
 }

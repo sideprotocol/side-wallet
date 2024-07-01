@@ -58,19 +58,17 @@ export default function ExportPrivateKeyScreen() {
 
   return (
     <Layout>
+      <Header
+        onBack={() => {
+          window.history.go(-1);
+        }}
+        title="Show Private Key"
+      />
       <Column
-        fullX
-        fullY
         style={{
-          gap: '0',
+          flex: 1,
           padding: '0 16px 24px'
         }}>
-        <Header
-          onBack={() => {
-            window.history.go(-1);
-          }}
-          title="Show Private Key"
-        />
         {privateKey.wif == '' ? (
           <>
             <Column
