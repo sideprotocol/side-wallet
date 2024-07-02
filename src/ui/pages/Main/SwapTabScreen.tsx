@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDebouncedCallback } from "use-debounce";
 
 import { KEYRING_TYPE } from '@/shared/constant';
 import { Column, Content, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
@@ -20,6 +21,7 @@ import { useWallet } from '@/ui/utils';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import useGetAllPools from '@/ui/hooks/useGetAllPools';
 import { findAssetIcon } from '@/ui/utils/swap';
+import TokenCurrent from "@/ui/components/TokenCurrent";
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
@@ -117,8 +119,10 @@ const NativeBalance = () => {
       )}
 
       {connected && (
-        <div className={'flex'}>
-          <div style={{ color: 'black', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <div style={{
+          display: 'flex'
+        }}>
+          <div style={{ color: '#fff', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(nativeBalance)
@@ -214,6 +218,29 @@ const RemoteBalance = () => {
   );
 };
 
+const NativeInput = () => {
+  const { swapPair } = useSwapStore();
+  const currentAccount = useCurrentAccount();
+  // const { curChain } = useWalletContext();
+  if (!currentAccount?.address) return;
+  const debouncedChange = useDebouncedCallback((value) => {
+    swapStore.swapPair['native'] = {
+      amount: value,
+      denom: swapStore.swapPair['native'].denom,
+    };
+    console.log(`swapStore.swapPair: `, swapStore.swapPair);
+  }, 500);
+
+  return (
+    <CoinInput
+      coin={swapPair?.native}
+      onChange={(value) => {
+        debouncedChange(value);
+      }}
+    />
+  );
+};
+
 export default function SwapTabScreen() {
   // const { swapPair, balances } = useSwapStore();
   const { tokenModalShow, balances, swapRouteResult, hoverExchange, swapPair, responseLoading, modalTokenType, searchTokenValue, showValidDetail } =
@@ -306,32 +333,19 @@ export default function SwapTabScreen() {
                 borderRadius: '100px',
                 padding: '20px 0px'
               }}>
-              {/*<NativeInput />*/}
-              <CoinInput
-                coin={{
-                  amount: 0
-                }}
-                onChange={(value) => {
-                  // if (!curChain?.chainID) {
-                  //   return;
-                  // }
-                  // swapStore.swapPair["remote"] = {
-                  //   amount: removeStartZero(value),
-                  //   denom: swapStore.swapPair["remote"].denom,
-                  // };
+
+              <NativeInput />
+
+              <TokenCurrent
+                value={swapPair.native}
+                setShow={() => {
+                  swapStore.tokenModalShow = true;
+                  swapStore.modalTokenType = 'native';
                 }}
               />
-
-              {/*<TokenCurrent*/}
-              {/*  value={swapPair.native}*/}
-              {/*  setShow={() => {*/}
-              {/*    swapStore.tokenModalShow = true;*/}
-              {/*    swapStore.modalTokenType = "native";*/}
-              {/*  }}*/}
-              {/*/>*/}
             </Row>
 
-            {/*<NativeBalance></NativeBalance>*/}
+            <NativeBalance></NativeBalance>
           </Column>
 
           <Row relative>

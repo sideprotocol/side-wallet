@@ -17,7 +17,7 @@ function Icon({ type }: { type: string }) {
   );
 }
 
-export default function TokenCurrent({ value, setShow }: { value: Coin; setShow: never }) {
+export default function TokenCurrent({ value, setShow }: { value: Coin; setShow: any }) {
   const newValue = SWAP_ASSETS.assets.find((asset) => asset.base === value?.denom);
 
   const unSelected = !newValue?.base;
