@@ -236,20 +236,20 @@ export const WALLETCONNECT_STATUS_MAP = {
   FAILD: 6
 };
 
-export const INTERNAL_REQUEST_ORIGIN = 'https://unisat.io';
+export const INTERNAL_REQUEST_ORIGIN = 'https://side.one';
 
 export const INTERNAL_REQUEST_SESSION = {
-  name: 'UniSat Wallet',
+  name: 'Side Wallet',
   origin: INTERNAL_REQUEST_ORIGIN,
   icon: './images/logo/logo@128x.png'
 };
 
 export const OPENAPI_URL_MAINNET = 'https://wallet-api.unisat.io/v5';
 export const OPENAPI_URL_TESTNET = 'https://wallet-api-testnet.unisat.io/v5';
-export const SIDEREST_URL_MAINNET = 'https://testnet-rest.side.one';
-export const SIDEREST_URL_TESTNET = 'https://devnet-rest.side.one';
-export const SIDERPC_URL_MAINNET = 'https://testnet-rpc.side.one';
-export const SIDERPC_URL_TESTNET = 'https://devnet-rpc.side.one';
+export const SIDEREST_URL_MAINNET = 'https://testnet-rpc2.side.one';
+export const SIDEREST_URL_TESTNET = 'https://testnet-rpc2.side.one';
+export const SIDERPC_URL_MAINNET = 'https://testnet-rpc2.side.one';
+export const SIDERPC_URL_TESTNET = 'https://testnet-rest.side.one';
 export const SIDE_CHAINID_MAINNET = 'S2-testnet-2';
 export const SIDE_CHAINID_TESTNET = 'devnet';
 

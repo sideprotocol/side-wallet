@@ -1,9 +1,9 @@
-import { IChain } from "@/components/WalletConnect/Wallet";
+// import { IChain } from "@/components/WalletConnect/Wallet";
 import { SIDE_DEV_ID, SIDE_TEST_ID } from "./chainId";
 import { SIDE_DEV_RPC_LIST, SIDE_TEST_RPC_LIST, SIDE_DEV_REST_LIST, SIDE_TEST_REST_LIST } from "./rpc";
 import { SIDE_DEV_EXPLORER_LIST, SIDE_TEST_EXPLORER_LIST } from "./explorer";
 
-export const CHAINS_DEV: IChain[] = [
+export const CHAINS_DEV = [
   {
     chainID: SIDE_DEV_ID,
     name: "SIDE devnet",
@@ -18,7 +18,7 @@ export const CHAINS_DEV: IChain[] = [
   },
 ];
 
-export const CHAINS_TEST: IChain[] = [
+export const CHAINS_TEST = [
   {
     chainID: SIDE_TEST_ID,
     name: "SIDE Testnet",
@@ -33,4 +33,4 @@ export const CHAINS_TEST: IChain[] = [
   },
 ];
 
-export const CHAINS_MAIN: IChain[] = [];
+export const CHAINS_MAIN = [];

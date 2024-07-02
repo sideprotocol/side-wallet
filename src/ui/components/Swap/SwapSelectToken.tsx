@@ -1,80 +1,16 @@
 import { useLocation } from 'react-router-dom';
 
-import { CHAINS_ENUM } from '@/shared/constant';
-import { BitcoinToken, SideToken } from '@/shared/types';
+// import { CHAINS_ENUM } from '@/shared/constant';
+import { SideToken } from '@/shared/types';
 import { Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
+import ImageIcon from '@/ui/components/ImageIcon';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
-import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
-import { useAccountBalance } from '@/ui/state/accounts/hooks';
-import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
+// import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
+// import { useAccountBalance } from '@/ui/state/accounts/hooks';
+// import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { useState } from 'react';
-import { useNavigate } from '@/ui/pages/MainRoute';
-
-// function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
-//   const accountBalance = useAccountBalance();
-//   const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.coingecko_id);
-//
-//   return (
-//     <>
-//       <Row>
-//         <Image src={token.logo} size={42}></Image>
-//         <Column
-//           style={{
-//             gap: '0px'
-//           }}>
-//           <Text preset="regular" text={token.symbol}></Text>
-//           <Text preset="sub" text={token.name}></Text>
-//         </Column>
-//       </Row>
-//
-//       <Column
-//         style={{
-//           gap: '0px'
-//         }}>
-//         <Text preset="regular" textEnd text={accountBalance.btc_amount}></Text>
-//         <Text preset="sub" textEnd text={`${getTruncate(totalPrice)}`}></Text>
-//       </Column>
-//     </>
-//   );
-// }
-//
-// function BitCrypto() {
-//   const navigate = useNavigate();
-//   const { state } = useLocation();
-//   const { chain, type } = state as {
-//     chain: CHAINS_ENUM;
-//     type: 'receive' | 'send';
-//   };
-//   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
-//   const { data: bitcoinTokenList } = useGetBitcoinTokenList();
-//   return (
-//     <>
-//       {bitcoinTokenList.map((token) => {
-//         return (
-//           <Row
-//             onClick={() => {
-//               if (type === 'receive') {
-//                 navigate('SelectAddressScreen', { chain, base: token.symbol });
-//               } else {
-//                 resetUiTxCreateScreen();
-//                 navigate('TxCreateScreen', { chain, base: token.symbol });
-//               }
-//             }}
-//             full
-//             key={token.symbol + token.name}
-//             justifyBetween
-//             style={{
-//               cursor: 'pointer'
-//             }}>
-//             <BitcoinCryptoItem token={token} />
-//           </Row>
-//         );
-//       })}
-//     </>
-//   );
-// }
 
 function SideCryptoItem({ token }: { token: SideToken }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
@@ -83,7 +19,12 @@ function SideCryptoItem({ token }: { token: SideToken }) {
   return (
     <>
       <Row>
-        <Image src={token.logo} size={42}></Image>
+        {/*<Image src={token.logo} size={42}></Image>*/}
+        <ImageIcon url={token.logo} style={{
+          width: '42px',
+          height: '42px',
+          borderRadius: '50%',
+        }} />
         <Column
           style={{
             gap: '0px'
@@ -103,7 +44,6 @@ function SideCryptoItem({ token }: { token: SideToken }) {
     </>
   );
 }
-
 
 export default function Index(props) {
   const { state } = useLocation();
@@ -153,16 +93,16 @@ export default function Index(props) {
 
         <Column>
           {
-            popularList?.map((asset, index) => {
+            popularList?.map((asset) => {
               return (
                 <Row
                   onClick={() => {
-                    // if (type === 'receive') {
-                    //   navigate('SelectAddressScreen', { chain, base: token.base });
-                    // } else {
-                    //   resetUiTxCreateScreen();
-                    //   navigate('TxCreateScreen', { chain, base: token.base });
-                    // }
+                    // onSelect();
+                    onSelect({
+                      denom: asset.base,
+                      amount: '1',
+                    });
+                    onClose();
                   }}
                   full
                   key={asset.symbol + asset.name}

@@ -10,7 +10,7 @@ import { Message } from '@/shared/utils';
 import AccountUpdater from '@/ui/state/accounts/updater';
 import '@/ui/styles/global.less';
 
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { ActionComponentProvider } from './components/ActionComponent';
 import { AppDimensions } from './components/Responsive';
 import AsyncMainRoute from './pages/MainRoute';

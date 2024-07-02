@@ -20,6 +20,7 @@ import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import useSwapSimulation from '@/ui/hooks/useSwapSimulation';
 import useGetAllPools from '@/ui/hooks/useGetAllPools';
 import { findAssetIcon } from '@/ui/utils/swap';
 import TokenCurrent from '@/ui/components/TokenCurrent';
@@ -41,7 +42,7 @@ const InitBalance = () => {
       };
     }
 
-    const client = await CosmWasmClient.connect('https://testnet-rpc.side.one');
+    const client = await CosmWasmClient.connect('https://testnet-rpc2.side.one');
 
     console.log('currentAccount?.address, asset.base: ', currentAccount?.address, asset.base);
     const balance = await client.getBalance(currentAccount?.address, asset.base);
@@ -269,6 +270,8 @@ export default function SwapTabScreen() {
   const [connected, setConnected] = useState(false);
   const currentKeyring = useCurrentKeyring();
 
+  useSwapSimulation();
+  useGetAllPools();
   // const networkType = useNetworkType();
   // const isInTab = useExtensionIsInTab();
   const validResult =
@@ -301,7 +304,7 @@ export default function SwapTabScreen() {
     };
     run();
   }, []);
-  useGetAllPools();
+
   return (
     <div style={{position: 'relative', width: '100%', height: '100%'}} >
       <Layout style={{
@@ -456,7 +459,6 @@ export default function SwapTabScreen() {
                 preset="primary"
                 onClick={async () => {
                   // alert('Swap');
-
                 }}
               />
             </Row>
@@ -472,9 +474,9 @@ export default function SwapTabScreen() {
         open={tokenModalShow}
         onClose={() => (swapStore.tokenModalShow = false)}
         onSelect={(token: Coin) => {
-          swapStore.swapPair[modalTokenType as "native" | "remote"] = {
+          swapStore.swapPair[modalTokenType as 'native' | 'remote'] = {
             ...token,
-            amount: modalTokenType === "remote" ? "" : "1",
+            amount: modalTokenType === 'remote' ? '' : '1',
           };
           swapStore.tokenModalShow = false;
         }}
@@ -484,7 +486,7 @@ export default function SwapTabScreen() {
           swapStore.searchTokenValue = value;
         }}
         searchValue={searchTokenValue}
-        curTokenDenom={swapPair[modalTokenType as "native" | "remote"]?.denom}
+        curTokenDenom={swapPair[modalTokenType as 'native' | 'remote']?.denom}
       />
     </div>
 

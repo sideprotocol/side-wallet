@@ -1,13 +1,13 @@
 export const SIDE_DEV_RPC_LIST = [
   {
     name: "Side RPC",
-    value: "https://devnet-rpc.side.one",
+    value: "https://testnet-rpc2.side.one/",
   },
 ];
 export const SIDE_TEST_RPC_LIST = [
   {
     name: "Side RPC",
-    value: "https://testnet-rpc.side.one",
+    value: "https://testnet-rpc2.side.one/",
   },
 ];
 export const SIDE_MAIN_RPC_LIST = [];

@@ -1,6 +1,6 @@
-import { IAsset } from "@/constants/assets";
-import { Coin } from "@cosmjs/stargate";
-import { SxProps } from "@mui/material";
+import { IAsset } from '@/constants/assets';
+import { Coin } from '@cosmjs/stargate';
+// import { SxProps } from "@mui/material";
 
 export type NativeAsset = {
   native_token: {
@@ -61,7 +61,7 @@ export interface SlippageControlProps {
   onQuickSet: (value: string) => void;
   open: boolean;
   onClose: () => void;
-  sx?: SxProps;
+  // sx?: SxProps;
 }
 
 export interface IPoolOne {

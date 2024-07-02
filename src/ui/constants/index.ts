@@ -71,7 +71,7 @@ export const AXELAR_ID = isProduction ? AXELAR_MAIN_ID : isTest ? AXELAR_TEST_ID
 export const BABYLON_ID = isProduction ? BABYLON_MAIN_ID : isTest ? BABYLON_TEST_ID : BABYLON_DEV_ID;
 export const OSMOSIS_ID = isProduction ? OSMOSIS_MAIN_ID : isTest ? OSMOSIS_TEST_ID : OSMOSIS_DEV_ID;
 
-export const SERVICE_BASE_URL = 'https://insider.side.one/indexer-station-devnet';
+export const SERVICE_BASE_URL = 'https://insider.side.one/indexer-station-testnet';
 
 export const SIDE_RPC_LIST = isProduction ? SIDE_MAIN_RPC_LIST : isTest ? SIDE_TEST_RPC_LIST : SIDE_DEV_RPC_LIST;
 
@@ -93,4 +93,4 @@ export const SIDE_BTC_INDEXER = '';
 //
 export const SIDE_BTC_EXPLORER = '';
 
-export const DEX_CONTRACT = 'bc1peh2aulwsyc9m45ggeznav402xcck4ll0yn0xgtlxyf4zkwch7juqmmvqrs';
+export const DEX_CONTRACT = 'bc1ppvrwmjuusn9wh34j7y520g8gumuy9xtl3gvprlljfdpwju3x7ucsahm9gq';

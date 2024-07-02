@@ -39,5 +39,5 @@ export {
   Row,
   StepBar,
   Text,
-  TextArea
+  TextArea,
 };

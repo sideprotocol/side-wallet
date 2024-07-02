@@ -1,5 +1,5 @@
 // import { Typography, Stack } from "@mui/material";
-// import ImageIcon from "./ImageIcon";
+import ImageIcon from './ImageIcon';
 import { Coin } from '@cosmjs/stargate';
 import { SWAP_ASSETS } from '@/ui/constants';
 
@@ -44,19 +44,14 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
       }}
     >
       {newValue?.logo && (
-        // <ImageIcon
-        //   style={{
-        //     width: '20px',
-        //     height: '20px',
-        //     marginRight: '4px',
-        //   }}
-        //   url={newValue?.logo || newValue?.logo}
-        // />
-        <img style={{
-          width: '20px',
-          height: '20px',
-          marginRight: '4px',
-        }} src={newValue?.logo || newValue?.logo} alt="" />
+        <ImageIcon
+          style={{
+            width: '20px',
+            height: '20px',
+            marginRight: '4px',
+          }}
+          url={newValue?.logo || newValue?.logo}
+        />
       )}
       <div style={{ fontSize: '14px', paddingRight: '6px', whiteSpace: 'nowrap' }}>
         {newValue?.symbol || newValue?.symbol || newValue?.base || 'Select Token'}
