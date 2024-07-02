@@ -9,72 +9,72 @@ import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTo
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
-
+import { useState } from 'react';
 import { useNavigate } from '@/ui/pages/MainRoute';
 
-function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
-  const accountBalance = useAccountBalance();
-  const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.coingecko_id);
-
-  return (
-    <>
-      <Row>
-        <Image src={token.logo} size={42}></Image>
-        <Column
-          style={{
-            gap: '0px'
-          }}>
-          <Text preset="regular" text={token.symbol}></Text>
-          <Text preset="sub" text={token.name}></Text>
-        </Column>
-      </Row>
-
-      <Column
-        style={{
-          gap: '0px'
-        }}>
-        <Text preset="regular" textEnd text={accountBalance.btc_amount}></Text>
-        <Text preset="sub" textEnd text={`${getTruncate(totalPrice)}`}></Text>
-      </Column>
-    </>
-  );
-}
-
-function BitCrypto() {
-  const navigate = useNavigate();
-  const { state } = useLocation();
-  const { chain, type } = state as {
-    chain: CHAINS_ENUM;
-    type: 'receive' | 'send';
-  };
-  const resetUiTxCreateScreen = useResetUiTxCreateScreen();
-  const { data: bitcoinTokenList } = useGetBitcoinTokenList();
-  return (
-    <>
-      {bitcoinTokenList.map((token) => {
-        return (
-          <Row
-            onClick={() => {
-              if (type === 'receive') {
-                navigate('SelectAddressScreen', { chain, base: token.symbol });
-              } else {
-                resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { chain, base: token.symbol });
-              }
-            }}
-            full
-            key={token.symbol + token.name}
-            justifyBetween
-            style={{
-              cursor: 'pointer'
-            }}>
-            <BitcoinCryptoItem token={token} />
-          </Row>
-        );
-      })}
-    </>
-  );
-}
+// function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
+//   const accountBalance = useAccountBalance();
+//   const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.coingecko_id);
+//
+//   return (
+//     <>
+//       <Row>
+//         <Image src={token.logo} size={42}></Image>
+//         <Column
+//           style={{
+//             gap: '0px'
+//           }}>
+//           <Text preset="regular" text={token.symbol}></Text>
+//           <Text preset="sub" text={token.name}></Text>
+//         </Column>
+//       </Row>
+//
+//       <Column
+//         style={{
+//           gap: '0px'
+//         }}>
+//         <Text preset="regular" textEnd text={accountBalance.btc_amount}></Text>
+//         <Text preset="sub" textEnd text={`${getTruncate(totalPrice)}`}></Text>
+//       </Column>
+//     </>
+//   );
+// }
+//
+// function BitCrypto() {
+//   const navigate = useNavigate();
+//   const { state } = useLocation();
+//   const { chain, type } = state as {
+//     chain: CHAINS_ENUM;
+//     type: 'receive' | 'send';
+//   };
+//   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
+//   const { data: bitcoinTokenList } = useGetBitcoinTokenList();
+//   return (
+//     <>
+//       {bitcoinTokenList.map((token) => {
+//         return (
+//           <Row
+//             onClick={() => {
+//               if (type === 'receive') {
+//                 navigate('SelectAddressScreen', { chain, base: token.symbol });
+//               } else {
+//                 resetUiTxCreateScreen();
+//                 navigate('TxCreateScreen', { chain, base: token.symbol });
+//               }
+//             }}
+//             full
+//             key={token.symbol + token.name}
+//             justifyBetween
+//             style={{
+//               cursor: 'pointer'
+//             }}>
+//             <BitcoinCryptoItem token={token} />
+//           </Row>
+//         );
+//       })}
+//     </>
+//   );
+// }
 
 function SideCryptoItem({ token }: { token: SideToken }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
@@ -104,52 +104,17 @@ function SideCryptoItem({ token }: { token: SideToken }) {
   );
 }
 
-function SideCrypto() {
-  const navigate = useNavigate();
-  const { state } = useLocation();
-  const { chain, type } = state as {
-    chain: CHAINS_ENUM;
-    type: 'receive' | 'send';
-  };
-  const resetUiTxCreateScreen = useResetUiTxCreateScreen();
-  const { data: sideTokenList } = useGetSideTokenList();
-  return (
-    <>
-      {sideTokenList.map((token) => {
-        return (
-          <Row
-            onClick={() => {
-              if (type === 'receive') {
-                navigate('SelectAddressScreen', { chain, base: token.base });
-              } else {
-                resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { chain, base: token.base });
-              }
-            }}
-            full
-            key={token.symbol + token.name}
-            justifyBetween
-            style={{
-              cursor: 'pointer'
-            }}>
-            <SideCryptoItem token={token} />
-          </Row>
-        );
-      })}
-    </>
-  );
-}
 
-export default function SelecCryptoScreen() {
+export default function Index(props) {
   const { state } = useLocation();
-  const { chain } = state as {
-    chain: CHAINS_ENUM;
-  };
+  const [focus, setFocus] = useState<boolean>(false);
+  const { open, onClose, onSelect, assetsList, popularList, onSearch, searchValue, curTokenDenom } = props;
   return (
-    <Layout>
+    <Layout style={{ width: '100%', position: 'absolute', left: 0, top: 0,
+      display: open ? 'flex' : 'none' }}>
       <Header
         onBack={() => {
-          window.history.go(-1);
+          onClose();
         }}
         title="Select crypto"
       />
@@ -170,6 +135,12 @@ export default function SelecCryptoScreen() {
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
             <Input
+              onFocus={() => setFocus(true)}
+              onBlur={() => setFocus(false)}
+              onChange={(e) => {
+                const value = e.target.value;
+                onSearch(value);
+              }}
               containerStyle={{
                 width: '100%',
                 border: 'none',
@@ -180,7 +151,31 @@ export default function SelecCryptoScreen() {
           </Row>
         </Column>
 
-        <Column>{chain === CHAINS_ENUM.SIDE ? <SideCrypto /> : <BitCrypto />}</Column>
+        <Column>
+          {
+            popularList?.map((asset, index) => {
+              return (
+                <Row
+                  onClick={() => {
+                    // if (type === 'receive') {
+                    //   navigate('SelectAddressScreen', { chain, base: token.base });
+                    // } else {
+                    //   resetUiTxCreateScreen();
+                    //   navigate('TxCreateScreen', { chain, base: token.base });
+                    // }
+                  }}
+                  full
+                  key={asset.symbol + asset.name}
+                  justifyBetween
+                  style={{
+                    cursor: 'pointer'
+                  }}>
+                  <SideCryptoItem token={asset} />
+                </Row>
+              );
+            })
+          }
+        </Column>
       </Content>
     </Layout>
   );
