@@ -19,6 +19,7 @@ import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import useGetAllPools from '@/ui/hooks/useGetAllPools';
+import { findAssetIcon } from '@/ui/utils/swap';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
@@ -76,14 +77,170 @@ const InitBalance = () => {
   return <></>;
 };
 
-export default function SwapTabScreen() {
+const NativeBalance = () => {
+  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || "{}");
+
   const { swapPair, balances } = useSwapStore();
+
+  // const { client } = useWalletContext();
+
+  const currentAccount = useCurrentAccount();
+  const connected = !!currentAccount?.address && swapPair?.native.denom;
+
+  const validNativeInput = BigNumber(swapPair?.native?.amount || 0).gt(0) && swapPair?.native?.denom;
+
+  const nativeBalance = balances[swapPair?.native?.denom || ""]?.available || "0";
+
+  const assetNativeIcon = findAssetIcon(swapPair?.native);
+
+  const nativePrice = (
+    new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(
+      unitPriceMap[assetNativeIcon?.coingecko_id || ""]?.usd || "0"
+    ) || 0
+  )
+    .toFixed(8, BigNumber.ROUND_DOWN)
+    .replace(/\.?0+$/, "");
+
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+    }} >
+      {validNativeInput ? (
+        <div>
+          ${nativePrice == 'NaN' ? '0' : BigNumber(nativePrice).toFormat()}
+        </div>
+      ) : (
+        <div></div>
+      )}
+
+      {connected && (
+        <div className={'flex'}>
+          <div style={{ color: 'black', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            {' '}
+            {/*<WalletIcon></WalletIcon>*/}
+            {BigNumber(nativeBalance)
+              .toFormat(assetNativeIcon?.precision || 8, BigNumber.ROUND_CEIL)
+              .replace(/\.?0+$/, '')}
+          </div>
+          <div
+            style={{
+              position: 'relative',
+              minWidth: '20px',
+              left: '4px',
+            }}
+            onClick={() => {
+              swapStore.swapPair['native'] = {
+                ...swapPair['native'],
+                amount: nativeBalance,
+              };
+            }}
+          >
+            MAX
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const RemoteBalance = () => {
+  const unitPriceMap = JSON.parse(localStorage.getItem("unitPriceMap") || "{}");
+
+  const { swapPair, balances } = useSwapStore();
+  const currentAccount = useCurrentAccount();
+  // const { client } = useWalletContext();
+
+  const connected = !!currentAccount?.address && swapPair?.remote.denom;
+
+  const validRemoteInput = BigNumber(swapPair?.remote?.amount || 0).gt(0) && swapPair?.native?.denom;
+
+  const remoteBalance = balances[swapPair?.remote?.denom || ""]?.available || "0";
+
+  const assetRemoteIcon = findAssetIcon(swapPair?.remote);
+
+  const remotePrice = (
+    new BigNumber(!swapPair?.remote?.amount ? 0 : swapPair?.remote?.amount).multipliedBy(
+      unitPriceMap[assetRemoteIcon?.coingecko_id || ""]?.usd || "0"
+    ) || 0
+  )
+    .toFixed(8, BigNumber.ROUND_DOWN)
+    .replace(/\.?0+$/, "");
+
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%',
+    }} >
+      {validRemoteInput ? (
+        <div style={{ color: '#7D7D7D', fontSize: "14px" }}>${remotePrice == "NaN" ? "0" : BigNumber(remotePrice).toFormat()}</div>
+      ) : (
+        <div></div>
+      )}
+
+      {connected && (
+        <div style={{
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+        }}>
+          <div style={{ color: 'black', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            {' '}
+            {/*<WalletIcon></WalletIcon>*/}
+            {BigNumber(remoteBalance)
+              .toFormat(assetRemoteIcon?.precision || 8, BigNumber.ROUND_CEIL)
+              .replace(/\.?0+$/, '')}
+          </div>
+          <div
+            style={{
+              color: '#16EDD6',
+              fontSize: '14px',
+              fontWeight: 700,
+              lineHeight: '13px',
+              marginLeft: '6px',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              return;
+            }}
+          ></div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default function SwapTabScreen() {
+  // const { swapPair, balances } = useSwapStore();
+  const { tokenModalShow, balances, swapRouteResult, hoverExchange, swapPair, responseLoading, modalTokenType, searchTokenValue, showValidDetail } =
+    useSwapStore();
   const navigate = useNavigate();
-  // const networkType = useNetworkType();
-  // const isInTab = useExtensionIsInTab();
-  //
   const [connected, setConnected] = useState(false);
   const currentKeyring = useCurrentKeyring();
+
+  // const networkType = useNetworkType();
+  // const isInTab = useExtensionIsInTab();
+  const validResult =
+    swapPair?.native?.denom &&
+    swapPair?.remote?.denom &&
+    BigNumber(swapPair?.native?.amount || 0).gt(0) &&
+    BigNumber(swapPair?.remote?.amount || 0).gt(0) &&
+    swapPair.remote.denom !== swapPair.native.denom &&
+    !responseLoading &&
+    swapRouteResult?.pools?.length &&
+    swapRouteResult?.pools?.length > 0;
+  useEffect(() => {
+    if (!validResult) {
+      swapStore.showValidDetail = false;
+    } else {
+      swapStore.showValidDetail = true;
+    }
+  }, [validResult]);
+
   // const currentAccount = useCurrentAccount();
   const wallet = useWallet();
   useEffect(() => {
@@ -98,7 +255,6 @@ export default function SwapTabScreen() {
     run();
   }, []);
   useGetAllPools();
-  console.log(`swapPair, balances: `, swapPair, balances);
   return (
     <Layout>
       <Header
