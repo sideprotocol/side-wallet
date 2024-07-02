@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDebouncedCallback } from "use-debounce";
+import { useDebouncedCallback } from 'use-debounce';
 
 import { KEYRING_TYPE } from '@/shared/constant';
 import { Column, Content, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
@@ -21,7 +21,7 @@ import { useWallet } from '@/ui/utils';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import useGetAllPools from '@/ui/hooks/useGetAllPools';
 import { findAssetIcon } from '@/ui/utils/swap';
-import TokenCurrent from "@/ui/components/TokenCurrent";
+import TokenCurrent from '@/ui/components/TokenCurrent';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
@@ -41,11 +41,11 @@ const InitBalance = () => {
 
     const client = await CosmWasmClient.connect('https://testnet-rpc.side.one');
 
-    console.log(`currentAccount?.address, asset.base: `, currentAccount?.address, asset.base);
+    console.log('currentAccount?.address, asset.base: ', currentAccount?.address, asset.base);
     const balance = await client.getBalance(currentAccount?.address, asset.base);
 
-    console.log(`client: `, client);
-    console.log(`client: `, balance);
+    console.log('client: ', client);
+    console.log('client: ', balance);
     return {
       available: BigNumber(balance?.amount || '0')
         .div(BigNumber(10).pow(asset.exponent))
@@ -56,7 +56,7 @@ const InitBalance = () => {
 
   // useGetAllPools();
   const getBalancesAll = async () => {
-    console.log(`SWAP_ASSETS.assets: `, SWAP_ASSETS.assets);
+    console.log('SWAP_ASSETS.assets: ', SWAP_ASSETS.assets);
     const balances = await Promise.all(SWAP_ASSETS.assets.map((asset) => getBalance(asset)));
     const balancesObject = balances.reduce((acc, cur, index) => {
       return {
@@ -80,7 +80,7 @@ const InitBalance = () => {
 };
 
 const NativeBalance = () => {
-  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || "{}");
+  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
 
   const { swapPair, balances } = useSwapStore();
 
@@ -91,17 +91,17 @@ const NativeBalance = () => {
 
   const validNativeInput = BigNumber(swapPair?.native?.amount || 0).gt(0) && swapPair?.native?.denom;
 
-  const nativeBalance = balances[swapPair?.native?.denom || ""]?.available || "0";
+  const nativeBalance = balances[swapPair?.native?.denom || '']?.available || '0';
 
   const assetNativeIcon = findAssetIcon(swapPair?.native);
 
   const nativePrice = (
     new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(
-      unitPriceMap[assetNativeIcon?.coingecko_id || ""]?.usd || "0"
+      unitPriceMap[assetNativeIcon?.coingecko_id || '']?.usd || '0'
     ) || 0
   )
     .toFixed(8, BigNumber.ROUND_DOWN)
-    .replace(/\.?0+$/, "");
+    .replace(/\.?0+$/, '');
 
   return (
     <div style={{
@@ -151,7 +151,7 @@ const NativeBalance = () => {
 };
 
 const RemoteBalance = () => {
-  const unitPriceMap = JSON.parse(localStorage.getItem("unitPriceMap") || "{}");
+  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
 
   const { swapPair, balances } = useSwapStore();
   const currentAccount = useCurrentAccount();
@@ -161,17 +161,17 @@ const RemoteBalance = () => {
 
   const validRemoteInput = BigNumber(swapPair?.remote?.amount || 0).gt(0) && swapPair?.native?.denom;
 
-  const remoteBalance = balances[swapPair?.remote?.denom || ""]?.available || "0";
+  const remoteBalance = balances[swapPair?.remote?.denom || '']?.available || '0';
 
   const assetRemoteIcon = findAssetIcon(swapPair?.remote);
 
   const remotePrice = (
     new BigNumber(!swapPair?.remote?.amount ? 0 : swapPair?.remote?.amount).multipliedBy(
-      unitPriceMap[assetRemoteIcon?.coingecko_id || ""]?.usd || "0"
+      unitPriceMap[assetRemoteIcon?.coingecko_id || '']?.usd || '0'
     ) || 0
   )
     .toFixed(8, BigNumber.ROUND_DOWN)
-    .replace(/\.?0+$/, "");
+    .replace(/\.?0+$/, '');
 
   return (
     <div style={{
@@ -181,7 +181,7 @@ const RemoteBalance = () => {
       width: '100%',
     }} >
       {validRemoteInput ? (
-        <div style={{ color: '#7D7D7D', fontSize: "14px" }}>${remotePrice == "NaN" ? "0" : BigNumber(remotePrice).toFormat()}</div>
+        <div style={{ color: '#7D7D7D', fontSize: '14px' }}>${remotePrice == 'NaN' ? '0' : BigNumber(remotePrice).toFormat()}</div>
       ) : (
         <div></div>
       )}
@@ -228,7 +228,7 @@ const NativeInput = () => {
       amount: value,
       denom: swapStore.swapPair['native'].denom,
     };
-    console.log(`swapStore.swapPair: `, swapStore.swapPair);
+    console.log('swapStore.swapPair: ', swapStore.swapPair);
   }, 500);
 
   return (

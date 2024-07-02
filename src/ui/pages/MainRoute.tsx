@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { HashRouter, Route, Routes, useNavigate as useNavigateOrigin } from 'react-router-dom';
-
+import axios from 'axios';
 import { LoadingOutlined } from '@ant-design/icons';
+
+import { ASSETS, SWAP_ASSETS } from '@/ui/constants';
 
 import { Content, Icon, Layout } from '../components';
 import useGetTokenPrice from '../hooks/useGetTokenPrice';
@@ -371,6 +373,28 @@ export function useNavigate() {
   );
 }
 
+const getCoinUnitPrice = async () => {
+  let ids = ASSETS.concat([SWAP_ASSETS]).map((item) => item.assets.map((asset) => asset.coingecko_id));
+  ids = [...new Set(ids)];
+  ids = [...new Set(ids)];
+  if (!ids) {
+    return {};
+  }
+  const { data } = await axios
+    .get('/api/v3/simple/price', {
+      baseURL: 'https://api.coingecko.com',
+      params: {
+        ids: ids.join(','),
+        vs_currencies: 'usd',
+      },
+    })
+    .catch(() => {
+      localStorage.setItem('unitPriceMap', JSON.stringify({ cosmos: { usd: 9.95 }, 'usd-coin': { usd: 0.997278 } }));
+      return;
+    });
+  localStorage.setItem('unitPriceMap', JSON.stringify(data));
+};
+
 const Main = () => {
   const wallet = useWallet();
   const dispatch = useAppDispatch();
@@ -453,6 +477,13 @@ const Main = () => {
         });
       }
     });
+    getCoinUnitPrice();
+    const unitInterval = setInterval(() => {
+      getCoinUnitPrice();
+    }, 3600000);
+    return () => {
+      clearInterval(unitInterval);
+    };
   }, []);
 
   useEffect(() => {
