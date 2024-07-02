@@ -22,6 +22,7 @@ import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import useGetAllPools from '@/ui/hooks/useGetAllPools';
 import { findAssetIcon } from '@/ui/utils/swap';
 import TokenCurrent from '@/ui/components/TokenCurrent';
+import { removeStartZero } from '@/ui/utils/format';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
@@ -241,6 +242,24 @@ const NativeInput = () => {
   );
 };
 
+const RemoteInput = () => {
+  const { swapPair } = useSwapStore();
+  const currentAccount = useCurrentAccount();
+  return (
+    <CoinInput
+      coin={swapPair?.remote}
+      readOnly
+      onChange={(value) => {
+        if (!currentAccount?.address) return;
+        swapStore.swapPair['remote'] = {
+          amount: removeStartZero(value),
+          denom: swapStore.swapPair['remote'].denom,
+        };
+      }}
+    />
+  );
+};
+
 export default function SwapTabScreen() {
   // const { swapPair, balances } = useSwapStore();
   const { tokenModalShow, balances, swapRouteResult, hoverExchange, swapPair, responseLoading, modalTokenType, searchTokenValue, showValidDetail } =
@@ -372,19 +391,19 @@ export default function SwapTabScreen() {
                 // swapStore.hoverExchange = false;
               }}
               onClick={() => {
-                // const nativePair = swapStore.swapPair.native;
-                //
-                // const remotePair = swapStore.swapPair.remote;
-                //
-                // swapStore.swapPair.native = {
-                //   ...remotePair,
-                //   amount: "1",
-                // };
-                //
-                // swapStore.swapPair.remote = {
-                //   ...nativePair,
-                //   amount: "",
-                // };
+                const nativePair = swapStore.swapPair.native;
+
+                const remotePair = swapStore.swapPair.remote;
+
+                swapStore.swapPair.native = {
+                  ...remotePair,
+                  amount: '1',
+                };
+
+                swapStore.swapPair.remote = {
+                  ...nativePair,
+                  amount: '',
+                };
               }}>
               <Icon icon={'swap-down-icon'}></Icon>
               {/*{!hoverExchange ? <ExchangeDefaultSVG color="black" /> : <ExchangeSVG />}*/}
@@ -410,33 +429,19 @@ export default function SwapTabScreen() {
                 borderRadius: '100px',
                 padding: '20px 0px'
               }}>
-              {/*<NativeInput />*/}
-              <CoinInput
-                coin={{
-                  amount: 0
-                }}
-                readOnly
-                onChange={(value) => {
-                  // if (!curChain?.chainID) {
-                  //   return;
-                  // }
-                  // swapStore.swapPair["remote"] = {
-                  //   amount: removeStartZero(value),
-                  //   denom: swapStore.swapPair["remote"].denom,
-                  // };
+
+              <RemoteInput />
+
+              <TokenCurrent
+                value={swapPair.remote}
+                setShow={() => {
+                  swapStore.modalTokenType = 'remote';
+                  swapStore.tokenModalShow = true;
                 }}
               />
-
-              {/*<TokenCurrent*/}
-              {/*  value={swapPair.native}*/}
-              {/*  setShow={() => {*/}
-              {/*    swapStore.tokenModalShow = true;*/}
-              {/*    swapStore.modalTokenType = "native";*/}
-              {/*  }}*/}
-              {/*/>*/}
             </Row>
 
-            {/*<NativeBalance></NativeBalance>*/}
+            <RemoteBalance />
           </Column>
 
           {/*<ConfirmButton />*/}

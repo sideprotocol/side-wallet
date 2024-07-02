@@ -28,10 +28,8 @@ export function useGetSideTokenBalance(base: string) {
       networkType === NetworkType.MAINNET ? SIDERPC_URL_MAINNET : SIDERPC_URL_TESTNET
     );
     console.log(`SIDERPC_URL_TESTNET: `, SIDERPC_URL_TESTNET);
-    debugger;
     const { amount } = await cosmwasmClient.getBalance(currentAccount.address, base);
     await wallet.setAccountSideTokenBalance(currentAccount.address, base, amount);
-    debugger;
     setBalanceAmount(amount);
   };
 
