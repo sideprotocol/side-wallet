@@ -16,6 +16,7 @@ import { useWallet } from '@/ui/utils';
 import { makeSignDoc as makeSignDocAmino } from '@cosmjs/amino';
 import { serializeSignDoc } from '@cosmjs/amino/build/signdoc';
 import { createWasmAminoConverters } from '@cosmjs/cosmwasm-stargate';
+import { wasmTypes } from '@cosmjs/cosmwasm-stargate/build/modules';
 import { fromBase64, fromHex, toBase64 } from '@cosmjs/encoding';
 import { EncodeObject, GeneratedType, Registry, TxBodyEncodeObject, makeAuthInfoBytes } from '@cosmjs/proto-signing';
 import {
@@ -67,7 +68,7 @@ const aminoTypes = new AminoTypes({
 
 const sideProtoRegistry: Iterable<[string, GeneratedType]> = [...sideBTCBridgeRegistry.registry];
 
-const registry = new Registry([...defaultRegistryTypes, ...sideProtoRegistry]);
+const registry = new Registry([...defaultRegistryTypes, ...wasmTypes, ...sideProtoRegistry]);
 
 enum BroadcastMode {
   SYNC = 'BROADCAST_MODE_SYNC',
@@ -81,7 +82,6 @@ export function useSignAndBroadcastTxRaw() {
   const networkType = useNetworkType();
   const restUrl = networkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET;
   const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
-  console.log(chainId);
 
   const signAndBroadcastTxRaw = async ({
     messages,
