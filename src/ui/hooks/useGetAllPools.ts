@@ -60,7 +60,6 @@ export default function useGetAllPools() {
 
       swapStore.allPools = pools;
       console.log('pools: ', pools);
-      debugger;
 
       return pools as IPoolItem[];
     },

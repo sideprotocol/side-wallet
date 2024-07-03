@@ -1,4 +1,4 @@
-import { ToastOptions as ToastOptionsType } from "react-hot-toast";
+import { ToastOptions as ToastOptionsType } from 'react-hot-toast';
 
 export const DURATION = 5000;
 

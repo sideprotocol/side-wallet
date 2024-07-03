@@ -94,3 +94,4 @@ export const SIDE_BTC_INDEXER = '';
 export const SIDE_BTC_EXPLORER = '';
 
 export const DEX_CONTRACT = 'bc1ppvrwmjuusn9wh34j7y520g8gumuy9xtl3gvprlljfdpwju3x7ucsahm9gq';
+export const DEX_ROUTER_CONTRACT = 'bc1phzz0s0ucrhdp6tue2lxk3c03nj6f60qy463we7lgx0wudd72ctmspp5ww8';

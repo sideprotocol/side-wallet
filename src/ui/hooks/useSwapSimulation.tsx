@@ -25,7 +25,6 @@ export default function useSwapSimulation() {
             .replace(/\.?0+$/, '')
         : data.exchangeRate;
     }
-    debugger;
     const outputAmount =
       mode === 'limit' && rateModified
         ? BigNumber(swapPair.native.amount || '0')
@@ -68,8 +67,6 @@ export default function useSwapSimulation() {
     BigNumber(swapPair.native?.amount || '0').gt(0) &&
     swapPair?.native.denom !== swapPair?.remote.denom &&
     allPools.length > 0;
-
-  debugger;
   useEffect(() => {
     if (!validPair) {
       setData(emptyResponse);
@@ -114,11 +111,9 @@ export default function useSwapSimulation() {
           return 1;
         });
 
-      debugger;
       const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
 
       if (transmuterPools?.length > 0) {
-        debugger;
         const selectedPool = transmuterPools[0];
         const offerToken = {
           ...selectedPool.assetsMeta[swapPair.native.denom],
@@ -178,7 +173,6 @@ export default function useSwapSimulation() {
       }
 
       if (resultQuote.length > 0) {
-        debugger;
         setData(resultQuote[0]);
       } else {
         setData(emptyResponse);

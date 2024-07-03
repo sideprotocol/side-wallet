@@ -25,6 +25,7 @@ import useGetAllPools from '@/ui/hooks/useGetAllPools';
 import { findAssetIcon } from '@/ui/utils/swap';
 import TokenCurrent from '@/ui/components/TokenCurrent';
 import { removeStartZero } from '@/ui/utils/format';
+import useSwap from '@/ui/hooks/useSwap';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
@@ -259,6 +260,90 @@ const RemoteInput = () => {
         };
       }}
     />
+  );
+};
+
+const ConfirmButton = () => {
+  // const { client, setConnectModal } = useWalletContext();
+  const currentAccount = useCurrentAccount();
+  const notConnected = !currentAccount || !currentAccount?.address;
+
+  const { swap } = useSwap();
+
+  const { swapLoading, swapPair, balances, swapRouteResult } = useSwapStore();
+
+  const priceImpact = swapRouteResult.priceImpact;
+
+  const priceImpactRaw = BigNumber(priceImpact).div(100);
+
+  function insufficientBalance() {
+    return BigNumber(swapPair.native.amount || "0").gt(balances?.[swapPair.native?.denom || ""]?.available || 0);
+  }
+
+  const isDisabled = () => {
+    return (
+      insufficientBalance() ||
+      !swapStore.swapPair.native?.amount ||
+      !swapStore.swapPair.remote?.amount ||
+      parseFloat(swapStore.swapPair.native?.amount) <= 0 ||
+      parseFloat(swapStore.swapPair.remote?.amount) <= 0 ||
+      swapLoading ||
+      BigNumber(priceImpactRaw || "0").gt(0.5)
+    );
+  };
+
+  const buttonText =
+    !swapPair?.native?.denom || !swapPair?.remote?.denom
+      ? "Select a token"
+      : BigNumber(swapPair?.native?.amount).eq(0)
+        ? "Enter an amount"
+        : insufficientBalance()
+          ? "Insufficient Amount"
+          : BigNumber(priceImpactRaw).gt(0.5)
+            ? "Price Impact >50%"
+            : swapLoading
+              ? ""
+              : "Swap";
+
+  if (notConnected) {
+    return (
+      <Button
+        themetype="primary"
+        sx={{
+          mt: "12px",
+          width: "100%",
+          fontSize: "18px",
+          fontWeight: 500,
+        }}
+        onClick={async () => {
+          setConnectModal(true);
+        }}
+      >
+        Connect
+      </Button>
+    );
+  }
+
+  return (
+    <LoadingButton
+      themetype="primary"
+      sx={{
+        mt: "12px",
+        width: "100%",
+        fontSize: "18px",
+        fontWeight: 500,
+        // color: "white",
+      }}
+      onClick={async () => {
+        if (!isDisabled()) {
+          swap();
+        }
+      }}
+      disabled={isDisabled()}
+      loading={swapLoading}
+    >
+      {buttonText}
+    </LoadingButton>
   );
 };
 
