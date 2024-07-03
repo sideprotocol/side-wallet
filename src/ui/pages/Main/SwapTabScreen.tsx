@@ -26,14 +26,14 @@ import { findAssetIcon } from '@/ui/utils/swap';
 import TokenCurrent from '@/ui/components/TokenCurrent';
 import { removeStartZero } from '@/ui/utils/format';
 import useSwap from '@/ui/hooks/useSwap';
+import LoadingIcon from '@/ui/assets/icons/loading.svg';
+import { colors } from '@/ui/theme/colors';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
   // const { client: curClient, curChain } = useWalletContext();
 
   const { reloadDataTrigger } = useSwapStore();
-  // console.log(`currentAccount: `, currentAccount);
-  // debugger;
 
   const getBalance = async (asset: IAsset) => {
     if (!currentAccount?.address) {
@@ -58,18 +58,15 @@ const InitBalance = () => {
     };
   };
 
-  // useGetAllPools();
   const getBalancesAll = async () => {
     console.log('SWAP_ASSETS.assets: ', SWAP_ASSETS.assets);
     const balances = await Promise.all(SWAP_ASSETS.assets.map((asset) => getBalance(asset)));
-    const balancesObject = balances.reduce((acc, cur, index) => {
+    swapStore.balances = balances.reduce((acc, cur, index) => {
       return {
         ...acc,
         [SWAP_ASSETS.assets[index].base]: cur
       };
     }, {});
-
-    swapStore.balances = balancesObject;
   };
 
   useEffect(() => {
@@ -87,9 +84,6 @@ const NativeBalance = () => {
   const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
 
   const { swapPair, balances } = useSwapStore();
-
-  // const { client } = useWalletContext();
-
   const currentAccount = useCurrentAccount();
   const connected = !!currentAccount?.address && swapPair?.native.denom;
 
@@ -138,6 +132,7 @@ const NativeBalance = () => {
               position: 'relative',
               minWidth: '20px',
               left: '4px',
+              color: colors.primary,
             }}
             onClick={() => {
               swapStore.swapPair['native'] = {
@@ -263,10 +258,18 @@ const RemoteInput = () => {
   );
 };
 
+
+
+function LoadingIndicator() {
+  return (
+    <img className="loading-obj" src={LoadingIcon} width={26} height={26} alt={'Loading'} />
+  );
+}
+
 const ConfirmButton = () => {
   // const { client, setConnectModal } = useWalletContext();
   const currentAccount = useCurrentAccount();
-  const notConnected = !currentAccount || !currentAccount?.address;
+  // const notConnected = !currentAccount || !currentAccount?.address;
 
   const { swap } = useSwap();
 
@@ -277,7 +280,7 @@ const ConfirmButton = () => {
   const priceImpactRaw = BigNumber(priceImpact).div(100);
 
   function insufficientBalance() {
-    return BigNumber(swapPair.native.amount || "0").gt(balances?.[swapPair.native?.denom || ""]?.available || 0);
+    return BigNumber(swapPair.native.amount || '0').gt(balances?.[swapPair.native?.denom || '']?.available || 0);
   }
 
   const isDisabled = () => {
@@ -288,62 +291,54 @@ const ConfirmButton = () => {
       parseFloat(swapStore.swapPair.native?.amount) <= 0 ||
       parseFloat(swapStore.swapPair.remote?.amount) <= 0 ||
       swapLoading ||
-      BigNumber(priceImpactRaw || "0").gt(0.5)
+      BigNumber(priceImpactRaw || '0').gt(0.5)
     );
   };
 
   const buttonText =
     !swapPair?.native?.denom || !swapPair?.remote?.denom
-      ? "Select a token"
+      ? 'Select a token'
       : BigNumber(swapPair?.native?.amount).eq(0)
-        ? "Enter an amount"
+        ? 'Enter an amount'
         : insufficientBalance()
-          ? "Insufficient Amount"
+          ? 'Insufficient Amount'
           : BigNumber(priceImpactRaw).gt(0.5)
-            ? "Price Impact >50%"
+            ? 'Price Impact >50%'
             : swapLoading
-              ? ""
-              : "Swap";
-
-  if (notConnected) {
-    return (
-      <Button
-        themetype="primary"
-        sx={{
-          mt: "12px",
-          width: "100%",
-          fontSize: "18px",
-          fontWeight: 500,
-        }}
-        onClick={async () => {
-          setConnectModal(true);
-        }}
-      >
-        Connect
-      </Button>
-    );
-  }
-
+              ? ''
+              : 'Swap';
   return (
-    <LoadingButton
-      themetype="primary"
-      sx={{
-        mt: "12px",
-        width: "100%",
-        fontSize: "18px",
-        fontWeight: 500,
-        // color: "white",
-      }}
+    // <LoadingButton
+    //   themetype="primary"
+    //   sx={{
+    //     mt: "12px",
+    //     width: "100%",
+    //     fontSize: "18px",
+    //     fontWeight: 500,
+    //     // color: "white",
+    //   }}
+    //   onClick={async () => {
+    //     if (!isDisabled()) {
+    //       swap();
+    //     }
+    //   }}
+    //   disabled={isDisabled()}
+    //   loading={swapLoading}
+    // >
+    //   {buttonText}
+    // </LoadingButton>
+    <Button
+      full
+      text={buttonText}
+      preset="primary"
+      disabled={isDisabled()}
+      icon={swapLoading ? <LoadingIndicator /> : undefined}
       onClick={async () => {
         if (!isDisabled()) {
           swap();
         }
       }}
-      disabled={isDisabled()}
-      loading={swapLoading}
-    >
-      {buttonText}
-    </LoadingButton>
+    />
   );
 };
 
@@ -535,17 +530,16 @@ export default function SwapTabScreen() {
 
               <RemoteBalance />
             </Column>
-
-            {/*<ConfirmButton />*/}
             <Row mt={'xl'} full>
-              <Button
-                full
-                text="Swap"
-                preset="primary"
-                onClick={async () => {
-                  // alert('Swap');
-                }}
-              />
+              {/*<Button*/}
+              {/*  full*/}
+              {/*  text="Swap"*/}
+              {/*  preset="primary"*/}
+              {/*  onClick={async () => {*/}
+              {/*    // alert('Swap');*/}
+              {/*  }}*/}
+              {/*/>*/}
+              <ConfirmButton />
             </Row>
 
             {/*{showValidDetail && <SwapDetail />}*/}

@@ -5,13 +5,13 @@ import { DEX_CONTRACT } from '@/ui/constants';
 // import { useWalletContext } from "@/components/WalletContext";
 import { IPairItem } from '@/ui/services/dex/type';
 import { NetworkType } from '@/shared/types';
-import { SIDEREST_URL_MAINNET, SIDEREST_URL_TESTNET } from '@/shared/constant';
+import { SIDEREST_URL_MAINNET, SIDEREST_URL_TESTNET, SIDERPC_URL_TESTNET } from '@/shared/constant';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 
 export default function useGetAllPairs() {
   // const { client, curChain } = useWalletContext();
   const networkType = useNetworkType();
-  const restUrl = networkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET;
+  const restUrl = networkType === NetworkType.MAINNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
   // debugger;
   const { data, isLoading: loading } = useQuery({
     queryKey: ['getAllPairs'],

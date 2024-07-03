@@ -7,7 +7,7 @@ import useGetAllPairs from './useGetAllPairs';
 import { findAssetIcon } from '@/ui/utils/swap';
 import { swapStore } from '@/ui/stores/SwapStore';
 import { NetworkType } from '@/shared/types';
-import { SIDEREST_URL_MAINNET, SIDEREST_URL_TESTNET } from '@/shared/constant';
+import { SIDEREST_URL_MAINNET, SIDEREST_URL_TESTNET, SIDERPC_URL_TESTNET } from '@/shared/constant';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 
@@ -16,7 +16,7 @@ export default function useGetAllPools() {
   const networkType = useNetworkType();
   const currentAccount = useCurrentAccount();
   const { data: pairs } = useGetAllPairs();
-  const restUrl = networkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET;
+  const restUrl = networkType === NetworkType.MAINNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
 
   const { data, isLoading: loading } = useQuery({
     queryKey: ['getAllPools'],

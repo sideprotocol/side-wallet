@@ -87,8 +87,13 @@ export default function useSwapSimulation() {
 
       const unitAmount = toUnitAmount(swapPair.native.amount, assetIn?.exponent || '6');
 
-      const resultQuote = await services.dex.getValidRoutes(swapPair.native.denom, unitAmount, swapPair.remote.denom);
-
+      let resultQuote
+      try{
+        resultQuote = await services.dex.getValidRoutes(swapPair.native.denom, unitAmount, swapPair.remote.denom);
+      } catch (e) {
+        console.log(e);
+        debugger;
+      }
       // const resultQuote = [];
 
       const transmuterPools = swapStore.allPools

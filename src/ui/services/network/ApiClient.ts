@@ -1,6 +1,6 @@
-import Axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import Axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-import { ApiConfiguration } from "./ApiConfiguration";
+import { ApiConfiguration } from './ApiConfiguration';
 
 export default class ApiClient {
   private client: AxiosInstance;
@@ -10,9 +10,9 @@ export default class ApiClient {
   ): AxiosInstance {
     return Axios.create({
       baseURL: apiConfiguration.baseURL,
-      responseType: "json" as const,
+      responseType: 'json' as const,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       timeout: 10 * 1000,
     });

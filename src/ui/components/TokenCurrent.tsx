@@ -3,6 +3,7 @@ import ImageIcon from './ImageIcon';
 import { Coin } from '@cosmjs/stargate';
 import { SWAP_ASSETS } from '@/ui/constants';
 
+
 function Icon({ type }: { type: string }) {
   return (
     <svg
@@ -30,8 +31,8 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
       padding: '8px 8px',
       cursor: 'pointer',
       borderRadius: '24px',
-      color: unSelected ? 'white' : 'black',
-      background: unSelected ? '#0DD4C3' : 'white',
+      color: unSelected ? 'white' : 'white',
+      background: unSelected ? 'black' : 'black',
       minWidth: 'max-content',
       ':hover': {
         background: unSelected ? '#0DD4C3' : 'rgba(234,234,234,0.5)',

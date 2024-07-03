@@ -19,10 +19,12 @@ import services from '@/ui/services';
 import { ToastOptions } from '@/ui/constants/toast';
 import { Pool, SwapRouteResult } from '@/ui/services/dex/type';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 
 export default function useSwap() {
   const { slippage, swapPair, swapRouteResult } = useSwapStore();
 
+  const currentAccount = useCurrentAccount();
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
   const { pools, returnToken } = swapRouteResult;
 
@@ -75,7 +77,7 @@ export default function useSwap() {
     timer.current = setTimeout(async () => {
       try {
         const result = await services.tx.getTxByHash(txHash, {
-          baseURL: curChain.restUrl,
+          baseURL: 'https://testnet-rest.side.one/',
         });
 
         refreshData(async () => {
@@ -180,7 +182,7 @@ export default function useSwap() {
           }
         });
 
-        if (result.tx_response.code === 0) {
+        if (result?.tx_response?.code === 0) {
           swapStore.swapLoading = false;
 
           const des = 'Transaction Successful! Your swap has been executed.';
@@ -215,21 +217,26 @@ export default function useSwap() {
 
   async function swap() {
     try {
-      if (!client?.address) return;
+      if (!currentAccount?.address) return;
 
       const funds = [coin(unitAmount, native.denom)];
       swapStore.swapLoading = true;
 
+      debugger;
       const txMsg = createExecuteMessage({
         message: msg,
-        senderAddress: client?.address,
+        senderAddress: currentAccount?.address,
         contractAddress: DEX_ROUTER_CONTRACT,
         funds,
       });
 
-      // const result = await signAndBroadcastTxRaw(client, client.address, curWallet, [txMsg], BigNumber('600000').times(pools.length).toFixed());
-      //
-      // confirmTx(result?.transactionHash);
+      const result = await signAndBroadcastTxRaw({
+        messages: [txMsg],
+        memo: '',
+        gas: BigNumber('600000').times(pools.length).toFixed(),
+      });
+      confirmTx(result?.transactionHash);
+      debugger;
     } catch (error) {
       toast.custom(
         (t) => (
