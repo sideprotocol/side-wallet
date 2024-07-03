@@ -175,7 +175,6 @@ export function useSignAndBroadcastTxRaw() {
     const signedGasLimit = Number(signed.fee.gas);
     const signedSequence = Number(signed.sequence);
 
-    console.log(11);
     const signedAuthInfoBytes = makeAuthInfoBytes(
       [{ pubkey, sequence: signedSequence }],
       signed.fee.amount,
@@ -184,7 +183,6 @@ export function useSignAndBroadcastTxRaw() {
       signed.fee.payer,
       signMode
     );
-    console.log(22);
 
     return TxRaw.fromPartial({
       bodyBytes: signedTxBodyBytes,
