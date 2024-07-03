@@ -228,11 +228,23 @@ export default function useSwap() {
         funds
       });
 
-      const result = await signAndBroadcastTxRaw({
-        messages: [txMsg],
-        memo: '',
-        gas: BigNumber('600000').times(pools.length).toFixed()
-      });
+      try {
+        console.log(`txMsg: `, txMsg);
+        const result = await signAndBroadcastTxRaw({
+          messages: [txMsg],
+          memo: '',
+          gas: BigNumber('600000').times(pools.length).toFixed(),
+        });
+        confirmTx(result?.transactionHash);
+      } catch (err) {
+        debugger;
+        console.log(`err: `, err);
+      }
+      // const result = await signAndBroadcastTxRaw({
+      //   messages: [txMsg],
+      //   memo: '',
+      //   gas: BigNumber('600000').times(pools.length).toFixed(),
+      // });
       // confirmTx(result?.transactionHash);
       debugger;
     } catch (error) {

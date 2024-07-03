@@ -10,6 +10,7 @@ import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
+import SwapDetail from '@/ui/components/Swap/detail';
 import { SWAP_ASSETS } from '@/ui/constants';
 import { IAsset } from '@/ui/constants/assets';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
@@ -530,19 +531,13 @@ export default function SwapTabScreen() {
 
               <RemoteBalance />
             </Column>
-            <Row mt={'xl'} full>
-              {/*<Button*/}
-              {/*  full*/}
-              {/*  text="Swap"*/}
-              {/*  preset="primary"*/}
-              {/*  onClick={async () => {*/}
-              {/*    // alert('Swap');*/}
-              {/*  }}*/}
-              {/*/>*/}
+
+            <Column mt={'xl'}>
+              {showValidDetail && <SwapDetail />}
+            </Column>
+            <Row mt={'xl'} full >
               <ConfirmButton />
             </Row>
-
-            {/*{showValidDetail && <SwapDetail />}*/}
           </Column>
         </Content>
         <Footer px="zero" py="zero">
