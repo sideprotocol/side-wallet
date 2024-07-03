@@ -1,8 +1,9 @@
-import SuccessSVG from '@/ui/assets/icons/success.svg?react';
-import FailSVG from '@/ui/assets/icons/fail.svg?react';
+// import SuccessSVG from '@/ui/assets/icons/success.svg?react';
+// import FailSVG from '@/ui/assets/icons/fail.svg?react';
 // import CLose_7SVG from "@/assets/icons/close_7.svg?react";
+import React, { useEffect, useState } from 'react';
 import toast, { Toast } from 'react-hot-toast';
-import React, { useState, useEffect } from 'react';
+
 import { ToastOptions } from '@/ui/constants/toast';
 
 interface IToastView {
@@ -44,32 +45,30 @@ export default function ToastView({ children, type, toaster, txHashUrl }: IToast
   return (
     <div
       style={{
-        width: "400px",
-        padding: "15px",
-        borderRadius: "16px",
-        background: "white",
+        width: '400px',
+        padding: '15px',
+        borderRadius: '16px',
+        background: 'white',
         fontWeight: 500,
-        position: "relative",
-        display: "flex",
-        flexDirection: "row",
-        gap: "8px",
-        right: "40px",
-        bottom: "50px",
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '8px',
+        right: '40px',
+        bottom: '50px'
       }}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div >
-        {type === "success" && <SuccessSVG />}
-        {type === "fail" && <FailSVG />}
+      onMouseLeave={() => setIsHovered(false)}>
+      <div>
+        {/* {type === 'success' && <SuccessSVG />}
+        {type === 'fail' && <FailSVG />} */}
       </div>
       <div
         style={{
-          width: "100%",
-          paddingRight: "50px",
-          overflowWrap: "break-word",
-        }}
-      >
+          width: '100%',
+          paddingRight: '50px',
+          overflowWrap: 'break-word'
+        }}>
         {children}
 
         {txHashUrl && (
@@ -77,21 +76,23 @@ export default function ToastView({ children, type, toaster, txHashUrl }: IToast
             <a
               href={txHashUrl}
               style={{
-                color: "#3C8AFF",
-                border: "none",
-                fontSize: "12px",
-                fontWeight: "500",
-                textTransform: "capitalize",
+                color: '#3C8AFF',
+                border: 'none',
+                fontSize: '12px',
+                fontWeight: '500',
+                textTransform: 'capitalize'
               }}
-              target="_blank"
-            >
+              rel="noreferrer"
+              target="_blank">
               View Transaction
             </a>
           </div>
         )}
 
         <div className="absolute bottom-2 w-3/5    h-0.5 bg-gray-200">
-          <div className={`absolute top-0 h-full`} style={{ width: `${progress}%`, background: type == "success" ? "#0DD4C3" : "#F6465D" }}></div>
+          <div
+            className={`absolute top-0 h-full`}
+            style={{ width: `${progress}%`, background: type == 'success' ? '#0DD4C3' : '#F6465D' }}></div>
         </div>
       </div>
       {/*<IconButton*/}

@@ -1,25 +1,20 @@
-import { useWalletContext } from '@/ui/components/WalletContext';
-import { useSwapStore, refreshData, swapStore } from '@/ui/stores/SwapStore';
-import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-import { findAssetIcon } from '@/ui/utils/swap';
 import BigNumber from 'bignumber.js';
-
-import { Box } from '@mui/material';
-
-import { coin } from '@cosmjs/stargate';
-
+import { useRef } from 'react';
 import toast from 'react-hot-toast';
-import ToastView from '@/ui/components/ToastView';
 
-import createExecuteMessage from '@/ui/utils/createExecuteMessage';
+import ToastView from '@/ui/components/ToastView';
 // import signAndBroadcastTxRaw from '@/ui/utils/createTxRaw';
 import { DEX_ROUTER_CONTRACT } from '@/ui/constants';
-import { useRef } from 'react';
-import services from '@/ui/services';
 import { ToastOptions } from '@/ui/constants/toast';
+import services from '@/ui/services';
 import { Pool, SwapRouteResult } from '@/ui/services/dex/type';
-import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
+import { refreshData, swapStore, useSwapStore } from '@/ui/stores/SwapStore';
+import createExecuteMessage from '@/ui/utils/createExecuteMessage';
+import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
+import { findAssetIcon } from '@/ui/utils/swap';
+import { coin } from '@cosmjs/stargate';
 
 export default function useSwap() {
   const { slippage, swapPair, swapRouteResult } = useSwapStore();
@@ -54,20 +49,20 @@ export default function useSwap() {
           astro_swap: {
             offer_asset_info: {
               native_token: {
-                denom: p.offerToken.denom,
-              },
+                denom: p.offerToken.denom
+              }
             },
             ask_asset_info: {
               native_token: {
-                denom: p.returnToken.denom,
-              },
-            },
-          },
+                denom: p.returnToken.denom
+              }
+            }
+          }
         };
       }),
       minimum_receive: minReceived,
-      max_spread: '0.5',
-    },
+      max_spread: '0.5'
+    }
   };
 
   const confirmTx = async (txHash: string) => {
@@ -77,11 +72,15 @@ export default function useSwap() {
     timer.current = setTimeout(async () => {
       try {
         const result = await services.tx.getTxByHash(txHash, {
-          baseURL: 'https://testnet-rest.side.one/',
+          baseURL: 'https://testnet-rest.side.one/'
         });
 
         refreshData(async () => {
-          const resultQuote = await services.dex.getValidRoutes(swapPair.native.denom, unitAmount, swapPair.remote.denom);
+          const resultQuote = await services.dex.getValidRoutes(
+            swapPair.native.denom,
+            unitAmount,
+            swapPair.remote.denom
+          );
 
           const transmuterPools = swapStore.allPools
             .filter((p) => {
@@ -90,7 +89,9 @@ export default function useSwap() {
                 swapPair.native.denom in p.assetsMeta &&
                 swapPair.remote.denom in p.assetsMeta &&
                 p.pair.pair_type?.['custom'] === 'transmuter' &&
-                BigNumber(pAssetOut?.amount || 0).gte(toUnitAmount(toReadableAmount(unitAmount, assetIn?.exponent || 6), assetOut?.exponent || 6))
+                BigNumber(pAssetOut?.amount || 0).gte(
+                  toUnitAmount(toReadableAmount(unitAmount, assetIn?.exponent || 6), assetOut?.exponent || 6)
+                )
               );
             })
             .sort((a, b) => {
@@ -113,10 +114,13 @@ export default function useSwap() {
               showAmount: swapPair.native.amount,
               denom: swapPair.native.denom,
               price: unitPriceMap?.[assetIn?.coingecko_id || '']?.usd || '0',
-              volume: '',
+              volume: ''
             };
 
-            const remoteAmount = toUnitAmount(toReadableAmount(unitAmount, assetIn?.exponent || 6), assetOut?.exponent || 6);
+            const remoteAmount = toUnitAmount(
+              toReadableAmount(unitAmount, assetIn?.exponent || 6),
+              assetOut?.exponent || 6
+            );
 
             const returnToken = {
               ...selectedPool.assetsMeta[swapPair.remote.denom],
@@ -124,7 +128,7 @@ export default function useSwap() {
               showAmount: swapPair.native.amount,
               denom: swapPair.remote.denom,
               price: unitPriceMap?.[assetOut?.coingecko_id || '']?.usd || '0',
-              volume: '',
+              volume: ''
             };
 
             const formattedPool: Pool = {
@@ -136,7 +140,7 @@ export default function useSwap() {
               feeAmount: '0',
               feeRate: '0',
               marketPrice: '0',
-              feeShowAmount: '0',
+              feeShowAmount: '0'
             };
 
             const result: SwapRouteResult = {
@@ -152,7 +156,7 @@ export default function useSwap() {
                 .replace(/\.?0*$/, ''),
               pools: [formattedPool],
               priceImpact: '0',
-              sort: 100,
+              sort: 100
             };
 
             if (resultQuote?.length > 0 && BigNumber(remoteAmount).gt(resultQuote?.[0]?.returnToken?.amount || '0')) {
@@ -171,44 +175,38 @@ export default function useSwap() {
               amount:
                 BigNumber(resultQuote[0]?.returnToken?.showAmount || '0')
                   .toFixed(assetOut?.precision || 6, BigNumber.ROUND_DOWN)
-                  .replace(/\.?0+$/, '') || '0',
+                  .replace(/\.?0+$/, '') || '0'
             };
           } else {
             swapStore.swapRouteResult = {} as SwapRouteResult;
             swapStore.swapPair['remote'] = {
               denom: swapPair.remote.denom,
-              amount: '',
+              amount: ''
             };
           }
         });
 
-        if (result?.tx_response?.code === 0) {
-          swapStore.swapLoading = false;
+        // if (result?.tx_response?.code === 0) {
+        //   swapStore.swapLoading = false;
 
-          const des = 'Transaction Successful! Your swap has been executed.';
+        //   const des = 'Transaction Successful! Your swap has been executed.';
 
-          toast.custom(
-            (t) => (
-              <ToastView toaster={t} type="success" txHashUrl={`${curChain.explorerUrl}/tx/${result.tx_response.txhash}`}>
-                <div style={{ color: '#000000', marginBottom: '6px', fontSize: '12px', fontWeight: '500' }}>{des}</div>
-              </ToastView>
-            ),
-            ToastOptions
-          );
-        } else {
-          swapStore.swapLoading = false;
+        //   toast.custom(
+        //     (t) => (
+        //       <ToastView
+        //         toaster={t}
+        //         type="success"
+        //         txHashUrl={`${curChain.explorerUrl}/tx/${result.tx_response.txhash}`}>
+        //         <div style={{ color: '#000000', marginBottom: '6px', fontSize: '12px', fontWeight: '500' }}>{des}</div>
+        //       </ToastView>
+        //     ),
+        //     ToastOptions
+        //   );
+        // } else {
+        //   swapStore.swapLoading = false;
 
-          const des = 'Transaction failed. Please try again.';
-
-          toast.custom(
-            (t) => (
-              <ToastView toaster={t} type="fail" txHashUrl={`${curChain.explorerUrl}/tx/${result.tx_response.txhash}`}>
-                <div style={{ color: '#000000', marginBottom: '6px', fontSize: '12px', fontWeight: '500' }}>{des}</div>
-              </ToastView>
-            ),
-            ToastOptions
-          );
-        }
+        //   const des = 'Transaction failed. Please try again.';
+        // }
       } catch (err) {
         confirmTx(txHash);
       }
@@ -227,32 +225,33 @@ export default function useSwap() {
         message: msg,
         senderAddress: currentAccount?.address,
         contractAddress: DEX_ROUTER_CONTRACT,
-        funds,
+        funds
       });
 
       const result = await signAndBroadcastTxRaw({
         messages: [txMsg],
         memo: '',
-        gas: BigNumber('600000').times(pools.length).toFixed(),
+        gas: BigNumber('600000').times(pools.length).toFixed()
       });
-      confirmTx(result?.transactionHash);
+      // confirmTx(result?.transactionHash);
       debugger;
     } catch (error) {
       toast.custom(
         (t) => (
           <ToastView toaster={t} type="fail">
-            <div style={{ color: '#000000', marginBottom: '6px', fontSize: '12px', fontWeight: '500' }}>{(error as Error).message}</div>
+            <div style={{ color: '#000000', marginBottom: '6px', fontSize: '12px', fontWeight: '500' }}>
+              {(error as Error).message}
+            </div>
           </ToastView>
         ),
         ToastOptions
       );
 
       swapStore.swapLoading = false;
-    } finally {
     }
   }
 
   return {
-    swap,
+    swap
   };
 }
