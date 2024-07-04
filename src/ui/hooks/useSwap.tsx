@@ -25,9 +25,6 @@ export default function useSwap() {
   const currentAccount = useCurrentAccount();
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
   const { pools, returnToken } = swapRouteResult;
-
-  // const { client, curWallet, curChain } = useWalletContext();
-
   const { native, remote } = swapPair;
 
   const assetIn = findAssetIcon(native);
@@ -76,12 +73,10 @@ export default function useSwap() {
     // @ts-ignore
     timer.current = setTimeout(async () => {
       try {
-        debugger;
         const result = await services.tx.getTxByHash(txHash, {
           baseURL: 'https://testnet-rest.side.one/'
         });
 
-        debugger;
         refreshData(async () => {
           const resultQuote = await services.dex.getValidRoutes(
             swapPair.native.denom,
@@ -242,13 +237,7 @@ export default function useSwap() {
       swapStore.swapLoading = false;
       // debugger;
       navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
-      // confirmTx(result?.transactionHash);
-      // const result = await signAndBroadcastTxRaw({
-      //   messages: [txMsg],
-      //   memo: '',
-      //   gas: BigNumber('600000').times(pools.length).toFixed(),
-      // });
-      // confirmTx(result?.transactionHash);
+      // confirmTx(result?.tx_response?.txhash);
     } catch (error) {
       debugger;
       toast.custom(

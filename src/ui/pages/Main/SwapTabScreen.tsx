@@ -309,25 +309,6 @@ const ConfirmButton = () => {
               ? ''
               : 'Swap';
   return (
-    // <LoadingButton
-    //   themetype="primary"
-    //   sx={{
-    //     mt: "12px",
-    //     width: "100%",
-    //     fontSize: "18px",
-    //     fontWeight: 500,
-    //     // color: "white",
-    //   }}
-    //   onClick={async () => {
-    //     if (!isDisabled()) {
-    //       swap();
-    //     }
-    //   }}
-    //   disabled={isDisabled()}
-    //   loading={swapLoading}
-    // >
-    //   {buttonText}
-    // </LoadingButton>
     <Button
       full
       text={buttonText}
@@ -365,11 +346,9 @@ export default function SwapTabScreen() {
     swapRouteResult?.pools?.length &&
     swapRouteResult?.pools?.length > 0;
   useEffect(() => {
-    if (!validResult) {
-      swapStore.showValidDetail = false;
-    } else {
-      swapStore.showValidDetail = true;
-    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    swapStore.showValidDetail = validResult;
   }, [validResult]);
 
   // const currentAccount = useCurrentAccount();
