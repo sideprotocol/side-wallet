@@ -181,7 +181,7 @@ const RemoteBalance = () => {
       width: '100%',
     }} >
       {validRemoteInput ? (
-        <div style={{ color: '#7D7D7D', fontSize: '14px' }}>${remotePrice == 'NaN' ? '0' : BigNumber(remotePrice).toFormat()}</div>
+        <div style={{ color: '#fff', fontSize: '14px' }}>${remotePrice == 'NaN' ? '0' : BigNumber(remotePrice).toFormat()}</div>
       ) : (
         <div></div>
       )}
@@ -192,7 +192,7 @@ const RemoteBalance = () => {
           display: 'flex',
           alignItems: 'center',
         }}>
-          <div style={{ color: 'black', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ color: '#fff', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(remoteBalance)
@@ -333,7 +333,7 @@ const ConfirmButton = () => {
       text={buttonText}
       preset="primary"
       disabled={isDisabled()}
-      icon={swapLoading ? <LoadingIndicator /> : undefined}
+      icon={swapLoading ? 'loading' : undefined}
       onClick={async () => {
         if (!isDisabled()) {
           swap();
@@ -532,12 +532,12 @@ export default function SwapTabScreen() {
               <RemoteBalance />
             </Column>
 
-            <Column mt={'xl'}>
-              {showValidDetail && <SwapDetail />}
-            </Column>
             <Row mt={'xl'} full >
               <ConfirmButton />
             </Row>
+            <Column mt={'xl'}>
+              {showValidDetail && <SwapDetail />}
+            </Column>
           </Column>
         </Content>
         <Footer px="zero" py="zero">

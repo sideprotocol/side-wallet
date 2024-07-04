@@ -50,6 +50,7 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
             width: '20px',
             height: '20px',
             marginRight: '4px',
+            borderRadius: '20px',
           }}
           url={newValue?.logo || newValue?.logo}
         />

@@ -153,8 +153,8 @@ const $baseTextStyle: CSSProperties = {
 
 const $textPresets: Record<Presets, CSSProperties> = {
   default: $baseTextStyle,
-  primary: Object.assign({}, $baseTextStyle, { color: colors.black }),
-  approval: Object.assign({}, $baseTextStyle, { color: colors.black }),
+  primary: Object.assign({}, $baseTextStyle, { color: colors.white }),
+  approval: Object.assign({}, $baseTextStyle, { color: colors.white }),
   danger: Object.assign({}, $baseTextStyle, { color: colors.white }),
   bar: Object.assign({}, $baseTextStyle, { textAlign: 'left', fontWeight: 'bold' } as CSSProperties),
 

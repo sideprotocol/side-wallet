@@ -35,7 +35,7 @@ export function Header(props: HeaderProps) {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '14px 16px 20px',
-        marginBottom: '10px'
+        // marginBottom: '10px'
         // borderBottom: '1px solid #1E1E1F',
       }}>
       <Row full>

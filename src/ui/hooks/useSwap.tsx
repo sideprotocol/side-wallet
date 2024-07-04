@@ -15,10 +15,13 @@ import createExecuteMessage from '@/ui/utils/createExecuteMessage';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { findAssetIcon } from '@/ui/utils/swap';
 import { coin } from '@cosmjs/stargate';
+import { CHAINS_ENUM } from '@/shared/constant';
+import { useNavigate } from '@/ui/pages/MainRoute';
 
 export default function useSwap() {
   const { slippage, swapPair, swapRouteResult } = useSwapStore();
 
+  const navigate = useNavigate();
   const currentAccount = useCurrentAccount();
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
   const { pools, returnToken } = swapRouteResult;
@@ -40,7 +43,7 @@ export default function useSwap() {
           .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
           .toFixed(0, BigNumber.ROUND_DOWN);
 
-  const timer = useRef<NodeJS.Timeout | null>(null);
+  const timer = useRef(null);
 
   const msg = {
     execute_swap_operations: {
@@ -69,12 +72,16 @@ export default function useSwap() {
     if (timer.current) {
       clearTimeout(timer.current);
     }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     timer.current = setTimeout(async () => {
       try {
+        debugger;
         const result = await services.tx.getTxByHash(txHash, {
           baseURL: 'https://testnet-rest.side.one/'
         });
 
+        debugger;
         refreshData(async () => {
           const resultQuote = await services.dex.getValidRoutes(
             swapPair.native.denom,
@@ -219,8 +226,6 @@ export default function useSwap() {
 
       const funds = [coin(unitAmount, native.denom)];
       swapStore.swapLoading = true;
-
-      debugger;
       const txMsg = createExecuteMessage({
         message: msg,
         senderAddress: currentAccount?.address,
@@ -228,26 +233,24 @@ export default function useSwap() {
         funds
       });
 
-      try {
-        console.log(`txMsg: `, txMsg);
-        const result = await signAndBroadcastTxRaw({
-          messages: [txMsg],
-          memo: '',
-          gas: BigNumber('600000').times(pools.length).toFixed(),
-        });
-        confirmTx(result?.transactionHash);
-      } catch (err) {
-        debugger;
-        console.log(`err: `, err);
-      }
+      console.log('txMsg: ', txMsg);
+      const result = await signAndBroadcastTxRaw({
+        messages: [txMsg],
+        memo: '',
+        gas: BigNumber('600000').times(pools.length).toFixed(),
+      });
+      swapStore.swapLoading = false;
+      // debugger;
+      navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
+      // confirmTx(result?.transactionHash);
       // const result = await signAndBroadcastTxRaw({
       //   messages: [txMsg],
       //   memo: '',
       //   gas: BigNumber('600000').times(pools.length).toFixed(),
       // });
       // confirmTx(result?.transactionHash);
-      debugger;
     } catch (error) {
+      debugger;
       toast.custom(
         (t) => (
           <ToastView toaster={t} type="fail">
