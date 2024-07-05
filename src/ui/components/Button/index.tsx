@@ -4,9 +4,10 @@ import { colors } from '@/ui/theme/colors';
 import { spacing } from '@/ui/theme/spacing';
 
 import { Column } from '../Column';
+import { Icon, IconTypes } from '../Icon';
 import { Row } from '../Row';
 import { Text } from '../Text';
-import { Icon } from '../Icon';
+
 type Presets = keyof typeof $viewPresets;
 export interface ButtonProps {
   /**
@@ -49,7 +50,7 @@ export interface ButtonProps {
    */
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
-  icon?: React.ReactNode;
+  icon?: IconTypes;
   disabled?: boolean;
   full?: boolean;
 }
@@ -153,7 +154,7 @@ const $baseTextStyle: CSSProperties = {
 
 const $textPresets: Record<Presets, CSSProperties> = {
   default: $baseTextStyle,
-  primary: Object.assign({}, $baseTextStyle, { color: colors.white }),
+  primary: Object.assign({}, $baseTextStyle, { color: colors.black }),
   approval: Object.assign({}, $baseTextStyle, { color: colors.white }),
   danger: Object.assign({}, $baseTextStyle, { color: colors.white }),
   bar: Object.assign({}, $baseTextStyle, { textAlign: 'left', fontWeight: 'bold' } as CSSProperties),
@@ -165,7 +166,11 @@ const $textPresets: Record<Presets, CSSProperties> = {
 
 const $rightAccessoryStyle: CSSProperties = { marginLeft: spacing.extraSmall, zIndex: 1 };
 const $leftAccessoryStyle: CSSProperties = { marginRight: spacing.extraSmall, zIndex: 1 };
-const $baseDisabledViewStyle: CSSProperties = { cursor: 'not-allowed', opacity: 0.5 };
+const $baseDisabledViewStyle: CSSProperties = {
+  cursor: 'not-allowed',
+  opacity: 0.5,
+  background: colors.grey_dark
+};
 export function Button(props: ButtonProps) {
   const {
     text,
@@ -194,7 +199,12 @@ export function Button(props: ButtonProps) {
     disabled ? $baseDisabledViewStyle : {},
     full ? { flex: 1 } : {}
   );
-  const $textStyle = Object.assign({}, $textPresets[preset], $textStyleOverride);
+  const $textStyle = Object.assign(
+    {},
+    $textPresets[preset],
+    $textStyleOverride,
+    disabled ? { color: colors.text } : {}
+  );
 
   const $subTextStyle = Object.assign({}, $textPresets[preset], {
     color: colors.white_muted,
@@ -235,7 +245,7 @@ export function Button(props: ButtonProps) {
       onMouseLeave={() => setHover(false)}>
       {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
       {/*{icon}*/}
-      <Icon icon={icon} color={icon === 'expand' ? "black" : "white"} />
+      <Icon icon={icon} color={icon === 'expand' ? 'black' : 'white'} />
       {text && <Text style={$textStyle} text={text} preset="regular-bold" />}
       {children}
       {RightAccessory && <div style={$rightAccessoryStyle}>{RightAccessory}</div>}

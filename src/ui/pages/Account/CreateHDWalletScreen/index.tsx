@@ -103,7 +103,6 @@ export default function CreateHDWalletScreen() {
       />
       <Column
         style={{
-          flex: 1,
           padding: '0 16px 24px'
         }}>
         <StepBar

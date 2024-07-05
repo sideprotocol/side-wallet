@@ -68,7 +68,8 @@ export default function Step1_Create({
       <Column
         style={{
           flex: 1,
-          overflow: 'hidden'
+          overflow: 'hidden',
+          padding: '0 16px 24px'
         }}>
         <Column
           style={{
@@ -110,7 +111,7 @@ export default function Step1_Create({
                         key={index}
                         style={{
                           gap: '8px',
-                          height: '32px',
+                          height: '36px',
                           borderRadius: '8px',
                           border: '1px solid #FFFFFF33',
                           backgroundColor: '#121212'
@@ -123,7 +124,7 @@ export default function Step1_Create({
                         />
                         <Input
                           containerStyle={{
-                            minHeight: '30px',
+                            minHeight: '34px',
                             padding: '0 10px',
                             flex: 1,
                             border: 'none',

@@ -86,7 +86,8 @@ export default function Step1_Import({
     <Column
       style={{
         flex: 1,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        padding: '0 16px 24px'
       }}>
       <Column
         style={{
@@ -128,7 +129,7 @@ export default function Step1_Import({
                     key={index}
                     style={{
                       gap: '8px',
-                      height: '32px',
+                      height: '36px',
                       borderRadius: '8px',
                       border: '1px solid #FFFFFF33',
                       backgroundColor: '#121212'
@@ -141,7 +142,7 @@ export default function Step1_Import({
                     />
                     <Input
                       containerStyle={{
-                        minHeight: '30px',
+                        minHeight: '34px',
                         padding: '0 10px',
                         flex: 1,
                         border: 'none',
@@ -182,7 +183,6 @@ export default function Step1_Import({
         <Column
           style={{
             marginTop: '24px',
-            border: '1px solid #404045',
             boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
             backgroundColor: '#222222',
             borderRadius: '14px',

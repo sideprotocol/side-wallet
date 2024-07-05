@@ -49,7 +49,8 @@ export default function Step2_Verify({
     <Column
       style={{
         flex: 1,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        padding: '0 16px 24px'
       }}>
       <Column
         style={{

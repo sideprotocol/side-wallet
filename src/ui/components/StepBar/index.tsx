@@ -26,8 +26,7 @@ export function StepBar(props: IStepBarProps) {
             width: '8px',
             height: '8px',
             borderRadius: '50%',
-            backgroundColor: +item.key <= +activeKey ? '#0DD4C3' : '#D9D9D9',
-            cursor: 'pointer'
+            backgroundColor: +item.key <= +activeKey ? '#0DD4C3' : '#D9D9D9'
           }}
         />
       ))}

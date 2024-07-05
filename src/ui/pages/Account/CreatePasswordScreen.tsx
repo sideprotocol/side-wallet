@@ -150,6 +150,15 @@ export default function CreatePasswordScreen() {
               alignItems: 'center'
             }}
             justifyBetween>
+            <Checkbox
+              style={{
+                borderRadius: '4px'
+              }}
+              defaultChecked={check}
+              onChange={(e) => {
+                setCheck(e.target.checked);
+              }}
+            />
             <Text
               text="I understand that I will not be able to access my wallet on this device if I forget my password"
               style={{
@@ -157,12 +166,6 @@ export default function CreatePasswordScreen() {
                 opacity: 0.5,
                 fontSize: '12px',
                 lineHeight: '18px'
-              }}
-            />
-            <Checkbox
-              defaultChecked={check}
-              onChange={(e) => {
-                setCheck(e.target.checked);
               }}
             />
           </Row>
