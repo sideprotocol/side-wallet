@@ -2,10 +2,13 @@ import BigNumber from 'bignumber.js';
 import { useRef } from 'react';
 import toast from 'react-hot-toast';
 
-import ToastView from '@/ui/components/ToastView';
 // import signAndBroadcastTxRaw from '@/ui/utils/createTxRaw';
+import { CHAINS_ENUM, SIDEREST_URL_MAINNET, SIDEREST_URL_TESTNET } from '@/shared/constant';
+import { NetworkType } from '@/shared/types';
+import ToastView from '@/ui/components/ToastView';
 import { DEX_ROUTER_CONTRACT } from '@/ui/constants';
 import { ToastOptions } from '@/ui/constants/toast';
+import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { Pool, SwapRouteResult } from '@/ui/services/dex/type';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -15,11 +18,12 @@ import createExecuteMessage from '@/ui/utils/createExecuteMessage';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { findAssetIcon } from '@/ui/utils/swap';
 import { coin } from '@cosmjs/stargate';
-import { CHAINS_ENUM } from '@/shared/constant';
-import { useNavigate } from '@/ui/pages/MainRoute';
+
+import { useNetworkType } from '../state/settings/hooks';
 
 export default function useSwap() {
   const { slippage, swapPair, swapRouteResult } = useSwapStore();
+  const netWorkType = useNetworkType();
 
   const navigate = useNavigate();
   const currentAccount = useCurrentAccount();
@@ -73,8 +77,8 @@ export default function useSwap() {
     // @ts-ignore
     timer.current = setTimeout(async () => {
       try {
-        const result = await services.tx.getTxByHash(txHash, {
-          baseURL: 'https://testnet-rest.side.one/'
+        await services.tx.getTxByHash(txHash, {
+          baseURL: netWorkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET
         });
 
         refreshData(async () => {
@@ -232,7 +236,7 @@ export default function useSwap() {
       const result = await signAndBroadcastTxRaw({
         messages: [txMsg],
         memo: '',
-        gas: BigNumber('600000').times(pools.length).toFixed(),
+        gas: BigNumber('600000').times(pools.length).toFixed()
       });
       swapStore.swapLoading = false;
       // debugger;
