@@ -54,23 +54,12 @@ export default function EditAccountNameScreen() {
         }}>
         <Column style={{ flex: 1, gap: '0' }}>
           <Text
-            text="Previous Account Name"
-            color="white_muted"
-            style={{
-              fontSize: '14px',
-              fontWeight: 400,
-              lineHeight: '24px'
-            }}
-          />
-          <Input value={account.alianName} disabled />
-          <Text
             text="New Account Name"
             color="white_muted"
             style={{
               fontSize: '14px',
               fontWeight: 400,
-              lineHeight: '24px',
-              marginTop: '16px'
+              lineHeight: '24px'
             }}
           />
           <Input

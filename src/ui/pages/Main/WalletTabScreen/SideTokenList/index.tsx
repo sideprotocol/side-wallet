@@ -13,16 +13,15 @@ function TokenItem({ token }: { token: SideToken }) {
 
   return (
     <Row
-      full
       justifyBetween
       style={{
         cursor: 'pointer',
         backgroundColor: '#1D1D1F',
-        padding: '10px 20px',
+        padding: '10px 16px',
         borderRadius: 10
       }}>
       <Row>
-        <Image src={token.logo} size={42}></Image>
+        <Image src={token.logo} size={38}></Image>
         <Column
           style={{
             gap: '0px'

@@ -50,8 +50,8 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
           padding: '0 6px 0 14px',
           borderRadius: '10px',
           marginTop: '16px',
-          background: selected ? '#22AB384D' : '#2E2E2F',
-          border: `1px solid ${selected ? '#22AB38' : '#2E2E2F'}`,
+          background: selected ? 'rgba(34, 171, 56, 0.1)' : '#2E2E2F',
+          border: `1px solid ${selected ? 'rgba(34, 171, 56, 0.1)' : '#2E2E2F'}`,
           cursor: 'pointer'
         }}
         onClick={async (e) => {
@@ -252,12 +252,7 @@ export default function SwitchAccountScreen() {
         style={{ flex: 1, overflow: 'auto', marginBottom: '16px' }}>
         {(item, index) => <ForwardMyItem account={item.account} autoNav={true} />}
       </VirtualList>
-      <Button
-        text="Add Account"
-        preset="ghost"
-        icon={<Image src="./images/icons/plus.svg" size={20} />}
-        onClick={add}
-      />
+      <Button text="Add Account" preset="ghost" icon={'plus'} onClick={add} />
     </>
   );
 }

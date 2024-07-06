@@ -116,7 +116,7 @@ export default function Step2_Verify({
                 border: '1px solid #FFFFFF33',
                 backgroundColor: '#121212'
               }}
-              style={{ width: '100%', color: '#fff', textAlign: 'right' }}
+              style={{ width: '100%', color: '#fff', textAlign: 'right', fontWeight: 600 }}
               value={firstWordInput}
               onChange={(e) => {
                 setFirstWordInput(e.target.value);
@@ -150,7 +150,7 @@ export default function Step2_Verify({
                 border: '1px solid #FFFFFF33',
                 backgroundColor: '#121212'
               }}
-              style={{ width: '100%', color: '#fff', textAlign: 'right' }}
+              style={{ width: '100%', color: '#fff', textAlign: 'right', fontWeight: 600 }}
               value={secondWordInput}
               onChange={(e) => {
                 setSecondWordInput(e.target.value);

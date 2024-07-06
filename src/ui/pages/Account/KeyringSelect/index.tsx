@@ -156,7 +156,7 @@ export default function WalletSelect() {
           <Button
             text="Add Wallet"
             preset="ghost"
-            icon={<Image src="./images/icons/plus.svg" size={20} />}
+            icon={'plus'}
             onClick={() => {
               navigate('WelcomeScreen', { addWallet: true });
             }}

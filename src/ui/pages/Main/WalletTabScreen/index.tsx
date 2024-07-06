@@ -99,7 +99,7 @@ export default function WalletTabScreen() {
               <Text text="Dapp Connected" size="xxs" />
             </Row>
           ) : (
-            <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} />
+            <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxl} />
           )
         }
         title={
@@ -125,7 +125,7 @@ export default function WalletTabScreen() {
           style={{
             marginTop: '16px',
             gap: '12px',
-            alignItems: 'center'
+            alignItems: 'flex-end'
           }}>
           {balanceVisible ? (
             <Row
@@ -168,7 +168,8 @@ export default function WalletTabScreen() {
 
         <Row
           style={{
-            justifyContent: 'space-around',
+            justifyContent: 'center',
+            gap: '50px',
             marginTop: '32px'
           }}>
           <Column
@@ -254,7 +255,8 @@ export default function WalletTabScreen() {
         <Column
           style={{
             padding: '0 16px',
-            marginBottom: '20px'
+            marginBottom: '20px',
+            gap: '0px'
           }}>
           <Text
             text="Tokens"

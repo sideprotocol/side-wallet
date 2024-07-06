@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useLocation, useNavigate as useNavigateRouter } from 'react-router-dom';
 
 import { KEYRING_TYPE } from '@/shared/constant';
-import { Button, Column, Header, Image, Text } from '@/ui/components';
+import { Button, Column, Header, Image, Layout, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useKeyrings } from '@/ui/state/keyrings/hooks';
 
@@ -22,46 +22,18 @@ export default function () {
     return keyrings.find((item) => item.index === index);
   }, [keyrings]);
   return (
-    <Column
-      fullY
-      fullX
-      style={{
-        gap: '0',
-        padding: '0 16px 24px'
-      }}>
+    <Layout>
       <Header title={keyring?.alianName} onBack={() => navigateRouter(-1)} />
       <Column
         style={{
           flex: 1,
-          gap: '10px'
+          padding: '0 16px 24px'
         }}>
-        <div
+        <Column
           style={{
-            height: '50px',
-            borderRadius: '10px',
-            padding: '0 10px',
-            cursor: 'pointer',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}
-          className="walletSettingItem"
-          onClick={() => {
-            navigate('EditWalletNameScreen', { keyring });
+            flex: 1,
+            gap: '10px'
           }}>
-          <Text
-            text="Edit Wallet Name"
-            color="text"
-            style={{
-              fontSize: '16px',
-              fontWeight: 500,
-              lineHeight: '19px'
-            }}
-          />
-          <Image src="./images/icons/chevron-down.svg" size={24} />
-        </div>
-
-        {keyring?.type === KEYRING_TYPE.HdKeyring && (
           <div
             style={{
               height: '50px',
@@ -74,10 +46,10 @@ export default function () {
             }}
             className="walletSettingItem"
             onClick={() => {
-              navigate('ExportMnemonicsScreen', { keyring });
+              navigate('EditWalletNameScreen', { keyring });
             }}>
             <Text
-              text="View Recovery Phrase"
+              text="Edit Wallet Name"
               color="text"
               style={{
                 fontSize: '16px',
@@ -87,15 +59,43 @@ export default function () {
             />
             <Image src="./images/icons/chevron-down.svg" size={24} />
           </div>
-        )}
+
+          {keyring?.type === KEYRING_TYPE.HdKeyring && (
+            <div
+              style={{
+                height: '50px',
+                borderRadius: '10px',
+                padding: '0 10px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+              className="walletSettingItem"
+              onClick={() => {
+                navigate('ExportMnemonicsScreen', { keyring });
+              }}>
+              <Text
+                text="View Recovery Phrase"
+                color="text"
+                style={{
+                  fontSize: '16px',
+                  fontWeight: 500,
+                  lineHeight: '19px'
+                }}
+              />
+              <Image src="./images/icons/chevron-down.svg" size={24} />
+            </div>
+          )}
+        </Column>
+        <Button
+          preset="ghostDanger"
+          text={`Delete ${keyring?.alianName}`}
+          onClick={() => {
+            navigate('DeleteWalletScreen', { index: keyring?.index });
+          }}
+        />
       </Column>
-      <Button
-        preset="ghostDanger"
-        text={`Delete ${keyring?.alianName}`}
-        onClick={() => {
-          navigate('DeleteWalletScreen', { index: keyring?.index });
-        }}
-      />
-    </Column>
+    </Layout>
   );
 }

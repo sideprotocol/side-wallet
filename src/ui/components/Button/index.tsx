@@ -111,7 +111,7 @@ const $viewPresets = {
   } as CSSProperties),
 
   ghostDanger: Object.assign({}, $baseViewStyle, {
-    border: `1px solid ${colors.red}`,
+    border: `1px solid rgb(255 255 255 / 40%)`,
     justifyContent: 'center',
     paddingTop: spacing.medium,
     paddingBottom: spacing.medium
@@ -169,7 +169,7 @@ const $leftAccessoryStyle: CSSProperties = { marginRight: spacing.extraSmall, zI
 const $baseDisabledViewStyle: CSSProperties = {
   cursor: 'not-allowed',
   opacity: 0.5,
-  background: colors.grey_dark
+  backgroundColor: colors.grey_dark
 };
 export function Button(props: ButtonProps) {
   const {
@@ -240,12 +240,13 @@ export function Button(props: ButtonProps) {
   return (
     <div
       style={$viewStyle}
+      className="2323"
       onClick={disabled ? undefined : onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>
       {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
       {/*{icon}*/}
-      <Icon icon={icon} color={icon === 'expand' ? 'black' : 'white'} />
+      <Icon icon={icon} color={icon === 'expand' ? 'black' : icon === 'plus' ? 'primary' : 'white'} />
       {text && <Text style={$textStyle} text={text} preset="regular-bold" />}
       {children}
       {RightAccessory && <div style={$rightAccessoryStyle}>{RightAccessory}</div>}

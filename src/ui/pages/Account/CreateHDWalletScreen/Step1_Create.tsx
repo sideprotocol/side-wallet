@@ -80,7 +80,6 @@ export default function Step1_Create({
             <Column
               style={{
                 marginTop: '16px',
-                border: '1px solid #404045',
                 boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
                 backgroundColor: '#222222',
                 borderRadius: '14px',
@@ -157,7 +156,7 @@ export default function Step1_Create({
             style={{
               marginTop: '24px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
-              borderRadius: '14px',
+              borderRadius: '10px',
               padding: '10px',
               gap: '4px'
             }}>
@@ -192,7 +191,7 @@ export default function Step1_Create({
             style={{
               marginTop: '10px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
-              borderRadius: '14px',
+              borderRadius: '10px',
               padding: '10px',
               gap: '4px'
             }}>
@@ -227,7 +226,7 @@ export default function Step1_Create({
             style={{
               marginTop: '10px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
-              borderRadius: '14px',
+              borderRadius: '10px',
               padding: '10px',
               gap: '4px'
             }}>

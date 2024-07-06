@@ -26,7 +26,7 @@ export function ButtonGroup(props: IButtonGroupProps) {
         style={{
           backgroundColor: '#1E1E1F',
           borderRadius: '100px',
-          padding: '3px 0'
+          padding: '3px 5px'
         }}>
         {list.map((item) => {
           return (

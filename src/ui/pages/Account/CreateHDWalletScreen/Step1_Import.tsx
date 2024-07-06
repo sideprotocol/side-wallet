@@ -97,7 +97,6 @@ export default function Step1_Import({
         <Column
           style={{
             marginTop: '16px',
-            border: '1px solid #404045',
             boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
             backgroundColor: '#222222',
             borderRadius: '14px',

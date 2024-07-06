@@ -55,7 +55,8 @@ export default function EditWalletNameScreen() {
             style={{
               fontSize: '14px',
               fontWeight: 400,
-              lineHeight: '24px'
+              lineHeight: '24px',
+              marginTop: '24px'
             }}
           />
           <Input value={keyring.alianName} disabled />

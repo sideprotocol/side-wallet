@@ -39,10 +39,11 @@ export default function DeleteWalletScreen() {
   };
 
   useEffect(() => {
-    setDisabled(true);
     if (password) {
       setDisabled(false);
       setError('');
+    } else {
+      setDisabled(true);
     }
   }, [password]);
 
@@ -106,7 +107,7 @@ export default function DeleteWalletScreen() {
           style={{
             marginTop: '24px',
             backgroundColor: 'rgb(240 182 34 / 10%)',
-            borderRadius: '14px',
+            borderRadius: '10px',
             padding: '10px',
             gap: '4px'
           }}>

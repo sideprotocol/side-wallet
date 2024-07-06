@@ -147,7 +147,7 @@ export default function ExportPrivateKeyScreen() {
                 style={{
                   marginTop: '24px',
                   backgroundColor: 'rgb(240 182 34 / 10%)',
-                  borderRadius: '14px',
+                  borderRadius: '10px',
                   padding: '10px',
                   gap: '4px'
                 }}>
@@ -182,7 +182,7 @@ export default function ExportPrivateKeyScreen() {
                 style={{
                   marginTop: '10px',
                   backgroundColor: 'rgb(240 182 34 / 10%)',
-                  borderRadius: '14px',
+                  borderRadius: '10px',
                   padding: '10px',
                   gap: '4px'
                 }}>

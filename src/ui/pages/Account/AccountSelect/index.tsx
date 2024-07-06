@@ -53,7 +53,7 @@ const AccountSelect = () => {
             }}
           />
         </Column>
-        <Icon icon="down" />
+        <Icon icon="down" size={10} />
       </Row>
       <Drawer
         title={null}
