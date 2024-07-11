@@ -28,7 +28,7 @@
     "service_worker": "background.js"
   },
   "homepage_url": "https://side.one/",
-  "permissions": ["storage", "unlimitedStorage", "activeTab"],
+  "permissions": ["storage", "unlimitedStorage", "activeTab", "sidePanel", "contextMenus", "scripting"],
   "short_name": "__MSG_appName__",
 
   "content_scripts": [
@@ -48,5 +48,11 @@
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "minimum_chrome_version": "88",
+
+  "side_panel": {
+    "default_path": "index.html",
+    "openPanelOnActionClick": true
   }
 }

@@ -44,7 +44,7 @@ const InitBalance = () => {
       };
     }
 
-    const client = await CosmWasmClient.connect('https://testnet-rpc2.side.one');
+    const client = await CosmWasmClient.connect('https://testnet-rpc.side.one');
 
     console.log('currentAccount?.address, asset.base: ', currentAccount?.address, asset.base);
     const balance = await client.getBalance(currentAccount?.address, asset.base);
