@@ -358,10 +358,11 @@ export const SIDE_TOKENS: SideToken[] = [
   {
     base: 'uside',
     symbol: 'SIDE',
-    name: 'Side protocol',
+    name: 'SIDE',
     exponent: '6',
     coingecko_id: 'usd-coin',
     logo: '/images/logo/wallet-logo-white.svg',
+    logo_black: '/images/logo/wallet-logo.png',
     precision: 6
   },
   {

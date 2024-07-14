@@ -449,6 +449,7 @@ export interface SideToken {
   exponent: string;
   coingecko_id: string;
   logo: string;
+  logo_black?: string;
   precision: number;
 }
 

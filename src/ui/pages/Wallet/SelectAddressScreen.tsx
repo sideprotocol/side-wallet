@@ -2,6 +2,8 @@ import { Column, Content, Header, Layout, Row, Text } from '@/ui/components';
 import { shortAddress } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+import { useAccountAddress, useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useLocation } from 'react-router-dom';
 
 interface Address {
   type: string;
@@ -13,14 +15,17 @@ interface Address {
 export default function SelecAddressScreen() {
   // TODO: set select network
 
+  const currentAccount = useCurrentAccount();
+  const address = useAccountAddress();
+  const { state } = useLocation();
   const navigate = useNavigate();
 
   const addresses: Address[] = [
     {
       type: 'Taproot',
-      address: 'bc1pq2323232323cn3q',
-      balance: '1',
-      value: '$1'
+      address: address,
+      balance: '',
+      value: ''
     }
   ];
 
@@ -30,7 +35,7 @@ export default function SelecAddressScreen() {
         onBack={() => {
           window.history.go(-1);
         }}
-        title="Select crypto"
+        title="Select address"
       />
       <Content>
         <Column>
@@ -42,7 +47,9 @@ export default function SelecAddressScreen() {
                 }}
                 full
                 onClick={() => {
-                  navigate('ReceiveScreen');
+                  navigate('ReceiveScreen', {
+                    ...state
+                  });
                 }}
                 key={item.address}
                 justifyBetween>

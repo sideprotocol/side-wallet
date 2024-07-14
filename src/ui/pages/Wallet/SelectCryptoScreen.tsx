@@ -49,6 +49,8 @@ function BitCrypto() {
   };
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
   const { data: bitcoinTokenList } = useGetBitcoinTokenList();
+  // console.log(`chain, type: `, chain, type);
+  debugger;
   return (
     <>
       {bitcoinTokenList.map((token) => {
@@ -56,10 +58,10 @@ function BitCrypto() {
           <Row
             onClick={() => {
               if (type === 'receive') {
-                navigate('SelectAddressScreen', { chain, base: token.symbol });
+                navigate('SelectAddressScreen', { ...state, base: token.symbol, token });
               } else {
                 resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { chain, base: token.symbol });
+                navigate('TxCreateScreen', { ...state, base: token.symbol });
               }
             }}
             full
@@ -120,10 +122,10 @@ function SideCrypto() {
           <Row
             onClick={() => {
               if (type === 'receive') {
-                navigate('SelectAddressScreen', { chain, base: token.base });
+                navigate('SelectAddressScreen', { ...state, base: token.base, token });
               } else {
                 resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { chain, base: token.base });
+                navigate('TxCreateScreen', { ...state, base: token.base });
               }
             }}
             full

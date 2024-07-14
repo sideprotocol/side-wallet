@@ -1,4 +1,5 @@
 import QRCode from 'qrcode.react';
+import { fromHex } from '@cosmjs/encoding';
 
 import { Button, Card, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -7,12 +8,52 @@ import { sizes } from '@/ui/theme/spacing';
 import { copyToClipboard } from '@/ui/utils';
 
 import './index.less';
+import { CHAINS_ENUM } from '@/shared/constant';
+import { useLocation } from 'react-router-dom';
+
+function getAddressTypeUrl(address: string, chain: string) {
+  if (address.startsWith('tb1') || chain === 'side') {
+    if (address.length === 42) {
+      return {
+        algo: 'segwit',
+        typeUrl: '/cosmos.crypto.segwit.PubKey',
+      };
+    } else if (address.length === 62) {
+      return {
+        algo: 'taproot',
+        typeUrl: '/cosmos.crypto.taproot.PubKey',
+      };
+    }
+  } else if (address.startsWith('bc1')) {
+    if (address.length === 42) {
+      return {
+        algo: 'segwit',
+        typeUrl: '/cosmos.crypto.segwit.PubKey',
+      };
+    } else if (address.length === 62) {
+      return {
+        algo: 'taproot',
+        typeUrl: '/cosmos.crypto.taproot.PubKey',
+      };
+    }
+  } else {
+    throw new Error('Please switch to Native Segwit or Taproot address ');
+  }
+}
 
 export default function ReceiveScreen() {
   const currentAccount = useCurrentAccount();
   const address = useAccountAddress();
+  const { state } = useLocation();
+  // const { chain, type, base } = state as {
+  //   chain: CHAINS_ENUM;
+  //   type: 'receive' | 'send';
+  //   base: string;
+  // };
 
   const tools = useTools();
+  console.log(`chain, type, base: `, state, currentAccount);
+  debugger;
 
   return (
     <Layout>
@@ -37,7 +78,7 @@ export default function ReceiveScreen() {
               style={{
                 borderRadius: '100%'
               }}
-              src="/images/img/btc.png"></Image>
+              src={state?.token?.logo_black ? state?.token?.logo_black : state?.token?.logo}></Image>
 
             <Column>
               <Row>
@@ -47,7 +88,7 @@ export default function ReceiveScreen() {
                     padding: '0'
                   }}
                   color="black"
-                  text={'DOG•GO•TO•THE•MOON'}></Text>
+                  text={state?.token?.name}></Text>
               </Row>
 
               <Row>
@@ -59,12 +100,13 @@ export default function ReceiveScreen() {
                   color="black"
                   bg="orange"
                   preset="sub"
-                  text={'Bitcoin'}></Text>
+                  text={state?.base === 'BTC' ? 'Bitcoin' : 'Side'}></Text>
 
                 <Text
                   style={{
                     padding: '4px 8px',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
+                    // display: 'none',
                   }}
                   color="black"
                   preset="sub"
@@ -120,10 +162,12 @@ export default function ReceiveScreen() {
                 margin: 'auto',
                 textAlign: 'center'
               }}
-              text={'Send only Bitcoin network assets to this address'}></Text>
+              text={`Send only ${state?.chain === 'BTC' ? 'BTC' : 'Side'} network assets to this address`}></Text>
           </Column>
 
-          <Row full>
+          <Row style={{
+            display: 'none',
+          }} full>
             <Button full preset="primary" text="Set amount"></Button>
           </Row>
         </Card>
