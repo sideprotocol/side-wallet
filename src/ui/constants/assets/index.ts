@@ -82,6 +82,8 @@ export const SWAP_ASSETS_DEV: IChainAsset = {
     SIDE_DEV_ASSETLIST.Usdc,
     SIDE_DEV_ASSETLIST.Usdt,
     SIDE_DEV_ASSETLIST.Btc,
+    SIDE_DEV_ASSETLIST.Wbtc,
+    SIDE_DEV_ASSETLIST["runes/8776:1"],
   ],
 };
 
@@ -89,10 +91,11 @@ export const SWAP_ASSETS_TEST: IChainAsset = {
   chainID: SIDE_TEST_ID,
   assets: [
     SIDE_TEST_ASSETLIST.Side,
-    SIDE_TEST_ASSETLIST.Btct,
     SIDE_TEST_ASSETLIST.Usdc,
     SIDE_TEST_ASSETLIST.Usdt,
+    SIDE_TEST_ASSETLIST.Btc,
     SIDE_TEST_ASSETLIST.Wbtc,
+    SIDE_TEST_ASSETLIST['runes/9110:1'],
   ],
 };
 

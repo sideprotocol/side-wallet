@@ -6,6 +6,7 @@ import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
+import ImageIcon from '@/ui/components/ImageIcon';
 
 function TokenItem({ token }: { token: SideToken }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
@@ -21,7 +22,16 @@ function TokenItem({ token }: { token: SideToken }) {
         borderRadius: 10
       }}>
       <Row>
-        <Image src={token.logo} size={38}></Image>
+        {/*<Image src={token.logo} size={38}></Image>*/}
+        {/*<img style={{*/}
+        {/*  borderRadius: '50%',*/}
+        {/*}} width={38} height={38} src={token.logo} alt="logo" />*/}
+        {/*<Image src={token.logo} size={38}></Image>*/}
+        <ImageIcon url={token.logo} style={{
+          width: '38px',
+          height: '38px',
+          borderRadius: '50%',
+        }} />
         <Column
           style={{
             gap: '0px'

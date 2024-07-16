@@ -1,5 +1,5 @@
 export const SIDE_DEV_ID = "devnet";
-export const SIDE_TEST_ID = "S2-testnet-2";
+export const SIDE_TEST_ID = "grimoria-testnet-1";
 export const SIDE_MAIN_ID = "";
 export const COSMOS_DEV_ID = "theta-testnet-001";
 export const COSMOS_TEST_ID = "theta-testnet-001";

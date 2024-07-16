@@ -12,6 +12,12 @@ export const SIDE_DEV_GASTOKEN = [
     feeAmount: "60000",
   },
   {
+    symbol: SIDE_DEV_ASSETLIST.Btc.symbol,
+    logo: SIDE_DEV_ASSETLIST.Btc.logo,
+    denom: SIDE_DEV_ASSETLIST.Btc.base,
+    feeAmount: "100",
+  },
+  {
     symbol: SIDE_DEV_ASSETLIST.Usdc.symbol,
     logo: SIDE_DEV_ASSETLIST.Usdc.logo,
     denom: SIDE_DEV_ASSETLIST.Usdc.base,
@@ -32,10 +38,22 @@ export const SIDE_TEST_GASTOKEN = [
     feeAmount: "60000",
   },
   {
-    symbol: SIDE_TEST_ASSETLIST.Btct.symbol,
-    logo: SIDE_TEST_ASSETLIST.Btct.logo,
-    denom: SIDE_TEST_ASSETLIST.Btct.base,
+    symbol: SIDE_DEV_ASSETLIST.Btc.symbol,
+    logo: SIDE_DEV_ASSETLIST.Btc.logo,
+    denom: SIDE_DEV_ASSETLIST.Btc.base,
     feeAmount: "100",
+  },
+  {
+    symbol: SIDE_DEV_ASSETLIST.Usdc.symbol,
+    logo: SIDE_DEV_ASSETLIST.Usdc.logo,
+    denom: SIDE_DEV_ASSETLIST.Usdc.base,
+    feeAmount: "60000",
+  },
+  {
+    symbol: SIDE_DEV_ASSETLIST.Usdt.symbol,
+    logo: SIDE_DEV_ASSETLIST.Usdt.logo,
+    denom: SIDE_DEV_ASSETLIST.Usdt.base,
+    feeAmount: "60000",
   },
 ];
 export const SIDE_MAIN_GASTOKEN = [

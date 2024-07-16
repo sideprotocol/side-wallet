@@ -374,15 +374,18 @@ export function useNavigate() {
 }
 
 const getCoinUnitPrice = async () => {
-  let ids = ASSETS.concat([SWAP_ASSETS]).map((item) => item.assets.map((asset) => asset.coingecko_id));
-  ids = [...new Set(ids)];
-  ids = [...new Set(ids)];
-  if (!ids) {
+  const ids = ASSETS.concat([SWAP_ASSETS]).map((item) =>
+    item.assets.map((asset) => asset.coingecko_id)
+  );
+
+  const newIds = [...new Set(ids.flat())];
+  // ids = [...new Set(ids)];
+  if (!newIds) {
     return {};
   }
   const { data } = await axios
-    .get('/api/v3/simple/price', {
-      baseURL: 'https://api.coingecko.com',
+    .get('/overprices/api/simple/price', {
+      baseURL: 'https://insider.side.one/',
       params: {
         ids: ids.join(','),
         vs_currencies: 'usd',
