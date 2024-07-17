@@ -22,11 +22,6 @@ function TokenItem({ token }: { token: SideToken }) {
         borderRadius: 10
       }}>
       <Row>
-        {/*<Image src={token.logo} size={38}></Image>*/}
-        {/*<img style={{*/}
-        {/*  borderRadius: '50%',*/}
-        {/*}} width={38} height={38} src={token.logo} alt="logo" />*/}
-        {/*<Image src={token.logo} size={38}></Image>*/}
         <ImageIcon url={token.logo} style={{
           width: '38px',
           height: '38px',

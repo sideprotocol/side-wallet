@@ -11,6 +11,7 @@ import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+import ImageIcon from '@/ui/components/ImageIcon';
 
 function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
   const accountBalance = useAccountBalance();
@@ -50,7 +51,6 @@ function BitCrypto() {
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
   const { data: bitcoinTokenList } = useGetBitcoinTokenList();
   // console.log(`chain, type: `, chain, type);
-  debugger;
   return (
     <>
       {bitcoinTokenList.map((token) => {
@@ -85,7 +85,11 @@ function SideCryptoItem({ token }: { token: SideToken }) {
   return (
     <>
       <Row>
-        <Image src={token.logo} size={42}></Image>
+        <ImageIcon url={token.logo} style={{
+          width: '38px',
+          height: '38px',
+          borderRadius: '50%',
+        }} />
         <Column
           style={{
             gap: '0px'
