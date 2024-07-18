@@ -113,13 +113,6 @@ export default function SideTxConfirmScreen() {
               style={{
                 alignItems: 'center'
               }}>
-              {/*<Image*/}
-              {/*  src={curToken.logo}*/}
-              {/*  size={42}*/}
-              {/*  style={{*/}
-              {/*    borderRadius: '50%'*/}
-              {/*  }}*/}
-              {/*/>*/}
               <ImageIcon url={curToken.logo} style={{
                 width: '42px',
                 height: '42px',

@@ -397,7 +397,6 @@ const getCoinUnitPrice = async () => {
       );
       return;
     });
-  debugger;
   localStorage.setItem('unitPriceMap', JSON.stringify(data));
 };
 
