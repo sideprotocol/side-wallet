@@ -12,6 +12,7 @@ import { formatUnitAmount, parseUnitAmount } from '@/ui/utils';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { useNavigate } from '../../MainRoute';
+import ImageIcon from '@/ui/components/ImageIcon';
 
 export default function SideTxConfirmScreen() {
   const navigate = useNavigate();
@@ -112,13 +113,18 @@ export default function SideTxConfirmScreen() {
               style={{
                 alignItems: 'center'
               }}>
-              <Image
-                src={curToken.logo}
-                size={42}
-                style={{
-                  borderRadius: '50%'
-                }}
-              />
+              {/*<Image*/}
+              {/*  src={curToken.logo}*/}
+              {/*  size={42}*/}
+              {/*  style={{*/}
+              {/*    borderRadius: '50%'*/}
+              {/*  }}*/}
+              {/*/>*/}
+              <ImageIcon url={curToken.logo} style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%',
+              }} />
               <Text
                 text={curToken.symbol}
                 style={{

@@ -379,22 +379,25 @@ const getCoinUnitPrice = async () => {
   );
 
   const newIds = [...new Set(ids.flat())];
-  // ids = [...new Set(ids)];
   if (!newIds) {
     return {};
   }
   const { data } = await axios
-    .get('/overprices/api/simple/price', {
+    .get('/siderprices/api/simple/price', {
       baseURL: 'https://insider.side.one/',
       params: {
-        ids: ids.join(','),
+        ids: newIds.join(','),
         vs_currencies: 'usd',
       },
     })
     .catch(() => {
-      localStorage.setItem('unitPriceMap', JSON.stringify({ cosmos: { usd: 9.95 }, 'usd-coin': { usd: 0.997278 } }));
+      localStorage.setItem(
+        'unitPriceMap',
+        JSON.stringify({ cosmos: { usd: 9.95 }, 'usd-coin': { usd: 0.997278 } })
+      );
       return;
     });
+  debugger;
   localStorage.setItem('unitPriceMap', JSON.stringify(data));
 };
 
