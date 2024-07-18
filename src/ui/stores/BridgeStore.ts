@@ -12,12 +12,14 @@ export interface DepositBTCBridge {
 }
 
 const initData = {
+  base: 'sat',
   bridgeAmount: '',
   from: null || ({} as ChainItem),
   to: null || ({} as ChainItem),
   balance: '',
   fee: 20,
-  loading: false
+  loading: false,
+  selectTokenModalShow: false
 };
 
 export const bridgeStore = proxy(initData);

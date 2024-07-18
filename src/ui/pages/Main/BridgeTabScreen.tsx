@@ -5,13 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { KEYRING_TYPE, SIDE_CHAINID_TESTNET } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { Column, Content, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
+import BridgeSelectToken from '@/ui/components/Bridge/BridgeSelectToken';
 import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
+import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
-import { useBtcBalance } from '@/ui/state/bridge/hook';
+import { useBtcBalance, useRuneBalance } from '@/ui/state/bridge/hook';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
@@ -28,9 +30,24 @@ export default function BridgeTabScreen() {
   const currentKeyring = useCurrentKeyring();
   const wallet = useWallet();
 
-  const { bridgeAmount, from, to, balance, loading } = useBridgeStore();
+  const { bridgeAmount, from, to, balance, loading, selectTokenModalShow, base } = useBridgeStore();
 
-  useBtcBalance();
+  const { data: assets } = useGetSideTokenList();
+
+  const bridgeAsset = assets.find((a) => a.base == base);
+
+  const isBtcBridge = base === 'sat';
+  console.log('isBtcBridge: ', isBtcBridge);
+
+  const runeBalance = useRuneBalance(base);
+  console.log('runeBalance: ', runeBalance);
+
+  const btcBalance = useBtcBalance();
+
+  useEffect(() => {
+    if (isBtcBridge) bridgeStore.balance = btcBalance;
+    else bridgeStore.balance = runeBalance;
+  }, [isBtcBridge, btcBalance, runeBalance]);
 
   const { bridge } = useBridge();
 
@@ -217,22 +234,26 @@ export default function BridgeTabScreen() {
                     height: '50px',
                     background: '#09090A'
                   }}
-                  full>
+                  full
+                  onClick={() => {
+                    bridgeStore.selectTokenModalShow = true;
+                  }}>
                   <Row
                     itemsCenter
-                    gap={'zero'}
+                    justifyCenter
+                    gap={'sm'}
                     style={{
                       height: '50px',
                       borderRadius: '100px',
                       padding: '20px 10px'
                     }}>
-                    <Image size={36} src={'/images/img/btc_token.png'} />
+                    <Image size={36} src={bridgeAsset?.logo} />
                     <span
                       style={{
                         fontSize: '14px'
                       }}
-                      className="ml-2">
-                      BTC
+                      className="ml-4">
+                      {bridgeAsset?.symbol}
                     </span>
                   </Row>
                 </Row>
@@ -323,6 +344,13 @@ export default function BridgeTabScreen() {
             </Row>
           </Column>
         </Row>
+
+        <BridgeSelectToken
+          open={selectTokenModalShow}
+          onClose={() => {
+            bridgeStore.selectTokenModalShow = false;
+          }}
+        />
       </Content>
       <Footer px="zero" py="zero">
         <NavTabBar tab="bridge" />

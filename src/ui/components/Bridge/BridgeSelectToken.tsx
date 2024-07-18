@@ -1,25 +1,29 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-
 // import { CHAINS_ENUM } from '@/shared/constant';
+import { useState } from 'react';
+
 import { SideToken } from '@/shared/types';
 import { Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
-// import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
-// import { useAccountBalance } from '@/ui/state/accounts/hooks';
-// import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
+import { useRuneAndBtcBalances } from '@/ui/state/bridge/hook';
+import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 
-function SideCryptoItem({ token }: { token: SideToken }) {
+function SideCryptoItem({ token }: { token: SideToken & { price: string; amount: string } }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
+  const { from } = useBridgeStore();
+
   const { data: totalPrice } = useCalcPrice(balanceAmount, token.coingecko_id, token.exponent);
+
+  const isDeposit = (from?.name || '').includes('Bitcoin');
+
+  const displayAmount = isDeposit ? token.amount : balanceAmount;
+  const displayPrice = isDeposit ? token.price : totalPrice;
 
   return (
     <>
       <Row>
-        {/*<Image src={token.logo} size={42}></Image>*/}
         <ImageIcon
           url={token.logo}
           style={{
@@ -41,17 +45,31 @@ function SideCryptoItem({ token }: { token: SideToken }) {
         style={{
           gap: '0px'
         }}>
-        <Text preset="regular" textEnd text={formatUnitAmount(balanceAmount, token.exponent)}></Text>
-        <Text preset="sub" textEnd text={`$${getTruncate(totalPrice)}`}></Text>
+        <Text preset="regular" textEnd text={formatUnitAmount(displayAmount, token.exponent)}></Text>
+        <Text preset="sub" textEnd text={`$${getTruncate(displayPrice)}`}></Text>
       </Column>
     </>
   );
 }
 
 export default function Index(props) {
-  const { state } = useLocation();
-  const [focus, setFocus] = useState<boolean>(false);
-  const { open, onClose, onSelect, assetsList, popularList, onSearch, searchValue, curTokenDenom } = props;
+  const { open, onClose } = props;
+
+  // list, onSearch
+
+  const runeAndBtcTokens = useRuneAndBtcBalances();
+
+  const [searchValue, setSearchValue] = useState<string>('');
+
+  function filterFunc(token: SideToken) {
+    if (!searchValue) return true;
+    return (
+      new RegExp(searchValue, 'i').test(token.base) ||
+      new RegExp(searchValue, 'i').test(token.symbol) ||
+      new RegExp(searchValue, 'i').test(token.name)
+    );
+  }
+
   return (
     <Layout style={{ width: '100%', position: 'absolute', left: 0, top: 0, display: open ? 'flex' : 'none' }}>
       <Header
@@ -77,11 +95,9 @@ export default function Index(props) {
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
             <Input
-              onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
               onChange={(e) => {
                 const value = e.target.value;
-                onSearch(value);
+                setSearchValue(value);
               }}
               containerStyle={{
                 width: '100%',
@@ -94,15 +110,11 @@ export default function Index(props) {
         </Column>
 
         <Column>
-          {popularList?.map((asset) => {
+          {runeAndBtcTokens.filter(filterFunc)?.map((asset) => {
             return (
               <Row
                 onClick={() => {
-                  // onSelect();
-                  onSelect({
-                    denom: asset.base,
-                    amount: '1'
-                  });
+                  bridgeStore.base = asset.base;
                   onClose();
                 }}
                 full

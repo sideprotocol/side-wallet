@@ -451,6 +451,7 @@ export interface SideToken {
   logo: string;
   logo_black?: string;
   precision: number;
+  isRune?: boolean;
 }
 
 export interface SideSendTxInfo {
