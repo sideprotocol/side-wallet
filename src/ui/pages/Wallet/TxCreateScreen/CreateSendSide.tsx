@@ -9,6 +9,7 @@ import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useUiTxCreateSendSideScreen, useUpdateUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
 import { formatUnitAmount, isValidAddress } from '@/ui/utils';
+import ImageIcon from '@/ui/components/ImageIcon';
 
 export default function CreateSendSide() {
   const navigate = useNavigate();
@@ -89,7 +90,12 @@ export default function CreateSendSide() {
               alignItems: 'center'
             }}
             justifyCenter>
-            <Image src={curToken.logo} size={62} />
+            {/*<Image src={curToken.logo} size={62} />*/}
+            <ImageIcon url={curToken.logo} style={{
+              width: '62px',
+              height: '62px',
+              borderRadius: '50%',
+            }} />
           </Row>
         </Row>
         <Text
