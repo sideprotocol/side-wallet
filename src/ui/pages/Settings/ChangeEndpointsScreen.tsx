@@ -51,7 +51,7 @@ export default function ChangeEndpointsScreen() {
         }}
         title="Change Endpoints"
       />
-      <Content justifyBetween>
+      <Content mt={'xl'} justifyBetween>
         <Column>
           {' '}
           <Column>
@@ -67,11 +67,15 @@ export default function ChangeEndpointsScreen() {
             <Text preset="sub" text={'LCD'} />
             <Input preset="text" />
           </Column>
-          <Column>
+          <Column style={{
+            marginTop: '10px'
+          }}>
             <Card style={{ borderRadius: 10 }}>
-              <Column fullX>
-                <Icon icon="alert-circle" size={24} color="white" />
-                <Text text={'Restart to apply new endpoints'} preset="bold" size="sm" />
+              <Column >
+                <Row>
+                  <Icon icon="alert-circle" size={24} color="white" />
+                  <Text text={'Restart to apply new endpoints'} preset="bold" size="sm" />
+                </Row>
                 <Row>
                   <Text
                     preset="sub"
@@ -87,7 +91,12 @@ export default function ChangeEndpointsScreen() {
         </Column>
 
         <Column itemsCenter>
-          <Button preset="reset" text="Reset" />
+          <Button style={{
+            width: '87px',
+            height: '36px',
+            background: '#22AB384D',
+            border: '1px solid #22AB38!important'
+          }} preset="reset" text="Reset" />
 
           <Button
             preset="primary"

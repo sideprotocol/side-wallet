@@ -213,12 +213,17 @@ export default function SettingsTabScreen() {
         title="Summon"
       />
       <Content justifyCenter itemsCenter>
-        <Column gap={'xl'} justifyCenter itemsCenter>
+        <Column gap={'md'} justifyCenter itemsCenter>
           <Row justifyCenter itemsCenter>
             <Image size={90} src={`/images/icons/main/comimg-soon.svg`} />
           </Row>
           <Row>
-            <span> Common soon </span>
+            <span style={{
+              // textAlign: 'center',
+              fontSize: '14px',
+              color: 'rgb(125, 125, 125)',
+              // fontWeight: 600,
+            }}> Common soon </span>
           </Row>
         </Column>
       </Content>

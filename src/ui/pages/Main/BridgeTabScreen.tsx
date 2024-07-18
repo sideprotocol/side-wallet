@@ -148,7 +148,7 @@ export default function BridgeTabScreen() {
                   borderRadius: '100px',
                   padding: '10px 0px'
                 }}>
-                <Image size={36} src={from.logo} />
+                <Image size={28} src={from.logo} />
                 <span
                   style={{
                     fontSize: '14px'
@@ -204,7 +204,7 @@ export default function BridgeTabScreen() {
                     borderRadius: '100px',
                     padding: '10px 0px'
                   }}>
-                  <Image size={36} src={to.logo} />
+                  <Image size={28} src={to.logo} />
                   <span
                     style={{
                       fontSize: '14px'
@@ -247,7 +247,7 @@ export default function BridgeTabScreen() {
                       borderRadius: '100px',
                       padding: '20px 10px'
                     }}>
-                    <Image size={36} src={bridgeAsset?.logo} />
+                    <Image size={28} src={bridgeAsset?.logo} />
                     <span
                       style={{
                         fontSize: '14px'
