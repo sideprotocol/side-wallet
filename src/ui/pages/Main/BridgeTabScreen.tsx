@@ -249,6 +249,14 @@ export default function BridgeTabScreen() {
                     }}>
                     Amount
                   </div>
+
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      color: '#7D7D7D'
+                    }}>
+                    Balance: {balance}
+                  </div>
                 </Row>
 
                 <Row

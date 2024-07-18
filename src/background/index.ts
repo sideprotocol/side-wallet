@@ -26,6 +26,8 @@ async function restoreAppState() {
 
   await preferenceService.init();
 
+  console.log('init');
+
   await openapiService.init();
 
   await permissionService.init();

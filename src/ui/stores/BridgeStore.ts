@@ -16,7 +16,7 @@ const initData = {
   from: null || ({} as ChainItem),
   to: null || ({} as ChainItem),
   balance: '',
-  fee: '200',
+  fee: 20,
   loading: false
 };
 
