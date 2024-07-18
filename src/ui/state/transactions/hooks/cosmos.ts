@@ -134,6 +134,7 @@ export function useSignAndBroadcastTxRaw() {
     const signMode = SignMode.SIGN_MODE_LEGACY_AMINO_JSON;
 
     const isBitcoinWithdraw = tx.messages.some((msg) => msg.typeUrl.startsWith('/side.btcbridge.'));
+    console.log('isBitcoinWithdraw: ', isBitcoinWithdraw);
 
     const msgs = isBitcoinWithdraw
       ? tx.messages.map((msg) => ({

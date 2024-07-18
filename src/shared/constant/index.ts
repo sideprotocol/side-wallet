@@ -270,6 +270,10 @@ export const SIDE_BTC_VAULT_ADDRESS_TESTNET = 'tb1qef5ffghj84k56pn5zdnkpdjdk88de
 
 export const SIDE_BTC_VAULT_ADDRESS_MAINNET = '';
 
+export const SIDE_RUNE_VAULT_ADDRESS_TESTNET = 'tb1qmu8nt6wye4vd644dm4tluurewa3yjdj76jnypw';
+
+export const SIDE_RUNE_VAULT_ADDRESS_MAINNET = '';
+
 export const EVENTS = {
   broadcastToUI: 'broadcastToUI',
   broadcastToBackground: 'broadcastToBackground',
