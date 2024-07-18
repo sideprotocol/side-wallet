@@ -1,5 +1,6 @@
 import { DISCORD_URL, TELEGRAM_URL, TWITTER_URL } from '@/shared/constant';
 import { Card, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import aboutIcon from '@/ui/assets/icons/about.svg'
 
 export default function AboutScreen() {
   return (
@@ -18,9 +19,10 @@ export default function AboutScreen() {
               paddingBottom: '25px'
             }}>
             <Image
+              src={aboutIcon}
               size={120}
               style={{
-                borderRadius: '24px',
+                borderRadius: '50%',
                 margin: 'auto'
               }}
             />
@@ -36,23 +38,38 @@ export default function AboutScreen() {
           </Column>
 
           <Column>
-            <Card>
-              <Row justifyBetween full>
+            <Card style={{
+              height: '58px',
+              borderRadius: '10px',
+            }} mt={'md'}>
+              <Row style={{
+                padding: '0 8px'
+              }} justifyBetween itemsCenter full>
                 <Text preset="regular" text={'Terms of Service'}></Text>
                 <Icon icon={'link'} size={18}></Icon>
               </Row>
             </Card>
 
-            <Card>
-              <Row justifyBetween full>
+            <Card style={{
+              height: '58px',
+              borderRadius: '10px',
+            }} mt={'md'}>
+              <Row style={{
+                padding: '0 8px'
+              }} justifyBetween itemsCenter full>
                 <Text preset="regular" text={'Privacy Policy'}></Text>
 
                 <Icon icon={'link'} size={18}></Icon>
               </Row>
             </Card>
 
-            <Card>
-              <Row justifyBetween full>
+            <Card style={{
+              height: '58px',
+              borderRadius: '10px',
+            }} mt={'md'}>
+              <Row style={{
+                padding: '0 8px'
+              }} justifyBetween itemsCenter full>
                 <Text preset="regular" text={'Contact us'}></Text>
 
                 <Row itemsCenter>
