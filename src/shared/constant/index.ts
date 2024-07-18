@@ -260,7 +260,7 @@ export const SIDERPC_URL_MAINNET = 'https://testnet-rpc.side.one';
 // export const SIDERPC_URL_TESTNET = 'https://devnet-rpc.side.one';
 export const SIDERPC_URL_TESTNET = 'https://testnet-rpc.side.one';
 export const SIDE_CHAINID_MAINNET = 'grimoria-testnet-1';
-export const SIDE_CHAINID_TESTNET = 'devnet';
+export const SIDE_CHAINID_TESTNET = 'grimoria-testnet-1';
 
 export const SIDE_BTC_INDEXER = 'https://index.side.one';
 
