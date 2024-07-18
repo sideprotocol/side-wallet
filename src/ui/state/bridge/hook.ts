@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
 import { useEffect, useState } from 'react';
 
-import wallet from '@/background/controller/wallet';
 import {
   SIDE_BTC_INDEXER,
   SIDE_BTC_VAULT_ADDRESS_MAINNET,
@@ -14,7 +13,7 @@ import { MessageComposer } from '@/ui/codegen/src/side/btcbridge/tx.registry';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { DepositBTCBridge, bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
-import { formatUnitAmount, formatWithDP, parseUnitAmount } from '@/ui/utils';
+import { formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
 import { toReadableAmount } from '@/ui/utils/formatter';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 import { sendBTC } from '@unisat/wallet-sdk/lib/tx-helpers';
@@ -171,6 +170,8 @@ export const useBridge = () => {
     bridgeStore.loading = false;
   };
 
+  const wallet = useWallet();
+
   const depositBTC = async (params: DepositBTCBridge) => {
     const { amount, fee } = params;
     const senderAddress = currentAccount.address;
@@ -218,9 +219,9 @@ export const useBridge = () => {
       memos: undefined
     });
 
-    console.log('networkType ', networkType === NetworkType.MAINNET ? 0 : 1, currentAccount);
+    const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
-    const signedPsbt = await wallet.signPsbt(psbt, toSignInputs, true);
+    const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
 
     const rawTransaction = signedPsbt.extractTransaction().toHex();
 
