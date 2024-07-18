@@ -219,10 +219,9 @@ export default function SettingsTabScreen() {
           </Row>
           <Row>
             <span style={{
-              // textAlign: 'center',
               fontSize: '14px',
               color: 'rgb(125, 125, 125)',
-              // fontWeight: 600,
+              fontFamily: 'Inter'
             }}> Common soon </span>
           </Row>
         </Column>
