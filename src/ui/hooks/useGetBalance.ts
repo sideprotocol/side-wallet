@@ -10,7 +10,7 @@ import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { formatUnitAmount, useWallet } from '../utils';
 import { useGetBitcoinTokenList, useGetSideTokenList } from './useGetTokenList';
 
-export function useGetSideTokenBalance(base: string) {
+export function useGetSideTokenBalance(base: string, flag?: boolean) {
   const [balanceAmount, setBalanceAmount] = useState('0');
   const currentAccount = useCurrentAccount();
   const networkType = useNetworkType();
@@ -18,7 +18,7 @@ export function useGetSideTokenBalance(base: string) {
 
   useEffect(() => {
     getBalanceAmount();
-  }, [base, currentAccount.address]);
+  }, [base, currentAccount.address, flag]);
 
   const getBalanceAmount = async () => {
     if (!base) return;
@@ -27,7 +27,7 @@ export function useGetSideTokenBalance(base: string) {
     const cosmwasmClient = await CosmWasmClient.connect(
       networkType === NetworkType.MAINNET ? SIDERPC_URL_MAINNET : SIDERPC_URL_TESTNET
     );
-    console.log(`SIDERPC_URL_TESTNET: `, SIDERPC_URL_TESTNET);
+    console.log('SIDERPC_URL_TESTNET: ', SIDERPC_URL_TESTNET);
     const { amount } = await cosmwasmClient.getBalance(currentAccount.address, base);
     await wallet.setAccountSideTokenBalance(currentAccount.address, base, amount);
     setBalanceAmount(amount);

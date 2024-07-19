@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { PubKey } from 'cosmjs-types/cosmos/crypto/secp256k1/keys';
 import { SignMode } from 'cosmjs-types/cosmos/tx/signing/v1beta1/signing';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
@@ -83,6 +84,97 @@ export function useSignAndBroadcastTxRaw() {
   const restUrl = networkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET;
   const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
 
+  const mockSignAmino = async (tx: CosmosTransaction): Promise<TxRaw> => {
+    const accountFromSigner = currentAccount;
+    if (!accountFromSigner) {
+      throw new Error('Failed to retrieve account from signer');
+    }
+    const pubkey = Any.fromPartial({
+      typeUrl: getAddressTypeUrl(accountFromSigner.address)?.typeUrl,
+      value: PubKey.encode({
+        key: fromHex(accountFromSigner.pubkey)
+      }).finish()
+    });
+
+    const signMode = SignMode.SIGN_MODE_LEGACY_AMINO_JSON;
+
+    const isBitcoinWithdraw = tx.messages.some((msg) => msg.typeUrl.startsWith('/side.btcbridge.'));
+
+    const msgs = isBitcoinWithdraw
+      ? tx.messages.map((msg) => ({
+          amount: msg.value.amount,
+          fee_rate: msg.value.feeRate,
+          sender: msg.value.sender
+        }))
+      : tx.messages.map((msg) => aminoTypes.toAmino(msg));
+
+    const signDoc = makeSignDocAmino(
+      msgs,
+      tx.fee,
+      tx.chainId,
+      tx.memo,
+      tx.signerData.accountNumber,
+      tx.signerData.sequence
+    );
+
+    const signed = signDoc;
+
+    const signature = mockSignature;
+
+    const signedTxBody = {
+      messages: isBitcoinWithdraw ? tx.messages : signed.msgs.map((msg) => aminoTypes.fromAmino(msg)),
+      memo: signed.memo
+    };
+
+    const signedTxBodyEncodeObject: TxBodyEncodeObject = {
+      typeUrl: '/cosmos.tx.v1beta1.TxBody',
+      value: signedTxBody
+    };
+
+    const signedTxBodyBytes = registry.encode(signedTxBodyEncodeObject);
+
+    const signedGasLimit = Number(signed.fee.gas);
+    const signedSequence = Number(signed.sequence);
+
+    const signedAuthInfoBytes = makeAuthInfoBytes(
+      [{ pubkey, sequence: signedSequence }],
+      signed.fee.amount,
+      signedGasLimit,
+      signed.fee.granter,
+      signed.fee.payer,
+      signMode
+    );
+
+    return TxRaw.fromPartial({
+      bodyBytes: signedTxBodyBytes,
+      authInfoBytes: signedAuthInfoBytes,
+      signatures: [fromBase64(signature)]
+    });
+  };
+
+  const estimateGas = async (bodyBytes: TxRaw) => {
+    // const txbytes = bodyBytes.authInfoBytes ? TxRaw.encode(bodyBytes).finish() : bodyBytes
+    const txbytes = TxRaw.encode(bodyBytes).finish();
+    const txString = toBase64(txbytes);
+    const txRaw = {
+      tx_bytes: txString
+    };
+
+    // get string
+    return await fetch(`${restUrl}/cosmos/tx/v1beta1/simulate`, {
+      method: 'POST',
+      body: JSON.stringify(txRaw)
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.code && res.code !== 0) {
+          throw new Error(res.message);
+        }
+
+        return res.gas_info?.gas_used;
+      });
+  };
+
   const signAndBroadcastTxRaw = async ({
     messages,
     memo,
@@ -100,7 +192,7 @@ export function useSignAndBroadcastTxRaw() {
       const json = await res.json();
       return json.account;
     });
-    const tx: CosmosTransaction = {
+    let tx: CosmosTransaction = {
       chainId,
       signerAddress: currentAccount.address,
       messages,
@@ -115,9 +207,32 @@ export function useSignAndBroadcastTxRaw() {
         chainId
       }
     };
+
+    console.log('feeAmount: ', feeAmount, feeDenom);
+
+    const mockTxRaw = await mockSignAmino(tx);
+
+    const gasUsed = await estimateGas(mockTxRaw);
+
+    const validGasUsed = typeof gasUsed === 'string' && BigNumber(gasUsed || '0').gt(0);
+
+    if (validGasUsed) {
+      const gasWithPadding = BigNumber(gasUsed).times(1.05).toFixed(0);
+
+      tx = {
+        ...tx,
+        fee: {
+          ...tx.fee,
+          gas: gasWithPadding
+        }
+      };
+    }
+
     const txRaw = await signAmino(tx);
     return broadcastTx(txRaw);
   };
+
+  const mockSignature = 'H7zK7+Cil6z3doIhLvB4IIY7G98EdTDpsPgjinsQab+pAsw0vWh1gPzGCv0z/SPLOGhaRyteMDoJYcXgJyLmHYU=';
 
   const signAmino = async (tx: CosmosTransaction): Promise<TxRaw> => {
     const accountFromSigner = currentAccount;

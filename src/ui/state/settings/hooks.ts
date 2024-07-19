@@ -71,9 +71,12 @@ export function useBlockstreamUrl(chain?: CHAINS_ENUM) {
     if (networkType === NetworkType.MAINNET) {
       return 'https://testnet.ping.pub/side';
     } else {
-      return 'https://explorer.side.exchange/devnet';
+      return 'https://explorer.side.exchange/testnet';
     }
+  } else if (chain === CHAINS_ENUM.SIDE_SIGNET) {
+    return 'https://signet.side.one';
   }
+
   if (networkType === NetworkType.MAINNET) {
     return 'https://mempool.space';
   } else {

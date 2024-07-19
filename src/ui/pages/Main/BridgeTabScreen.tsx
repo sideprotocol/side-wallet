@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { KEYRING_TYPE, SIDE_CHAINID_TESTNET } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
+import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Column, Content, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
 import BridgeSelectToken from '@/ui/components/Bridge/BridgeSelectToken';
 import { Button } from '@/ui/components/Button';
@@ -13,7 +14,7 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
-import { useBtcBalance, useRuneBalance } from '@/ui/state/bridge/hook';
+import { useBtcBalance, useRuneBalance, useRuneBridge } from '@/ui/state/bridge/hook';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
@@ -30,26 +31,27 @@ export default function BridgeTabScreen() {
   const currentKeyring = useCurrentKeyring();
   const wallet = useWallet();
 
-  const { bridgeAmount, from, to, balance, loading, selectTokenModalShow, base } = useBridgeStore();
+  const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeStore();
 
   const { data: assets } = useGetSideTokenList();
 
   const bridgeAsset = assets.find((a) => a.base == base);
 
   const isBtcBridge = base === 'sat';
-  console.log('isBtcBridge: ', isBtcBridge);
 
   const runeBalance = useRuneBalance(base);
-  console.log('runeBalance: ', runeBalance);
 
   const btcBalance = useBtcBalance();
 
+  const balance = isBtcBridge ? btcBalance : runeBalance;
+
   useEffect(() => {
-    if (isBtcBridge) bridgeStore.balance = btcBalance;
-    else bridgeStore.balance = runeBalance;
-  }, [isBtcBridge, btcBalance, runeBalance]);
+    bridgeStore.balance = balance;
+  }, [balance]);
 
   const { bridge } = useBridge();
+
+  const { bridge: bridgeRune } = useRuneBridge();
 
   const networkType = useNetworkType();
 
@@ -225,6 +227,12 @@ export default function BridgeTabScreen() {
                     }}>
                     Send
                   </div>
+
+                  <Row itemsCenter justifyCenter gap="sm">
+                    <img src={WalletIcon} alt="" />
+
+                    <Text size="sm">{balance}</Text>
+                  </Row>
                 </Row>
 
                 <Row
@@ -269,14 +277,6 @@ export default function BridgeTabScreen() {
                       color: '#7D7D7D'
                     }}>
                     Amount
-                  </div>
-
-                  <div
-                    style={{
-                      fontSize: '12px',
-                      color: '#7D7D7D'
-                    }}>
-                    Balance: {balance}
                   </div>
                 </Row>
 
@@ -334,7 +334,11 @@ export default function BridgeTabScreen() {
             <Row mt={'xl'} full>
               <Button
                 onClick={() => {
-                  bridge();
+                  if (base === 'sat') {
+                    bridge();
+                  } else {
+                    bridgeRune();
+                  }
                 }}
                 disabled={disabled}
                 full

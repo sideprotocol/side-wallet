@@ -12,7 +12,8 @@ import { AddressType, BitcoinToken, Chain, NetworkType, RestoreWalletType, SideT
 
 export enum CHAINS_ENUM {
   BTC = 'BTC',
-  SIDE = 'SIDE'
+  SIDE = 'SIDE',
+  SIDE_SIGNET = 'SIDE_SIGNET'
 }
 
 export const CHAINS: Record<string, Chain> = {

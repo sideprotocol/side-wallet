@@ -109,7 +109,11 @@ export default function Index(props) {
           </Row>
         </Column>
 
-        <Column>
+        <Column
+          gap="xl"
+          style={{
+            marginTop: '20px'
+          }}>
           {runeAndBtcTokens.filter(filterFunc)?.map((asset) => {
             return (
               <Row

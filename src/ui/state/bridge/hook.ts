@@ -1,8 +1,10 @@
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
+import qs from 'qs';
 import { useEffect, useState } from 'react';
 
 import {
+  CHAINS_ENUM,
   SIDE_BTC_INDEXER,
   SIDE_BTC_VAULT_ADDRESS_MAINNET,
   SIDE_BTC_VAULT_ADDRESS_TESTNET,
@@ -16,6 +18,7 @@ import { MessageComposer } from '@/ui/codegen/src/side/btcbridge/tx.registry';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
+import { useNavigate } from '@/ui/pages/MainRoute';
 import { DepositBTCBridge, bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
@@ -38,8 +41,47 @@ function compareAmount(a: string, b: string) {
   return new BigNumber(a || '0').comparedTo(new BigNumber(b || '0'));
 }
 
+export interface BridgeTxItem {
+  time: number;
+  txid: string;
+  amount: string;
+  status: 'pending' | 'confirmed';
+  url: string;
+}
+
+const PENDING_RUNES_KEY = 'PENIDNG:RUNES';
+
+const RUNE_BALANCE_KEY_PREFIX = 'RUNE_BALANCE_KEY_';
+
+export const getPendingDeposits = (id: string, address: string) => {
+  if (!id || !address) return [];
+  const curStore = localStorage.getItem(PENDING_RUNES_KEY + `:${id}` + `:${address}`);
+
+  return JSON.parse(curStore || '[]') as BridgeTxItem[];
+};
+
+export const unshiftPendingDeposits = (pending: BridgeTxItem, id: string, address: string) => {
+  const curStores = getPendingDeposits(id, address);
+  const newStores = [pending, ...curStores] as BridgeTxItem[];
+
+  return localStorage.setItem(PENDING_RUNES_KEY + ':' + id + `:${address}`, JSON.stringify(newStores));
+};
+
+export const updatePendingDeposits = (pending: BridgeTxItem[], id: string, address: string) => {
+  const newStores = [...pending];
+  return localStorage.setItem(PENDING_RUNES_KEY + ':' + id + `:${address}`, JSON.stringify(newStores));
+};
+
+export const getRuneBalanceFromStore = (runeId: string, address: string) => {
+  return localStorage.getItem(RUNE_BALANCE_KEY_PREFIX + runeId + ':' + address);
+};
+
+export const setRuneBalanceFromStore = (balance: string, runeId: string, address: string) => {
+  return localStorage.setItem(RUNE_BALANCE_KEY_PREFIX + runeId + ':' + address, balance);
+};
+
 export const useBtcBalance = () => {
-  const { from } = useBridgeStore();
+  const { from, loading } = useBridgeStore();
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
@@ -94,12 +136,12 @@ export const useBtcBalance = () => {
     return _data;
   }
 
-  const { balanceAmount: balanceSideSat } = useGetSideTokenBalance('sat');
+  const { balanceAmount: balanceSideSat } = useGetSideTokenBalance('sat', loading);
 
   // load btc balance
   useEffect(() => {
     getBtcBalance().then(setBtcBalance);
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     if (isDeposit) {
@@ -113,7 +155,7 @@ export const useBtcBalance = () => {
 
       setBalance(parsedBalance);
     }
-  }, [isDeposit, currentAccount.address, balanceSideSat, btcBalance]);
+  }, [isDeposit, currentAccount.address, balanceSideSat, btcBalance, loading]);
 
   return balance;
 };
@@ -206,6 +248,8 @@ export const useBridge = () => {
 
   const currentAccount = useCurrentAccount();
 
+  const navigate = useNavigate();
+
   const tools = useTools();
 
   const networkType = useNetworkType();
@@ -233,15 +277,21 @@ export const useBridge = () => {
           })
           .then((res) => {
             if (res) {
-              tools.toastSuccess('Deposit Successful! ');
+              navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
+
+              // tools.toastSuccess('Deposit Successful! ');
             }
           })
           .catch((err) => {
             console.log('err: ', err);
             tools.toastError(err.message);
+          })
+          .finally(() => {
+            bridgeStore.loading = false;
           });
       } catch (error) {
         tools.toastError('Deposit Failed! ');
+        bridgeStore.loading = false;
       }
     } else {
       const txMsg = MessageComposer.withTypeUrl.withdrawBitcoin({
@@ -254,18 +304,23 @@ export const useBridge = () => {
         signAndBroadcastTxRaw({
           messages: [txMsg]
         })
-          .then(() => {
-            tools.toastSuccess('Withdraw Successful!');
+          .then((result) => {
+            // tools.toastSuccess('Withdraw Successful!');
+
+            navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
           })
           .catch((err) => {
             console.log('err: ', err);
             tools.toastError(err.message);
+          })
+          .finally(() => {
+            bridgeStore.loading = false;
           });
       } catch (error) {
         tools.toastError('Deposit Failed! ');
+        bridgeStore.loading = false;
       }
     }
-    bridgeStore.loading = false;
   };
 
   const wallet = useWallet();
@@ -340,6 +395,8 @@ export const useBridge = () => {
 export const useRuneBalances = () => {
   const assets = SIDE_TOKENS;
 
+  const { loading: bridgeLoading } = useBridgeStore();
+
   const runeAssets = assets.filter((a) => a.name === 'Rune');
 
   const defaultMap = (runeAssets || []).reduce((acc, cur) => {
@@ -354,6 +411,8 @@ export const useRuneBalances = () => {
   const [bitcoinRunes, setBitcoinRunes] = useState<any[]>([]);
 
   const currentAccount = useCurrentAccount();
+
+  const networkType = useNetworkType();
 
   const refetch = async () => {
     const rawUtxos = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) =>
@@ -419,23 +478,58 @@ export const useRuneBalances = () => {
         .dividedBy(10 ** Number(asset?.exponent || 6))
         .toFixed(2);
 
-      const balance = toReadableAmount(item[1].toString(), asset?.exponent || 6);
-      return {
-        ...asset,
+      const pendingRunes = getPendingDeposits(`${networkType}:${runeid}`, currentAccount.address);
+      console.log('pendingRunes: ', pendingRunes);
 
-        logo: asset?.logo,
-        name: 'Rune',
-        amount: item[1],
-        exponent: asset?.exponent || '6',
-        symbol: item[0],
-        label: '',
-        chain: 'bitcoin',
-        balance: balance,
-        price,
-        denom: runeid,
-        base: runeid,
-        precision: Number(asset?.exponent || 0) || '6'
-      };
+      const hasPendingRuns = pendingRunes.length > 0;
+
+      if (!hasPendingRuns) {
+        const balance = toReadableAmount(item[1].toString(), asset?.exponent || 6);
+        setRuneBalanceFromStore(balance, runeid, currentAccount.address);
+        return {
+          ...asset,
+
+          logo: asset?.logo,
+          name: 'Rune',
+          amount: item[1],
+          exponent: asset?.exponent || '6',
+          symbol: item[0],
+          label: '',
+          chain: 'bitcoin',
+          balance: balance,
+          price,
+          denom: runeid,
+          base: runeid,
+          precision: Number(asset?.exponent || 0) || '6'
+        };
+      } else {
+        const pendingAmount = pendingRunes.reduce((acc, cur) => {
+          return acc.plus(cur.amount);
+        }, BigNumber(0));
+
+        const storeBalance = getRuneBalanceFromStore(runeid, currentAccount.address);
+
+        const newBalance = BigNumber(storeBalance || item[1])
+          .minus(BigNumber(pendingAmount))
+          .toFixed();
+
+        return {
+          ...asset,
+
+          logo: asset?.logo,
+          name: 'Rune',
+          amount: item[1],
+          exponent: asset?.exponent || '6',
+          symbol: item[0],
+          label: '',
+          chain: 'bitcoin',
+          balance: newBalance,
+          price,
+          denom: runeid,
+          base: runeid,
+          precision: Number(asset?.exponent || 0) || '6'
+        };
+      }
     });
 
     const filteredRunes = predata.filter((d) => (runeAssets || []).find((a) => a.base === d.denom));
@@ -449,7 +543,7 @@ export const useRuneBalances = () => {
     refetch().finally(() => {
       setLoading(false);
     });
-  }, []);
+  }, [bridgeLoading]);
 
   return { data: bitcoinRunes, loading };
 };
@@ -484,15 +578,19 @@ export const useRuneAndBtcBalances = () => {
 };
 
 export const useRuneBridge = () => {
-  const { from, bridgeAmount, fee, base } = useBridgeStore();
+  const { from, bridgeAmount, fee, base, loading } = useBridgeStore();
 
   const currentAccount = useCurrentAccount();
+
+  const navigate = useNavigate();
 
   const tools = useTools();
 
   const networkType = useNetworkType();
 
-  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, 8)).toNumber();
+  const asset = SIDE_TOKENS.find((a) => a.base === base);
+
+  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, asset?.exponent || 6)).toNumber();
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
@@ -501,10 +599,65 @@ export const useRuneBridge = () => {
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 
+  const updateProofs = async () => {
+    const params = qs.stringify(
+      {
+        events: [`btcbridge.recipient='${currentAccount.address}'`],
+        order_by: '2'
+      },
+      { arrayFormat: 'repeat' }
+    );
+
+    const proofs = await fetch('/cosmos/tx/v1beta1/txs?' + params).then((res) => res.json());
+
+    const confirmedTxs = proofs.tx_responses.map((res) => {
+      const amount =
+        res.events
+          .filter((e) => e.type === 'transfer')
+          ?.at(-1)
+          ?.attributes?.find((a) => a.key === 'amount')?.value || '';
+
+      const amountValue = new RegExp(base, 'i').test(amount) ? parseInt(amount) : 0;
+
+      return {
+        destinationTx: res.events.find((e) => e.type === 'btcbridge')?.attributes?.find((a) => a.key === 'txid')?.value,
+        tx: res.txhash,
+        amount: amountValue
+      };
+    });
+
+    const id = `${networkType}:${base}`;
+
+    const tempPendingTxs = getPendingDeposits(id, currentAccount.address);
+
+    const filteredPendingTxs = tempPendingTxs
+      .filter(
+        (tx) =>
+          tx.txid &&
+          tx.txid !== null &&
+          tx.txid !== undefined &&
+          !confirmedTxs.find((item) => item.destinationTx === tx.txid)
+      )
+      .sort((a, b) => a.time - b.time);
+
+    updatePendingDeposits(filteredPendingTxs, id, currentAccount.address);
+
+    return filteredPendingTxs;
+  };
+
   const bridge = async () => {
     bridgeStore.loading = true;
 
     if (isDeposit) {
+      const filteredPendingTxs = await updateProofs();
+
+      if (filteredPendingTxs.length > 0) {
+        tools.toastError(
+          'Please wait for the pending Rune bridging transaction to complete before starting a new request.'
+        );
+
+        return;
+      }
       try {
         depositRune({
           amount: unitAmount,
@@ -515,7 +668,21 @@ export const useRuneBridge = () => {
           })
           .then((res) => {
             if (res) {
-              tools.toastSuccess('Deposit Successful! ');
+              // tools.toastSuccess('Deposit Successful! ');
+
+              const item: BridgeTxItem = {
+                amount: bridgeAmount,
+                time: Date.now() / 1000,
+                url: '',
+                txid: res,
+                status: 'pending'
+              };
+
+              const id = `${networkType}:${base}`;
+
+              unshiftPendingDeposits(item, id, currentAccount.address || '');
+
+              navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
             }
           })
           .catch((err) => {
@@ -536,8 +703,10 @@ export const useRuneBridge = () => {
         signAndBroadcastTxRaw({
           messages: [txMsg]
         })
-          .then(() => {
-            tools.toastSuccess('Withdraw Successful!');
+          .then((result) => {
+            // tools.toastSuccess('Withdraw Successful!');
+
+            navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
           })
           .catch((err) => {
             console.log('err: ', err);
