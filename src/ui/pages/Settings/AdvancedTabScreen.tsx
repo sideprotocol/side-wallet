@@ -125,6 +125,7 @@ export default function AdvancedTabScreen() {
               }
               return (
                 <Card
+                  classname="bg-item-hover"
                   key={item.action}
                   mt="lg"
                   onClick={(e) => {

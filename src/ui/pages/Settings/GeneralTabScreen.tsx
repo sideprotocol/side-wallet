@@ -132,6 +132,7 @@ export default function GeneralTabScreen() {
               }
               return (
                 <Card
+                  classname="bg-item-hover"
                   key={item.action}
                   mt="lg"
                   onClick={(e) => {

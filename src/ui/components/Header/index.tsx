@@ -23,7 +23,7 @@ export function Header(props: HeaderProps) {
     if (children) {
       return children;
     } else if (title) {
-      return <Text text={title} preset="regular-bold" />;
+      return <Text size={'lg'} text={title} preset="regular-bold" />;
     } else {
       return <Logo preset="small" />;
     }

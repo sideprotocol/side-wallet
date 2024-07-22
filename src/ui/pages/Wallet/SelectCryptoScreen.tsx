@@ -20,7 +20,7 @@ function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
   return (
     <>
       <Row>
-        <Image src={token.logo} size={42}></Image>
+        <Image src={token.logo} size={38}></Image>
         <Column
           style={{
             gap: '0px'
@@ -56,6 +56,7 @@ function BitCrypto() {
       {bitcoinTokenList.map((token) => {
         return (
           <Row
+            classname={'bg-item-hover'}
             onClick={() => {
               if (type === 'receive') {
                 navigate('SelectAddressScreen', { ...state, base: token.symbol, token });
@@ -68,7 +69,8 @@ function BitCrypto() {
             key={token.symbol + token.name}
             justifyBetween
             style={{
-              cursor: 'pointer'
+              cursor: 'pointer',
+              padding: '0 24px'
             }}>
             <BitcoinCryptoItem token={token} />
           </Row>
@@ -84,7 +86,7 @@ function SideCryptoItem({ token }: { token: SideToken }) {
 
   return (
     <>
-      <Row>
+      <Row classname={'bg-item-hover'}>
         <ImageIcon url={token.logo} style={{
           width: '38px',
           height: '38px',
@@ -92,7 +94,7 @@ function SideCryptoItem({ token }: { token: SideToken }) {
         }} />
         <Column
           style={{
-            gap: '0px'
+            gap: '0px',
           }}>
           <Text preset="regular" text={token.symbol}></Text>
           <Text preset="sub" text={token.name}></Text>
@@ -124,6 +126,7 @@ function SideCrypto() {
       {sideTokenList.map((token) => {
         return (
           <Row
+            classname={'bg-item-hover'}
             onClick={() => {
               if (type === 'receive') {
                 navigate('SelectAddressScreen', { ...state, base: token.base, token });
@@ -136,7 +139,8 @@ function SideCrypto() {
             key={token.symbol + token.name}
             justifyBetween
             style={{
-              cursor: 'pointer'
+              cursor: 'pointer',
+              padding: '0 24px'
             }}>
             <SideCryptoItem token={token} />
           </Row>
@@ -161,12 +165,15 @@ export default function SelecCryptoScreen() {
       />
       <Content
         style={{
-          backgroundColor: '#09090A'
+          backgroundColor: '#09090A',
+          padding: 0,
         }}>
-        <Column>
+        <Column style={{
+          padding: '0 24px',
+        }}>
           <Row
             style={{
-              padding: '0px 10px',
+              padding: '0px 24px',
               borderRadius: '12px',
               backgroundColor: '#1E1E1F'
             }}
@@ -174,7 +181,6 @@ export default function SelecCryptoScreen() {
             bg="search_box_bg"
             full>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
-
             <Input
               containerStyle={{
                 width: '100%',

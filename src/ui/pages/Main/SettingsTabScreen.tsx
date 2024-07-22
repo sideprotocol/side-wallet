@@ -220,6 +220,7 @@ export default function SettingsTabScreen() {
               }
               return (
                 <Card
+                  classname="bg-item-hover"
                   key={item.action}
                   mt="lg"
                   onClick={(e) => {

@@ -124,7 +124,7 @@ export default function SecurityTabScreen() {
         onBack={() => {
           window.history.go(-1);
         }}
-        title="Advance"
+        title="Security"
       />
       <Content justifyBetween>
         <Column>
@@ -135,6 +135,7 @@ export default function SecurityTabScreen() {
               }
               return (
                 <Card
+                  classname="bg-item-hover"
                   key={item.action}
                   mt="lg"
                   onClick={(e) => {
