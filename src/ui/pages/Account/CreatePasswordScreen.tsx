@@ -147,7 +147,7 @@ export default function CreatePasswordScreen() {
           <Row
             style={{
               marginTop: '16px',
-              alignItems: 'center'
+              alignItems: 'start'
             }}
             justifyBetween>
             <Checkbox
