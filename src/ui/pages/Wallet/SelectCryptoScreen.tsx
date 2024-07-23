@@ -70,7 +70,8 @@ function BitCrypto() {
             justifyBetween
             style={{
               cursor: 'pointer',
-              padding: '0 24px'
+              padding: '3px 24px',
+              height: '44px',
             }}>
             <BitcoinCryptoItem token={token} />
           </Row>
@@ -140,7 +141,8 @@ function SideCrypto() {
             justifyBetween
             style={{
               cursor: 'pointer',
-              padding: '0 24px'
+              padding: '3px 24px',
+              height: '44px',
             }}>
             <SideCryptoItem token={token} />
           </Row>
@@ -192,7 +194,9 @@ export default function SelecCryptoScreen() {
           </Row>
         </Column>
 
-        <Column>{chain === CHAINS_ENUM.SIDE ? <SideCrypto /> : <BitCrypto />}</Column>
+        <Column style={{
+          marginTop: '14px',
+        }}>{chain === CHAINS_ENUM.SIDE ? <SideCrypto /> : <BitCrypto />}</Column>
       </Content>
     </Layout>
   );

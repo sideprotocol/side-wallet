@@ -32,6 +32,8 @@ export const svgRegistry = {
   wallet: '/images/icons/wallet-solid.svg',
   compass: './images/icons/compass-solid.svg',
   settings: './images/icons/gear-solid.svg',
+  'setting-address': './images/icons/setting-address-type.svg',
+  'setting-network': './images/icons/setting-network.svg',
   grid: './images/icons/grid-solid.svg',
 
   delete: '/images/icons/delete.svg',
@@ -39,6 +41,7 @@ export const svgRegistry = {
   check: '/images/icons/check.svg',
   eye: '/images/icons/eye.svg',
   'eye-slash': '/images/icons/eye-slash.svg',
+  'eye-slash-hover': '/images/icons/eye-off.svg',
   copy: './images/icons/copy-solid.svg',
   copy2: './images/icons/settings/copy2.svg',
 
@@ -78,6 +81,7 @@ export const svgRegistry = {
   'main-summon': '/images/icons/main/summon-ac-icon.svg',
   'main-summon-ac': '/images/icons/main/summon-ac-icon.svg',
   'swap-down-icon': '/images/icons/swap/bottom-icon.svg',
+  'swap-down-hover': '/images/icons/swap/bottom-hover.svg',
   loading: '/images/icons/loading.svg',
   plus: './images/icons/plus.svg'
 };
@@ -115,6 +119,8 @@ interface IconProps {
    * An optional function to be called when the icon is clicked
    */
   onClick?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseOver?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   children?: React.ReactNode;
 }
 
@@ -126,12 +132,16 @@ export function Icon(props: IconProps) {
     style: $imageStyleOverride,
     containerStyle: $containerStyleOverride,
     onClick,
-    children
+    children,
+    onMouseOver,
+    onMouseLeave
   } = props;
   if (!icon) {
     return (
       <div
         onClick={onClick}
+        onMouseOver={onMouseOver}
+        onMouseLeave={onMouseLeave}
         style={Object.assign(
           {},
           {
@@ -151,6 +161,8 @@ export function Icon(props: IconProps) {
   if (iconImgList.includes(icon)) {
     return (
       <img
+        onMouseOver={onMouseOver}
+        onMouseLeave={onMouseLeave}
         src={iconPath}
         alt=""
         style={Object.assign({}, $containerStyleOverride, {
@@ -164,6 +176,8 @@ export function Icon(props: IconProps) {
     return (
       <div style={$containerStyleOverride}>
         <div
+          onMouseOver={onMouseOver}
+          onMouseLeave={onMouseLeave}
           onClick={onClick}
           style={Object.assign(
             {},

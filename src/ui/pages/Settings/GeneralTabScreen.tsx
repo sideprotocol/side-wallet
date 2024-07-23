@@ -149,10 +149,12 @@ export default function GeneralTabScreen() {
                     navigate(item.route);
                   }}
                   style={{
-                    backgroundColor: 'transparent'
+                    backgroundColor: 'transparent',
+                    paddingLeft: '10px',
+                    paddingRight: '10px',
                   }}>
                   <Row full justifyBetween>
-                    <Column justifyCenter gap={'sm'}>
+                    <Column justifyCenter gap={'zero'}>
                       <Text text={item.label || item.desc} preset="regular-bold" />
                       <Text text={item.value} preset="sub" />
                     </Column>

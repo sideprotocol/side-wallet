@@ -130,7 +130,9 @@ export default function BridgeTabScreen() {
       />
       <Content>
         <Row full relative rounded={true}>
-          <Column full relative>
+          <Column full relative  style={{
+            gap: '5px'
+          }}>
             <Column mt={'xl'} px={'xl'} py={'xl'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div

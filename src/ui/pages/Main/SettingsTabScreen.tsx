@@ -79,6 +79,7 @@ const SettingList: Setting[] = [
   {
     label: 'Address Type',
     value: 'Taproot',
+    icon: 'setting-address',
     desc: '',
     action: 'addressType',
     route: '/settings/address-type',
@@ -105,6 +106,7 @@ const SettingList: Setting[] = [
   {
     label: 'Network',
     value: 'MAINNET',
+    icon: 'setting-network',
     desc: '',
     action: 'networkType',
     route: '/settings/network-type',
@@ -237,7 +239,9 @@ export default function SettingsTabScreen() {
                     navigate(item.route);
                   }}
                   style={{
-                    backgroundColor: 'transparent'
+                    backgroundColor: 'transparent',
+                    paddingLeft: '10px',
+                    paddingRight: '10px',
                   }}>
                   <Row full justifyBetween>
                     <Row itemsCenter>
@@ -246,7 +250,7 @@ export default function SettingsTabScreen() {
                     </Row>
 
                     <Column justifyCenter>
-                      {item.right && <RightOutlined style={{ color: 'rgb(107,107,107)' }} />}
+                      {item.right && <span className={'iconRight'}><RightOutlined style={{ color: 'rgb(107,107,107)' }} /></span>}
                     </Column>
                   </Row>
                 </Card>

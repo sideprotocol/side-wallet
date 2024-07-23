@@ -399,7 +399,9 @@ export default function SwapTabScreen() {
         />
         <Content>
           <InitBalance></InitBalance>
-          <Column relative>
+          <Column relative style={{
+            gap: '5px'
+          }}>
             <Column mt={'xl'} px={'xl'} py={'xl'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div
@@ -434,7 +436,9 @@ export default function SwapTabScreen() {
               <NativeBalance></NativeBalance>
             </Column>
 
-            <Row relative>
+            <Row relative style={{
+              top: 0,
+            }}>
               <div
                 style={{
                   position: 'absolute',
@@ -452,10 +456,10 @@ export default function SwapTabScreen() {
                   alignItems: 'center'
                 }}
                 onMouseEnter={() => {
-                  // swapStore.hoverExchange = true;
+                  swapStore.hoverExchange = true;
                 }}
                 onMouseLeave={() => {
-                  // swapStore.hoverExchange = false;
+                  swapStore.hoverExchange = false;
                 }}
                 onClick={() => {
                   const nativePair = swapStore.swapPair.native;
@@ -472,7 +476,7 @@ export default function SwapTabScreen() {
                     amount: '',
                   };
                 }}>
-                <Icon icon={'swap-down-icon'}></Icon>
+                <Icon size={hoverExchange ? 22 : 11} icon={hoverExchange ? 'swap-down-hover' : 'swap-down-icon'}></Icon>
                 {/*{!hoverExchange ? <ExchangeDefaultSVG color="black" /> : <ExchangeSVG />}*/}
               </div>
             </Row>

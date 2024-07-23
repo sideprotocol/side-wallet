@@ -28,6 +28,11 @@ const $viewPresets = {
     padding: spacing.large,
     paddingTop: 0
   }),
+  medium: Object.assign({}, $contentStyle, {
+    alignItems: 'stretch',
+    padding: spacing.medium,
+    paddingTop: 0
+  }),
   middle: Object.assign({}, $contentStyle, {
     alignItems: 'center',
     justifyContent: 'center',
@@ -39,6 +44,6 @@ const $viewPresets = {
 export function Content(props: ContentProps) {
   const { style: $styleOverride, preset, ...rest } = props;
 
-  const $style = Object.assign({}, $viewPresets[preset || 'large'], $styleOverride);
+  const $style = Object.assign({}, $viewPresets[preset || 'medium'], $styleOverride);
   return <BaseView style={$style} {...rest} />;
 }

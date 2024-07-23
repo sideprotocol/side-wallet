@@ -77,6 +77,7 @@ const $baseInputStyle: CSSProperties = Object.assign({}, $textPresets.regular, {
 function PasswordInput(props: InputProps) {
   const { placeholder, containerStyle, style: $inputStyleOverride, ...rest } = props;
   const [type, setType] = useState<'password' | 'text'>('password');
+  const [isMouse, setIsMouse] = useState<boolean>(false);
   return (
     <div style={Object.assign({}, $baseContainerStyle, containerStyle)}>
       <input
@@ -86,7 +87,7 @@ function PasswordInput(props: InputProps) {
         {...rest}
       />
       {type === 'password' && (
-        <Icon icon="eye-slash" style={{ marginLeft: spacing.tiny }} onClick={() => setType('text')} color="textDim" />
+        <Icon onMouseLeave={() => setIsMouse(false)} onMouseOver={() => setIsMouse(true)} icon={isMouse ? 'eye-slash-hover' : 'eye-slash'} style={{ marginLeft: spacing.tiny }} onClick={() => setType('text')} color="textDim" />
       )}
       {type === 'text' && <Icon icon="eye" style={{ marginLeft: spacing.tiny }} onClick={() => setType('password')} />}
     </div>

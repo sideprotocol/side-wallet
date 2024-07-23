@@ -23,8 +23,8 @@ function SideCryptoItem({ token }: { token: SideToken }) {
         <ImageIcon
           url={token.logo}
           style={{
-            width: '42px',
-            height: '42px',
+            width: '38px',
+            height: '38px',
             borderRadius: '50%'
           }}
         />
@@ -62,9 +62,12 @@ export default function Index(props) {
       />
       <Content
         style={{
-          backgroundColor: '#09090A'
+          backgroundColor: '#09090A',
+          padding: '0',
         }}>
-        <Column>
+        <Column style={{
+          padding: '0 24px',
+        }}>
           <Row
             style={{
               padding: '0px 10px',
@@ -93,10 +96,13 @@ export default function Index(props) {
           </Row>
         </Column>
 
-        <Column>
+        <Column style={{
+          marginTop: '14px',
+        }}>
           {popularList?.map((asset) => {
             return (
               <Row
+                classname={'bg-item-hover'}
                 onClick={() => {
                   // onSelect();
                   onSelect({
@@ -109,7 +115,9 @@ export default function Index(props) {
                 key={asset.symbol + asset.name}
                 justifyBetween
                 style={{
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  height: '44px',
+                  padding: '0 24px',
                 }}>
                 <SideCryptoItem token={asset} />
               </Row>
