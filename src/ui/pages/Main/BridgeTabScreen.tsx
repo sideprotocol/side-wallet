@@ -23,6 +23,7 @@ import { useWallet } from '@/ui/utils';
 
 import { SIDE_CHAINID_MAINNET } from '../../../shared/constant/index';
 import { useBridge } from '../../state/bridge/hook';
+import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ export default function BridgeTabScreen() {
   useEffect(() => {
     bridgeStore.balance = balance;
   }, [balance]);
-
+  const { hoverExchange } = useSwapStore();
   const { bridge } = useBridge();
 
   const { bridge: bridgeRune } = useRuneBridge();
@@ -67,7 +68,7 @@ export default function BridgeTabScreen() {
       bridgeStore.from = {
         id: chainId,
         name: 'SIDE devnet',
-        logo: '/images/logo/wallet-logo-white.svg'
+        logo: '/images/logo/wallet-logo-white-v2.svg'
       };
       bridgeStore.to = {
         id: 'mainnet',
@@ -78,7 +79,7 @@ export default function BridgeTabScreen() {
       bridgeStore.from = {
         id: chainId,
         name: 'SIDE devnet',
-        logo: '/images/logo/wallet-logo-white.svg'
+        logo: '/images/logo/wallet-logo-white-v2.svg'
       };
       bridgeStore.to = {
         id: 'LIVENET',
@@ -155,7 +156,8 @@ export default function BridgeTabScreen() {
                 <Image size={28} src={from.logo} />
                 <span
                   style={{
-                    fontSize: '14px'
+                    fontSize: '14px',
+                    paddingLeft: '5px'
                   }}>
                   {from.name}
                 </span>
@@ -179,12 +181,19 @@ export default function BridgeTabScreen() {
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}
+                onMouseEnter={() => {
+                  swapStore.hoverExchange = true;
+                }}
+                onMouseLeave={() => {
+                  swapStore.hoverExchange = false;
+                }}
                 onClick={() => {
                   const from = bridgeStore.from;
                   bridgeStore.from = to;
                   bridgeStore.to = from;
                 }}>
-                <Icon icon={'swap-down-icon'}></Icon>
+                {/*<Icon icon={'swap-down-icon'}></Icon>*/}
+                <Icon size={hoverExchange ? 22 : 11} icon={hoverExchange ? 'swap-down-hover' : 'swap-down-icon'}></Icon>
               </div>
             </Row>
 
@@ -211,7 +220,8 @@ export default function BridgeTabScreen() {
                   <Image size={28} src={to.logo} />
                   <span
                     style={{
-                      fontSize: '14px'
+                      fontSize: '14px',
+                      paddingLeft: '5px'
                     }}>
                     {to.name}
                   </span>
@@ -230,10 +240,12 @@ export default function BridgeTabScreen() {
                     Send
                   </div>
 
-                  <Row itemsCenter justifyCenter gap="sm">
+                  <Row itemsCenter justifyCenter>
                     <img src={WalletIcon} alt="" />
 
-                    <Text size="sm">{balance}</Text>
+                    <Text size="sm" style={{
+                      paddingLeft: '5px'
+                    }}>{balance}</Text>
                   </Row>
                 </Row>
 
@@ -320,7 +332,8 @@ export default function BridgeTabScreen() {
                         color: '#0DD4C3',
                         fontSize: '14px',
                         background: 'rgba(13, 212, 195, 0.10)',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        borderRadius: '8px'
                       }}
                       onClick={() => {
                         bridgeStore.bridgeAmount = balance;
