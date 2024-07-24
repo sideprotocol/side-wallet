@@ -81,7 +81,8 @@ export const colors = Object.assign({}, palette, {
 
   // side theme color
   background: '#09090A',
-  swapBg: '#1D1D1F'
+  swapBg: '#1D1D1F',
+  // border: '#1E1E1F',
 });
 
 export type ColorTypes = keyof typeof colors;

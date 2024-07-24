@@ -53,7 +53,7 @@ export default function Index(props) {
   const [focus, setFocus] = useState<boolean>(false);
   const { open, onClose, onSelect, assetsList, popularList, onSearch, searchValue, curTokenDenom } = props;
   return (
-    <Layout style={{ width: '100%', position: 'absolute', left: 0, top: 0, display: open ? 'flex' : 'none' }}>
+    <Layout style={{ width: '100%', transform: 'translate(-50%, 0)', position: 'absolute', left: '50%', top: 0, display: open ? 'flex' : 'none' }}>
       <Header
         onBack={() => {
           onClose();

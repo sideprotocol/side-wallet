@@ -18,11 +18,11 @@ export function AtomicalsTab() {
       children: <AtomicalList />,
       hidden: true
     },
-    {
-      key: AtomicalsAssetTabKey.ARC20,
-      label: `ARC-20 (${addressSummary.arc20Count})`,
-      children: <Arc20List />
-    },
+    // {
+    //   key: AtomicalsAssetTabKey.ARC20,
+    //   label: `ARC-20 (${addressSummary.arc20Count})`,
+    //   children: <Arc20List />
+    // },
     {
       key: AtomicalsAssetTabKey.OTHERS,
       label: `Others`,

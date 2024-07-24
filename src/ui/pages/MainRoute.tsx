@@ -30,8 +30,8 @@ import { InscribeTransferScreen } from './Approval/components/InscribeTransfer';
 import AtomicalsNFTScreen from './Atomicals/AtomicalsNFTScreen';
 import SendArc20Screen from './Atomicals/SendArc20Screen';
 import SendAtomicalsInscriptionScreen from './Atomicals/SendAtomicalsNFTScreen';
-import BRC20SendScreen from './BRC20/BRC20SendScreen';
-import BRC20TokenScreen from './BRC20/BRC20TokenScreen';
+// import BRC20SendScreen from './BRC20/BRC20SendScreen';
+// import BRC20TokenScreen from './BRC20/BRC20TokenScreen';
 import AppTabScrren from './Main/AppTabScreen';
 import BoostScreen from './Main/BoostScreen';
 import BridgeTabScreen from './Main/BridgeTabScreen';
@@ -322,14 +322,14 @@ const routes = {
     path: '/inscribe/transfer',
     element: <InscribeTransferScreen />
   },
-  BRC20SendScreen: {
-    path: '/brc20/send',
-    element: <BRC20SendScreen />
-  },
-  BRC20TokenScreen: {
-    path: '/brc20/token',
-    element: <BRC20TokenScreen />
-  },
+  // BRC20SendScreen: {
+  //   path: '/brc20/send',
+  //   element: <BRC20SendScreen />
+  // },
+  // BRC20TokenScreen: {
+  //   path: '/brc20/token',
+  //   element: <BRC20TokenScreen />
+  // },
   TestScreen: {
     path: '/test',
     element: <TestScreen />

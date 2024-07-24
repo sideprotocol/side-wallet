@@ -366,7 +366,7 @@ export default function SwapTabScreen() {
   }, []);
 
   return (
-    <div style={{position: 'relative', width: '100%', height: '100%'}} >
+    <>
       <Layout style={{
         display: !tokenModalShow ? 'flex' : 'none!important',
       }}>
@@ -545,7 +545,6 @@ export default function SwapTabScreen() {
         searchValue={searchTokenValue}
         curTokenDenom={swapPair[modalTokenType as 'native' | 'remote']?.denom}
       />
-    </div>
-
+    </>
   );
 }

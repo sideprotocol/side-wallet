@@ -53,7 +53,7 @@ export default function ReceiveScreen() {
 
   const tools = useTools();
   console.log(`chain, type, base: `, state, currentAccount);
-  debugger;
+  // debugger;
 
   return (
     <Layout>
@@ -88,7 +88,7 @@ export default function ReceiveScreen() {
                     padding: '0'
                   }}
                   color="black"
-                  text={state?.token?.name}></Text>
+                  text={state?.token?.name === 'Bitcoin' ? 'BTC' : state?.token?.name}></Text>
               </Row>
 
               <Row>
@@ -100,7 +100,7 @@ export default function ReceiveScreen() {
                   color="black"
                   bg="orange"
                   preset="sub"
-                  text={state?.base === 'BTC' ? 'Bitcoin' : 'Side'}></Text>
+                  text={state?.base === 'BTC' ? 'BTC' : 'Side'}></Text>
 
                 <Text
                   style={{
@@ -120,9 +120,9 @@ export default function ReceiveScreen() {
             full
             style={{
               height: '1px',
-              borderBottom: '1px solid #1E1E1F'
+              borderBottom: '1px solid #1E1E1F20'
             }}
-            bg="black_dark"></Row>
+            bg="border"></Row>
 
           <Row
             full
