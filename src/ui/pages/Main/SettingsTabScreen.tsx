@@ -240,8 +240,8 @@ export default function SettingsTabScreen() {
                   }}
                   style={{
                     backgroundColor: 'transparent',
-                    paddingLeft: '10px',
-                    paddingRight: '10px',
+                    paddingLeft: '6px',
+                    paddingRight: '6px',
                   }}>
                   <Row full justifyBetween>
                     <Row itemsCenter>

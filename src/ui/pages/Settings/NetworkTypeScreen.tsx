@@ -5,6 +5,7 @@ import { useReloadAccounts } from '@/ui/state/accounts/hooks';
 import { useChangeNetworkTypeCallback, useNetworkType } from '@/ui/state/settings/hooks';
 
 import { useNavigate } from '../MainRoute';
+import { colors } from '@/ui/theme/colors';
 
 export default function NetworkTypeScreen() {
   const networkType = useNetworkType();
@@ -45,6 +46,7 @@ export default function NetworkTypeScreen() {
               //   </Row>
               // </Card>
               <Row
+                rounded
                 onClick={async () => {
                   if (item.value == networkType) {
                     return;
@@ -56,12 +58,14 @@ export default function NetworkTypeScreen() {
                 }}
                 key={index}
                 style={{
-                  padding: '16px 10px'
-                }} full justifyBetween itemsCenter classname={'bg-item1e'}>
+                  padding: '10px 10px',
+                  backgroundColor: item.value == networkType ? colors.green_light : 'tr',
+                  border: item.value == networkType ? `1px solid ${colors.green_light}` : 'none',
+                }} full justifyBetween itemsCenter classname={item.value != networkType ? 'bg-item1e' : ''}>
                 <Row itemsCenter>
                   <Text text={item.label} />
                 </Row>
-                <Column>{item.value == networkType && <Icon contain={'contain'} icon="check" />}</Column>
+                <Column>{item.value == networkType && <Icon color={'green'} icon="check-circle" />}</Column>
               </Row>
             );
           })}

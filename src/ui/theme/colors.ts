@@ -18,6 +18,7 @@ const palette = {
   green_dark: '#379a29',
   green: '#41B530',
   green_light: '#5ec04f',
+  green_check: '#22AB38',
 
   yellow_dark: '#d5ac00',
   yellow: '#e3bb5f',

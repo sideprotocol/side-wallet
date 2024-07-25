@@ -22,7 +22,7 @@ export default function AboutScreen() {
               src={aboutIcon}
               size={120}
               style={{
-                borderRadius: '50%',
+                borderRadius: '40px',
                 margin: 'auto'
               }}
             />

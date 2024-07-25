@@ -79,7 +79,7 @@ export default function CreateSendSide() {
         <Row
           justifyCenter
           style={{
-            marginTop: '-24px'
+            marginTop: '-35px'
           }}>
           <Row
             style={{

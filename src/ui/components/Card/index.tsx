@@ -16,7 +16,7 @@ const $baseViewStyle = {
   backgroundColor: colors.black_dark,
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: 5
+  borderRadius: 8
 } as CSSProperties;
 
 const $viewPresets = {
@@ -54,7 +54,7 @@ const $viewPresets = {
     minHeight: 50,
     backgroundColor: colors.green_light,
     border: `1px solid ${colors.green_light}`,
-    borderRadius: 12
+    borderRadius: 8
   }) as CSSProperties,
   styleNotCheck: Object.assign({}, $baseViewStyle, {
     paddingTop: spacingGap.lg,
@@ -62,7 +62,7 @@ const $viewPresets = {
     paddingLeft: spacingGap.lg,
     paddingRight: spacingGap.lg,
     minHeight: 50,
-    borderRadius: 12
+    borderRadius: 8
   }) as CSSProperties
 };
 

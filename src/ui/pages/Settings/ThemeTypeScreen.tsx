@@ -1,4 +1,5 @@
 import { Card, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
+import { colors } from '@/ui/theme/colors';
 
 export default function LanguageTypeScreen() {
   return (
@@ -25,17 +26,20 @@ export default function LanguageTypeScreen() {
       {/*</Content>*/}
 
       <Content style={{
-        padding: '0 16px'
+        padding: '0 16px',
+        marginTop: '16px',
       }}>
         <Column gap={'md'}>
-          <Row style={{
+          <Row rounded style={{
             padding: '16px 10px',
-          }} full justifyBetween itemsCenter classname={'bg-item1e'}>
+            backgroundColor: colors.green_light,
+            border: `1px solid ${colors.green_light}`,
+          }} full justifyBetween itemsCenter classname={''}>
             <Row itemsCenter>
               <Text text={'Black'} />
             </Row>
             <Column>
-              <Icon icon="check-box" />
+              <Icon color={'green'} icon="check-circle"  />
             </Column>
           </Row>
         </Column>
