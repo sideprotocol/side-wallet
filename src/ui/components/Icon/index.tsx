@@ -104,6 +104,7 @@ interface IconProps {
    * An optional size for the icon..
    */
   size?: number | string;
+  contain?: number | string;
 
   /**
    * Style overrides for the icon image
@@ -126,6 +127,7 @@ interface IconProps {
 
 export function Icon(props: IconProps) {
   const {
+    contain,
     icon,
     color,
     size,
@@ -187,11 +189,11 @@ export function Icon(props: IconProps) {
               height: size || fontSizes.icon,
               backgroundColor: color ? colors[color] : '#FFF',
               maskImage: `url(${iconPath})`,
-              maskSize: 'cover',
+              maskSize: contain ? 'contain' : 'cover',
               maskRepeat: 'no-repeat',
               maskPosition: 'center',
               WebkitMaskImage: `url(${iconPath})`,
-              WebkitMaskSize: 'cover',
+              WebkitMaskSize: contain ? 'contain' : 'cover',
               WebkitMaskRepeat: 'no-repeat',
               WebkitMaskPosition: 'center'
             },

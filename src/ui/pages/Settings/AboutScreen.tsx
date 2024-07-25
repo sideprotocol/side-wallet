@@ -129,6 +129,7 @@ export default function AboutScreen() {
                 height: '40px'
               }}>
               <Icon
+                contain={'contain'}
                 icon="discord"
                 size={20}
                 onClick={() => {
