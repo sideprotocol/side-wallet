@@ -54,6 +54,7 @@ export default function ConnectedSitesScreen() {
                         size={fontSizes.logo}
                       />
                       <Text
+                        color={'white'}
                         style={{
                           fontSize: '14px'
                         }}

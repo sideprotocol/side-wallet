@@ -11,7 +11,7 @@ export function Empty(props: EmptyProps) {
       style={{
         alignSelf: 'center'
       }}>
-      <Text text={content} preset="sub" textCenter />
+      <Text color={'white'} text={content} preset="sub" textCenter />
     </div>
   );
 }

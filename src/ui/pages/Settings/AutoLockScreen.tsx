@@ -26,6 +26,7 @@ export default function AutoLockScreen() {
 
           <Text
             preset="sub"
+            color={'white'}
             style={{
               textAlign: 'center',
               width: '200px',
@@ -35,7 +36,7 @@ export default function AutoLockScreen() {
         </Column>
 
         <Column>
-          <Text preset="sub" text={'Duration (minutes)'}></Text>
+          <Text color={'white'} preset="sub" text={'Duration (minutes)'}></Text>
 
           <Input placeholder="0"></Input>
 

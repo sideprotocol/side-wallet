@@ -47,7 +47,7 @@ export default function ChangePasswordScreen() {
       <Content justifyBetween>
         <Column gap="lg">
           <Column>
-            <Text text={'Old Password'} preset="sub"></Text>
+            <Text text={'Old Password'} color={'white'} preset="sub"></Text>
             <Input
               preset="password"
               placeholder="Current Password"
@@ -59,7 +59,7 @@ export default function ChangePasswordScreen() {
           </Column>
 
           <Column>
-            <Text text={'New Password'} preset="sub"></Text>
+            <Text text={'New Password'} color={'white'} preset="sub"></Text>
 
             <Input
               preset="password"
@@ -80,7 +80,7 @@ export default function ChangePasswordScreen() {
           </Column>
 
           <Column>
-            <Text text={'Confirm Password'} preset="sub"></Text>
+            <Text text={'Confirm Password'} color={'white'} preset="sub"></Text>
 
             <Input
               preset="password"
