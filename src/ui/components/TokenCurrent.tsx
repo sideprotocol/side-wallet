@@ -23,6 +23,11 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
 
   const unSelected = !newValue?.base;
 
+  let limitWidth = newValue?.logo ? {
+    maxWidth: '72px',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
+  } : {};
   return (
     <div style={{
       display: 'flex',
@@ -55,10 +60,16 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
           url={newValue?.logo || newValue?.logo}
         />
       )}
-      <div style={{ fontSize: '14px', paddingRight: '6px', whiteSpace: 'nowrap' }}>
+      <div style={{ fontSize: '14px', paddingRight: '6px', whiteSpace: 'nowrap',
+        ...limitWidth
+      }}>
         {newValue?.symbol || newValue?.symbol || newValue?.base || 'Select Token'}
       </div>
       <Icon type="side-down" />
     </div>
   );
 }
+
+// maxWidth: '40px',
+//   textOverflow: 'ellipsis',
+//   overflow: 'hidden'

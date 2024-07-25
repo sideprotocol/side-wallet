@@ -152,7 +152,7 @@ export default function CreatePasswordScreen() {
             justifyBetween>
             <Checkbox
               style={{
-                borderRadius: '4px'
+                borderRadius: '4px',
               }}
               defaultChecked={check}
               onChange={(e) => {

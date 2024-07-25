@@ -117,7 +117,7 @@ export default function Index(props) {
                 style={{
                   cursor: 'pointer',
                   height: '44px',
-                  padding: '0 24px',
+                  padding: '10px 24px',
                 }}>
                 <SideCryptoItem token={asset} />
               </Row>

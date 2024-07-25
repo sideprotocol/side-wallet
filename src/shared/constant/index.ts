@@ -420,28 +420,6 @@ export const SIDE_TOKENS: SideToken[] = [
     logo: USDT,
     precision: 6
   },
-  {
-    base: 'uwbtc',
-    coingecko_id: 'bitcoin',
-    exponent: '8',
-    logo: Wbtc,
-    name: 'Unified BTC',
-
-    precision: 8,
-    symbol: 'wBTC'
-  },
-  {
-    ...NOBLE_TEST_ASSETLIST.Usdc,
-    base: 'ibc/F082B65C88E4B6D5EF1DB243CDA1D331D002759E938A0F5CD3FFDC5D53B3E349'
-  },
-  {
-    ...AXELAR_TEST_ASSETLIST.Ausdc,
-    base: 'ibc/4BDF2D63B8FFE3454AF30E9BC10D2D7979BD3A938D989889ABC94FC5B86F1E2D'
-  },
-  {
-    ...BABYLON_TEST_ASSETLIST.Bbn,
-    base: 'ibc/sdfs'
-  }
 ];
 
 export const BITCOIN_TOKENS: BitcoinToken[] = [

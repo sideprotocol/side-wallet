@@ -99,9 +99,9 @@ const config = (env) => {
           // 自定义主题
           lessOptions: {
             modifyVars: {
-              'primary-color': 'rgb(234,202,68)',
+              'primary-color': '#000',
               'primary-color-active': '#383535',
-              'input-icon-hover-color': '#FFFFFF',
+              'input-icon-hover-color': '#000',
               'component-background': '#1C1919',
               'select-dropdown-bg': '#2A2626',
               'select-item-selected-bg': '#332F2F',
@@ -131,7 +131,8 @@ const config = (env) => {
               'height-lg': '3.875rem',
               'checkbox-size': '1.5rem',
               'btn-text-hover-bg': '#383535',
-              'input-disabled-color': 'rgba(255,255,255,0.6)'
+              'input-disabled-color': 'rgba(255,255,255,0.6)',
+              'checkbox-check-color': '#000'
             },
             javascriptEnabled: true
           }

@@ -88,7 +88,7 @@ export default function AboutScreen() {
               justifyCenter
               style={{
                 border: '0.7px solid #2A2A2A',
-                borderRadius: '100%',
+                borderRadius: '40px',
                 width: '40px',
                 height: '40px'
               }}>

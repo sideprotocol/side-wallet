@@ -34,7 +34,7 @@ export function AddressTypeCard(props: AddressTypeCardProps) {
           <Column style={{
             position: 'relative',
             top: '-10px',
-          }} justifyCenter>{checked && <Icon icon="check" />}</Column>
+          }} justifyCenter>{checked && <Icon contain={'contain'} icon="check" />}</Column>
         </Row>
         {hasVault && (
           <Row justifyBetween bg="bg3" roundedBottom px="md" py="md">

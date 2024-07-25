@@ -145,7 +145,7 @@ export default function AdvancedTabScreen() {
                     backgroundColor: 'transparent'
                   }}>
                   <Row full justifyBetween>
-                    <Column justifyCenter>
+                    <Column gap={'zero'} justifyCenter>
                       <Text text={item.label || item.desc} preset="regular-bold" />
                       <Text text={item.value} preset="sub" />
                     </Column>
