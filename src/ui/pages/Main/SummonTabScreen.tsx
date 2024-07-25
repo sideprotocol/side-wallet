@@ -14,7 +14,7 @@ import { spacing } from '@/ui/theme/spacing';
 import { useWallet } from '@/ui/utils';
 import { RightOutlined } from '@ant-design/icons';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-
+import { colors } from '@/ui/theme/colors';
 interface Setting {
   label?: string;
   value?: string;
@@ -215,19 +215,18 @@ export default function SettingsTabScreen() {
       <Content justifyCenter itemsCenter>
         <Column gap={'md'} justifyCenter itemsCenter>
           <Row justifyCenter itemsCenter>
-            <Image size={90} src={`/images/icons/main/comimg-soon.svg`} />
+            <Image size={90} src={'/images/icons/main/comimg-soon.svg'} />
           </Row>
           <Row>
             <span style={{
               fontSize: '14px',
-              color: 'rgb(125, 125, 125)',
+              color: colors.white,
               fontFamily: 'Inter'
-            }}> Common soon </span>
+            }}> Comming soon </span>
           </Row>
         </Column>
       </Content>
       <Footer px="zero" py="zero">
-        {/*<NavTabBar tab="mint" />*/}
         <NavTabBar tab="summon" />
       </Footer>
     </Layout>
