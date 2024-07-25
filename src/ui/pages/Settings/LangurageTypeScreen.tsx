@@ -9,26 +9,28 @@ export default function LanguageTypeScreen() {
         }}
         title="Language"
       />
-      <Content>
-        <Column>
-          <Card preset="styleChecked">
-            <Row full justifyBetween itemsCenter>
-              <Row itemsCenter>
-                <Text text={'Automatic (Browser default)'} preset="regular-bold" />
-              </Row>
-              <Column>
-                <Icon icon="check-box" />
-              </Column>
+      <Content style={{
+        padding: '0 16px'
+      }}>
+        <Column gap={'md'}>
+          <Row style={{
+            padding: '16px 24px',
+          }} full justifyBetween itemsCenter classname={'bg-item1e'}>
+            <Row itemsCenter>
+              <Text text={'Automatic (Browser default)'} />
             </Row>
-          </Card>
+            <Column>
+              <Icon icon="check-box" />
+            </Column>
+          </Row>
 
-          <Card preset="styleNotCheck">
-            <Row full justifyBetween itemsCenter>
-              <Row itemsCenter>
-                <Text text={'English'} preset="regular-bold" />
-              </Row>
+          <Row style={{
+            padding: '16px 24px',
+          }} full justifyBetween itemsCenter classname={'bg-item1e'}>
+            <Row itemsCenter>
+              <Text text={'English'} />
             </Row>
-          </Card>
+          </Row>
         </Column>
       </Content>
     </Layout>

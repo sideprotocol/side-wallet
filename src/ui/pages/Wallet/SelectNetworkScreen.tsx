@@ -8,6 +8,7 @@ import { useNavigate } from '../MainRoute';
 export default function SelectNetworkScreen() {
   // TODO: set select network
 
+  const [isCheck, setIsCheck] = useState(false);
   const [number, setNumber] = useState(-1);
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -29,13 +30,20 @@ export default function SelectNetworkScreen() {
         }}>
         <Column
           onClick={() => {
-            // navigate('SelectCryptoScreen', {
-            //   chain: CHAINS_ENUM.BTC,
-            //   type
-            // });
+            navigate('SelectCryptoScreen', {
+              chain: CHAINS_ENUM.BTC,
+              type
+            });
             setNumber(0);
+            setIsCheck(true);
           }}>
           <Image
+            onMouseEnter={() => {
+              setNumber(0);
+            }}
+            onMouseLeave={() => {
+              // setNumber(-1);
+            }}
             style={{
               cursor: 'pointer'
             }}
@@ -46,13 +54,20 @@ export default function SelectNetworkScreen() {
 
         <Column
           onClick={() => {
-            // navigate('SelectCryptoScreen', {
-            //   chain: CHAINS_ENUM.SIDE,
-            //   type
-            // });
+            navigate('SelectCryptoScreen', {
+              chain: CHAINS_ENUM.SIDE,
+              type
+            });
             setNumber(1);
+            setIsCheck(true);
           }}>
           <Image
+            onMouseEnter={() => {
+              setNumber(1);
+            }}
+            onMouseLeave={() => {
+              setNumber(-1);
+            }}
             style={{
               cursor: 'pointer'
             }}
@@ -60,25 +75,25 @@ export default function SelectNetworkScreen() {
             src={number === 1 ? '/images/icons/wallet/side-selected.svg' : '/images/icons/wallet/side-select-dark.svg'}
           />
         </Column>
-        <Row mt={'md'}>
-          <Button
-            full
-            text={'Confirm'}
-            preset="primary"
-            disabled={number === -1}
-            onClick={async () => {
-              if (number === -1) return;
-              let chain = CHAINS_ENUM.BTC;
-              if (number === 1) {
-                chain = CHAINS_ENUM.SIDE;
-              }
-              navigate('SelectCryptoScreen', {
-                chain,
-                type
-              });
-            }}
-          />
-        </Row>
+        {/*<Row mt={'md'}>*/}
+        {/*  <Button*/}
+        {/*    full*/}
+        {/*    text={'Confirm'}*/}
+        {/*    preset="primary"*/}
+        {/*    disabled={!isCheck}*/}
+        {/*    onClick={async () => {*/}
+        {/*      if (number === -1) return;*/}
+        {/*      let chain = CHAINS_ENUM.BTC;*/}
+        {/*      if (number === 1) {*/}
+        {/*        chain = CHAINS_ENUM.SIDE;*/}
+        {/*      }*/}
+        {/*      navigate('SelectCryptoScreen', {*/}
+        {/*        chain,*/}
+        {/*        type*/}
+        {/*      });*/}
+        {/*    }}*/}
+        {/*  />*/}
+        {/*</Row>*/}
       </Content>
     </Layout>
   );

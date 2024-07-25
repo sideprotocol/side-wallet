@@ -119,7 +119,7 @@ export default function Step1_Create({
                           text={`${index + 1}. `}
                           style={{ width: 25, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                           textEnd
-                          color="textDim"
+                          color="white"
                         />
                         <Input
                           containerStyle={{

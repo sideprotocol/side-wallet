@@ -27,8 +27,8 @@ function SideCryptoItem({ token }: { token: SideToken & { price: string; amount:
         <ImageIcon
           url={token.logo}
           style={{
-            width: '42px',
-            height: '42px',
+            width: '38px',
+            height: '38px',
             borderRadius: '50%'
           }}
         />
@@ -71,7 +71,7 @@ export default function Index(props) {
   }
 
   return (
-    <Layout style={{ width: '100%', position: 'absolute', left: 0, top: 0, display: open ? 'flex' : 'none' }}>
+    <Layout style={{ width: '100%', transform: 'translate(-50%, 0)', position: 'absolute', left: '50%', top: 0, display: open ? 'flex' : 'none' }}>
       <Header
         onBack={() => {
           onClose();

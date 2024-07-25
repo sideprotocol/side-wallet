@@ -90,7 +90,7 @@ export default function Step2_SetName({
           <Text
             text="Wallet Name"
             style={{
-              color: '#828282',
+              color: 'white',
               fontSize: '14px',
               lineHeight: '24px'
             }}

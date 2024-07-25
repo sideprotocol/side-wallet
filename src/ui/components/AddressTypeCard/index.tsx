@@ -22,14 +22,16 @@ export function AddressTypeCard(props: AddressTypeCardProps) {
   const { onClick, label, address, checked, assets } = props;
   const hasVault = Boolean(assets.satoshis && assets.satoshis > 0);
   return (
-    <Card px="zero" py="zero" gap="zero" rounded onClick={onClick}>
-      <Column full>
-        <Row justifyBetween px="md" pt="md">
+    <Card px="zero" py="zero" gap="zero" onClick={onClick}>
+      <Column full gap={'zero'}>
+        <Row justifyBetween px="lg" style={{
+          paddingTop: '16px'
+        }}>
           <Column justifyCenter>
             <Text text={label} size="xs" disableTranslate />
           </Column>
         </Row>
-        <Row justifyBetween px="md" pb="md">
+        <Row justifyBetween px="lg" pb="md">
           <CopyableAddress address={address} />
           <Column style={{
             position: 'relative',

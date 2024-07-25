@@ -5,7 +5,7 @@ import { Button, ButtonGroup, Column, Grid, Image, Input, Row, Text } from '@/ui
 import { useTools } from '@/ui/components/ActionComponent';
 
 import { ContextData, TabType, UpdateContextDataParams, WORDS_12_ITEM, WORDS_24_ITEM, WordsType } from './type';
-
+import { colors } from '@/ui/theme/colors';
 export default function Step1_Import({
   contextData,
   updateContextData
@@ -97,7 +97,7 @@ export default function Step1_Import({
         <Column
           style={{
             marginTop: '16px',
-            boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+            // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
             backgroundColor: '#222222',
             borderRadius: '14px',
             padding: '16px'
@@ -137,7 +137,7 @@ export default function Step1_Import({
                       text={`${index + 1}. `}
                       style={{ width: 25, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                       textEnd
-                      color="textDim"
+                      color="white_4"
                     />
                     <Input
                       containerStyle={{
@@ -181,8 +181,8 @@ export default function Step1_Import({
 
         <Column
           style={{
-            marginTop: '24px',
-            boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+            marginTop: '10px',
+            // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
             backgroundColor: '#222222',
             borderRadius: '14px',
             padding: '10px 16px',
@@ -196,7 +196,7 @@ export default function Step1_Import({
             <Text
               text="Note:"
               style={{
-                color: '#828282',
+                color: colors.white,
                 lineHeight: '20px',
                 fontSize: '14px',
                 fontWeight: 600
@@ -206,7 +206,7 @@ export default function Step1_Import({
           <Text
             text="Enter your recovery phrase here to restore your wallet. Click on any field and paste the entire phrase. Make sure the phrase is in the correct order, without capitalization, punctuation, or extra spaces."
             style={{
-              color: '#828282',
+              color: '#fff',
               lineHeight: '18px',
               fontSize: '12px',
               fontWeight: 400,

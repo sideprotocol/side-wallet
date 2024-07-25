@@ -8,13 +8,18 @@ interface ImageProps {
   style?: CSSProperties;
   containerStyle?: CSSProperties;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 export function Image(props: ImageProps) {
-  const { src, size, style: $imageStyleOverride, onClick } = props;
+  const { src, size, style: $imageStyleOverride, onClick, onMouseEnter, onMouseLeave,  } = props;
 
   return (
     <img
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       src={src}
       alt=""
       style={Object.assign({}, $imageStyleOverride, {

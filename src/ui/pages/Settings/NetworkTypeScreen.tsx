@@ -20,12 +20,31 @@ export default function NetworkTypeScreen() {
         }}
         title="Switch Network"
       />
-      <Content>
-        <Column>
+      <Content style={{
+        padding: '0 16px'
+      }}>
+        <Column gap={'md'}>
           {NETWORK_TYPES.map((item, index) => {
             return (
-              <Card
-                key={index}
+              // <Card
+              //   key={index}
+              //   onClick={async () => {
+              //     if (item.value == networkType) {
+              //       return;
+              //     }
+              //     await changeNetworkType(item.value);
+              //     reloadAccounts();
+              //     navigate('MainScreen');
+              //     tools.toastSuccess('Network type changed');
+              //   }}>
+              //   <Row full justifyBetween itemsCenter>
+              //     <Row itemsCenter>
+              //       <Text text={item.label}  />
+              //     </Row>
+              //     <Column>{item.value == networkType && <Icon icon="check" />}</Column>
+              //   </Row>
+              // </Card>
+              <Row
                 onClick={async () => {
                   if (item.value == networkType) {
                     return;
@@ -34,14 +53,16 @@ export default function NetworkTypeScreen() {
                   reloadAccounts();
                   navigate('MainScreen');
                   tools.toastSuccess('Network type changed');
-                }}>
-                <Row full justifyBetween itemsCenter>
-                  <Row itemsCenter>
-                    <Text text={item.label} preset="regular-bold" />
-                  </Row>
-                  <Column>{item.value == networkType && <Icon icon="check" />}</Column>
+                }}
+                key={index}
+                style={{
+                  padding: '16px 0'
+                }} full justifyBetween itemsCenter classname={'bg-item1e'}>
+                <Row itemsCenter>
+                  <Text text={item.label} />
                 </Row>
-              </Card>
+                <Column>{item.value == networkType && <Icon contain={'contain'} icon="check" />}</Column>
+              </Row>
             );
           })}
         </Column>

@@ -2,10 +2,11 @@
 
 const palette = {
   white: '#ffffff',
+  white_4: 'rgb(255 255 255 / 50%)',
   white_muted: 'rgb(130 130 130 / 50%)',
   black: '#000000',
   black_muted: 'rgba(0, 0, 0, 0.5)',
-  black_muted2: 'rgba(0, 0, 0, 0.)',
+  black_muted2: 'rgba(0, 0, 0, 0.1)',
 
   dark: '#1E283C',
   grey: '#495361',
