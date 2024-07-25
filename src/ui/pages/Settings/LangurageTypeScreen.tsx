@@ -14,7 +14,7 @@ export default function LanguageTypeScreen() {
       }}>
         <Column gap={'md'}>
           <Row style={{
-            padding: '16px 24px',
+            padding: '16px 10px',
           }} full justifyBetween itemsCenter classname={'bg-item1e'}>
             <Row itemsCenter>
               <Text text={'Automatic (Browser default)'} />
@@ -25,7 +25,7 @@ export default function LanguageTypeScreen() {
           </Row>
 
           <Row style={{
-            padding: '16px 24px',
+            padding: '16px 10px',
           }} full justifyBetween itemsCenter classname={'bg-item1e'}>
             <Row itemsCenter>
               <Text text={'English'} />

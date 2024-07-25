@@ -56,7 +56,7 @@ export default function NetworkTypeScreen() {
                 }}
                 key={index}
                 style={{
-                  padding: '16px 0'
+                  padding: '16px 10px'
                 }} full justifyBetween itemsCenter classname={'bg-item1e'}>
                 <Row itemsCenter>
                   <Text text={item.label} />
