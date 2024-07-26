@@ -105,13 +105,13 @@ export default function CreatePasswordScreen() {
               opacity: 0.5,
               fontSize: '12px',
               lineHeight: '18px',
-              marginTop: '36px'
+              marginTop: '24px'
             }}
           />
           <Text
             text="Password"
             style={{
-              marginTop: '32px',
+              marginTop: '24px',
               color: '#828282',
               fontSize: '14px',
               lineHeight: '24px'
