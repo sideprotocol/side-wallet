@@ -83,6 +83,7 @@ export const svgRegistry = {
   'swap-down-icon': '/images/icons/swap/bottom-icon.svg',
   'swap-down-hover': '/images/icons/swap/bottom-hover.svg',
   'check-circle': '/images/icons/check-circle.svg',
+  'clear': '/images/icons/main/clear.svg',
   loading: '/images/icons/loading.svg',
   plus: './images/icons/plus.svg'
 };
