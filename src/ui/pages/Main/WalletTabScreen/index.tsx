@@ -78,6 +78,9 @@ export default function WalletTabScreen() {
       }
     };
     run();
+
+    wallet.setShowSafeNotice(true);
+    setShowSafeNotice(true);
   }, []);
 
   const [currentTab, setCurrentTab] = useState<CHAINS_ENUM>(CHAINS_ENUM.SIDE);

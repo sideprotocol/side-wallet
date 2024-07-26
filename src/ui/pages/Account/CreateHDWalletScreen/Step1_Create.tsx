@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Column, Grid, Image, Input, Mask, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { copyToClipboard, useWallet } from '@/ui/utils';
-
+import { Icon } from '@/ui/components/Icon';
 import { ContextData, TabType, UpdateContextDataParams, WORDS_12_ITEM, WORDS_24_ITEM, WordsType } from './type';
 
 export default function Step1_Create({
@@ -80,7 +80,7 @@ export default function Step1_Create({
             <Column
               style={{
                 marginTop: '16px',
-                boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+                // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
                 backgroundColor: '#222222',
                 borderRadius: '14px',
                 padding: '16px'
@@ -147,6 +147,7 @@ export default function Step1_Create({
                 style={{
                   marginTop: '8px'
                 }}>
+                <Icon icon="copy2" color={'white'} size={20} />
                 <Text text="Copy to clipboard" />
               </Row>
             </Column>
@@ -154,9 +155,9 @@ export default function Step1_Create({
 
           <Column
             style={{
-              marginTop: '24px',
+              marginTop: '10px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
-              borderRadius: '10px',
+              borderRadius: '8px',
               padding: '10px',
               gap: '4px'
             }}>

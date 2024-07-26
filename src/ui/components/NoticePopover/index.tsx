@@ -32,25 +32,33 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
     <Popover>
       <Column justifyCenter itemsCenter>
         <Text text="Compatibility Tips" preset="title-bold" />
-        <Icon icon={'info'} color={'icon_yellow'} size={57} />
+        <Icon style={{
+          margin: '16px 0'
+        }} icon={'info'} color={'icon_yellow'} size={58} />
 
-        <Column gap="zero">
-          <Text text={'Please be aware that:'} preset={'bold'} />
-          <div style={{ marginTop: 8 }}>
+        <Column gap="lg">
+          <Text text={'Please be aware that:'} />
+          <div style={{ marginTop: 8, display: 'flex' }}>
             <Checkbox
+              style={{
+                display: 'flex',
+                alignItems: 'self-start'
+              }}
               checked={checked1}
               onChange={(e) => {
                 setChecked1(e.target.checked);
               }}>
               <div style={{ fontSize: fontSizes.sm }}>
-                for Ordinals assets, <span style={{ color: colors.primary }}>Rare sats </span>are not supported.
+                for Ordinals assets, <span style={{ color: colors.primary }}>Rare SATS </span>are not supported.
               </div>
             </Checkbox>
           </div>
-          <Row style={{ borderTopWidth: 1, borderColor: colors.border }} my="md" />
 
-          <div>
-            <Checkbox checked={checked2} onChange={(e) => setChecked2(e.target.checked)}>
+          <div style={{ display: 'flex' }}>
+            <Checkbox style={{
+              display: 'flex',
+              alignItems: 'self-start'
+            }} checked={checked2} onChange={(e) => setChecked2(e.target.checked)}>
               <div style={{ fontSize: fontSizes.sm }}>
                 for Atomicals assets, <span style={{ color: colors.primary }}>Non-ARC20</span> are not supported yet.
               </div>
@@ -58,9 +66,9 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
           </div>
         </Column>
 
-        <Row full>
+        <Row mt={'md'} full>
           <Button
-            text={coolDown > 0 ? `OK (${coolDown}s)` : 'OK'}
+            text={coolDown > 0 ? `OK (${coolDown}s)` : 'Confirm'}
             preset="primary"
             disabled={!checked1 || !checked2}
             full
