@@ -20,18 +20,19 @@ const AccountSelect = () => {
     <>
       <Row
         itemsCenter
-        justifyBetween
+        justifyCenter
         bg="card"
-        rounded
         onClick={() => {
           setOpen(true);
           // navigate('SwitchAccountScreen');
         }}
         style={{
           padding: '5px 16px',
-          gap: '36px'
+          borderRadius: '20px',
         }}>
-        <Column
+        <Row
+          itemsCenter
+          justifyCenter
           style={{
             gap: '0'
           }}>
@@ -43,7 +44,11 @@ const AccountSelect = () => {
               fontWeight: 600,
               lineHeight: '17px'
             }}
-          />
+          /><span style={{
+            color: 'rgb(130 130 130 / 50%)',
+          fontWeight: 400,
+          fontSize: '12px',
+        }}>&nbsp;/&nbsp;</span>
           <Text
             color="white_muted"
             text={shortAddress(currentAccount?.alianName, 8)}
@@ -52,7 +57,7 @@ const AccountSelect = () => {
               lineHeight: '15px'
             }}
           />
-        </Column>
+        </Row>
         <Icon icon="down" size={10} />
       </Row>
       <Drawer

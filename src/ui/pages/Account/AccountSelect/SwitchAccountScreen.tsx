@@ -106,15 +106,17 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                 width: 200,
                 position: 'absolute',
                 right: 0,
-                padding: '24px 16px',
+                padding: '12px 0',
                 zIndex: 10,
-                gap: '16px',
-                borderRadius: '12px'
+                gap: '8px',
+                borderRadius: '8px'
               }}>
               <Row
+                classname="bg-item-hover"
                 style={{
                   gap: '16px',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  padding: '10px 16px',
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -133,9 +135,11 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
               </Row>
               {account.type !== KEYRING_TYPE.KeystoneKeyring && (
                 <Row
+                  classname="bg-item-hover"
                   style={{
                     gap: '16px',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    padding: '10px 16px',
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -154,9 +158,11 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                 </Row>
               )}
               <Row
+                classname="bg-item-hover"
                 style={{
                   gap: '16px',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  padding: '10px 16px',
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -164,7 +170,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                   tools.toastSuccess('copied');
                   setOptionsVisible(false);
                 }}>
-                <Image src="./images/icons/key-02.svg" size={20} />
+                <Image src="./images/icons/copy-03.svg" size={20} />
                 <Text
                   text="Copy Address"
                   color="text"
