@@ -1955,6 +1955,8 @@ export class WalletController extends BaseController {
   getAccountSideTokenBalance = assetService.getAccountSideTokenBalance;
   getAccountBitcoinTokenBalanceList = assetService.getAccountBitcoinTokenBalanceList;
   getAccountSideTokenBalanceList = assetService.getAccountSideTokenBalanceList;
+
+  reset = keyringService.reset;
 }
 
 export default new WalletController();

@@ -4,6 +4,7 @@ import encryptor from 'browser-passworder';
 import { EventEmitter } from 'events';
 import log from 'loglevel';
 
+import { storage } from '@/background/webapi';
 import { ADDRESS_TYPES, KEYRING_TYPE } from '@/shared/constant';
 import { AddressType } from '@/shared/types';
 import { ObservableStore } from '@metamask/obs-store';
@@ -932,6 +933,11 @@ class KeyringService extends EventEmitter {
   setUnlocked = () => {
     this.memStore.updateState({ isUnlocked: true });
     this.emit('unlock');
+  };
+
+  reset = async () => {
+    await storage.clear();
+    this.store.updateState({ booted: undefined, vault: undefined });
   };
 }
 

@@ -384,6 +384,8 @@ export interface WalletController {
 
   getAccountBitcoinTokenBalanceList(account: string): Promise<{ symbol: string; amount: string }[]>;
   getAccountSideTokenBalanceList(account: string): Promise<{ base: string; amount: string }[]>;
+
+  reset(): Promise<void>;
 }
 
 const WalletContext = createContext<{
