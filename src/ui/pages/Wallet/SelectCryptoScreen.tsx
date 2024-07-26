@@ -9,6 +9,7 @@ import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTo
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
+import React, {useState} from 'react';
 
 import { useNavigate } from '../MainRoute';
 import ImageIcon from '@/ui/components/ImageIcon';
@@ -41,7 +42,7 @@ function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
   );
 }
 
-function BitCrypto() {
+function BitCrypto({searchTerm}) {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { chain, type } = state as {
@@ -49,8 +50,11 @@ function BitCrypto() {
     type: 'receive' | 'send';
   };
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
-  const { data: bitcoinTokenList } = useGetBitcoinTokenList();
+  let { data: bitcoinTokenList } = useGetBitcoinTokenList();
   // console.log(`chain, type: `, chain, type);
+  bitcoinTokenList = bitcoinTokenList.filter((item) => {
+    return item.symbol.toLocaleLowerCase().includes(searchTerm.trim()) || item.name.toLocaleLowerCase().includes(searchTerm.trim());
+  })
   return (
     <>
       {bitcoinTokenList.map((token) => {
@@ -113,7 +117,9 @@ function SideCryptoItem({ token }: { token: SideToken }) {
   );
 }
 
-function SideCrypto() {
+function SideCrypto({searchTerm}) {
+  // console.log(`searchTerm: `, searchTerm);
+  // debugger;
   const navigate = useNavigate();
   const { state } = useLocation();
   const { chain, type } = state as {
@@ -121,7 +127,10 @@ function SideCrypto() {
     type: 'receive' | 'send';
   };
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
-  const { data: sideTokenList } = useGetSideTokenList();
+  let { data: sideTokenList } = useGetSideTokenList();
+  sideTokenList = sideTokenList.filter((item) => {
+    return item.symbol.toLocaleLowerCase().includes(searchTerm.trim()) || item.name.toLocaleLowerCase().includes(searchTerm.trim());
+  })
   return (
     <>
       {sideTokenList.map((token) => {
@@ -153,6 +162,7 @@ function SideCrypto() {
 }
 
 export default function SelecCryptoScreen() {
+  const [searchTerm, setSearchTerm] = useState('');
   const { state } = useLocation();
   const { chain } = state as {
     chain: CHAINS_ENUM;
@@ -177,13 +187,18 @@ export default function SelecCryptoScreen() {
             style={{
               padding: '0 24px',
               borderRadius: '12px',
-              backgroundColor: '#1E1E1F'
+              backgroundColor: '#1E1E1F',
+              position: 'relative',
             }}
             itemsCenter
             bg="search_box_bg"
             full>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
             <Input
+              value={searchTerm}
+              onChange={(event) => {
+                setSearchTerm(event.target.value.trim());
+              }}
               containerStyle={{
                 width: '100%',
                 border: 'none',
@@ -191,12 +206,24 @@ export default function SelecCryptoScreen() {
               }}
               placeholder="Search crypto"
             />
+            <div onClick={() => {
+              setSearchTerm('');
+            }} style={{
+              position: 'absolute',
+              right: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              cursor: 'pointer',
+              display: searchTerm ? 'block' : 'none'
+            }}>
+              <Icon icon="clear" color={'search_icon'} size={20}></Icon>
+            </div>
           </Row>
         </Column>
 
         <Column style={{
           marginTop: '14px',
-        }}>{chain === CHAINS_ENUM.SIDE ? <SideCrypto /> : <BitCrypto />}</Column>
+        }}>{chain === CHAINS_ENUM.SIDE ? <SideCrypto searchTerm={searchTerm} /> : <BitCrypto searchTerm={searchTerm} />}</Column>
       </Content>
     </Layout>
   );

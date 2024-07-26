@@ -1,5 +1,5 @@
 // import { CHAINS_ENUM } from '@/shared/constant';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { SideToken } from '@/shared/types';
 import { Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
@@ -53,22 +53,18 @@ function SideCryptoItem({ token }: { token: SideToken & { price: string; amount:
 }
 
 export default function Index(props) {
-  const { open, onClose } = props;
+  let { open, onClose } = props;
 
   // list, onSearch
+  const [searchValue, onSearch] = useState<string>('');
 
-  const runeAndBtcTokens = useRuneAndBtcBalances();
-
-  const [searchValue, setSearchValue] = useState<string>('');
-
-  function filterFunc(token: SideToken) {
-    if (!searchValue) return true;
-    return (
-      new RegExp(searchValue, 'i').test(token.base) ||
-      new RegExp(searchValue, 'i').test(token.symbol) ||
-      new RegExp(searchValue, 'i').test(token.name)
-    );
+  let runeAndBtcTokens = useRuneAndBtcBalances();
+  if (searchValue && runeAndBtcTokens?.length) {
+    runeAndBtcTokens = runeAndBtcTokens.filter((item) => {
+      return item?.symbol?.toLocaleLowerCase().includes(searchValue?.trim()) || item?.name?.toLocaleLowerCase()?.includes(searchValue?.trim());
+    });
   }
+  console.log(`runeAndBtcTokens: `, runeAndBtcTokens);
 
   return (
     <Layout style={{ width: '100%', transform: 'translate(-50%, 0)', position: 'absolute', left: '50%', top: 0, display: open ? 'flex' : 'none' }}>
@@ -87,7 +83,8 @@ export default function Index(props) {
             style={{
               padding: '0px 10px',
               borderRadius: '12px',
-              backgroundColor: '#1E1E1F'
+              backgroundColor: '#1E1E1F',
+              position: 'relative'
             }}
             itemsCenter
             bg="search_box_bg"
@@ -95,9 +92,10 @@ export default function Index(props) {
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
             <Input
+              value={searchValue}
               onChange={(e) => {
                 const value = e.target.value;
-                setSearchValue(value);
+                onSearch(value);
               }}
               containerStyle={{
                 width: '100%',
@@ -106,6 +104,18 @@ export default function Index(props) {
               }}
               placeholder="Search crypto"
             />
+            <div onClick={() => {
+              onSearch('');
+            }} style={{
+              position: 'absolute',
+              right: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              cursor: 'pointer',
+              display: searchValue ? 'block' : 'none'
+            }}>
+              <Icon icon="clear" color={'search_icon'} size={20}></Icon>
+            </div>
           </Row>
         </Column>
 
@@ -114,7 +124,7 @@ export default function Index(props) {
           style={{
             marginTop: '20px'
           }}>
-          {runeAndBtcTokens.filter(filterFunc)?.map((asset) => {
+          {runeAndBtcTokens?.map((asset) => {
             return (
               <Row
                 onClick={() => {

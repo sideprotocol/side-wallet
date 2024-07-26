@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // import { CHAINS_ENUM } from '@/shared/constant';
@@ -49,9 +49,14 @@ function SideCryptoItem({ token }: { token: SideToken }) {
 }
 
 export default function Index(props) {
+  // const [searchTerm, setSearchTerm] = useState('');
   const { state } = useLocation();
   const [focus, setFocus] = useState<boolean>(false);
-  const { open, onClose, onSelect, assetsList, popularList, onSearch, searchValue, curTokenDenom } = props;
+  let { open, onClose, onSelect, assetsList, popularList, onSearch, searchValue, curTokenDenom } = props;
+  // console.log(`popularList: `, popularList);
+  popularList = popularList.filter((item) => {
+    return item.symbol.toLocaleLowerCase().includes(searchValue.trim()) || item.name.toLocaleLowerCase().includes(searchValue.trim());
+  })
   return (
     <Layout style={{ width: '100%', transform: 'translate(-50%, 0)', position: 'absolute', left: '50%', top: 0, display: open ? 'flex' : 'none' }}>
       <Header
@@ -72,7 +77,8 @@ export default function Index(props) {
             style={{
               padding: '0px 10px',
               borderRadius: '12px',
-              backgroundColor: '#1E1E1F'
+              backgroundColor: '#1E1E1F',
+              position: 'relative',
             }}
             itemsCenter
             bg="search_box_bg"
@@ -80,6 +86,7 @@ export default function Index(props) {
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
             <Input
+              value={searchValue}
               onFocus={() => setFocus(true)}
               onBlur={() => setFocus(false)}
               onChange={(e) => {
@@ -93,11 +100,23 @@ export default function Index(props) {
               }}
               placeholder="Search crypto"
             />
+            <div onClick={() => {
+              onSearch('');
+            }} style={{
+              position: 'absolute',
+              right: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              cursor: 'pointer',
+              display: searchValue ? 'block' : 'none'
+            }}>
+              <Icon icon="clear" color={'search_icon'} size={20}></Icon>
+            </div>
           </Row>
         </Column>
 
         <Column style={{
-          marginTop: '14px',
+          marginTop: '14px'
         }}>
           {popularList?.map((asset) => {
             return (
