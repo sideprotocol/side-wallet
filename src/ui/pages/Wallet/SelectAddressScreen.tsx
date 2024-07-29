@@ -35,7 +35,7 @@ export default function SelecAddressScreen() {
         onBack={() => {
           window.history.go(-1);
         }}
-        title="Select address"
+        title="Select address type"
       />
       <Content>
         <Column>
