@@ -13,6 +13,8 @@ import { useNavigate } from '../../MainRoute';
 export default function UnlockScreen() {
   const wallet = useWallet();
   const navigate = useNavigate();
+  // const [btnText, setBtnText] = useState('Incorrect Password');
+  const [btnText, setBtnText] = useState('Unlock');
   const [password, setPassword] = useState('');
   const [disabled, setDisabled] = useState(true);
   const UIType = getUiType();
@@ -33,7 +35,9 @@ export default function UnlockScreen() {
         }
       }
     } catch (e) {
-      tools.toastError('PASSWORD ERROR');
+      // tools.toastError('PASSWORD ERROR');
+      setDisabled(true);
+      setBtnText('Incorrect Password');
     }
   };
 
@@ -87,11 +91,15 @@ export default function UnlockScreen() {
         <Input
           preset="password"
           placeholder="Password"
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setBtnText('Unlock');
+          }}
           onKeyUp={(e) => handleOnKeyUp(e)}
           autoFocus={true}
         />
-        <Button disabled={disabled} text="Unlock" preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />
+        {/*<Button disabled={disabled} text="Unlock" preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />*/}
+        <Button disabled={disabled} text={btnText} preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />
         <Text
           text="Forget Password"
           style={{
