@@ -14,6 +14,7 @@ function TokenItem({ token }: { token: SideToken }) {
 
   return (
     <Row
+      classname={'bg-item-hover-v2'}
       justifyBetween
       style={{
         cursor: 'pointer',
