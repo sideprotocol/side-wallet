@@ -125,7 +125,7 @@ export default function WalletTabScreen() {
         <Row
           justifyCenter
           style={{
-            marginTop: '16px',
+            marginTop: '36px',
             gap: '12px',
             alignItems: 'flex-end'
           }}>
@@ -266,7 +266,7 @@ export default function WalletTabScreen() {
             text="Tokens"
             style={{
               marginTop: '20px',
-              marginBottom: '26px',
+              marginBottom: '20px',
               fontSize: '16px',
               fontWeight: 600
             }}
