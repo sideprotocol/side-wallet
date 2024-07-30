@@ -101,7 +101,7 @@ const NativeBalance = () => {
   )
     .toFixed(8, BigNumber.ROUND_DOWN)
     .replace(/\.?0+$/, '');
-
+  const newValue = SWAP_ASSETS.assets.find((asset) => asset.base === swapStore.swapPair['native']?.denom);
   return (
     <div style={{
       display: 'flex',
@@ -147,7 +147,9 @@ const NativeBalance = () => {
               .toFormat(assetNativeIcon?.precision || 8, BigNumber.ROUND_CEIL)
               .replace(/\.?0+$/, '')}
             &nbsp;
-            {swapStore.swapPair['native']['denom']}
+            {
+              newValue?.symbol || newValue?.symbol || newValue?.base
+            }
           </div>
         </div>
       )}
