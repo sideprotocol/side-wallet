@@ -10,7 +10,7 @@ export function Layout(props: LayoutProps) {
   const { children, style: $styleBase } = props;
   return (
     <div
-      className="layout"
+      className="layout hide-scrollbar"
       style={Object.assign(
         {
           backgroundColor: '#09090A',
@@ -18,9 +18,13 @@ export function Layout(props: LayoutProps) {
           flexDirection: 'column',
           width: '100%',
           maxWidth: '375px',
-          height: '100vh',
+          maxHeight: '620px',
+          minHeight: '620px',
+          // height: '100vh',
           overflowY: 'auto',
           overflowX: 'hidden',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          justifyContent: 'center',
         },
         $styleBase
       )}>

@@ -31,11 +31,15 @@ export default function WelcomeScreen() {
             justifyCenter
             style={{
               flex: 1,
-              alignItems: 'center'
+              alignItems: 'center',
+              marginTop: '115px'
             }}>
             <Image src="./images/img/phone.png" size={174} />
           </Row>
           <Button
+            style={{
+              marginTop: '140px'
+            }}
             text="Create new wallet"
             preset="primary"
             onClick={async () => {

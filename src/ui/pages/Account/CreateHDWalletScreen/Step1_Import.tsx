@@ -90,6 +90,7 @@ export default function Step1_Import({
         padding: '0 16px 24px'
       }}>
       <Column
+        classname="hide-scrollbar"
         style={{
           flex: 1,
           overflow: 'auto'

@@ -6,7 +6,7 @@ export type FooterProps = BaseViewProps;
 
 const $footerBaseStyle = {
   display: 'block',
-  minHeight: 20,
+  // minHeight: 20,
   padding: 10,
   paddingBottom: 20,
   bottom: 0

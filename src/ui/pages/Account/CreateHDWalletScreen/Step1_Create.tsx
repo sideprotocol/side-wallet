@@ -16,6 +16,8 @@ export default function Step1_Create({
   const wallet = useWallet();
   const tools = useTools();
   const [type, setType] = useState<WordsType>(WordsType.WORDS_12);
+  const [isClickMask, setIsClickMask] = useState(false);
+  const [isClickCopy, setIsClickCopy] = useState(false);
 
   const init = async () => {
     const preMnemonics = await wallet.getPreMnemonics();
@@ -47,7 +49,7 @@ export default function Step1_Create({
 
   function copy(str: string) {
     copyToClipboard(str).then(() => {
-      tools.toastSuccess('Copied');
+      // tools.toastSuccess('Copied');
     });
   }
 
@@ -69,21 +71,26 @@ export default function Step1_Create({
         style={{
           flex: 1,
           overflow: 'hidden',
-          padding: '0 16px 24px'
+          padding: '0 16px 24px',
         }}>
         <Column
+          classname={'hide-scrollbar'}
           style={{
             flex: 1,
             overflow: 'auto'
           }}>
-          <Mask>
+          <Mask onClick={() => {
+            // alert('Mask');
+            setIsClickMask(true)
+          }}>
             <Column
               style={{
                 marginTop: '16px',
-                // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
                 backgroundColor: '#222222',
                 borderRadius: '14px',
-                padding: '16px'
+                padding: '16px',
+                height: isClickMask ? 'auto' : '165px',
+                overflow: 'hidden',
               }}>
               {wordsItems.length > 1 ? (
                 <ButtonGroup
@@ -143,11 +150,12 @@ export default function Step1_Create({
                 justifyCenter
                 onClick={(e) => {
                   copy(curMenemonics);
+                  setIsClickCopy(true);
                 }}
                 style={{
                   marginTop: '8px'
                 }}>
-                <Icon icon="copy2" color={'white'} size={20} />
+                <Icon icon={isClickCopy ? 'check-circle-broken' : 'copy2'} color={isClickCopy ? 'green_check' : 'white'} size={20} />
                 <Text text="Copy to clipboard" />
               </Row>
             </Column>

@@ -85,10 +85,14 @@ export default function UnlockScreen() {
           style={{
             color: '#828282',
             fontSize: '14px',
-            lineHeight: '24px'
+            lineHeight: '24px',
+            marginTop: '50px',
           }}
         />
         <Input
+          containerStyle={{
+            borderColor : btnText === 'Incorrect Password' ? 'rgba(255, 69, 69, 1)' : 'rgba(255, 255, 255, 0.2)'
+          }}
           preset="password"
           placeholder="Password"
           onChange={(e) => {

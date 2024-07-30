@@ -42,6 +42,7 @@ export const svgRegistry = {
   eye: '/images/icons/eye.svg',
   'eye-slash': '/images/icons/eye-slash.svg',
   'eye-slash-hover': '/images/icons/eye-off.svg',
+  'eye-white': '/images/icons/eye-white.svg',
   copy: './images/icons/copy-solid.svg',
   copy2: './images/icons/settings/copy2.svg',
 
@@ -83,6 +84,7 @@ export const svgRegistry = {
   'swap-down-icon': '/images/icons/swap/bottom-icon.svg',
   'swap-down-hover': '/images/icons/swap/bottom-hover.svg',
   'check-circle': '/images/icons/check-circle.svg',
+  'check-circle-broken': '/images/icons/check-circle-broken.svg',
   'clear': '/images/icons/main/clear.svg',
   loading: '/images/icons/loading.svg',
   plus: './images/icons/plus.svg'

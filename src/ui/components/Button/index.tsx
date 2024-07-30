@@ -111,7 +111,7 @@ const $viewPresets = {
   } as CSSProperties),
 
   ghostDanger: Object.assign({}, $baseViewStyle, {
-    border: `1px solid rgb(255 255 255 / 40%)`,
+    border: '1px solid rgb(255 255 255 / 40%)',
     justifyContent: 'center',
     paddingTop: spacing.medium,
     paddingBottom: spacing.medium
@@ -122,7 +122,8 @@ const $viewPresets = {
 const $hoverViewPresets: Record<Presets, CSSProperties> = {
   default: {
     backgroundColor: colors.grey_dark,
-    boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
+    boxShadow: ''
+    // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
   },
   primary: {
     backgroundColor: colors.blue_dark2,
@@ -240,7 +241,7 @@ export function Button(props: ButtonProps) {
   return (
     <div
       style={$viewStyle}
-      className="2323"
+      className=""
       onClick={disabled ? undefined : onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>

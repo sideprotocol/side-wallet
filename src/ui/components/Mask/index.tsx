@@ -1,11 +1,21 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Image } from '../Image';
 
-export function Mask({ children }: { children: React.ReactNode }) {
+export function Mask({ children, onClick }: { children: React.ReactNode; onClick?: React.MouseEventHandler }) {
   const [visible, setVisible] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   return (
     <div
+      onClick={onClick}
       style={{
         position: 'relative'
       }}>
@@ -22,10 +32,12 @@ export function Mask({ children }: { children: React.ReactNode }) {
           borderRadius: '14px',
           display: visible ? 'flex' : 'none',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          maxHeight: '185px'
         }}>
-        <div onClick={() => setVisible(!visible)}>
-          <Image src="/images/icons/eye-off.svg" size={40} style={{ cursor: 'pointer' }} />
+        <div onMouseOver={handleMouseOver}
+             onMouseLeave={handleMouseLeave} onClick={() => setVisible(!visible)}>
+          <Image src={isHovered ? '/images/icons/eye-white.svg' : '/images/icons/eye-off.svg'} size={40} style={{ cursor: 'pointer' }} />
         </div>
       </div>
     </div>
