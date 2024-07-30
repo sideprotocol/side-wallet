@@ -55,7 +55,9 @@ export default function ProtectionScreen() {
         }}
         title="Protection"
       />
-      <Content>
+      <Content style={{
+        marginTop: 16
+      }}>
         <Column>
           <Card style={{ borderRadius: 10 }}>
             <Column fullX>

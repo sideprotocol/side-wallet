@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { Select } from 'antd';
 import { AddressFlagType } from '@/shared/constant';
 import { checkAddressFlag } from '@/shared/utils';
 import { Card, Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
@@ -36,6 +37,9 @@ export default function ChangeEndpointsScreen() {
       setEnableUnconfirmed(true);
     }
   }, []);
+  const handleChange = (value: string) => {
+    console.log(`selected ${value}`);
+  };
 
   if (!init) {
     return <Layout></Layout>;
@@ -55,16 +59,29 @@ export default function ChangeEndpointsScreen() {
         <Column>
           {' '}
           <Column>
-            <Text preset="sub" text={'Choose Network'} />
+            <Text color={'white'} preset="sub" text={'Choose Network'} />
 
+            {/*<Input preset="text" />*/}
+            {/*<select name="pets" id="pet-select">*/}
+            {/*  <option value="dog">Dog</option>*/}
+            {/*  <option value="cat">Cat</option>*/}
+            {/*</select>*/}
+            <Select
+              defaultValue="Bitcoin"
+              // style={{ width: 120 }}
+              onChange={handleChange}
+              options={[
+                { value: 'Bitcoin', label: 'Bitcoin' },
+                { value: 'Side', label: 'Side' }
+              ]}
+            />
+          </Column>
+          <Column>
+            <Text color={'white'} preset="sub" text={'RPC'} />
             <Input preset="text" />
           </Column>
           <Column>
-            <Text preset="sub" text={'RPC'} />
-            <Input preset="text" />
-          </Column>
-          <Column>
-            <Text preset="sub" text={'LCD'} />
+            <Text color={'white'} preset="sub" text={'LCD'} />
             <Input preset="text" />
           </Column>
           <Column style={{
@@ -78,6 +95,7 @@ export default function ChangeEndpointsScreen() {
                 </Row>
                 <Row>
                   <Text
+                    color={'white'}
                     preset="sub"
                     size="sm"
                     text={

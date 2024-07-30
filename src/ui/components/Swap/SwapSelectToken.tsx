@@ -58,7 +58,7 @@ export default function Index(props) {
     return item.symbol.toLocaleLowerCase().includes(searchValue.trim()) || item.name.toLocaleLowerCase().includes(searchValue.trim());
   })
   return (
-    <Layout style={{ width: '100%', transform: 'translate(-50%, 0)', position: 'absolute', left: '50%', top: 0, display: open ? 'flex' : 'none' }}>
+    <Layout style={{ width: '100%', transform: 'translate(-50%, -50%)', position: 'absolute', left: '50%', top: '50%', display: open ? 'flex' : 'none' }}>
       <Header
         onBack={() => {
           onClose();
@@ -68,7 +68,8 @@ export default function Index(props) {
       <Content
         style={{
           backgroundColor: '#09090A',
-          padding: '0',
+          padding: 0,
+          marginTop: 16,
         }}>
         <Column style={{
           padding: '0 24px',

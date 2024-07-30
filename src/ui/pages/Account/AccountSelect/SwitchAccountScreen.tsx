@@ -14,6 +14,7 @@ import { colors } from '@/ui/theme/colors';
 import { copyToClipboard, useWallet } from '@/ui/utils';
 
 import './index.less';
+import { shortAddress } from '@/ui/utils';
 
 export interface ItemData {
   key: string;
@@ -34,6 +35,8 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
   const keyring = useCurrentKeyring();
   const tools = useTools();
 
+  console.log(`account: `, account);
+  // debugger;
   if (!account) {
     return <div />;
   }
@@ -43,15 +46,15 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
     <>
       <Row
         justifyBetween
-        classname="accountItem"
+        classname="accountItem bg-item-hover-v3"
         style={{
           height: '60px',
           alignItems: 'center',
           padding: '0 6px 0 14px',
           borderRadius: '10px',
           marginTop: '16px',
-          background: selected ? 'rgba(34, 171, 56, 0.1)' : '#2E2E2F',
-          border: `1px solid ${selected ? 'rgba(34, 171, 56, 0.1)' : '#2E2E2F'}`,
+          background: selected ? 'rgba(34, 171, 56, 0.1)' : '#2E2E2F!important',
+          border: `1px solid ${selected ? 'rgba(34, 171, 56, 0.1)' : '#2E2E2F!important'}`,
           cursor: 'pointer'
         }}
         onClick={async (e) => {
@@ -62,15 +65,28 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
           }
           if (autoNav) navigate('MainScreen');
         }}>
-        <Text
-          text={account.alianName}
-          color="text"
-          style={{
-            fontSize: '14px',
-            fontWeight: 600,
-            lineHeight: '17px'
-          }}
-        />
+        <div >
+          <Text
+            text={account.alianName}
+            color="text"
+            style={{
+              fontSize: '14px',
+              fontWeight: 600,
+              lineHeight: '17px'
+            }}
+          />
+
+          <Text
+            text={shortAddress(account.address)}
+            color="search_icon"
+            style={{
+              fontSize: '12px',
+              fontWeight: 600,
+              lineHeight: '17px'
+            }}
+          />
+        </div>
+
         <Column relative>
           {optionsVisible && (
             <div

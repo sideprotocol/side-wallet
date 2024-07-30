@@ -44,7 +44,9 @@ export default function ChangePasswordScreen() {
         }}
         title="Change Password"
       />
-      <Content justifyBetween>
+      <Content style={{
+        marginTop: 16
+      }} justifyBetween>
         <Column gap="lg">
           <Column>
             <Text text={'Old Password'} color={'white'} preset="sub"></Text>

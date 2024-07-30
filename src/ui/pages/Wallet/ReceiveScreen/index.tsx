@@ -75,7 +75,9 @@ export default function ReceiveScreen() {
         }}
         title="Receive"
       />
-      <Content>
+      <Content style={{
+        marginTop: '16px'
+      }}>
         <Card
           bg="white"
           gap="lg"
@@ -123,7 +125,7 @@ export default function ReceiveScreen() {
                   color="black"
                   preset="sub"
                   bg="light_gray"
-                  text={'Taproot'}></Text>
+                  text={state.addressType}></Text>
               </Row>
             </Column>
           </Row>
@@ -139,7 +141,7 @@ export default function ReceiveScreen() {
           <Row
             full
             onClick={(e) => {
-              copyToClipboard(address).then(() => {
+              copyToClipboard(state.address).then(() => {
                 // tools.toastSuccess('Copied');
                 setTimeout(() => {
                   setIsClickCopy(false);
@@ -151,7 +153,7 @@ export default function ReceiveScreen() {
               wrap
               text={
                 <>
-                  {currentAccount.address}
+                  {state.address}
                   <Icon
                     icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
                     color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'black'}
@@ -176,7 +178,7 @@ export default function ReceiveScreen() {
               color="background"></Text>
           </Row>
           <Column>
-            <QRCode value={address || ''} renderAs="svg" size={sizes.qrcode}></QRCode>
+            <QRCode value={state.address || ''} renderAs="svg" size={sizes.qrcode}></QRCode>
           </Column>
 
           <Column>

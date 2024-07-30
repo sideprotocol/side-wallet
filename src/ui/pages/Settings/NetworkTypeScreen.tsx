@@ -22,7 +22,8 @@ export default function NetworkTypeScreen() {
         title="Switch Network"
       />
       <Content style={{
-        padding: '0 16px'
+        padding: '0 16px',
+        marginTop: 16
       }}>
         <Column gap={'md'}>
           {NETWORK_TYPES.map((item, index) => {
@@ -58,7 +59,8 @@ export default function NetworkTypeScreen() {
                 }}
                 key={index}
                 style={{
-                  padding: '10px 10px',
+                  height: 56,
+                  padding: '16px 10px',
                   backgroundColor: item.value == networkType ? colors.green_light : 'tr',
                   border: item.value == networkType ? `1px solid ${colors.green_light}` : 'none',
                 }} full justifyBetween itemsCenter classname={item.value != networkType ? 'bg-item1e' : ''}>

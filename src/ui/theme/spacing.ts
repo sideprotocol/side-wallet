@@ -21,7 +21,8 @@ export const spacingGap = {
   md: 8,
   sm: 4,
   xs: 2,
-  zero: 0
+  zero: 0,
+  medium: 16,
 };
 
 export const sizes = {

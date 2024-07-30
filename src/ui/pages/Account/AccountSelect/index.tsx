@@ -28,7 +28,7 @@ const AccountSelect = () => {
         }}
         style={{
           padding: '5px 16px',
-          borderRadius: '20px',
+          borderRadius: '20px'
         }}>
         <Row
           itemsCenter
@@ -45,9 +45,9 @@ const AccountSelect = () => {
               lineHeight: '17px'
             }}
           /><span style={{
-            color: 'rgb(130 130 130 / 50%)',
+          color: 'rgb(130 130 130 / 50%)',
           fontWeight: 400,
-          fontSize: '12px',
+          fontSize: '12px'
         }}>&nbsp;/&nbsp;</span>
           <Text
             color="white_muted"

@@ -179,6 +179,7 @@ export default function SelecCryptoScreen() {
         style={{
           backgroundColor: '#09090A',
           padding: 0,
+          marginTop: '16px',
         }}>
         <Column style={{
           padding: '0 24px',
@@ -222,7 +223,7 @@ export default function SelecCryptoScreen() {
         </Column>
 
         <Column style={{
-          marginTop: '14px',
+          // marginTop: '14px',
         }}>{chain === CHAINS_ENUM.SIDE ? <SideCrypto searchTerm={searchTerm} /> : <BitCrypto searchTerm={searchTerm} />}</Column>
       </Content>
     </Layout>

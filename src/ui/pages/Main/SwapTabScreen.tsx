@@ -109,44 +109,84 @@ const NativeBalance = () => {
       alignItems: 'center',
       width: '100%',
     }} >
-      {validNativeInput ? (
-        <div>
-          ${nativePrice == 'NaN' ? '0' : BigNumber(nativePrice).toFormat()}
-        </div>
-      ) : (
-        <div></div>
-      )}
+      {/*{validNativeInput ? (*/}
+      {/*  <div>*/}
+      {/*    ${nativePrice == 'NaN' ? '0' : BigNumber(nativePrice).toFormat()}*/}
+      {/*  </div>*/}
+      {/*) : (*/}
+      {/*  <div></div>*/}
+      {/*)}*/}
+      <div />
 
       {connected && (
         <div style={{
           display: 'flex'
         }}>
-          <div style={{ color: '#fff', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div
+            style={{
+              // position: 'relative',
+              // minWidth: '20px',
+              // left: '4px',
+              color: 'rgb(125, 125, 125)',
+              fontSize: '14px',
+              // color: colors.primary
+            }}
+            onClick={() => {
+              swapStore.swapPair['native'] = {
+                ...swapPair['native'],
+                amount: nativeBalance
+              };
+            }}
+          >
+            Max&nbsp;:&nbsp;
+          </div>
+          <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(nativeBalance)
               .toFormat(assetNativeIcon?.precision || 8, BigNumber.ROUND_CEIL)
               .replace(/\.?0+$/, '')}
-          </div>
-          <div
-            style={{
-              position: 'relative',
-              minWidth: '20px',
-              left: '4px',
-              color: colors.primary,
-            }}
-            onClick={() => {
-              swapStore.swapPair['native'] = {
-                ...swapPair['native'],
-                amount: nativeBalance,
-              };
-            }}
-          >
-            MAX
+            &nbsp;
+            {swapStore.swapPair['native']['denom']}
           </div>
         </div>
       )}
     </div>
+  );
+};
+
+const NativePrice = () => {
+  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
+
+  const { swapPair, balances } = useSwapStore();
+  const currentAccount = useCurrentAccount();
+
+  const validNativeInput = BigNumber(swapPair?.native?.amount || 0).gt(0) && swapPair?.native?.denom;
+  const assetNativeIcon = findAssetIcon(swapPair?.native);
+
+  const nativePrice = (
+    new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(
+      unitPriceMap[assetNativeIcon?.coingecko_id || '']?.usd || '0'
+    ) || 0
+  )
+    .toFixed(8, BigNumber.ROUND_DOWN)
+    .replace(/\.?0+$/, '');
+
+  return (
+    <>
+      {validNativeInput ? (
+        <div style={{
+          fontSize: '12px',
+          color: 'rgb(125, 125, 125)'
+        }}>
+          ${nativePrice == 'NaN' ? '0' : BigNumber(nativePrice).toFormat()}
+        </div>
+      ) : (
+        <div style={{
+          height: '22px',
+        }}></div>
+      )}
+    </>
   );
 };
 
@@ -181,9 +221,11 @@ const RemoteBalance = () => {
       width: '100%',
     }} >
       {validRemoteInput ? (
-        <div style={{ color: '#fff', fontSize: '14px' }}>${remotePrice == 'NaN' ? '0' : BigNumber(remotePrice).toFormat()}</div>
+        <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px' }}>${remotePrice == 'NaN' ? '0' : BigNumber(remotePrice).toFormat()}</div>
       ) : (
-        <div></div>
+        <div style={{
+          height: '22px'
+        }}></div>
       )}
 
       {connected && (
@@ -192,7 +234,7 @@ const RemoteBalance = () => {
           display: 'flex',
           alignItems: 'center',
         }}>
-          <div style={{ color: '#fff', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(remoteBalance)
@@ -233,6 +275,7 @@ const NativeInput = () => {
 
   return (
     <CoinInput
+      size={36}
       coin={swapPair?.native}
       onChange={(value) => {
         debouncedChange(value);
@@ -246,6 +289,7 @@ const RemoteInput = () => {
   const currentAccount = useCurrentAccount();
   return (
     <CoinInput
+      size={36}
       coin={swapPair?.remote}
       readOnly
       onChange={(value) => {
@@ -399,18 +443,29 @@ export default function SwapTabScreen() {
         />
         <Content>
           <InitBalance></InitBalance>
+
           <Column relative style={{
-            gap: '5px'
+            gap: '6px'
           }}>
-            <Column mt={'xl'} px={'xl'} py={'xl'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <div style={{
+              position: 'relative',
+              top: 15,
+              left: 10,
+              fontWeight: 700,
+            }}>
+              Swap
+            </div>
+            <Column mt={'xl'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
                     fontSize: '12px',
                     color: '#7D7D7D'
                   }}>
-                  You provide
+                  From
                 </div>
+
+                <NativeBalance />
               </Row>
 
               <Row
@@ -433,9 +488,10 @@ export default function SwapTabScreen() {
                 />
               </Row>
 
-              <NativeBalance></NativeBalance>
-            </Column>
+              <NativePrice />
 
+
+            </Column>
             <Row relative style={{
               top: 0,
             }}>
@@ -468,12 +524,12 @@ export default function SwapTabScreen() {
 
                   swapStore.swapPair.native = {
                     ...remotePair,
-                    amount: '1',
+                    amount: '1'
                   };
 
                   swapStore.swapPair.remote = {
                     ...nativePair,
-                    amount: '',
+                    amount: ''
                   };
                 }}>
                 <Icon size={hoverExchange ? 22 : 11} icon={hoverExchange ? 'swap-down-hover' : 'swap-down-icon'}></Icon>
@@ -481,14 +537,14 @@ export default function SwapTabScreen() {
               </div>
             </Row>
 
-            <Column px={'xl'} py={'xl'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <Column mt={'zero'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
                     fontSize: '12px',
                     color: '#7D7D7D'
                   }}>
-                  You get
+                  To
                 </div>
               </Row>
 
@@ -498,7 +554,8 @@ export default function SwapTabScreen() {
                 style={{
                   height: '32px',
                   borderRadius: '100px',
-                  padding: '20px 0px'
+                  padding: '20px 0px',
+                  gap: '5px'
                 }}>
 
                 <RemoteInput />
@@ -515,7 +572,7 @@ export default function SwapTabScreen() {
               <RemoteBalance />
             </Column>
 
-            <Row mt={'xl'} full >
+            <Row mt={'xl'} full>
               <ConfirmButton />
             </Row>
             <Column mt={'xl'}>

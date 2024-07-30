@@ -32,14 +32,16 @@ export default function ConnectedSitesScreen() {
         }}
         title="Connected Sites"
       />
-      <Content>
+      <Content style={{
+        marginTop: 16
+      }}>
         {sites.length > 0 && (
           <Text
             preset="sub"
             text={'[Account Name] is connected to these sites. They can view your account address.'}></Text>
         )}
 
-        <Column>
+        <Column >
           {sites.length > 0 ? (
             sites.map((item, _) => {
               return (
