@@ -18,7 +18,7 @@ function TokenItem({ token }: { token: SideToken }) {
       justifyBetween
       style={{
         cursor: 'pointer',
-        backgroundColor: '#1D1D1F',
+        backgroundColor: '#21232F',
         padding: '10px 16px',
         borderRadius: 10
       }}>

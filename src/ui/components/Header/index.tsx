@@ -5,6 +5,7 @@ import { Logo } from '../Logo';
 import { Row } from '../Row';
 import { Text } from '../Text';
 import './index.module.less';
+import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 
 interface HeaderProps {
   onBack?: () => void;
@@ -18,7 +19,7 @@ interface HeaderProps {
 
 export function Header(props: HeaderProps) {
   const { onBack, title, leftTitle, LeftComponent, RightComponent, onClickRight, children } = props;
-
+  const isInTab = useExtensionIsInTab();
   const CenterComponent = useMemo(() => {
     if (children) {
       return children;
@@ -35,8 +36,10 @@ export function Header(props: HeaderProps) {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '14px 16px 14px',
-        marginBottom: '6px',
+        marginTop: !isInTab ? '10px' : '0',
         borderBottom: '1px solid #1E1E1F',
+        minHeight: '60px',
+        maxHeight: '60px',
       }}>
       <Row full>
         <Column selfItemsCenter style={{ gap: '10px' }}>

@@ -115,10 +115,12 @@ export default function WalletTabScreen() {
         }}
       />
       <Column
+        classname={'hide-scrollbar'}
         style={{
           flex: 1,
           gap: '0px',
-          overflow: 'auto'
+          overflow: 'auto',
+          cursor: 'pointer'
         }}>
         <Row
           justifyCenter
@@ -131,7 +133,7 @@ export default function WalletTabScreen() {
             <Row
               justifyCenter
               style={{
-                gap: '0px',
+                gap: 0,
                 alignItems: 'flex-end'
               }}>
               <Text
@@ -156,13 +158,15 @@ export default function WalletTabScreen() {
               style={{
                 fontSize: '38px',
                 fontWeight: 500,
-                lineHeight: '32px'
+                lineHeight: '32px',
+                position: 'relative',
+                top: '12px',
               }}
             />
           )}
 
           <span onClick={() => setBalanceVisible(!balanceVisible)}>
-            <Image src="/images/icons/eye-off-2.svg" size={20} />
+            <Image src={ balanceVisible ? '/images/icons/eye-off-2.svg' : '/images/icons/eye-white.svg'} size={20} />
           </span>
         </Row>
 
@@ -170,14 +174,14 @@ export default function WalletTabScreen() {
           style={{
             justifyContent: 'center',
             gap: '50px',
-            marginTop: '32px'
+            marginTop: '20px'
           }}>
           <Column
             onClick={() => {
               navigate('SelectNetworkScreen', { type: 'receive' });
             }}
             itemsCenter>
-            <Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.iconxLarge} />
+            <Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.xxxl} />
             <Text
               text="Receive"
               style={{
@@ -194,7 +198,7 @@ export default function WalletTabScreen() {
               navigate('SelectNetworkScreen', { type: 'send' });
             }}
             itemsCenter>
-            <Image src="/images/icons/main/send-icon.svg" size={fontSizes.iconxLarge} />
+            <Image src="/images/icons/main/send-icon.svg" size={fontSizes.xxxl} />
             <Text
               text="Send"
               style={{
@@ -226,7 +230,7 @@ export default function WalletTabScreen() {
 
         <Row
           style={{
-            marginTop: '42px'
+            marginTop: '20px'
           }}
           justifyCenter>
           <ButtonGroup
@@ -261,8 +265,8 @@ export default function WalletTabScreen() {
           <Text
             text="Tokens"
             style={{
-              marginTop: '35px',
-              marginBottom: '16px',
+              marginTop: '20px',
+              marginBottom: '26px',
               fontSize: '16px',
               fontWeight: 600
             }}
