@@ -18,6 +18,16 @@ export default function Step1_Create({
   const [type, setType] = useState<WordsType>(WordsType.WORDS_12);
   const [isClickMask, setIsClickMask] = useState(false);
   const [isClickCopy, setIsClickCopy] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
   const init = async () => {
     const preMnemonics = await wallet.getPreMnemonics();
@@ -50,6 +60,9 @@ export default function Step1_Create({
   function copy(str: string) {
     copyToClipboard(str).then(() => {
       // tools.toastSuccess('Copied');
+      setTimeout(() => {
+        setIsClickCopy(false);
+      }, 3000);
     });
   }
 
@@ -81,7 +94,8 @@ export default function Step1_Create({
           }}>
           <Mask onClick={() => {
             // alert('Mask');
-            setIsClickMask(true)
+            setIsClickMask(true);
+            setDisabled(false);
           }}>
             <Column
               style={{
@@ -147,6 +161,8 @@ export default function Step1_Create({
                 </Grid>
               </Row>
               <Row
+                onMouseOver={handleMouseOver}
+                onMouseLeave={handleMouseLeave}
                 justifyCenter
                 onClick={(e) => {
                   copy(curMenemonics);
@@ -155,15 +171,15 @@ export default function Step1_Create({
                 style={{
                   marginTop: '8px'
                 }}>
-                <Icon icon={isClickCopy ? 'check-circle-broken' : 'copy2'} color={isClickCopy ? 'green_check' : 'white'} size={20} />
-                <Text text="Copy to clipboard" />
+                <Icon icon={isClickCopy ? 'check-circle-broken' : 'copy2'} color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'} size={20} />
+                <Text text={isClickCopy ? 'Copied' : 'Copy to clipboard'} color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'} />
               </Row>
             </Column>
           </Mask>
 
           <Column
             style={{
-              marginTop: '10px',
+              marginTop: '16px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
               borderRadius: '8px',
               padding: '10px',
@@ -198,7 +214,7 @@ export default function Step1_Create({
 
           <Column
             style={{
-              marginTop: '10px',
+              marginTop: '16px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
               borderRadius: '10px',
               padding: '10px',
@@ -233,7 +249,7 @@ export default function Step1_Create({
 
           <Column
             style={{
-              marginTop: '10px',
+              marginTop: '16px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
               borderRadius: '10px',
               padding: '10px',
@@ -266,7 +282,7 @@ export default function Step1_Create({
             />
           </Column>
         </Column>
-        <Button text="Next" preset="primary" onClick={btnClick} />
+        <Button disabled={disabled} text="Next" preset="primary" onClick={btnClick} />
       </Column>
     </>
   );

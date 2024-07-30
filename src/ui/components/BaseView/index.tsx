@@ -15,6 +15,8 @@ export interface BaseViewProps {
   selfItemsCenter?: boolean;
   gap?: Gap;
   onClick?: ReactEventHandler<HTMLDivElement>;
+  onMouseLeave?: ReactEventHandler<HTMLDivElement>;
+  onMouseOver?: ReactEventHandler<HTMLDivElement>;
   px?: Gap;
   py?: Gap;
   pt?: Gap;
@@ -66,6 +68,8 @@ export function BaseView(props: BaseViewProps) {
     color,
     relative,
     onClick,
+    onMouseOver,
+    onMouseLeave,
     fixed,
     classname,
     overflowX,
@@ -105,7 +109,7 @@ export function BaseView(props: BaseViewProps) {
   const $classname = [classname].join(' ').trim();
 
   return (
-    <div style={$style} onClick={onClick} className={$classname}>
+    <div style={$style} onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} onClick={onClick} className={$classname}>
       {children}
     </div>
   );

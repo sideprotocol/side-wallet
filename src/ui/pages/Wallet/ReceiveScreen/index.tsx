@@ -10,30 +10,31 @@ import { copyToClipboard } from '@/ui/utils';
 import './index.less';
 import { CHAINS_ENUM } from '@/shared/constant';
 import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
 
 function getAddressTypeUrl(address: string, chain: string) {
   if (address.startsWith('tb1') || chain === 'side') {
     if (address.length === 42) {
       return {
         algo: 'segwit',
-        typeUrl: '/cosmos.crypto.segwit.PubKey',
+        typeUrl: '/cosmos.crypto.segwit.PubKey'
       };
     } else if (address.length === 62) {
       return {
         algo: 'taproot',
-        typeUrl: '/cosmos.crypto.taproot.PubKey',
+        typeUrl: '/cosmos.crypto.taproot.PubKey'
       };
     }
   } else if (address.startsWith('bc1')) {
     if (address.length === 42) {
       return {
         algo: 'segwit',
-        typeUrl: '/cosmos.crypto.segwit.PubKey',
+        typeUrl: '/cosmos.crypto.segwit.PubKey'
       };
     } else if (address.length === 62) {
       return {
         algo: 'taproot',
-        typeUrl: '/cosmos.crypto.taproot.PubKey',
+        typeUrl: '/cosmos.crypto.taproot.PubKey'
       };
     }
   } else {
@@ -45,6 +46,17 @@ export default function ReceiveScreen() {
   const currentAccount = useCurrentAccount();
   const address = useAccountAddress();
   const { state } = useLocation();
+  const [isClickCopy, setIsClickCopy] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   // const { chain, type, base } = state as {
   //   chain: CHAINS_ENUM;
   //   type: 'receive' | 'send';
@@ -100,12 +112,12 @@ export default function ReceiveScreen() {
                   color="black"
                   bg="orange"
                   preset="sub"
-                  text={state?.base === 'BTC' ? 'BTC' : 'Side'}></Text>
+                  text={state?.base === 'BTC' ? 'Bitcoin' : 'Side'}></Text>
 
                 <Text
                   style={{
                     padding: '4px 8px',
-                    borderRadius: '8px',
+                    borderRadius: '8px'
                     // display: 'none',
                   }}
                   color="black"
@@ -128,8 +140,12 @@ export default function ReceiveScreen() {
             full
             onClick={(e) => {
               copyToClipboard(address).then(() => {
-                tools.toastSuccess('Copied');
+                // tools.toastSuccess('Copied');
+                setTimeout(() => {
+                  setIsClickCopy(false);
+                }, 3000);
               });
+              setIsClickCopy(true);
             }}>
             <Text
               wrap
@@ -137,12 +153,21 @@ export default function ReceiveScreen() {
                 <>
                   {currentAccount.address}
                   <Icon
+                    icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
+                    color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'black'}
                     containerStyle={{
                       display: 'inline-block',
-                      marginLeft: '2px'
+                      marginLeft: '8px',
+                      position: 'relative',
+                      top: '3px',
                     }}
-                    color="black"
-                    icon="copy2"></Icon>
+                  ></Icon>
+                  <span style={{
+                    display: isClickCopy ? 'inline-block' : 'none',
+                    color: '#41B530',
+                    fontSize: '12px',
+                    marginLeft: '4px'
+                  }}>Copied!</span>
                 </>
               }
               style={{
@@ -166,7 +191,7 @@ export default function ReceiveScreen() {
           </Column>
 
           <Row style={{
-            display: 'none',
+            display: 'none'
           }} full>
             <Button full preset="primary" text="Set amount"></Button>
           </Row>
