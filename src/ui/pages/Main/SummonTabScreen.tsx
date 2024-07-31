@@ -227,7 +227,7 @@ export default function SettingsTabScreen() {
         </Column>
       </Content>
       <Footer px="zero" py="zero">
-        <NavTabBar tab="summon" />
+        <NavTabBar tab="explore" />
       </Footer>
     </Layout>
   );

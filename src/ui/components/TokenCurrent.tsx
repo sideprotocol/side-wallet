@@ -29,7 +29,7 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
     overflow: 'hidden'
   } : {};
   return (
-    <div style={{
+    <div className={'bg-swap-hover'} style={{
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -39,9 +39,9 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
       color: unSelected ? 'white' : 'white',
       background: unSelected ? 'black' : 'black',
       minWidth: 'max-content',
-      ':hover': {
-        background: unSelected ? '#0DD4C3' : 'rgba(234,234,234,0.5)',
-      },
+      // ':hover': {
+      //   background: unSelected ? '#0DD4C3' : 'rgba(234,234,234,0.5)',
+      // },
     }}
       onClick={(e) => {
         e.preventDefault();
