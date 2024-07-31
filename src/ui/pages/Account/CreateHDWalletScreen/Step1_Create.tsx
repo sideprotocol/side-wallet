@@ -85,7 +85,7 @@ export default function Step1_Create({
         style={{
           flex: 1,
           overflow: 'hidden',
-          padding: '0 16px 24px'
+          padding: '0 16px 32px'
         }}>
         <Column
           classname={'hide-scrollbar'}
@@ -259,6 +259,7 @@ export default function Step1_Create({
           <Column
             style={{
               marginTop: '16px',
+              marginBottom: '32px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
               borderRadius: '10px',
               padding: '10px',
@@ -291,7 +292,9 @@ export default function Step1_Create({
             />
           </Column>
         </Column>
-        <Button disabled={disabled} text="Next" preset="primary" onClick={btnClick} />
+        <Button style={{
+          minHeight: '48px',
+        }} disabled={disabled} text="Next" preset="primary" onClick={btnClick} />
       </Column>
     </>
   );
