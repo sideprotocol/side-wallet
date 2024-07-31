@@ -84,7 +84,15 @@ export default function WalletTabScreen() {
   const blockstreamUrl = useBlockstreamUrl();
 
   const [buyBtcModalVisible, setBuyBtcModalVisible] = useState(false);
+  const [isHoveredMoney, setIsHoveredMoney] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const handleMouseOver = () => {
+    setIsHoveredMoney(true);
+  };
 
+  const handleMouseLeave = () => {
+    setIsHoveredMoney(false);
+  };
   return (
     <Layout>
       <Header
@@ -123,6 +131,8 @@ export default function WalletTabScreen() {
           cursor: 'pointer'
         }}>
         <Row
+          onMouseOver={handleMouseOver}
+          onMouseLeave={handleMouseLeave}
           justifyCenter
           style={{
             marginTop: '36px',
@@ -165,7 +175,12 @@ export default function WalletTabScreen() {
             />
           )}
 
-          <span onClick={() => setBalanceVisible(!balanceVisible)}>
+          <span  style={{
+            display: 'inline-box',
+            width: isHoveredMoney ? '20px' : '0',
+            opacity: isHoveredMoney ? 1 : 0,
+            transition: 'all 0.3s ease-in',
+          }} onClick={() => setBalanceVisible(!balanceVisible)}>
             <Image src={ balanceVisible ? '/images/icons/eye-off-2.svg' : '/images/icons/eye-white.svg'} size={20} />
           </span>
         </Row>

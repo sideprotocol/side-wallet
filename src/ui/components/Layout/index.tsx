@@ -17,7 +17,7 @@ export function Layout(props: LayoutProps) {
           display: 'flex',
           flexDirection: 'column',
           width: '100%',
-          maxWidth: '375px',
+          maxWidth: '360px',
           maxHeight: '620px',
           minHeight: '620px',
           // height: '100vh',

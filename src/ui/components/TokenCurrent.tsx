@@ -39,9 +39,6 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
       color: unSelected ? 'white' : 'white',
       background: unSelected ? 'black' : 'black',
       minWidth: 'max-content',
-      // ':hover': {
-      //   background: unSelected ? '#0DD4C3' : 'rgba(234,234,234,0.5)',
-      // },
     }}
       onClick={(e) => {
         e.preventDefault();
