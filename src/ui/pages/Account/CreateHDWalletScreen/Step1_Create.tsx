@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 
 import { Button, ButtonGroup, Column, Grid, Image, Input, Mask, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
-import { copyToClipboard, useWallet } from '@/ui/utils';
 import { Icon } from '@/ui/components/Icon';
+import { copyToClipboard, useWallet } from '@/ui/utils';
+
 import { ContextData, TabType, UpdateContextDataParams, WORDS_12_ITEM, WORDS_24_ITEM, WordsType } from './type';
 
 export default function Step1_Create({
@@ -84,7 +85,7 @@ export default function Step1_Create({
         style={{
           flex: 1,
           overflow: 'hidden',
-          padding: '0 16px 24px',
+          padding: '0 16px 24px'
         }}>
         <Column
           classname={'hide-scrollbar'}
@@ -92,11 +93,12 @@ export default function Step1_Create({
             flex: 1,
             overflow: 'auto'
           }}>
-          <Mask onClick={() => {
-            // alert('Mask');
-            setIsClickMask(true);
-            setDisabled(false);
-          }}>
+          <Mask
+            onClick={() => {
+              // alert('Mask');
+              setIsClickMask(true);
+              setDisabled(false);
+            }}>
             <Column
               style={{
                 marginTop: '16px',
@@ -104,7 +106,7 @@ export default function Step1_Create({
                 borderRadius: '14px',
                 padding: '16px',
                 height: isClickMask ? 'auto' : '165px',
-                overflow: 'hidden',
+                overflow: 'hidden'
               }}>
               {wordsItems.length > 1 ? (
                 <ButtonGroup
@@ -124,13 +126,13 @@ export default function Step1_Create({
               ) : null}
 
               <Row justifyCenter style={{ marginTop: '16px' }}>
-                <Grid columns={2}>
+                <Grid columns={3}>
                   {words.map((v, index) => {
                     return (
                       <Row
                         key={index}
                         style={{
-                          gap: '8px',
+                          gap: '4px',
                           height: '36px',
                           borderRadius: '8px',
                           border: '1px solid #FFFFFF33',
@@ -145,7 +147,7 @@ export default function Step1_Create({
                         <Input
                           containerStyle={{
                             minHeight: '34px',
-                            padding: '0 10px',
+                            padding: '0',
                             flex: 1,
                             border: 'none',
                             backgroundColor: 'transparent'
@@ -171,8 +173,15 @@ export default function Step1_Create({
                 style={{
                   marginTop: '8px'
                 }}>
-                <Icon icon={isClickCopy ? 'check-circle-broken' : 'copy2'} color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'} size={20} />
-                <Text text={isClickCopy ? 'Copied' : 'Copy to clipboard'} color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'} />
+                <Icon
+                  icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
+                  color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'}
+                  size={20}
+                />
+                <Text
+                  text={isClickCopy ? 'Copied' : 'Copy to clipboard'}
+                  color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'}
+                />
               </Row>
             </Column>
           </Mask>

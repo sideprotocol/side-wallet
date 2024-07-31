@@ -500,6 +500,11 @@ class PreferenceService {
   setEnableSignData = (enableSignData: boolean) => {
     this.store.enableSignData = enableSignData;
   };
+
+  reset = () => {
+    this.store.keyringAlianNames = {};
+    this.store.accountAlianNames = {};
+  };
 }
 
 export default new PreferenceService();

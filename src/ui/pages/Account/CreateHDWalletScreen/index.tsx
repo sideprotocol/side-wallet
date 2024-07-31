@@ -104,7 +104,8 @@ export default function CreateHDWalletScreen() {
       <Column
         style={{
           padding: '0 16px 0',
-          marginTop: '10px'
+          marginTop: '10px',
+          marginBottom: '10px'
         }}>
         <StepBar
           activeKey={contextData.tabType}

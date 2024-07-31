@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useNavigate as useNavigateRouter } from 'react-router-dom';
 
 import { Button, Column, Header, Image, Layout, Row, Text } from '@/ui/components';
+import { useAppDispatch } from '@/ui/state/hooks';
+import { keyringsActions } from '@/ui/state/keyrings/reducer';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
@@ -14,6 +16,7 @@ export default function CreateHDWalletScreen() {
   const [checked2, setChecked2] = useState(false);
   const [checked3, setChecked3] = useState(false);
   const wallet = useWallet();
+  const dispatch = useAppDispatch();
 
   return (
     <Layout style={{}}>
@@ -117,6 +120,7 @@ export default function CreateHDWalletScreen() {
           preset="primary"
           onClick={async () => {
             await wallet.reset();
+            dispatch(keyringsActions.reset());
             navigate('WelcomeScreen');
           }}
         />

@@ -937,6 +937,7 @@ class KeyringService extends EventEmitter {
 
   reset = async () => {
     await storage.clear();
+    await this.clearKeyrings();
     this.store.updateState({ booted: undefined, vault: undefined });
   };
 }

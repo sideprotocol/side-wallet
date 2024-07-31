@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 
 import { Button, ButtonGroup, Column, Grid, Image, Input, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
+import { colors } from '@/ui/theme/colors';
 
 import { ContextData, TabType, UpdateContextDataParams, WORDS_12_ITEM, WORDS_24_ITEM, WordsType } from './type';
-import { colors } from '@/ui/theme/colors';
+
 export default function Step1_Import({
   contextData,
   updateContextData
@@ -122,13 +123,13 @@ export default function Step1_Import({
           ) : null}
 
           <Row justifyCenter style={{ marginTop: '16px' }}>
-            <Grid columns={2}>
+            <Grid columns={3}>
               {keys.map((_, index) => {
                 return (
                   <Row
                     key={index}
                     style={{
-                      gap: '8px',
+                      gap: '4px',
                       height: '36px',
                       borderRadius: '8px',
                       border: '1px solid #FFFFFF33',
@@ -143,7 +144,7 @@ export default function Step1_Import({
                     <Input
                       containerStyle={{
                         minHeight: '34px',
-                        padding: '0 10px',
+                        padding: '0px',
                         flex: 1,
                         border: 'none',
                         backgroundColor: 'transparent'
@@ -170,7 +171,7 @@ export default function Step1_Import({
                       }}
                       onKeyUp={(e) => handleOnKeyUp(e)}
                       autoFocus={index == curInputIndex}
-                      preset={'password'}
+                      // preset={'password'}
                       placeholder=""
                     />
                   </Row>
