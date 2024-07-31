@@ -30,6 +30,10 @@ export default function CreatePasswordScreen() {
 
   const [password2, setPassword2] = useState('');
 
+  const [isPwdError, setIsPwdError] = useState(false);
+  const [pwdErrorMsg, setPwdErrorMsg] = useState('');
+  const [isConfirmError, setIsConfirmError] = useState(false);
+  const [confirmErrorMsg, setConfirmErrorMsg] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [check, setCheck] = useState(false);
 
@@ -55,7 +59,10 @@ export default function CreatePasswordScreen() {
 
   const verify = (pwd2: string) => {
     if (pwd2 && pwd2 !== password) {
-      tools.toastWarning('Entered passwords differ');
+      // tools.toastWarning('Entered passwords differ');
+      setIsPwdError(true);
+      setIsConfirmError(true);
+      setConfirmErrorMsg('Entered passwords differ');
     }
   };
 
@@ -63,11 +70,16 @@ export default function CreatePasswordScreen() {
     setDisabled(true);
 
     if (password) {
+      setIsPwdError(false);
+      setPwdErrorMsg('');
+      setIsConfirmError(false);
+      setConfirmErrorMsg('');
       if (password.length < 5) {
-        tools.toastWarning('Password must contain at least 5 characters');
+        // tools.toastWarning('Password must contain at least 5 characters');
+        setIsPwdError(true);
+        setPwdErrorMsg('Password must contain at least 5 characters');
         return;
       }
-
       if (!check) {
         return;
       }
@@ -82,6 +94,10 @@ export default function CreatePasswordScreen() {
   }, [password, password2, check]);
 
   const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // setIsPwdError(false);
+    // setPwdErrorMsg('');
+    // setIsConfirmError(false);
+    // setConfirmErrorMsg('');
     if (!disabled && 'Enter' == e.key) {
       btnClick();
     }
@@ -118,12 +134,28 @@ export default function CreatePasswordScreen() {
             }}
           />
           <Input
+            containerStyle={{
+              borderColor: isPwdError ? '#ff0000' : 'rgba(255, 255, 255, 0.2)'
+            }}
             preset="password"
             onBlur={(e) => {
               setPassword(e.target.value);
             }}
+            onChange={(e) => {
+              setIsPwdError(false);
+              setPwdErrorMsg('');
+              setIsConfirmError(false);
+              setConfirmErrorMsg('');
+            }}
             autoFocus={true}
           />
+          <div style={{
+            color: '#ff0000',
+            fontSize: '14px',
+            opacity: pwdErrorMsg ? 1 : 0
+          }} className="">
+            {pwdErrorMsg}
+          </div>
           <Text
             text="Confirm Password"
             style={{
@@ -134,9 +166,16 @@ export default function CreatePasswordScreen() {
             }}
           />
           <Input
+            containerStyle={{
+              borderColor: isConfirmError ? '#ff0000' : 'rgba(255, 255, 255, 0.2)'
+            }}
             preset="password"
             placeholder="Confirm Password"
             onChange={(e) => {
+              setIsPwdError(false);
+              setPwdErrorMsg('');
+              setIsConfirmError(false);
+              setConfirmErrorMsg('');
               setPassword2(e.target.value);
             }}
             onBlur={(e) => {
@@ -144,6 +183,13 @@ export default function CreatePasswordScreen() {
             }}
             onKeyUp={(e) => handleOnKeyUp(e)}
           />
+          <div style={{
+            color: '#ff0000',
+            fontSize: '14px',
+            opacity: confirmErrorMsg ? 1 : 0
+          }} className="">
+            {confirmErrorMsg}
+          </div>
           <Row
             style={{
               marginTop: '16px',
