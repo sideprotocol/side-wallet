@@ -443,7 +443,7 @@ export default function SwapTabScreen() {
             navigate('/settings');
           }}
         />
-        <Content>
+        <Content classname={'hide-scrollbar'}>
           <InitBalance></InitBalance>
 
           <Column relative style={{

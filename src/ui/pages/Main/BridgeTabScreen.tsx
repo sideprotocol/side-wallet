@@ -21,8 +21,8 @@ import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
 
-import { SIDE_CHAINID_MAINNET } from '../../../shared/constant/index';
-import { useBridge } from '../../state/bridge/hook';
+import { SIDE_CHAINID_MAINNET } from '@/shared/constant';
+import { useBridge } from '@/ui/state/bridge/hook';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 
 export default function BridgeTabScreen() {
@@ -129,7 +129,7 @@ export default function BridgeTabScreen() {
           navigate('/settings');
         }}
       />
-      <Content>
+      <Content classname={'hide-scrollbar'} >
         <Row full relative rounded={true}>
           <Column full relative  style={{
             gap: '5px'

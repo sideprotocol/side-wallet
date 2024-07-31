@@ -27,7 +27,7 @@ export default function SelectNetworkScreen() {
       <Content
         style={{
           backgroundColor: '#09090A',
-          marginTop: '16px'
+          marginTop: '32px'
         }}>
         <Column
           onClick={() => {

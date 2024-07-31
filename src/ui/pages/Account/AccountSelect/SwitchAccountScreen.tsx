@@ -34,12 +34,30 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
   const dispatch = useAppDispatch();
   const keyring = useCurrentKeyring();
   const tools = useTools();
-
+  const [isHovered, setIsHovered] = useState(false);
+  const [isClickCopy, setIsClickCopy] = useState(false);
   console.log(`account: `, account);
   // debugger;
   if (!account) {
     return <div />;
   }
+
+  function copy(str: string) {
+    copyToClipboard(str).then(() => {
+      setTimeout(() => {
+        setIsClickCopy(false);
+      }, 3000);
+    });
+  }
+
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   const [optionsVisible, setOptionsVisible] = useState(false);
 
   return (
@@ -65,7 +83,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
           }
           if (autoNav) navigate('MainScreen');
         }}>
-        <div >
+        <div>
           <Text
             text={account.alianName}
             color="text"
@@ -76,15 +94,34 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
             }}
           />
 
-          <Text
-            text={shortAddress(account.address)}
-            color="search_icon"
-            style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              lineHeight: '17px'
-            }}
-          />
+          <div onMouseOver={handleMouseOver}
+               onMouseLeave={handleMouseLeave}
+                style={{
+            display: 'flex',
+            gap: 0,
+            alignItems: 'center',
+          }}>
+            <Text
+              text={shortAddress(account.address)}
+              color="search_icon"
+              style={{
+                fontSize: '12px',
+                fontWeight: 600,
+                lineHeight: '17px',
+                marginRight: '8px',
+              }}
+            />
+            <Icon style={{
+              marginRight: '3px',
+            }} onClick={(e) => {
+              copy(account.address);
+              setIsClickCopy(true);
+            }} icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
+                  color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'} size={14} />
+            <Text text={isClickCopy ? 'Copied' : ''}
+                  color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'} />
+          </div>
+
         </div>
 
         <Column relative>
@@ -132,7 +169,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                 style={{
                   gap: '16px',
                   alignItems: 'center',
-                  padding: '10px 16px',
+                  padding: '10px 16px'
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -155,7 +192,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                   style={{
                     gap: '16px',
                     alignItems: 'center',
-                    padding: '10px 16px',
+                    padding: '10px 16px'
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -178,7 +215,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                 style={{
                   gap: '16px',
                   alignItems: 'center',
-                  padding: '10px 16px',
+                  padding: '10px 16px'
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -272,7 +309,7 @@ export default function SwitchAccountScreen() {
         itemHeight={20}
         itemKey={(item) => item.key}
         style={{ flex: 1, overflow: 'auto', marginBottom: '16px' }}>
-        {(item, index) => <ForwardMyItem account={item.account} autoNav={true} />}
+        {(item, index) => <MyItem account={item.account} autoNav={true} />}
       </VirtualList>
       <Button text="Add Account" preset="ghost" icon={'plus'} onClick={add} />
     </>
