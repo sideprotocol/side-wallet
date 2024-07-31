@@ -105,7 +105,7 @@ const routes = {
     element: <SettingsTabScreen />
   },
   SummonTabScreen: {
-    path: '/summon',
+    path: '/explore',
     element: <SummonTabScreen />
   },
   BridgeTabScreen: {

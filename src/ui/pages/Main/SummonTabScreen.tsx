@@ -210,7 +210,7 @@ export default function SettingsTabScreen() {
         onBack={() => {
           window.history.go(-1);
         }}
-        title="Summon"
+        title="Explore"
       />
       <Content justifyCenter itemsCenter>
         <Column gap={'md'} justifyCenter itemsCenter>
