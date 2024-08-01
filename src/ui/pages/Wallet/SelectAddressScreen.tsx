@@ -132,6 +132,7 @@ export default function SelecAddressScreen() {
                   // backgroundColor: '#21232F',
                   cursor: 'pointer',
                   // height: '71px',
+                  margin: '0 16px',
                   padding: '8px 16px',
                   borderRadius: '8px',
                 }}
@@ -145,7 +146,7 @@ export default function SelecAddressScreen() {
                 }}
                 key={address}
                 justifyBetween>
-                <Column>
+                <Column gap={'zero'}>
                   <Text preset="regular" text={item.name}></Text>
                   <Text preset="sub" text={shortAddress(address)}></Text>
                 </Column>

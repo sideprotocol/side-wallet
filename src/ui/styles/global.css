@@ -1,9 +1,5 @@
 @import url('./font.css');
 
-//* {
-//  box-sizing: border-box;
-//}
-
 .popover-container {
   position: fixed;
   top: 0;
@@ -71,25 +67,23 @@ div {
   border: 0 solid;
 }
 
-// For scrollbar
+/**/
 ::-webkit-scrollbar {
-  //width: 4px;
-  //height: 4px;
   display: none;
 }
 
 ::-webkit-scrollbar-thumb {
-  //border-radius: 3px;
-  //box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
-  //background: rgba(255, 255, 255, 0.854);
+  /*//border-radius: 3px;*/
+  /*//box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);*/
+  /*//background: rgba(255, 255, 255, 0.854);*/
 }
 
 ::-webkit-scrollbar-track {
-  //box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1) inset;
+  /*//box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1) inset;*/
 }
 
 ::-webkit-scrollbar-corner {
-  //background: transparent;
+  /*//background: transparent;*/
 }
 
 .ant-tooltip {
@@ -105,7 +99,6 @@ div {
 .ant-drawer-content-wrapper .ant-drawer-content {
   max-width: 375px;
 }
-//.ant-select-selector, .ant-select-selection-item, .ant-select-selection-search,
 .ant-select-selection-search-input {
   height: 50px;
   line-height: 50px;
@@ -124,17 +117,17 @@ div {
   background-color: transparent!important;
 }
 
-//.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-//.ant-select-item {
-//  height: 50px;
-//  line-height: 50px;
-//  border-radius: 10px;
-//  background-color: rgb(30, 30, 31);
-//}
-//
-//.ant-select-item-option-content {
-//  line-height: 50px;
-//}
+/*//.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {*/
+/*//.ant-select-item {*/
+/*//  height: 50px;*/
+/*//  line-height: 50px;*/
+/*//  border-radius: 10px;*/
+/*//  background-color: rgb(30, 30, 31);*/
+/*//}*/
+/*//*/
+/*//.ant-select-item-option-content {*/
+/*//  line-height: 50px;*/
+/*//}*/
 .ant-select {
   height: 50px;
   line-height: 50px;
@@ -156,9 +149,25 @@ div {
   border-radius: 8px;
 }
 
+.bg-item-hover .icon-right {
+  width: 20px;
+  height: 20px;
+  /* @ts-ignore */
+  /*background-image: url("@/ui/images/icons/wallet/arrow-right.png");*/
+}
+.bg-item-hover:hover .icon-right {
+    /*  // @ts-ignore */
+  /*background: url('/images/icons/wallet/arrow-right-hover.png');*/
+}
+
 .bg-item-hover-v2:hover {
-  background-color: #1A1A1A!important;
+  background-color: rgb(64, 64, 69)!important;
   border-radius: 8px;
+}
+
+.bg-item-hover-v2:hover .symbol {
+    color: #0DD4C3!important;
+    font-weight: bold;
 }
 
 .bg-item-hover-v3:hover {
@@ -176,4 +185,9 @@ div {
 
 .opacity-1:hover {
   opacity: 1;
+}
+
+.close-icon:hover {
+  border-radius: 50%;
+  background-color: #1A1A1A;
 }

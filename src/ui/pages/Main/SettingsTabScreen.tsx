@@ -250,7 +250,7 @@ export default function SettingsTabScreen() {
                     </Row>
 
                     <Column justifyCenter>
-                      {item.right && <span className={'iconRight'}><RightOutlined style={{ color: 'rgb(107,107,107)' }} /></span>}
+                      {item.right && <span className={'iconRight'}><RightOutlined style={{ fontSize: 14, color: 'rgb(107,107,107)' }} /></span>}
                     </Column>
                   </Row>
                 </Card>

@@ -18,7 +18,7 @@ function TokenItem({ token }: { token: SideToken }) {
       justifyBetween
       style={{
         cursor: 'pointer',
-        backgroundColor: '#21232F',
+        backgroundColor: '#1A1A1A',
         padding: '10px 16px',
         borderRadius: 10
       }}>
@@ -32,7 +32,7 @@ function TokenItem({ token }: { token: SideToken }) {
           style={{
             gap: '0px'
           }}>
-          <Text preset="regular" text={token.symbol}></Text>
+          <Text classname={'symbol'} preset="regular" text={token.symbol}></Text>
           <Text preset="sub" text={token.name}></Text>
         </Column>
       </Row>

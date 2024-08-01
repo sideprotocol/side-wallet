@@ -26,12 +26,14 @@ export function ButtonGroup(props: IButtonGroupProps) {
         style={{
           backgroundColor: '#1E1E1F',
           borderRadius: '100px',
-          padding: '3px 5px'
+          padding: '3px 5px',
+          gap: '0'
         }}>
         {list.map((item) => {
           return (
             <div
               key={item.key}
+              className={value !== item.key ? 'bg-swap-hover' : ''}
               style={{
                 height,
                 padding: '0 22px',

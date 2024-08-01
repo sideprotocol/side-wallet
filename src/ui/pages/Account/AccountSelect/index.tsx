@@ -22,6 +22,7 @@ const AccountSelect = () => {
         itemsCenter
         justifyCenter
         bg="card"
+        classname={'bg-item-hover-v2'}
         onClick={() => {
           setOpen(true);
           // navigate('SwitchAccountScreen');
@@ -34,7 +35,7 @@ const AccountSelect = () => {
           itemsCenter
           justifyCenter
           style={{
-            gap: '0'
+            gap: '0',
           }}>
           <Text
             color="text"
@@ -79,8 +80,12 @@ const AccountSelect = () => {
           title={<KeyringSelect />}
           RightComponent={
             <span
+              className="close-icon"
               style={{
-                cursor: 'pointer'
+                cursor: 'pointer',
+                position: 'relative',
+                right: '-25px',
+                padding: '10px'
               }}
               onClick={() => setOpen(false)}>
               <Image src="./images/icons/x.svg" size={24} />

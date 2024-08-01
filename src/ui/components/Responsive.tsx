@@ -7,8 +7,8 @@ export const AppDimensions = (props) => {
     <div
       style={{
         width: extensionIsInTab ? '100vw' : '375px',
-        height: extensionIsInTab ? '100vh' : '620px',
-        minHeight: '620px',
+        height: extensionIsInTab ? '100vh' : '600px',
+        minHeight: '600px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

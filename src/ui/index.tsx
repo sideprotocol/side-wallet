@@ -8,7 +8,7 @@ import { EVENTS } from '@/shared/constant';
 import eventBus from '@/shared/eventBus';
 import { Message } from '@/shared/utils';
 import AccountUpdater from '@/ui/state/accounts/updater';
-import '@/ui/styles/global.less';
+import '@/ui/styles/global.css';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ActionComponentProvider } from './components/ActionComponent';

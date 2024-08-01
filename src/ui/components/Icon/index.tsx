@@ -87,7 +87,9 @@ export const svgRegistry = {
   'check-circle-broken': '/images/icons/check-circle-broken.svg',
   'clear': '/images/icons/main/clear.svg',
   loading: '/images/icons/loading.svg',
-  plus: './images/icons/plus.svg'
+  plus: './images/icons/plus.svg',
+  'arrow-right': './images/icons/wallet/arrow-right.svg',
+  'arrow-right-hover': './images/icons/wallet/arrow-right-hover.svg',
 };
 
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];

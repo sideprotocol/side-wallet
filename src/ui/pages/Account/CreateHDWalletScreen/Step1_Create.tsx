@@ -175,12 +175,12 @@ export default function Step1_Create({
                 }}>
                 <Icon
                   icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
-                  color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'}
+                  color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
                   size={20}
                 />
                 <Text
                   text={isClickCopy ? 'Copied' : 'Copy to clipboard'}
-                  color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'}
+                  color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
                 />
               </Row>
             </Column>

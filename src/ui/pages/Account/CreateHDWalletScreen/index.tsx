@@ -92,7 +92,7 @@ export default function CreateHDWalletScreen() {
   return (
     <Layout style={{
       maxWidth: '375px',
-      height: '620px',
+      height: '600px',
       overflowY: 'hidden',
     }}>
       <Header

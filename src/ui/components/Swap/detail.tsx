@@ -30,13 +30,13 @@ function SwapDetail() {
 
   const ratePrice = swapRouteResult.exchangeRateVolume;
 
-  const minReceived0 = BigNumber(swapRouteResult?.returnToken?.showAmount || "")
+  const minReceived0 = BigNumber(swapRouteResult?.returnToken?.showAmount || '')
     .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
     .toFixed(assetOut?.precision || 6, BigNumber.ROUND_DOWN)
-    .replace(/\.?0*$/, "");
+    .replace(/\.?0*$/, '');
 
   const minReceived =
-    swapRouteResult?.pools?.length === 1 && swapRouteResult.pools[0].pairType.includes("transmuter") ? swapPair.remote.amount : minReceived0;
+    swapRouteResult?.pools?.length === 1 && swapRouteResult.pools[0].pairType.includes('transmuter') ? swapPair.remote.amount : minReceived0;
 
 
 

@@ -54,7 +54,7 @@ export default function CreateHDWalletScreen() {
               }}
             />
             <Text
-              text="OKX Wallet doesn't store your password and can't help you retrieve it."
+              text="Side Wallet doesn't store your password and can't help you retrieve it."
               style={{
                 color: '#fff',
                 opacity: 0.5,

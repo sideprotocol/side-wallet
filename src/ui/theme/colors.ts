@@ -84,6 +84,7 @@ export const colors = Object.assign({}, palette, {
   // side theme color
   background: '#09090A',
   swapBg: '#1D1D1F',
+  // copyColor: 'rgba(13, 212, 195, 0.10)'
   // border: '#1E1E1F',
 });
 

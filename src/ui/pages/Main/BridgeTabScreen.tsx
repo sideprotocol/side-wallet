@@ -104,18 +104,11 @@ export default function BridgeTabScreen() {
     <Layout>
       <Header
         LeftComponent={
-          connected ? (
-            <Row
-              itemsCenter
-              onClick={() => {
-                navigate('ConnectedSitesScreen');
-              }}>
-              <Text text="·" color="green" size="xxl" />
-              <Text text="Dapp Connected" size="xxs" />
-            </Row>
-          ) : (
-            <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} />
-          )
+          <>
+            <Image onClick={() => {
+              navigate('SettingsTabScreen');
+            }} src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />
+          </>
         }
         title={
           currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
@@ -124,10 +117,11 @@ export default function BridgeTabScreen() {
             ''
           )
         }
-        RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
-        onClickRight={() => {
-          navigate('/settings');
-        }}
+        // RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
+        RightComponent={''}
+        // onClickRight={() => {
+        //   navigate('/settings');
+        // }}
       />
       <Content classname={'hide-scrollbar'} >
         <Row full relative rounded={true}>

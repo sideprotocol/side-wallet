@@ -100,6 +100,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
             display: 'flex',
             gap: 0,
             alignItems: 'center',
+                  height: 19
           }}>
             <Text
               text={shortAddress(account.address)}
@@ -117,9 +118,9 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
               copy(account.address);
               setIsClickCopy(true);
             }} icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
-                  color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'} size={14} />
+                  color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'} size={14} />
             <Text text={isClickCopy ? 'Copied' : ''}
-                  color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'white'} />
+                  color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'} />
           </div>
 
         </div>
@@ -169,7 +170,8 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                 style={{
                   gap: '16px',
                   alignItems: 'center',
-                  padding: '10px 16px'
+                  padding: '10px 6px',
+                  margin: '0 10px'
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -192,7 +194,8 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                   style={{
                     gap: '16px',
                     alignItems: 'center',
-                    padding: '10px 16px'
+                    padding: '10px 6px',
+                    margin: '0 10px'
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -210,30 +213,30 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                   />
                 </Row>
               )}
-              <Row
-                classname="bg-item-hover"
-                style={{
-                  gap: '16px',
-                  alignItems: 'center',
-                  padding: '10px 16px'
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  copyToClipboard(account.address);
-                  tools.toastSuccess('copied');
-                  setOptionsVisible(false);
-                }}>
-                <Image src="./images/icons/copy-03.svg" size={20} />
-                <Text
-                  text="Copy Address"
-                  color="text"
-                  style={{
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    lineHeight: '17px'
-                  }}
-                />
-              </Row>
+              {/*<Row*/}
+              {/*  classname="bg-item-hover"*/}
+              {/*  style={{*/}
+              {/*    gap: '16px',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    padding: '10px 16px'*/}
+              {/*  }}*/}
+              {/*  onClick={(e) => {*/}
+              {/*    e.stopPropagation();*/}
+              {/*    copyToClipboard(account.address);*/}
+              {/*    tools.toastSuccess('copied');*/}
+              {/*    setOptionsVisible(false);*/}
+              {/*  }}>*/}
+              {/*  <Image src="./images/icons/copy-03.svg" size={20} />*/}
+              {/*  <Text*/}
+              {/*    text="Copy Address"*/}
+              {/*    color="text"*/}
+              {/*    style={{*/}
+              {/*      fontSize: '14px',*/}
+              {/*      fontWeight: 500,*/}
+              {/*      lineHeight: '17px'*/}
+              {/*    }}*/}
+              {/*  />*/}
+              {/*</Row>*/}
             </Column>
           )}
         </Column>

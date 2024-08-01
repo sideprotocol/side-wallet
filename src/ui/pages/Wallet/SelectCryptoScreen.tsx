@@ -74,7 +74,8 @@ function BitCrypto({searchTerm}) {
             justifyBetween
             style={{
               cursor: 'pointer',
-              padding: '10px 24px',
+              margin: '0 16px',
+              padding: '10px 16px',
               height: '44px',
             }}>
             <BitcoinCryptoItem token={token} />
@@ -149,8 +150,9 @@ function SideCrypto({searchTerm}) {
             key={token.symbol + token.name}
             justifyBetween
             style={{
+              margin: '0 16px',
               cursor: 'pointer',
-              padding: '10px 24px',
+              padding: '10px 16px',
               height: '44px',
             }}>
             <SideCryptoItem token={token} />
@@ -163,6 +165,7 @@ function SideCrypto({searchTerm}) {
 
 export default function SelecCryptoScreen() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [isFocus, setIsFocus] = useState(false);
   const { state } = useLocation();
   const { chain } = state as {
     chain: CHAINS_ENUM;
@@ -182,14 +185,16 @@ export default function SelecCryptoScreen() {
           marginTop: '16px',
         }}>
         <Column style={{
-          padding: '0 24px',
+          padding: '0 16px',
+          // margin: '0 16px'
         }}>
           <Row
             style={{
-              padding: '0 24px',
-              borderRadius: '12px',
+              padding: '0 10px',
+              borderRadius: '10px',
               backgroundColor: '#1E1E1F',
               position: 'relative',
+              border: isFocus ? '1px solid white' : '1px solid transparent'
             }}
             itemsCenter
             bg="search_box_bg"
@@ -200,10 +205,16 @@ export default function SelecCryptoScreen() {
               onChange={(event) => {
                 setSearchTerm(event.target.value.trim());
               }}
+              onFocus={() => {
+                setIsFocus(true);
+              }}
+              onBlur={() => {
+                setIsFocus(false);
+              }}
               containerStyle={{
                 width: '100%',
                 border: 'none',
-                padding: '0'
+                padding: '0',
               }}
               placeholder="Search crypto"
             />

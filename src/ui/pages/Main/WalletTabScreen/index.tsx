@@ -94,7 +94,10 @@ export default function WalletTabScreen() {
     setIsHoveredMoney(false);
   };
   return (
-    <Layout >
+    <Layout style={{
+      minHeight: '600px',
+      height: '600px',
+    }}>
       <Header
         LeftComponent={
           // connected ? (
@@ -124,9 +127,9 @@ export default function WalletTabScreen() {
         }
         // RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
         RightComponent={''}
-        onClickRight={() => {
-          // navigate('SettingsTabScreen');
-        }}
+        // onClickRight={() => {
+        //   // navigate('SettingsTabScreen');
+        // }}
       />
       <Column
         classname={''}
