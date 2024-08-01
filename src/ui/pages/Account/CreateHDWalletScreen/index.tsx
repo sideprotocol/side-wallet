@@ -90,7 +90,11 @@ export default function CreateHDWalletScreen() {
   }, [items, contextData.tabType]);
 
   return (
-    <Layout style={{}}>
+    <Layout style={{
+      maxWidth: '375px',
+      height: '620px',
+      overflowY: 'hidden',
+    }}>
       <Header
         onBack={() => {
           if (fromUnlock) {

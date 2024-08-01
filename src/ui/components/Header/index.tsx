@@ -36,7 +36,7 @@ export function Header(props: HeaderProps) {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '14px 16px 14px',
-        marginTop: !isInTab ? '10px' : '0',
+        // marginTop: !isInTab ? '10px' : '0',
         borderBottom: '1px solid #1E1E1F',
         minHeight: '60px',
         maxHeight: '60px',

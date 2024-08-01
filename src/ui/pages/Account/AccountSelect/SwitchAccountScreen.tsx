@@ -246,6 +246,7 @@ export default function SwitchAccountScreen() {
   const keyring = useCurrentKeyring();
   const wallet = useWallet();
   const [keyword, setKeyword] = useState('');
+  const [isFocus, setIsFocus] = useState(false);
   const items = useMemo(() => {
     const _items: ItemData[] = keyring.accounts.map((v) => {
       return {
@@ -281,7 +282,7 @@ export default function SwitchAccountScreen() {
             padding: '0px 10px',
             borderRadius: '12px',
             backgroundColor: '#1E1E1F',
-            border: '1px solid #FFFFFF33'
+            border: isFocus ? '1px solid white' : '1px solid #FFFFFF33'
           }}
           itemsCenter
           bg="search_box_bg"
@@ -295,6 +296,8 @@ export default function SwitchAccountScreen() {
               border: 'none',
               padding: '0'
             }}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
             onChange={(event) => {
               const value = event.target.value.replace(/,/g, '');
               setKeyword(value);

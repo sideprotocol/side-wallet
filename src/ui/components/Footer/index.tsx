@@ -9,7 +9,7 @@ const $footerBaseStyle = {
   // minHeight: 20,
   padding: 10,
   paddingBottom: 20,
-  bottom: 0
+  marginBottom: 0
 } as CSSProperties;
 
 export function Footer(props: FooterProps) {

@@ -106,10 +106,15 @@ export default function CreatePasswordScreen() {
   };
 
   return (
-    <Layout>
+    <Layout style={{
+      maxWidth: '375px',
+    }}>
       <Header onBack={() => navigateRouter(-1)} title="Create Password"></Header>
       <Column
         style={{
+          minHeight: '530px',
+          // height: '580px',
+          // overflow: 'hidden',
           flex: 1,
           padding: '0 16px 24px'
         }}>

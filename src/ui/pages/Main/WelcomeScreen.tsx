@@ -14,7 +14,11 @@ export default function WelcomeScreen() {
   const isInTab = useExtensionIsInTab();
 
   return (
-    <Layout>
+    <Layout style={{
+      maxWidth: '375px',
+      height: '620px',
+      overflow: 'hidden',
+    }}>
       {state?.addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}
       <Column
         fullX
@@ -38,7 +42,7 @@ export default function WelcomeScreen() {
           </Row>
           <Button
             style={{
-              marginTop: '140px'
+              marginTop: '100px'
             }}
             text="Create new wallet"
             preset="primary"

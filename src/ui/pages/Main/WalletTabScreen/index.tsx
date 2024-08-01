@@ -94,21 +94,26 @@ export default function WalletTabScreen() {
     setIsHoveredMoney(false);
   };
   return (
-    <Layout>
+    <Layout >
       <Header
         LeftComponent={
-          connected ? (
-            <Row
-              itemsCenter
-              onClick={() => {
-                navigate('ConnectedSitesScreen');
-              }}>
-              <Text text="·" color="green" size="xxl" />
-              <Text text="Dapp Connected" size="xxs" />
-            </Row>
-          ) : (
-            <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxl} />
-          )
+          // connected ? (
+          //   <Row
+          //     itemsCenter
+          //     onClick={() => {
+          //       navigate('ConnectedSitesScreen');
+          //     }}>
+          //     <Text text="·" color="green" size="xxl" />
+          //     <Text text="Dapp Connected" size="xxs" />
+          //   </Row>
+          // ) : (
+          //   <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxl} />
+          // )
+          <>
+            <Image onClick={() => {
+              navigate('SettingsTabScreen');
+            }} src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />
+          </>
         }
         title={
           currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
@@ -117,13 +122,14 @@ export default function WalletTabScreen() {
             ''
           )
         }
-        RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
+        // RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
+        RightComponent={''}
         onClickRight={() => {
-          navigate('SettingsTabScreen');
+          // navigate('SettingsTabScreen');
         }}
       />
       <Column
-        classname={'hide-scrollbar'}
+        classname={''}
         style={{
           flex: 1,
           gap: '0px',
