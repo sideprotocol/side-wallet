@@ -14,6 +14,7 @@ export default function UnlockScreen() {
   const wallet = useWallet();
   const navigate = useNavigate();
   // const [btnText, setBtnText] = useState('Incorrect Password');
+  const [errorMsg, setErrorMsg] = useState('');
   const [btnText, setBtnText] = useState('Unlock');
   const [password, setPassword] = useState('');
   const [disabled, setDisabled] = useState(true);
@@ -37,7 +38,8 @@ export default function UnlockScreen() {
     } catch (e) {
       // tools.toastError('PASSWORD ERROR');
       setDisabled(true);
-      setBtnText('Incorrect Password');
+      // setBtnText('Incorrect Password');
+      setErrorMsg('Invalid Password');
     }
   };
 
@@ -91,7 +93,7 @@ export default function UnlockScreen() {
         />
         <Input
           containerStyle={{
-            borderColor : btnText === 'Incorrect Password' ? 'rgba(255, 69, 69, 1)' : 'rgba(255, 255, 255, 0.2)'
+            borderColor: errorMsg ? 'rgba(255, 69, 69, 1)' : 'rgba(255, 255, 255, 0.2)'
           }}
           preset="password"
           placeholder="Password"
@@ -102,6 +104,13 @@ export default function UnlockScreen() {
           onKeyUp={(e) => handleOnKeyUp(e)}
           autoFocus={true}
         />
+        <div style={{
+          color: '#ff0000',
+          fontSize: '14px',
+          opacity: errorMsg ? 1 : 0
+        }} className="">
+          {errorMsg}
+        </div>
         {/*<Button disabled={disabled} text="Unlock" preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />*/}
         <Button disabled={disabled} text={btnText} preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />
         <Text
@@ -117,6 +126,7 @@ export default function UnlockScreen() {
             navigate('ForgetPasswordScreen');
           }}
         />
+
       </Column>
     </Layout>
   );
