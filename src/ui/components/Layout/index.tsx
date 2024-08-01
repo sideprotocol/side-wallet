@@ -22,7 +22,7 @@ export function Layout(props: LayoutProps) {
           maxWidth: '375px',
           // maxHeight: '600px',
           minHeight: $styleBase?.minHeight || '620px',
-          height: $styleBase?.height || '100vh',
+          height: $styleBase?.height || '620px',
           overflowY: 'auto',
           overflowX: 'hidden',
           border: !isInTab ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
