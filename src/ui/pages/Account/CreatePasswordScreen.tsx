@@ -31,8 +31,10 @@ export default function CreatePasswordScreen() {
   const [password2, setPassword2] = useState('');
 
   const [isPwdError, setIsPwdError] = useState(false);
+  const [isPwdFocus, setIsPwdFocus] = useState(false);
   const [pwdErrorMsg, setPwdErrorMsg] = useState('');
   const [isConfirmError, setIsConfirmError] = useState(false);
+  const [isConfirmFocus, setIsConfirmFocus] = useState(false);
   const [confirmErrorMsg, setConfirmErrorMsg] = useState('');
   const [disabled, setDisabled] = useState(true);
   const [check, setCheck] = useState(false);
@@ -135,11 +137,15 @@ export default function CreatePasswordScreen() {
           />
           <Input
             containerStyle={{
-              borderColor: isPwdError ? '#ff0000' : 'rgba(255, 255, 255, 0.2)'
+              borderColor: isPwdError ? '#ff0000' : isPwdFocus ? 'white' : 'rgba(255, 255, 255, 0.2)'
             }}
             preset="password"
             onBlur={(e) => {
               setPassword(e.target.value);
+              setIsPwdFocus(false);
+            }}
+            onFocus={(e) => {
+              setIsPwdFocus(true);
             }}
             onChange={(e) => {
               setIsPwdError(false);
@@ -167,7 +173,8 @@ export default function CreatePasswordScreen() {
           />
           <Input
             containerStyle={{
-              borderColor: isConfirmError ? '#ff0000' : 'rgba(255, 255, 255, 0.2)'
+              borderColor: isConfirmError ? '#ff0000' : isConfirmFocus ? 'white' : 'rgba(255, 255, 255, 0.2)'
+              // borderColor: isConfirmError ? '#ff0000' : 'rgba(255, 255, 255, 0.2)'
             }}
             preset="password"
             placeholder="Confirm Password"
@@ -178,8 +185,12 @@ export default function CreatePasswordScreen() {
               setConfirmErrorMsg('');
               setPassword2(e.target.value);
             }}
+            onFocus={(e) => {
+              setIsConfirmFocus(true);
+            }}
             onBlur={(e) => {
               verify(e.target.value);
+              setIsConfirmFocus(false);
             }}
             onKeyUp={(e) => handleOnKeyUp(e)}
           />

@@ -18,6 +18,7 @@ export default function UnlockScreen() {
   const [btnText, setBtnText] = useState('Unlock');
   const [password, setPassword] = useState('');
   const [disabled, setDisabled] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
   const UIType = getUiType();
   const isInNotification = UIType.isNotification;
   const unlock = useUnlockCallback();
@@ -93,13 +94,20 @@ export default function UnlockScreen() {
         />
         <Input
           containerStyle={{
-            borderColor: errorMsg ? 'rgba(255, 69, 69, 1)' : 'rgba(255, 255, 255, 0.2)'
+            borderColor: errorMsg ? 'rgba(255, 69, 69, 1)' : isFocused ? 'white' : 'rgba(255, 255, 255, 0.2)'
           }}
           preset="password"
           placeholder="Password"
           onChange={(e) => {
             setPassword(e.target.value);
             setBtnText('Unlock');
+            setErrorMsg('');
+          }}
+          onFocus={() => {
+            setIsFocused(true);
+          }}
+          onBlur={() => {
+            setIsFocused(false);
           }}
           onKeyUp={(e) => handleOnKeyUp(e)}
           autoFocus={true}
