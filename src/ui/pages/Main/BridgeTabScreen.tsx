@@ -106,7 +106,7 @@ export default function BridgeTabScreen() {
         LeftComponent={
           <>
             <Image onClick={() => {
-              navigate('SettingsTabScreen');
+              navigate('/settings');
             }} src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />
           </>
         }

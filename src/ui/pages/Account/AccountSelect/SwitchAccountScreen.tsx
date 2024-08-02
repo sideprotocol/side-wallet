@@ -250,7 +250,7 @@ export default function SwitchAccountScreen() {
   const wallet = useWallet();
   const [keyword, setKeyword] = useState('');
   const [isFocus, setIsFocus] = useState(false);
-  const items = useMemo(() => {
+  let items = useMemo(() => {
     const _items: ItemData[] = keyring.accounts.map((v) => {
       return {
         key: v.address,
@@ -268,6 +268,7 @@ export default function SwitchAccountScreen() {
   }, [keyring.accounts, keyword]);
 
   const add = async () => {
+    items = [];
     const defaultName = await wallet.getNextAlianName(keyring);
     await wallet.deriveNewAccountFromMnemonic(keyring, defaultName);
   };
@@ -311,7 +312,7 @@ export default function SwitchAccountScreen() {
         itemHeight={20}
         itemKey={(item) => item.key}
         style={{ flex: 1, overflow: 'auto', marginBottom: '16px' }}>
-        {(item, index) => <MyItem account={item.account} autoNav={true} />}
+        {(item, index) => <ForwardMyItem account={item.account} autoNav={true} />}
       </VirtualList>
       <Button text="Add Account" preset="ghost" icon={'plus'} onClick={add} />
     </>

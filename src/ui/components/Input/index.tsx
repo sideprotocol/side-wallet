@@ -306,7 +306,7 @@ export const AddressInput = (props: InputProps) => {
     <div style={{ alignSelf: 'stretch' }}>
       <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] '}  style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '50px' })}>
         <input
-          placeholder={'Address or name (sats, unisat, ...) '}
+          placeholder={'Address...'}
           type={'text'}
           style={Object.assign({}, $baseInputStyle, $inputStyleOverride)}
           onChange={async (e) => {

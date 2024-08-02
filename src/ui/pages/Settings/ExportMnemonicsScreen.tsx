@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ADDRESS_TYPES } from '@/shared/constant';
 import { WalletKeyring } from '@/shared/types';
-import { Button, Column, Grid, Header, Input, Layout, LongPress, Row, Text } from '@/ui/components';
+import { Button, Column, Grid, Header, Icon, Input, Layout, LongPress, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { copyToClipboard, useLocationState, useWallet } from '@/ui/utils';
 
@@ -24,7 +24,16 @@ export default function ExportMnemonicsScreen() {
   const tools = useTools();
 
   const [passphrase, setPassphrase] = useState('');
+  const [isClickCopy, setIsClickCopy] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   const btnClick = async () => {
     try {
       const { mnemonic, hdPath, passphrase } = await wallet.getMnemonics(password, keyring);
@@ -160,13 +169,35 @@ export default function ExportMnemonicsScreen() {
                     );
                   })}
                 </Grid>
-                <Text
-                  text="Copy to clipboard"
-                  style={{
-                    textAlign: 'center'
+                {/*<Text*/}
+                {/*  text="Copy to clipboard"*/}
+                {/*  style={{*/}
+                {/*    textAlign: 'center'*/}
+                {/*  }}*/}
+                {/*  onClick={() => copy(mnemonic)}*/}
+                {/*/>*/}
+
+                <Row
+                  onMouseOver={handleMouseOver}
+                  onMouseLeave={handleMouseLeave}
+                  justifyCenter
+                  onClick={(e) => {
+                    copy(mnemonic);
+                    setIsClickCopy(true);
                   }}
-                  onClick={() => copy(mnemonic)}
-                />
+                  style={{
+                    marginTop: '8px'
+                  }}>
+                  <Icon
+                    icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
+                    color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                    size={20}
+                  />
+                  <Text
+                    text={isClickCopy ? 'Copied' : 'Copy to clipboard'}
+                    color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                  />
+                </Row>
               </Column>
             </Column>
             <Button text="Close" preset="primary" onClick={() => window.history.go(-1)} />
