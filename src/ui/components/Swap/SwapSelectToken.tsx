@@ -72,18 +72,10 @@ export default function Index(props) {
           marginTop: 16,
         }}>
         <Column style={{
-          padding: '0 24px',
+          padding: '0 24px'
         }}>
-          <Row
-            style={{
-              padding: '0px 10px',
-              borderRadius: '12px',
-              backgroundColor: '#1E1E1F',
-              position: 'relative',
-            }}
-            itemsCenter
-            bg="search_box_bg"
-            full>
+          {/*<div className={'flex items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '}></div>*/}
+          <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '}>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
             <Input
@@ -113,7 +105,7 @@ export default function Index(props) {
             }}>
               <Icon icon="clear" color={'search_icon'} size={20}></Icon>
             </div>
-          </Row>
+          </div>
         </Column>
 
         <Column style={{

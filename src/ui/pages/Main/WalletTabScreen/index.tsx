@@ -153,13 +153,14 @@ export default function WalletTabScreen() {
               justifyCenter
               style={{
                 gap: 0,
-                alignItems: 'flex-end'
+                // alignItems: 'flex-end'
               }}>
               <Text
                 text="$"
                 style={{
-                  fontSize: '24px',
-                  fontWeight: 400
+                  fontSize: '38px',
+                  fontWeight: 400,
+                  lineHeight: '32px'
                 }}
               />
               <Text
@@ -254,7 +255,8 @@ export default function WalletTabScreen() {
 
         <Row
           style={{
-            marginTop: '20px'
+            marginTop: '20px',
+            marginBottom: '20px'
           }}
           justifyCenter>
           <ButtonGroup
@@ -286,15 +288,15 @@ export default function WalletTabScreen() {
             marginBottom: '20px',
             gap: '0px'
           }}>
-          <Text
-            text="Tokens"
-            style={{
-              marginTop: '20px',
-              marginBottom: '20px',
-              fontSize: '16px',
-              fontWeight: 600
-            }}
-          />
+          {/*<Text*/}
+          {/*  text="Tokens"*/}
+          {/*  style={{*/}
+          {/*    marginTop: '20px',*/}
+          {/*    marginBottom: '20px',*/}
+          {/*    fontSize: '16px',*/}
+          {/*    fontWeight: 600*/}
+          {/*  }}*/}
+          {/*/>*/}
           {currentTab === CHAINS_ENUM.SIDE ? <SideTokenList /> : <BtcTokenList />}
         </Column>
       </Column>

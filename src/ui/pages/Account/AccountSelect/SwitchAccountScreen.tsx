@@ -71,7 +71,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
           padding: '0 6px 0 14px',
           borderRadius: '10px',
           marginTop: '16px',
-          background: selected ? 'rgba(34, 171, 56, 0.1)' : '#2E2E2F!important',
+          background: selected ? 'rgba(13, 212, 195, 0.1)' : '#2E2E2F!important',
           border: `1px solid ${selected ? 'rgba(34, 171, 56, 0.1)' : '#2E2E2F!important'}`,
           cursor: 'pointer'
         }}
@@ -280,16 +280,12 @@ export default function SwitchAccountScreen() {
         style={{
           flexGrow: 0
         }}>
-        <Row
+        <div
+          className="flex items-center gap-[5px] bg-[#1E1E1F] rounded-[12px] px-[10px] hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20]"
           style={{
-            padding: '0px 10px',
-            borderRadius: '12px',
-            backgroundColor: '#1E1E1F',
-            border: isFocus ? '1px solid white' : '1px solid #FFFFFF33'
+            borderColor: isFocus ? 'white' : ''
           }}
-          itemsCenter
-          bg="search_box_bg"
-          full>
+          >
           <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
           <Input
@@ -307,7 +303,7 @@ export default function SwitchAccountScreen() {
             }}
             placeholder="Search Account"
           />
-        </Row>
+        </div>
       </div>
       <VirtualList
         data={items}

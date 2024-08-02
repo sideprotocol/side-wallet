@@ -32,7 +32,8 @@ export default function () {
         <Column
           style={{
             flex: 1,
-            gap: '10px'
+            gap: '10px',
+            marginTop: '16px'
           }}>
           <div
             style={{

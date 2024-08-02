@@ -212,7 +212,7 @@ function removeTrailingZeroes(str: string): string {
   let temp = str.slice(0, dotIndex + 1) + str.slice(dotIndex + 1).replace(/0+$/, '');
 
   if (temp.endsWith('.')) {
-    temp = temp.replace('.', '');
+    temp = temp.replace('.', '.00');
   }
   return temp;
 }

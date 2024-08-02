@@ -105,7 +105,8 @@ function PasswordInput(props: InputProps) {
       {type === 'password' && (
         <Icon onMouseLeave={() => setIsMouse(false)} onMouseOver={() => setIsMouse(true)}
               icon={isMouse ? 'eye-slash-hover' : 'eye-slash'} style={{ marginLeft: spacing.tiny }}
-              onClick={() => setType('text')} color="textDim" />
+              // onClick={() => setType('text')} color="textDim" />
+              onClick={() => setType('text')} color={isMouse ? 'white' : 'textDim'} />
       )}
       {type === 'text' && <Icon icon="eye" style={{ marginLeft: spacing.tiny }} onClick={() => setType('password')} />}
     </div>
@@ -303,7 +304,7 @@ export const AddressInput = (props: InputProps) => {
 
   return (
     <div style={{ alignSelf: 'stretch' }}>
-      <div style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '50px' })}>
+      <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] '}  style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '50px' })}>
         <input
           placeholder={'Address or name (sats, unisat, ...) '}
           type={'text'}
@@ -351,7 +352,7 @@ export const AddressInput = (props: InputProps) => {
 function TextInput(props: InputProps) {
   const { placeholder, containerStyle, style: $inputStyleOverride, disabled, autoFocus, ...rest } = props;
   return (
-    <div style={Object.assign({}, $baseContainerStyle, containerStyle)}>
+    <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] '}  style={Object.assign({}, $baseContainerStyle, containerStyle)}>
       <input
         placeholder={placeholder}
         type={'text'}

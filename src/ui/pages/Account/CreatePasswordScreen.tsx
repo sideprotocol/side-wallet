@@ -64,7 +64,7 @@ export default function CreatePasswordScreen() {
       // tools.toastWarning('Entered passwords differ');
       setIsPwdError(true);
       setIsConfirmError(true);
-      setConfirmErrorMsg('Entered passwords differ');
+      setConfirmErrorMsg('Passwords do not match');
     }
   };
 
@@ -79,7 +79,7 @@ export default function CreatePasswordScreen() {
       if (password.length < 5) {
         // tools.toastWarning('Password must contain at least 5 characters');
         setIsPwdError(true);
-        setPwdErrorMsg('Password must contain at least 5 characters');
+        setPwdErrorMsg('Password must include at least 5 characters');
         return;
       }
       if (!check) {
@@ -141,6 +141,7 @@ export default function CreatePasswordScreen() {
             }}
           />
           <Input
+            placeholder="Input Password"
             containerStyle={{
               borderColor: isPwdError ? '#ff0000' : isPwdFocus ? 'white' : ''
             }}

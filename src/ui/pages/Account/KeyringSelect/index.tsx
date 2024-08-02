@@ -105,6 +105,7 @@ export default function WalletSelect() {
   return (
     <>
       <Row
+        classname="bg-item-hover-v2 !rounded-[16px]"
         itemsCenter
         justifyBetween
         rounded
