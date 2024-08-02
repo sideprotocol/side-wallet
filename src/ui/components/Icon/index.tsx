@@ -112,6 +112,7 @@ interface IconProps {
    */
   size?: number | string;
   contain?: number | string;
+  className?: string;
 
   /**
    * Style overrides for the icon image
@@ -134,6 +135,7 @@ interface IconProps {
 
 export function Icon(props: IconProps) {
   const {
+    className,
     contain,
     icon,
     color,
@@ -148,6 +150,7 @@ export function Icon(props: IconProps) {
   if (!icon) {
     return (
       <div
+        className={className}
         onClick={onClick}
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}
@@ -170,6 +173,7 @@ export function Icon(props: IconProps) {
   if (iconImgList.includes(icon)) {
     return (
       <img
+        className={className}
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}
         src={iconPath}
@@ -183,7 +187,7 @@ export function Icon(props: IconProps) {
   }
   if (iconPath) {
     return (
-      <div style={$containerStyleOverride}>
+      <div className={className} style={$containerStyleOverride}>
         <div
           onMouseOver={onMouseOver}
           onMouseLeave={onMouseLeave}

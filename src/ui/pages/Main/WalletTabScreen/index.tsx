@@ -201,13 +201,13 @@ export default function WalletTabScreen() {
             gap: '50px',
             marginTop: '20px'
           }}>
-          <div className="flex flex-col items-center gap-[8px] group"
+          <div className="flex flex-col items-center gap-[8px] group transition"
                onClick={() => {
                  navigate('SelectNetworkScreen', { type: 'receive' });
                }}>
             {/*<Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.xxxl} />*/}
             <div
-              className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045]">
+              className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045] transition">
               <Image
                 src={
                   '/images/icons/main/recevie-icon.svg' // Default image source
@@ -221,12 +221,12 @@ export default function WalletTabScreen() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-[8px] group"
+          <div className="flex flex-col items-center gap-[8px] group transition"
                onClick={() => {
                  navigate('SelectNetworkScreen', { type: 'send' });
                }}>
             <div
-              className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045]">
+              className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045] transition">
               <Image
                 src={
                   '/images/icons/main/send-icon.svg' // Default image source

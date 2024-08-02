@@ -112,9 +112,10 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                 marginRight: '8px',
               }}
             />
-            <Icon style={{
+            <Icon className={'copy-icon'} style={{
               marginRight: '3px',
             }} onClick={(e) => {
+              e.stopPropagation();
               copy(account.address);
               setIsClickCopy(true);
             }} icon={isClickCopy ? 'check-circle-broken' : 'copy2'}

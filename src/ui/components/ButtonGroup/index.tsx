@@ -44,7 +44,8 @@ export function ButtonGroup(props: IButtonGroupProps) {
                 opacity: 0.8,
                 cursor: 'pointer',
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                transition: 'background 0.6s ease'
               }}
               onClick={() => {
                 if (item.key === value) {
