@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    scroll-behavior: smooth;
+}
+
 .popover-container {
   position: fixed;
   top: 0;
@@ -194,4 +198,9 @@ div {
 .close-icon:hover {
   border-radius: 50%;
   background-color: rgb(64, 64, 69);
+}
+
+.smooth-scroll {
+    transform: translateZ(0);
+    will-change: transform;
 }

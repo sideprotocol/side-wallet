@@ -13,6 +13,7 @@ function TokenItem({ token }: { token: BitcoinToken }) {
 
   return (
     <Row
+      classname={'bg-item-hover-v2'}
       justifyBetween
       style={{
         cursor: 'pointer',

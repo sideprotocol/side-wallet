@@ -132,7 +132,7 @@ export default function WalletTabScreen() {
         // }}
       />
       <Column
-        classname={''}
+        classname={'smooth-scroll'}
         style={{
           flex: 1,
           gap: '0px',

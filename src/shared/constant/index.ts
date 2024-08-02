@@ -428,5 +428,17 @@ export const BITCOIN_TOKENS: BitcoinToken[] = [
     name: 'Bitcoin',
     symbol: 'BTC',
     coingecko_id: 'bitcoin'
+  },
+  {
+    // @ts-ignore
+    base: "runes/9110:1",
+    symbol: "GRIMORIA•X•RUNE",
+    name: "Rune",
+    exponent: "6",
+    coingecko_id: "usd-coin",
+    logo: GrimoriaRune,
+    precision: 6,
+    emoji: "🔮",
+    isRune: true,
   }
 ];

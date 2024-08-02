@@ -33,15 +33,15 @@ const AdvancedList: Setting[] = [
     right: true
   },
 
-  {
-    label: 'Change Endpoints',
-    value: '',
-    desc: '',
-    action: '',
-    route: '/settings/change-endpoints',
-
-    right: true
-  }
+  // {
+  //   label: 'Change Endpoints',
+  //   value: '',
+  //   desc: '',
+  //   action: '',
+  //   route: '/settings/change-endpoints',
+  //
+  //   right: true
+  // }
 ];
 
 export default function AdvancedTabScreen() {
