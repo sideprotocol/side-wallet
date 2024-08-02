@@ -94,7 +94,8 @@ export default function UnlockScreen() {
         />
         <Input
           containerStyle={{
-            borderColor: errorMsg ? 'rgba(255, 69, 69, 1)' : isFocused ? 'white' : 'rgba(255, 255, 255, 0.2)'
+            // borderColor: errorMsg ? 'rgba(255, 69, 69, 1)' : isFocused ? 'white' : 'rgba(255, 255, 255, 0.2)'
+            borderColor: errorMsg ? 'rgba(255, 69, 69, 1)' : isFocused ? 'white' : ''
           }}
           preset="password"
           placeholder="Password"
