@@ -62,7 +62,7 @@ export default function ExportMnemonicsScreen() {
 
   function copy(str: string) {
     copyToClipboard(str);
-    tools.toastSuccess('Copied');
+    // tools.toastSuccess('Copied');
   }
   const words = mnemonic.split(' ');
 
@@ -178,6 +178,8 @@ export default function ExportMnemonicsScreen() {
                 {/*/>*/}
 
                 <Row
+                  full
+                  itemsCenter
                   onMouseOver={handleMouseOver}
                   onMouseLeave={handleMouseLeave}
                   justifyCenter

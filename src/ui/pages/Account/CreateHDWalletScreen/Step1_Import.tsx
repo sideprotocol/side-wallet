@@ -139,7 +139,7 @@ export default function Step1_Import({
                       text={`${index + 1}. `}
                       style={{ width: 25, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
                       textEnd
-                      color="white_4"
+                      color="white_muted"
                     />
                     <Input
                       containerStyle={{

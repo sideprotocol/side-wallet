@@ -188,7 +188,7 @@ export default function Step1_Create({
 
           <Column
             style={{
-              marginTop: '16px',
+              marginTop: '10px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
               borderRadius: '8px',
               padding: '10px',
@@ -223,7 +223,7 @@ export default function Step1_Create({
 
           <Column
             style={{
-              marginTop: '16px',
+              marginTop: '10px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
               borderRadius: '10px',
               padding: '10px',
@@ -258,7 +258,7 @@ export default function Step1_Create({
 
           <Column
             style={{
-              marginTop: '16px',
+              marginTop: '10px',
               marginBottom: '32px',
               backgroundColor: 'rgb(240 182 34 / 10%)',
               borderRadius: '10px',

@@ -38,12 +38,12 @@ export default function SelecAddressScreen() {
   });
   const self = selfRef.current;
 
-  let NEWADDRESS_TYPES;
-  if (state.chain === 'SIDE') {
-    NEWADDRESS_TYPES = ADDRESS_TYPES.filter((v) => v.label === 'P2PKH' || v.label === 'P2WPKH');
-  } else {
-    NEWADDRESS_TYPES = ADDRESS_TYPES;
-  }
+  // let NEWADDRESS_TYPES;
+  // if (state.chain === 'SIDE') {
+  //   NEWADDRESS_TYPES = ADDRESS_TYPES.filter((v) => v.label !== 'P2PKH' || v.label !== 'P2WPKH');
+  // } else {
+  //   NEWADDRESS_TYPES = ADDRESS_TYPES;
+  // }
 
   const loadAddresses = async () => {
     tools.showLoading(true);
@@ -72,7 +72,7 @@ export default function SelecAddressScreen() {
 
   const addressTypes = useMemo(() => {
     if (currentKeyring.type === KEYRING_TYPE.HdKeyring) {
-      return NEWADDRESS_TYPES.filter((v) => {
+      return ADDRESS_TYPES.filter((v) => {
         if (v.displayIndex < 0) {
           return false;
         }
@@ -86,7 +86,7 @@ export default function SelecAddressScreen() {
         return true;
       }).sort((a, b) => a.displayIndex - b.displayIndex);
     } else {
-      return NEWADDRESS_TYPES.filter((v) => v.displayIndex >= 0 && v.isUnisatLegacy != true).sort(
+      return ADDRESS_TYPES.filter((v) => v.displayIndex >= 0 && v.isUnisatLegacy != true).sort(
         (a, b) => a.displayIndex - b.displayIndex
       );
     }
@@ -100,8 +100,6 @@ export default function SelecAddressScreen() {
   //     value: ''
   //   }
   // ];
-
-
   return (
     <Layout>
       <Header
@@ -123,7 +121,7 @@ export default function SelecAddressScreen() {
               satoshis: 0,
               total_inscription: 0
             };
-            console.log(`assets: `, assets);
+            // console.log(`assets: `, assets);
             // debugger;
             return (
               <Row

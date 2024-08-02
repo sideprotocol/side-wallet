@@ -130,14 +130,14 @@ export const ADDRESS_TYPES: {
   displayIndex: number;
   isUnisatLegacy?: boolean;
 }[] = [
-  {
-    value: AddressType.P2PKH,
-    label: 'P2PKH',
-    name: 'Legacy (P2PKH)',
-    hdPath: "m/44'/0'/0'/0",
-    displayIndex: 3,
-    isUnisatLegacy: false
-  },
+  // {
+  //   value: AddressType.P2PKH,
+  //   label: 'P2PKH',
+  //   name: 'Legacy (P2PKH)',
+  //   hdPath: "m/44'/0'/0'/0",
+  //   displayIndex: 3,
+  //   isUnisatLegacy: false
+  // },
   {
     value: AddressType.P2WPKH,
     label: 'P2WPKH',
@@ -154,14 +154,14 @@ export const ADDRESS_TYPES: {
     displayIndex: 2,
     isUnisatLegacy: false
   },
-  {
-    value: AddressType.P2SH_P2WPKH,
-    label: 'P2SH-P2WPKH',
-    name: 'Nested Segwit (P2SH-P2WPKH)',
-    hdPath: "m/49'/0'/0'/0",
-    displayIndex: 1,
-    isUnisatLegacy: false
-  },
+  // {
+  //   value: AddressType.P2SH_P2WPKH,
+  //   label: 'P2SH-P2WPKH',
+  //   name: 'Nested Segwit (P2SH-P2WPKH)',
+  //   hdPath: "m/49'/0'/0'/0",
+  //   displayIndex: 1,
+  //   isUnisatLegacy: false
+  // },
   {
     value: AddressType.M44_P2WPKH,
     label: 'P2WPKH',
