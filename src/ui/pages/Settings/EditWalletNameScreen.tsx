@@ -51,7 +51,7 @@ export default function EditWalletNameScreen() {
         <Column style={{ flex: 1, gap: '0' }}>
           <Text
             text="Previous Wallet Name"
-            color="white_muted"
+            color="white"
             style={{
               fontSize: '14px',
               fontWeight: 400,
@@ -62,7 +62,7 @@ export default function EditWalletNameScreen() {
           <Input value={keyring.alianName} disabled />
           <Text
             text="New Wallet Name"
-            color="white_muted"
+            color="white"
             style={{
               fontSize: '14px',
               fontWeight: 400,

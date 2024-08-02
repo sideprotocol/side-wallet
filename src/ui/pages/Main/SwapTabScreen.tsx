@@ -84,7 +84,7 @@ const InitBalance = () => {
 const NativeBalance = () => {
   const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
 
-  const { swapPair, balances } = useSwapStore();
+  const { swapLoading, swapPair, balances, swapRouteResult } = useSwapStore();
   const currentAccount = useCurrentAccount();
   const connected = !!currentAccount?.address && swapPair?.native.denom;
 
@@ -94,6 +94,24 @@ const NativeBalance = () => {
 
   const assetNativeIcon = findAssetIcon(swapPair?.native);
 
+  function insufficientBalance() {
+    return BigNumber(swapPair.native.amount || '0').gt(balances?.[swapPair.native?.denom || '']?.available || 0);
+  }
+
+  const priceImpact = swapRouteResult.priceImpact;
+
+  const priceImpactRaw = BigNumber(priceImpact).div(100);
+  const isDisabled = () => {
+    return (
+      insufficientBalance() ||
+      !swapStore.swapPair.native?.amount ||
+      !swapStore.swapPair.remote?.amount ||
+      parseFloat(swapStore.swapPair.native?.amount) <= 0 ||
+      parseFloat(swapStore.swapPair.remote?.amount) <= 0 ||
+      swapLoading ||
+      BigNumber(priceImpactRaw || '0').gt(0.5)
+    );
+  };
   const nativePrice = (
     new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(
       unitPriceMap[assetNativeIcon?.coingecko_id || '']?.usd || '0'
@@ -119,37 +137,33 @@ const NativeBalance = () => {
       <div />
 
       {connected && (
-        <div style={{
-          display: 'flex'
+        <div className={'mr-[20px] gap-[3px] flex items-center cursor-pointer'} style={{
         }}>
-          <div
-            style={{
-              // position: 'relative',
-              // minWidth: '20px',
-              // left: '4px',
-              color: 'rgb(125, 125, 125)',
-              fontSize: '14px',
-              // color: colors.primary
-            }}
-            onClick={() => {
-              swapStore.swapPair['native'] = {
-                ...swapPair['native'],
-                amount: nativeBalance
-              };
-            }}
-          >
-            Max&nbsp;:&nbsp;
-          </div>
-          <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <Icon icon={'wallet-icon'} size={14} color={!isDisabled() ? 'white' : 'search_icon'}></Icon>
+          <div style={{
+            color: 'rgb(125, 125, 125)',
+            fontSize: '14px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px'
+          }}>
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(nativeBalance)
               .toFormat(assetNativeIcon?.precision || 8, BigNumber.ROUND_CEIL)
               .replace(/\.?0+$/, '')}
             &nbsp;
-            {
-              newValue?.symbol || newValue?.symbol || newValue?.base
-            }
+            <div
+              className={'text-[#0DD4C3] text-[14px] hover:text-[#0DD4C3]/80'}
+              onClick={() => {
+                swapStore.swapPair['native'] = {
+                  ...swapPair['native'],
+                  amount: nativeBalance
+                };
+              }}
+            >
+              Max
+            </div>
           </div>
         </div>
       )}
@@ -463,7 +477,7 @@ export default function SwapTabScreen() {
             {/*}}>*/}
             {/*  Swap*/}
             {/*</div>*/}
-            <Column mt={'xl'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <Column mt={'max'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{

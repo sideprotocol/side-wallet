@@ -127,7 +127,7 @@ const $hoverViewPresets: Record<Presets, CSSProperties> = {
   },
   primary: {
     backgroundColor: colors.blue_dark2,
-    boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
+    // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
   },
   approval: {
     backgroundColor: colors.orange_dark
@@ -241,7 +241,7 @@ export function Button(props: ButtonProps) {
   return (
     <div
       style={$viewStyle}
-      className=""
+      className={`${preset === 'ghostDanger' ? 'hover:bg-[#fff]/10' : ''}`}
       onClick={disabled ? undefined : onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>

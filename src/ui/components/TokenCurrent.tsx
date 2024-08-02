@@ -29,7 +29,7 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
     overflow: 'hidden'
   } : {};
   return (
-    <div className={`!hover:bg-[#292828] ${unSelected ? 'bg-[black]' : 'bg-[#292828]/50'} `} style={{
+    <div className={`hover:bg-[#000]/70 bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 ${unSelected ? 'bg-[#000]' : ''}`} style={{
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',

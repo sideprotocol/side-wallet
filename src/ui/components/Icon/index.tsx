@@ -86,6 +86,7 @@ export const svgRegistry = {
   'check-circle': '/images/icons/check-circle.svg',
   'check-circle-broken': '/images/icons/check-circle-broken.svg',
   'clear': '/images/icons/main/clear.svg',
+  'wallet-icon': '/images/icons/wallet-icon.svg',
   loading: '/images/icons/loading.svg',
   plus: './images/icons/plus.svg',
   'arrow-right': './images/icons/wallet/arrow-right.svg',

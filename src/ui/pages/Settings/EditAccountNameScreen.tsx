@@ -50,12 +50,13 @@ export default function EditAccountNameScreen() {
       <Column
         style={{
           flex: 1,
-          padding: '0 16px 24px'
+          padding: '0 16px 24px',
+          marginTop: '16px',
         }}>
         <Column style={{ flex: 1, gap: '0' }}>
           <Text
             text="New Account Name"
-            color="white_muted"
+            color="white"
             style={{
               fontSize: '14px',
               fontWeight: 400,

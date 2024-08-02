@@ -23,6 +23,7 @@ export const spacingGap = {
   xs: 2,
   zero: 0,
   medium: 16,
+  max: 32,
 };
 
 export const sizes = {

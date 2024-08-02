@@ -146,7 +146,7 @@ export default function WalletTabScreen() {
           style={{
             marginTop: '36px',
             gap: '12px',
-            alignItems: 'flex-end'
+            alignItems: 'center'
           }}>
           {balanceVisible ? (
             <Row
@@ -180,7 +180,7 @@ export default function WalletTabScreen() {
                 fontWeight: 500,
                 lineHeight: '32px',
                 position: 'relative',
-                top: '12px',
+                top: '6px',
               }}
             />
           )}
