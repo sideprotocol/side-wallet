@@ -4,6 +4,7 @@ import { fontSizes } from '@/ui/theme/font';
 
 interface ImageProps {
   src?: string;
+  className?: string;
   size?: number | string;
   style?: CSSProperties;
   containerStyle?: CSSProperties;
@@ -13,10 +14,11 @@ interface ImageProps {
 }
 
 export function Image(props: ImageProps) {
-  const { src, size, style: $imageStyleOverride, onClick, onMouseEnter, onMouseLeave,  } = props;
+  const { className, src, size, style: $imageStyleOverride, onClick, onMouseEnter, onMouseLeave,  } = props;
 
   return (
     <img
+      className={className ? className : ''}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

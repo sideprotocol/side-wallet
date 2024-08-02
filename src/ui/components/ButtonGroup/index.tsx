@@ -33,7 +33,7 @@ export function ButtonGroup(props: IButtonGroupProps) {
           return (
             <div
               key={item.key}
-              className={value !== item.key ? 'bg-swap-hover' : ''}
+              // className={value !== item.key ? 'bg-swap-hover' : ''}
               style={{
                 height,
                 padding: '0 22px',

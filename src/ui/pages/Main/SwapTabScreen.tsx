@@ -137,7 +137,7 @@ const NativeBalance = () => {
       <div />
 
       {connected && (
-        <div className={'mr-[20px] gap-[3px] flex items-center cursor-pointer'} style={{
+        <div className={' gap-[3px] flex items-center cursor-pointer'} style={{
         }}>
           <Icon icon={'wallet-icon'} size={14} color={!isDisabled() ? 'white' : 'search_icon'}></Icon>
           <div style={{

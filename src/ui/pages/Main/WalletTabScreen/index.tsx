@@ -201,39 +201,61 @@ export default function WalletTabScreen() {
             gap: '50px',
             marginTop: '20px'
           }}>
-          <Column
-            onClick={() => {
-              navigate('SelectNetworkScreen', { type: 'receive' });
-            }}
-            itemsCenter>
-            <Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.xxxl} />
-            <Text
-              text="Receive"
-              style={{
-                color: '#fff',
-                fontSize: '14px',
-                lineHeight: '17px',
-                opacity: 0.8
-              }}
-            />
-          </Column>
+          <div className="flex flex-col items-center gap-[8px] group"
+               onClick={() => {
+                 navigate('SelectNetworkScreen', { type: 'receive' });
+               }}>
+            {/*<Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.xxxl} />*/}
+            <div
+              className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045]">
+              <Image
+                src={
+                  '/images/icons/main/recevie-icon.svg' // Default image source
+                }
+                size={fontSizes.md}
+                className="" // Hide the default image on hover
+              />
+            </div>
+            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px]">
+              Receive
+            </div>
+          </div>
 
-          <Column
-            onClick={() => {
-              navigate('SelectNetworkScreen', { type: 'send' });
-            }}
-            itemsCenter>
-            <Image src="/images/icons/main/send-icon.svg" size={fontSizes.xxxl} />
-            <Text
-              text="Send"
-              style={{
-                color: '#fff',
-                fontSize: '14px',
-                lineHeight: '17px',
-                opacity: 0.8
-              }}
-            />
-          </Column>
+          <div className="flex flex-col items-center gap-[8px] group"
+               onClick={() => {
+                 navigate('SelectNetworkScreen', { type: 'send' });
+               }}>
+            <div
+              className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045]">
+              <Image
+                src={
+                  '/images/icons/main/send-icon.svg' // Default image source
+                }
+                size={fontSizes.md}
+                className="" // Hide the default image on hover
+              />
+            </div>
+            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px]">
+              Send
+            </div>
+          </div>
+
+          {/*<Column*/}
+          {/*  onClick={() => {*/}
+          {/*    navigate('SelectNetworkScreen', { type: 'send' });*/}
+          {/*  }}*/}
+          {/*  itemsCenter>*/}
+          {/*  <Image src="/images/icons/main/send-icon.svg" size={fontSizes.xxxl} />*/}
+          {/*  <Text*/}
+          {/*    text="Send"*/}
+          {/*    style={{*/}
+          {/*      color: '#fff',*/}
+          {/*      fontSize: '14px',*/}
+          {/*      lineHeight: '17px',*/}
+          {/*      opacity: 0.8*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*</Column>*/}
 
           {/* <Column
             onClick={() => {
