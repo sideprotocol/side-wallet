@@ -455,14 +455,14 @@ export default function SwapTabScreen() {
           <Column relative style={{
             gap: '6px'
           }}>
-            <div style={{
-              position: 'relative',
-              top: 15,
-              left: 10,
-              fontWeight: 700,
-            }}>
-              Swap
-            </div>
+            {/*<div style={{*/}
+            {/*  position: 'relative',*/}
+            {/*  top: 26,*/}
+            {/*  left: 10,*/}
+            {/*  fontWeight: 700,*/}
+            {/*}}>*/}
+            {/*  Swap*/}
+            {/*</div>*/}
             <Column mt={'xl'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div

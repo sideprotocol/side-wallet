@@ -26,6 +26,10 @@ export interface InputProps {
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
   onPaste?: React.ClipboardEventHandler<HTMLInputElement>;
+  onMouseOver?: React.ClipboardEventHandler<HTMLInputElement>;
+  onContainerMouseOver?: React.ClipboardEventHandler<HTMLInputElement>;
+  onMouseLeave?: React.ClipboardEventHandler<HTMLInputElement>;
+  onContainerMouseLeave?: React.ClipboardEventHandler<HTMLInputElement>;
   autoFocus?: boolean;
   defaultValue?: string;
   value?: string;
@@ -62,7 +66,7 @@ const $baseContainerStyle: CSSProperties = {
   borderRadius: 10,
   minHeight: '50px',
   alignSelf: 'stretch',
-  border: '1px solid #FFFFFF33'
+  // border: '1px solid #FFFFFF33'
 };
 
 const $baseInputStyle: CSSProperties = Object.assign({}, $textPresets.regular, {
@@ -75,11 +79,23 @@ const $baseInputStyle: CSSProperties = Object.assign({}, $textPresets.regular, {
 });
 
 function PasswordInput(props: InputProps) {
-  const { placeholder, containerStyle, style: $inputStyleOverride, ...rest } = props;
+  const {
+    placeholder,
+    containerStyle,
+    style: $inputStyleOverride,
+    // onMouseOver,
+    // onMouseLeave,
+    onContainerMouseOver,
+    onContainerMouseLeave,
+    ...rest
+  } = props;
   const [type, setType] = useState<'password' | 'text'>('password');
   const [isMouse, setIsMouse] = useState<boolean>(false);
+  const [isContainerMouseOver, setIsContainerMouseOver] = useState<boolean>(false);
   return (
-    <div style={Object.assign({}, $baseContainerStyle, containerStyle)}>
+    <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] '} style={Object.assign({}, $baseContainerStyle, containerStyle, {
+      // borderColor: isContainerMouseOver ? '#ffffff50!important' : 'transparent'
+    })}>
       <input
         placeholder={isNull(placeholder) ? 'Password' : placeholder}
         type={type}
@@ -87,7 +103,9 @@ function PasswordInput(props: InputProps) {
         {...rest}
       />
       {type === 'password' && (
-        <Icon onMouseLeave={() => setIsMouse(false)} onMouseOver={() => setIsMouse(true)} icon={isMouse ? 'eye-slash-hover' : 'eye-slash'} style={{ marginLeft: spacing.tiny }} onClick={() => setType('text')} color="textDim" />
+        <Icon onMouseLeave={() => setIsMouse(false)} onMouseOver={() => setIsMouse(true)}
+              icon={isMouse ? 'eye-slash-hover' : 'eye-slash'} style={{ marginLeft: spacing.tiny }}
+              onClick={() => setType('text')} color="textDim" />
       )}
       {type === 'text' && <Icon icon="eye" style={{ marginLeft: spacing.tiny }} onClick={() => setType('password')} />}
     </div>

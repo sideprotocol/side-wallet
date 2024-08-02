@@ -142,7 +142,7 @@ export default function CreatePasswordScreen() {
           />
           <Input
             containerStyle={{
-              borderColor: isPwdError ? '#ff0000' : isPwdFocus ? 'white' : 'rgba(255, 255, 255, 0.2)'
+              borderColor: isPwdError ? '#ff0000' : isPwdFocus ? 'white' : ''
             }}
             preset="password"
             onBlur={(e) => {
@@ -178,7 +178,8 @@ export default function CreatePasswordScreen() {
           />
           <Input
             containerStyle={{
-              borderColor: isConfirmError ? '#ff0000' : isConfirmFocus ? 'white' : 'rgba(255, 255, 255, 0.2)'
+              // borderColor: isConfirmError ? '#ff0000' : isConfirmFocus ? 'white' : 'rgba(255, 255, 255, 0.2)'
+              borderColor: isConfirmError ? '#ff0000' : isConfirmFocus ? 'white' : ''
               // borderColor: isConfirmError ? '#ff0000' : 'rgba(255, 255, 255, 0.2)'
             }}
             preset="password"

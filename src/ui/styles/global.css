@@ -1,5 +1,9 @@
 @import url('./font.css');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .popover-container {
   position: fixed;
   top: 0;
