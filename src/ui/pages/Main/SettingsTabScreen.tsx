@@ -227,12 +227,12 @@ export default function SettingsTabScreen() {
                   mt="lg"
                   onClick={(e) => {
                     if (item.action == 'addressType') {
-                      if (isCustomHdPath) {
-                        tools.showTip(
-                          'The wallet currently uses a custom HD path and does not support switching address types.'
-                        );
-                        return;
-                      }
+                      // if (isCustomHdPath) {
+                      //   tools.showTip(
+                      //     'The wallet currently uses a custom HD path and does not support switching address types.'
+                      //   );
+                      //   return;
+                      // }
                       navigate('/settings/address-type');
                       return;
                     }

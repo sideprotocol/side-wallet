@@ -236,20 +236,23 @@ const RemoteBalance = () => {
       alignItems: 'center',
       width: '100%',
     }} >
-      {validRemoteInput ? (
-        <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px' }}>${remotePrice == 'NaN' ? '0' : BigNumber(remotePrice).toFormat()}</div>
-      ) : (
-        <div style={{
-          height: '22px'
-        }}></div>
-      )}
+      <div />
+      {/*{validRemoteInput ? (*/}
+      {/*  <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px' }}>${remotePrice == 'NaN' ? '0' : BigNumber(remotePrice).toFormat()}</div>*/}
+      {/*) : (*/}
+      {/*  <div style={{*/}
+      {/*    height: '22px'*/}
+      {/*  }}></div>*/}
+      {/*)}*/}
 
       {connected && (
         <div style={{
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
+          gap: '3px',
         }}>
+          <Icon icon={'wallet-icon'} size={14} color={'search_icon'}></Icon>
           <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
@@ -273,6 +276,42 @@ const RemoteBalance = () => {
         </div>
       )}
     </div>
+  );
+};
+
+const RemotePrice = () => {
+  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
+
+  const { swapPair, balances } = useSwapStore();
+  const currentAccount = useCurrentAccount();
+
+  const validNativeInput = BigNumber(swapPair?.native?.amount || 0).gt(0) && swapPair?.native?.denom;
+  const assetNativeIcon = findAssetIcon(swapPair?.native);
+
+  const nativePrice = (
+    new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(
+      unitPriceMap[assetNativeIcon?.coingecko_id || '']?.usd || '0'
+    ) || 0
+  )
+    .toFixed(8, BigNumber.ROUND_DOWN)
+    .replace(/\.?0+$/, '');
+  const remoteBalance = balances[swapPair?.remote?.denom || '']?.available || '0';
+
+  return (
+    <>
+      {validNativeInput ? (
+        <div style={{
+          fontSize: '12px',
+          color: 'rgb(125, 125, 125)'
+        }}>
+          ${nativePrice == 'NaN' ? '0' : BigNumber(remoteBalance).toFormat()}
+        </div>
+      ) : (
+        <div style={{
+          height: '22px',
+        }}></div>
+      )}
+    </>
   );
 };
 
@@ -568,6 +607,7 @@ export default function SwapTabScreen() {
                   }}>
                   To
                 </div>
+                <RemoteBalance />
               </Row>
 
               <Row
@@ -591,7 +631,8 @@ export default function SwapTabScreen() {
                 />
               </Row>
 
-              <RemoteBalance />
+              <RemotePrice />
+
             </Column>
 
             <Row mt={'xl'} full>

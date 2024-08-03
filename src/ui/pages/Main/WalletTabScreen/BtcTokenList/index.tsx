@@ -7,7 +7,7 @@ import { useGetBitcoinTokenList } from '@/ui/hooks/useGetTokenList';
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
 import { getTruncate } from '@/ui/utils';
 
-function TokenItem({ token }: { token: BitcoinToken }) {
+function TokenItem({ token, balanceVisible }: { token: BitcoinToken; balanceVisible: boolean }) {
   const accountBalance = useAccountBalance();
   const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.coingecko_id);
 
@@ -36,14 +36,15 @@ function TokenItem({ token }: { token: BitcoinToken }) {
         style={{
           gap: '0px'
         }}>
-        <Text preset="regular" text={accountBalance.btc_amount} textEnd />
-        <Text preset="sub" text={`$${getTruncate(totalPrice)}`} textEnd />
+        <Text preset="regular" text={balanceVisible ? accountBalance.btc_amount : '**'} textEnd />
+        {/*<Text preset="sub" text={`$${getTruncate(totalPrice)}`} textEnd />*/}
+        <Text preset="sub" text={balanceVisible ? `$${getTruncate(totalPrice)}` : '**'} textEnd />
       </Column>
     </Row>
   );
 }
 
-export default function BtcTokenList() {
+export default function BtcTokenList({balanceVisible}) {
   const { data: bitcoinAssets } = useGetBitcoinTokenList();
   return (
     <Column
@@ -53,7 +54,7 @@ export default function BtcTokenList() {
       {bitcoinAssets.map((item) => {
         return (
           <Fragment key={item.symbol + item.name}>
-            <TokenItem token={item} />
+            <TokenItem token={item} balanceVisible={balanceVisible} />
           </Fragment>
         );
       })}

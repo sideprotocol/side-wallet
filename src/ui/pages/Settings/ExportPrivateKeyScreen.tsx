@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { Account } from '@/shared/types';
-import { Button, Column, Header, Image, Input, Layout, LongPress, Mask, Row, Text } from '@/ui/components';
+import { Button, Column, Header, Icon, Image, Input, Layout, LongPress, Mask, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { copyToClipboard, useWallet } from '@/ui/utils';
 
@@ -19,13 +19,23 @@ export default function ExportPrivateKeyScreen() {
 
   const [password, setPassword] = useState('');
   const [disabled, setDisabled] = useState(true);
+  const [isFocus, setIsFocus] = useState(false);
 
   const [privateKey, setPrivateKey] = useState({ hex: '', wif: '' });
   const [status, setStatus] = useState<Status>('');
   const [error, setError] = useState('');
   const wallet = useWallet();
   const tools = useTools();
+  const [isClickCopy, setIsClickCopy] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   const btnClick = async () => {
     try {
       const _res = await wallet.getPrivateKey(password, account);
@@ -52,8 +62,11 @@ export default function ExportPrivateKeyScreen() {
   }, [password]);
 
   function copy(str: string) {
-    copyToClipboard(str);
-    tools.toastSuccess('Copied');
+    copyToClipboard(str).then(() => {
+      setTimeout(() => {
+        setIsClickCopy(false);
+      }, 3000);
+    });
   }
 
   return (
@@ -80,13 +93,23 @@ export default function ExportPrivateKeyScreen() {
             </Column>
             <Text
               text="Password"
-              color="white_muted"
+              color="white"
               style={{
                 fontSize: '14px',
                 lineHeight: '24px'
               }}
             />
             <Input
+              containerStyle={{
+                // borderColor: error ? 'rgba(255, 69, 69, 1)' : error ? 'white' : ''
+                borderColor: error ? 'rgba(255, 69, 69, 1)' : isFocus ? 'white' : ''
+              }}
+              onFocus={() => {
+                setIsFocus(true);
+              }}
+              onBlur={() => {
+                setIsFocus(false);
+              }}
               preset="password"
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -114,10 +137,11 @@ export default function ExportPrivateKeyScreen() {
               }}>
               <Mask>
                 <div
+                  // className={'flex'}
                   style={{
                     background: '#222222',
                     border: '1px solid #404045',
-                    boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+                    // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
                     borderRadius: '14px',
                     padding: '16px'
                   }}>
@@ -126,21 +150,43 @@ export default function ExportPrivateKeyScreen() {
                       color: '#fff',
                       fontSize: '12px',
                       lineHeight: '20px',
-                      opacity: 0.5,
+                      // opacity: 0.5,
                       wordBreak: 'break-word',
                       marginRight: '4px'
                     }}>
                     {privateKey.wif}
                   </span>
-                  <span
-                    style={{
-                      cursor: 'pointer'
-                    }}
-                    onClick={() => {
+                  {/*<span*/}
+                  {/*  style={{*/}
+                  {/*    cursor: 'pointer'*/}
+                  {/*  }}*/}
+                  {/*  onClick={() => {*/}
+                  {/*    copy(privateKey.wif);*/}
+                  {/*  }}>*/}
+                  {/*  <Image src="/images/icons/copy-03.svg" size={16} />*/}
+                  {/*</span>*/}
+                  <div className={'inline-block cursor-pointer'}
+                    onMouseOver={handleMouseOver}
+                    onMouseLeave={handleMouseLeave}
+                    onClick={(e) => {
                       copy(privateKey.wif);
+                      setIsClickCopy(true);
+                    }}
+                    style={{
+                      // marginTop: '8px'
                     }}>
-                    <Image src="/images/icons/copy-03.svg" size={16} />
-                  </span>
+                    <Icon
+                      className={'inline-block relative top-[5px] ml-[5px] mr-[2px]'}
+                      icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
+                      color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                      size={20}
+                    />
+                    <Text
+                      classname={'inline-block'}
+                      text={isClickCopy ? 'Copied' : ''}
+                      color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                    />
+                  </div>
                 </div>
               </Mask>
               <Column

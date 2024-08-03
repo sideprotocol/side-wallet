@@ -8,7 +8,7 @@ import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import ImageIcon from '@/ui/components/ImageIcon';
 
-function TokenItem({ token }: { token: SideToken }) {
+function TokenItem({ token, balanceVisible }: { token: SideToken; balanceVisible: boolean }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
   const { data: totalPrice } = useCalcPrice(balanceAmount, token.coingecko_id, token.exponent);
 
@@ -41,21 +41,22 @@ function TokenItem({ token }: { token: SideToken }) {
         style={{
           gap: '0px'
         }}>
-        <Text preset="regular" text={formatUnitAmount(balanceAmount, token.exponent)} textEnd />
-        <Text preset="sub" text={`$${getTruncate(totalPrice)}`} textEnd />
+        <Text preset="regular" text={balanceVisible ? formatUnitAmount(balanceAmount, token.exponent) : '**'} textEnd />
+        {/*<Text preset="sub" text={`${'$' + getTruncate(totalPrice)}`} textEnd />*/}
+        <Text preset="sub" text={`${balanceVisible ? '$' + getTruncate(totalPrice) : '**'}`} textEnd />
       </Column>
     </Row>
   );
 }
 
-export default function SideTokenList() {
+export default function SideTokenList({balanceVisible}) {
   const { data: assets } = useGetSideTokenList();
   return (
     <Column>
       {assets.map((item) => {
         return (
           <Fragment key={item.symbol + item.name}>
-            <TokenItem token={item} />
+            <TokenItem token={item} balanceVisible={balanceVisible} />
           </Fragment>
         );
       })}

@@ -155,8 +155,10 @@ export default function ReceiveScreen() {
                 <>
                   {state.address}
                   <Icon
+                    onMouseOver={handleMouseOver}
+                    onMouseLeave={handleMouseLeave}
                     icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
-                    color={(isHovered && !isClickCopy) || isClickCopy ? 'green' : 'black'}
+                    color={isClickCopy ? 'green' : isHovered ? 'black' : 'search_icon'}
                     containerStyle={{
                       display: 'inline-block',
                       marginLeft: '8px',

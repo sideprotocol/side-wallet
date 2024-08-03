@@ -241,14 +241,15 @@ export function Button(props: ButtonProps) {
   return (
     <div
       style={$viewStyle}
-      className={`${preset === 'ghostDanger' ? 'hover:bg-[#fff]/10' : ''}`}
+      className={`${preset === 'ghostDanger' ? 'hover:bg-[#fff]/10' : preset === 'ghost' ? 'hover:bg-[#0DD4C3] !text-black' : ''} group`}
       onClick={disabled ? undefined : onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>
       {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
       {/*{icon}*/}
       <Icon icon={icon} color={icon === 'expand' ? 'black' : icon === 'plus' ? 'primary' : 'white'} />
-      {text && <Text style={$textStyle} text={text} preset="regular-bold" />}
+      {/*color={preset === 'ghost' ? '' : ''}*/}
+      {text && <Text style={$textStyle} text={text} preset="regular-bold" classname={'group-hover:!text-[#000]'} />}
       {children}
       {RightAccessory && <div style={$rightAccessoryStyle}>{RightAccessory}</div>}
     </div>

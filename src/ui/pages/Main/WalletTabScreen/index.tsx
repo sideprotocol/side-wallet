@@ -164,7 +164,16 @@ export default function WalletTabScreen() {
                 }}
               />
               <Text
-                text={getTruncate(accountBalanceByUSD, 2)}
+                text={String(getTruncate(accountBalanceByUSD, 2)).split('.')[0]}
+                style={{
+                  fontSize: '38px',
+                  fontWeight: 500,
+                  lineHeight: '32px'
+                }}
+              />
+              <Text
+                color={'white_muted'}
+                text={`.${String(getTruncate(accountBalanceByUSD, 2)).split('.')[1]}`}
                 style={{
                   fontSize: '38px',
                   fontWeight: 500,
@@ -189,7 +198,7 @@ export default function WalletTabScreen() {
             display: 'inline-box',
             width: isHoveredMoney ? '20px' : '0',
             opacity: isHoveredMoney ? 1 : 0,
-            transition: 'all 0.3s ease-in',
+            transition: 'all 0.2s ease-in',
           }} onClick={() => setBalanceVisible(!balanceVisible)}>
             <Image src={ balanceVisible ? '/images/icons/eye-off-2.svg' : '/images/icons/eye-white.svg'} size={20} />
           </span>
@@ -319,7 +328,7 @@ export default function WalletTabScreen() {
           {/*    fontWeight: 600*/}
           {/*  }}*/}
           {/*/>*/}
-          {currentTab === CHAINS_ENUM.SIDE ? <SideTokenList /> : <BtcTokenList />}
+          {currentTab === CHAINS_ENUM.SIDE ? <SideTokenList balanceVisible={balanceVisible} /> : <BtcTokenList balanceVisible={balanceVisible} />}
         </Column>
       </Column>
 

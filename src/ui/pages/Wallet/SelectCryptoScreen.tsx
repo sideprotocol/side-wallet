@@ -9,7 +9,7 @@ import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTo
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 
 import { useNavigate } from '../MainRoute';
 import ImageIcon from '@/ui/components/ImageIcon';
@@ -42,7 +42,7 @@ function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
   );
 }
 
-function BitCrypto({ searchTerm }) {
+function BitCrypto({searchTerm}) {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { chain, type } = state as {
@@ -54,7 +54,7 @@ function BitCrypto({ searchTerm }) {
   // console.log(`chain, type: `, chain, type);
   bitcoinTokenList = bitcoinTokenList.filter((item) => {
     return item.symbol.toLocaleLowerCase().includes(searchTerm.trim()) || item.name.toLocaleLowerCase().includes(searchTerm.trim());
-  });
+  })
   return (
     <>
       {bitcoinTokenList.map((token) => {
@@ -76,7 +76,7 @@ function BitCrypto({ searchTerm }) {
               cursor: 'pointer',
               margin: '0 16px',
               padding: '10px 16px',
-              height: '44px'
+              height: '44px',
             }}>
             <BitcoinCryptoItem token={token} />
           </Row>
@@ -96,11 +96,11 @@ function SideCryptoItem({ token }: { token: SideToken }) {
         <ImageIcon url={token.logo} style={{
           width: '38px',
           height: '38px',
-          borderRadius: '50%'
+          borderRadius: '50%',
         }} />
         <Column
           style={{
-            gap: '0px'
+            gap: '0px',
           }}>
           <Text preset="regular" text={token.symbol}></Text>
           <Text preset="sub" text={token.name}></Text>
@@ -118,7 +118,7 @@ function SideCryptoItem({ token }: { token: SideToken }) {
   );
 }
 
-function SideCrypto({ searchTerm }) {
+function SideCrypto({searchTerm}) {
   // console.log(`searchTerm: `, searchTerm);
   // debugger;
   const navigate = useNavigate();
@@ -131,7 +131,7 @@ function SideCrypto({ searchTerm }) {
   let { data: sideTokenList } = useGetSideTokenList();
   sideTokenList = sideTokenList.filter((item) => {
     return item.symbol.toLocaleLowerCase().includes(searchTerm.trim()) || item.name.toLocaleLowerCase().includes(searchTerm.trim());
-  });
+  })
   return (
     <>
       {sideTokenList.map((token) => {
@@ -153,7 +153,7 @@ function SideCrypto({ searchTerm }) {
               margin: '0 16px',
               cursor: 'pointer',
               padding: '10px 16px',
-              height: '44px'
+              height: '44px',
             }}>
             <SideCryptoItem token={token} />
           </Row>
@@ -182,10 +182,10 @@ export default function SelecCryptoScreen() {
         style={{
           backgroundColor: '#09090A',
           padding: 0,
-          marginTop: '16px'
+          marginTop: '16px',
         }}>
         <Column style={{
-          padding: '0 16px'
+          padding: '0 16px',
           // margin: '0 16px'
         }}>
           <div
@@ -205,7 +205,7 @@ export default function SelecCryptoScreen() {
               containerStyle={{
                 width: '100%',
                 border: 'none',
-                padding: '0'
+                padding: '0',
               }}
               placeholder="Search crypto"
             />
@@ -219,15 +219,14 @@ export default function SelecCryptoScreen() {
               cursor: 'pointer',
               display: searchTerm ? 'block' : 'none'
             }}>
-              <Icon icon="clear" color={'white'} size={20}></Icon>
+              <Icon icon="clear" color={'search_icon'} size={20}></Icon>
             </div>
           </div>
         </Column>
 
         <Column style={{
           // marginTop: '14px',
-        }}>{chain === CHAINS_ENUM.SIDE ? <SideCrypto searchTerm={searchTerm} /> :
-          <BitCrypto searchTerm={searchTerm} />}</Column>
+        }}>{chain === CHAINS_ENUM.SIDE ? <SideCrypto searchTerm={searchTerm} /> : <BitCrypto searchTerm={searchTerm} />}</Column>
       </Content>
     </Layout>
   );
