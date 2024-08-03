@@ -57,7 +57,7 @@ export default function Index(props) {
 
   // list, onSearch
   const [searchValue, onSearch] = useState<string>('');
-
+  const [focus, setFocus] = useState<boolean>(false);
   let runeAndBtcTokens = useRuneAndBtcBalances();
   if (searchValue && runeAndBtcTokens?.length) {
     runeAndBtcTokens = runeAndBtcTokens.filter((item) => {
@@ -67,7 +67,7 @@ export default function Index(props) {
   console.log(`runeAndBtcTokens: `, runeAndBtcTokens);
 
   return (
-    <Layout style={{ width: '100%', transform: 'translate(-50%, 0)', position: 'absolute', left: '50%', top: 0, display: open ? 'flex' : 'none' }}>
+    <Layout style={{ width: '100%', transform: 'translate(-50%, -50%)', position: 'absolute', left: '50%', top: '50%', display: open ? 'flex' : 'none' }}>
       <Header
         onBack={() => {
           onClose();
@@ -76,23 +76,41 @@ export default function Index(props) {
       />
       <Content
         style={{
-          backgroundColor: '#09090A'
+          backgroundColor: '#09090A',
+          marginTop: 16,
         }}>
         <Column>
-          <Row
-            style={{
-              padding: '0px 10px',
-              borderRadius: '12px',
-              backgroundColor: '#1E1E1F',
-              position: 'relative'
-            }}
-            itemsCenter
-            bg="search_box_bg"
-            full>
+          {/*<Row*/}
+          {/*  style={{*/}
+          {/*    padding: '0px 10px',*/}
+          {/*    borderRadius: '12px',*/}
+          {/*    backgroundColor: '#1E1E1F',*/}
+          {/*    position: 'relative'*/}
+          {/*  }}*/}
+          {/*  itemsCenter*/}
+          {/*  bg="search_box_bg"*/}
+          {/*  full>*/}
+          <div
+            className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '}>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
+            {/*<Input*/}
+            {/*  value={searchValue}*/}
+            {/*  onChange={(e) => {*/}
+            {/*    const value = e.target.value;*/}
+            {/*    onSearch(value);*/}
+            {/*  }}*/}
+            {/*  containerStyle={{*/}
+            {/*    width: '100%',*/}
+            {/*    border: 'none',*/}
+            {/*    padding: '0'*/}
+            {/*  }}*/}
+            {/*  placeholder="Search crypto"*/}
+            {/*/>*/}
             <Input
               value={searchValue}
+              onFocus={() => setFocus(true)}
+              onBlur={() => setFocus(false)}
               onChange={(e) => {
                 const value = e.target.value;
                 onSearch(value);
@@ -116,7 +134,7 @@ export default function Index(props) {
             }}>
               <Icon icon="clear" color={'search_icon'} size={20}></Icon>
             </div>
-          </Row>
+          </div>
         </Column>
 
         <Column

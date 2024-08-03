@@ -125,10 +125,10 @@ export default function BridgeTabScreen() {
       />
       <Content classname={'hide-scrollbar'} >
         <Row full relative rounded={true}>
-          <Column full relative  style={{
+          <Column full relative style={{
             gap: '5px'
           }}>
-            <Column mt={'xl'} px={'xl'} py={'xl'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <Column mt={'max'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
@@ -340,7 +340,7 @@ export default function BridgeTabScreen() {
             </Row>
 
             {/*<ConfirmButton />*/}
-            <Row mt={'xl'} full>
+            <Row mt={'md'} full>
               <Button
                 onClick={() => {
                   if (base === 'sat') {
