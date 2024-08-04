@@ -488,6 +488,17 @@ export default function SignPsbt({
   const [isPsbtRiskPopoverVisible, setIsPsbtRiskPopoverVisible] = useState(false);
   const [isKeystoneSigning, setIsKeystoneSigning] = useState(false);
 
+  const [isClickCopy, setIsClickCopy] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseOver = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   const init = async () => {
     let txError = '';
     if (type === TxType.SIGN_TX) {
@@ -727,7 +738,7 @@ export default function SignPsbt({
                     fontSize: fontSizes.xs
                   }}>
                   <div>
-                    <Row>
+                    <Row itemsCenter>
                       <Text text={txInfo.decodedPsbt.feeRate.toString()} />
                       <Icon icon="alert" color="warning" />
                     </Row>
@@ -778,7 +789,7 @@ export default function SignPsbt({
                                 <Row>
                                   <AddressText address={v.address} color={isToSign ? 'white' : 'textDim'} />
                                   {isToSign && (
-                                    <Row style={{ borderWidth: 1, borderColor: 'primary', borderRadius: 5, padding: 2 }}>
+                                    <Row style={{ borderWidth: 1, borderColor: 'rgb(13, 212, 195)', borderRadius: 5, padding: 2 }}>
                                       <Text text="to sign" color="primary" size="xs" />
                                     </Row>
                                   )}
@@ -976,14 +987,28 @@ export default function SignPsbt({
           <Section title="PSBT Data:">
             <Text text={shortAddress(txInfo.psbtHex, 10)} />
             <Row
+              onMouseOver={handleMouseOver}
+              onMouseLeave={handleMouseLeave}
               itemsCenter
               onClick={(e) => {
+                setIsClickCopy(true);
                 copyToClipboard(txInfo.psbtHex).then(() => {
-                  tools.toastSuccess('Copied');
+                  setTimeout(() => {
+                    setIsClickCopy(false);
+                  }, 3000);
                 });
               }}>
               <Text text={`${txInfo.psbtHex.length / 2} bytes`} color="textDim" />
-              <Icon icon="copy" color="textDim" />
+              {/*<Icon icon="copy" color="textDim" />*/}
+              <Icon
+                icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
+                color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                size={20}
+              />
+              <Text
+                text={isClickCopy ? '' : ''}
+                color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+              />
             </Row>
           </Section>
         </Column>

@@ -28,12 +28,12 @@ export function MyItem({ account, selected, onClick }: MyItemProps, ref) {
       <Row>
         <Column style={{ width: 20 }} selfItemsCenter>
           {selected && (
-            <Icon>
+            <Icon color={'primary'}>
               <CheckCircleFilled />
             </Icon>
           )}
         </Column>
-        <Column>
+        <Column gap={'sm'}>
           <Text text={account.alianName} />
           <Text text={`${shortAddress(account.address)}`} preset="sub" />
         </Column>
@@ -157,7 +157,7 @@ export default function Connect({ params: { session } }: Props) {
       </Header>
       <Content>
         <Column>
-          <Text text="Connect with UniSat Wallet" preset="title-bold" textCenter mt="lg" />
+          <Text text="Connect with Side Wallet" preset="title-bold" textCenter mt="lg" />
           <Text text="Select the account to use on this site" textCenter mt="md" />
           <Text text="Only connect with sites you trust." preset="sub" textCenter mt="md" />
 
