@@ -93,7 +93,10 @@ export default function SignData({ params: { data, session } }: Props) {
   }
 
   return (
-    <Layout>
+    <Layout  style={{
+      minHeight: '560px',
+      height: '560px',
+    }}>
       <Content>
         <Header>
           <WebsiteBar session={session} />

@@ -12,7 +12,7 @@ export function Layout(props: LayoutProps) {
   const isInTab = useExtensionIsInTab();
   return (
     <div
-      className="layout "
+      className="layout"
       style={Object.assign(
         {
           backgroundColor: '#09090A',
