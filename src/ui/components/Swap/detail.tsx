@@ -38,8 +38,8 @@ function SwapDetail() {
   const minReceived =
     swapRouteResult?.pools?.length === 1 && swapRouteResult.pools[0].pairType.includes('transmuter') ? swapPair.remote.amount : minReceived0;
 
-
-
+  console.log(`priceImpact: `, priceImpact);
+  console.log(`priceImpact: minReceived: `, minReceived);
   const itemData: {
     id: string;
     text: string;
@@ -74,6 +74,7 @@ function SwapDetail() {
   function RenderItem({ text, value }: { text: string; value: string | JSX.Element }) {
     return (
       <div
+        className={'pt-[12px]'}
         key={text + value}
         style={{
           display: 'flex',
@@ -92,7 +93,7 @@ function SwapDetail() {
 
         <div
           style={{
-            color: '#000000',
+            color: 'white',
           }}
         >
           {value}
@@ -104,18 +105,20 @@ function SwapDetail() {
   return (
 
     <>
-      <div>
+      <div className="border-b-[1px] border-b-solid border-b-[#8E8E8F]/20 pb-[10px]">
         1 {findAssetIcon(swapPair.native)?.symbol || swapPair.native?.denom || '-'} = {swapRate}{' '}
         {findAssetIcon(swapPair.remote)?.symbol || swapPair.remote?.denom || '-'} (${ratePrice})
       </div>
-      {
-        itemData?.map(item => {
-          return RenderItem({
-            text: item.text,
-            value: item.value,
+      <div className={''}>
+        {
+          itemData?.map(item => {
+            return RenderItem({
+              text: item.text,
+              value: item.value,
+            })
           })
-        })
-      }
+        }
+      </div>
     </>
   );
 }

@@ -304,7 +304,8 @@ export const AddressInput = (props: InputProps) => {
 
   return (
     <div style={{ alignSelf: 'stretch' }}>
-      <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] '}  style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '50px' })}>
+      {/*formatError*/}
+      <div className={`hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] ${formatError ? '!border-[#e52937]' : ''}`}  style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '50px' })}>
         <input
           placeholder={'Address...'}
           type={'text'}

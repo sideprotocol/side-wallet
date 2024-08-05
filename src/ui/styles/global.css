@@ -204,3 +204,14 @@ div {
     transform: translateZ(0);
     will-change: transform;
 }
+
+
+.coin-input {
+    /* Basic styling */
+
+    /* Placeholder styling */
+    &::placeholder {
+        color: rgb(125, 125, 125);
+        /*font-style: italic;*/
+    }
+}

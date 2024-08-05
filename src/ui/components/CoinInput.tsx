@@ -7,9 +7,10 @@ export type CoinInputProps = {
   onChange: (value: string) => void;
   readOnly?: boolean;
   size?: number;
+  color?: string;
   onInput?: () => void;
 };
-export function CoinInput({ coin, onChange, readOnly, onInput, size }: CoinInputProps) {
+export function CoinInput({ coin, onChange, readOnly, onInput, size, color }: CoinInputProps) {
   return (
     <NumericFormat
       type="text"
@@ -24,6 +25,7 @@ export function CoinInput({ coin, onChange, readOnly, onInput, size }: CoinInput
         border: 'none',
         fontWeight: '500',
         outline: 'none',
+        color: color
       }}
       onInput={() => onInput?.()}
       valueIsNumericString

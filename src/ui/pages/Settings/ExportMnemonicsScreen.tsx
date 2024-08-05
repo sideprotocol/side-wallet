@@ -53,7 +53,7 @@ export default function ExportMnemonicsScreen() {
 
   useEffect(() => {
     setDisabled(true);
-    if (password) {
+    if (password?.length > 4) {
       setDisabled(false);
       setStatus('');
       setError('');
@@ -98,6 +98,9 @@ export default function ExportMnemonicsScreen() {
               }}
             />
             <Input
+              containerStyle={{
+                borderColor: error ? '#ff0000' : error ? 'white' : ''
+              }}
               preset="password"
               onChange={(e) => {
                 setPassword(e.target.value);

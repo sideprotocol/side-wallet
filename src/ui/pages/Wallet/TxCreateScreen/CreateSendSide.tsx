@@ -172,7 +172,7 @@ export default function CreateSendSide() {
           justifyBetween
           style={{
             padding: '16px 12px',
-            borderRadius: '10px'
+            borderRadius: '10px',
           }}>
           <Text
             text="Tx Fee:"
@@ -184,21 +184,23 @@ export default function CreateSendSide() {
           />
           <Row>
             <Text
-              text={`${formatUnitAmount(fee, feeToken.exponent)} ${feeToken.symbol}`}
+              // text={`${formatUnitAmount(fee, feeToken.exponent)} ${feeToken.symbol}`}
+              text={`- ${feeToken.symbol}`}
               style={{
                 fontSize: '16px',
                 fontWeight: 600,
                 lineHeight: '24px'
               }}
             />
-            <Text
-              text={`($${feeByUSD})`}
-              color="white_muted"
-              style={{
-                fontSize: '16px',
-                lineHeight: '24px'
-              }}
-            />
+            {/*<Text*/}
+            {/*  // text={`($${feeByUSD})`}*/}
+            {/*  text={`($ -)`}*/}
+            {/*  color="white_muted"*/}
+            {/*  style={{*/}
+            {/*    fontSize: '16px',*/}
+            {/*    lineHeight: '24px'*/}
+            {/*  }}*/}
+            {/*/>*/}
           </Row>
         </Row>
 

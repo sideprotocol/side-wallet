@@ -295,7 +295,7 @@ const RemotePrice = () => {
   )
     .toFixed(8, BigNumber.ROUND_DOWN)
     .replace(/\.?0+$/, '');
-  const remoteBalance = balances[swapPair?.remote?.denom || '']?.available || '0';
+  const remoteBalance = balances[swapPair?.remote?.denom || '']?.available || '0.00';
 
   return (
     <>
@@ -304,7 +304,7 @@ const RemotePrice = () => {
           fontSize: '12px',
           color: 'rgb(125, 125, 125)'
         }}>
-          ${nativePrice == 'NaN' ? '0' : BigNumber(remoteBalance).toFormat()}
+          ${nativePrice == 'NaN' ? '0.00' : BigNumber(remoteBalance)?.toFormat(2)}
         </div>
       ) : (
         <div style={{
@@ -347,6 +347,7 @@ const RemoteInput = () => {
       size={36}
       coin={swapPair?.remote}
       readOnly
+      color={swapStore.swapPair['remote'].denom ? 'white' : 'rgb(125, 125, 125)'}
       onChange={(value) => {
         if (!currentAccount?.address) return;
         swapStore.swapPair['remote'] = {
@@ -638,9 +639,15 @@ export default function SwapTabScreen() {
             <Row mt={'xl'} full>
               <ConfirmButton />
             </Row>
-            {/*<Column mt={'xl'}>*/}
-            {/*  {showValidDetail && <SwapDetail />}*/}
-            {/*</Column>*/}
+            {
+              showValidDetail && (
+                <div className={'mt-[16px] mb-[32px] rounded-[8px] bg-[#1E1E1F]'}>
+                  <div className="px-[16px] py-[14px]">
+                    <SwapDetail />
+                  </div>
+                </div>
+              )
+            }
           </Column>
         </Content>
         <Footer px="zero" py="zero">

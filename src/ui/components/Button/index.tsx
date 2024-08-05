@@ -241,7 +241,7 @@ export function Button(props: ButtonProps) {
   return (
     <div
       style={$viewStyle}
-      className={`${preset === 'ghostDanger' ? 'hover:bg-[#fff]/10' : preset === 'ghost' ? 'hover:bg-[#0DD4C3] group' : ''} `}
+      className={`${preset === 'ghostDanger' ? 'hover:bg-[#ed334b]/10 !border-[#ed334b]' : preset === 'ghost' ? 'hover:bg-[#0DD4C3] group' : ''} `}
       onClick={disabled ? undefined : onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>
