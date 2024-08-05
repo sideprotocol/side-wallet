@@ -165,7 +165,7 @@ function AmountInput(props: InputProps) {
     }
   };
   return (
-    <div style={$baseContainerStyle}>
+    <div  className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20]'} style={Object.assign({}, $baseContainerStyle, {})}>
       <input
         placeholder={placeholder || 'Amount'}
         type={'text'}
