@@ -19,6 +19,16 @@ export default function ChangePasswordScreen() {
   const wallet = useWallet();
   const tools = useTools();
 
+  const [isOldPwdError, setIsOldPwdError] = useState(false);
+  const [isPwdError, setIsPwdError] = useState(false);
+  const [isPwdFocus, setIsPwdFocus] = useState(false);
+  const [oldPwdErrorMsg, setOldPwdErrorMsg] = useState('');
+  const [pwdErrorMsg, setPwdErrorMsg] = useState('');
+  const [isConfirmError, setIsConfirmError] = useState(false);
+  const [isConfirmFocus, setIsConfirmFocus] = useState(false);
+  const [confirmErrorMsg, setConfirmErrorMsg] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+
   useEffect(() => {
     if (originPassword.length > 0 && newPassword.length >= 5 && newPassword === confirmPassword) {
       setDisabled(false);
@@ -30,10 +40,20 @@ export default function ChangePasswordScreen() {
   const verify = async () => {
     try {
       await wallet.changePassword(originPassword, newPassword);
-      tools.toastSuccess('Success');
-      navigate('MainScreen');
+      // tools.toastSuccess('Success');
+      // navigate('MainScreen');
+      setIsSuccess(true);
+      setTimeout(() => {
+        setConfirmErrorMsg('Your password has been reset!');
+      }, 1000);
+      setTimeout(() => {
+        setIsSuccess(false);
+        navigate('MainScreen');
+      }, 1500);
     } catch (err) {
-      tools.toastError((err as any).message);
+      // tools.toastError((err as any).message);
+      setIsOldPwdError(true);
+      setOldPwdErrorMsg('You entered wrong password.')
     }
   };
   return (
@@ -58,27 +78,44 @@ export default function ChangePasswordScreen() {
               }}
               autoFocus={true}
             />
+            <Text text={oldPwdErrorMsg} color={'red'} preset="sub"></Text>
           </Column>
 
           <Column>
             <Text text={'New Password'} color={'white'} preset="sub"></Text>
 
             <Input
+              containerStyle={{
+                borderColor: isPwdError ? '#ff0000' : isPwdFocus ? 'white' : ''
+              }}
               preset="password"
               placeholder="New Password"
+              onFocus={(e) => {
+                setIsPwdFocus(true);
+              }}
               onBlur={(e) => {
+                setIsPwdFocus(false);
                 if (newPassword.length < 5) {
-                  tools.toastWarning('at least five characters');
+                  // tools.toastWarning('at least five characters');
+                  setIsPwdError(true);
+                  setPwdErrorMsg('Password must include at least 5 characters');
                   return;
                 }
                 if (newPassword.length > 0 && confirmPassword.length > 0 && newPassword !== confirmPassword) {
-                  tools.toastWarning('Entered passwords differ');
+                  // tools.toastWarning('Entered passwords differ');
+                  setIsPwdError(true);
+                  setPwdErrorMsg('Passwords do not match');
                 }
               }}
               onChange={(e) => {
                 setNewPassword(e.target.value);
+                setIsPwdError(false);
+                setPwdErrorMsg('');
+                setIsConfirmError(false);
+                setConfirmErrorMsg('');
               }}
             />
+            <Text text={pwdErrorMsg} color={'red'} preset="sub"></Text>
           </Column>
 
           <Column>
@@ -87,15 +124,29 @@ export default function ChangePasswordScreen() {
             <Input
               preset="password"
               placeholder="Confirm Password"
+              onFocus={(e) => {
+                setIsConfirmFocus(true);
+              }}
               onBlur={(e) => {
+                setIsPwdError(false);
+                setPwdErrorMsg('');
+                setIsConfirmError(false);
+                setConfirmErrorMsg('');
                 if (newPassword.length > 0 && confirmPassword.length > 0 && newPassword !== confirmPassword) {
-                  tools.toastWarning('Entered passwords differ');
+                  // tools.toastWarning('Entered passwords differ');
+                  setIsConfirmError(true);
+                  setConfirmErrorMsg('Passwords do not match.');
                 }
               }}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
+                setIsPwdError(false);
+                setPwdErrorMsg('');
+                setIsConfirmError(false);
+                setConfirmErrorMsg('');
               }}
             />
+            <Text text={confirmErrorMsg} color={isSuccess ? 'primary' : 'red'} preset="sub"></Text>
           </Column>
         </Column>
 
