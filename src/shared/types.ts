@@ -440,6 +440,8 @@ export interface BitcoinToken {
   name: string;
   symbol: string;
   coingecko_id: string;
+  base?: string;
+  exponent?: string;
 }
 
 export interface SideToken {

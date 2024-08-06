@@ -77,13 +77,15 @@ export const colors = Object.assign({}, palette, {
 
   search_box_bg: '#1E1E1F',
 
+  grey: '#7D7D7D',
+
   orange: '#FCCD94',
 
   light_gray: '#F5F5F5',
 
   // side theme color
   background: '#09090A',
-  swapBg: '#1D1D1F',
+  swapBg: '#1D1D1F'
   // copyColor: 'rgba(13, 212, 195, 0.10)'
   // border: '#1E1E1F',
 });

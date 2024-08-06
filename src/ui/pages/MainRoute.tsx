@@ -30,8 +30,7 @@ import { InscribeTransferScreen } from './Approval/components/InscribeTransfer';
 import AtomicalsNFTScreen from './Atomicals/AtomicalsNFTScreen';
 import SendArc20Screen from './Atomicals/SendArc20Screen';
 import SendAtomicalsInscriptionScreen from './Atomicals/SendAtomicalsNFTScreen';
-// import BRC20SendScreen from './BRC20/BRC20SendScreen';
-// import BRC20TokenScreen from './BRC20/BRC20TokenScreen';
+import BridgeConfirmTabScreen from './Bridge/BridgeConfirmTabScreen';
 import AppTabScrren from './Main/AppTabScreen';
 import BoostScreen from './Main/BoostScreen';
 import BridgeTabScreen from './Main/BridgeTabScreen';
@@ -112,6 +111,12 @@ const routes = {
     path: '/bridge',
     element: <BridgeTabScreen />
   },
+
+  BridgeConfirmTabScreen: {
+    path: '/bridge-confirm',
+    element: <BridgeConfirmTabScreen />
+  },
+
   SwapTabScreen: {
     path: '/swap',
     element: <SwapTabScreen />

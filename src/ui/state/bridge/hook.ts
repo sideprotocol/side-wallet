@@ -22,8 +22,8 @@ import { useNavigate } from '@/ui/pages/MainRoute';
 import { DepositBTCBridge, bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
+import { sendBTC, sendRunes } from '@/wallet-sdk/tx-helpers';
 import { UnspentOutput } from '@unisat/wallet-sdk';
-import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
 
 import { useCurrentAccount } from '../accounts/hooks';
 import { useNetworkType } from '../settings/hooks';
@@ -389,7 +389,56 @@ export const useBridge = () => {
     return res;
   };
 
-  return { bridge };
+  async function estimateNetworkFee(params: DepositBTCBridge) {
+    const { amount, fee } = params;
+    const senderAddress = currentAccount.address;
+    const rawUtxos = (
+      await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) => res.json())
+    ).filter((utxo) => utxo.value !== 546);
+
+    const btcRawUtxos = await Promise.all(
+      rawUtxos.map(async (item) => {
+        return fetch(`${SIDE_BTC_INDEXER}/tx/${item.txid}`).then((res) => res.json());
+      })
+    );
+
+    const btcUtxos: UnspentOutput[] = [];
+
+    const decodeBech32 = bitcoin.address.fromBech32(senderAddress);
+
+    const isTaproot = decodeBech32.version === 1 && decodeBech32.data.length === 32;
+
+    btcRawUtxos.forEach((tx) => {
+      const realUtxo = rawUtxos.find((utxo) => utxo.txid === tx.txid);
+      if (!realUtxo) return;
+
+      btcUtxos.push({
+        txid: tx.txid,
+        vout: realUtxo.vout,
+        satoshis: realUtxo.value,
+        scriptPk: tx.vout[realUtxo.vout].scriptpubkey,
+        pubkey: currentAccount.pubkey,
+        inscriptions: [],
+        atomicals: [],
+        addressType: isTaproot ? 2 : 1
+      });
+    });
+
+    const { networkFee } = await sendBTC({
+      btcUtxos: btcUtxos,
+      tos: [{ address: BTC_BRIDGE_VAULT, satoshis: amount }],
+      networkType: networkType === NetworkType.MAINNET ? 0 : 1,
+      changeAddress: senderAddress,
+      feeRate: fee,
+      enableRBF: false,
+      memo: undefined,
+      memos: undefined
+    });
+
+    return networkFee;
+  }
+
+  return { bridge, estimateNetworkFee };
 };
 
 export const useRuneBalances = () => {
@@ -875,4 +924,18 @@ export const useRuneBridge = () => {
   };
 
   return { bridge };
+};
+
+export const queryAddressUtxo = async (address: string) => {
+  const utxos = await fetch(`${SIDE_BTC_INDEXER}/address/${address}/utxo`).then((res) => res.json());
+
+  if (utxos.length === 1) {
+    bridgeStore.accountUtxo = utxos[0];
+    return;
+  }
+
+  const vout1 = utxos.find((utxo) => utxo.vout === 1);
+  if (vout1) {
+    bridgeStore.accountUtxo = vout1;
+  }
 };

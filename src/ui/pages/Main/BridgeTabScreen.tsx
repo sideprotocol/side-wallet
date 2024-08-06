@@ -1,8 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { KEYRING_TYPE, SIDE_CHAINID_TESTNET } from '@/shared/constant';
+import { KEYRING_TYPE, SIDE_CHAINID_MAINNET, SIDE_CHAINID_TESTNET } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Column, Content, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
@@ -10,22 +9,20 @@ import BridgeSelectToken from '@/ui/components/Bridge/BridgeSelectToken';
 import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
+import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
-import { useBtcBalance, useRuneBalance, useRuneBridge } from '@/ui/state/bridge/hook';
+import { useBridge, useBtcBalance, useRuneBalance, useRuneBridge } from '@/ui/state/bridge/hook';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
+import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
 
-import { SIDE_CHAINID_MAINNET } from '@/shared/constant';
-import { useBridge } from '@/ui/state/bridge/hook';
-import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
-import TokenCurrent from '@/ui/components/TokenCurrent';
-import ImageIcon from '@/ui/components/ImageIcon';
+import { useNavigate } from '../MainRoute';
 
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
@@ -107,9 +104,13 @@ export default function BridgeTabScreen() {
       <Header
         LeftComponent={
           <>
-            <Image onClick={() => {
-              navigate('/settings');
-            }} src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />
+            <Image
+              onClick={() => {
+                navigate('/settings');
+              }}
+              src="/images/icons/main/menu-icon.svg"
+              size={fontSizes.xxl}
+            />
           </>
         }
         title={
@@ -127,9 +128,12 @@ export default function BridgeTabScreen() {
       />
       <Content classname={'hide-scrollbar'}>
         <Row full relative rounded={true}>
-          <Column full relative style={{
-            gap: '5px'
-          }}>
+          <Column
+            full
+            relative
+            style={{
+              gap: '5px'
+            }}>
             <Column mt={'medium'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div
@@ -218,8 +222,8 @@ export default function BridgeTabScreen() {
                     fontSize: '14px',
                     paddingLeft: '5px'
                   }}>
-                    {to.name}
-                  </span>
+                  {to.name}
+                </span>
               </Row>
             </Column>
 
@@ -234,7 +238,7 @@ export default function BridgeTabScreen() {
 
               <div className={'flex flex-col gap-[8px]'}>
                 <div
-                  className={`hover:bg-[#000]/70 bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 bg-[#000]`}
+                  className={'hover:bg-[#000]/70 bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 bg-[#000]'}
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -249,8 +253,7 @@ export default function BridgeTabScreen() {
                     e.stopPropagation();
                     // setShow(true);
                     bridgeStore.selectTokenModalShow = true;
-                  }}
-                >
+                  }}>
                   <ImageIcon
                     style={{
                       width: '20px',
@@ -260,12 +263,15 @@ export default function BridgeTabScreen() {
                     }}
                     url={bridgeAsset?.logo || bridgeAsset?.logo}
                   />
-                  <div style={{
-                    fontSize: '14px', paddingRight: '6px', whiteSpace: 'nowrap',
-                    maxWidth: '72px',
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden'
-                  }}>
+                  <div
+                    style={{
+                      fontSize: '14px',
+                      paddingRight: '6px',
+                      whiteSpace: 'nowrap',
+                      maxWidth: '72px',
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden'
+                    }}>
                     {bridgeAsset?.symbol || bridgeAsset?.symbol || bridgeAsset?.base || 'Select Token'}
                   </div>
                   {/*<Icon type="" />*/}
@@ -274,46 +280,12 @@ export default function BridgeTabScreen() {
                       width: '16px',
                       height: '16px',
                       flexShrink: '0'
-                    }}
-                  >
+                    }}>
                     <use xlinkHref={'#side-down'} />
                   </svg>
                 </div>
               </div>
-
             </Row>
-
-            {/*<Row*/}
-            {/*  itemsCenter*/}
-            {/*  rounded={true}*/}
-            {/*  style={{*/}
-            {/*    height: '50px',*/}
-            {/*    // background: '#09090A'*/}
-            {/*  }}*/}
-            {/*  full*/}
-            {/*  onClick={() => {*/}
-            {/*    bridgeStore.selectTokenModalShow = true;*/}
-            {/*  }}>*/}
-            {/*  <Row*/}
-            {/*    itemsCenter*/}
-            {/*    justifyCenter*/}
-            {/*    gap={'sm'}*/}
-            {/*    style={{*/}
-            {/*      height: '50px',*/}
-            {/*      borderRadius: '100px',*/}
-            {/*      padding: '20px 10px'*/}
-            {/*    }}>*/}
-            {/*    <Image size={28} src={bridgeAsset?.logo} />*/}
-            {/*    <span*/}
-            {/*      style={{*/}
-            {/*        fontSize: '14px'*/}
-            {/*      }}*/}
-            {/*      className="ml-4">*/}
-            {/*        {bridgeAsset?.symbol}*/}
-            {/*      </span>*/}
-            {/*  </Row>*/}
-            {/*</Row>*/}
-
 
             <Column mt={'smm'} full px={'xl'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
@@ -328,9 +300,13 @@ export default function BridgeTabScreen() {
                 <div className={'flex gap-[8px]'}>
                   <img src={WalletIcon} alt="" />
 
-                  <Text size="sm" style={{
-                    paddingLeft: '3px'
-                  }}>{balance}</Text>
+                  <Text
+                    size="sm"
+                    style={{
+                      paddingLeft: '3px'
+                    }}>
+                    {balance}
+                  </Text>
                 </div>
               </Row>
 
@@ -390,7 +366,7 @@ export default function BridgeTabScreen() {
               <Button
                 onClick={() => {
                   if (base === 'sat') {
-                    bridge();
+                    navigate('BridgeConfirmTabScreen');
                   } else {
                     bridgeRune();
                   }

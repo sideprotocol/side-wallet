@@ -2,33 +2,33 @@ import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebouncedCallback } from 'use-debounce';
-import SwapSelectToken from '@/ui/components/Swap/SwapSelectToken';
-import { Coin } from '@cosmjs/stargate';
+
 import { KEYRING_TYPE } from '@/shared/constant';
-import { Column, Content, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
+import LoadingIcon from '@/ui/assets/icons/loading.svg';
+import { Column, Content, Footer, Header, Image, Layout, Row } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
+import SwapSelectToken from '@/ui/components/Swap/SwapSelectToken';
 import SwapDetail from '@/ui/components/Swap/detail';
+import TokenCurrent from '@/ui/components/TokenCurrent';
 import { SWAP_ASSETS } from '@/ui/constants';
 import { IAsset } from '@/ui/constants/assets';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
+import useGetAllPools from '@/ui/hooks/useGetAllPools';
+import useSwap from '@/ui/hooks/useSwap';
+import useSwapSimulation from '@/ui/hooks/useSwapSimulation';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import useSwapSimulation from '@/ui/hooks/useSwapSimulation';
-import useGetAllPools from '@/ui/hooks/useGetAllPools';
-import { findAssetIcon } from '@/ui/utils/swap';
-import TokenCurrent from '@/ui/components/TokenCurrent';
 import { removeStartZero } from '@/ui/utils/format';
-import useSwap from '@/ui/hooks/useSwap';
-import LoadingIcon from '@/ui/assets/icons/loading.svg';
-import { colors } from '@/ui/theme/colors';
+import { findAssetIcon } from '@/ui/utils/swap';
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { Coin } from '@cosmjs/stargate';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
@@ -121,12 +121,13 @@ const NativeBalance = () => {
     .replace(/\.?0+$/, '');
   const newValue = SWAP_ASSETS.assets.find((asset) => asset.base === swapStore.swapPair['native']?.denom);
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '100%',
-    }} >
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%'
+      }}>
       {/*{validNativeInput ? (*/}
       {/*  <div>*/}
       {/*    ${nativePrice == 'NaN' ? '0' : BigNumber(nativePrice).toFormat()}*/}
@@ -137,16 +138,16 @@ const NativeBalance = () => {
       <div />
 
       {connected && (
-        <div className={' gap-[3px] flex items-center cursor-pointer'} style={{
-        }}>
+        <div className={' gap-[3px] flex items-center cursor-pointer'} style={{}}>
           <Icon icon={'wallet-icon'} size={14} color={!isDisabled() ? 'white' : 'search_icon'}></Icon>
-          <div style={{
-            color: 'rgb(125, 125, 125)',
-            fontSize: '14px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px'
-          }}>
+          <div
+            style={{
+              color: 'rgb(125, 125, 125)',
+              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}>
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(nativeBalance)
@@ -160,8 +161,7 @@ const NativeBalance = () => {
                   ...swapPair['native'],
                   amount: nativeBalance
                 };
-              }}
-            >
+              }}>
               Max
             </div>
           </div>
@@ -191,16 +191,18 @@ const NativePrice = () => {
   return (
     <>
       {validNativeInput ? (
-        <div style={{
-          fontSize: '12px',
-          color: 'rgb(125, 125, 125)'
-        }}>
+        <div
+          style={{
+            fontSize: '12px',
+            color: 'rgb(125, 125, 125)'
+          }}>
           ${nativePrice == 'NaN' ? '0' : BigNumber(nativePrice).toFormat()}
         </div>
       ) : (
-        <div style={{
-          height: '22px',
-        }}></div>
+        <div
+          style={{
+            height: '22px'
+          }}></div>
       )}
     </>
   );
@@ -230,12 +232,13 @@ const RemoteBalance = () => {
     .replace(/\.?0+$/, '');
 
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '100%',
-    }} >
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%'
+      }}>
       <div />
       {/*{validRemoteInput ? (*/}
       {/*  <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px' }}>${remotePrice == 'NaN' ? '0' : BigNumber(remotePrice).toFormat()}</div>*/}
@@ -246,14 +249,22 @@ const RemoteBalance = () => {
       {/*)}*/}
 
       {connected && (
-        <div style={{
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '3px',
-        }}>
+        <div
+          style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '3px'
+          }}>
           <Icon icon={'wallet-icon'} size={14} color={'search_icon'}></Icon>
-          <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div
+            style={{
+              color: 'rgb(125, 125, 125)',
+              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}>
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(remoteBalance)
@@ -267,12 +278,11 @@ const RemoteBalance = () => {
               fontWeight: 700,
               lineHeight: '13px',
               marginLeft: '6px',
-              cursor: 'pointer',
+              cursor: 'pointer'
             }}
             onClick={() => {
               return;
-            }}
-          ></div>
+            }}></div>
         </div>
       )}
     </div>
@@ -300,16 +310,18 @@ const RemotePrice = () => {
   return (
     <>
       {validNativeInput ? (
-        <div style={{
-          fontSize: '12px',
-          color: 'rgb(125, 125, 125)'
-        }}>
+        <div
+          style={{
+            fontSize: '12px',
+            color: 'rgb(125, 125, 125)'
+          }}>
           ${nativePrice == 'NaN' ? '0.00' : BigNumber(remoteBalance)?.toFormat(2)}
         </div>
       ) : (
-        <div style={{
-          height: '22px',
-        }}></div>
+        <div
+          style={{
+            height: '22px'
+          }}></div>
       )}
     </>
   );
@@ -323,7 +335,7 @@ const NativeInput = () => {
   const debouncedChange = useDebouncedCallback((value) => {
     swapStore.swapPair['native'] = {
       amount: value,
-      denom: swapStore.swapPair['native'].denom,
+      denom: swapStore.swapPair['native'].denom
     };
     console.log('swapStore.swapPair: ', swapStore.swapPair);
   }, 500);
@@ -352,19 +364,15 @@ const RemoteInput = () => {
         if (!currentAccount?.address) return;
         swapStore.swapPair['remote'] = {
           amount: removeStartZero(value),
-          denom: swapStore.swapPair['remote'].denom,
+          denom: swapStore.swapPair['remote'].denom
         };
       }}
     />
   );
 };
 
-
-
 function LoadingIndicator() {
-  return (
-    <img className="loading-obj" src={LoadingIcon} width={26} height={26} alt={'Loading'} />
-  );
+  return <img className="loading-obj" src={LoadingIcon} width={26} height={26} alt={'Loading'} />;
 }
 
 const ConfirmButton = () => {
@@ -400,14 +408,14 @@ const ConfirmButton = () => {
     !swapPair?.native?.denom || !swapPair?.remote?.denom
       ? 'Select a token'
       : BigNumber(swapPair?.native?.amount).eq(0)
-        ? 'Enter an amount'
-        : insufficientBalance()
-          ? 'Insufficient Amount'
-          : BigNumber(priceImpactRaw).gt(0.5)
-            ? 'Price Impact >50%'
-            : swapLoading
-              ? ''
-              : 'Swap';
+      ? 'Enter an amount'
+      : insufficientBalance()
+      ? 'Insufficient Amount'
+      : BigNumber(priceImpactRaw).gt(0.5)
+      ? 'Price Impact >50%'
+      : swapLoading
+      ? ''
+      : 'Swap';
   return (
     <Button
       full
@@ -426,8 +434,17 @@ const ConfirmButton = () => {
 
 export default function SwapTabScreen() {
   // const { swapPair, balances } = useSwapStore();
-  const { tokenModalShow, balances, swapRouteResult, hoverExchange, swapPair, responseLoading, modalTokenType, searchTokenValue, showValidDetail } =
-    useSwapStore();
+  const {
+    tokenModalShow,
+    balances,
+    swapRouteResult,
+    hoverExchange,
+    swapPair,
+    responseLoading,
+    modalTokenType,
+    searchTokenValue,
+    showValidDetail
+  } = useSwapStore();
   const navigate = useNavigate();
   const [connected, setConnected] = useState(false);
   const currentKeyring = useCurrentKeyring();
@@ -467,27 +484,20 @@ export default function SwapTabScreen() {
 
   return (
     <>
-      <Layout style={{
-        display: !tokenModalShow ? 'flex' : 'none!important',
-      }}>
+      <Layout
+        style={{
+          display: !tokenModalShow ? 'flex' : 'none!important'
+        }}>
         <Header
           LeftComponent={
-            // connected ? (
-            //   <Row
-            //     itemsCenter
-            //     onClick={() => {
-            //       navigate('ConnectedSitesScreen');
-            //     }}>
-            //     <Text text="·" color="green" size="xxl" />
-            //     <Text text="Dapp Connected" size="xxs" />
-            //   </Row>
-            // ) : (
-            //   <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxxl} />
-            // )
             <>
-              <Image onClick={() => {
-                navigate('/settings');
-              }} src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />
+              <Image
+                onClick={() => {
+                  navigate('/settings');
+                }}
+                src="/images/icons/main/menu-icon.svg"
+                size={fontSizes.xxl}
+              />
             </>
           }
           title={
@@ -506,9 +516,11 @@ export default function SwapTabScreen() {
         <Content classname={'hide-scrollbar'}>
           <InitBalance></InitBalance>
 
-          <Column relative style={{
-            gap: '6px'
-          }}>
+          <Column
+            relative
+            style={{
+              gap: '6px'
+            }}>
             {/*<div style={{*/}
             {/*  position: 'relative',*/}
             {/*  top: 26,*/}
@@ -538,7 +550,6 @@ export default function SwapTabScreen() {
                   borderRadius: '100px',
                   padding: '20px 0px'
                 }}>
-
                 <NativeInput />
 
                 <TokenCurrent
@@ -551,12 +562,12 @@ export default function SwapTabScreen() {
               </Row>
 
               <NativePrice />
-
-
             </Column>
-            <Row relative style={{
-              top: 0,
-            }}>
+            <Row
+              relative
+              style={{
+                top: 0
+              }}>
               <div
                 style={{
                   position: 'absolute',
@@ -620,7 +631,6 @@ export default function SwapTabScreen() {
                   padding: '20px 0px',
                   gap: '5px'
                 }}>
-
                 <RemoteInput />
 
                 <TokenCurrent
@@ -633,21 +643,18 @@ export default function SwapTabScreen() {
               </Row>
 
               <RemotePrice />
-
             </Column>
 
             <Row mt={'xl'} full>
               <ConfirmButton />
             </Row>
-            {
-              showValidDetail && (
-                <div className={'mt-[16px] mb-[32px] rounded-[8px] bg-[#1E1E1F]'}>
-                  <div className="px-[16px] py-[14px]">
-                    <SwapDetail />
-                  </div>
+            {showValidDetail && (
+              <div className={'mt-[16px] mb-[32px] rounded-[8px] bg-[#1E1E1F]'}>
+                <div className="px-[16px] py-[14px]">
+                  <SwapDetail />
                 </div>
-              )
-            }
+              </div>
+            )}
           </Column>
         </Content>
         <Footer px="zero" py="zero">
@@ -660,7 +667,7 @@ export default function SwapTabScreen() {
         onSelect={(token: Coin) => {
           swapStore.swapPair[modalTokenType as 'native' | 'remote'] = {
             ...token,
-            amount: modalTokenType === 'remote' ? '' : '1',
+            amount: modalTokenType === 'remote' ? '' : '1'
           };
           swapStore.tokenModalShow = false;
         }}

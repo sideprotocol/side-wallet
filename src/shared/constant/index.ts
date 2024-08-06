@@ -3,10 +3,6 @@
 /* constants pool */
 import GrimoriaRune from '@/ui/assets/icons/grimoria-rune.png';
 import USDT from '@/ui/assets/icons/usdt.svg';
-import Wbtc from '@/ui/assets/icons/wbtc.jpg';
-import { AXELAR_TEST_ASSETLIST } from '@/ui/constants/assets/axelarAsset';
-import { BABYLON_TEST_ASSETLIST } from '@/ui/constants/assets/babylonAsset';
-import { NOBLE_TEST_ASSETLIST } from '@/ui/constants/assets/nobleAsset';
 
 import { AddressType, BitcoinToken, Chain, NetworkType, RestoreWalletType, SideToken } from '../types';
 
@@ -419,7 +415,7 @@ export const SIDE_TOKENS: SideToken[] = [
     coingecko_id: 'usd-coin',
     logo: USDT,
     precision: 6
-  },
+  }
 ];
 
 export const BITCOIN_TOKENS: BitcoinToken[] = [
@@ -430,15 +426,14 @@ export const BITCOIN_TOKENS: BitcoinToken[] = [
     coingecko_id: 'bitcoin'
   },
   {
-    // @ts-ignore
-    base: "runes/9110:1",
-    symbol: "GRIMORIA•X•RUNE",
-    name: "Rune",
-    exponent: "6",
-    coingecko_id: "usd-coin",
+    base: 'runes/9110:1',
+    symbol: 'GRIMORIA•X•RUNE',
+    name: 'Rune',
+    exponent: '6',
+    coingecko_id: 'usd-coin',
     logo: GrimoriaRune,
     precision: 6,
-    emoji: "🔮",
-    isRune: true,
+    emoji: '🔮',
+    isRune: true
   }
 ];

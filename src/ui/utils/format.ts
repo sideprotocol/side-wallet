@@ -1,4 +1,4 @@
-import { fromBech32, toBech32, fromHex, toHex } from '@cosmjs/encoding';
+import { fromBech32, fromHex, toBech32, toHex } from '@cosmjs/encoding';
 
 export const ethToEthermint = (ethAddress: string, prefix: string) => {
   const data = fromHex(ethAddress.replace('0x', ''));
@@ -20,3 +20,8 @@ export function removeStartZero(value: string) {
   }
   return value.replace(/^0+(?=\d)/, '');
 }
+
+export const formatAddress = (address: string, len: number) => {
+  if (!address) return '';
+  return address?.slice(0, 6) + '...' + address?.slice(-len);
+};

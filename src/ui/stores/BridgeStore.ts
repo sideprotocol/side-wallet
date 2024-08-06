@@ -11,6 +11,20 @@ export interface DepositBTCBridge {
   fee: number;
 }
 
+interface Status {
+  confirmed: boolean;
+  block_height: number;
+  block_hash: string;
+  block_time: number;
+}
+
+export interface UTXOAddress {
+  txid: string;
+  vout: number;
+  status: Status;
+  value: number;
+}
+
 const initData = {
   base: 'sat',
   bridgeAmount: '',
@@ -19,7 +33,8 @@ const initData = {
   balance: '',
   fee: 20,
   loading: false,
-  selectTokenModalShow: false
+  selectTokenModalShow: false,
+  accountUtxo: null as UTXOAddress | null
 };
 
 export const bridgeStore = proxy(initData);

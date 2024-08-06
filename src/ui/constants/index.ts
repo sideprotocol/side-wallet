@@ -88,10 +88,9 @@ export const SIDE_GASTOKEN = isProduction ? SIDE_MAIN_GASTOKEN : isTest ? SIDE_T
 export const SIDE_FAUCET = '';
 
 export const BTC_BRIDGE_VAULT = '';
-//
 export const SIDE_BTC_INDEXER = '';
-//
-export const SIDE_BTC_EXPLORER = '';
+
+export const SIDE_BTC_EXPLORER = 'https://signet.side.one';
 
 export const DEX_CONTRACT = 'tb1pwkwy0xh89ksdgj9hr347dyd2dw7zesmtrue6kfzyml4vdtz6e5ws93fqnh';
 export const DEX_ROUTER_CONTRACT = 'tb1p7p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgscc4xdz';
