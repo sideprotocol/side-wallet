@@ -42,14 +42,15 @@ export default function ChangePasswordScreen() {
       await wallet.changePassword(originPassword, newPassword);
       // tools.toastSuccess('Success');
       // navigate('MainScreen');
-      setIsSuccess(true);
-      setTimeout(() => {
-        setConfirmErrorMsg('Your password has been reset!');
-      }, 1000);
-      setTimeout(() => {
-        setIsSuccess(false);
+      // setIsSuccess(true);
+      // setTimeout(() => {
+        // setConfirmErrorMsg('Your password has been reset!');
+        tools.toastSuccess('Your password has been reset!');
+      // }, 1000);
+      // setTimeout(() => {
+      //   setIsSuccess(false);
         navigate('MainScreen');
-      }, 1500);
+      // }, 1500);
     } catch (err) {
       // tools.toastError((err as any).message);
       setIsOldPwdError(true);
@@ -146,7 +147,7 @@ export default function ChangePasswordScreen() {
                 setConfirmErrorMsg('');
               }}
             />
-            <Text text={confirmErrorMsg} color={isSuccess ? 'primary' : 'red'} preset="sub"></Text>
+            <Text text={confirmErrorMsg} color={'red'} preset="sub"></Text>
           </Column>
         </Column>
 

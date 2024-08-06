@@ -38,7 +38,7 @@ export default function ConnectedSitesScreen() {
         {sites.length > 0 && (
           <Text
             preset="sub"
-            text={'[Account Name] is connected to these sites. They can view your account address.'}></Text>
+            text={'The current account is connected to these sites. They can view your account details.'}></Text>
         )}
 
         <Column >

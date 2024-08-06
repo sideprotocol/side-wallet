@@ -2,7 +2,8 @@ import en from 'antd/es/locale/en_US';
 import message from 'antd/lib/message';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-
+import { useEffect, useState } from 'react'
+import { useIdleTimer } from 'react-idle-timer'
 import browser from '@/background/webapi/browser';
 import { EVENTS } from '@/shared/constant';
 import eventBus from '@/shared/eventBus';
@@ -133,9 +134,74 @@ eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
 });
 
 function Updaters() {
+  // const timeout = 10_000
+  // const promptBeforeIdle = 4_000
+  // const [state, setState] = useState<string>('Active')
+  // const [remaining, setRemaining] = useState<number>(timeout)
+  // const [open, setOpen] = useState<boolean>(false)
+  //
+  // const onIdle = () => {
+  //   setState('Idle')
+  //   setOpen(false)
+  // }
+  //
+  // const onActive = () => {
+  //   setState('Active')
+  //   setOpen(false)
+  // }
+  //
+  // const onPrompt = () => {
+  //   setState('Prompted')
+  //   setOpen(true)
+  // }
+  //
+  // const { getRemainingTime, activate } = useIdleTimer({
+  //   onIdle,
+  //   onActive,
+  //   onPrompt,
+  //   timeout,
+  //   promptBeforeIdle,
+  //   throttle: 500
+  // })
+  //
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setRemaining(Math.ceil(getRemainingTime() / 1000))
+  //   }, 500)
+  //
+  //   return () => {
+  //     clearInterval(interval)
+  //   }
+  // })
+  //
+  // const handleStillHere = () => {
+  //   activate()
+  // }
+  //
+  // const timeTillPrompt = Math.max(remaining - promptBeforeIdle / 1000, 0)
+  // const seconds = timeTillPrompt > 1 ? 'seconds' : 'second'
+
+
   return (
     <>
       <AccountUpdater />
+      {/*<div className={'flex flex-col'}>*/}
+      {/*  <p>Current State: {state}</p>*/}
+      {/*  {timeTillPrompt > 0 && (*/}
+      {/*    <p>*/}
+      {/*      {timeTillPrompt} {seconds} until prompt*/}
+      {/*    </p>*/}
+      {/*  )}*/}
+      {/*  <div*/}
+      {/*    className='modal'*/}
+      {/*    style={{*/}
+      {/*      display: open ? 'flex' : 'none'*/}
+      {/*    }}>*/}
+      {/*    <h3>Are you still here?</h3>*/}
+      {/*    <p>Logging out in {remaining} seconds</p>*/}
+      {/*    <button onClick={handleStillHere}>Im still here</button>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
     </>
   );
 }

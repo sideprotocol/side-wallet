@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useRef } from 'react';
 import { HashRouter, Route, Routes, useNavigate as useNavigateOrigin } from 'react-router-dom';
 
+import IdleTimer, { useIdleTimer } from 'react-idle-timer';
 import { ASSETS, SWAP_ASSETS } from '@/ui/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -506,6 +507,14 @@ const Main = () => {
       </Layout>
     );
   }
+  // if (autoLockTimeLimit > 0) {
+  //   return (
+  //     <IdleTimer onAction={setLastActiveTime} throttle={1000}>
+  //       {routes}
+  //     </IdleTimer>
+  //   );
+  // }
+
   return (
     <HashRouter>
       <Routes>

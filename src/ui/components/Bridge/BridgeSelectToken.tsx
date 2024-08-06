@@ -77,9 +77,12 @@ export default function Index(props) {
       <Content
         style={{
           backgroundColor: '#09090A',
+          padding: 0,
           marginTop: 16,
         }}>
-        <Column>
+        <Column style={{
+          padding: '0 24px'
+        }}>
           {/*<Row*/}
           {/*  style={{*/}
           {/*    padding: '0px 10px',*/}
@@ -94,19 +97,6 @@ export default function Index(props) {
             className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '}>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
-            {/*<Input*/}
-            {/*  value={searchValue}*/}
-            {/*  onChange={(e) => {*/}
-            {/*    const value = e.target.value;*/}
-            {/*    onSearch(value);*/}
-            {/*  }}*/}
-            {/*  containerStyle={{*/}
-            {/*    width: '100%',*/}
-            {/*    border: 'none',*/}
-            {/*    padding: '0'*/}
-            {/*  }}*/}
-            {/*  placeholder="Search crypto"*/}
-            {/*/>*/}
             <Input
               value={searchValue}
               onFocus={() => setFocus(true)}
@@ -140,11 +130,12 @@ export default function Index(props) {
         <Column
           gap="xl"
           style={{
-            marginTop: '20px'
+            margin: '0 16px'
           }}>
           {runeAndBtcTokens?.map((asset) => {
             return (
               <Row
+                classname={'bg-item-hover'}
                 onClick={() => {
                   bridgeStore.base = asset.base;
                   onClose();
@@ -153,7 +144,10 @@ export default function Index(props) {
                 key={asset.symbol + asset.name}
                 justifyBetween
                 style={{
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  height: '44px',
+                  padding: '10px 16px',
+                  // margin: '0 16px',
                 }}>
                 <SideCryptoItem token={asset} />
               </Row>
