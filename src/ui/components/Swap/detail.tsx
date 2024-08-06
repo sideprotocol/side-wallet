@@ -105,7 +105,7 @@ function SwapDetail() {
   return (
 
     <>
-      <div className="border-b-[1px] border-b-solid border-b-[#8E8E8F]/20 pb-[10px]">
+      <div className="border-b-[1px] border-b-solid border-b-[#8E8E8F]/20 pb-[10px] text-[14px]">
         1 {findAssetIcon(swapPair.native)?.symbol || swapPair.native?.denom || '-'} = {swapRate}{' '}
         {findAssetIcon(swapPair.remote)?.symbol || swapPair.remote?.denom || '-'} (${ratePrice})
       </div>
