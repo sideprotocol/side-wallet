@@ -3,13 +3,29 @@ import { Fragment } from 'react';
 import { BitcoinToken } from '@/shared/types';
 import { Column, Image, Row, Text } from '@/ui/components';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
-import { useGetBitcoinTokenList } from '@/ui/hooks/useGetTokenList';
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
 import { getTruncate } from '@/ui/utils';
 
-function TokenItem({ token, balanceVisible }: { token: BitcoinToken; balanceVisible: boolean }) {
+function TokenItem({
+  token,
+  balanceVisible,
+  price,
+  amount,
+  balance
+}: { token: BitcoinToken; balanceVisible: boolean } & {
+  price: string;
+  amount: string;
+  balance: string | number;
+}) {
   const accountBalance = useAccountBalance();
   const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.coingecko_id);
+  console.log('token: ', token);
+
+  console.log({
+    token,
+    price,
+    amount
+  });
 
   return (
     <Row
@@ -36,25 +52,23 @@ function TokenItem({ token, balanceVisible }: { token: BitcoinToken; balanceVisi
         style={{
           gap: '0px'
         }}>
-        <Text preset="regular" text={balanceVisible ? accountBalance.btc_amount : '**'} textEnd />
-        {/*<Text preset="sub" text={`$${getTruncate(totalPrice)}`} textEnd />*/}
-        <Text preset="sub" text={balanceVisible ? `$${getTruncate(totalPrice)}` : '**'} textEnd />
+        <Text preset="regular" text={balanceVisible ? balance : '**'} textEnd />
+        <Text preset="sub" text={balanceVisible ? `$${getTruncate(price)}` : '**'} textEnd />
       </Column>
     </Row>
   );
 }
 
-export default function BtcTokenList({balanceVisible}) {
-  const { data: bitcoinAssets } = useGetBitcoinTokenList();
+export default function BtcTokenList({ balanceVisible, runeAndBtcTokens }) {
   return (
     <Column
       style={{
         minHeight: '132px'
       }}>
-      {bitcoinAssets.map((item) => {
+      {runeAndBtcTokens.map((item) => {
         return (
           <Fragment key={item.symbol + item.name}>
-            <TokenItem token={item} balanceVisible={balanceVisible} />
+            <TokenItem token={item} {...item} balanceVisible={balanceVisible} />
           </Fragment>
         );
       })}

@@ -12,6 +12,7 @@ import { useGetAccountBalanceByUSD } from '@/ui/hooks/useGetBalance';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
+import { useRuneAndBtcBalances } from '@/ui/state/bridge/hook';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useBlockstreamUrl, useSkipVersionCallback, useVersionInfo, useWalletConfig } from '@/ui/state/settings/hooks';
@@ -93,11 +94,15 @@ export default function WalletTabScreen() {
   const handleMouseLeave = () => {
     setIsHoveredMoney(false);
   };
+
+  const runeAndBtcTokens = useRuneAndBtcBalances();
+
   return (
-    <Layout style={{
-      minHeight: '600px',
-      height: '600px',
-    }}>
+    <Layout
+      style={{
+        minHeight: '600px',
+        height: '600px'
+      }}>
       <Header
         LeftComponent={
           // connected ? (
@@ -113,9 +118,13 @@ export default function WalletTabScreen() {
           //   <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxl} />
           // )
           <>
-            <Image onClick={() => {
-              navigate('SettingsTabScreen');
-            }} src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />
+            <Image
+              onClick={() => {
+                navigate('SettingsTabScreen');
+              }}
+              src="/images/icons/main/menu-icon.svg"
+              size={fontSizes.xxl}
+            />
           </>
         }
         title={
@@ -152,7 +161,7 @@ export default function WalletTabScreen() {
             <Row
               justifyCenter
               style={{
-                gap: 0,
+                gap: 0
                 // alignItems: 'flex-end'
               }}>
               <Text
@@ -189,18 +198,20 @@ export default function WalletTabScreen() {
                 fontWeight: 500,
                 lineHeight: '32px',
                 position: 'relative',
-                top: '6px',
+                top: '6px'
               }}
             />
           )}
 
-          <span  style={{
-            display: 'inline-box',
-            width: isHoveredMoney ? '20px' : '0',
-            opacity: isHoveredMoney ? 1 : 0,
-            transition: 'all 0.2s ease-in',
-          }} onClick={() => setBalanceVisible(!balanceVisible)}>
-            <Image src={ balanceVisible ? '/images/icons/eye-off-2.svg' : '/images/icons/eye-white.svg'} size={20} />
+          <span
+            style={{
+              display: 'inline-box',
+              width: isHoveredMoney ? '20px' : '0',
+              opacity: isHoveredMoney ? 1 : 0,
+              transition: 'all 0.2s ease-in'
+            }}
+            onClick={() => setBalanceVisible(!balanceVisible)}>
+            <Image src={balanceVisible ? '/images/icons/eye-off-2.svg' : '/images/icons/eye-white.svg'} size={20} />
           </span>
         </Row>
 
@@ -210,13 +221,13 @@ export default function WalletTabScreen() {
             gap: '50px',
             marginTop: '20px'
           }}>
-          <div className="flex flex-col items-center gap-[8px] group transition"
-               onClick={() => {
-                 navigate('SelectNetworkScreen', { type: 'receive' });
-               }}>
+          <div
+            className="flex flex-col items-center gap-[8px] group transition"
+            onClick={() => {
+              navigate('SelectNetworkScreen', { type: 'receive' });
+            }}>
             {/*<Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.xxxl} />*/}
-            <div
-              className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045] transition">
+            <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045] transition">
               <Image
                 src={
                   '/images/icons/main/recevie-icon.svg' // Default image source
@@ -225,17 +236,15 @@ export default function WalletTabScreen() {
                 className="" // Hide the default image on hover
               />
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px]">
-              Receive
-            </div>
+            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px]">Receive</div>
           </div>
 
-          <div className="flex flex-col items-center gap-[8px] group transition"
-               onClick={() => {
-                 navigate('SelectNetworkScreen', { type: 'send' });
-               }}>
-            <div
-              className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045] transition">
+          <div
+            className="flex flex-col items-center gap-[8px] group transition"
+            onClick={() => {
+              navigate('SelectNetworkScreen', { type: 'send' });
+            }}>
+            <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045] transition">
               <Image
                 src={
                   '/images/icons/main/send-icon.svg' // Default image source
@@ -244,44 +253,8 @@ export default function WalletTabScreen() {
                 className="" // Hide the default image on hover
               />
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px]">
-              Send
-            </div>
+            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px]">Send</div>
           </div>
-
-          {/*<Column*/}
-          {/*  onClick={() => {*/}
-          {/*    navigate('SelectNetworkScreen', { type: 'send' });*/}
-          {/*  }}*/}
-          {/*  itemsCenter>*/}
-          {/*  <Image src="/images/icons/main/send-icon.svg" size={fontSizes.xxxl} />*/}
-          {/*  <Text*/}
-          {/*    text="Send"*/}
-          {/*    style={{*/}
-          {/*      color: '#fff',*/}
-          {/*      fontSize: '14px',*/}
-          {/*      lineHeight: '17px',*/}
-          {/*      opacity: 0.8*/}
-          {/*    }}*/}
-          {/*  />*/}
-          {/*</Column>*/}
-
-          {/* <Column
-            onClick={() => {
-              setBuyBtcModalVisible(true);
-            }}
-            itemsCenter>
-            <Image src="/images/icons/main/buy-icon.svg" size={fontSizes.iconxLarge} />
-            <Text
-              text="Buy"
-              style={{
-                color: '#fff',
-                fontSize: '14px',
-                lineHeight: '17px',
-                opacity: 0.8
-              }}
-            />
-          </Column> */}
         </Row>
 
         <Row
@@ -319,16 +292,11 @@ export default function WalletTabScreen() {
             marginBottom: '20px',
             gap: '0px'
           }}>
-          {/*<Text*/}
-          {/*  text="Tokens"*/}
-          {/*  style={{*/}
-          {/*    marginTop: '20px',*/}
-          {/*    marginBottom: '20px',*/}
-          {/*    fontSize: '16px',*/}
-          {/*    fontWeight: 600*/}
-          {/*  }}*/}
-          {/*/>*/}
-          {currentTab === CHAINS_ENUM.SIDE ? <SideTokenList balanceVisible={balanceVisible} /> : <BtcTokenList balanceVisible={balanceVisible} />}
+          {currentTab === CHAINS_ENUM.SIDE ? (
+            <SideTokenList balanceVisible={balanceVisible} />
+          ) : (
+            <BtcTokenList balanceVisible={balanceVisible} runeAndBtcTokens={runeAndBtcTokens} />
+          )}
         </Column>
       </Column>
 
