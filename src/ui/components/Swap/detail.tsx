@@ -53,15 +53,14 @@ function SwapDetail() {
 
     {
       id: 'min_received',
-
       text: 'Minimum Received',
-      value: `${minReceived} ${assetOut?.symbol}`,
+      value: `${minReceived} ${assetOut?.emoji || assetOut?.symbol}`,
     },
 
     {
       id: 'fee',
       text: `Fee (${fee})`,
-      value: `${feePrice} ${assetOut?.symbol}`,
+      value: `${feePrice} ${assetOut?.emoji || assetOut?.symbol}`,
     },
 
     // {
@@ -93,7 +92,7 @@ function SwapDetail() {
 
         <div
           style={{
-            color: 'white',
+            color: text !== 'Price impact' ? 'white' : 'rgb(246, 70, 93)',
           }}
         >
           {value}
