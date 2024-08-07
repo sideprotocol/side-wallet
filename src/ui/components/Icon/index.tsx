@@ -92,6 +92,7 @@ export const svgRegistry = {
   'arrow-right': './images/icons/wallet/arrow-right.svg',
   'arrow-right-hover': './images/icons/wallet/arrow-right-hover.svg',
   'icon-empty': './images/icons/main/no-data.svg',
+  // 'icon-correct': './images/icons/main/correct.gif',
 };
 
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];

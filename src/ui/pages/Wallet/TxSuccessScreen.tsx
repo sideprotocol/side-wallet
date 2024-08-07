@@ -17,34 +17,37 @@ export default function TxSuccessScreen() {
 
   return (
     <Layout>
-      <Header />
+      {/*<Header title=" " />*/}
 
-      <Content style={{ gap: spacing.small }}>
+      <Content style={{ gap: spacing.small, marginTop: '50px' }}>
         <Column justifyCenter mt="xxl" gap="xl">
-          <Row justifyCenter>
-            <Icon icon="success" size={50} style={{ alignSelf: 'center' }} />
+          <Row style={{
+            // width: '105px',
+          }} justifyCenter>
+            {/*<Icon icon="icon-correct" size={50} style={{ alignSelf: 'center' }} />*/}
+            <img width={'105px'} src="/images/icons/main/correct.gif" alt="" />
           </Row>
 
-          <Text preset="title" text="Payment Sent" textCenter />
-          <Text preset="sub" text="Your transaction has been successfully sent" color="textDim" textCenter />
+          <Text preset="title" text="Transaction completed!" textCenter />
+          {/*<Text preset="sub" text="Your transaction has been successfully sent" color="textDim" textCenter />*/}
 
           <Row
+            itemsCenter
             justifyCenter
             onClick={() => {
               window.open(`${blockstreamUrl}/tx/${txid}`);
             }}>
-            <Icon icon="eye" color="textDim" />
-            <Text preset="regular-bold" text="View on Block Explorer" color="textDim" />
+            <Icon icon="eye" color="white" />
+            <Text preset="regular-bold" text="View on Block Explorer" color="white" />
           </Row>
         </Column>
       </Content>
       <Footer>
         <Button
+          preset={'primary'}
           full
-          text="Done"
+          text="Finish"
           onClick={() => {
-            // navigate('MainScreen');
-
             window.history.go(-1);
           }}
         />

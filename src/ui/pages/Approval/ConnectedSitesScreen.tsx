@@ -38,6 +38,7 @@ export default function ConnectedSitesScreen() {
         {sites.length > 0 && (
           <Text
             preset="sub"
+            color={'white'}
             text={'The current account is connected to these sites. They can view your account details.'}></Text>
         )}
 
@@ -51,6 +52,7 @@ export default function ConnectedSitesScreen() {
                       <Image
                         src={item.icon}
                         style={{
+                          border: '1px solid #ffffff20',
                           borderRadius: '100%'
                         }}
                         size={fontSizes.logo}
