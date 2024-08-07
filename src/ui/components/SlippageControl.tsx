@@ -78,7 +78,7 @@ export default function SlippageControl(props) {
               padding: "5px",
               borderRadius: "16px",
               fontSize: "14px",
-              border: `1px solid white`,
+              border: `1px solid #ffffff/10`,
               height: "50px",
             }}
           >
@@ -91,7 +91,7 @@ export default function SlippageControl(props) {
                       width: "80px",
                       display: "flex",
                       alignItems: "center",
-                      border: `1px solid white`,
+                      border: `1px solid #ffffff/10`,
                       borderRadius: "12px",
                       padding: "0px 12px",
                       marginLeft: "8px",
@@ -99,19 +99,14 @@ export default function SlippageControl(props) {
                       background: '#000',
                     }}
                   >
-                    {/*<Input*/}
-                    {/*  className="h-[40px] py-0.5 text-center bg-transparent border-side-secondary rounded-[14px] border border-transparent  focus:border-[#6DE5DA]"*/}
-                    {/*  type="text"*/}
-                    {/*  value={slippage}*/}
-                    {/*  disableUnderline*/}
-                    {/*  onChange={(e) => {*/}
-                    {/*    onInputSlippage(e.target.value);*/}
-                    {/*  }}*/}
-                    {/*  sx={{*/}
-                    {/*    fontWeight: 600,*/}
-                    {/*    color: isLight ? colors.black : colors.white,*/}
-                    {/*  }}*/}
-                    {/*/>*/}
+                    <input
+                      className="w-[40px] h-[40px] py-0.5 text-center bg-transparent border-side-secondary rounded-[14px] border border-transparent  focus:border-[#6DE5DA]"
+                      type="text"
+                      value={slippage}
+                      onChange={(e) => {
+                        onInputSlippage(e.target.value);
+                      }}
+                    />
                     <span>%</span>
                   </div>
                 );
@@ -140,19 +135,23 @@ export default function SlippageControl(props) {
               );
             })}
           </div>
-          <Button
-            style={{
-              // color: '#000'
-            }}
-            // themetype="primary"
-            preset="primary"
-            onClick={() => {
-              swapStore.slippageIsAuto = true;
-              swapStore.slippage = '0.25';
-            }}
-          >
-            Auto
-          </Button>
+          <div className="flex items-center justify-center w-full">
+            <Button
+              style={{
+                // color: '#000'
+                width: '100%',
+                height: '36px',
+              }}
+              // themetype="primary"
+              preset="primary"
+              onClick={() => {
+                swapStore.slippageIsAuto = true;
+                swapStore.slippage = '0.25';
+              }}
+            >
+              Auto
+            </Button>
+          </div>
         </div>
         {/*<Button*/}
         {/*  text="Add Wallet"*/}
