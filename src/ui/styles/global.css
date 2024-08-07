@@ -63,6 +63,14 @@ iframe {
   }
 }
 
+.ant-modal-close {
+    transform: scale(0.5);
+}
+
+.ant-modal-close:focus, .ant-modal-close:hover {
+    color: #fff!important;
+}
+
 .ant-checkbox, .ant-checkbox-checked::after, .ant-checkbox-inner {
   border-radius: 4px!important;
 }

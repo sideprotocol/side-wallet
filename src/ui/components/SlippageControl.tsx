@@ -28,6 +28,7 @@ export default function SlippageControl(props) {
   return (
     <Modal
       maskClosable={true}
+      // onCancel={handleCancel}
       className="walletSelectModal"
       title={null}
       closable={false}
@@ -35,12 +36,11 @@ export default function SlippageControl(props) {
       open={open}
       footer={null}
       width={314}
-      onCancel={() => onClose}>
+      onCancel={onClose}>
       <div
         style={{
           padding: '12px 10px 16px'
         }}>
-
         <div
           style={{
             fontWeight: "500",
@@ -48,7 +48,7 @@ export default function SlippageControl(props) {
             alignItems: "center",
             justifyContent: "space-between",
             fontSize: "18px",
-            margin: "20px 0px",
+            margin: "40px 0px 10px",
             color: 'white',
           }}
         >
@@ -142,7 +142,7 @@ export default function SlippageControl(props) {
           </div>
           <Button
             style={{
-              color: '#000'
+              // color: '#000'
             }}
             // themetype="primary"
             preset="primary"

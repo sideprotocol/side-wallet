@@ -714,9 +714,9 @@ export default function SwapTabScreen() {
       {/*  <p>Some contents...</p>*/}
       {/*</Modal>*/}
       <SlippageControl open={isModalOpen}
-                       onClose={() => (swapStore.slippageModalShow = false)}
+                       onClose={() => setIsModalOpen(false)}
                        slippage={slippage}
-                       onBack={() => (swapStore.slippageModalShow = false)}
+                       onBack={() => setIsModalOpen(false)}
                        slippageIsAuto={slippageIsAuto}
                        onInputSlippage={(targetValue: string) => {
                          swapStore.slippageIsAuto = false;
