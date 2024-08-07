@@ -13,10 +13,11 @@ import React, {useState} from 'react';
 
 import { useNavigate } from '../MainRoute';
 import ImageIcon from '@/ui/components/ImageIcon';
+import { useRuneAndBtcBalances } from '@/ui/state/bridge/hook';
 
 function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
   const accountBalance = useAccountBalance();
-  const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.coingecko_id);
+  // const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.coingecko_id);
 
   return (
     <>
@@ -35,14 +36,15 @@ function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
         style={{
           gap: '0px'
         }}>
-        <Text preset="regular" textEnd text={accountBalance.btc_amount}></Text>
-        <Text preset="sub" textEnd text={`${getTruncate(totalPrice)}`}></Text>
+        <Text preset="regular" textEnd text={token?.balance}></Text>
+        <Text preset="sub" textEnd text={`${getTruncate(token?.price)}`}></Text>
       </Column>
     </>
   );
 }
 
 function BitCrypto({searchTerm}) {
+  const runeAndBtcTokens = useRuneAndBtcBalances();
   const navigate = useNavigate();
   const { state } = useLocation();
   const { chain, type } = state as {
@@ -57,7 +59,7 @@ function BitCrypto({searchTerm}) {
   })
   return (
     <>
-      {bitcoinTokenList.map((token) => {
+      {runeAndBtcTokens.map((token) => {
         return (
           <Row
             classname={'bg-item-hover'}
