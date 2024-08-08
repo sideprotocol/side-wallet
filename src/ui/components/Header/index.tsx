@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 
+import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
+
 import { Column } from '../Column';
 import { Logo } from '../Logo';
 import { Row } from '../Row';
 import { Text } from '../Text';
 import './index.module.less';
-import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 
 interface HeaderProps {
   onBack?: () => void;
@@ -15,6 +16,7 @@ interface HeaderProps {
   LeftComponent?: React.ReactNode;
   RightComponent?: React.ReactNode;
   children?: React.ReactNode;
+  style?: any;
 }
 
 export function Header(props: HeaderProps) {
@@ -40,6 +42,7 @@ export function Header(props: HeaderProps) {
         borderBottom: '1px solid #1E1E1F',
         minHeight: '60px',
         maxHeight: '60px',
+        ...(props.style || {})
       }}>
       <Row full>
         <Column selfItemsCenter style={{ gap: '10px' }}>

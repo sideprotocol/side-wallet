@@ -12,7 +12,7 @@ import {
   ToSignInput,
   TxType
 } from '@/shared/types';
-import { Button, Card, Column, Content, Footer, Header, Icon, Layout, Row, Text } from '@/ui/components';
+import { Button, Card, Column, Content, Footer, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { AddressText } from '@/ui/components/AddressText';
 import Arc20PreviewCard from '@/ui/components/Arc20PreviewCard';
@@ -22,9 +22,9 @@ import BRC20Preview from '@/ui/components/BRC20Preview';
 import InscriptionPreview from '@/ui/components/InscriptionPreview';
 import RunesPreviewCard from '@/ui/components/RunesPreviewCard';
 import { SignPsbtWithRisksPopover } from '@/ui/components/SignPsbtWithRisksPopover';
-import WebsiteBar from '@/ui/components/WebsiteBar';
 import KeystoneSignScreen from '@/ui/pages/Wallet/KeystoneSignScreen';
 import { useAccountAddress, useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import {
   usePrepareSendAtomicalsNFTCallback,
   usePrepareSendBTCCallback,
@@ -33,7 +33,7 @@ import {
 import { colors } from '@/ui/theme/colors';
 import { fontSizes } from '@/ui/theme/font';
 import { copyToClipboard, satoshisToAmount, shortAddress, useApproval, useWallet } from '@/ui/utils';
-import { LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined, RightOutlined } from '@ant-design/icons';
 
 interface Props {
   header?: React.ReactNode;
@@ -323,10 +323,29 @@ function SignTxDetails({ txInfo, type, rawTxInfo }: { txInfo: TxInfo; rawTxInfo?
 
   if (type === TxType.SIGN_TX) {
     return (
-      <Column gap="lg">
+      <Column
+        gap="lg"
+        rounded
+        style={{
+          backgroundColor: '#1E1E1F',
+          paddingBottom: '12px'
+        }}>
         <Text text="Sign Transaction" preset="title-bold" textCenter mt="lg" />
-        <Row justifyCenter>
-          <Card style={{ backgroundColor: '#272626', maxWidth: 320, width: 320 }}>
+        <Row
+          justifyCenter
+          style={{
+            padding: '0px 20px'
+          }}>
+          <Card
+            style={{
+              maxWidth: 320,
+              width: 320,
+              border: '1px solid #FFFFFF1A !important',
+              borderColor: '#FFFFFF1A !important',
+              borderWidth: '1px !important',
+              backgroundColor: '#000000',
+              borderRadius: '10px'
+            }}>
             <Column gap="lg">
               <Column>
                 <Column>
@@ -334,7 +353,11 @@ function SignTxDetails({ txInfo, type, rawTxInfo }: { txInfo: TxInfo; rawTxInfo?
                     <Row itemsCenter>
                       <Text
                         text={(receivingSatoshis > sendingSatoshis ? '+' : '') + balanceChangedAmount}
-                        color={receivingSatoshis > sendingSatoshis ? 'white' : 'white'}
+                        // color={receivingSatoshis > sendingSatoshis ? 'white' : 'white'}
+
+                        style={{
+                          color: '#0DD4C3'
+                        }}
                         preset="bold"
                         textCenter
                         size="xxl"
@@ -484,6 +507,8 @@ export default function SignPsbt({
 
   const address = useAccountAddress();
   const currentAccount = useCurrentAccount();
+
+  const currentKeyring = useCurrentKeyring();
 
   const [isPsbtRiskPopoverVisible, setIsPsbtRiskPopoverVisible] = useState(false);
   const [isKeystoneSigning, setIsKeystoneSigning] = useState(false);
@@ -670,9 +695,34 @@ export default function SignPsbt({
 
   if (!header && session) {
     header = (
-      <Header>
-        <WebsiteBar session={session} />
-      </Header>
+      <Column
+        itemsCenter
+        style={{
+          paddingBottom: '4px'
+        }}>
+        <Text
+          textCenter
+          size="xl"
+          style={{
+            fontWeight: '600'
+          }}>
+          Signature request
+        </Text>
+
+        <Text
+          textCenter
+          style={{
+            color: '#828282',
+            borderRadius: '8px',
+            padding: '4px 16px',
+            backgroundColor: '#1E1E1F',
+            fontSize: '14px',
+            maxWidth: 'max-content'
+          }}
+          classname="">
+          {session.origin}
+        </Text>
+      </Column>
     );
   }
 
@@ -713,13 +763,89 @@ export default function SignPsbt({
   }
 
   return (
-    <Layout style={{
-      height: '580px',
-      minHeight: '580px',
-    }}>
+    <Layout
+      style={{
+        height: '580px',
+        minHeight: '580px'
+      }}>
       {header}
       <Content>
         <Column gap="xl">
+          <Row
+            itemsCenter
+            justifyBetween
+            mt="md"
+            style={{
+              background: '#1E1E1F',
+              border: '1px solid #FFFFFF1A',
+              padding: '16px 10px 16px 10px',
+              borderRadius: '8px',
+              position: 'relative'
+            }}>
+            <Column
+              style={{
+                width: '90%'
+              }}>
+              <Text
+                style={{
+                  fontWeight: '500',
+                  fontSize: '16px'
+                }}>
+                Account connected
+              </Text>
+
+              <Text
+                size="sm"
+                style={{
+                  color: 'white',
+                  opacity: '0.5',
+                  wordBreak: 'break-word'
+                }}>
+                {currentAccount.address}
+              </Text>
+
+              <Row
+                itemsCenter
+                style={{
+                  gap: '4px',
+                  borderRadius: '10px',
+                  backgroundColor: '#0DD4C3',
+                  padding: '4px 10px',
+                  fontSize: '12px',
+                  width: 'max-content',
+                  color: 'black'
+                }}>
+                <Text
+                  style={{
+                    fontWeight: '600',
+                    color: 'black'
+                  }}>
+                  {currentKeyring.alianName}
+                </Text>
+
+                <Text
+                  style={{
+                    fontWeight: '600',
+                    color: 'black'
+                  }}>
+                  /
+                </Text>
+
+                <Text
+                  style={{
+                    color: 'black'
+                  }}>
+                  {currentAccount.alianName}
+                </Text>
+              </Row>
+            </Column>
+
+            <RightOutlined
+              style={{
+                flexShrink: 0
+              }}></RightOutlined>
+          </Row>
+
           {detailsComponent}
           {canChanged == false && (
             <Section title="Network Fee:">
@@ -792,7 +918,14 @@ export default function SignPsbt({
                                 <Row>
                                   <AddressText address={v.address} color={isToSign ? 'white' : 'textDim'} />
                                   {isToSign && (
-                                    <Row style={{ borderWidth: 1, borderColor: 'rgb(13, 212, 195)', borderRadius: 5, padding: 2 }}>
+                                    <Row
+                                      style={{
+                                        // borderWidth: 1,
+                                        // borderColor: 'rgb(13, 212, 195)',
+                                        borderRadius: 5,
+                                        padding: 2,
+                                        background: '#0DD4C31A'
+                                      }}>
                                       <Text text="to sign" color="primary" size="xs" />
                                     </Row>
                                   )}
@@ -1004,14 +1137,11 @@ export default function SignPsbt({
               <Text text={`${txInfo.psbtHex.length / 2} bytes`} color="textDim" />
               {/*<Icon icon="copy" color="textDim" />*/}
               <Icon
-                icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
+                icon={isClickCopy ? 'check-circle-broken' : 'copy3'}
                 color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
                 size={20}
               />
-              <Text
-                text={isClickCopy ? '' : ''}
-                color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
-              />
+              <Text text={isClickCopy ? '' : ''} color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'} />
             </Row>
           </Section>
         </Column>

@@ -24,7 +24,14 @@ export function MyItem({ account, selected, onClick }: MyItemProps, ref) {
   }
 
   return (
-    <Card justifyBetween mt="sm" onClick={onClick}>
+    <Card
+      justifyBetween
+      mt="sm"
+      style={{
+        border: '1px solid #FFFFFF1A',
+        backgroundColor: '#1E1E1F'
+      }}
+      onClick={onClick}>
       <Row>
         <Column style={{ width: 20 }} selfItemsCenter>
           {selected && (
@@ -89,10 +96,11 @@ export default function Connect({ params: { session } }: Props) {
 
   if (checkState === WebsiteState.CHECKING) {
     return (
-      <Layout style={{
-        minHeight: '560px',
-        height: '560px',
-      }}>
+      <Layout
+        style={{
+          minHeight: '560px',
+          height: '560px'
+        }}>
         <Content itemsCenter justifyCenter>
           <Icon size={fontSizes.xxxl} color="gold">
             <LoadingOutlined />
@@ -104,14 +112,15 @@ export default function Connect({ params: { session } }: Props) {
 
   if (checkState === WebsiteState.SCAMMER) {
     return (
-      <Layout style={{
-        minHeight: '560px',
-        height: '560px',
-      }}>
+      <Layout
+        style={{
+          minHeight: '560px',
+          height: '560px'
+        }}>
         <Header>
           <WebsiteBar session={session} />
         </Header>
-        <Content >
+        <Content>
           <Column>
             <Text text="Phishing Detection" preset="title-bold" textCenter mt="xxl" />
             <Text text="Malicious behavior and suspicious activity have been detected." mt="md" />
@@ -130,10 +139,11 @@ export default function Connect({ params: { session } }: Props) {
 
   if (warning) {
     return (
-      <Layout style={{
-        minHeight: '560px',
-        height: '560px',
-      }}>
+      <Layout
+        style={{
+          minHeight: '560px',
+          height: '560px'
+        }}>
         <Header>
           <WebsiteBar session={session} />
         </Header>
@@ -160,18 +170,30 @@ export default function Connect({ params: { session } }: Props) {
     );
   }
   return (
-    <Layout style={{
-      minHeight: '560px',
-      height: '560px',
-    }}>
-      <Header>
+    <Layout
+      style={{
+        minHeight: '560px',
+        height: '560px'
+      }}>
+      <Header
+        style={{
+          borderBottom: '1px solid transparent'
+        }}>
         <WebsiteBar session={session} />
       </Header>
       <Content>
         <Column>
-          <Text text="Connect with Side Wallet" preset="title-bold" textCenter mt="lg" />
-          <Text text="Select the account to use on this site" textCenter mt="md" />
-          <Text text="Only connect with sites you trust." preset="sub" textCenter mt="md" />
+          <Column
+            style={{
+              background: '#0DD4C31A',
+              paddingBottom: '8px'
+            }}
+            gap="zero"
+            rounded>
+            <Text text="Connect with Side Wallet" preset="title-bold" textCenter mt="lg" />
+            <Text text="Select the account to use on this site." textCenter preset="sub" mt="md" />
+            <Text text="Only connect with sites you trust." preset="sub" textCenter />
+          </Column>
 
           {keyrings.map((keyring) => (
             <Column mt="lg" key={keyring.key}>

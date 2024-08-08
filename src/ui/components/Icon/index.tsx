@@ -85,14 +85,14 @@ export const svgRegistry = {
   'swap-down-hover': '/images/icons/swap/bottom-hover.svg',
   'check-circle': '/images/icons/check-circle.svg',
   'check-circle-broken': '/images/icons/check-circle-broken.svg',
-  'clear': '/images/icons/main/clear.svg',
+  clear: '/images/icons/main/clear.svg',
   'wallet-icon': '/images/icons/wallet-icon.svg',
   loading: '/images/icons/loading.svg',
   plus: './images/icons/plus.svg',
   'arrow-right': './images/icons/wallet/arrow-right.svg',
   'arrow-right-hover': './images/icons/wallet/arrow-right-hover.svg',
   'icon-empty': './images/icons/main/no-data.svg',
-  // 'icon-correct': './images/icons/main/correct.gif',
+  copy3: './images/icons/copy3.svg'
 };
 
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];
