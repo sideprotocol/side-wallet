@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebouncedCallback } from 'use-debounce';
+
 // import { Modal } from 'antd';
 import { KEYRING_TYPE } from '@/shared/constant';
 import LoadingIcon from '@/ui/assets/icons/loading.svg';
@@ -10,6 +11,7 @@ import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
+import SlippageControl from '@/ui/components/SlippageControl';
 import SwapSelectToken from '@/ui/components/Swap/SwapSelectToken';
 import SwapDetail from '@/ui/components/Swap/detail';
 import TokenCurrent from '@/ui/components/TokenCurrent';
@@ -29,8 +31,6 @@ import { removeStartZero } from '@/ui/utils/format';
 import { findAssetIcon } from '@/ui/utils/swap';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { Coin } from '@cosmjs/stargate';
-import VirtualList from 'rc-virtual-list';
-import SlippageControl from '@/ui/components/SlippageControl';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
@@ -549,7 +549,9 @@ export default function SwapTabScreen() {
             {/*</div>*/}
             <div className="flex justify-between mt-[24px]">
               <div className="pl-[10px]"></div>
-              <div className="w-[108px] flex items-center justify-center rounded-[24px] border-[1px] border-[#14a89b1a]  bg-[#0dd4c31a] h-[30px] cursor-pointer" onClick={showModal}>
+              <div
+                className="w-[108px] flex items-center justify-center rounded-[24px] border-[1px] border-[#14a89b1a]  bg-[#0dd4c31a] h-[30px] cursor-pointer"
+                onClick={showModal}>
                 <span className={'font-medium text-sm whitespace-nowrap mr-3 text-teal-400'}>{slippage}%</span>
                 <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -694,6 +696,20 @@ export default function SwapTabScreen() {
         open={tokenModalShow}
         onClose={() => (swapStore.tokenModalShow = false)}
         onSelect={(token: Coin) => {
+          if (modalTokenType === 'native' && token.denom === swapPair.remote.denom) {
+            swapStore.swapPair['remote'] = {
+              denom: swapPair.native.denom,
+              amount: ''
+            };
+          }
+
+          if (modalTokenType === 'remote' && token.denom === swapPair.native.denom) {
+            swapStore.swapPair['native'] = {
+              denom: swapPair.remote.denom,
+              amount: swapPair.native.amount
+            };
+          }
+
           swapStore.swapPair[modalTokenType as 'native' | 'remote'] = {
             ...token,
             amount: modalTokenType === 'remote' ? '' : '1'
@@ -713,31 +729,30 @@ export default function SwapTabScreen() {
       {/*  <p>Some contents...</p>*/}
       {/*  <p>Some contents...</p>*/}
       {/*</Modal>*/}
-      <SlippageControl open={isModalOpen}
-                       onClose={() => setIsModalOpen(false)}
-                       slippage={slippage}
-                       onBack={() => setIsModalOpen(false)}
-                       slippageIsAuto={slippageIsAuto}
-                       onInputSlippage={(targetValue: string) => {
-                         swapStore.slippageIsAuto = false;
+      <SlippageControl
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        slippage={slippage}
+        onBack={() => setIsModalOpen(false)}
+        slippageIsAuto={slippageIsAuto}
+        onInputSlippage={(targetValue: string) => {
+          swapStore.slippageIsAuto = false;
 
-                         if (targetValue.startsWith(".")) {
-                           return;
-                         }
-                         if (
-                           targetValue !== "" &&
-                           !targetValue.match(/^\d*(\.\d{0,2})?$/)
-                         ) {
-                           return;
-                         }
-                         const newSlippage = targetValue.replace(/^0+/, "0"); // remove prefix zeros
+          if (targetValue.startsWith('.')) {
+            return;
+          }
+          if (targetValue !== '' && !targetValue.match(/^\d*(\.\d{0,2})?$/)) {
+            return;
+          }
+          const newSlippage = targetValue.replace(/^0+/, '0'); // remove prefix zeros
 
-                         swapStore.slippage = newSlippage;
-                       }}
-                       onQuickSet={(value: string) => {
-                         swapStore.slippageIsAuto = false;
-                         swapStore.slippage = value;
-                       }} />
+          swapStore.slippage = newSlippage;
+        }}
+        onQuickSet={(value: string) => {
+          swapStore.slippageIsAuto = false;
+          swapStore.slippage = value;
+        }}
+      />
     </>
   );
 }

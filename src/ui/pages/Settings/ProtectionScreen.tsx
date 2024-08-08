@@ -10,6 +10,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { ColorTypes, colors } from '@/ui/theme/colors';
+import { fontSizes } from '@/ui/theme/font';
 import { shortAddress, useWallet } from '@/ui/utils';
 
 export default function ProtectionScreen() {
@@ -55,9 +56,10 @@ export default function ProtectionScreen() {
         }}
         title="Protection"
       />
-      <Content style={{
-        marginTop: 16
-      }}>
+      <Content
+        style={{
+          marginTop: 16
+        }}>
         <Column>
           <Card style={{ borderRadius: 10 }}>
             <Column fullX>
@@ -182,29 +184,35 @@ const riskColor: { [key: string]: ColorTypes } = {
 export const EnableSignDataPopover = ({ onNext, onCancel }: { onNext: () => void; onCancel: () => void }) => {
   const [understand, setUnderstand] = useState(false);
   return (
-    <Popover onClose={onCancel}>
+    <Popover>
       <Column justifyCenter itemsCenter>
-        <Text text={'Use at your own risk'} textCenter preset="title-bold" color="orange" />
+        <Icon
+          icon={'warning'}
+          color={'icon_yellow'}
+          size={57}
+          style={{
+            marginTop: '8px'
+          }}
+        />
 
-        <Column mt="lg">
+        <Text
+          text="Use at your own risk"
+          mt="sm"
+          preset="title-bold"
+          style={{
+            fontSize: '16px'
+          }}
+        />
+
+        <Column gap="zero">
+          <div style={{ fontSize: fontSizes.sm, marginTop: 0 }} className="text-opacity-50 text-white">
+            Allowing signData requests can make you vulnerable to phishing attacks. Always review the URL and be careful
+            when signing messages that contain code.
+          </div>
+        </Column>
+
+        <Column mt="sm">
           <Column>
-            <Row>
-              <Text
-                text={
-                  'Allowing signData requests can make you vulnerable to phishing attacks. Always review the URL and be careful when signing messages that contain code.'
-                }
-              />
-            </Row>
-
-            <Row style={{ borderTopWidth: 1, borderColor: colors.border }} my="md" />
-
-            <Row style={{ backgroundColor: 'darkred', padding: 5, borderRadius: 5 }}>
-              <Row>
-                <Icon icon="info" size={40} color="white" />
-                <Text text={"If you've been asked to turn this setting on, you might be getting scammed"} />
-              </Row>
-            </Row>
-
             <Row>
               <Row>
                 <Checkbox
@@ -212,7 +220,20 @@ export const EnableSignDataPopover = ({ onNext, onCancel }: { onNext: () => void
                     setUnderstand(!understand);
                   }}
                   checked={understand}></Checkbox>
-                <Text text={'I understand that I can lose all of my funds and NFTs if I enable signData requests.'} />
+                <Text
+                  size="xs"
+                  text={'I understand that I can lose all of my funds and NFTs if I enable signData requests.'}
+                />
+              </Row>
+            </Row>
+
+            <Row style={{ backgroundColor: '#FF45451A', padding: 5, borderRadius: 10 }}>
+              <Row>
+                <Icon icon="warning" size={40} color="red_disconnect" />
+                <Text
+                  color="red_disconnect"
+                  text={"If you've been asked to turn this setting on, you might be getting scammed"}
+                />
               </Row>
             </Row>
           </Column>
