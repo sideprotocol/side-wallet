@@ -130,7 +130,6 @@ class PreferenceService {
         showSafeNotice: true,
         addressFlags: {},
         enableSignData: false,
-        autoLockTimeLimit: 0,  // 默认值为0，表示不启用自动锁屏
       }
     });
     if (!this.store.locale || this.store.locale !== defaultLang) {
@@ -501,16 +500,6 @@ class PreferenceService {
 
   setEnableSignData = (enableSignData: boolean) => {
     this.store.enableSignData = enableSignData;
-  };
-  // 设置自动锁屏时间（秒）
-  setAutoLockTime = (timeInSeconds: number) => {
-    this.store.autoLockTimeLimit = timeInSeconds;
-    // 可以在这里更新或启动一个定时器，但通常这会在其他地方处理
-  };
-
-  // 获取自动锁屏时间（秒）
-  getAutoLockTime = () => {
-    return this.store.autoLockTimeLimit;
   };
 
   reset = () => {

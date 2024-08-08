@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useRef } from 'react';
 import { HashRouter, Route, Routes, useNavigate as useNavigateOrigin } from 'react-router-dom';
 
-import IdleTimer, { useIdleTimer } from 'react-idle-timer';
+// import IdleTimer, { useIdleTimer } from 'react-idle-timer';
 import { ASSETS, SWAP_ASSETS } from '@/ui/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -407,6 +407,7 @@ const Main = () => {
 
   const isReady = useIsReady();
   const isUnlocked = useIsUnlocked();
+  // console.log(`isUnlocked: `, isUnlocked);
   useGetTokenPrice();
 
   const selfRef = useRef({
@@ -475,6 +476,7 @@ const Main = () => {
     wallet.hasVault().then((val) => {
       if (val) {
         wallet.isUnlocked().then((isUnlocked) => {
+          // console.log(`isUnlocked: `, isUnlocked);
           dispatch(globalActions.update({ isUnlocked }));
           if (!isUnlocked && location.href.includes(routes.UnlockScreen.path) === false) {
             const basePath = location.href.split('#')[0];
@@ -507,13 +509,6 @@ const Main = () => {
       </Layout>
     );
   }
-  // if (autoLockTimeLimit > 0) {
-  //   return (
-  //     <IdleTimer onAction={setLastActiveTime} throttle={1000}>
-  //       {routes}
-  //     </IdleTimer>
-  //   );
-  // }
 
   return (
     <HashRouter>

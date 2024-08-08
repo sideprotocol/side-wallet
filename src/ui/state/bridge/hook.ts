@@ -927,6 +927,7 @@ export const useRuneBridge = () => {
 };
 
 export const queryAddressUtxo = async (address: string) => {
+  if (!address) return;
   const utxos = await fetch(`${SIDE_BTC_INDEXER}/address/${address}/utxo`).then((res) => res.json());
 
   if (utxos.length === 1) {

@@ -165,7 +165,7 @@ function AmountInput(props: InputProps) {
     }
   };
   return (
-    <div  className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20]'} style={Object.assign({}, $baseContainerStyle, {})}>
+    <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20]'} style={Object.assign({}, $baseContainerStyle, {})}>
       <input
         placeholder={placeholder || 'Amount'}
         type={'text'}
@@ -351,10 +351,12 @@ export const AddressInput = (props: InputProps) => {
 };
 
 function TextInput(props: InputProps) {
-  const { placeholder, containerStyle, style: $inputStyleOverride, disabled, autoFocus, ...rest } = props;
+  const { placeholder, containerStyle, value, onChange, style: $inputStyleOverride, disabled, autoFocus, ...rest } = props;
   return (
     <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] '}  style={Object.assign({}, $baseContainerStyle, containerStyle)}>
       <input
+        value={value}
+        onChange={onChange}
         placeholder={placeholder}
         type={'text'}
         disabled={disabled}

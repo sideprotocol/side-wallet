@@ -9,6 +9,7 @@ export interface SettingsState {
   networkType: NetworkType;
   walletConfig: WalletConfig;
   skippedVersion: string;
+  unLockTimeLimit: number;
 }
 
 export const initialState: SettingsState = {
@@ -20,7 +21,8 @@ export const initialState: SettingsState = {
     moonPayEnabled: true,
     statusMessage: ''
   },
-  skippedVersion: ''
+  skippedVersion: '',
+  unLockTimeLimit: localStorage.getItem('unLockTimeLimit') ? Number(localStorage.getItem('unLockTimeLimit')) : 5
 };
 
 const slice = createSlice({
@@ -39,6 +41,7 @@ const slice = createSlice({
           networkType?: NetworkType;
           walletConfig?: WalletConfig;
           skippedVersion?: string;
+          unLockTimeLimit?: number;
         };
       }
     ) {

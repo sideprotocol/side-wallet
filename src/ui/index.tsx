@@ -17,6 +17,13 @@ import { AppDimensions } from './components/Responsive';
 import AsyncMainRoute from './pages/MainRoute';
 import store from './state';
 import { WalletProvider } from './utils';
+import {
+  preferenceService,
+  sessionService
+} from '@/background/service';
+import { globalActions } from '@/ui/state/global/reducer';
+import { useAppDispatch, useAppSelector } from '@/ui/state/hooks';
+import { SettingsState } from '@/ui/state/settings/reducer';
 
 // disabled sentry
 // Sentry.init({
@@ -134,54 +141,56 @@ eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
 });
 
 function Updaters() {
-  // const timeout = 10_000
-  // const promptBeforeIdle = 4_000
-  // const [state, setState] = useState<string>('Active')
-  // const [remaining, setRemaining] = useState<number>(timeout)
-  // const [open, setOpen] = useState<boolean>(false)
-  //
-  // const onIdle = () => {
-  //   setState('Idle')
-  //   setOpen(false)
-  // }
-  //
-  // const onActive = () => {
-  //   setState('Active')
-  //   setOpen(false)
-  // }
-  //
-  // const onPrompt = () => {
-  //   setState('Prompted')
-  //   setOpen(true)
-  // }
-  //
-  // const { getRemainingTime, activate } = useIdleTimer({
-  //   onIdle,
-  //   onActive,
-  //   onPrompt,
-  //   timeout,
-  //   promptBeforeIdle,
-  //   throttle: 500
-  // })
-  //
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setRemaining(Math.ceil(getRemainingTime() / 1000))
-  //   }, 500)
-  //
-  //   return () => {
-  //     clearInterval(interval)
-  //   }
-  // })
-  //
+  const settingsState = useAppSelector((state) => state.settings);
+  const dispatch = useAppDispatch();
+  // const timeout = settingsState.unLockTimeLimit * 60 * 1000
+  const timeout = location.href.split('#')[1] !== '/account/unlock' ? settingsState.unLockTimeLimit * 60 * 1000 : 1000;
+  const promptBeforeIdle = 0
+  const [state, setState] = useState<string>('Active')
+  const [remaining, setRemaining] = useState<number>(timeout)
+  const [open, setOpen] = useState<boolean>(false)
+
+  const onIdle = () => {
+    setState('Idle');
+    console.log(`settingsState: `, settingsState);
+    // setOpen(false)
+    dispatch(globalActions.update({ isUnlocked: false }));
+    const basePath = location.href.split('#')[0];
+    location.href = `${basePath}#/account/unlock`;
+  }
+
+  const onActive = () => {
+    setState('Active')
+  }
+
+  const onPrompt = () => {
+    setState('Prompted')
+  }
+
+  const { getRemainingTime, activate } = useIdleTimer({
+    onIdle,
+    onActive,
+    onPrompt,
+    timeout,
+    promptBeforeIdle,
+    throttle: 500
+  })
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // console.log(`Math.ceil(getRemainingTime() / 1000): `, Math.ceil(getRemainingTime() / 1000));
+      setRemaining(Math.ceil(getRemainingTime() / 1000))
+    }, 1000)
+    return () => {
+      clearInterval(interval)
+    }
+  })
   // const handleStillHere = () => {
   //   activate()
   // }
-  //
-  // const timeTillPrompt = Math.max(remaining - promptBeforeIdle / 1000, 0)
-  // const seconds = timeTillPrompt > 1 ? 'seconds' : 'second'
 
-
+  // const timeTillPrompt = Math.max(remaining - promptBeforeIdle / 1000, 0);
+  // const seconds = timeTillPrompt > 1 ? 'seconds' : 'second';
   return (
     <>
       <AccountUpdater />
