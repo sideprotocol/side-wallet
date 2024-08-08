@@ -133,6 +133,10 @@ interface IconProps {
   onMouseOver?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   children?: React.ReactNode;
+
+  height?: number | string;
+
+  width?: number | string;
 }
 
 export function Icon(props: IconProps) {
@@ -147,7 +151,9 @@ export function Icon(props: IconProps) {
     onClick,
     children,
     onMouseOver,
-    onMouseLeave
+    onMouseLeave,
+    height,
+    width
   } = props;
   if (!icon) {
     return (
@@ -181,8 +187,8 @@ export function Icon(props: IconProps) {
         src={iconPath}
         alt=""
         style={Object.assign({}, $containerStyleOverride, {
-          width: size || fontSizes.icon,
-          height: size || fontSizes.icon
+          width: height || size || fontSizes.icon,
+          height: width || size || fontSizes.icon
         })}
       />
     );
@@ -198,8 +204,8 @@ export function Icon(props: IconProps) {
             {},
             {
               color: color ? colors[color] : '#FFF',
-              width: size || fontSizes.icon,
-              height: size || fontSizes.icon,
+              width: height || size || fontSizes.icon,
+              height: width || size || fontSizes.icon,
               backgroundColor: color ? colors[color] : '#FFF',
               maskImage: `url(${iconPath})`,
               maskSize: contain ? 'contain' : 'cover',

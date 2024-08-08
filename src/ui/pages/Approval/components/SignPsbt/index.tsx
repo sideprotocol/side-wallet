@@ -1139,7 +1139,8 @@ export default function SignPsbt({
               <Icon
                 icon={isClickCopy ? 'check-circle-broken' : 'copy3'}
                 color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
-                size={20}
+                height={isClickCopy ? 20 : 16}
+                width={20}
               />
               <Text text={isClickCopy ? '' : ''} color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'} />
             </Row>
