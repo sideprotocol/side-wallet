@@ -236,7 +236,7 @@ export default function WalletTabScreen() {
                 className="" // Hide the default image on hover
               />
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px]">Receive</div>
+            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">Receive</div>
           </div>
 
           <div
@@ -253,7 +253,7 @@ export default function WalletTabScreen() {
                 className="" // Hide the default image on hover
               />
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px]">Send</div>
+            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">Send</div>
           </div>
         </Row>
 

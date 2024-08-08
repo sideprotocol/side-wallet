@@ -1,13 +1,23 @@
 const fonts = {
+  // ProtoMono: {
+  //   bold: 'ProtoMono-Bold',
+  //   regular: 'ProtoMono-Regular',
+  //   light: 'ProtoMono-Light'
+  // },
+  // Inter: {
+  //   bold: 'Inter-Bold',
+  //   regular: 'Inter-Regular',
+  //   light: 'Inter-Light'
+  // }
   ProtoMono: {
-    bold: 'ProtoMono-Bold',
-    regular: 'ProtoMono-Regular',
-    light: 'ProtoMono-Light'
+    bold: 'Saira-Italic',
+    regular: 'Saira-Italic',
+    light: 'Saira-Variable'
   },
   Inter: {
-    bold: 'Inter-Bold',
-    regular: 'Inter-Regular',
-    light: 'Inter-Light'
+    bold: 'Saira',
+    regular: 'Saira',
+    light: 'Saira'
   }
 };
 

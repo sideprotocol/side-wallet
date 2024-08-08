@@ -8,6 +8,10 @@ html {
     scroll-behavior: smooth;
 }
 
+html, body, div, span, applet, object, iframe {
+    font-family: 'Saira';
+}
+
 .popover-container {
   position: fixed;
   top: 0;

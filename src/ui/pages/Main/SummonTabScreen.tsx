@@ -221,7 +221,6 @@ export default function SettingsTabScreen() {
             <span style={{
               fontSize: '14px',
               color: colors.white,
-              fontFamily: 'Inter'
             }}> Comming soon </span>
           </Row>
         </Column>
