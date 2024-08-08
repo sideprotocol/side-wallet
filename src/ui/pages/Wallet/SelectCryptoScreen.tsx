@@ -52,11 +52,11 @@ function BitCrypto({searchTerm}) {
     type: 'receive' | 'send';
   };
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
-  let { data: bitcoinTokenList } = useGetBitcoinTokenList();
-  // console.log(`chain, type: `, chain, type);
-  bitcoinTokenList = bitcoinTokenList.filter((item) => {
-    return item.symbol.toLocaleLowerCase().includes(searchTerm.trim()) || item.name.toLocaleLowerCase().includes(searchTerm.trim());
-  })
+  // let { data: bitcoinTokenList } = useGetBitcoinTokenList();
+  // // console.log(`chain, type: `, chain, type);
+  // bitcoinTokenList = bitcoinTokenList.filter((item) => {
+  //   return item.symbol.toLocaleLowerCase().includes(searchTerm.trim()) || item.name.toLocaleLowerCase().includes(searchTerm.trim());
+  // })
   return (
     <>
       {runeAndBtcTokens.map((token) => {

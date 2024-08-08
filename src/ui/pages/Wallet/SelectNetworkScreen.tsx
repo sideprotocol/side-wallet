@@ -76,25 +76,6 @@ export default function SelectNetworkScreen() {
             src={number === 1 ? '/images/icons/wallet/side-selected.svg' : '/images/icons/wallet/side-select-dark.svg'}
           />
         </Column>
-        {/*<Row mt={'md'}>*/}
-        {/*  <Button*/}
-        {/*    full*/}
-        {/*    text={'Confirm'}*/}
-        {/*    preset="primary"*/}
-        {/*    disabled={!isCheck}*/}
-        {/*    onClick={async () => {*/}
-        {/*      if (number === -1) return;*/}
-        {/*      let chain = CHAINS_ENUM.BTC;*/}
-        {/*      if (number === 1) {*/}
-        {/*        chain = CHAINS_ENUM.SIDE;*/}
-        {/*      }*/}
-        {/*      navigate('SelectCryptoScreen', {*/}
-        {/*        chain,*/}
-        {/*        type*/}
-        {/*      });*/}
-        {/*    }}*/}
-        {/*  />*/}
-        {/*</Row>*/}
       </Content>
     </Layout>
   );
