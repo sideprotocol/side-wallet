@@ -1,4 +1,4 @@
-import { Icon } from '@/ui/components';
+import { Icon, Row } from '@/ui/components';
 import { fontSizes } from '@/ui/theme/font';
 
 import { Button } from '../Button';
@@ -10,21 +10,45 @@ export const EnableUnconfirmedPopover = ({ onClose, onConfirm }: { onClose: () =
   return (
     <Popover>
       <Column justifyCenter itemsCenter>
-        <Icon icon={'warning'} color={'icon_yellow'} size={57} />
+        <Icon
+          icon={'warning'}
+          color={'icon_yellow'}
+          size={57}
+          style={{
+            marginTop: '8px'
+          }}
+        />
 
-        <Text text="Enable Unconfirmed Balance" preset="title-bold" />
+        <Text
+          text="Enable Unconfirmed Balance"
+          mt="sm"
+          preset="title-bold"
+          style={{
+            fontSize: '16px'
+          }}
+        />
         <Column gap="zero">
-          <div style={{ fontSize: fontSizes.sm, color: '#ddd', marginTop: 20 }}>
+          <div style={{ fontSize: fontSizes.sm, marginTop: 0 }} className="text-opacity-50 text-white">
             If Runes (or ARC20) assets are detected in the given address, the unconfirmed UTXOs are explicitly not
             allowed to be spent until it's confirmed. Forcely spending these unconfirmed assets will incur the risks of
             losing assets.
           </div>
         </Column>
 
-        <Column full mt={'xl'}>
+        <Row full mt={'xl'}>
           <Button
-            text="Allow using Unconfirmed Balance"
-            preset="primaryV2"
+            text="Cancel"
+            full
+            preset="default"
+            onClick={(e) => {
+              if (onClose) {
+                onClose();
+              }
+            }}
+          />
+          <Button
+            text="Allow"
+            preset="primary"
             full
             onClick={(e) => {
               if (onConfirm) {
@@ -32,17 +56,7 @@ export const EnableUnconfirmedPopover = ({ onClose, onConfirm }: { onClose: () =
               }
             }}
           />
-          <Button
-            text="Cancel"
-            full
-            preset="defaultV2"
-            onClick={(e) => {
-              if (onClose) {
-                onClose();
-              }
-            }}
-          />
-        </Column>
+        </Row>
       </Column>
     </Popover>
   );
