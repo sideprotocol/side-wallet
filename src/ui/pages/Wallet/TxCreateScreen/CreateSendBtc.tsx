@@ -1,14 +1,16 @@
 import { Tooltip } from 'antd';
+import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
 
-import { COIN_DUST } from '@/shared/constant';
-import { RawTxInfo } from '@/shared/types';
-import { Button, Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
+import { COIN_DUST, SIDE_TOKENS } from '@/shared/constant';
+import { RawTxInfo, TxType } from '@/shared/types';
+import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { RBFBar } from '@/ui/components/RBFBar';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
+import { useSendRune } from '@/ui/state/send/hook';
 import {
   useBitcoinTx,
   useFetchUtxosCallback,
@@ -18,13 +20,21 @@ import {
 } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { amountToSatoshis, isValidAddress, satoshisToAmount } from '@/ui/utils';
+import { amountToSatoshis, isValidAddress, parseUnitAmount, satoshisToAmount, useLocationState } from '@/ui/utils';
+
+interface LocationState {
+  base: string;
+  token: any;
+}
 
 export default function CreateSendBtc() {
   const accountBalance = useAccountBalance();
   const safeBalance = useSafeBalance();
   const navigate = useNavigate();
   const bitcoinTx = useBitcoinTx();
+
+  const { base, token } = useLocationState<LocationState>();
+  console.log('base: ', base, token);
 
   const [disabled, setDisabled] = useState(true);
 
@@ -63,6 +73,8 @@ export default function CreateSendBtc() {
   const dustAmount = useMemo(() => satoshisToAmount(COIN_DUST), [COIN_DUST]);
 
   const [rawTxInfo, setRawTxInfo] = useState<RawTxInfo>();
+
+  const { sendRune } = useSendRune();
 
   const spendUnavailableUtxos = useSpendUnavailableUtxos();
   const spendUnavailableSatoshis = useMemo(() => {
@@ -134,6 +146,8 @@ export default function CreateSendBtc() {
       });
   }, [toInfo, inputAmount, feeRate, enableRBF]);
 
+  const isRune = !!token?.denom?.includes('runes');
+
   return (
     <Layout
       style={{
@@ -143,7 +157,7 @@ export default function CreateSendBtc() {
         onBack={() => {
           window.history.go(-1);
         }}
-        title="Send BTC"
+        title={`Send ${token.symbol}`}
       />
 
       <Row
@@ -165,7 +179,8 @@ export default function CreateSendBtc() {
           style={{
             marginTop: '6px'
           }}>
-          <Icon icon="btc" size={50} />
+          <Image src={token.logo} size={50}></Image>
+          {/* <Icon icon={token.logo || 'btc'} size={50} /> */}
         </Row>
       </Row>
 
@@ -299,7 +314,29 @@ export default function CreateSendBtc() {
             preset="primary"
             text="Next"
             onClick={(e) => {
-              navigate('TxConfirmScreen', { rawTxInfo });
+              if (isRune) {
+                const asset = SIDE_TOKENS.find((a) => a.base === base);
+
+                const unitAmount = BigNumber(parseUnitAmount(inputAmount, asset?.exponent || 6)).toNumber();
+
+                sendRune({
+                  to: toInfo.address,
+                  fee: feeRate,
+                  amount: unitAmount,
+                  base: token.base
+                })
+                  .then((res) => {
+                    navigate('TxConfirmScreen', {
+                      rawTxInfo: res,
+                      type: TxType.SEND_RUNE_TEST
+                    });
+                  })
+                  .catch((error) => {
+                    navigate('TxFailScreen', { error: error.message });
+                  });
+              } else {
+                navigate('TxConfirmScreen', { rawTxInfo });
+              }
             }}></Button>
         </Column>
       </Content>
