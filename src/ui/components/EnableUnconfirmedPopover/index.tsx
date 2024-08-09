@@ -1,4 +1,4 @@
-import { Icon, Row } from '@/ui/components';
+import { Icon } from '@/ui/components';
 import { fontSizes } from '@/ui/theme/font';
 
 import { Button } from '../Button';
@@ -10,15 +10,11 @@ export const EnableUnconfirmedPopover = ({ onClose, onConfirm }: { onClose: () =
   return (
     <Popover>
       <Column justifyCenter itemsCenter>
-        <Icon
-          icon={'warning'}
-          color={'icon_yellow'}
-          size={57}
-          style={{
-            marginTop: '8px'
-          }}
-        />
-
+        <div className="w-[68px] bg-[#282521] h-[68px] rounded-full flex items-center justify-center">
+          <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center bg-[#F0B622] bg-opacity-10">
+            <Icon icon={'warning2'} color={'icon_yellow'} size={24} />
+          </div>
+        </div>
         <Text
           text="Enable Unconfirmed Balance"
           mt="sm"
@@ -35,28 +31,36 @@ export const EnableUnconfirmedPopover = ({ onClose, onConfirm }: { onClose: () =
           </div>
         </Column>
 
-        <Row full mt={'xl'}>
+        <Column full mt={'xl'}>
+          <Button
+            text="Allow using unconfirmed balance"
+            preset="primary"
+            onClick={(e) => {
+              if (onConfirm) {
+                onConfirm();
+              }
+            }}
+            style={{
+              fontWeight: 600,
+              fontSize: fontSizes.sm,
+              height: 48
+            }}
+          />
           <Button
             text="Cancel"
-            full
             preset="default"
             onClick={(e) => {
               if (onClose) {
                 onClose();
               }
             }}
-          />
-          <Button
-            text="Allow"
-            preset="primary"
-            full
-            onClick={(e) => {
-              if (onConfirm) {
-                onConfirm();
-              }
+            style={{
+              fontWeight: 600,
+              fontSize: fontSizes.sm,
+              height: 48
             }}
           />
-        </Row>
+        </Column>
       </Column>
     </Popover>
   );

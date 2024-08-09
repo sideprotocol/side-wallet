@@ -186,14 +186,11 @@ export const EnableSignDataPopover = ({ onNext, onCancel }: { onNext: () => void
   return (
     <Popover>
       <Column justifyCenter itemsCenter>
-        <Icon
-          icon={'warning'}
-          color={'icon_yellow'}
-          size={57}
-          style={{
-            marginTop: '8px'
-          }}
-        />
+        <div className="w-[68px] bg-[#282521] h-[68px] rounded-full flex items-center justify-center">
+          <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center bg-[#F0B622] bg-opacity-10">
+            <Icon icon={'warning2'} color={'icon_yellow'} size={24} />
+          </div>
+        </div>
 
         <Text
           text="Use at your own risk"
@@ -213,6 +210,16 @@ export const EnableSignDataPopover = ({ onNext, onCancel }: { onNext: () => void
 
         <Column mt="sm">
           <Column>
+            <Row style={{ backgroundColor: '#FF45451A', padding: 5, borderRadius: 10 }}>
+              <Row>
+                <Icon icon={'warning2'} color={'red_disconnect'} size={24} />
+
+                <Text
+                  color="red_disconnect"
+                  text={"If you've been asked to turn this setting on, you might be getting scammed"}
+                />
+              </Row>
+            </Row>
             <Row>
               <Row>
                 <Checkbox
@@ -223,16 +230,6 @@ export const EnableSignDataPopover = ({ onNext, onCancel }: { onNext: () => void
                 <Text
                   size="xs"
                   text={'I understand that I can lose all of my funds and NFTs if I enable signData requests.'}
-                />
-              </Row>
-            </Row>
-
-            <Row style={{ backgroundColor: '#FF45451A', padding: 5, borderRadius: 10 }}>
-              <Row>
-                <Icon icon="warning" size={40} color="red_disconnect" />
-                <Text
-                  color="red_disconnect"
-                  text={"If you've been asked to turn this setting on, you might be getting scammed"}
                 />
               </Row>
             </Row>
@@ -249,9 +246,15 @@ export const EnableSignDataPopover = ({ onNext, onCancel }: { onNext: () => void
                 onCancel();
               }
             }}
+            style={{
+              fontWeight: '600'
+            }}
           />
           <Button
             text="Continue"
+            style={{
+              fontWeight: '600'
+            }}
             full
             disabled={!understand}
             preset="primary"

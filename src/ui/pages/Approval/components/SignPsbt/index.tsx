@@ -33,7 +33,7 @@ import {
 import { colors } from '@/ui/theme/colors';
 import { fontSizes } from '@/ui/theme/font';
 import { copyToClipboard, satoshisToAmount, shortAddress, useApproval, useWallet } from '@/ui/utils';
-import { LoadingOutlined, RightOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
 
 interface Props {
   header?: React.ReactNode;
@@ -839,11 +839,6 @@ export default function SignPsbt({
                 </Text>
               </Row>
             </Column>
-
-            <RightOutlined
-              style={{
-                flexShrink: 0
-              }}></RightOutlined>
           </Row>
 
           {detailsComponent}
