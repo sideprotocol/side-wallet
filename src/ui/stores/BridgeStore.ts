@@ -9,6 +9,7 @@ export interface ChainItem {
 export interface DepositBTCBridge {
   amount: number;
   fee: number;
+  to?: string;
 }
 
 interface Status {

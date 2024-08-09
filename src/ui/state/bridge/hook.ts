@@ -698,15 +698,15 @@ export const useRuneBridge = () => {
     bridgeStore.loading = true;
 
     if (isDeposit) {
-      const filteredPendingTxs = await updateProofs();
+      // const filteredPendingTxs = await updateProofs();
 
-      if (filteredPendingTxs.length > 0) {
-        tools.toastError(
-          'Please wait for the pending Rune bridging transaction to complete before starting a new request.'
-        );
+      // if (filteredPendingTxs.length > 0) {
+      //   tools.toastError(
+      //     'Please wait for the pending Rune bridging transaction to complete before starting a new request.'
+      //   );
 
-        return;
-      }
+      //   return;
+      // }
       try {
         depositRune({
           amount: unitAmount,
@@ -717,8 +717,6 @@ export const useRuneBridge = () => {
           })
           .then((res) => {
             if (res) {
-              // tools.toastSuccess('Deposit Successful! ');
-
               const item: BridgeTxItem = {
                 amount: bridgeAmount,
                 time: Date.now() / 1000,
@@ -771,14 +769,16 @@ export const useRuneBridge = () => {
   const wallet = useWallet();
 
   const depositRune = async (params: DepositBTCBridge) => {
-    const { amount, fee } = params;
+    const { amount, fee, to } = params;
     const senderAddress = currentAccount.address;
+
+    const runeAmount = BigNumber(amount).toFixed();
 
     const runeid = base?.substring(6);
 
-    const rawUtxos = (
-      await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) => res.json())
-    ).filter((utxo) => utxo.value !== 546);
+    const rawUtxos = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) =>
+      res.json()
+    );
 
     const btcRawUtxos = await Promise.all(
       rawUtxos.map(async (item) => {
@@ -796,22 +796,18 @@ export const useRuneBridge = () => {
 
     const isTaproot = decodeBech32.version === 1 && decodeBech32.data.length === 32;
 
-    btcRawUtxos.forEach((tx) => {
-      const realUtxo = rawUtxos.find((utxo) => utxo.txid === tx.txid);
-      if (!realUtxo) return;
-
+    btcRawUtxos.forEach((tx, index) => {
       btcUtxos.push({
         txid: tx.txid,
-        vout: realUtxo.vout,
-        satoshis: realUtxo.value,
-        scriptPk: tx.vout[realUtxo.vout].scriptpubkey,
+        vout: rawUtxos[index].vout,
+        satoshis: rawUtxos[index].value,
+        scriptPk: tx.vout[rawUtxos[index].vout].scriptpubkey,
         pubkey: currentAccount.pubkey,
         inscriptions: [],
         atomicals: [],
         addressType: isTaproot ? 2 : 1
       });
     });
-
     const runesOutputsData = rawUtxos.map((utxo) => `${utxo.txid}:${utxo.vout}`);
 
     const allRunes = await fetch(`${SIDE_RUNE_INDEXER}/runes`, {
@@ -855,7 +851,7 @@ export const useRuneBridge = () => {
       const v = assetUtxos[i];
       if (v.runes && v.runes.length > 1) {
         const balance = v.runes.find((r) => r.runeid == runeid);
-        if (balance && balance.amount == BigNumber(amount).toFixed()) {
+        if (balance && balance.amount == runeAmount) {
           _assetUtxos.push(v);
           break;
         }
@@ -867,7 +863,7 @@ export const useRuneBridge = () => {
         const v = assetUtxos[i];
         if (v.runes) {
           const balance = v.runes.find((r) => r.runeid == runeid);
-          if (balance && balance.amount == BigNumber(amount).toFixed()) {
+          if (balance && balance.amount == runeAmount) {
             _assetUtxos.push(v);
             break;
           }
@@ -885,7 +881,7 @@ export const useRuneBridge = () => {
           }
         });
         _assetUtxos.push(v);
-        if (total >= BigInt(BigNumber(amount).toFixed())) {
+        if (total >= BigInt(runeAmount)) {
           break;
         }
       }
@@ -897,7 +893,7 @@ export const useRuneBridge = () => {
       assetUtxos,
       btcUtxos: btcUtxos.filter((utxo) => utxo.satoshis !== 546),
       networkType: networkType === NetworkType.MAINNET ? 0 : 1,
-      toAddress: RUNE_BRIDGE_VAULT,
+      toAddress: to || RUNE_BRIDGE_VAULT,
       assetAddress: senderAddress,
       btcAddress: senderAddress,
       feeRate: fee,

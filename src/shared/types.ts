@@ -184,7 +184,8 @@ export enum TxType {
   SEND_BITCOIN,
   SEND_ORDINALS_INSCRIPTION,
   SEND_ATOMICALS_INSCRIPTION,
-  SEND_SIDE
+  SEND_SIDE,
+  SEND_RUNE_TEST
 }
 
 interface BaseUserToSignInput {

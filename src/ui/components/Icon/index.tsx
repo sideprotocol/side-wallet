@@ -58,6 +58,7 @@ export const svgRegistry = {
   atomicals: '/images/icons/atomicals.svg',
   info: '/images/icons/info.svg',
   warning: '/images/icons/warning.svg',
+  warning2: '/images/icons/alert-triangle.svg',
   alert: '/images/icons/alert.svg',
   burn: ' /images/icons/burn.svg',
   risk: '/images/icons/risk.svg',

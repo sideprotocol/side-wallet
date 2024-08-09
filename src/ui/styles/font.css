@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
 @font-face {
   font-family: ProtoMono-Bold;
   src: url('./fonts/ProtoMono-Bold.otf');
@@ -38,16 +39,5 @@
 }
 
 @font-face {
-    font-family: Saira;
-    font-style: normal;
-    font-weight: 300;
-    /*src: url('./fonts/Saira-Italic-VariableFont_wdth,wght.ttf');*/
-    src: url('./fonts/Saira.woff2') format('woff2');
-}
-
-@font-face {
-    font-family: Saira-Variable;
-    font-style: normal;
-    font-weight: 600;
-    src: url('./fonts/Saira-VariableFont_wdth,wght.ttf');
+  font-family: Saira;
 }

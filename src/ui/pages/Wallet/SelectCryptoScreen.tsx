@@ -1,19 +1,19 @@
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { CHAINS_ENUM } from '@/shared/constant';
 import { BitcoinToken, SideToken } from '@/shared/types';
 import { Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
+import ImageIcon from '@/ui/components/ImageIcon';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
-import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
+import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
+import { useRuneAndBtcBalances } from '@/ui/state/bridge/hook';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
-import React, {useState} from 'react';
 
 import { useNavigate } from '../MainRoute';
-import ImageIcon from '@/ui/components/ImageIcon';
-import { useRuneAndBtcBalances } from '@/ui/state/bridge/hook';
 
 function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
   const accountBalance = useAccountBalance();
@@ -43,7 +43,7 @@ function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
   );
 }
 
-function BitCrypto({searchTerm}) {
+function BitCrypto({ searchTerm }) {
   const runeAndBtcTokens = useRuneAndBtcBalances();
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -52,11 +52,7 @@ function BitCrypto({searchTerm}) {
     type: 'receive' | 'send';
   };
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
-  // let { data: bitcoinTokenList } = useGetBitcoinTokenList();
-  // // console.log(`chain, type: `, chain, type);
-  // bitcoinTokenList = bitcoinTokenList.filter((item) => {
-  //   return item.symbol.toLocaleLowerCase().includes(searchTerm.trim()) || item.name.toLocaleLowerCase().includes(searchTerm.trim());
-  // })
+
   return (
     <>
       {runeAndBtcTokens.map((token) => {
@@ -68,7 +64,7 @@ function BitCrypto({searchTerm}) {
                 navigate('SelectAddressScreen', { ...state, base: token.symbol, token });
               } else {
                 resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { ...state, base: token.symbol });
+                navigate('TxCreateScreen', { ...state, base: token.symbol, token });
               }
             }}
             full
@@ -78,7 +74,7 @@ function BitCrypto({searchTerm}) {
               cursor: 'pointer',
               margin: '0 16px',
               padding: '10px 16px',
-              height: '44px',
+              height: '44px'
             }}>
             <BitcoinCryptoItem token={token} />
           </Row>
@@ -95,14 +91,17 @@ function SideCryptoItem({ token }: { token: SideToken }) {
   return (
     <>
       <Row classname={'bg-item-hover'}>
-        <ImageIcon url={token.logo} style={{
-          width: '38px',
-          height: '38px',
-          borderRadius: '50%',
-        }} />
+        <ImageIcon
+          url={token.logo}
+          style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%'
+          }}
+        />
         <Column
           style={{
-            gap: '0px',
+            gap: '0px'
           }}>
           <Text preset="regular" text={token.symbol}></Text>
           <Text preset="sub" text={token.name}></Text>
@@ -120,7 +119,7 @@ function SideCryptoItem({ token }: { token: SideToken }) {
   );
 }
 
-function SideCrypto({searchTerm}) {
+function SideCrypto({ searchTerm }) {
   // console.log(`searchTerm: `, searchTerm);
   // debugger;
   const navigate = useNavigate();
@@ -132,8 +131,11 @@ function SideCrypto({searchTerm}) {
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
   let { data: sideTokenList } = useGetSideTokenList();
   sideTokenList = sideTokenList.filter((item) => {
-    return item.symbol.toLocaleLowerCase().includes(searchTerm.trim()) || item.name.toLocaleLowerCase().includes(searchTerm.trim());
-  })
+    return (
+      item.symbol.toLocaleLowerCase().includes(searchTerm.trim()) ||
+      item.name.toLocaleLowerCase().includes(searchTerm.trim())
+    );
+  });
   return (
     <>
       {sideTokenList.map((token) => {
@@ -155,7 +157,7 @@ function SideCrypto({searchTerm}) {
               margin: '0 16px',
               cursor: 'pointer',
               padding: '10px 16px',
-              height: '44px',
+              height: '44px'
             }}>
             <SideCryptoItem token={token} />
           </Row>
@@ -184,14 +186,17 @@ export default function SelecCryptoScreen() {
         style={{
           backgroundColor: '#09090A',
           padding: 0,
-          marginTop: '16px',
+          marginTop: '16px'
         }}>
-        <Column style={{
-          padding: '0 16px',
-          // margin: '0 16px'
-        }}>
+        <Column
+          style={{
+            padding: '0 16px'
+            // margin: '0 16px'
+          }}>
           <div
-            className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] px-[10px] flex items-center rounded-[10px] bg-[#1E1E1F] relative gap-[8px]'}>
+            className={
+              'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] px-[10px] flex items-center rounded-[10px] bg-[#1E1E1F] relative gap-[8px]'
+            }>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
             <Input
               value={searchTerm}
@@ -207,28 +212,30 @@ export default function SelecCryptoScreen() {
               containerStyle={{
                 width: '100%',
                 border: 'none',
-                padding: '0',
+                padding: '0'
               }}
               placeholder="Search crypto"
             />
-            <div onClick={() => {
-              setSearchTerm('');
-            }} style={{
-              position: 'absolute',
-              right: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              cursor: 'pointer',
-              display: searchTerm ? 'block' : 'none'
-            }}>
+            <div
+              onClick={() => {
+                setSearchTerm('');
+              }}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+                display: searchTerm ? 'block' : 'none'
+              }}>
               <Icon icon="clear" color={'search_icon'} size={20}></Icon>
             </div>
           </div>
         </Column>
 
-        <Column style={{
-          // marginTop: '14px',
-        }}>{chain === CHAINS_ENUM.SIDE ? <SideCrypto searchTerm={searchTerm} /> : <BitCrypto searchTerm={searchTerm} />}</Column>
+        <Column>
+          {chain === CHAINS_ENUM.SIDE ? <SideCrypto searchTerm={searchTerm} /> : <BitCrypto searchTerm={searchTerm} />}
+        </Column>
       </Content>
     </Layout>
   );
