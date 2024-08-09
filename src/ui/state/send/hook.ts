@@ -38,8 +38,8 @@ export const useSendRune = () => {
 
   const wallet = useWallet();
 
-  const sendRune = async (params: DepositBTCBridge & { base: string }) => {
-    const { amount, fee, to, base } = params;
+  const sendRune = async (params: DepositBTCBridge & { base: string; enableRBF: boolean; outputValue: number }) => {
+    const { amount, fee, to, base, enableRBF, outputValue } = params;
     const senderAddress = currentAccount.address;
 
     const runeAmount = BigNumber(amount).toFixed();
@@ -169,8 +169,8 @@ export const useSendRune = () => {
       feeRate: fee,
       runeid: runeid!,
       runeAmount: BigNumber(amount).toFixed(),
-      outputValue: 546, //
-      enableRBF: true
+      outputValue: outputValue || 546, //
+      enableRBF: enableRBF
     });
     const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 

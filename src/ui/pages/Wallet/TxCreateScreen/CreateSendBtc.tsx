@@ -34,7 +34,6 @@ export default function CreateSendBtc() {
   const bitcoinTx = useBitcoinTx();
 
   const { base, token } = useLocationState<LocationState>();
-  console.log('base: ', base, token);
 
   const [disabled, setDisabled] = useState(true);
 
@@ -323,7 +322,8 @@ export default function CreateSendBtc() {
                   to: toInfo.address,
                   fee: feeRate,
                   amount: unitAmount,
-                  base: token.base
+                  base: token.base,
+                  enableRBF
                 })
                   .then((res) => {
                     navigate('TxConfirmScreen', {
