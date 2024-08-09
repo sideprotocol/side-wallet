@@ -17,3 +17,20 @@ export const AppDimensions = (props) => {
     />
   );
 };
+
+export const AppSideDimensions = (props) => {
+  // const extensionIsInTab = useExtensionIsInTab();
+  return (
+    <div
+      style={{
+        width: '100vw',
+        height: '100vh',
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      {...props}
+    />
+  );
+};

@@ -15,8 +15,8 @@ export default function WelcomeScreen() {
 
   return (
     <Layout style={{
-      maxWidth: '375px',
-      height: '600px',
+      maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
+      height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
       overflow: 'hidden',
     }}>
       {state?.addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}

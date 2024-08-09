@@ -163,7 +163,8 @@ const config = (env) => {
       background: paths.rootResolve('src/background/index.ts'),
       'content-script': paths.rootResolve('src/content-script/index.ts'),
       pageProvider: paths.rootResolve('src/content-script/pageProvider/index.ts'),
-      ui: paths.rootResolve('src/ui/index.tsx')
+      ui: paths.rootResolve('src/ui/index.tsx'),
+      side: paths.rootResolve('src/ui/sidePanel.tsx'),
     },
     output: {
       path: paths.dist,
@@ -455,13 +456,6 @@ const config = (env) => {
       new ESLintWebpackPlugin({
         extensions: ['ts', 'tsx', 'js', 'jsx']
       }),
-      // new AntdDayjsWebpackPlugin(),
-      // new HtmlWebpackPlugin({
-      //   inject: true,
-      //   template: paths.popupHtml,
-      //   chunks: ['ui'],
-      //   filename: 'popup.html',
-      // }),
       new HtmlWebpackPlugin({
         inject: true,
         template: paths.notificationHtml,
@@ -473,6 +467,12 @@ const config = (env) => {
         template: paths.indexHtml,
         chunks: ['ui'],
         filename: 'index.html'
+      }),
+      new HtmlWebpackPlugin({
+        inject: true,
+        template: paths.sidePanelHtml,
+        chunks: ['ui'],
+        filename: 'sidePanel.html'
       }),
       new HtmlWebpackPlugin({
         inject: true,
@@ -519,7 +519,7 @@ const config = (env) => {
         https: require.resolve('https-browserify'),
         buffer: require.resolve('buffer/')
       },
-      extensions: ['.js', 'jsx', '.ts', '.tsx']
+      extensions: ['.js', '.jsx', '.ts', '.tsx']
     },
     stats: 'minimal',
     // optimization: {

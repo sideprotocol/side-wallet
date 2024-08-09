@@ -149,9 +149,10 @@ function Updaters() {
   const onIdle = () => {
     setState('Idle');
     console.log(`settingsState: `, settingsState);
-    // dispatch(globalActions.update({ isUnlocked: false }));
-    // const basePath = location.href.split('#')[0];
-    // location.href = `${basePath}#/account/unlock`;
+    // setOpen(false)
+    dispatch(globalActions.update({ isUnlocked: false }));
+    const basePath = location.href.split('#')[0];
+    location.href = `${basePath}#/account/unlock`;
   }
 
   const onActive = () => {
@@ -193,43 +194,6 @@ function Updaters() {
   );
 }
 
-// wallet.getLocale().then((locale) => {
-//   addResourceBundle(locale).then(() => {
-//     i18n.changeLanguage(locale);
-//     // ReactDOM.render(<Views wallet={wallet} />, document.getElementById('root'));
-//     const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-//     root.render(
-//       <Provider store={store}>
-//         <WalletProvider {...antdConfig} wallet={wallet as any}>
-//           <AppDimensions>
-//             <Updaters />
-//             <AsyncMainRoute />
-//           </AppDimensions>
-//         </WalletProvider>
-//       </Provider>
-//     );
-//   });
-// });
-
-
-let root = document.getElementById('root') && ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-if (root) {
-  root.render(
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <WalletProvider {...antdConfig} wallet={wallet as any}>
-          <ActionComponentProvider>
-            <AppDimensions>
-              <Updaters />
-              <AsyncMainRoute />
-            </AppDimensions>
-          </ActionComponentProvider>
-        </WalletProvider>
-      </QueryClientProvider>
-    </Provider>
-  );
-}
-
 let root2 = document.getElementById('side') && ReactDOM.createRoot(document.getElementById('side') as HTMLElement);
 if (root2) {
   root2.render(
@@ -247,24 +211,6 @@ if (root2) {
     </Provider>
   );
 }
-
-// if (root2) {
-//   const root2 = ReactDOM.createRoot(document.getElementById('side') as HTMLElement);
-//   root2.render(
-//     <Provider store={store}>
-//       <QueryClientProvider client={queryClient}>
-//         <WalletProvider {...antdConfig} wallet={wallet as any}>
-//           <ActionComponentProvider>
-//             <AppSideDimensions>
-//               <Updaters />
-//               <AsyncMainRoute />
-//             </AppSideDimensions>
-//           </ActionComponentProvider>
-//         </WalletProvider>
-//       </QueryClientProvider>
-//     </Provider>
-//   );
-// }
 
 
 

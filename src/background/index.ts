@@ -27,6 +27,7 @@ async function restoreAppState() {
   await preferenceService.init();
 
   console.log('init');
+  // debugger;
 
   await openapiService.init();
 
@@ -127,6 +128,8 @@ browserRuntimeOnInstalled((details) => {
   }
 });
 
+
+
 if (MANIFEST_VERSION === 'mv3') {
   // Keep alive for MV3
   const INTERNAL_STAYALIVE_PORT = 'CT_Internal_port_alive';
@@ -158,4 +161,9 @@ if (MANIFEST_VERSION === 'mv3') {
       }
     }
   }, 5000);
+
+  chrome.sidePanel
+    .setPanelBehavior({ openPanelOnActionClick: false })
+    .catch((error) => console.error(error));
+
 }

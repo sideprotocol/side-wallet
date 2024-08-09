@@ -28,7 +28,7 @@
     "service_worker": "background.js"
   },
   "homepage_url": "https://side.one/",
-  "permissions": ["storage", "unlimitedStorage", "activeTab", "sidePanel", "contextMenus", "scripting"],
+  "permissions": ["storage", "unlimitedStorage", "activeTab", "sidePanel", "contextMenus", "scripting", "documentScan"],
   "short_name": "__MSG_appName__",
 
   "content_scripts": [
@@ -52,7 +52,7 @@
   "minimum_chrome_version": "88",
 
   "side_panel": {
-    "default_path": "index.html",
+    "default_path": "sidePanel.html#/main",
     "openPanelOnActionClick": true
   }
 }

@@ -107,7 +107,7 @@ export default function CreatePasswordScreen() {
 
   return (
     <Layout style={{
-      maxWidth: '375px',
+      maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
     }}>
       <Header onBack={() => navigateRouter(-1)} title="Create Password"></Header>
       <Column

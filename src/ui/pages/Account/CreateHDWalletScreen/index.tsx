@@ -91,8 +91,8 @@ export default function CreateHDWalletScreen() {
 
   return (
     <Layout style={{
-      maxWidth: '375px',
-      height: '600px',
+      maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
+      height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
       overflowY: 'hidden',
     }}>
       <Header

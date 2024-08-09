@@ -100,8 +100,8 @@ export default function WalletTabScreen() {
   return (
     <Layout
       style={{
-        minHeight: '600px',
-        height: '600px'
+        minHeight: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
+        height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px'
       }}>
       <Header
         LeftComponent={
@@ -135,10 +135,46 @@ export default function WalletTabScreen() {
           )
         }
         // RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
-        RightComponent={''}
-        // onClickRight={() => {
-        //   // navigate('SettingsTabScreen');
-        // }}
+        RightComponent={window.location.pathname !== '/sidePanel.html' ? 'open' : 'close'}
+        onClickRight={async () => {
+          if (window.location.pathname === '/sidePanel.html') {
+            // console.log(`here: `);
+            // chrome.sidePanel.close();
+            chrome.sidePanel
+              .setPanelBehavior({ openPanelOnActionClick: false })
+              .catch((error) => console.error(error));
+            setTimeout(() => {
+              window.close();
+            }, 500);
+            // debugger;
+          } else {
+            window.close();
+            chrome.sidePanel
+              .setPanelBehavior({ openPanelOnActionClick: true })
+              .catch((error) => console.error(error));
+            const [tab] = await chrome.tabs.query({
+              active: true,
+              lastFocusedWindow: true
+            });
+            const tabId = tab.id;
+            await chrome.sidePanel.open({ tabId });
+            await chrome.sidePanel.setOptions({
+              tabId,
+              path: 'sidePanel.html#/main',
+              enabled: true
+            });
+            // chrome.runtime.sendMessage({
+            //   type: 'open_side_panel',
+            // });
+          }
+          // chrome.sidePanel
+          //   .setPanelBehavior({ openPanelOnActionClick: true })
+          //   .catch((error) => console.error(error));
+          // chrome.sidePanel.setOptions({ path: 'sidePanel.html#/main' }, () => {
+          //   console.log(`e: `, e);
+          // });
+
+        }}
       />
       <Column
         classname={'smooth-scroll'}

@@ -86,7 +86,6 @@ export interface PreferenceStore {
   showSafeNotice: boolean;
   addressFlags: { [key: string]: number };
   enableSignData: boolean;
-  autoLockTimeLimit: number;
 }
 
 const SUPPORT_LOCALES = ['en'];
