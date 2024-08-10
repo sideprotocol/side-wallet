@@ -191,7 +191,8 @@ export default function SideTxConfirmScreen() {
           style={{
             padding: '16px 12px',
             borderRadius: '10px',
-            backgroundColor: '#1E1E1F'
+            backgroundColor: '#1E1E1F',
+            opacity: 0
           }}>
           <Text
             text="Tx Fee:"

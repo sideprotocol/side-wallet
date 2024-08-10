@@ -173,6 +173,7 @@ export default function CreateSendSide() {
           style={{
             padding: '16px 12px',
             borderRadius: '10px',
+            opacity: 0,
           }}>
           <Text
             text="Tx Fee:"

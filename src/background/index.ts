@@ -165,5 +165,4 @@ if (MANIFEST_VERSION === 'mv3') {
   chrome.sidePanel
     .setPanelBehavior({ openPanelOnActionClick: false })
     .catch((error) => console.error(error));
-
 }

@@ -25,6 +25,7 @@ import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
 import BtcTokenList from './BtcTokenList';
 import SideTokenList from './SideTokenList';
+import MainHeader from '../MainHeader';
 
 export default function WalletTabScreen() {
   const navigate = useNavigate();
@@ -103,79 +104,7 @@ export default function WalletTabScreen() {
         minHeight: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
         height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px'
       }}>
-      <Header
-        LeftComponent={
-          // connected ? (
-          //   <Row
-          //     itemsCenter
-          //     onClick={() => {
-          //       navigate('ConnectedSitesScreen');
-          //     }}>
-          //     <Text text="·" color="green" size="xxl" />
-          //     <Text text="Dapp Connected" size="xxs" />
-          //   </Row>
-          // ) : (
-          //   <Image src="/images/logo/wallet-logo-white.svg" size={fontSizes.xxl} />
-          // )
-          <>
-            <Image
-              onClick={() => {
-                navigate('SettingsTabScreen');
-              }}
-              src="/images/icons/main/menu-icon.svg"
-              size={fontSizes.xxl}
-            />
-          </>
-        }
-        title={
-          currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
-            <AccountSelect />
-          ) : (
-            ''
-          )
-        }
-        // RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
-        RightComponent={window.location.pathname !== '/sidePanel.html' ? 'open' : 'close'}
-        onClickRight={async () => {
-          if (window.location.pathname === '/sidePanel.html') {
-            // console.log(`here: `);
-            // chrome.sidePanel.close();
-            chrome.sidePanel
-              .setPanelBehavior({ openPanelOnActionClick: false })
-              .catch((error) => console.error(error));
-            setTimeout(() => {
-              window.close();
-            }, 500);
-            // debugger;
-          } else {
-            window.close();
-            chrome.sidePanel
-              .setPanelBehavior({ openPanelOnActionClick: true })
-              .catch((error) => console.error(error));
-            const [tab] = await chrome.tabs.query({
-              active: true,
-              lastFocusedWindow: true
-            });
-            const tabId = tab.id;
-            await chrome.sidePanel.open({ tabId });
-            await chrome.sidePanel.setOptions({
-              tabId,
-              path: 'sidePanel.html#/main',
-              enabled: true
-            });
-            // chrome.runtime.sendMessage({
-            //   type: 'open_side_panel',
-            // });
-          }
-          // chrome.sidePanel
-          //   .setPanelBehavior({ openPanelOnActionClick: true })
-          //   .catch((error) => console.error(error));
-          // chrome.sidePanel.setOptions({ path: 'sidePanel.html#/main' }, () => {
-          //   console.log(`e: `, e);
-          // });
-
-        }}
-      />
+      <MainHeader title={''} />
       <Column
         classname={'smooth-scroll'}
         style={{

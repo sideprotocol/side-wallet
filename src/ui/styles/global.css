@@ -227,3 +227,22 @@ div {
         /*font-style: italic;*/
     }
 }
+
+/* modal start */
+.walletSelectModal .ant-modal-content {
+    border-radius: 12px;
+    background-color: #000000;
+}
+
+.walletSelectModal .ant-modal-content .ant-modal-body {
+    padding: 0;
+}
+
+.slippageControlModal {
+    border-radius: 12px !important;
+}
+
+.slippageControlModal .ant-modal-content {
+    background-color: #1E1E1F;
+}
+/* modal end */

@@ -1,16 +1,6 @@
 import { swapStore } from '@/ui/stores/SwapStore';
-// import { IconButton, Input } from "@mui/material";
-
 import { Button } from '@/ui/components/Button';
-// import CloseSVG from "@/assets/icons/close.svg?react";
-
-// import { SlippageControlProps } from "@/services/dex/type";
-// import Back from "@/components/Back";
-
-// import { useContext } from "react";
-// import { globalContext } from "@/context";
 import { Modal } from 'antd';
-// import { colors } from "@/constants/colors";
 
 export default function SlippageControl(props) {
   const {
@@ -23,13 +13,11 @@ export default function SlippageControl(props) {
     onClose,
     sx,
   } = props;
-  // const { isLight } = useContext(globalContext);
 
   return (
     <Modal
       maskClosable={true}
-      // onCancel={handleCancel}
-      className="walletSelectModal"
+      className="slippageControlModal walletSelectModal"
       title={null}
       closable={false}
       centered
@@ -47,13 +35,13 @@ export default function SlippageControl(props) {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            fontSize: "18px",
-            margin: "40px 0px 10px",
+            fontSize: "13px",
+            margin: "20px 0px 10px",
             color: 'white',
           }}
         >
-          <span className="font-normal">Slippage tolerance</span>
-          <div className="">
+          <span className="font-normal pl-[10px]">Slippage tolerance</span>
+          <div className="pr-[10px]">
             <span>{slippage}% </span>
           </div>
         </div>
@@ -80,18 +68,20 @@ export default function SlippageControl(props) {
               fontSize: "14px",
               border: `1px solid #ffffff/10`,
               height: "50px",
+              backgroundColor: '#000',
             }}
           >
             {["0.25", "0.5", "1", ""].map((item, index) => {
               if (!item && index === 3) {
                 return (
                   <div
+                    className={'focus-within:!border-[#0DD4C3] transition-colors duration-300'}
                     key={index}
                     style={{
                       width: "80px",
                       display: "flex",
                       alignItems: "center",
-                      border: `1px solid #ffffff/10`,
+                      border: `1px solid #848E9C`,
                       borderRadius: "12px",
                       padding: "0px 12px",
                       marginLeft: "8px",
@@ -100,7 +90,7 @@ export default function SlippageControl(props) {
                     }}
                   >
                     <input
-                      className="w-[40px] h-[40px] py-0.5 text-center bg-transparent border-side-secondary rounded-[14px] border border-transparent  focus:border-[#6DE5DA]"
+                      className=" w-[40px] h-[33px] py-0.5 text-center focus:outline-none bg-transparent border-side-secondary rounded-[14px]   "
                       type="text"
                       value={slippage}
                       onChange={(e) => {
@@ -124,7 +114,7 @@ export default function SlippageControl(props) {
                     borderRadius: "14px",
                     fontWeight: 600,
                     background: item === slippage ? 'rgb(13, 212, 195)' : "",
-                    color: 'white',
+                    color: item === slippage ? '#000' : '#fff',
                   }}
                   onClick={() => {
                     onQuickSet(item);
@@ -138,7 +128,7 @@ export default function SlippageControl(props) {
           <div className="flex items-center justify-center w-full">
             <Button
               style={{
-                // color: '#000'
+                color: '#000',
                 width: '100%',
                 height: '36px',
               }}

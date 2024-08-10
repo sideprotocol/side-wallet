@@ -15,6 +15,7 @@ import { useWallet } from '@/ui/utils';
 import { RightOutlined } from '@ant-design/icons';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { colors } from '@/ui/theme/colors';
+import MainHeader from '@/ui/pages/Main/MainHeader';
 interface Setting {
   label?: string;
   value?: string;
@@ -206,12 +207,7 @@ export default function SettingsTabScreen() {
 
   return (
     <Layout>
-      <Header
-        onBack={() => {
-          window.history.go(-1);
-        }}
-        title="Explore"
-      />
+      <MainHeader title={'Explore'} />
       <Content justifyCenter itemsCenter>
         <Column gap={'md'} justifyCenter itemsCenter>
           <Row justifyCenter itemsCenter>

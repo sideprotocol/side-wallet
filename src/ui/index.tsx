@@ -248,23 +248,6 @@ if (root2) {
   );
 }
 
-// if (root2) {
-//   const root2 = ReactDOM.createRoot(document.getElementById('side') as HTMLElement);
-//   root2.render(
-//     <Provider store={store}>
-//       <QueryClientProvider client={queryClient}>
-//         <WalletProvider {...antdConfig} wallet={wallet as any}>
-//           <ActionComponentProvider>
-//             <AppSideDimensions>
-//               <Updaters />
-//               <AsyncMainRoute />
-//             </AppSideDimensions>
-//           </ActionComponentProvider>
-//         </WalletProvider>
-//       </QueryClientProvider>
-//     </Provider>
-//   );
-// }
 
 
 

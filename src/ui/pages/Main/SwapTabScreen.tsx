@@ -31,6 +31,7 @@ import { removeStartZero } from '@/ui/utils/format';
 import { findAssetIcon } from '@/ui/utils/swap';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { Coin } from '@cosmjs/stargate';
+import MainHeader from '@/ui/pages/Main/MainHeader';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
@@ -506,48 +507,15 @@ export default function SwapTabScreen() {
         style={{
           display: !tokenModalShow ? 'flex' : 'none!important'
         }}>
-        <Header
-          LeftComponent={
-            <>
-              <Image
-                onClick={() => {
-                  navigate('/settings');
-                }}
-                src="/images/icons/main/menu-icon.svg"
-                size={fontSizes.xxl}
-              />
-            </>
-          }
-          title={
-            currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
-              <AccountSelect />
-            ) : (
-              ''
-            )
-          }
-          // RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
-          RightComponent={''}
-          // onClickRight={() => {
-          //   navigate('/settings');
-          // }}
-        />
+        <MainHeader title={''} />
         <Content classname={'hide-scrollbar'}>
           <InitBalance></InitBalance>
-
           <Column
             relative
             style={{
               gap: '6px'
             }}>
-            {/*<div style={{*/}
-            {/*  position: 'relative',*/}
-            {/*  top: 26,*/}
-            {/*  left: 10,*/}
-            {/*  fontWeight: 700,*/}
-            {/*}}>*/}
-            {/*  Swap*/}
-            {/*</div>*/}
-            <div className="flex justify-between mt-[24px]">
+            <div className="flex justify-between mt-[16px]">
               <div className="pl-[10px]"></div>
               <div
                 className="w-[108px] flex items-center justify-center rounded-[24px] border-[1px] border-[#14a89b1a]  bg-[#0dd4c31a] h-[30px] cursor-pointer"

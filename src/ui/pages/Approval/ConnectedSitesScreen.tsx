@@ -35,12 +35,12 @@ export default function ConnectedSitesScreen() {
       <Content style={{
         marginTop: 16
       }}>
-        {sites.length > 0 && (
+        {/*{sites.length > 0 && (*/}
           <Text
             preset="sub"
             color={'white'}
             text={'The current account is connected to these sites. They can view your account details.'}></Text>
-        )}
+        {/*)}*/}
 
         <Column >
           {sites.length > 0 ? (

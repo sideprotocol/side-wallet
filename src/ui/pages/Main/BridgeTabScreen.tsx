@@ -23,6 +23,7 @@ import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+import MainHeader from '@/ui/pages/Main/MainHeader';
 
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
@@ -101,31 +102,7 @@ export default function BridgeTabScreen() {
   }, []);
   return (
     <Layout>
-      <Header
-        LeftComponent={
-          <>
-            <Image
-              onClick={() => {
-                navigate('/settings');
-              }}
-              src="/images/icons/main/menu-icon.svg"
-              size={fontSizes.xxl}
-            />
-          </>
-        }
-        title={
-          currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
-            <AccountSelect />
-          ) : (
-            ''
-          )
-        }
-        // RightComponent={<Image src="/images/icons/main/menu-icon.svg" size={fontSizes.xxl} />}
-        RightComponent={''}
-        // onClickRight={() => {
-        //   navigate('/settings');
-        // }}
-      />
+      <MainHeader title={''} />
       <Content classname={'hide-scrollbar'}>
         <Row full relative rounded={true}>
           <Column
@@ -318,9 +295,8 @@ export default function BridgeTabScreen() {
                   height: '50px',
                   background: '#09090A'
                 }}
-                full>
+                >
                 <Row
-                  full
                   itemsCenter
                   gap={'zero'}
                   style={{

@@ -15,7 +15,7 @@ export default function TxCreateScreen() {
 
   console.log('token: ', token);
 
-  const isRune = !!token.base.includes('runes');
+  const isRune = !!token?.base?.includes('runes');
 
   if (chain === CHAINS_ENUM.BTC) {
     if (isRune) {
