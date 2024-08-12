@@ -175,6 +175,16 @@ export const useRuneBalance = (base: string) => {
   return isDeposit ? rune.balance || '0' : toReadableAmount(balanceAmount, rune.exponent || '6');
 };
 
+export const useBitcoinRuneBalance = (base: string) => {
+  const { data: runesBalance, loading: runeLoading } = useRuneBalances();
+
+  const rune = runesBalance.find((rune) => rune.base === base);
+
+  if (!rune || runeLoading) return '0';
+
+  return rune.balance || '0';
+};
+
 export const useBitcoinBtcBalance = () => {
   const currentAccount = useCurrentAccount();
 
