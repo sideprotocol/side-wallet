@@ -4,8 +4,8 @@ import { Text } from '../Text';
 
 const WebsiteBar = ({ session }: { session: { origin: string; icon: string; name: string } }) => {
   return (
-    <Card bg="transparent" preset="style2" selfItemsCenter>
-      <Row itemsCenter>
+    <Card bg="transparent" px="zero" preset="style2" selfItemsCenter>
+      <Row itemsCenter px="zero">
         {/* <Image src={session.icon} size={fontSizes.logo} /> */}
         <Text
           size="xl"
