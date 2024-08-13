@@ -9,17 +9,12 @@ import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { OutputValueBar } from '@/ui/components/OutputValueBar';
 import { RBFBar } from '@/ui/components/RBFBar';
 import { useNavigate } from '@/ui/pages/MainRoute';
-import { useAccountBalance } from '@/ui/state/accounts/hooks';
-import { useRuneBalance } from '@/ui/state/bridge/hook';
+import { useBitcoinRuneBalance } from '@/ui/state/bridge/hook';
 import { useSendRune } from '@/ui/state/send/hook';
-import {
-  useBitcoinTx,
-  useFetchUtxosCallback,
-  usePrepareSendBTCCallback,
-  useSafeBalance
-} from '@/ui/state/transactions/hooks';
+import { useBitcoinTx, useFetchUtxosCallback, useSafeBalance } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
-import { amountToSatoshis, parseUnitAmount, useLocationState } from '@/ui/utils';
+import { parseUnitAmount, useLocationState } from '@/ui/utils';
+import { getAddressUtxoDust } from '@/wallet-sdk/transaction';
 
 interface LocationState {
   base: string;
@@ -27,7 +22,6 @@ interface LocationState {
 }
 
 export default function CreateSendRune() {
-  const accountBalance = useAccountBalance();
   const safeBalance = useSafeBalance();
   const navigate = useNavigate();
   const bitcoinTx = useBitcoinTx();
@@ -60,21 +54,15 @@ export default function CreateSendRune() {
     });
   }, []);
 
-  const prepareSendBTC = usePrepareSendBTCCallback();
+  const minOutputValue = useMemo(() => {
+    if (toInfo.address) {
+      return getAddressUtxoDust(toInfo.address);
+    } else {
+      return 0;
+    }
+  }, [toInfo.address]);
 
-  const avaiableSatoshis = useMemo(() => {
-    return amountToSatoshis(safeBalance);
-  }, [safeBalance]);
-
-  const toSatoshis = useMemo(() => {
-    if (!inputAmount) return 0;
-    return amountToSatoshis(inputAmount);
-  }, [inputAmount]);
-
-  const runeBalance = useRuneBalance(token.base);
-  //   console.log('runeBalance: ', runeBalance);
-
-  //   const dustAmount = useMemo(() => satoshisToAmount(COIN_DUST), [COIN_DUST]);
+  const runeBalance = useBitcoinRuneBalance(token.base);
 
   const { sendRune } = useSendRune();
 
@@ -82,10 +70,14 @@ export default function CreateSendRune() {
     setError('');
     setDisabled(true);
 
+    if (outputValue < minOutputValue) {
+      setError(`outputValue should be greater or equal than ${minOutputValue}`);
+    }
+
     if (!!inputAmount && BigNumber(inputAmount || '0').lte(runeBalance)) {
       setDisabled(false);
     }
-  }, [toInfo, inputAmount, feeRate, enableRBF, runeBalance]);
+  }, [toInfo, inputAmount, feeRate, enableRBF, runeBalance, minOutputValue, outputValue]);
 
   return (
     <Layout
@@ -224,7 +216,7 @@ export default function CreateSendRune() {
         <Column mt="lg">
           {error && <Text text={error} color="error" />}
           <Button
-            disabled={disabled}
+            disabled={disabled || !!error}
             preset="primary"
             text="Next"
             onClick={(e) => {
