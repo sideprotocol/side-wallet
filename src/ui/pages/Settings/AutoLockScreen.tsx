@@ -8,6 +8,8 @@ import { settingsActions } from '@/ui/state/settings/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useNavigate } from '@/ui/pages/MainRoute';
+import Lottie from 'react-lottie';
+import * as animationData from '@/ui/assets/lottie/lock.json';
 
 export default function AutoLockScreen() {
   const [time, setTime] = useState('0');
@@ -29,13 +31,23 @@ export default function AutoLockScreen() {
             paddingTop: '70px',
             paddingBottom: '25px'
           }}>
-          <Image
-            style={{
-              margin: 'auto'
-            }}
-            src="/images/icons/settings/auto-lock.svg"
-            size={90}
-          />
+          {/*<Image*/}
+          {/*  style={{*/}
+          {/*    margin: 'auto'*/}
+          {/*  }}*/}
+          {/*  src="/images/icons/settings/auto-lock.svg"*/}
+          {/*  size={90}*/}
+          {/*/>*/}
+          <div className="">
+            <Lottie options={
+              // loop: true,
+              {
+                autoplay: true,
+                animationData
+              }
+            }
+                    width={120}/>
+          </div>
 
           <Text
             preset="sub"
@@ -51,11 +63,12 @@ export default function AutoLockScreen() {
         <Column>
           <Text color={'white'} preset="sub" text={'Duration (minutes)'}></Text>
 
-          <Input preset={'amount'} placeholder="0"  onAmountInputChange={async(e) => setTime(e)} ></Input>
+          <Input preset={'amount'} placeholder={localStorage.getItem('unLockTimeLimit') ? localStorage.getItem('unLockTimeLimit') : '5'}  onAmountInputChange={async(e) => setTime(e)} ></Input>
 
-          <Button preset="primary" text="Confirm" onClick={() => {
+          <Button preset="primary" text="Confirm" onClick={(e) => {
             // preferenceService.setAutoLockDuration(10);
-            if (isNaN(Number(time))) return;
+            e.stopPropagation();
+            if (isNaN(Number(time)) || Number(time) <= 0) return false;
             dispatch(
               settingsActions.updateSettings({
                 unLockTimeLimit: Number(time)
@@ -64,6 +77,9 @@ export default function AutoLockScreen() {
             tools.toastSuccess('Your settings have been saved.');
             localStorage.setItem('unLockTimeLimit', time);
             navigate('MainScreen');
+            chrome.storage.local.set({ unLockTimeLimit: Number(time) }, function() {
+              console.log('锁屏时间限制已保存为 ' + Number(time) + ' 分钟。');
+            });
           }}></Button>
         </Column>
       </Content>

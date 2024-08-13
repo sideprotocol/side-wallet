@@ -8,6 +8,8 @@ import { keyringsActions } from '@/ui/state/keyrings/reducer';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+import Lottie from 'react-lottie';
+import * as animationData from '@/ui/assets/lottie/forget-pwd.json';
 
 export default function CreateHDWalletScreen() {
   const navigateRouter = useNavigateRouter();
@@ -35,9 +37,17 @@ export default function CreateHDWalletScreen() {
           <Row
             justifyCenter
             style={{
-              padding: '74px 0'
+              padding: '34px 0'
             }}>
-            <Image src="./images/icons/wallet.svg" size={90} />
+            {/*<Image src="./images/icons/wallet.svg" size={90} />*/}
+            <Lottie options={
+              // loop: true,
+              {
+                autoplay: true,
+                animationData
+              }
+            }
+                    width={180}/>
           </Row>
           <Row
             style={{
