@@ -27,8 +27,11 @@
   "background": {
     "service_worker": "background.js"
   },
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "homepage_url": "https://side.one/",
-  "permissions": ["storage", "unlimitedStorage", "activeTab", "sidePanel", "contextMenus", "scripting", "documentScan"],
+  "permissions": ["storage", "unlimitedStorage", "sidePanel", "contextMenus", "documentScan", "alarms", "tabs", "activeTab", "scripting", "webRequest", "nativeMessaging"],
   "short_name": "__MSG_appName__",
 
   "content_scripts": [

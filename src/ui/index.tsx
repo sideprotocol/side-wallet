@@ -16,7 +16,7 @@ import { ActionComponentProvider } from './components/ActionComponent';
 import { AppDimensions, AppSideDimensions } from './components/Responsive';
 import AsyncMainRoute from './pages/MainRoute';
 import store from './state';
-import { WalletProvider } from './utils';
+import { useWallet, WalletProvider } from './utils';
 import { globalActions } from '@/ui/state/global/reducer';
 import { useAppDispatch, useAppSelector } from '@/ui/state/hooks';
 import { SettingsState } from '@/ui/state/settings/reducer';
@@ -145,13 +145,82 @@ function Updaters() {
   const [state, setState] = useState<string>('Active')
   const [remaining, setRemaining] = useState<number>(timeout)
   const [open, setOpen] = useState<boolean>(false)
+  const wallet1 = useWallet();
+  // window.lockAccount = () => {
+  //   dispatch(globalActions.update({ isUnlocked: false }));
+  //   const basePath = location.href.split('#')[0];
+  //   location.href = `${basePath}#/account/unlock`;
+  // };
 
+  // useEffect(() => {
+  //   const handleMessage = (message, sender, sendResponse) => {
+  //     if (message.type === 'LOCK_ACCOUNT') {
+  //       console.log('Received auto lock time: seconds');
+  //       wallet1.isUnlocked().then((isUnlocked) => {
+  //         console.log(`isUnlocked: `, isUnlocked);
+  //         if (isUnlocked) return false;
+  //         wallet1.lockWallet();
+  //         dispatch(globalActions.update({ isUnlocked: false }));
+  //         const basePath = location.href.split('#')[0];
+  //         location.href = `${basePath}#/account/unlock`;
+  //       }).catch((err) => {
+  //         console.log(`err: `, err);
+  //       });
+  //     }
+  //   }
+  //   // window.addEventListener('message', handleMessage);
+  //   chrome.runtime.onMessage.addListener(handleMessage);
+  //
+  //   // 重置自动锁屏计时器
+  //   function resetAutoLockTimer() {
+  //     chrome.runtime.sendMessage({ type: 'SET_AUTO_LOCK_TIME', payload: { autoLockTime: localStorage.getItem('unLockTimeLimit') ? Number(localStorage.getItem('unLockTimeLimit')) : 5 } });
+  //   }
+  //
+  //   // 监听 popup.html 上的任何操作,并重置自动锁屏计时器
+  //   document.addEventListener('click', resetAutoLockTimer);
+  //   document.addEventListener('keydown', resetAutoLockTimer);
+  //   document.addEventListener('input', resetAutoLockTimer);
+  //   document.addEventListener('mousemove', resetAutoLockTimer);
+  //
+  //   return () => {
+  //     // window.removeEventListener('message', handleMessage);
+  //     chrome.runtime.onMessage.removeListener(handleMessage);
+  //     document.removeEventListener('click', resetAutoLockTimer);
+  //     document.removeEventListener('keydown', resetAutoLockTimer);
+  //     document.removeEventListener('input', resetAutoLockTimer);
+  //     document.removeEventListener('mousemove', resetAutoLockTimer);
+  //   };
+  // }, []);
+
+  // chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  //   if (message.type === 'LOCK_ACCOUNT') {
+  //     console.log('Received lock account message');
+  //     wallet.lockWallet();
+  //     dispatch(globalActions.update({ isUnlocked: false }));
+  //     const basePath = location.href.split('#')[0];
+  //     location.href = `${basePath}#/account/unlock`;
+  //     if (window.lockAccount) {
+  //       // window.lockAccount();
+  //       sendResponse({ status: 'Account locked' });
+  //     } else {
+  //       console.error('lockAccount method not found');
+  //       sendResponse({ status: 'Failed to lock account' });
+  //     }
+  //   }
+  // });
   const onIdle = () => {
     setState('Idle');
-    console.log(`settingsState: `, settingsState);
-    // dispatch(globalActions.update({ isUnlocked: false }));
-    // const basePath = location.href.split('#')[0];
-    // location.href = `${basePath}#/account/unlock`;
+    // console.log(`settingsState: `, settingsState);
+    // wallet1.isUnlocked().then((isUnlocked) => {
+    //   console.log(`isUnlocked: `, isUnlocked);
+    //   if (isUnlocked && !location.href.includes('/account/unlock')) {
+    //     // const basePath = location.href.split('#')[0];
+    //     // location.href = `${basePath}#/account/unlock`;
+    //     dispatch(globalActions.update({ isUnlocked: false }));
+    //     const basePath = location.href.split('#')[0];
+    //     location.href = `${basePath}#/account/unlock`;
+    //   }
+    // })
   }
 
   const onActive = () => {
@@ -176,16 +245,62 @@ function Updaters() {
       // console.log(`Math.ceil(getRemainingTime() / 1000): `, Math.ceil(getRemainingTime() / 1000));
       setRemaining(Math.ceil(getRemainingTime() / 1000))
     }, 1000)
+
+
+    chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], function(result) {
+      const ONE_MINUTE = (result.unLockTimeLimit ? Number(result.unLockTimeLimit) : 5) * 60 * 1000;
+      let lastActiveTimestamp = result.lastActiveTimestamp || Date.now();
+
+      console.log(`inin: `);
+
+      // 更新最后活动时间戳并重置倒计时
+      function resetTimer() {
+        lastActiveTimestamp = Date.now();
+        chrome.storage.local.set({ lastActiveTimestamp: lastActiveTimestamp });
+        console.log(`resetTimer: `);
+        // document.getElementById('status').innerText = '活动状态：正常';
+      }
+
+      // 检查是否超过时间限制
+      function checkForInactivity() {
+        if (Date.now() - lastActiveTimestamp > ONE_MINUTE) {
+          // document.getElementById('status').innerText = '活动状态：超时';
+          // 在这里可以添加其他处理逻辑，比如锁屏操作
+          wallet1.isUnlocked().then((isUnlocked) => {
+            console.log(`isUnlocked: `, isUnlocked);
+            if (isUnlocked && !location.href.includes('/account/unlock')) {
+              // dispatch(globalActions.update({ isUnlocked: false }));
+              wallet1.lockWallet();
+              const basePath = location.href.split('#')[0];
+              location.href = `${basePath}#/account/unlock`;
+            }
+          })
+        } else {
+          // document.getElementById('status').innerText = '活动状态：正常';
+        }
+      }
+
+      // 监听所有用户操作以重置倒计时
+      ['mousemove', 'keydown', 'click', 'scroll'].forEach(event => {
+        document.removeEventListener(event, resetTimer);
+        document.addEventListener(event, resetTimer);
+      });
+
+      // 每次打开 popup 时立即检查是否已经超时
+      checkForInactivity();
+
+      // 定期检查不活动时间
+      setInterval(checkForInactivity, 1000); // 每秒检查一次
+
+      // 初始化时重置计时器
+      resetTimer();
+    });
+
     return () => {
       clearInterval(interval)
+      // window.removeEventListener('unload', close);
     }
   })
-  // const handleStillHere = () => {
-  //   activate()
-  // }
-
-  // const timeTillPrompt = Math.max(remaining - promptBeforeIdle / 1000, 0);
-  // const seconds = timeTillPrompt > 1 ? 'seconds' : 'second';
   return (
     <>
       <AccountUpdater />

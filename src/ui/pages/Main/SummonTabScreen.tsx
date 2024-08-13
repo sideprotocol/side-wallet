@@ -16,194 +16,17 @@ import { RightOutlined } from '@ant-design/icons';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { colors } from '@/ui/theme/colors';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-interface Setting {
-  label?: string;
-  value?: string;
-  desc?: string;
-  danger?: boolean;
-  icon?: IconTypes;
-  action: string;
-  route: string;
-  right: boolean;
-}
 
-const SettingList: Setting[] = [
-  // {
-  //   label: 'Manage Wallet',
-  //   value: '',
-  //   desc: '',
-  //   action: 'manage-wallet',
-  //   route: '/settings/manage-wallet',
-  //   right: true
-  // },
+import Lottie from 'react-lottie';
+import * as animationData from '@/ui/assets/lottie/coming-soon.json';
 
-  {
-    label: 'General',
-    value: '',
-    icon: 'general',
-    desc: '',
-    action: '',
-    route: '/settings/general',
-    right: true
-  },
-
-  {
-    label: 'Advance',
-    value: '',
-    icon: 'advance',
-    desc: '',
-    action: 'advanced',
-    route: '/settings/advanced',
-    right: true
-  },
-
-  {
-    label: 'Security',
-    value: '',
-    icon: 'security',
-    desc: '',
-    action: '',
-    route: '/settings/security',
-    right: true
-  },
-
-  {
-    label: 'About',
-    value: '',
-    icon: 'about',
-    desc: '',
-    action: '',
-    route: '/settings/about',
-
-    right: true
-  },
-
-  // {
-  //   label: 'Address Type',
-  //   value: 'Taproot',
-  //   desc: '',
-  //   action: 'addressType',
-  //   route: '/settings/address-type',
-  //   right: true
-  // },
-
-  // {
-  //   label: 'Advanced',
-  //   value: 'Advanced settings',
-  //   desc: '',
-  //   action: 'advanced',
-  //   route: '/settings/advanced',
-  //   right: true
-  // },
-
-  // {
-  //   label: 'Connected Sites',
-  //   value: '',
-  //   desc: '',
-  //   action: 'connected-sites',
-  //   route: '/connected-sites',
-  //   right: true
-  // },
-  // {
-  //   label: 'Network',
-  //   value: 'MAINNET',
-  //   desc: '',
-  //   action: 'networkType',
-  //   route: '/settings/network-type',
-  //   right: true
-  // },
-
-  // {
-  //   label: 'Change Password',
-  //   value: 'Change your lockscreen password',
-  //   desc: '',
-  //   action: 'password',
-  //   route: '/settings/password',
-  //   right: true
-  // },
-  {
-    label: '',
-    value: '',
-    desc: ' Expand View',
-    action: 'expand-view',
-    route: '/settings/export-privatekey',
-    right: false,
-    icon: 'expand'
-  },
-  {
-    label: '',
-    value: '',
-    desc: 'Lock',
-    icon: 'lock',
-    action: 'lock-wallet',
-    route: '',
-    right: false
-  }
-];
 
 export default function SettingsTabScreen() {
-  const navigate = useNavigate();
-
-  const networkType = useNetworkType();
-
-  const isInTab = useExtensionIsInTab();
-
-  const [connected, setConnected] = useState(false);
-
-  const currentKeyring = useCurrentKeyring();
-  const currentAccount = useCurrentAccount();
-  const wallet = useWallet();
+  // const navigate = useNavigate();
+  // const wallet = useWallet();
   useEffect(() => {
-    const run = async () => {
-      const res = await getCurrentTab();
-      if (!res) return;
-      const site = await wallet.getCurrentConnectedSite(res.id);
-      if (site) {
-        setConnected(site.isConnected);
-      }
-    };
-    run();
+
   }, []);
-
-  const isCustomHdPath = useMemo(() => {
-    const item = ADDRESS_TYPES[currentKeyring.addressType];
-    return currentKeyring.hdPath !== '' && item.hdPath !== currentKeyring.hdPath;
-  }, [currentKeyring]);
-
-  const toRenderSettings = SettingList.filter((v) => {
-    if (v.action == 'manage-wallet') {
-      v.value = currentKeyring.alianName;
-    }
-
-    if (v.action == 'connected-sites') {
-      v.value = connected ? 'Connected' : 'Not connected';
-    }
-
-    if (v.action == 'networkType') {
-      v.value = NETWORK_TYPES[networkType].label;
-    }
-
-    if (v.action == 'addressType') {
-      const item = ADDRESS_TYPES[currentKeyring.addressType];
-      const hdPath = currentKeyring.hdPath || item.hdPath;
-      if (currentKeyring.type === KEYRING_TYPE.SimpleKeyring) {
-        v.value = `${item.name}`;
-      } else {
-        v.value = `${item.name} (${hdPath}/${currentAccount.index})`;
-      }
-    }
-
-    if (v.action == 'expand-view') {
-      if (isInTab) {
-        return false;
-      }
-    }
-
-    return true;
-  });
-
-  const tools = useTools();
-  const openExtensionInTab = useOpenExtensionInTab();
 
   return (
     <Layout>
@@ -211,12 +34,23 @@ export default function SettingsTabScreen() {
       <Content justifyCenter itemsCenter>
         <Column gap={'md'} justifyCenter itemsCenter>
           <Row justifyCenter itemsCenter>
-            <Image size={90} src={'/images/icons/main/comimg-soon.svg'} />
+            {/*<Image size={90} src={'/images/icons/main/comimg-soon.svg'} />*/}
+            <Lottie options={
+              // loop: true,
+              {
+                autoplay: true,
+                animationData: animationData
+              }
+            }
+                    width={180} />
           </Row>
-          <Row>
+          <Row style={{
+            position: 'relative',
+            top: '-80px'
+          }}>
             <span style={{
               fontSize: '14px',
-              color: colors.white,
+              color: colors.white
             }}> Comming soon </span>
           </Row>
         </Column>

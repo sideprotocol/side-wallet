@@ -26,24 +26,21 @@ import { useNavigate } from '../../MainRoute';
 import BtcTokenList from './BtcTokenList';
 import SideTokenList from './SideTokenList';
 import MainHeader from '../MainHeader';
+import { globalActions } from '@/ui/state/global/reducer';
 
 export default function WalletTabScreen() {
   const navigate = useNavigate();
   const [balanceVisible, setBalanceVisible] = useState(true);
 
   const { accountBalanceByUSD } = useGetAccountBalanceByUSD();
-
   const currentKeyring = useCurrentKeyring();
   const currentAccount = useCurrentAccount();
 
   const wallet = useWallet();
   const [connected, setConnected] = useState(false);
-
   const dispatch = useAppDispatch();
   const assetTabKey = useAssetTabKey();
-
   const skipVersion = useSkipVersionCallback();
-
   const walletConfig = useWalletConfig();
   const versionInfo = useVersionInfo();
 
@@ -80,6 +77,58 @@ export default function WalletTabScreen() {
       }
     };
     run();
+  }, []);
+
+  useEffect(() => {
+    // const handleMessage = (message, sender, sendResponse) => {
+    //   if (message.type === 'LOCK_ACCOUNT') {
+    //     console.log('Received auto lock time: seconds');
+    //     // wallet.isUnlocked().then((isUnlocked) => {
+    //     //   console.log(`isUnlocked: `, isUnlocked);
+    //     //   if (!isUnlocked) return false;
+    //     //   // wallet.lockWallet();
+    //     //   dispatch(globalActions.update({ isUnlocked: false }));
+    //     //   const basePath = location.href.split('#')[0];
+    //     //   location.href = `${basePath}#/account/unlock`;
+    //     // }).catch((err) => {
+    //     //   console.log(`err: `, err);
+    //     // });
+    //     wallet.hasVault().then((val) => {
+    //       if (val) {
+    //         wallet.isUnlocked().then((isUnlocked) => {
+    //           // console.log(`isUnlocked: `, isUnlocked);
+    //           dispatch(globalActions.update({ isUnlocked }));
+    //           if (!isUnlocked && location.href.includes('/account/unlock')) {
+    //             const basePath = location.href.split('#')[0];
+    //             location.href = `${basePath}#/account/unlock`;
+    //           }
+    //         });
+    //       }
+    //     });
+    //   }
+    // }
+    // // window.addEventListener('message', handleMessage);
+    // chrome.runtime.onMessage.addListener(handleMessage);
+    //
+    // // 重置自动锁屏计时器
+    // function resetAutoLockTimer() {
+    //   chrome.runtime.sendMessage({ type: 'SET_AUTO_LOCK_TIME', payload: localStorage.getItem('unLockTimeLimit') ? Number(localStorage.getItem('unLockTimeLimit')) : 5 });
+    // }
+    //
+    // // 监听 popup.html 上的任何操作,并重置自动锁屏计时器
+    // document.addEventListener('click', resetAutoLockTimer);
+    // document.addEventListener('keydown', resetAutoLockTimer);
+    // document.addEventListener('input', resetAutoLockTimer);
+    // document.addEventListener('mousemove', resetAutoLockTimer);
+
+    return () => {
+      // window.removeEventListener('message', handleMessage);
+      // chrome.runtime.onMessage.removeListener(handleMessage);
+      // document.removeEventListener('click', resetAutoLockTimer);
+      // document.removeEventListener('keydown', resetAutoLockTimer);
+      // document.removeEventListener('input', resetAutoLockTimer);
+      // document.removeEventListener('mousemove', resetAutoLockTimer);
+    };
   }, []);
 
   const [currentTab, setCurrentTab] = useState<CHAINS_ENUM>(CHAINS_ENUM.SIDE);

@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import { getUiType, useApproval, useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+// import { globalActions } from '@/ui/state/global/reducer';
+// import { useAppDispatch } from '@/ui/state/hooks';
 
 export default function BoostScreen() {
   const navigate = useNavigate();
@@ -10,6 +12,7 @@ export default function BoostScreen() {
 
   const [getApproval, , rejectApproval] = useApproval();
   const loadView = async () => {
+    // const dispatch = useAppDispatch();
     const UIType = getUiType();
     const isInNotification = UIType.isNotification;
     const isInTab = UIType.isTab;
@@ -75,7 +78,7 @@ export default function BoostScreen() {
 
   useEffect(() => {
     init();
-  }, []);
+  }, [])
 
   return <div></div>;
 }
