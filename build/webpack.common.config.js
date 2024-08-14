@@ -164,7 +164,6 @@ const config = (env) => {
       'content-script': paths.rootResolve('src/content-script/index.ts'),
       pageProvider: paths.rootResolve('src/content-script/pageProvider/index.ts'),
       ui: paths.rootResolve('src/ui/index.tsx'),
-      side: paths.rootResolve('src/ui/sidePanel.tsx'),
     },
     output: {
       path: paths.dist,
