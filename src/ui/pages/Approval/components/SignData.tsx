@@ -93,15 +93,40 @@ export default function SignData({ params: { data, session } }: Props) {
   }
 
   return (
-    <Layout  style={{
-      minHeight: '560px',
-      height: '560px',
-    }}>
+    <Layout
+      style={{
+        minHeight: '560px',
+        height: '560px'
+      }}>
       <Content>
-        <Header>
-          <WebsiteBar session={session} />
-        </Header>
+        <Column
+          itemsCenter
+          style={{
+            paddingBottom: '4px'
+          }}>
+          <Text
+            textCenter
+            size="xl"
+            style={{
+              fontWeight: '600'
+            }}>
+            Signature request
+          </Text>
 
+          <Text
+            textCenter
+            style={{
+              color: '#828282',
+              borderRadius: '8px',
+              padding: '4px 16px',
+              backgroundColor: '#1E1E1F',
+              fontSize: '14px',
+              maxWidth: 'max-content'
+            }}
+            classname="">
+            {session.origin}
+          </Text>
+        </Column>
         <Column>
           <Text text="Signature request" preset="title-bold" textCenter mt="lg" />
 
