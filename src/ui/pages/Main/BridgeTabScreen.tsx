@@ -264,7 +264,7 @@ export default function BridgeTabScreen() {
               </div>
             </Row>
 
-            <Column mt={'smm'} full px={'xl'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <Column mt={'smm'} px={'xl'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
