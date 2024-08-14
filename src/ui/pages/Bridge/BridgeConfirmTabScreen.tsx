@@ -7,7 +7,6 @@ import { Button, Column, Content, Footer, Header, Image, Layout, Row } from '@/u
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { SIDE_BTC_EXPLORER } from '@/ui/constants';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
-import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { queryAddressUtxo, useBridge } from '@/ui/state/bridge/hook';
@@ -36,6 +35,17 @@ function DetailRow({ text, value }: DetailRowItem) {
   );
 }
 
+export interface CacheUTXO {
+  txid: string;
+  vout: number;
+  satoshis: number;
+  scriptPk: string;
+  pubkey: string;
+  inscriptions: any[];
+  atomicals: any[];
+  addressType: number;
+}
+
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
 
@@ -48,6 +58,8 @@ export default function BridgeTabScreen() {
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base, accountUtxo, fee } = useBridgeStore();
 
   const [networkFee, setNetworkFee] = useState<number>(0);
+
+  const [tx, setTx] = useState<CacheUTXO[]>([]);
 
   const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, 8)).toNumber();
 
@@ -62,11 +74,11 @@ export default function BridgeTabScreen() {
 
   useEffect(() => {
     estimateNetworkFee({ amount: unitAmount, fee }).then((res) => {
-      setNetworkFee(res as number);
+      setNetworkFee(res.networkFee as number);
+
+      setTx(res.walletInputs);
     });
   }, [fee]);
-
-  const { data: assets } = useGetSideTokenList();
 
   const currentAccount = useCurrentAccount();
 
@@ -139,7 +151,27 @@ export default function BridgeTabScreen() {
                 <Typography className="text-right">Amount</Typography>
               </Row>
 
-              <Row relative full justifyBetween color={'white'}>
+              {tx.map((item) => {
+                return (
+                  <Row key={item.txid} relative full justifyBetween color={'white'}>
+                    <a
+                      target="_blank"
+                      className="underline text-white w-1/3 text-left"
+                      href={`${SIDE_BTC_EXPLORER}/tx/${accountUtxo?.txid}`}
+                      rel="noreferrer">
+                      {formatAddress(item.txid || '-', 6)}
+                    </a>
+
+                    <Typography className="w-1/3 text-center">{item.vout || '-'}</Typography>
+                    <Typography className="w-1/3 text-right">
+                      {' '}
+                      {toReadableAmount(item.satoshis.toString() || '0', 8)}
+                    </Typography>
+                  </Row>
+                );
+              })}
+
+              {/* <Row relative full justifyBetween color={'white'}>
                 <a
                   target="_blank"
                   className="underline text-white w-1/3 text-left"
@@ -153,7 +185,7 @@ export default function BridgeTabScreen() {
                   {' '}
                   {toReadableAmount(accountUtxo?.value?.toString() || '0', 8)}
                 </Typography>
-              </Row>
+              </Row> */}
             </Column>
 
             <Column relative classname="bg-[#F0B622] p-3 px-2 bg-opacity-30 " rounded>

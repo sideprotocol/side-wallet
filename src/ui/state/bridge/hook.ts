@@ -434,8 +434,9 @@ export const useBridge = () => {
       });
     });
 
-    const { networkFee } = await sendBTC({
-      btcUtxos: btcUtxos,
+    const { networkFee, walletInputs } = await sendBTC({
+      btcUtxos: btcUtxos.sort((a, b) => b.satoshis - a.satoshis),
+
       tos: [{ address: BTC_BRIDGE_VAULT, satoshis: amount }],
       networkType: networkType === NetworkType.MAINNET ? 0 : 1,
       changeAddress: senderAddress,
@@ -445,7 +446,7 @@ export const useBridge = () => {
       memos: undefined
     });
 
-    return networkFee;
+    return { networkFee, walletInputs };
   }
 
   return { bridge, estimateNetworkFee };

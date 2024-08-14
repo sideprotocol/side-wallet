@@ -1,9 +1,9 @@
-import { UTXO_DUST } from "../constants";
-import { ErrorCodes, WalletUtilsError } from "../error";
-import { NetworkType } from "../network";
-import { Transaction } from "../transaction/transaction";
-import { utxoHelper } from "../transaction/utxo";
-import { ToSignInput, UnspentOutput } from "../types";
+import { UTXO_DUST } from '../constants';
+import { ErrorCodes, WalletUtilsError } from '../error';
+import { NetworkType } from '../network';
+import { Transaction } from '../transaction/transaction';
+import { utxoHelper } from '../transaction/utxo';
+import { ToSignInput, UnspentOutput } from '../types';
 
 export async function sendBTC({
   btcUtxos,
@@ -13,7 +13,7 @@ export async function sendBTC({
   feeRate,
   enableRBF = true,
   memo,
-  memos,
+  memos
 }: {
   btcUtxos: UnspentOutput[];
   tos: {
@@ -42,14 +42,14 @@ export async function sendBTC({
   });
 
   if (memo) {
-    if (Buffer.from(memo, "hex").toString("hex") === memo) {
-      tx.addOpreturn([Buffer.from(memo, "hex")]);
+    if (Buffer.from(memo, 'hex').toString('hex') === memo) {
+      tx.addOpreturn([Buffer.from(memo, 'hex')]);
     } else {
       tx.addOpreturn([Buffer.from(memo)]);
     }
   } else if (memos) {
-    if (Buffer.from(memos[0], "hex").toString("hex") === memos[0]) {
-      tx.addOpreturn(memos.map((memo) => Buffer.from(memo, "hex")));
+    if (Buffer.from(memos[0], 'hex').toString('hex') === memos[0]) {
+      tx.addOpreturn(memos.map((memo) => Buffer.from(memo, 'hex')));
     } else {
       tx.addOpreturn(memos.map((memo) => Buffer.from(memo)));
     }
@@ -59,7 +59,11 @@ export async function sendBTC({
 
   const psbt = tx.toPsbt();
 
-  return { psbt, toSignInputs, networkFee: await tx.calNetworkFee() };
+  const walletInputs = btcUtxos.filter(
+    (btcutxo) => !!psbt.data.inputs.find((input) => input.witnessUtxo?.value === btcutxo.satoshis)
+  );
+
+  return { psbt, toSignInputs, networkFee: await tx.calNetworkFee(), walletInputs };
 }
 
 export async function sendAllBTC({
@@ -67,7 +71,7 @@ export async function sendAllBTC({
   toAddress,
   networkType,
   feeRate,
-  enableRBF = true,
+  enableRBF = true
 }: {
   btcUtxos: UnspentOutput[];
   toAddress: string;
