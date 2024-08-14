@@ -372,7 +372,7 @@ export const useBridge = () => {
     });
 
     const { psbt, toSignInputs } = await sendBTC({
-      btcUtxos: btcUtxos,
+      btcUtxos: btcUtxos.sort((a, b) => b.satoshis - a.satoshis),
       tos: [{ address: BTC_BRIDGE_VAULT, satoshis: amount }],
       networkType: networkType === NetworkType.MAINNET ? 0 : 1,
       changeAddress: senderAddress,
