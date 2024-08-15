@@ -1,9 +1,8 @@
 import { Tooltip } from 'antd';
-import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
 
-import { COIN_DUST, SIDE_TOKENS } from '@/shared/constant';
-import { RawTxInfo, TxType } from '@/shared/types';
+import { COIN_DUST } from '@/shared/constant';
+import { RawTxInfo } from '@/shared/types';
 import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
@@ -20,7 +19,7 @@ import {
 } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { amountToSatoshis, isValidAddress, parseUnitAmount, satoshisToAmount, useLocationState } from '@/ui/utils';
+import { amountToSatoshis, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
 
 interface LocationState {
   base: string;
@@ -313,30 +312,7 @@ export default function CreateSendBtc() {
             preset="primary"
             text="Next"
             onClick={(e) => {
-              if (isRune) {
-                const asset = SIDE_TOKENS.find((a) => a.base === base);
-
-                const unitAmount = BigNumber(parseUnitAmount(inputAmount, asset?.exponent || 6)).toNumber();
-
-                sendRune({
-                  to: toInfo.address,
-                  fee: feeRate,
-                  amount: unitAmount,
-                  base: token.base,
-                  enableRBF
-                })
-                  .then((res) => {
-                    navigate('TxConfirmScreen', {
-                      rawTxInfo: res,
-                      type: TxType.SEND_RUNE_TEST
-                    });
-                  })
-                  .catch((error) => {
-                    navigate('TxFailScreen', { error: error.message });
-                  });
-              } else {
-                navigate('TxConfirmScreen', { rawTxInfo });
-              }
+              navigate('TxConfirmScreen', { rawTxInfo });
             }}></Button>
         </Column>
       </Content>
