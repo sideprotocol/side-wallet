@@ -18,7 +18,7 @@ function TokenItem({
   balance: string | number;
 }) {
   const accountBalance = useAccountBalance();
-  const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.coingecko_id);
+  const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.base || '');
   console.log('token: ', token);
 
   console.log({

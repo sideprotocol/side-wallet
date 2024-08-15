@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext } from 'react';
 
 import { AccountAsset } from '@/background/controller/wallet';
-import { CoingeckoPriceType } from '@/background/service/asset';
+import { AssetPriceType } from '@/background/service/asset';
 import { ContactBookItem, ContactBookStore } from '@/background/service/contactBook';
 import { ToSignInput } from '@/background/service/keyring';
 import { ConnectedSite } from '@/background/service/permission';
@@ -373,8 +373,8 @@ export interface WalletController {
   getBitcoinTokens(): Promise<BitcoinToken[]>;
   getSideTokens(): Promise<SideToken[]>;
 
-  setCoingeckoPriceMap(data: CoingeckoPriceType): Promise<void>;
-  getCoingeckoPriceMap(): Promise<CoingeckoPriceType>;
+  setAssetPriceMap(data: AssetPriceType): Promise<void>;
+  getAssetPriceMap(): Promise<AssetPriceType>;
 
   setAccountBitcoinTokenBalance(account: string, symbol: string, amount: string): Promise<void>;
   getAccountBitcoinTokenBalance(account: string, symbol: string): Promise<string>;

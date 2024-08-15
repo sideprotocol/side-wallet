@@ -1,16 +1,16 @@
 import { Fragment } from 'react';
 
 import { SideToken } from '@/shared/types';
-import { Column, Image, Row, Text } from '@/ui/components';
+import { Column, Row, Text } from '@/ui/components';
+import ImageIcon from '@/ui/components/ImageIcon';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
-import ImageIcon from '@/ui/components/ImageIcon';
 
 function TokenItem({ token, balanceVisible }: { token: SideToken; balanceVisible: boolean }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
-  const { data: totalPrice } = useCalcPrice(balanceAmount, token.coingecko_id, token.exponent);
+  const { data: totalPrice } = useCalcPrice(balanceAmount, token.base, token.exponent);
 
   return (
     <Row
@@ -23,11 +23,14 @@ function TokenItem({ token, balanceVisible }: { token: SideToken; balanceVisible
         borderRadius: 10
       }}>
       <Row>
-        <ImageIcon url={token.logo} style={{
-          width: '38px',
-          height: '38px',
-          borderRadius: '50%',
-        }} />
+        <ImageIcon
+          url={token.logo}
+          style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%'
+          }}
+        />
         <Column
           style={{
             gap: '0px'
@@ -49,7 +52,7 @@ function TokenItem({ token, balanceVisible }: { token: SideToken; balanceVisible
   );
 }
 
-export default function SideTokenList({balanceVisible}) {
+export default function SideTokenList({ balanceVisible }) {
   const { data: assets } = useGetSideTokenList();
   return (
     <Column>

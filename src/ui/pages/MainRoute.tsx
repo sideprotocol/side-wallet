@@ -1,9 +1,7 @@
-import axios from 'axios';
 import { useCallback, useEffect, useRef } from 'react';
 import { HashRouter, Route, Routes, useNavigate as useNavigateOrigin } from 'react-router-dom';
 
 // import IdleTimer, { useIdleTimer } from 'react-idle-timer';
-import { ASSETS, SWAP_ASSETS } from '@/ui/constants';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { Content, Icon, Layout } from '../components';
@@ -379,28 +377,6 @@ export function useNavigate() {
   );
 }
 
-const getCoinUnitPrice = async () => {
-  const ids = ASSETS.concat([SWAP_ASSETS]).map((item) => item.assets.map((asset) => asset.coingecko_id));
-
-  const newIds = [...new Set(ids.flat())];
-  if (!newIds) {
-    return {};
-  }
-  const { data } = await axios
-    .get('/siderprices/api/simple/price', {
-      baseURL: 'https://insider.side.one/',
-      params: {
-        ids: newIds.join(','),
-        vs_currencies: 'usd'
-      }
-    })
-    .catch(() => {
-      localStorage.setItem('unitPriceMap', JSON.stringify({ cosmos: { usd: 9.95 }, 'usd-coin': { usd: 0.997278 } }));
-      return;
-    });
-  localStorage.setItem('unitPriceMap', JSON.stringify(data));
-};
-
 const Main = () => {
   const wallet = useWallet();
   const dispatch = useAppDispatch();
@@ -485,13 +461,6 @@ const Main = () => {
         });
       }
     });
-    getCoinUnitPrice();
-    const unitInterval = setInterval(() => {
-      getCoinUnitPrice();
-    }, 3600000);
-    return () => {
-      clearInterval(unitInterval);
-    };
   }, []);
 
   useEffect(() => {

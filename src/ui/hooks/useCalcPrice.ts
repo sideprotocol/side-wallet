@@ -3,24 +3,24 @@ import { useEffect, useState } from 'react';
 
 import { formatUnitAmount, useWallet } from '../utils';
 
-export function useCalcPrice(balanceAmount: string, coingecko_id: string, decimals?: number | string) {
+export function useCalcPrice(balanceAmount: string, base: string, decimals?: number | string) {
   const wallet = useWallet();
   const [totalPrice, setTotalPrice] = useState('0');
   useEffect(() => {
     calcPrice();
-  }, [balanceAmount, coingecko_id]);
+  }, [balanceAmount, base]);
 
   const calcPrice = async () => {
-    if (!coingecko_id) {
+    if (!base) {
       return;
     }
-    const priceMap = await wallet.getCoingeckoPriceMap();
+    const priceMap = await wallet.getAssetPriceMap();
     let amount = balanceAmount;
     if (decimals) {
       amount = formatUnitAmount(balanceAmount, decimals);
     }
 
-    const _totalPrice = new BigNumber(amount).multipliedBy(priceMap[coingecko_id].usd).toString();
+    const _totalPrice = new BigNumber(amount).multipliedBy(priceMap[base] || 0).toString();
     setTotalPrice(_totalPrice);
   };
   return {

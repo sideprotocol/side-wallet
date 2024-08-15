@@ -3,13 +3,13 @@ import { useLocation } from 'react-router-dom';
 
 import { TxType } from '@/shared/types';
 import { Button, Column, Header, Image, Input, Layout, Row, Text } from '@/ui/components';
+import ImageIcon from '@/ui/components/ImageIcon';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useUiTxCreateSendSideScreen, useUpdateUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
 import { formatUnitAmount, isValidAddress } from '@/ui/utils';
-import ImageIcon from '@/ui/components/ImageIcon';
 
 export default function CreateSendSide() {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ export default function CreateSendSide() {
     };
   }, [sideTokenList]);
 
-  const { data: feeByUSD } = useCalcPrice(fee, feeToken?.coingecko_id, feeToken?.exponent || 6);
+  const { data: feeByUSD } = useCalcPrice(fee, feeToken?.base, feeToken?.exponent || 6);
   const disabled = useMemo(() => {
     let _disabled = false;
     if (!isValidAddress(toInfo.address)) {
@@ -91,11 +91,14 @@ export default function CreateSendSide() {
             }}
             justifyCenter>
             {/*<Image src={curToken.logo} size={62} />*/}
-            <ImageIcon url={curToken.logo} style={{
-              width: '62px',
-              height: '62px',
-              borderRadius: '50%',
-            }} />
+            <ImageIcon
+              url={curToken.logo}
+              style={{
+                width: '62px',
+                height: '62px',
+                borderRadius: '50%'
+              }}
+            />
           </Row>
         </Row>
         <Text
@@ -173,7 +176,7 @@ export default function CreateSendSide() {
           style={{
             padding: '16px 12px',
             borderRadius: '10px',
-            opacity: 0,
+            opacity: 0
           }}>
           <Text
             text="Tx Fee:"

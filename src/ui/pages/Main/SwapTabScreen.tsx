@@ -4,9 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDebouncedCallback } from 'use-debounce';
 
 // import { Modal } from 'antd';
-import { KEYRING_TYPE } from '@/shared/constant';
 import LoadingIcon from '@/ui/assets/icons/loading.svg';
-import { Column, Content, Footer, Header, Image, Layout, Row } from '@/ui/components';
+import { Column, Content, Footer, Layout, Row } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
@@ -21,17 +20,15 @@ import { getCurrentTab } from '@/ui/features/browser/tabs';
 import useGetAllPools from '@/ui/hooks/useGetAllPools';
 import useSwap from '@/ui/hooks/useSwap';
 import useSwapSimulation from '@/ui/hooks/useSwapSimulation';
-import AccountSelect from '@/ui/pages/Account/AccountSelect';
+import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
-import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
 import { removeStartZero } from '@/ui/utils/format';
 import { findAssetIcon } from '@/ui/utils/swap';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { Coin } from '@cosmjs/stargate';
-import MainHeader from '@/ui/pages/Main/MainHeader';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
@@ -85,7 +82,7 @@ const InitBalance = () => {
 };
 
 const NativeBalance = () => {
-  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
+  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
   const { swapLoading, swapPair, balances, swapRouteResult } = useSwapStore();
   const currentAccount = useCurrentAccount();
@@ -117,7 +114,7 @@ const NativeBalance = () => {
   };
   const nativePrice = (
     new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(
-      unitPriceMap[assetNativeIcon?.coingecko_id || '']?.usd || '0'
+      priceMap[assetNativeIcon?.base || ''] || '0'
     ) || 0
   )
     .toFixed(8, BigNumber.ROUND_DOWN)
@@ -175,7 +172,7 @@ const NativeBalance = () => {
 };
 
 const NativePrice = () => {
-  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
+  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
   const { swapPair, balances } = useSwapStore();
   const currentAccount = useCurrentAccount();
@@ -185,7 +182,7 @@ const NativePrice = () => {
 
   const nativePrice = (
     new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(
-      unitPriceMap[assetNativeIcon?.coingecko_id || '']?.usd || '0'
+      priceMap[assetNativeIcon?.base || ''] || '0'
     ) || 0
   )
     .toFixed(8, BigNumber.ROUND_DOWN)
@@ -212,7 +209,7 @@ const NativePrice = () => {
 };
 
 const RemoteBalance = () => {
-  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
+  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
   const { swapPair, balances } = useSwapStore();
   const currentAccount = useCurrentAccount();
@@ -228,7 +225,7 @@ const RemoteBalance = () => {
 
   const remotePrice = (
     new BigNumber(!swapPair?.remote?.amount ? 0 : swapPair?.remote?.amount).multipliedBy(
-      unitPriceMap[assetRemoteIcon?.coingecko_id || '']?.usd || '0'
+      priceMap[assetRemoteIcon?.base || ''] || '0'
     ) || 0
   )
     .toFixed(8, BigNumber.ROUND_DOWN)
@@ -293,7 +290,7 @@ const RemoteBalance = () => {
 };
 
 const RemotePrice = () => {
-  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
+  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
   const { swapPair, balances } = useSwapStore();
   const currentAccount = useCurrentAccount();
@@ -303,7 +300,7 @@ const RemotePrice = () => {
 
   const nativePrice = (
     new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(
-      unitPriceMap[assetNativeIcon?.coingecko_id || '']?.usd || '0'
+      priceMap[assetNativeIcon?.base || ''] || '0'
     ) || 0
   )
     .toFixed(8, BigNumber.ROUND_DOWN)

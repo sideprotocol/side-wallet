@@ -1,13 +1,11 @@
-import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
-
+import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 
+import services from '@/ui/services';
 import { Pool, SwapRouteResult } from '@/ui/services/dex/type';
-import BigNumber from 'bignumber.js';
+import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { findAssetIcon } from '@/ui/utils/swap';
-
-import services from '@/ui/services';
 
 export default function useSwapSimulation() {
   const { swapPair, mode, limitRate, rateModified, isRateExchanged, allPools } = useSwapStore();
@@ -43,7 +41,7 @@ export default function useSwapSimulation() {
 
     swapStore.swapPair['remote'] = {
       denom: swapPair.remote.denom,
-      amount: outputAmount,
+      amount: outputAmount
     };
 
     if (data.returnToken) {
@@ -87,8 +85,8 @@ export default function useSwapSimulation() {
 
       const unitAmount = toUnitAmount(swapPair.native.amount, assetIn?.exponent || '6');
 
-      let resultQuote
-      try{
+      let resultQuote;
+      try {
         resultQuote = await services.dex.getValidRoutes(swapPair.native.denom, unitAmount, swapPair.remote.denom);
       } catch (e) {
         console.log(e);
@@ -103,7 +101,9 @@ export default function useSwapSimulation() {
             swapPair.native.denom in p.assetsMeta &&
             swapPair.remote.denom in p.assetsMeta &&
             p.pair.pair_type?.['custom'] === 'transmuter' &&
-            BigNumber(pAssetOut?.amount || 0).gte(toUnitAmount(toReadableAmount(unitAmount, assetIn?.exponent || 6), assetOut?.exponent || 6))
+            BigNumber(pAssetOut?.amount || 0).gte(
+              toUnitAmount(toReadableAmount(unitAmount, assetIn?.exponent || 6), assetOut?.exponent || 6)
+            )
           );
         })
         .sort((a, b) => {
@@ -116,7 +116,7 @@ export default function useSwapSimulation() {
           return 1;
         });
 
-      const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
+      const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
       if (transmuterPools?.length > 0) {
         const selectedPool = transmuterPools[0];
@@ -125,19 +125,22 @@ export default function useSwapSimulation() {
           amount: unitAmount,
           showAmount: swapPair.native.amount,
           denom: swapPair.native.denom,
-          price: unitPriceMap?.[assetIn?.coingecko_id || '']?.usd || '0',
-          volume: '',
+          price: priceMap?.[assetIn?.base || ''] || '0',
+          volume: ''
         };
 
-        const remoteAmount = toUnitAmount(toReadableAmount(unitAmount, assetIn?.exponent || 6), assetOut?.exponent || 6);
+        const remoteAmount = toUnitAmount(
+          toReadableAmount(unitAmount, assetIn?.exponent || 6),
+          assetOut?.exponent || 6
+        );
 
         const returnToken = {
           ...selectedPool.assetsMeta[swapPair.remote.denom],
           amount: remoteAmount,
           showAmount: swapPair.native.amount,
           denom: swapPair.remote.denom,
-          price: unitPriceMap?.[assetOut?.coingecko_id || '']?.usd || '0',
-          volume: '',
+          price: priceMap?.[assetOut?.base || ''] || '0',
+          volume: ''
         };
 
         const formattedPool: Pool = {
@@ -149,7 +152,7 @@ export default function useSwapSimulation() {
           feeAmount: '0',
           feeRate: '0',
           marketPrice: '0',
-          feeShowAmount: '0',
+          feeShowAmount: '0'
         };
 
         const result: SwapRouteResult = {
@@ -165,7 +168,7 @@ export default function useSwapSimulation() {
             .replace(/\.?0*$/, ''),
           pools: [formattedPool],
           priceImpact: '0',
-          sort: 100,
+          sort: 100
         };
 
         if (resultQuote?.length > 0 && BigNumber(remoteAmount).gt(resultQuote?.[0]?.returnToken?.amount || '0')) {

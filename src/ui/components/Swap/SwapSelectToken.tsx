@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // import { CHAINS_ENUM } from '@/shared/constant';
@@ -14,7 +14,7 @@ import { formatUnitAmount, getTruncate } from '@/ui/utils';
 
 function SideCryptoItem({ token }: { token: SideToken }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
-  const { data: totalPrice } = useCalcPrice(balanceAmount, token.coingecko_id, token.exponent);
+  const { data: totalPrice } = useCalcPrice(balanceAmount, token.base, token.exponent);
 
   return (
     <>
@@ -55,10 +55,21 @@ export default function Index(props) {
   let { open, onClose, onSelect, assetsList, popularList, onSearch, searchValue, curTokenDenom } = props;
   // console.log(`popularList: `, popularList);
   popularList = popularList.filter((item) => {
-    return item.symbol.toLocaleLowerCase().includes(searchValue.trim()) || item.name.toLocaleLowerCase().includes(searchValue.trim());
-  })
+    return (
+      item.symbol.toLocaleLowerCase().includes(searchValue.trim()) ||
+      item.name.toLocaleLowerCase().includes(searchValue.trim())
+    );
+  });
   return (
-    <Layout style={{ width: '100%', transform: 'translate(-50%, -50%)', position: 'absolute', left: '50%', top: '50%', display: open ? 'flex' : 'none' }}>
+    <Layout
+      style={{
+        width: '100%',
+        transform: 'translate(-50%, -50%)',
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        display: open ? 'flex' : 'none'
+      }}>
       <Header
         onBack={() => {
           onClose();
@@ -69,13 +80,17 @@ export default function Index(props) {
         style={{
           backgroundColor: '#09090A',
           padding: 0,
-          marginTop: 16,
+          marginTop: 16
         }}>
-        <Column style={{
-          padding: '0 24px'
-        }}>
+        <Column
+          style={{
+            padding: '0 24px'
+          }}>
           {/*<div className={'flex items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '}></div>*/}
-          <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '}>
+          <div
+            className={
+              'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '
+            }>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
             <Input
@@ -93,24 +108,27 @@ export default function Index(props) {
               }}
               placeholder="Search crypto"
             />
-            <div onClick={() => {
-              onSearch('');
-            }} style={{
-              position: 'absolute',
-              right: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              cursor: 'pointer',
-              display: searchValue ? 'block' : 'none'
-            }}>
+            <div
+              onClick={() => {
+                onSearch('');
+              }}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+                display: searchValue ? 'block' : 'none'
+              }}>
               <Icon icon="clear" color={'search_icon'} size={20}></Icon>
             </div>
           </div>
         </Column>
 
-        <Column style={{
-          marginTop: '14px'
-        }}>
+        <Column
+          style={{
+            marginTop: '14px'
+          }}>
           {popularList?.map((asset) => {
             return (
               <Row
@@ -130,7 +148,7 @@ export default function Index(props) {
                   cursor: 'pointer',
                   height: '44px',
                   padding: '10px 16px',
-                  margin: '0 16px',
+                  margin: '0 16px'
                 }}>
                 <SideCryptoItem token={asset} />
               </Row>

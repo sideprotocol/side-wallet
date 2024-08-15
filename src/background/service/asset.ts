@@ -1,16 +1,14 @@
 import { createPersistStore } from '@/background/utils';
 import { BitcoinToken, SideToken } from '@/shared/types';
 
-export type CoingeckoPriceType = {
-  [key: string]: {
-    usd: number;
-  };
+export type AssetPriceType = {
+  [key: string]: string;
 };
 
 export type AssetStore = {
   bitcoinTokens: BitcoinToken[];
   sideTokens: SideToken[];
-  coingeckoPriceMap: CoingeckoPriceType;
+  assetPriceMap: AssetPriceType;
   bitcoinTokenBalanceList: { [key: string]: Array<{ amount: string } & Pick<BitcoinToken, 'symbol'>> };
   sideTokenBalanceList: { [key: string]: Array<{ amount: string } & Pick<SideToken, 'base'>> };
 };
@@ -24,7 +22,7 @@ class AssetService {
       template: {
         bitcoinTokens: [],
         sideTokens: [],
-        coingeckoPriceMap: {},
+        assetPriceMap: {},
         bitcoinTokenBalanceList: {},
         sideTokenBalanceList: {}
       }
@@ -46,12 +44,12 @@ class AssetService {
     return this.store.sideTokens;
   };
 
-  setCoingeckoPriceMap = (data: CoingeckoPriceType) => {
-    this.store.coingeckoPriceMap = data;
+  setAssetPriceMap = (data: AssetPriceType) => {
+    this.store.assetPriceMap = data;
   };
 
-  getCoingeckoPriceMap = () => {
-    return this.store.coingeckoPriceMap;
+  getAssetPriceMap = () => {
+    return this.store.assetPriceMap;
   };
 
   getAccountBitcoinTokenBalanceList = (account: string) => {

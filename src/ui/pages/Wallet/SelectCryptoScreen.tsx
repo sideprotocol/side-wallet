@@ -86,7 +86,7 @@ function BitCrypto({ searchTerm }) {
 
 function SideCryptoItem({ token }: { token: SideToken }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
-  const { data: totalPrice } = useCalcPrice(balanceAmount, token.coingecko_id, token.exponent);
+  const { data: totalPrice } = useCalcPrice(balanceAmount, token.base, token.exponent);
 
   return (
     <>

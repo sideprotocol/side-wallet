@@ -1,5 +1,5 @@
 // import { CHAINS_ENUM } from '@/shared/constant';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { SideToken } from '@/shared/types';
 import { Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
@@ -14,7 +14,7 @@ function SideCryptoItem({ token }: { token: SideToken & { price: string; amount:
   const { balanceAmount } = useGetSideTokenBalance(token.base);
   const { from } = useBridgeStore();
 
-  const { data: totalPrice } = useCalcPrice(balanceAmount, token.coingecko_id, token.exponent);
+  const { data: totalPrice } = useCalcPrice(balanceAmount, token.base, token.exponent);
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
@@ -61,13 +61,24 @@ export default function Index(props) {
   let runeAndBtcTokens = useRuneAndBtcBalances();
   if (searchValue && runeAndBtcTokens?.length) {
     runeAndBtcTokens = runeAndBtcTokens.filter((item) => {
-      return item?.symbol?.toLocaleLowerCase().includes(searchValue?.trim()) || item?.name?.toLocaleLowerCase()?.includes(searchValue?.trim());
+      return (
+        item?.symbol?.toLocaleLowerCase().includes(searchValue?.trim()) ||
+        item?.name?.toLocaleLowerCase()?.includes(searchValue?.trim())
+      );
     });
   }
   console.log(`runeAndBtcTokens: `, runeAndBtcTokens);
 
   return (
-    <Layout style={{ width: '100%', transform: 'translate(-50%, -50%)', position: 'absolute', left: '50%', top: '50%', display: open ? 'flex' : 'none' }}>
+    <Layout
+      style={{
+        width: '100%',
+        transform: 'translate(-50%, -50%)',
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        display: open ? 'flex' : 'none'
+      }}>
       <Header
         onBack={() => {
           onClose();
@@ -78,11 +89,12 @@ export default function Index(props) {
         style={{
           backgroundColor: '#09090A',
           padding: 0,
-          marginTop: 16,
+          marginTop: 16
         }}>
-        <Column style={{
-          padding: '0 24px'
-        }}>
+        <Column
+          style={{
+            padding: '0 24px'
+          }}>
           {/*<Row*/}
           {/*  style={{*/}
           {/*    padding: '0px 10px',*/}
@@ -94,7 +106,9 @@ export default function Index(props) {
           {/*  bg="search_box_bg"*/}
           {/*  full>*/}
           <div
-            className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '}>
+            className={
+              'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '
+            }>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
             <Input
@@ -112,16 +126,18 @@ export default function Index(props) {
               }}
               placeholder="Search crypto"
             />
-            <div onClick={() => {
-              onSearch('');
-            }} style={{
-              position: 'absolute',
-              right: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              cursor: 'pointer',
-              display: searchValue ? 'block' : 'none'
-            }}>
+            <div
+              onClick={() => {
+                onSearch('');
+              }}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+                display: searchValue ? 'block' : 'none'
+              }}>
               <Icon icon="clear" color={'search_icon'} size={20}></Icon>
             </div>
           </div>
@@ -146,7 +162,7 @@ export default function Index(props) {
                 style={{
                   cursor: 'pointer',
                   height: '44px',
-                  padding: '10px 16px',
+                  padding: '10px 16px'
                   // margin: '0 16px',
                 }}>
                 <SideCryptoItem token={asset} />

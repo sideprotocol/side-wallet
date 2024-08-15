@@ -110,7 +110,7 @@ export default function useSwap() {
               return 1;
             });
 
-          const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
+          const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
           if (transmuterPools?.length > 0) {
             const selectedPool = transmuterPools[0];
@@ -119,7 +119,7 @@ export default function useSwap() {
               amount: unitAmount,
               showAmount: swapPair.native.amount,
               denom: swapPair.native.denom,
-              price: unitPriceMap?.[assetIn?.coingecko_id || '']?.usd || '0',
+              price: priceMap?.[assetIn?.base || ''] || '0',
               volume: ''
             };
 
@@ -133,7 +133,7 @@ export default function useSwap() {
               amount: remoteAmount,
               showAmount: swapPair.native.amount,
               denom: swapPair.remote.denom,
-              price: unitPriceMap?.[assetOut?.coingecko_id || '']?.usd || '0',
+              price: priceMap?.[assetOut?.base || ''] || '0',
               volume: ''
             };
 

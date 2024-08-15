@@ -526,12 +526,12 @@ export const useRuneBalances = () => {
     );
 
     const predata = Object.entries(_data).map((item) => {
-      const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
+      const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
       const runeid = 'runes/' + `${allRunes.entries.find((entry) => entry[1].spaced_rune === item[0])?.[0] || ''}`;
       const asset = assets.find((a) => a.base === runeid);
 
-      const balancePrice = unitPriceMap?.[asset?.coingecko_id || '']?.usd || 0;
+      const balancePrice = priceMap?.[asset?.base || ''] || 0;
 
       const price = new BigNumber(balancePrice)
         .multipliedBy(item[1])
@@ -615,9 +615,9 @@ export const useRuneAndBtcBalances = () => {
 
   const { data: bitcoinBtcBalance, loading: btcLoaing } = useBitcoinBtcBalance();
 
-  const unitPriceMap = JSON.parse(localStorage.getItem('unitPriceMap') || '{}');
+  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
-  const balancePrice = unitPriceMap?.[satItem?.coingecko_id || '']?.usd || 0;
+  const balancePrice = priceMap?.[satItem?.base || ''] || 0;
 
   const price = new BigNumber(balancePrice).multipliedBy(bitcoinBtcBalance || '0').toFixed(2);
 

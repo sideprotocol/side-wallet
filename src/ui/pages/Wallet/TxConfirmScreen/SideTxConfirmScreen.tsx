@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 
 import { CHAINS_ENUM } from '@/shared/constant';
-import { Button, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
+import ImageIcon from '@/ui/components/ImageIcon';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -12,7 +13,6 @@ import { formatUnitAmount, parseUnitAmount } from '@/ui/utils';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { useNavigate } from '../../MainRoute';
-import ImageIcon from '@/ui/components/ImageIcon';
 
 export default function SideTxConfirmScreen() {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ export default function SideTxConfirmScreen() {
     };
   }, [sideTokenList]);
 
-  const { data: feeByUSD } = useCalcPrice(fee, feeToken?.coingecko_id, feeToken?.exponent || 6);
+  const { data: feeByUSD } = useCalcPrice(fee, feeToken?.base, feeToken?.exponent || 6);
   if (!curToken) {
     return <Layout />;
   }
@@ -113,11 +113,14 @@ export default function SideTxConfirmScreen() {
               style={{
                 alignItems: 'center'
               }}>
-              <ImageIcon url={curToken.logo} style={{
-                width: '42px',
-                height: '42px',
-                borderRadius: '50%',
-              }} />
+              <ImageIcon
+                url={curToken.logo}
+                style={{
+                  width: '42px',
+                  height: '42px',
+                  borderRadius: '50%'
+                }}
+              />
               <Text
                 text={curToken.symbol}
                 style={{
