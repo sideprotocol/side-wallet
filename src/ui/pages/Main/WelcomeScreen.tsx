@@ -14,11 +14,12 @@ export default function WelcomeScreen() {
   const isInTab = useExtensionIsInTab();
 
   return (
-    <Layout style={{
-      maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
-      height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
-      overflow: 'hidden',
-    }}>
+    <Layout
+      style={{
+        maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
+        height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
+        overflow: 'hidden'
+      }}>
       {state?.addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}
       <Column
         fullX
@@ -43,7 +44,7 @@ export default function WelcomeScreen() {
           <Button
             style={{
               marginTop: '100px',
-              fontWeight: 500,
+              fontWeight: 500
             }}
             text="Create new wallet"
             preset="primary"
@@ -68,7 +69,7 @@ export default function WelcomeScreen() {
               }
             }}
             style={{
-              marginTop: '24px'
+              marginTop: '8px'
             }}
           />
         </Column>

@@ -11,10 +11,9 @@ import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { colors } from '@/ui/theme/colors';
-import { copyToClipboard, useWallet } from '@/ui/utils';
+import { copyToClipboard, shortAddress, useWallet } from '@/ui/utils';
 
 import './index.less';
-import { shortAddress } from '@/ui/utils';
 
 export interface ItemData {
   key: string;
@@ -94,36 +93,43 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
             }}
           />
 
-          <div onMouseOver={handleMouseOver}
-               onMouseLeave={handleMouseLeave}
-                style={{
-            display: 'flex',
-            gap: 0,
-            alignItems: 'center',
-                  height: 19
-          }}>
+          <div
+            onMouseOver={handleMouseOver}
+            onMouseLeave={handleMouseLeave}
+            style={{
+              display: 'flex',
+              gap: 0,
+              alignItems: 'center',
+              height: 19
+            }}>
             <Text
               text={shortAddress(account.address)}
               color="search_icon"
               style={{
                 fontSize: '12px',
-                fontWeight: 600,
                 lineHeight: '17px',
-                marginRight: '8px',
+                marginRight: '8px'
               }}
             />
-            <Icon className={'copy-icon'} style={{
-              marginRight: '3px',
-            }} onClick={(e) => {
-              e.stopPropagation();
-              copy(account.address);
-              setIsClickCopy(true);
-            }} icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
-                  color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'} size={14} />
-            <Text text={isClickCopy ? 'Copied' : ''}
-                  color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'} />
+            <Icon
+              className={'copy-icon'}
+              style={{
+                marginRight: '3px'
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                copy(account.address);
+                setIsClickCopy(true);
+              }}
+              icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
+              color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+              size={14}
+            />
+            <Text
+              text={isClickCopy ? 'Copied' : ''}
+              color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+            />
           </div>
-
         </div>
 
         <Column relative>
@@ -286,8 +292,7 @@ export default function SwitchAccountScreen() {
           className="flex items-center gap-[5px] bg-[#1E1E1F] rounded-[12px] px-[10px] hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20]"
           style={{
             borderColor: isFocus ? 'white' : ''
-          }}
-          >
+          }}>
           <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
           <Input

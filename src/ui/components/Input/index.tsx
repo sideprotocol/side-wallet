@@ -65,7 +65,7 @@ const $baseContainerStyle: CSSProperties = {
   paddingBottom: 11,
   borderRadius: 10,
   minHeight: '50px',
-  alignSelf: 'stretch',
+  alignSelf: 'stretch'
   // border: '1px solid #FFFFFF33'
 };
 
@@ -92,21 +92,34 @@ function PasswordInput(props: InputProps) {
   const [type, setType] = useState<'password' | 'text'>('password');
   const [isMouse, setIsMouse] = useState<boolean>(false);
   const [isContainerMouseOver, setIsContainerMouseOver] = useState<boolean>(false);
+  const [isFocus, setIsFocus] = useState(false);
   return (
-    <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] '} style={Object.assign({}, $baseContainerStyle, containerStyle, {
-      // borderColor: isContainerMouseOver ? '#ffffff50!important' : 'transparent'
-    })}>
+    <div
+      className={` border-[1px] border-solid ${
+        isFocus ? 'border-white' : 'border-[#ffffff20] hover:border-[#ffffff50] '
+      } `}
+      style={Object.assign({}, $baseContainerStyle, containerStyle, {
+        // borderColor: isContainerMouseOver ? '#ffffff50!important' : 'transparent'
+      })}>
       <input
         placeholder={isNull(placeholder) ? 'Password' : placeholder}
+        className="placeholder:opacity-30"
         type={type}
         style={Object.assign({}, $baseInputStyle, $inputStyleOverride)}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
         {...rest}
       />
       {type === 'password' && (
-        <Icon onMouseLeave={() => setIsMouse(false)} onMouseOver={() => setIsMouse(true)}
-              icon={isMouse ? 'eye-slash-hover' : 'eye-slash'} style={{ marginLeft: spacing.tiny }}
-              // onClick={() => setType('text')} color="textDim" />
-              onClick={() => setType('text')} color={isMouse ? 'white' : 'textDim'} />
+        <Icon
+          onMouseLeave={() => setIsMouse(false)}
+          onMouseOver={() => setIsMouse(true)}
+          icon={isMouse ? 'eye-slash-hover' : 'eye-slash'}
+          style={{ marginLeft: spacing.tiny }}
+          // onClick={() => setType('text')} color="textDim" />
+          onClick={() => setType('text')}
+          color={isMouse ? 'white' : 'textDim'}
+        />
       )}
       {type === 'text' && <Icon icon="eye" style={{ marginLeft: spacing.tiny }} onClick={() => setType('password')} />}
     </div>
@@ -165,9 +178,12 @@ function AmountInput(props: InputProps) {
     }
   };
   return (
-    <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20]'} style={Object.assign({}, $baseContainerStyle, {})}>
+    <div
+      className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20]'}
+      style={Object.assign({}, $baseContainerStyle, {})}>
       <input
         placeholder={placeholder || 'Amount'}
+        className="placeholder:opacity-30"
         type={'text'}
         value={inputValue}
         onChange={handleInputAmount}
@@ -305,9 +321,14 @@ export const AddressInput = (props: InputProps) => {
   return (
     <div style={{ alignSelf: 'stretch' }}>
       {/*formatError*/}
-      <div className={`hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] ${formatError ? '!border-[#e52937]' : ''}`}  style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '50px' })}>
+      <div
+        className={`hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] ${
+          formatError ? '!border-[#e52937]' : ''
+        }`}
+        style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '50px' })}>
         <input
           placeholder={'Address...'}
+          className="placeholder:opacity-30"
           type={'text'}
           style={Object.assign({}, $baseInputStyle, $inputStyleOverride)}
           onChange={async (e) => {
@@ -351,9 +372,23 @@ export const AddressInput = (props: InputProps) => {
 };
 
 function TextInput(props: InputProps) {
-  const { placeholder, containerStyle, value, onChange, style: $inputStyleOverride, disabled, autoFocus, ...rest } = props;
+  const {
+    placeholder,
+    containerStyle,
+    value,
+    onChange,
+    style: $inputStyleOverride,
+    disabled,
+    autoFocus,
+    ...rest
+  } = props;
+  const [isFocus, setIsFocus] = useState(false);
   return (
-    <div className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] '}  style={Object.assign({}, $baseContainerStyle, containerStyle)}>
+    <div
+      className={` border-[1px] border-solid ${
+        isFocus ? 'border-white' : 'border-[#ffffff20] hover:border-[#ffffff50] '
+      } `}
+      style={Object.assign({}, $baseContainerStyle, containerStyle)}>
       <input
         value={value}
         onChange={onChange}
@@ -361,7 +396,10 @@ function TextInput(props: InputProps) {
         type={'text'}
         disabled={disabled}
         autoFocus={autoFocus}
+        className="placeholder:opacity-30"
         style={Object.assign({}, $baseInputStyle, $inputStyleOverride, {})}
+        onFocus={() => setIsFocus(true)}
+        onBlur={() => setIsFocus(false)}
         {...rest}
       />
     </div>

@@ -66,6 +66,7 @@ const $baseViewStyle: CSSProperties = {
   overflow: 'hidden',
   cursor: 'pointer',
   alignSelf: 'stretch',
+  fontWeight: 600,
   paddingLeft: spacing.small,
   paddingRight: spacing.small
 };
@@ -126,7 +127,7 @@ const $hoverViewPresets: Record<Presets, CSSProperties> = {
     // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
   },
   primary: {
-    backgroundColor: colors.blue_dark2,
+    backgroundColor: colors.blue_dark2
     // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
   },
   approval: {
@@ -241,7 +242,13 @@ export function Button(props: ButtonProps) {
   return (
     <div
       style={$viewStyle}
-      className={`${preset === 'ghostDanger' ? 'hover:bg-[#ed334b]/10 !border-[#ed334b]' : preset === 'ghost' ? 'hover:bg-[#0DD4C3] group' : ''} `}
+      className={`${
+        preset === 'ghostDanger'
+          ? 'hover:bg-[#ed334b]/10 !border-[#ed334b]'
+          : preset === 'ghost'
+          ? 'hover:bg-[#0DD4C3] group'
+          : ''
+      } `}
       onClick={disabled ? undefined : onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>
@@ -249,7 +256,14 @@ export function Button(props: ButtonProps) {
       {/*{icon}*/}
       <Icon icon={icon} color={icon === 'expand' ? 'black' : icon === 'plus' ? 'primary' : 'white'} />
       {/*color={preset === 'ghost' ? '' : ''}*/}
-      {text && <Text style={$textStyle} text={text} preset="regular-bold" classname={preset === 'ghost' ? 'group-hover:!text-[#000]' : ''} />}
+      {text && (
+        <Text
+          style={$textStyle}
+          text={text}
+          preset="regular-bold"
+          classname={preset === 'ghost' ? 'group-hover:!text-[#000]' : ''}
+        />
+      )}
       {children}
       {RightAccessory && <div style={$rightAccessoryStyle}>{RightAccessory}</div>}
     </div>

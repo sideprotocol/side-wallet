@@ -105,7 +105,7 @@ export default function Step1_Create({
                 backgroundColor: '#222222',
                 borderRadius: '14px',
                 padding: '16px',
-                height: isClickMask ? 'auto' : '165px',
+                // height: isClickMask ? 'auto' : '165px',
                 overflow: 'hidden'
               }}>
               {wordsItems.length > 1 ? (
@@ -292,9 +292,15 @@ export default function Step1_Create({
             />
           </Column>
         </Column>
-        <Button style={{
-          minHeight: '48px',
-        }} disabled={disabled} text="Next" preset="primary" onClick={btnClick} />
+        <Button
+          style={{
+            minHeight: '48px'
+          }}
+          disabled={disabled}
+          text="Next"
+          preset="primary"
+          onClick={btnClick}
+        />
       </Column>
     </>
   );

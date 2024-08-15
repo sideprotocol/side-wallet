@@ -31,17 +31,21 @@ export function Mask({ children, onClick }: { children: React.ReactNode; onClick
           borderRadius: '14px',
           display: visible ? 'flex' : 'none',
           justifyContent: 'center',
-          alignItems: 'center',
-          maxHeight: '185px'
+          alignItems: 'center'
+          // maxHeight: '185px'
         }}>
-        <div onMouseOver={handleMouseOver}
-             onMouseLeave={handleMouseLeave}
-             onClick={() => {
-               setVisible(!visible);
-               onClick();
-             }}>
-          <Image src={isHovered ? '/images/icons/eye-white.svg' : '/images/icons/eye-off.svg'} size={40}
-                 style={{ cursor: 'pointer' }} />
+        <div
+          onMouseOver={handleMouseOver}
+          onMouseLeave={handleMouseLeave}
+          onClick={() => {
+            setVisible(!visible);
+            onClick();
+          }}>
+          <Image
+            src={isHovered ? '/images/icons/eye-white.svg' : '/images/icons/eye-off.svg'}
+            size={40}
+            style={{ cursor: 'pointer' }}
+          />
         </div>
       </div>
     </div>
