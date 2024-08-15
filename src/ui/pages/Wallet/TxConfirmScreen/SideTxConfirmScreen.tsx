@@ -9,7 +9,8 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { useUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { formatUnitAmount, parseUnitAmount } from '@/ui/utils';
+import { parseUnitAmount } from '@/ui/utils';
+import { toUnitAmount } from '@/ui/utils/formatter';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { useNavigate } from '../../MainRoute';
@@ -35,9 +36,13 @@ export default function SideTxConfirmScreen() {
       curToken,
       feeToken
     };
-  }, [sideTokenList]);
+  }, [sideTokenList.length, denom, feeDenom]);
 
-  const { data: feeByUSD } = useCalcPrice(fee, feeToken?.base, feeToken?.exponent || 6);
+  const { data: feeByUSD } = useCalcPrice(
+    toUnitAmount(uiState.fee || '0', feeToken?.exponent || 6),
+    feeToken?.base,
+    feeToken?.exponent || 6
+  );
   if (!curToken) {
     return <Layout />;
   }
@@ -192,10 +197,9 @@ export default function SideTxConfirmScreen() {
         <Row
           justifyBetween
           style={{
-            padding: '16px 12px',
+            padding: '14px 12px',
             borderRadius: '10px',
-            backgroundColor: '#1E1E1F',
-            opacity: 0
+            backgroundColor: '#1E1E1F'
           }}>
           <Text
             text="Tx Fee:"
@@ -207,7 +211,7 @@ export default function SideTxConfirmScreen() {
           />
           <Row>
             <Text
-              text={`${formatUnitAmount(fee, feeToken.exponent)} ${feeToken.symbol}`}
+              text={`${uiState.fee} ${feeToken.symbol}`}
               style={{
                 fontSize: '16px',
                 fontWeight: 600,
@@ -224,14 +228,7 @@ export default function SideTxConfirmScreen() {
             />
           </Row>
         </Row>
-        <Button
-          preset="primary"
-          text="Confirm"
-          onClick={handleSubmit}
-          style={{
-            marginTop: '12px'
-          }}
-        />
+        <Button preset="primary" text="Confirm" onClick={handleSubmit} />
       </Column>
     </Layout>
   );

@@ -8,8 +8,11 @@ import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { useNavigate } from '@/ui/pages/MainRoute';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { useUiTxCreateSendSideScreen, useUpdateUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
-import { formatUnitAmount, isValidAddress } from '@/ui/utils';
+import { formatUnitAmount, isValidAddress, parseUnitAmount } from '@/ui/utils';
+import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
 export default function CreateSendSide() {
   const navigate = useNavigate();
@@ -20,17 +23,18 @@ export default function CreateSendSide() {
   const uiState = useUiTxCreateSendSideScreen();
   const setUiState = useUpdateUiTxCreateSendSideScreen();
 
+  const { estimateGasFee } = useSignAndBroadcastTxRaw();
+
   const { data: sideTokenList } = useGetSideTokenList();
   const { balanceAmount } = useGetSideTokenBalance(base);
   const toInfo = uiState.toInfo;
   const inputAmount = uiState.inputAmount;
-  const fee = uiState.fee;
+  // const fee = uiState.fee;
+
   const feeDenom = uiState.feeDenom;
   const memo = uiState.memo;
 
-  useEffect(() => {
-    setUiState({ base });
-  }, [base]);
+  const currentAccount = useCurrentAccount();
 
   const { curToken, feeToken } = useMemo(() => {
     const curToken = sideTokenList.find((item) => item.base === base)!;
@@ -41,7 +45,49 @@ export default function CreateSendSide() {
     };
   }, [sideTokenList]);
 
-  const { data: feeByUSD } = useCalcPrice(fee, feeToken?.base, feeToken?.exponent || 6);
+  async function estimateFee() {
+    const msg = {
+      typeUrl: '/cosmos.bank.v1beta1.MsgSend',
+      value: {
+        fromAddress: currentAccount.address,
+        toAddress: toInfo.address,
+        amount: [
+          {
+            amount: parseUnitAmount('1', curToken.exponent),
+            denom: curToken.base
+          }
+        ]
+      }
+    };
+
+    const { tx } = await estimateGasFee({
+      messages: [msg],
+      feeAmount: uiState.fee,
+      feeDenom: feeDenom
+    });
+
+    const coin = tx.fee.amount[0];
+
+    const feeEstimate = toReadableAmount(coin.amount, feeToken?.exponent || 6);
+
+    setUiState({
+      fee: feeEstimate
+    });
+  }
+
+  useEffect(() => {
+    setUiState({ base });
+    if (!toInfo.address || !curToken?.base || !base) return;
+
+    estimateFee();
+  }, [base, toInfo?.address, curToken?.base, feeToken]);
+
+  const { data: feeByUSD } = useCalcPrice(
+    toUnitAmount(uiState.fee || '0', feeToken?.exponent || 6),
+    feeToken?.base,
+    feeToken?.exponent || 6
+  );
+
   const disabled = useMemo(() => {
     let _disabled = false;
     if (!isValidAddress(toInfo.address)) {
@@ -73,110 +119,119 @@ export default function CreateSendSide() {
           borderRadius: '10px',
           background: '#222',
           padding: '0 16px',
+          paddingBottom: '14px',
           marginTop: '40px',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
         }}>
-        <Row
-          justifyCenter
+        <Column
           style={{
-            marginTop: '-35px'
+            flex: '1',
+            gap: '10px'
           }}>
           <Row
+            justifyCenter
             style={{
-              background: '#1E1E1F',
-              width: '74px',
-              height: '74px',
-              borderRadius: '50%',
-              alignItems: 'center'
-            }}
-            justifyCenter>
-            {/*<Image src={curToken.logo} size={62} />*/}
-            <ImageIcon
-              url={curToken.logo}
+              marginTop: '-35px'
+            }}>
+            <Row
               style={{
-                width: '62px',
-                height: '62px',
-                borderRadius: '50%'
+                background: '#1E1E1F',
+                width: '74px',
+                height: '74px',
+                borderRadius: '50%',
+                alignItems: 'center'
               }}
-            />
+              justifyCenter>
+              {/*<Image src={curToken.logo} size={62} />*/}
+              <ImageIcon
+                url={curToken.logo}
+                style={{
+                  width: '62px',
+                  height: '62px',
+                  borderRadius: '50%'
+                }}
+              />
+            </Row>
           </Row>
-        </Row>
-        <Text
-          text="Recipient"
-          color="white_muted"
-          style={{
-            fontSize: '14px',
-            lineHeight: '24px'
-          }}
-        />
-        <Input
-          preset="address"
-          addressInputData={toInfo}
-          onAddressInputChange={(val) => {
-            setUiState({ toInfo: val });
-          }}
-          autoFocus={true}
-        />
-        <Row
-          justifyBetween
-          style={{
-            marginTop: '16px'
-          }}>
           <Text
-            text="Amount"
+            text="Recipient"
             color="white_muted"
             style={{
               fontSize: '14px',
               lineHeight: '24px'
             }}
           />
+          <Input
+            preset="address"
+            addressInputData={toInfo}
+            onAddressInputChange={(val) => {
+              setUiState({ toInfo: val });
+            }}
+            autoFocus={true}
+          />
           <Row
+            justifyBetween
             style={{
-              alignItems: 'center'
+              marginTop: '16px'
             }}>
-            <Image src="./images/icons/wallet-04.svg" size={24} />
             <Text
-              text={available}
+              text="Amount"
+              color="white_muted"
               style={{
                 fontSize: '14px',
                 lineHeight: '24px'
               }}
             />
+            <Row
+              style={{
+                alignItems: 'center'
+              }}>
+              <Image src="./images/icons/wallet-04.svg" size={24} />
+              <Text
+                text={available}
+                style={{
+                  fontSize: '14px',
+                  lineHeight: '24px'
+                }}
+              />
+            </Row>
           </Row>
-        </Row>
-        <Input
-          preset="amount"
-          placeholder={'Amount'}
-          value={inputAmount}
-          onAmountInputChange={(amount) => {
-            setUiState({ inputAmount: amount });
-          }}
-          enableMax={true}
-          onMaxClick={() => {
-            setUiState({ inputAmount: available });
-          }}
-        />
-        <Text
-          text="Memo"
-          color="white_muted"
-          style={{
-            fontSize: '14px',
-            lineHeight: '24px',
-            marginTop: '16px'
-          }}
-        />
-        <Input
-          preset="text"
-          placeholder={'Required for sending to centralized exchanges'}
-          value={memo}
-          onChange={(e) => setUiState({ memo: e.target.value })}
-        />
+          <Input
+            preset="amount"
+            placeholder={'Amount'}
+            value={inputAmount}
+            onAmountInputChange={(amount) => {
+              setUiState({ inputAmount: amount });
+            }}
+            enableMax={true}
+            onMaxClick={() => {
+              setUiState({ inputAmount: available });
+            }}
+          />
+          <Text
+            text="Memo"
+            color="white_muted"
+            style={{
+              fontSize: '14px',
+              lineHeight: '24px',
+              marginTop: '16px'
+            }}
+          />
+          <Input
+            preset="text"
+            placeholder={'Required for sending to centralized exchanges'}
+            value={memo}
+            onChange={(e) => setUiState({ memo: e.target.value })}
+          />
+        </Column>
+
         <Row
           justifyBetween
           style={{
-            padding: '16px 12px',
-            borderRadius: '10px',
-            opacity: 0
+            padding: '0px 12px',
+            paddingTop: '16px',
+            borderRadius: '10px'
+            // opacity: 0
           }}>
           <Text
             text="Tx Fee:"
@@ -189,29 +244,26 @@ export default function CreateSendSide() {
           <Row>
             <Text
               // text={`${formatUnitAmount(fee, feeToken.exponent)} ${feeToken.symbol}`}
-              text={`- ${feeToken.symbol}`}
+              text={`${uiState.fee} ${feeToken.symbol}`}
               style={{
                 fontSize: '16px',
                 fontWeight: 600,
                 lineHeight: '24px'
               }}
             />
-            {/*<Text*/}
-            {/*  // text={`($${feeByUSD})`}*/}
-            {/*  text={`($ -)`}*/}
-            {/*  color="white_muted"*/}
-            {/*  style={{*/}
-            {/*    fontSize: '16px',*/}
-            {/*    lineHeight: '24px'*/}
-            {/*  }}*/}
-            {/*/>*/}
+            <Text
+              text={`($${feeByUSD})`}
+              color="white_muted"
+              style={{
+                fontSize: '16px',
+                lineHeight: '24px'
+              }}
+            />
           </Row>
         </Row>
 
         <Button
           style={{
-            marginTop: '12px',
-            position: 'sticky',
             bottom: '24px',
             left: 0
           }}

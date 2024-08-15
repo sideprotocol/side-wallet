@@ -13,6 +13,7 @@ import {
 import { CosmosTransaction, CosmosTxResponse, NetworkType } from '@/shared/types';
 import { AminoConverter } from '@/ui/codegen/src/side/btcbridge/tx.amino';
 import * as sideBTCBridgeRegistry from '@/ui/codegen/src/side/btcbridge/tx.registry';
+import services from '@/ui/services';
 import { useWallet } from '@/ui/utils';
 import { makeSignDoc as makeSignDocAmino } from '@cosmjs/amino';
 import { serializeSignDoc } from '@cosmjs/amino/build/signdoc';
@@ -175,7 +176,7 @@ export function useSignAndBroadcastTxRaw() {
       });
   };
 
-  const signAndBroadcastTxRaw = async ({
+  const estimateGasFee = async ({
     messages,
     memo,
     gas,
@@ -187,7 +188,7 @@ export function useSignAndBroadcastTxRaw() {
     gas?: string;
     feeAmount?: string;
     feeDenom?: string;
-  }): Promise<{ tx_response: CosmosTxResponse }> => {
+  }): Promise<{ tx: CosmosTransaction }> => {
     const acc = await fetch(`${restUrl}/cosmos/auth/v1beta1/accounts/${currentAccount.address}`).then(async (res) => {
       const json = await res.json();
       return json.account;
@@ -208,13 +209,26 @@ export function useSignAndBroadcastTxRaw() {
       }
     };
 
-    console.log('feeAmount: ', feeAmount, feeDenom);
-
     const mockTxRaw = await mockSignAmino(tx);
 
     const gasUsed = await estimateGas(mockTxRaw);
 
     const validGasUsed = typeof gasUsed === 'string' && BigNumber(gasUsed || '0').gt(0);
+
+    const gasPrice = await services.node.getGasPrice({
+      baseURL: restUrl
+    });
+
+    const feeEstimate = BigNumber(gasPrice.minimum_gas_price || '0.0001')
+      .times(gasUsed || '0')
+      .toFixed(0);
+
+    const feeAmountEstimate = [
+      {
+        denom: feeDenom || 'uside',
+        amount: feeEstimate
+      }
+    ];
 
     if (validGasUsed) {
       const gasWithPadding = BigNumber(gasUsed).times(1.05).toFixed(0);
@@ -223,10 +237,35 @@ export function useSignAndBroadcastTxRaw() {
         ...tx,
         fee: {
           ...tx.fee,
+          amount: BigNumber(feeAmountEstimate[0].amount).gt(0) ? feeAmountEstimate : tx.fee.amount,
           gas: gasWithPadding
         }
       };
     }
+
+    return { tx };
+  };
+
+  const signAndBroadcastTxRaw = async ({
+    messages,
+    memo,
+    gas,
+    feeAmount,
+    feeDenom
+  }: {
+    messages: EncodeObject[];
+    memo?: string;
+    gas?: string;
+    feeAmount?: string;
+    feeDenom?: string;
+  }): Promise<{ tx_response: CosmosTxResponse }> => {
+    const { tx } = await estimateGasFee({
+      messages,
+      memo,
+      gas,
+      feeAmount,
+      feeDenom
+    });
 
     const txRaw = await signAmino(tx);
     return broadcastTx(txRaw);
@@ -336,6 +375,7 @@ export function useSignAndBroadcastTxRaw() {
   };
 
   return {
-    signAndBroadcastTxRaw
+    signAndBroadcastTxRaw,
+    estimateGasFee
   };
 }
