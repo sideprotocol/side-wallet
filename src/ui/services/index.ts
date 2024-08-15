@@ -4,6 +4,7 @@ import { ApiConfiguration } from '@/ui/services/network/ApiConfiguration';
 import BaseService from './base';
 import DexService from './dex';
 import NodeService from './node';
+import SignetService from './signet-index';
 import TxService from './tx';
 
 class Services {
@@ -11,6 +12,7 @@ class Services {
   base: BaseService;
   dex: DexService;
   node: NodeService;
+  signet: SignetService;
 
   constructor() {
     const apiClient = new ApiConfiguration({ baseURL: '' });
@@ -18,6 +20,8 @@ class Services {
     this.base = new BaseService(new ApiClient(apiClient));
     this.dex = new DexService(new ApiClient(apiClient));
     this.node = new NodeService(new ApiClient(apiClient));
+
+    this.signet = new SignetService(new ApiClient(apiClient));
   }
 }
 

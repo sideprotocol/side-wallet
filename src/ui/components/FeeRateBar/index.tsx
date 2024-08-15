@@ -1,5 +1,8 @@
 import { CSSProperties, useEffect, useState } from 'react';
 
+import { NetworkType } from '@/shared/types';
+import services from '@/ui/services';
+import { useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
 import { useWallet } from '@/ui/utils';
 
@@ -18,8 +21,24 @@ enum FeeRateType {
 export function FeeRateBar({ readonly, onChange }: { readonly?: boolean; onChange?: (val: number) => void }) {
   const wallet = useWallet();
   const [feeOptions, setFeeOptions] = useState<{ title: string; desc?: string; feeRate: number }[]>([]);
+  const networkType = useNetworkType();
+
+  const isMainnet = networkType === NetworkType.MAINNET;
 
   useEffect(() => {
+    if (!isMainnet) {
+      services.signet.feeEstimates().then((v) => {
+        console.log('111v: ', v);
+        if (readonly) {
+          setFeeOptions(v.list);
+        } else {
+          setFeeOptions([...v.list, { title: 'Custom', feeRate: 0 }]);
+        }
+      });
+
+      return;
+    }
+
     wallet.getFeeSummary().then((v) => {
       if (readonly) {
         setFeeOptions(v.list);
@@ -27,7 +46,7 @@ export function FeeRateBar({ readonly, onChange }: { readonly?: boolean; onChang
         setFeeOptions([...v.list, { title: 'Custom', feeRate: 0 }]);
       }
     });
-  }, []);
+  }, [isMainnet]);
 
   const [feeOptionIndex, setFeeOptionIndex] = useState(FeeRateType.AVG);
   const [feeRateInputVal, setFeeRateInputVal] = useState('');
