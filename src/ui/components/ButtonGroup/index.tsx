@@ -1,5 +1,7 @@
-import { Row, RowProps } from '../Row';
 import { colors } from '@/ui/theme/colors';
+
+import { Row, RowProps } from '../Row';
+
 interface ButtonItem {
   key: string | number;
   label: string;
@@ -41,7 +43,7 @@ export function ButtonGroup(props: IButtonGroupProps) {
                 borderRadius: '100px',
                 color: colors.white,
                 fontSize: '12px',
-                opacity: 0.8,
+                opacity: value === item.key ? 1 : 0.8,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',

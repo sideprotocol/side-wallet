@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useReadTab, useUnreadAppSummary } from '@/ui/state/accounts/hooks';
 import { TabOption } from '@/ui/state/global/reducer';
@@ -21,10 +23,21 @@ export function NavTabBar({ tab }: { tab: TabOption }) {
   );
 }
 
-function TabButton({ tabName, icon, isActive, name }: { tabName: TabOption; icon: IconTypes; isActive: boolean, name?: string }) {
+function TabButton({
+  tabName,
+  icon,
+  isActive,
+  name
+}: {
+  tabName: TabOption;
+  icon: IconTypes;
+  isActive: boolean;
+  name?: string;
+}) {
   const navigate = useNavigate();
   const unreadApp = useUnreadAppSummary();
   const readTab = useReadTab();
+  const [isHover, setIsHover] = useState(false);
   return (
     <Column
       justifyCenter
@@ -38,7 +51,7 @@ function TabButton({ tabName, icon, isActive, name }: { tabName: TabOption; icon
           navigate('MainScreen');
         } else if (tabName === 'swap') {
           navigate('SwapTabScreen');
-        }  else if (tabName === 'bridge') {
+        } else if (tabName === 'bridge') {
           navigate('BridgeTabScreen');
         } else if (tabName === 'explore') {
           navigate('SummonTabScreen');
@@ -50,15 +63,21 @@ function TabButton({ tabName, icon, isActive, name }: { tabName: TabOption; icon
         //   navigate('SettingsTabScreen');
         // }
       }}>
-      <Column itemsCenter style={{
-        gap: 0
-      }}>
-        <Icon size={24} icon={icon} color={isActive ? 'white' : 'white_muted'} />
-        <span style={{
-          textTransform: 'capitalize' as const,
-          fontSize: 15,
-          color: isActive ? '#fff' : 'rgb(130 130 130 / 50%)'
-        }}>
+      <Column
+        itemsCenter
+        style={{
+          gap: 0,
+          opacity: isHover ? 0.8 : 1
+        }}
+        onMouseOver={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}>
+        <Icon size={24} icon={icon} color={isActive || isHover ? 'white' : 'white_muted'} />
+        <span
+          style={{
+            textTransform: 'capitalize' as const,
+            fontSize: 15,
+            color: isActive || isHover ? '#fff' : 'rgb(130 130 130 / 50%)'
+          }}>
           {name ? name : tabName}
         </span>
       </Column>

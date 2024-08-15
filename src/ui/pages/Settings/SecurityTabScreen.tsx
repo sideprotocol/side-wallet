@@ -161,7 +161,7 @@ export default function SecurityTabScreen() {
                     </Column>
 
                     <Column justifyCenter>
-                      {item.right && <RightOutlined style={{ color: 'rgb(107,107,107)' }} />}
+                      {item.right && <RightOutlined style={{ color: 'rgb(107,107,107)', fontSize: '14px' }} />}
                     </Column>
                   </Row>
                 </Card>

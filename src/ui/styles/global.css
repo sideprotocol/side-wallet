@@ -5,11 +5,17 @@
 @tailwind utilities;
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
-html, body, div, span, applet, object, iframe {
-    font-family: 'Saira';
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe {
+  font-family: 'Saira';
 }
 
 .popover-container {
@@ -45,7 +51,7 @@ iframe {
   width: 20px !important;
   height: 20px !important;
 
-  color: #000!important;
+  color: #000 !important;
   background-color: #383535 !important;
 }
 
@@ -68,15 +74,18 @@ iframe {
 }
 
 .ant-modal-close {
-    transform: scale(0.5);
+  transform: scale(0.5);
 }
 
-.ant-modal-close:focus, .ant-modal-close:hover {
-    color: #fff!important;
+.ant-modal-close:focus,
+.ant-modal-close:hover {
+  color: #fff !important;
 }
 
-.ant-checkbox, .ant-checkbox-checked::after, .ant-checkbox-inner {
-  border-radius: 4px!important;
+.ant-checkbox,
+.ant-checkbox-checked::after,
+.ant-checkbox-inner {
+  border-radius: 4px !important;
 }
 
 .ant-checkbox-checked .ant-checkbox-inner::after {
@@ -126,15 +135,16 @@ div {
   background-color: rgb(30, 30, 31);
 }
 
-.ant-select-selection-item, .ant-select-selection-search {
+.ant-select-selection-item,
+.ant-select-selection-search {
   background-color: rgb(30, 30, 31);
   border-radius: 10px;
   height: 46px;
-  line-height: 46px!important;
+  line-height: 46px !important;
 }
 
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-  background-color: transparent!important;
+  background-color: transparent !important;
 }
 
 /*//.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {*/
@@ -157,15 +167,15 @@ div {
 }
 
 .ant-select-arrow {
-  color: white!important;
+  color: white !important;
 }
 
 .bg-item1e {
-  background-color: #1E1E1F!important;
+  background-color: #1e1e1f !important;
 }
 
 .bg-item-hover:hover {
-  background-color: #1E1E1F!important;
+  background-color: #1e1e1f !important;
   border-radius: 8px;
 }
 
@@ -176,31 +186,31 @@ div {
   /*background-image: url("@/ui/images/icons/wallet/arrow-right.png");*/
 }
 .bg-item-hover:hover .icon-right {
-    /*  // @ts-ignore */
+  /*  // @ts-ignore */
   /*background: url('/images/icons/wallet/arrow-right-hover.png');*/
 }
 
 .bg-item-hover-v2:hover {
-  background-color: rgb(64, 64, 69)!important;
+  background-color: rgb(64, 64, 69) !important;
   border-radius: 8px;
 }
 
 .bg-item-hover-v2:hover .symbol {
-    /*color: #0DD4C3!important;*/
-    /*font-weight: bold;*/
+  /*color: #0DD4C3!important;*/
+  /*font-weight: bold;*/
 }
 
 .bg-item-hover-v3:hover {
-  background-color: #1A1A1A;
+  background-color: #1a1a1a;
   border-radius: 8px;
 }
 
 .bg-swap-hover:hover {
-  background: rgba(41, 40, 40, 5)!important;
+  background: rgba(41, 40, 40, 5) !important;
 }
 
 .bg-item-hover:hover .anticon-right {
-  color: #fff!important;
+  color: #fff !important;
 }
 
 .opacity-1:hover {
@@ -213,36 +223,39 @@ div {
 }
 
 .smooth-scroll {
-    transform: translateZ(0);
-    will-change: transform;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
-
 .coin-input {
-    /* Basic styling */
+  /* Basic styling */
 
-    /* Placeholder styling */
-    &::placeholder {
-        color: rgb(125, 125, 125);
-        /*font-style: italic;*/
-    }
+  /* Placeholder styling */
+  &::placeholder {
+    color: rgb(125, 125, 125);
+    /*font-style: italic;*/
+  }
 }
 
 /* modal start */
 .walletSelectModal .ant-modal-content {
-    border-radius: 12px;
-    background-color: #000000;
+  border-radius: 12px;
+  background-color: #000000;
 }
 
 .walletSelectModal .ant-modal-content .ant-modal-body {
-    padding: 0;
+  padding: 0;
+}
+
+.ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.8) !important;
 }
 
 .slippageControlModal {
-    border-radius: 12px !important;
+  border-radius: 12px !important;
 }
 
 .slippageControlModal .ant-modal-content {
-    background-color: #1E1E1F;
+  background-color: #1e1e1f;
 }
 /* modal end */

@@ -1,5 +1,6 @@
 import QRCode from 'qrcode.react';
-import { fromHex } from '@cosmjs/encoding';
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { Button, Card, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -8,9 +9,6 @@ import { sizes } from '@/ui/theme/spacing';
 import { copyToClipboard } from '@/ui/utils';
 
 import './index.less';
-import { CHAINS_ENUM } from '@/shared/constant';
-import { useLocation } from 'react-router-dom';
-import { useState } from 'react';
 
 function getAddressTypeUrl(address: string, chain: string) {
   if (address.startsWith('tb1') || chain === 'side') {
@@ -75,9 +73,10 @@ export default function ReceiveScreen() {
         }}
         title="Receive"
       />
-      <Content style={{
-        marginTop: '16px'
-      }}>
+      <Content
+        style={{
+          marginTop: '32px'
+        }}>
         <Card
           bg="white"
           gap="lg"
@@ -163,15 +162,17 @@ export default function ReceiveScreen() {
                       display: 'inline-block',
                       marginLeft: '8px',
                       position: 'relative',
-                      top: '3px',
-                    }}
-                  ></Icon>
-                  <span style={{
-                    display: isClickCopy ? 'inline-block' : 'none',
-                    color: '#41B530',
-                    fontSize: '12px',
-                    marginLeft: '4px'
-                  }}>Copied!</span>
+                      top: '3px'
+                    }}></Icon>
+                  <span
+                    style={{
+                      display: isClickCopy ? 'inline-block' : 'none',
+                      color: '#41B530',
+                      fontSize: '12px',
+                      marginLeft: '4px'
+                    }}>
+                    Copied!
+                  </span>
                 </>
               }
               style={{
@@ -194,9 +195,11 @@ export default function ReceiveScreen() {
               text={`Send only ${state?.chain === 'BTC' ? 'BTC' : 'Side'} network assets to this address`}></Text>
           </Column>
 
-          <Row style={{
-            display: 'none'
-          }} full>
+          <Row
+            style={{
+              display: 'none'
+            }}
+            full>
             <Button full preset="primary" text="Set amount"></Button>
           </Row>
         </Card>
