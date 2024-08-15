@@ -1,6 +1,6 @@
 import { DISCORD_URL, TELEGRAM_URL, TWITTER_URL } from '@/shared/constant';
+import aboutIcon from '@/ui/assets/icons/about.svg';
 import { Card, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
-import aboutIcon from '@/ui/assets/icons/about.svg'
 
 export default function AboutScreen() {
   return (
@@ -37,43 +37,66 @@ export default function AboutScreen() {
               text="Side Wallet"></Text>
           </Column>
 
-          <Column>
-            <Card style={{
-              height: '58px',
-              borderRadius: '10px',
-            }} mt={'md'}>
-              <Row style={{
-                padding: '0 8px'
-              }} justifyBetween itemsCenter full>
+          <Column
+            style={{
+              gap: '10px'
+            }}>
+            <Card
+              style={{
+                height: '58px',
+                borderRadius: '10px'
+              }}>
+              <Row
+                style={{
+                  padding: '0 8px'
+                }}
+                justifyBetween
+                itemsCenter
+                full>
                 <Text preset="regular" text={'Terms of Service'}></Text>
                 <Icon icon={'link'} size={18}></Icon>
               </Row>
             </Card>
 
-            <Card style={{
-              height: '58px',
-              borderRadius: '10px',
-            }} mt={'md'}>
-              <Row style={{
-                padding: '0 8px'
-              }} justifyBetween itemsCenter full>
+            <Card
+              style={{
+                height: '58px',
+                borderRadius: '10px'
+              }}>
+              <Row
+                style={{
+                  padding: '0 8px'
+                }}
+                justifyBetween
+                itemsCenter
+                full>
                 <Text preset="regular" text={'Privacy Policy'}></Text>
 
                 <Icon icon={'link'} size={18}></Icon>
               </Row>
             </Card>
 
-            <Card style={{
-              height: '58px',
-              borderRadius: '10px',
-            }} mt={'md'}>
-              <Row style={{
-                padding: '0 8px'
-              }} justifyBetween itemsCenter full>
+            <Card
+              style={{
+                height: '58px',
+                borderRadius: '10px'
+              }}>
+              <Row
+                style={{
+                  padding: '0 8px'
+                }}
+                justifyBetween
+                itemsCenter
+                full>
                 <Text preset="regular" text={'Contact us'}></Text>
 
                 <Row itemsCenter>
-                  <Text preset="sub" text="contact@side.one"></Text>
+                  <Text
+                    preset="sub"
+                    text="contact@side.one"
+                    style={{
+                      color: 'white'
+                    }}></Text>
                   <Icon icon={'copy2'} size={20}></Icon>
                 </Row>
               </Row>

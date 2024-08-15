@@ -10,7 +10,7 @@ import { CopyableAddress } from '../CopyableAddress';
 import { Icon } from '../Icon';
 import { Row } from '../Row';
 import { Text } from '../Text';
-import { colors } from '@/ui/theme/colors';
+
 interface AddressTypeCardProps {
   label: string;
   address: string;
@@ -22,23 +22,34 @@ export function AddressTypeCard(props: AddressTypeCardProps) {
   const { onClick, label, address, checked, assets } = props;
   const hasVault = Boolean(assets.satoshis && assets.satoshis > 0);
   return (
-    <Card preset={checked ? 'styleChecked' : 'styleNotCheck'} px="zero" py="zero" gap="zero" onClick={onClick} style={{
-      // border: checked ? '1px solid #fff' : 'none'
-    }}>
-      <Column full gap={'zero'}  >
-        <Row justifyBetween px="lg" style={{
-          paddingTop: '16px',
-        }}>
+    <Card
+      preset={checked ? 'styleChecked' : 'styleNotCheck'}
+      px="zero"
+      py="zero"
+      gap="zero"
+      onClick={onClick}
+      classname={!checked ? 'hover:!bg-[#22ab381a] hover:border-[#22ab381a]' : ''}>
+      <Column full gap={'zero'}>
+        <Row
+          justifyBetween
+          px="lg"
+          style={{
+            paddingTop: '16px'
+          }}>
           <Column justifyCenter>
             <Text text={label} size="xs" disableTranslate />
           </Column>
         </Row>
         <Row justifyBetween px="lg" pb="md">
           <CopyableAddress address={address} />
-          <Column style={{
-            position: 'relative',
-            top: '-10px',
-          }} justifyCenter>{checked && <Icon color={'green'} contain={'contain'} icon="check-circle" />}</Column>
+          <Column
+            style={{
+              position: 'relative',
+              top: '-10px'
+            }}
+            justifyCenter>
+            {checked && <Icon color={'green'} contain={'contain'} icon="check-circle" />}
+          </Column>
         </Row>
         {hasVault && (
           <Row justifyBetween bg="bg3" roundedBottom px="md" py="md">

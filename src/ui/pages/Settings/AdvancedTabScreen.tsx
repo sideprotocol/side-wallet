@@ -31,7 +31,7 @@ const AdvancedList: Setting[] = [
     action: 'protection',
     route: '/settings/protection',
     right: true
-  },
+  }
 
   // {
   //   label: 'Change Endpoints',
@@ -151,7 +151,7 @@ export default function AdvancedTabScreen() {
                     </Column>
 
                     <Column justifyCenter>
-                      {item.right && <RightOutlined style={{ color: 'rgb(107,107,107)' }} />}
+                      {item.right && <RightOutlined style={{ color: 'rgb(107,107,107)', fontSize: '14px' }} />}
                     </Column>
                   </Row>
                 </Card>

@@ -1,15 +1,12 @@
-import { Button, Column, Content, Header, Image, Input, Layout, Text } from '@/ui/components';
-import {
-  preferenceService,
-  // sessionService
-} from '@/background/service';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { settingsActions } from '@/ui/state/settings/reducer';
-import { useAppDispatch } from '@/ui/state/hooks';
+import { useState } from 'react';
+import Lottie from 'react-lottie';
+
+import * as animationData from '@/ui/assets/lottie/lock.json';
+import { Button, Column, Content, Header, Input, Layout, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useNavigate } from '@/ui/pages/MainRoute';
-import Lottie from 'react-lottie';
-import * as animationData from '@/ui/assets/lottie/lock.json';
+import { useAppDispatch } from '@/ui/state/hooks';
+import { settingsActions } from '@/ui/state/settings/reducer';
 
 export default function AutoLockScreen() {
   const [time, setTime] = useState('0');
@@ -39,14 +36,16 @@ export default function AutoLockScreen() {
           {/*  size={90}*/}
           {/*/>*/}
           <div className="">
-            <Lottie options={
-              // loop: true,
-              {
-                autoplay: true,
-                animationData
+            <Lottie
+              options={
+                // loop: true,
+                {
+                  autoplay: true,
+                  animationData
+                }
               }
-            }
-                    width={120}/>
+              width={120}
+            />
           </div>
 
           <Text
@@ -60,27 +59,36 @@ export default function AutoLockScreen() {
             text="Set the duration for the wallet to automatically lock."></Text>
         </Column>
 
-        <Column>
+        <Column
+          style={{
+            gap: '24px'
+          }}>
           <Text color={'white'} preset="sub" text={'Duration (minutes)'}></Text>
 
-          <Input preset={'amount'} placeholder={localStorage.getItem('unLockTimeLimit') ? localStorage.getItem('unLockTimeLimit') : '5'}  onAmountInputChange={async(e) => setTime(e)} ></Input>
+          <Input
+            preset={'amount'}
+            placeholder={localStorage.getItem('unLockTimeLimit') ? localStorage.getItem('unLockTimeLimit') : '5'}
+            onAmountInputChange={async (e) => setTime(e)}></Input>
 
-          <Button preset="primary" text="Confirm" onClick={(e) => {
-            // preferenceService.setAutoLockDuration(10);
-            e.stopPropagation();
-            if (isNaN(Number(time)) || Number(time) <= 0) return false;
-            dispatch(
-              settingsActions.updateSettings({
-                unLockTimeLimit: Number(time)
-              })
-            );
-            tools.toastSuccess('Your settings have been saved.');
-            localStorage.setItem('unLockTimeLimit', time);
-            navigate('MainScreen');
-            chrome.storage.local.set({ unLockTimeLimit: Number(time) }, function() {
-              console.log('锁屏时间限制已保存为 ' + Number(time) + ' 分钟。');
-            });
-          }}></Button>
+          <Button
+            preset="primary"
+            text="Confirm"
+            onClick={(e) => {
+              // preferenceService.setAutoLockDuration(10);
+              e.stopPropagation();
+              if (isNaN(Number(time)) || Number(time) <= 0) return false;
+              dispatch(
+                settingsActions.updateSettings({
+                  unLockTimeLimit: Number(time)
+                })
+              );
+              tools.toastSuccess('Your settings have been saved.');
+              localStorage.setItem('unLockTimeLimit', time);
+              navigate('MainScreen');
+              chrome.storage.local.set({ unLockTimeLimit: Number(time) }, function () {
+                console.log('锁屏时间限制已保存为 ' + Number(time) + ' 分钟。');
+              });
+            }}></Button>
         </Column>
       </Content>
     </Layout>

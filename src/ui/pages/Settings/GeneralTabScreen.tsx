@@ -151,7 +151,7 @@ export default function GeneralTabScreen() {
                   style={{
                     backgroundColor: 'transparent',
                     paddingLeft: '10px',
-                    paddingRight: '10px',
+                    paddingRight: '10px'
                   }}>
                   <Row full justifyBetween>
                     <Column justifyCenter gap={'zero'}>
@@ -160,7 +160,7 @@ export default function GeneralTabScreen() {
                     </Column>
 
                     <Column justifyCenter>
-                      {item.right && <RightOutlined style={{ color: 'rgb(107,107,107)' }} />}
+                      {item.right && <RightOutlined style={{ color: 'rgb(107,107,107)', fontSize: '14px' }} />}
                     </Column>
                   </Row>
                 </Card>

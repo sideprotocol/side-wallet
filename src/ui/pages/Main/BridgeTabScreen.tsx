@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 
-import { KEYRING_TYPE, SIDE_CHAINID_MAINNET, SIDE_CHAINID_TESTNET } from '@/shared/constant';
+import { SIDE_CHAINID_MAINNET, SIDE_CHAINID_TESTNET } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
-import { Column, Content, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
+import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import BridgeSelectToken from '@/ui/components/Bridge/BridgeSelectToken';
 import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
@@ -13,17 +13,15 @@ import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
-import AccountSelect from '@/ui/pages/Account/AccountSelect';
+import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useBridge, useBtcBalance, useRuneBalance, useRuneBridge } from '@/ui/state/bridge/hook';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
-import { fontSizes } from '@/ui/theme/font';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
-import MainHeader from '@/ui/pages/Main/MainHeader';
 
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
@@ -294,8 +292,7 @@ export default function BridgeTabScreen() {
                 style={{
                   height: '50px',
                   background: '#09090A'
-                }}
-                >
+                }}>
                 <Row
                   itemsCenter
                   gap={'zero'}
@@ -325,6 +322,7 @@ export default function BridgeTabScreen() {
                       color: '#0DD4C3',
                       fontSize: '14px',
                       // background: 'rgba(13, 212, 195, 0.10)',
+                      background: '#0DD4C31A',
                       cursor: 'pointer',
                       borderRadius: '8px'
                     }}
@@ -338,7 +336,7 @@ export default function BridgeTabScreen() {
             </Column>
 
             {/*<ConfirmButton />*/}
-            <Row mt={'md'} full>
+            <Row mt={'xl'} full>
               <Button
                 onClick={() => {
                   if (base === 'sat') {
