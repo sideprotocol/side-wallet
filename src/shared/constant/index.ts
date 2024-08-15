@@ -263,7 +263,7 @@ export const SIDE_BTC_INDEXER = 'https://index.side.one';
 
 export const SIDE_RUNE_INDEXER = 'https://signet-rune.side.one';
 
-export const SIDE_BTC_VAULT_ADDRESS_TESTNET = 'tb1qef5ffghj84k56pn5zdnkpdjdk88deec0huamq4';
+export const SIDE_BTC_VAULT_ADDRESS_TESTNET = 'tb1q3q776wlrg6wljqyv4e52ls84zcw38yat2ym55t';
 
 export const SIDE_BTC_VAULT_ADDRESS_MAINNET = '';
 
