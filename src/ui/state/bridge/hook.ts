@@ -245,7 +245,7 @@ export const useBitcoinBtcBalance = () => {
     getBtcBalance()
       .then(setBtcBalance)
       .finally(() => setLoading(false));
-  }, []);
+  }, [currentAccount.address]);
 
   return {
     data: btcBalance,
@@ -603,7 +603,7 @@ export const useRuneBalances = () => {
     refetch().finally(() => {
       setLoading(false);
     });
-  }, [bridgeLoading]);
+  }, [bridgeLoading, currentAccount.address]);
 
   return { data: bitcoinRunes, loading };
 };
