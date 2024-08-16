@@ -10,7 +10,7 @@ import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { useUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
 import { parseUnitAmount } from '@/ui/utils';
-import { toUnitAmount } from '@/ui/utils/formatter';
+import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { useNavigate } from '../../MainRoute';
@@ -211,7 +211,7 @@ export default function SideTxConfirmScreen() {
           />
           <Row>
             <Text
-              text={`${uiState.fee} ${feeToken.symbol}`}
+              text={`${toReadableAmount(uiState.fee, feeToken.exponent)} ${feeToken.symbol}`}
               style={{
                 fontSize: '16px',
                 fontWeight: 600,

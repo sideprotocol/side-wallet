@@ -50,11 +50,11 @@ export default function CreateSendSide() {
       typeUrl: '/cosmos.bank.v1beta1.MsgSend',
       value: {
         fromAddress: currentAccount.address,
-        toAddress: toInfo.address,
+        toAddress: currentAccount.address,
         amount: [
           {
-            amount: parseUnitAmount('1', curToken.exponent),
-            denom: curToken.base
+            amount: parseUnitAmount('1', 6),
+            denom: 'uside'
           }
         ]
       }
@@ -68,7 +68,7 @@ export default function CreateSendSide() {
 
     const coin = tx.fee.amount[0];
 
-    const feeEstimate = toReadableAmount(coin.amount, feeToken?.exponent || 6);
+    const feeEstimate = coin.amount;
 
     setUiState({
       fee: feeEstimate
@@ -76,11 +76,13 @@ export default function CreateSendSide() {
   }
 
   useEffect(() => {
-    setUiState({ base });
-    if (!toInfo.address || !curToken?.base || !base) return;
-
+    if (!base) return;
     estimateFee();
-  }, [base, toInfo?.address, curToken?.base, feeToken]);
+  }, [base]);
+
+  useEffect(() => {
+    setUiState({ base });
+  }, [base]);
 
   const { data: feeByUSD } = useCalcPrice(
     toUnitAmount(uiState.fee || '0', feeToken?.exponent || 6),
@@ -244,7 +246,7 @@ export default function CreateSendSide() {
           <Row>
             <Text
               // text={`${formatUnitAmount(fee, feeToken.exponent)} ${feeToken.symbol}`}
-              text={`${uiState.fee} ${feeToken.symbol}`}
+              text={`${disabled ? '-' : toReadableAmount(uiState.fee, feeToken.exponent)} ${feeToken.symbol}`}
               style={{
                 fontSize: '16px',
                 fontWeight: 600,
@@ -252,7 +254,7 @@ export default function CreateSendSide() {
               }}
             />
             <Text
-              text={`($${feeByUSD})`}
+              text={`($${disabled ? '-' : feeByUSD})`}
               color="white_muted"
               style={{
                 fontSize: '16px',
