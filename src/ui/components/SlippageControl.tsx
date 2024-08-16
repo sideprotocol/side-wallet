@@ -1,6 +1,7 @@
-import { swapStore } from '@/ui/stores/SwapStore';
-import { Button } from '@/ui/components/Button';
 import { Modal } from 'antd';
+
+import { Button } from '@/ui/components/Button';
+import { swapStore } from '@/ui/stores/SwapStore';
 
 export default function SlippageControl(props) {
   const {
@@ -11,7 +12,7 @@ export default function SlippageControl(props) {
     onQuickSet,
     open,
     onClose,
-    sx,
+    sx
   } = props;
 
   return (
@@ -31,15 +32,14 @@ export default function SlippageControl(props) {
         }}>
         <div
           style={{
-            fontWeight: "500",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            fontSize: "13px",
-            margin: "20px 0px 10px",
-            color: 'white',
-          }}
-        >
+            fontWeight: '500',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            fontSize: '13px',
+            margin: '20px 0px 10px',
+            color: 'white'
+          }}>
           <span className="font-normal pl-[10px]">Slippage tolerance</span>
           <div className="pr-[10px]">
             <span>{slippage}% </span>
@@ -47,50 +47,46 @@ export default function SlippageControl(props) {
         </div>
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "12px",
-            marginBottom: "12px",
-          }}
-        >
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '12px',
+            marginBottom: '12px'
+          }}>
           <div
             style={{
               flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
               color: 'white',
               fontWeight: 700,
-              padding: "5px",
-              borderRadius: "16px",
-              fontSize: "14px",
+              padding: '5px',
+              borderRadius: '16px',
+              fontSize: '14px',
               border: `1px solid #ffffff/10`,
-              height: "50px",
-              backgroundColor: '#000',
-            }}
-          >
-            {["0.25", "0.5", "1", ""].map((item, index) => {
+              height: '50px',
+              backgroundColor: '#000'
+            }}>
+            {['0.25', '0.5', '1', ''].map((item, index) => {
               if (!item && index === 3) {
                 return (
                   <div
                     className={'focus-within:!border-[#0DD4C3] transition-colors duration-300'}
                     key={index}
                     style={{
-                      width: "80px",
-                      display: "flex",
-                      alignItems: "center",
+                      width: '80px',
+                      display: 'flex',
+                      alignItems: 'center',
                       border: `1px solid #848E9C`,
-                      borderRadius: "12px",
-                      padding: "0px 12px",
-                      marginLeft: "8px",
+                      borderRadius: '100px',
+                      padding: '0px 12px',
                       fontWeight: 600,
-                      background: '#000',
-                    }}
-                  >
+                      background: '#000'
+                    }}>
                     <input
-                      className=" w-[40px] h-[33px] py-0.5 text-center focus:outline-none bg-transparent border-side-secondary rounded-[14px]   "
+                      className=" w-[40px] h-[33px] py-0.5 text-center focus:outline-none bg-transparent border-side-secondary rounded-[100px]   "
                       type="text"
                       value={slippage}
                       onChange={(e) => {
@@ -105,21 +101,21 @@ export default function SlippageControl(props) {
                 <div
                   key={index}
                   style={{
-                    height: "36px",
-                    width: "65px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    borderRadius: "14px",
+                    height: '36px',
+                    width: '65px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    borderRadius: '100px',
                     fontWeight: 600,
-                    background: item === slippage ? 'rgb(13, 212, 195)' : "",
+                    background: item === slippage ? 'rgb(13, 212, 195)' : '#1E1E1F',
                     color: item === slippage ? '#000' : '#fff',
+                    marginRight: '8px'
                   }}
                   onClick={() => {
                     onQuickSet(item);
-                  }}
-                >
+                  }}>
                   <span>{item}%</span>
                 </div>
               );
@@ -130,15 +126,14 @@ export default function SlippageControl(props) {
               style={{
                 color: '#000',
                 width: '100%',
-                height: '36px',
+                height: '48px'
               }}
               // themetype="primary"
               preset="primary"
               onClick={() => {
                 swapStore.slippageIsAuto = true;
                 swapStore.slippage = '0.25';
-              }}
-            >
+              }}>
               Auto
             </Button>
           </div>
