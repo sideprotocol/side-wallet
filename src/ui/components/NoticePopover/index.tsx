@@ -1,7 +1,6 @@
 import { Checkbox } from 'antd';
 import { useEffect, useState } from 'react';
 
-import { colors } from '@/ui/theme/colors';
 import { fontSizes } from '@/ui/theme/font';
 
 import { Button } from '../Button';
@@ -14,6 +13,7 @@ import { Text } from '../Text';
 export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
   const [checked1, setChecked1] = useState(false);
   const [checked2, setChecked2] = useState(false);
+  const [checked3, setChecked3] = useState(false);
 
   const [enable, setEnable] = useState(false);
   const [coolDown, setCoolDown] = useState(3);
@@ -31,10 +31,15 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
   return (
     <Popover>
       <Column justifyCenter itemsCenter>
-        <Text text="Compatibility Tips" preset="title-bold" />
-        <Icon style={{
-          margin: '16px 0'
-        }} icon={'info'} color={'icon_yellow'} size={58} />
+        <Text text="Read Before Proceeding" preset="title-bold" />
+        <Icon
+          style={{
+            margin: '16px 0'
+          }}
+          icon={'info'}
+          color={'icon_yellow'}
+          size={58}
+        />
 
         <Column gap="lg">
           <Text text={'Please be aware that:'} />
@@ -49,19 +54,32 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
                 setChecked1(e.target.checked);
               }}>
               <div style={{ fontSize: fontSizes.sm }}>
-                for Ordinals assets, <span style={{ color: colors.primary }}>Rare SATS </span>are not supported.
+                This is an experimental product; do not use it on the mainnet.
               </div>
             </Checkbox>
           </div>
 
           <div style={{ display: 'flex' }}>
-            <Checkbox style={{
-              display: 'flex',
-              alignItems: 'self-start'
-            }} checked={checked2} onChange={(e) => setChecked2(e.target.checked)}>
-              <div style={{ fontSize: fontSizes.sm }}>
-                for Atomicals assets, <span style={{ color: colors.primary }}>Non-ARC20</span> are not supported yet.
-              </div>
+            <Checkbox
+              style={{
+                display: 'flex',
+                alignItems: 'self-start'
+              }}
+              checked={checked2}
+              onChange={(e) => setChecked2(e.target.checked)}>
+              <div style={{ fontSize: fontSizes.sm }}>Ordinals assets are not currently supported.</div>
+            </Checkbox>
+          </div>
+
+          <div style={{ display: 'flex' }}>
+            <Checkbox
+              style={{
+                display: 'flex',
+                alignItems: 'self-start'
+              }}
+              checked={checked3}
+              onChange={(e) => setChecked3(e.target.checked)}>
+              <div style={{ fontSize: fontSizes.sm }}>Atomicals assets are not currently supported.</div>
             </Checkbox>
           </div>
         </Column>
@@ -70,7 +88,7 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
           <Button
             text={coolDown > 0 ? `OK (${coolDown}s)` : 'Confirm'}
             preset="primary"
-            disabled={!checked1 || !checked2}
+            disabled={!checked1 || !checked2 || !checked3}
             full
             onClick={(e) => {
               if (!enable) return;

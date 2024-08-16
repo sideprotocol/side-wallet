@@ -169,7 +169,10 @@ export default function SignText({ params: { data, session } }: Props) {
             mt="lg"
           />
 
-          <Card>
+          <Card
+            style={{
+              flexDirection: 'column'
+            }}>
             <Text text="You are signing:" textCenter mt="lg" />
             <div
               style={{

@@ -12,7 +12,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { useUiTxCreateSendSideScreen, useUpdateUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
 import { formatUnitAmount, isValidAddress, parseUnitAmount } from '@/ui/utils';
-import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
+import { toReadableAmount } from '@/ui/utils/formatter';
 
 export default function CreateSendSide() {
   const navigate = useNavigate();
@@ -84,11 +84,8 @@ export default function CreateSendSide() {
     setUiState({ base });
   }, [base]);
 
-  const { data: feeByUSD } = useCalcPrice(
-    toUnitAmount(uiState.fee || '0', feeToken?.exponent || 6),
-    feeToken?.base,
-    feeToken?.exponent || 6
-  );
+  const { data: feeByUSD } = useCalcPrice(uiState.fee || '0', feeToken?.base, feeToken?.exponent || 6);
+  const available = formatUnitAmount(balanceAmount, curToken?.exponent || 6);
 
   const disabled = useMemo(() => {
     let _disabled = false;
@@ -103,7 +100,6 @@ export default function CreateSendSide() {
   if (!curToken) {
     return <Layout />;
   }
-  const available = formatUnitAmount(balanceAmount, curToken.exponent);
 
   return (
     <Layout>
@@ -270,8 +266,8 @@ export default function CreateSendSide() {
             left: 0
           }}
           preset="primary"
-          text="Next"
-          disabled={disabled}
+          text={+inputAmount > +available ? 'Insufficient Balance' : 'Next'}
+          disabled={disabled || +inputAmount > +available}
           onClick={() => {
             navigate('TxConfirmScreen', { type: TxType.SEND_SIDE });
           }}

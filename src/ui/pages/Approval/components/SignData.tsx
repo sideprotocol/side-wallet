@@ -130,7 +130,10 @@ export default function SignData({ params: { data, session } }: Props) {
         <Column>
           <Text text="Signature request" preset="title-bold" textCenter mt="lg" />
 
-          <Card>
+          <Card
+            style={{
+              flexDirection: 'column'
+            }}>
             <Text text="You are signing data:" textCenter mt="lg" />
             <div
               style={{
