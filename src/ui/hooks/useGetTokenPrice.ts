@@ -25,7 +25,9 @@ export default function useGetTokenPrice() {
       try {
         const result = await services.dex.getAssetPrice(asset.base);
         priceMap[asset.base] = result;
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     }
     localStorage.setItem('priceMap', JSON.stringify(priceMap));
     wallet.setAssetPriceMap(priceMap);
