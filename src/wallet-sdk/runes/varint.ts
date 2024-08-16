@@ -1,13 +1,13 @@
 //@ts-nocheck
+import bigInt from 'big-integer';
 
-import bigInt from "big-integer";
 function try_decode(buf) {
   let n = bigInt(0);
   let m = bigInt(1);
 
   for (let i = 0; ; i++) {
     if (i >= buf.length) {
-      throw new Error("Buffer too short");
+      throw new Error('Buffer too short');
     }
 
     let byte = bigInt(buf.readUInt8(i));
@@ -36,7 +36,7 @@ function decode(buffer) {
 }
 
 function decodeVec(inBuffer) {
-  console.log("inBuffer: ", inBuffer.length);
+  console.log('inBuffer: ', inBuffer.length);
   let buffer = inBuffer;
 
   const vec = [];
@@ -78,5 +78,5 @@ export const varint = {
   decode,
   try_decode,
   encodeToVec,
-  decodeVec,
+  decodeVec
 };

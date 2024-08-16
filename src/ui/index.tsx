@@ -1,25 +1,24 @@
 import en from 'antd/es/locale/en_US';
 import message from 'antd/lib/message';
+import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import { useIdleTimer } from 'react-idle-timer';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
-import { useEffect, useState } from 'react'
-import { useIdleTimer } from 'react-idle-timer'
+
 import browser from '@/background/webapi/browser';
 import { EVENTS } from '@/shared/constant';
 import eventBus from '@/shared/eventBus';
 import { Message } from '@/shared/utils';
 import AccountUpdater from '@/ui/state/accounts/updater';
+import { useAppDispatch, useAppSelector } from '@/ui/state/hooks';
 import '@/ui/styles/global.css';
 
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { ActionComponentProvider } from './components/ActionComponent';
 import { AppDimensions, AppSideDimensions } from './components/Responsive';
 import AsyncMainRoute from './pages/MainRoute';
 import store from './state';
-import { useWallet, WalletProvider } from './utils';
-import { globalActions } from '@/ui/state/global/reducer';
-import { useAppDispatch, useAppSelector } from '@/ui/state/hooks';
-import { SettingsState } from '@/ui/state/settings/reducer';
+import { WalletProvider, useWallet } from './utils';
 
 // disabled sentry
 // Sentry.init({
@@ -39,9 +38,9 @@ import { SettingsState } from '@/ui/state/settings/reducer';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
+      refetchOnWindowFocus: false
+    }
+  }
 });
 
 message.config({
@@ -141,10 +140,10 @@ function Updaters() {
   const dispatch = useAppDispatch();
   // const timeout = settingsState.unLockTimeLimit * 60 * 1000
   const timeout = location.href.split('#')[1] !== '/account/unlock' ? settingsState.unLockTimeLimit * 60 * 1000 : 1000;
-  const promptBeforeIdle = 0
-  const [state, setState] = useState<string>('Active')
-  const [remaining, setRemaining] = useState<number>(timeout)
-  const [open, setOpen] = useState<boolean>(false)
+  const promptBeforeIdle = 0;
+  const [state, setState] = useState<string>('Active');
+  const [remaining, setRemaining] = useState<number>(timeout);
+  const [open, setOpen] = useState<boolean>(false);
   const wallet1 = useWallet();
   // window.lockAccount = () => {
   //   dispatch(globalActions.update({ isUnlocked: false }));
@@ -221,15 +220,15 @@ function Updaters() {
     //     location.href = `${basePath}#/account/unlock`;
     //   }
     // })
-  }
+  };
 
   const onActive = () => {
-    setState('Active')
-  }
+    setState('Active');
+  };
 
   const onPrompt = () => {
-    setState('Prompted')
-  }
+    setState('Prompted');
+  };
 
   const { getRemainingTime, activate } = useIdleTimer({
     onIdle,
@@ -238,26 +237,22 @@ function Updaters() {
     timeout,
     promptBeforeIdle,
     throttle: 500
-  })
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
       // console.log(`Math.ceil(getRemainingTime() / 1000): `, Math.ceil(getRemainingTime() / 1000));
-      setRemaining(Math.ceil(getRemainingTime() / 1000))
-    }, 1000)
+      setRemaining(Math.ceil(getRemainingTime() / 1000));
+    }, 1000);
 
-
-    chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], function(result) {
+    chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], function (result) {
       const ONE_MINUTE = (result.unLockTimeLimit ? Number(result.unLockTimeLimit) : 5) * 60 * 1000;
       let lastActiveTimestamp = result.lastActiveTimestamp || Date.now();
-
-      console.log(`inin: `);
 
       // 更新最后活动时间戳并重置倒计时
       function resetTimer() {
         lastActiveTimestamp = Date.now();
         chrome.storage.local.set({ lastActiveTimestamp: lastActiveTimestamp });
-        console.log(`resetTimer: `);
         // document.getElementById('status').innerText = '活动状态：正常';
       }
 
@@ -267,21 +262,20 @@ function Updaters() {
           // document.getElementById('status').innerText = '活动状态：超时';
           // 在这里可以添加其他处理逻辑，比如锁屏操作
           wallet1.isUnlocked().then((isUnlocked) => {
-            console.log(`isUnlocked: `, isUnlocked);
             if (isUnlocked && !location.href.includes('/account/unlock')) {
               // dispatch(globalActions.update({ isUnlocked: false }));
               wallet1.lockWallet();
               const basePath = location.href.split('#')[0];
               location.href = `${basePath}#/account/unlock`;
             }
-          })
+          });
         } else {
           // document.getElementById('status').innerText = '活动状态：正常';
         }
       }
 
       // 监听所有用户操作以重置倒计时
-      ['mousemove', 'keydown', 'click', 'scroll'].forEach(event => {
+      ['mousemove', 'keydown', 'click', 'scroll'].forEach((event) => {
         document.removeEventListener(event, resetTimer);
         document.addEventListener(event, resetTimer);
       });
@@ -297,10 +291,10 @@ function Updaters() {
     });
 
     return () => {
-      clearInterval(interval)
+      clearInterval(interval);
       // window.removeEventListener('unload', close);
-    }
-  })
+    };
+  });
   return (
     <>
       <AccountUpdater />
@@ -325,7 +319,6 @@ function Updaters() {
 //     );
 //   });
 // });
-
 
 let root = document.getElementById('root') && ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 if (root) {
@@ -362,7 +355,3 @@ if (root2) {
     </Provider>
   );
 }
-
-
-
-

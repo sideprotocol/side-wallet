@@ -1153,10 +1153,7 @@ export class WalletController extends BaseController {
   };
 
   getCurrentKeyring = async () => {
-    console.log('getCurrentKeyring: ');
-
     let currentKeyringIndex = preferenceService.getCurrentKeyringIndex();
-    console.log('currentKeyringIndex: ', currentKeyringIndex);
     const displayedKeyrings = await keyringService.getAllDisplayedKeyrings();
     if (currentKeyringIndex === undefined) {
       const currentAccount = preferenceService.getCurrentAccount();

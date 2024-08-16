@@ -539,8 +539,6 @@ export const useRuneBalances = () => {
         .toFixed(2);
 
       const pendingRunes = getPendingDeposits(`${networkType}:${runeid}`, currentAccount.address);
-      console.log('pendingRunes: ', pendingRunes);
-
       const hasPendingRuns = pendingRunes.length > 0;
 
       if (!hasPendingRuns) {
@@ -593,7 +591,6 @@ export const useRuneBalances = () => {
     });
 
     const filteredRunes = predata.filter((d) => (runeAssets || []).find((a) => a.base === d.denom));
-    console.log('filteredRunes: ', filteredRunes);
 
     setBitcoinRunes(filteredRunes);
   };

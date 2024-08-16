@@ -35,8 +35,10 @@ export default function BitcoinTxConfirmScreen() {
               navigate('TxSuccessScreen', { txid, chain: CHAINS_ENUM.SIDE_SIGNET });
             })
             .catch((error) => {
+              console.log('error: ', error);
               navigate('TxFailScreen', { error });
             });
+          return;
         }
 
         pushBitcoinTx((res ?? rawTxInfo).rawtx).then(({ success, txid, error }) => {
