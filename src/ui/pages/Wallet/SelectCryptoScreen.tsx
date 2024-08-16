@@ -170,6 +170,7 @@ function SideCrypto({ searchTerm }) {
 export default function SelecCryptoScreen() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isFocus, setIsFocus] = useState(false);
+  const [isHover, setIsHover] = useState(false);
   const { state } = useLocation();
   const { chain } = state as {
     chain: CHAINS_ENUM;
@@ -220,6 +221,8 @@ export default function SelecCryptoScreen() {
               onClick={() => {
                 setSearchTerm('');
               }}
+              onMouseEnter={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
               style={{
                 position: 'absolute',
                 right: '10px',
@@ -228,7 +231,7 @@ export default function SelecCryptoScreen() {
                 cursor: 'pointer',
                 display: searchTerm ? 'block' : 'none'
               }}>
-              <Icon icon="clear" color={'search_icon'} size={20}></Icon>
+              <Icon icon="clear" color={isHover ? 'white' : 'search_icon'} size={20}></Icon>
             </div>
           </div>
         </Column>

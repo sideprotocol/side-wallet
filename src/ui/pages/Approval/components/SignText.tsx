@@ -168,9 +168,9 @@ export default function SignText({ params: { data, session } }: Props) {
             textCenter
             mt="lg"
           />
-          <Text text="You are signing:" textCenter mt="lg" />
 
           <Card>
+            <Text text="You are signing:" textCenter mt="lg" />
             <div
               style={{
                 userSelect: 'text',
@@ -178,7 +178,8 @@ export default function SignText({ params: { data, session } }: Props) {
                 overflow: 'auto',
                 whiteSpace: 'pre-wrap',
                 wordBreak: 'break-word',
-                flexWrap: 'wrap'
+                flexWrap: 'wrap',
+                lineHeight: '18px'
               }}>
               {data.text}
             </div>

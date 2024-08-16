@@ -1,8 +1,21 @@
+import { useState } from 'react';
+
 import { DISCORD_URL, TELEGRAM_URL, TWITTER_URL } from '@/shared/constant';
 import aboutIcon from '@/ui/assets/icons/about.svg';
 import { Card, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { copyToClipboard } from '@/ui/utils';
 
 export default function AboutScreen() {
+  const [isClickCopy, setIsClickCopy] = useState(false);
+
+  function copy(str: string) {
+    copyToClipboard(str).then(() => {
+      setTimeout(() => {
+        setIsClickCopy(false);
+      }, 3000);
+    });
+  }
+
   return (
     <Layout>
       <Header
@@ -97,7 +110,18 @@ export default function AboutScreen() {
                     style={{
                       color: 'white'
                     }}></Text>
-                  <Icon icon={'copy2'} size={20}></Icon>
+                  <Icon
+                    className={'copy-icon'}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copy('contact@side.one');
+                      setIsClickCopy(true);
+                    }}
+                    icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
+                    color={isClickCopy ? 'green' : 'white'}
+                    size={20}
+                  />
+                  <Text text={isClickCopy ? 'Copied' : ''} color={isClickCopy ? 'green' : 'white'} />
                 </Row>
               </Row>
             </Card>

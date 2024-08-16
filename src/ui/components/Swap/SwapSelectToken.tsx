@@ -52,6 +52,7 @@ export default function Index(props) {
   // const [searchTerm, setSearchTerm] = useState('');
   const { state } = useLocation();
   const [focus, setFocus] = useState<boolean>(false);
+  const [isHover, setIsHover] = useState(false);
   let { open, onClose, onSelect, assetsList, popularList, onSearch, searchValue, curTokenDenom } = props;
   // console.log(`popularList: `, popularList);
   popularList = popularList.filter((item) => {
@@ -112,6 +113,8 @@ export default function Index(props) {
               onClick={() => {
                 onSearch('');
               }}
+              onMouseEnter={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
               style={{
                 position: 'absolute',
                 right: '10px',
@@ -120,7 +123,7 @@ export default function Index(props) {
                 cursor: 'pointer',
                 display: searchValue ? 'block' : 'none'
               }}>
-              <Icon icon="clear" color={'search_icon'} size={20}></Icon>
+              <Icon icon="clear" color={isHover ? 'white' : 'search_icon'} size={20}></Icon>
             </div>
           </div>
         </Column>

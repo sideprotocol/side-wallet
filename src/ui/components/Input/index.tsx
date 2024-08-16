@@ -180,7 +180,7 @@ function AmountInput(props: InputProps) {
   return (
     <div
       className={'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20]'}
-      style={Object.assign({}, $baseContainerStyle, {})}>
+      style={Object.assign({}, $baseContainerStyle, { padding: '4px 10px' })}>
       <input
         placeholder={placeholder || 'Amount'}
         className="placeholder:opacity-30"
@@ -199,6 +199,11 @@ function AmountInput(props: InputProps) {
           text={'Max'}
           color={'primary'}
           size="sm"
+          style={{
+            padding: '8px',
+            borderRadius: '8px',
+            backgroundColor: '#0DD4C31A'
+          }}
         />
       ) : null}
     </div>

@@ -58,6 +58,7 @@ export default function Index(props) {
   // list, onSearch
   const [searchValue, onSearch] = useState<string>('');
   const [focus, setFocus] = useState<boolean>(false);
+  const [isHover, setIsHover] = useState(false);
   let runeAndBtcTokens = useRuneAndBtcBalances();
   if (searchValue && runeAndBtcTokens?.length) {
     runeAndBtcTokens = runeAndBtcTokens.filter((item) => {
@@ -130,6 +131,8 @@ export default function Index(props) {
               onClick={() => {
                 onSearch('');
               }}
+              onMouseEnter={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
               style={{
                 position: 'absolute',
                 right: '10px',
@@ -138,7 +141,7 @@ export default function Index(props) {
                 cursor: 'pointer',
                 display: searchValue ? 'block' : 'none'
               }}>
-              <Icon icon="clear" color={'search_icon'} size={20}></Icon>
+              <Icon icon="clear" color={isHover ? 'white' : 'search_icon'} size={20}></Icon>
             </div>
           </div>
         </Column>

@@ -145,14 +145,12 @@ export default function AdvancedTabScreen() {
                     backgroundColor: 'transparent'
                   }}>
                   <Row full justifyBetween>
-                    <Column gap={'zero'} justifyCenter>
-                      <Text text={item.label || item.desc} preset="regular-bold" />
-                      <Text text={item.value} preset="sub" />
-                    </Column>
+                    <Text text={item.label || item.desc} preset="regular-bold" />
 
-                    <Column justifyCenter>
+                    <Row itemsCenter>
+                      <Text text={item.value} preset="regular" style={{ opacity: 0.5 }} />
                       {item.right && <RightOutlined style={{ color: 'rgb(107,107,107)', fontSize: '14px' }} />}
-                    </Column>
+                    </Row>
                   </Row>
                 </Card>
               );

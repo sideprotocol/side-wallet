@@ -21,6 +21,7 @@ interface Setting {
   action: string;
   route: string;
   right: boolean;
+  rightComponent?: React.ReactNode;
 }
 
 const GeneralList: Setting[] = [
@@ -48,7 +49,15 @@ const GeneralList: Setting[] = [
     desc: '',
     action: '',
     route: '/settings/theme',
-    right: true
+    right: false,
+    rightComponent: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+        <path
+          d="M20.293 12.9864C19.0929 13.8143 17.6406 14.1953 16.1887 14.0632C14.7367 13.9311 13.3771 13.2942 12.3461 12.2632C11.3152 11.2323 10.6783 9.87265 10.5462 8.42072C10.4141 6.96878 10.7951 5.51647 11.623 4.31641C10.1016 4.44676 8.64919 5.00897 7.43655 5.93687C6.22392 6.86477 5.30158 8.11975 4.77806 9.55411C4.25454 10.9885 4.15163 12.5425 4.48145 14.0334C4.81127 15.5243 5.56008 16.8899 6.63978 17.9696C7.71947 19.0493 9.08511 19.7981 10.576 20.1279C12.0668 20.4578 13.6209 20.3548 15.0553 19.8313C16.4896 19.3078 17.7446 18.3855 18.6725 17.1728C19.6004 15.9602 20.1626 14.5077 20.293 12.9864Z"
+          fill="#0DD4C3"
+        />
+      </svg>
+    )
   }
 ];
 
@@ -146,7 +155,9 @@ export default function GeneralTabScreen() {
                       navigate('/settings/address-type');
                       return;
                     }
-                    navigate(item.route);
+                    if (item.right && item.route) {
+                      navigate(item.route);
+                    }
                   }}
                   style={{
                     backgroundColor: 'transparent',
@@ -154,14 +165,17 @@ export default function GeneralTabScreen() {
                     paddingRight: '10px'
                   }}>
                   <Row full justifyBetween>
-                    <Column justifyCenter gap={'zero'}>
-                      <Text text={item.label || item.desc} preset="regular-bold" />
-                      <Text text={item.value} preset="sub" />
-                    </Column>
+                    <Text text={item.label || item.desc} preset="regular-bold" />
 
-                    <Column justifyCenter>
-                      {item.right && <RightOutlined style={{ color: 'rgb(107,107,107)', fontSize: '14px' }} />}
-                    </Column>
+                    <Row itemsCenter>
+                      {item.rightComponent}
+                      {item.right && (
+                        <>
+                          <Text text={item.value} preset="regular" style={{ opacity: 0.5 }} />
+                          <RightOutlined style={{ color: 'rgb(107,107,107)', fontSize: '14px' }} />
+                        </>
+                      )}
+                    </Row>
                   </Row>
                 </Card>
               );

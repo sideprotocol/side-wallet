@@ -130,9 +130,8 @@ export default function SignData({ params: { data, session } }: Props) {
         <Column>
           <Text text="Signature request" preset="title-bold" textCenter mt="lg" />
 
-          <Text text="You are signing data:" textCenter mt="lg" />
-
           <Card>
+            <Text text="You are signing data:" textCenter mt="lg" />
             <div
               style={{
                 userSelect: 'text',
@@ -140,7 +139,8 @@ export default function SignData({ params: { data, session } }: Props) {
                 overflow: 'auto',
                 whiteSpace: 'pre-wrap',
                 wordBreak: 'break-word',
-                flexWrap: 'wrap'
+                flexWrap: 'wrap',
+                lineHeight: '18px'
               }}>
               {data.data}
             </div>

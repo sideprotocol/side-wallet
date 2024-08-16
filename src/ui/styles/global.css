@@ -68,7 +68,7 @@ iframe {
     background-color: #0dd4c3 !important;
 
     .ant-switch-handle::before {
-      background-color: #fff;
+      background-color: #000;
     }
   }
 }
