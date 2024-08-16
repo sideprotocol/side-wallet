@@ -1,6 +1,7 @@
-import { Text } from '../Text';
 import { Image } from '@/ui/components/Image';
-import { spacing } from '@/ui/theme/spacing';
+
+import { Text } from '../Text';
+
 interface EmptyProps {
   text?: string;
 }
@@ -10,15 +11,21 @@ export function Empty(props: EmptyProps) {
   return (
     <div
       className="flex flex-col items-center gap-[10px]"
-      style={{
-        // display: 'flex',
-        // flexDirection: 'col',
-        // gap: spacing.small,
-        // alignSelf: 'center'
-      }}>
-      <Image src={'./images/icons/main/no-data.svg'} size={64} style={{
-        height: '80px',
-      }} />
+      style={
+        {
+          // display: 'flex',
+          // flexDirection: 'col',
+          // gap: spacing.small,
+          // alignSelf: 'center'
+        }
+      }>
+      <Image
+        src={'./images/img/no-data.gif'}
+        size={64}
+        style={{
+          height: '80px'
+        }}
+      />
       <Text color={'white'} text={content} preset="sub" textCenter />
     </div>
   );

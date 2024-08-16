@@ -32,17 +32,18 @@ export default function ConnectedSitesScreen() {
         }}
         title="Connected Sites"
       />
-      <Content style={{
-        marginTop: 16
-      }}>
+      <Content
+        style={{
+          marginTop: 16
+        }}>
         {/*{sites.length > 0 && (*/}
-          <Text
-            preset="sub"
-            color={'white'}
-            text={'The current account is connected to these sites. They can view your account details.'}></Text>
+        <Text
+          preset="sub"
+          color={'white'}
+          text={'The current account is connected to these sites. They can view your account details.'}></Text>
         {/*)}*/}
 
-        <Column >
+        <Column>
           {sites.length > 0 ? (
             sites.map((item, _) => {
               return (
@@ -78,7 +79,12 @@ export default function ConnectedSitesScreen() {
               );
             })
           ) : (
-            <Empty />
+            <div
+              style={{
+                marginTop: '100px'
+              }}>
+              <Empty />
+            </div>
           )}
         </Column>
       </Content>
