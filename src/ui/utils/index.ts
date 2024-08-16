@@ -218,6 +218,9 @@ function removeTrailingZeroes(str: string): string {
 }
 
 export function getTruncate(num: string, demicals = 2) {
+  if (!+num) {
+    num = '0.00';
+  }
   const fmt = {
     decimalSeparator: '.',
     groupSeparator: ',',

@@ -43,8 +43,7 @@ export default function WelcomeScreen() {
           </Row>
           <Button
             style={{
-              marginTop: '100px',
-              fontWeight: 500
+              marginTop: '100px'
             }}
             text="Create new wallet"
             preset="primary"

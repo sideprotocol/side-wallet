@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import { AddressFlagType, CHAINS_ENUM, KEYRING_TYPE } from '@/shared/constant';
+import { AddressFlagType, CHAINS_ENUM } from '@/shared/constant';
 import { checkAddressFlag } from '@/shared/utils';
-import { ButtonGroup, Column, Footer, Header, Image, Layout, Row, Text } from '@/ui/components';
+import { ButtonGroup, Column, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPopover';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
 import { UpgradePopover } from '@/ui/components/UpgradePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
 import { useGetAccountBalanceByUSD } from '@/ui/hooks/useGetBalance';
-import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useRuneAndBtcBalances } from '@/ui/state/bridge/hook';
@@ -23,10 +22,9 @@ import { getTruncate, useWallet } from '@/ui/utils';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
+import MainHeader from '../MainHeader';
 import BtcTokenList from './BtcTokenList';
 import SideTokenList from './SideTokenList';
-import MainHeader from '../MainHeader';
-import { globalActions } from '@/ui/state/global/reducer';
 
 export default function WalletTabScreen() {
   const navigate = useNavigate();
@@ -250,7 +248,9 @@ export default function WalletTabScreen() {
                 className="" // Hide the default image on hover
               />
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">Receive</div>
+            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">
+              Receive
+            </div>
           </div>
 
           <div

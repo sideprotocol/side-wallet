@@ -122,7 +122,7 @@ export default function CreateSendSide() {
           background: '#222',
           padding: '0 16px',
           paddingBottom: '14px',
-          marginTop: '40px',
+          marginTop: '66px',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
         }}>
         <Column

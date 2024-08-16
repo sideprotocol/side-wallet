@@ -641,7 +641,11 @@ export default function SwapTabScreen() {
               <RemotePrice />
             </Column>
 
-            <Row mt={'xl'} full>
+            <Row
+              full
+              style={{
+                marginTop: '8px'
+              }}>
               <ConfirmButton />
             </Row>
             {showValidDetail && (

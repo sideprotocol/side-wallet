@@ -164,7 +164,7 @@ export default function CreateSendBtc() {
           width: '74px',
           height: '74px',
           position: 'absolute',
-          top: '66px',
+          top: '92px',
           left: '50%',
           borderRadius: '50%',
           transform: 'translate(-50%, 0)',
@@ -189,7 +189,7 @@ export default function CreateSendBtc() {
           borderRadius: '10px',
           background: '#222',
           padding: '16px 16px 64px 16px',
-          marginTop: '30px',
+          marginTop: '66px',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
         }}>
         <Column mt="xxl">

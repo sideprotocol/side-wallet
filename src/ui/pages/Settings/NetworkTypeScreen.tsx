@@ -63,18 +63,31 @@ export default function NetworkTypeScreen() {
                   height: 56,
                   padding: '16px 10px',
                   backgroundColor: item.value == networkType ? colors.green_light : 'tr',
-                  border: item.value == networkType ? `1px solid ${colors.green_light}` : 'none'
+                  border: `1px solid ${item.value == networkType ? colors.green_light : 'transparent'}`
                 }}
                 full
                 justifyBetween
                 itemsCenter
-                classname={
-                  item.value != networkType ? 'bg-[#1e1e1f] hover:bg-[#22ab381a] hover:border-[#22ab381a]' : ''
-                }>
+                classname={item.value != networkType ? 'bg-[#1e1e1f]  hover:!border-[#0dd4c31a]' : ''}>
                 <Row itemsCenter>
                   <Text text={item.label} />
                 </Row>
-                <Column>{item.value == networkType && <Icon color={'green'} icon="check-circle" />}</Column>
+                <Column>
+                  {item.value == networkType && (
+                    <div
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '4px',
+                        backgroundColor: '#22AB38',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}>
+                      <Icon color={'white'} icon="check-square" />
+                    </div>
+                  )}
+                </Column>
               </Row>
             );
           })}

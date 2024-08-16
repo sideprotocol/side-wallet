@@ -59,10 +59,7 @@ export default function AutoLockScreen() {
             text="Set the duration for the wallet to automatically lock."></Text>
         </Column>
 
-        <Column
-          style={{
-            gap: '24px'
-          }}>
+        <Column>
           <Text color={'white'} preset="sub" text={'Duration (minutes)'}></Text>
 
           <Input
@@ -73,6 +70,9 @@ export default function AutoLockScreen() {
           <Button
             preset="primary"
             text="Confirm"
+            style={{
+              marginTop: '16px'
+            }}
             onClick={(e) => {
               // preferenceService.setAutoLockDuration(10);
               e.stopPropagation();

@@ -111,7 +111,7 @@ export default function SlippageControl(props) {
                     fontWeight: 600,
                     background: item === slippage ? 'rgb(13, 212, 195)' : '#1E1E1F',
                     color: item === slippage ? '#000' : '#fff',
-                    marginRight: '8px'
+                    marginRight: '4px'
                   }}
                   onClick={() => {
                     onQuickSet(item);

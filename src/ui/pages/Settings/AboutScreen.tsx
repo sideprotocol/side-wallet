@@ -121,7 +121,7 @@ export default function AboutScreen() {
                     color={isClickCopy ? 'green' : 'white'}
                     size={20}
                   />
-                  <Text text={isClickCopy ? 'Copied' : ''} color={isClickCopy ? 'green' : 'white'} />
+                  {isClickCopy ? <Text text={'Copied'} color={isClickCopy ? 'green' : 'white'} /> : null}
                 </Row>
               </Row>
             </Card>

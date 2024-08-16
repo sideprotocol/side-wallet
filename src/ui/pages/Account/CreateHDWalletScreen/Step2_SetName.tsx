@@ -100,7 +100,6 @@ export default function Step2_SetName({
               padding: '0 10px',
               flex: 1,
               borderRadius: '8px',
-              border: '1px solid #FFFFFF33',
               backgroundColor: '#121212'
             }}
             style={{ width: '100%', color: '#fff' }}

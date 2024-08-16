@@ -1,15 +1,15 @@
 import { Checkbox } from 'antd';
 import { useState } from 'react';
+import Lottie from 'react-lottie';
 import { useNavigate as useNavigateRouter } from 'react-router-dom';
 
-import { Button, Column, Header, Image, Layout, Row, Text } from '@/ui/components';
+import * as animationData from '@/ui/assets/lottie/forget-pwd.json';
+import { Button, Column, Header, Layout, Row, Text } from '@/ui/components';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { keyringsActions } from '@/ui/state/keyrings/reducer';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
-import Lottie from 'react-lottie';
-import * as animationData from '@/ui/assets/lottie/forget-pwd.json';
 
 export default function CreateHDWalletScreen() {
   const navigateRouter = useNavigateRouter();
@@ -37,17 +37,19 @@ export default function CreateHDWalletScreen() {
           <Row
             justifyCenter
             style={{
-              padding: '34px 0'
+              padding: '34px 0 16px'
             }}>
             {/*<Image src="./images/icons/wallet.svg" size={90} />*/}
-            <Lottie options={
-              // loop: true,
-              {
-                autoplay: true,
-                animationData
+            <Lottie
+              options={
+                // loop: true,
+                {
+                  autoplay: true,
+                  animationData
+                }
               }
-            }
-                    width={180}/>
+              width={180}
+            />
           </Row>
           <Row
             style={{
@@ -128,6 +130,9 @@ export default function CreateHDWalletScreen() {
           disabled={!(checked1 && checked2 && checked3)}
           text="Reset wallet"
           preset="primary"
+          style={{
+            marginTop: '8px'
+          }}
           onClick={async () => {
             await wallet.reset();
             dispatch(keyringsActions.reset());

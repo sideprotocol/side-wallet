@@ -91,7 +91,7 @@ export default function ExportMnemonicsScreen() {
             </Column>
             <Text
               text="Password"
-              color="white_muted"
+              color="white"
               style={{
                 fontSize: '14px',
                 lineHeight: '24px'

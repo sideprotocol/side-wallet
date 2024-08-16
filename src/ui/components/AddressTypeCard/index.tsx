@@ -28,7 +28,7 @@ export function AddressTypeCard(props: AddressTypeCardProps) {
       py="zero"
       gap="zero"
       onClick={onClick}
-      classname={!checked ? 'hover:!bg-[#22ab381a] hover:border-[#22ab381a]' : ''}>
+      classname={!checked ? 'hover:!bg-[#0dd4c31a] hover:border-[#0dd4c31a]' : ''}>
       <Column full gap={'zero'}>
         <Row
           justifyBetween
