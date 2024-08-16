@@ -68,7 +68,7 @@ export default function NetworkTypeScreen() {
                 full
                 justifyBetween
                 itemsCenter
-                classname={item.value != networkType ? 'bg-[#1e1e1f]  hover:!border-[#0dd4c31a]' : ''}>
+                classname={item.value != networkType ? 'hover:bg-[#1e1e1f] ' : ''}>
                 <Row itemsCenter>
                   <Text text={item.label} />
                 </Row>
