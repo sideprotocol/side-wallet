@@ -423,7 +423,8 @@ export const BITCOIN_TOKENS: BitcoinToken[] = [
     logo: '/images/img/btc.png',
     name: 'Bitcoin',
     symbol: 'BTC',
-    coingecko_id: 'bitcoin'
+    coingecko_id: 'bitcoin',
+    base: 'sat'
   },
   {
     base: 'runes/9110:1',

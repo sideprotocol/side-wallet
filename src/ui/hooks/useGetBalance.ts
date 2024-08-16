@@ -52,7 +52,7 @@ export function useGetAccountBalanceByUSD() {
   const getTotalBalance = async () => {
     const accountSideTokenBalanceList = await wallet.getAccountSideTokenBalanceList(currentAccount.address);
     const accountBitcoinTokenBalanceList = await wallet.getAccountBitcoinTokenBalanceList(currentAccount.address);
-    const coingeckoPriceMap = await wallet.getCoingeckoPriceMap();
+    const priceMap = await wallet.getAssetPriceMap();
     let sideAccountBalanceByUSD = new BigNumber('0'),
       bitcoinAccountBalanceByUSD = new BigNumber('0');
     for (let i = 0; i < accountSideTokenBalanceList.length; i++) {
@@ -60,9 +60,7 @@ export function useGetAccountBalanceByUSD() {
       const curSideToken = sideTokenList.find((item) => item.base === curSideTokenBalance.base);
       if (curSideToken) {
         const formatAmount = formatUnitAmount(curSideTokenBalance.amount, curSideToken.exponent);
-        const curBalanceByUSD = new BigNumber(coingeckoPriceMap[curSideToken.coingecko_id].usd || '0').multipliedBy(
-          formatAmount
-        );
+        const curBalanceByUSD = new BigNumber(priceMap[curSideToken.base]).multipliedBy(formatAmount);
         sideAccountBalanceByUSD = sideAccountBalanceByUSD.plus(curBalanceByUSD);
       }
     }
@@ -71,9 +69,7 @@ export function useGetAccountBalanceByUSD() {
       const curBitcoinToken = bitcoinTokenList.find((item) => item.symbol === curBitcoinTokenBalance.symbol);
       if (curBitcoinToken) {
         const formatAmount = formatUnitAmount(curBitcoinTokenBalance.amount, 18);
-        const curBalanceByUSD = new BigNumber(coingeckoPriceMap[curBitcoinToken.coingecko_id].usd || '0').multipliedBy(
-          formatAmount
-        );
+        const curBalanceByUSD = new BigNumber(priceMap[curBitcoinToken.base || ''] || '0').multipliedBy(formatAmount);
         bitcoinAccountBalanceByUSD = bitcoinAccountBalanceByUSD.plus(curBalanceByUSD);
       }
     }
