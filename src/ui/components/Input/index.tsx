@@ -364,7 +364,7 @@ export const AddressInput = (props: InputProps) => {
             color="yellow"
             text={'More details'}
             onClick={() => {
-              window.open(`https://side.one/`);
+              window.open('https://side.one/');
             }}
           />
           <Text preset="sub" size="sm" text={')'} />

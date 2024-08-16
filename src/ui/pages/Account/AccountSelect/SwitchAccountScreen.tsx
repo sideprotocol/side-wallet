@@ -35,7 +35,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
   const tools = useTools();
   const [isHovered, setIsHovered] = useState(false);
   const [isClickCopy, setIsClickCopy] = useState(false);
-  console.log(`account: `, account);
+  console.log('account: ', account);
   // debugger;
   if (!account) {
     return <div />;

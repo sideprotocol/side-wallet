@@ -1,13 +1,13 @@
 //@ts-nocheck
 
-import * as bip39 from "bip39";
-import bitcore from "bitcore-lib";
-import * as hdkey from "hdkey";
-import { ECPair, ECPairInterface, bitcoin } from "../bitcoin-core";
-import { SimpleKeyring } from "./simple-keyring";
+import * as bip39 from 'bip39';
+import bitcore from 'bitcore-lib';
+import * as hdkey from 'hdkey';
+import { ECPair, ECPairInterface, bitcoin } from '../bitcoin-core';
+import { SimpleKeyring } from './simple-keyring';
 
-const hdPathString = "m/44'/0'/0'/0";
-const type = "HD Key Tree";
+const hdPathString = 'm/44\'/0\'/0\'/0';
+const type = 'HD Key Tree';
 
 interface DeserializeOption {
   hdPath?: string;
@@ -55,7 +55,7 @@ export class HdKeyring extends SimpleKeyring {
 
   async deserialize(_opts: DeserializeOption = {}) {
     if (this.root) {
-      throw new Error("Btc-Hd-Keyring: Secret recovery phrase already provided");
+      throw new Error('Btc-Hd-Keyring: Secret recovery phrase already provided');
     }
     let opts = _opts as DeserializeOption;
     this.wallets = [];
@@ -80,7 +80,7 @@ export class HdKeyring extends SimpleKeyring {
 
   initFromXpriv(xpriv: string) {
     if (this.root) {
-      throw new Error("Btc-Hd-Keyring: Secret recovery phrase already provided");
+      throw new Error('Btc-Hd-Keyring: Secret recovery phrase already provided');
     }
 
     this.xpriv = xpriv;
@@ -92,7 +92,7 @@ export class HdKeyring extends SimpleKeyring {
 
   initFromMnemonic(mnemonic: string) {
     if (this.root) {
-      throw new Error("Btc-Hd-Keyring: Secret recovery phrase already provided");
+      throw new Error('Btc-Hd-Keyring: Secret recovery phrase already provided');
     }
 
     this.mnemonic = mnemonic;
@@ -105,7 +105,7 @@ export class HdKeyring extends SimpleKeyring {
 
   changeHdPath(hdPath: string) {
     if (!this.mnemonic) {
-      throw new Error("Btc-Hd-Keyring: Not support");
+      throw new Error('Btc-Hd-Keyring: Not support');
     }
 
     this.hdPath = hdPath;
@@ -121,14 +121,14 @@ export class HdKeyring extends SimpleKeyring {
 
   getAccountByHdPath(hdPath: string, index: number) {
     if (!this.mnemonic) {
-      throw new Error("Btc-Hd-Keyring: Not support");
+      throw new Error('Btc-Hd-Keyring: Not support');
     }
     const root = this.hdWallet.derive(hdPath);
     const child = root.deriveChild(index);
     const ecpair = ECPair.fromPrivateKey(child.privateKey, {
       network: this.network,
     });
-    const address = ecpair.publicKey.toString("hex");
+    const address = ecpair.publicKey.toString('hex');
     return address;
   }
 
@@ -150,7 +150,7 @@ export class HdKeyring extends SimpleKeyring {
     }
 
     const hexWallets = newWallets.map((w) => {
-      return w.publicKey.toString("hex");
+      return w.publicKey.toString('hex');
     });
 
     return Promise.resolve(hexWallets);
@@ -221,7 +221,7 @@ export class HdKeyring extends SimpleKeyring {
 
   async getAccounts() {
     return this.wallets.map((w) => {
-      return w.publicKey.toString("hex");
+      return w.publicKey.toString('hex');
     });
   }
 
@@ -240,7 +240,7 @@ export class HdKeyring extends SimpleKeyring {
       const ecpair = ECPair.fromPrivateKey(child.privateKey, {
         network: this.network,
       });
-      const address = ecpair.publicKey.toString("hex");
+      const address = ecpair.publicKey.toString('hex');
       this._index2wallet[i] = [address, ecpair];
     }
 

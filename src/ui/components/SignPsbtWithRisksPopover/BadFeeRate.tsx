@@ -33,10 +33,10 @@ export const BadFeeRate = ({
 
         <Row fullX style={{ borderBottomWidth: 1, borderColor: colors.border }} />
 
-        <Text text={`Current fee rate:`} preset="sub" />
+        <Text text={'Current fee rate:'} preset="sub" />
         <Text text={`${decodedPsbt.feeRate} sat/vB`} />
 
-        <Text text={`Recommended fee rates:`} preset="sub" mt="lg" />
+        <Text text={'Recommended fee rates:'} preset="sub" mt="lg" />
         <FeeRateBar readonly />
       </Column>
     </Popover>

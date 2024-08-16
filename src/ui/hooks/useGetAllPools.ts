@@ -7,7 +7,7 @@ import useGetAllPairs from './useGetAllPairs';
 import { findAssetIcon } from '@/ui/utils/swap';
 import { swapStore } from '@/ui/stores/SwapStore';
 import { NetworkType } from '@/shared/types';
-import { SIDEREST_URL_MAINNET, SIDEREST_URL_TESTNET, SIDERPC_URL_TESTNET } from '@/shared/constant';
+import { SIDERPC_URL_TESTNET } from '@/shared/constant';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 

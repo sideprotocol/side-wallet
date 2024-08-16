@@ -1,6 +1,6 @@
 //@ts-nocheck
-import { BinaryReader, BinaryWriter } from "../../binary";
-import { bytesFromBase64, base64FromBytes } from "../../helpers";
+import { BinaryReader, BinaryWriter } from '../../binary';
+import { bytesFromBase64, base64FromBytes } from '../../helpers';
 /** Bitcoin Signing Status */
 export enum SigningStatus {
   /** SIGNING_STATUS_UNSPECIFIED - SIGNING_STATUS_UNSPECIFIED - Default value, should not be used */
@@ -22,25 +22,25 @@ export const SigningStatusAmino = SigningStatus;
 export function signingStatusFromJSON(object: any): SigningStatus {
   switch (object) {
     case 0:
-    case "SIGNING_STATUS_UNSPECIFIED":
+    case 'SIGNING_STATUS_UNSPECIFIED':
       return SigningStatus.SIGNING_STATUS_UNSPECIFIED;
     case 1:
-    case "SIGNING_STATUS_CREATED":
+    case 'SIGNING_STATUS_CREATED':
       return SigningStatus.SIGNING_STATUS_CREATED;
     case 2:
-    case "SIGNING_STATUS_SIGNED":
+    case 'SIGNING_STATUS_SIGNED':
       return SigningStatus.SIGNING_STATUS_SIGNED;
     case 3:
-    case "SIGNING_STATUS_BROADCASTED":
+    case 'SIGNING_STATUS_BROADCASTED':
       return SigningStatus.SIGNING_STATUS_BROADCASTED;
     case 4:
-    case "SIGNING_STATUS_CONFIRMED":
+    case 'SIGNING_STATUS_CONFIRMED':
       return SigningStatus.SIGNING_STATUS_CONFIRMED;
     case 5:
-    case "SIGNING_STATUS_REJECTED":
+    case 'SIGNING_STATUS_REJECTED':
       return SigningStatus.SIGNING_STATUS_REJECTED;
     case -1:
-    case "UNRECOGNIZED":
+    case 'UNRECOGNIZED':
     default:
       return SigningStatus.UNRECOGNIZED;
   }
@@ -48,20 +48,20 @@ export function signingStatusFromJSON(object: any): SigningStatus {
 export function signingStatusToJSON(object: SigningStatus): string {
   switch (object) {
     case SigningStatus.SIGNING_STATUS_UNSPECIFIED:
-      return "SIGNING_STATUS_UNSPECIFIED";
+      return 'SIGNING_STATUS_UNSPECIFIED';
     case SigningStatus.SIGNING_STATUS_CREATED:
-      return "SIGNING_STATUS_CREATED";
+      return 'SIGNING_STATUS_CREATED';
     case SigningStatus.SIGNING_STATUS_SIGNED:
-      return "SIGNING_STATUS_SIGNED";
+      return 'SIGNING_STATUS_SIGNED';
     case SigningStatus.SIGNING_STATUS_BROADCASTED:
-      return "SIGNING_STATUS_BROADCASTED";
+      return 'SIGNING_STATUS_BROADCASTED';
     case SigningStatus.SIGNING_STATUS_CONFIRMED:
-      return "SIGNING_STATUS_CONFIRMED";
+      return 'SIGNING_STATUS_CONFIRMED';
     case SigningStatus.SIGNING_STATUS_REJECTED:
-      return "SIGNING_STATUS_REJECTED";
+      return 'SIGNING_STATUS_REJECTED';
     case SigningStatus.UNRECOGNIZED:
     default:
-      return "UNRECOGNIZED";
+      return 'UNRECOGNIZED';
   }
 }
 /** Bitcoin Block Header */
@@ -77,7 +77,7 @@ export interface BlockHeader {
   ntx: bigint;
 }
 export interface BlockHeaderProtoMsg {
-  typeUrl: "/side.btcbridge.BlockHeader";
+  typeUrl: '/side.btcbridge.BlockHeader';
   value: Uint8Array;
 }
 /** Bitcoin Block Header */
@@ -93,7 +93,7 @@ export interface BlockHeaderAmino {
   ntx?: string;
 }
 export interface BlockHeaderAminoMsg {
-  type: "/side.btcbridge.BlockHeader";
+  type: '/side.btcbridge.BlockHeader';
   value: BlockHeaderAmino;
 }
 /** Bitcoin Block Header */
@@ -119,7 +119,7 @@ export interface BitcoinSigningRequest {
   vaultAddress: string;
 }
 export interface BitcoinSigningRequestProtoMsg {
-  typeUrl: "/side.btcbridge.BitcoinSigningRequest";
+  typeUrl: '/side.btcbridge.BitcoinSigningRequest';
   value: Uint8Array;
 }
 /** Bitcoin Signing Request */
@@ -133,7 +133,7 @@ export interface BitcoinSigningRequestAmino {
   vault_address?: string;
 }
 export interface BitcoinSigningRequestAminoMsg {
-  type: "/side.btcbridge.BitcoinSigningRequest";
+  type: '/side.btcbridge.BitcoinSigningRequest';
   value: BitcoinSigningRequestAmino;
 }
 /** Bitcoin Signing Request */
@@ -158,7 +158,7 @@ export interface UTXO {
   isLocked: boolean;
 }
 export interface UTXOProtoMsg {
-  typeUrl: "/side.btcbridge.UTXO";
+  typeUrl: '/side.btcbridge.UTXO';
   value: Uint8Array;
 }
 /** Bitcoin UTXO */
@@ -174,7 +174,7 @@ export interface UTXOAmino {
   is_locked?: boolean;
 }
 export interface UTXOAminoMsg {
-  type: "/side.btcbridge.UTXO";
+  type: '/side.btcbridge.UTXO';
   value: UTXOAmino;
 }
 /** Bitcoin UTXO */
@@ -191,38 +191,38 @@ export interface UTXOSDKType {
 function createBaseBlockHeader(): BlockHeader {
   return {
     version: BigInt(0),
-    hash: "",
+    hash: '',
     height: BigInt(0),
-    previousBlockHash: "",
-    merkleRoot: "",
+    previousBlockHash: '',
+    merkleRoot: '',
     nonce: BigInt(0),
-    bits: "",
+    bits: '',
     time: BigInt(0),
     ntx: BigInt(0)
   };
 }
 export const BlockHeader = {
-  typeUrl: "/side.btcbridge.BlockHeader",
+  typeUrl: '/side.btcbridge.BlockHeader',
   encode(message: BlockHeader, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.version !== BigInt(0)) {
       writer.uint32(8).uint64(message.version);
     }
-    if (message.hash !== "") {
+    if (message.hash !== '') {
       writer.uint32(18).string(message.hash);
     }
     if (message.height !== BigInt(0)) {
       writer.uint32(24).uint64(message.height);
     }
-    if (message.previousBlockHash !== "") {
+    if (message.previousBlockHash !== '') {
       writer.uint32(34).string(message.previousBlockHash);
     }
-    if (message.merkleRoot !== "") {
+    if (message.merkleRoot !== '') {
       writer.uint32(42).string(message.merkleRoot);
     }
     if (message.nonce !== BigInt(0)) {
       writer.uint32(48).uint64(message.nonce);
     }
-    if (message.bits !== "") {
+    if (message.bits !== '') {
       writer.uint32(58).string(message.bits);
     }
     if (message.time !== BigInt(0)) {
@@ -277,12 +277,12 @@ export const BlockHeader = {
   fromPartial(object: Partial<BlockHeader>): BlockHeader {
     const message = createBaseBlockHeader();
     message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
-    message.hash = object.hash ?? "";
+    message.hash = object.hash ?? '';
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
-    message.previousBlockHash = object.previousBlockHash ?? "";
-    message.merkleRoot = object.merkleRoot ?? "";
+    message.previousBlockHash = object.previousBlockHash ?? '';
+    message.merkleRoot = object.merkleRoot ?? '';
     message.nonce = object.nonce !== undefined && object.nonce !== null ? BigInt(object.nonce.toString()) : BigInt(0);
-    message.bits = object.bits ?? "";
+    message.bits = object.bits ?? '';
     message.time = object.time !== undefined && object.time !== null ? BigInt(object.time.toString()) : BigInt(0);
     message.ntx = object.ntx !== undefined && object.ntx !== null ? BigInt(object.ntx.toString()) : BigInt(0);
     return message;
@@ -321,12 +321,12 @@ export const BlockHeader = {
   toAmino(message: BlockHeader): BlockHeaderAmino {
     const obj: any = {};
     obj.version = message.version !== BigInt(0) ? message.version.toString() : undefined;
-    obj.hash = message.hash === "" ? undefined : message.hash;
+    obj.hash = message.hash === '' ? undefined : message.hash;
     obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
-    obj.previous_block_hash = message.previousBlockHash === "" ? undefined : message.previousBlockHash;
-    obj.merkle_root = message.merkleRoot === "" ? undefined : message.merkleRoot;
+    obj.previous_block_hash = message.previousBlockHash === '' ? undefined : message.previousBlockHash;
+    obj.merkle_root = message.merkleRoot === '' ? undefined : message.merkleRoot;
     obj.nonce = message.nonce !== BigInt(0) ? message.nonce.toString() : undefined;
-    obj.bits = message.bits === "" ? undefined : message.bits;
+    obj.bits = message.bits === '' ? undefined : message.bits;
     obj.time = message.time !== BigInt(0) ? message.time.toString() : undefined;
     obj.ntx = message.ntx !== BigInt(0) ? message.ntx.toString() : undefined;
     return obj;
@@ -342,31 +342,31 @@ export const BlockHeader = {
   },
   toProtoMsg(message: BlockHeader): BlockHeaderProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.BlockHeader",
+      typeUrl: '/side.btcbridge.BlockHeader',
       value: BlockHeader.encode(message).finish()
     };
   }
 };
 function createBaseBitcoinSigningRequest(): BitcoinSigningRequest {
   return {
-    address: "",
-    txid: "",
-    psbt: "",
+    address: '',
+    txid: '',
+    psbt: '',
     status: 0,
     sequence: BigInt(0),
-    vaultAddress: ""
+    vaultAddress: ''
   };
 }
 export const BitcoinSigningRequest = {
-  typeUrl: "/side.btcbridge.BitcoinSigningRequest",
+  typeUrl: '/side.btcbridge.BitcoinSigningRequest',
   encode(message: BitcoinSigningRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== "") {
+    if (message.address !== '') {
       writer.uint32(10).string(message.address);
     }
-    if (message.txid !== "") {
+    if (message.txid !== '') {
       writer.uint32(18).string(message.txid);
     }
-    if (message.psbt !== "") {
+    if (message.psbt !== '') {
       writer.uint32(26).string(message.psbt);
     }
     if (message.status !== 0) {
@@ -375,7 +375,7 @@ export const BitcoinSigningRequest = {
     if (message.sequence !== BigInt(0)) {
       writer.uint32(40).uint64(message.sequence);
     }
-    if (message.vaultAddress !== "") {
+    if (message.vaultAddress !== '') {
       writer.uint32(50).string(message.vaultAddress);
     }
     return writer;
@@ -414,12 +414,12 @@ export const BitcoinSigningRequest = {
   },
   fromPartial(object: Partial<BitcoinSigningRequest>): BitcoinSigningRequest {
     const message = createBaseBitcoinSigningRequest();
-    message.address = object.address ?? "";
-    message.txid = object.txid ?? "";
-    message.psbt = object.psbt ?? "";
+    message.address = object.address ?? '';
+    message.txid = object.txid ?? '';
+    message.psbt = object.psbt ?? '';
     message.status = object.status ?? 0;
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
-    message.vaultAddress = object.vaultAddress ?? "";
+    message.vaultAddress = object.vaultAddress ?? '';
     return message;
   },
   fromAmino(object: BitcoinSigningRequestAmino): BitcoinSigningRequest {
@@ -446,12 +446,12 @@ export const BitcoinSigningRequest = {
   },
   toAmino(message: BitcoinSigningRequest): BitcoinSigningRequestAmino {
     const obj: any = {};
-    obj.address = message.address === "" ? undefined : message.address;
-    obj.txid = message.txid === "" ? undefined : message.txid;
-    obj.psbt = message.psbt === "" ? undefined : message.psbt;
+    obj.address = message.address === '' ? undefined : message.address;
+    obj.txid = message.txid === '' ? undefined : message.txid;
+    obj.psbt = message.psbt === '' ? undefined : message.psbt;
     obj.status = message.status === 0 ? undefined : message.status;
     obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
-    obj.vault_address = message.vaultAddress === "" ? undefined : message.vaultAddress;
+    obj.vault_address = message.vaultAddress === '' ? undefined : message.vaultAddress;
     return obj;
   },
   fromAminoMsg(object: BitcoinSigningRequestAminoMsg): BitcoinSigningRequest {
@@ -465,16 +465,16 @@ export const BitcoinSigningRequest = {
   },
   toProtoMsg(message: BitcoinSigningRequest): BitcoinSigningRequestProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.BitcoinSigningRequest",
+      typeUrl: '/side.btcbridge.BitcoinSigningRequest',
       value: BitcoinSigningRequest.encode(message).finish()
     };
   }
 };
 function createBaseUTXO(): UTXO {
   return {
-    txid: "",
+    txid: '',
     vout: BigInt(0),
-    address: "",
+    address: '',
     amount: BigInt(0),
     height: BigInt(0),
     pubKeyScript: new Uint8Array(),
@@ -483,15 +483,15 @@ function createBaseUTXO(): UTXO {
   };
 }
 export const UTXO = {
-  typeUrl: "/side.btcbridge.UTXO",
+  typeUrl: '/side.btcbridge.UTXO',
   encode(message: UTXO, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.txid !== "") {
+    if (message.txid !== '') {
       writer.uint32(10).string(message.txid);
     }
     if (message.vout !== BigInt(0)) {
       writer.uint32(16).uint64(message.vout);
     }
-    if (message.address !== "") {
+    if (message.address !== '') {
       writer.uint32(26).string(message.address);
     }
     if (message.amount !== BigInt(0)) {
@@ -551,9 +551,9 @@ export const UTXO = {
   },
   fromPartial(object: Partial<UTXO>): UTXO {
     const message = createBaseUTXO();
-    message.txid = object.txid ?? "";
+    message.txid = object.txid ?? '';
     message.vout = object.vout !== undefined && object.vout !== null ? BigInt(object.vout.toString()) : BigInt(0);
-    message.address = object.address ?? "";
+    message.address = object.address ?? '';
     message.amount = object.amount !== undefined && object.amount !== null ? BigInt(object.amount.toString()) : BigInt(0);
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.pubKeyScript = object.pubKeyScript ?? new Uint8Array();
@@ -591,9 +591,9 @@ export const UTXO = {
   },
   toAmino(message: UTXO): UTXOAmino {
     const obj: any = {};
-    obj.txid = message.txid === "" ? undefined : message.txid;
+    obj.txid = message.txid === '' ? undefined : message.txid;
     obj.vout = message.vout !== BigInt(0) ? message.vout.toString() : undefined;
-    obj.address = message.address === "" ? undefined : message.address;
+    obj.address = message.address === '' ? undefined : message.address;
     obj.amount = message.amount !== BigInt(0) ? message.amount.toString() : undefined;
     obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
     obj.pub_key_script = message.pubKeyScript ? base64FromBytes(message.pubKeyScript) : undefined;
@@ -612,7 +612,7 @@ export const UTXO = {
   },
   toProtoMsg(message: UTXO): UTXOProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.UTXO",
+      typeUrl: '/side.btcbridge.UTXO',
       value: UTXO.encode(message).finish()
     };
   }

@@ -1,9 +1,9 @@
-import ApiClient from "@/ui/services/network/ApiClient";
-import { AxiosRequestConfig } from "axios";
+import ApiClient from '@/ui/services/network/ApiClient';
+import { AxiosRequestConfig } from 'axios';
 
-import { GetTxRequest, GetTxsResponse } from "./types";
+import { GetTxRequest, GetTxsResponse } from './types';
 
-import { getQueryParams } from "../getQueryParams";
+import { getQueryParams } from '../getQueryParams';
 
 export default class TxService {
   private apiClient: ApiClient;

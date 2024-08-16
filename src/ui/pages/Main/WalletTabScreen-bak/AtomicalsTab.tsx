@@ -25,7 +25,7 @@ export function AtomicalsTab() {
     },
     {
       key: AtomicalsAssetTabKey.OTHERS,
-      label: `Others`,
+      label: 'Others',
       children: (
         <Column style={{ minHeight: 150 }} itemsCenter justifyCenter>
           <Empty text="Not supported yet" />

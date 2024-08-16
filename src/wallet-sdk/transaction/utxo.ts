@@ -1,8 +1,8 @@
 //@ts-nocheck
 
-import { decodeAddress } from "../address";
-import { NetworkType } from "../network";
-import { AddressType, UnspentOutput } from "../types";
+import { decodeAddress } from '../address';
+import { NetworkType } from '../network';
+import { AddressType, UnspentOutput } from '../types';
 
 function hasInscription(utxos: UnspentOutput[]) {
   if (utxos.find((v) => v.inscriptions.length > 0)) {
@@ -12,14 +12,14 @@ function hasInscription(utxos: UnspentOutput[]) {
 }
 
 function hasAtomicalsFT(utxos: UnspentOutput[]) {
-  if (utxos.find((v) => v.atomicals.find((w) => w.type === "FT"))) {
+  if (utxos.find((v) => v.atomicals.find((w) => w.type === 'FT'))) {
     return true;
   }
   return false;
 }
 
 function hasAtomicalsNFT(utxos: UnspentOutput[]) {
-  if (utxos.find((v) => v.atomicals.find((w) => w.type === "NFT"))) {
+  if (utxos.find((v) => v.atomicals.find((w) => w.type === 'NFT'))) {
     return true;
   }
   return false;
@@ -78,7 +78,7 @@ function getAddedVirtualSize(addressType: AddressType) {
   } else if (addressType === AddressType.P2SH_P2WPKH) {
     return 41 + 24 + (1 + 1 + 72 + 1 + 33) / 4;
   }
-  throw new Error("unknown address type");
+  throw new Error('unknown address type');
 }
 
 export function getUtxoDust(addressType: AddressType) {

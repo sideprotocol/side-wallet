@@ -1,4 +1,4 @@
-import { Card, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
+import { Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { colors } from '@/ui/theme/colors';
 
 export default function LanguageTypeScreen() {

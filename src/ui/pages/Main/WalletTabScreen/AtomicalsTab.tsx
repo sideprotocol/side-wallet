@@ -6,7 +6,6 @@ import { useAppDispatch } from '@/ui/state/hooks';
 import { useAtomicalsAssetTabKey } from '@/ui/state/ui/hooks';
 import { AtomicalsAssetTabKey, uiActions } from '@/ui/state/ui/reducer';
 
-import { Arc20List } from './Arc20List';
 import { AtomicalList } from './AtomicalsList';
 
 export function AtomicalsTab() {
@@ -25,7 +24,7 @@ export function AtomicalsTab() {
     // },
     {
       key: AtomicalsAssetTabKey.OTHERS,
-      label: `Others`,
+      label: 'Others',
       children: (
         <Column style={{ minHeight: 150 }} itemsCenter justifyCenter>
           <Empty text="Not supported yet" />

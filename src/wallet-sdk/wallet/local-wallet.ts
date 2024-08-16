@@ -1,13 +1,13 @@
 //@ts-nocheck
 
-import { publicKeyToAddress, publicKeyToScriptPk, scriptPkToAddress } from "../address";
-import { ECPair, bitcoin } from "../bitcoin-core";
-import { HdKeyring, SimpleKeyring } from "../keyring";
-import { signMessageOfBIP322Simple } from "../message";
-import { NetworkType, toPsbtNetwork } from "../network";
-import { AddressType, AddressUserToSignInput, PublicKeyUserToSignInput, SignPsbtOptions, ToSignInput } from "../types";
-import { toXOnly } from "../utils";
-import { AbstractWallet } from "./abstract-wallet";
+import { publicKeyToAddress, publicKeyToScriptPk, scriptPkToAddress } from '../address';
+import { ECPair, bitcoin } from '../bitcoin-core';
+import { HdKeyring, SimpleKeyring } from '../keyring';
+import { signMessageOfBIP322Simple } from '../message';
+import { NetworkType, toPsbtNetwork } from '../network';
+import { AddressType, AddressUserToSignInput, PublicKeyUserToSignInput, SignPsbtOptions, ToSignInput } from '../types';
+import { toXOnly } from '../utils';
+import { AbstractWallet } from './abstract-wallet';
 
 export class LocalWallet implements AbstractWallet {
   keyring: SimpleKeyring;
@@ -20,9 +20,9 @@ export class LocalWallet implements AbstractWallet {
   constructor(wif: string, addressType: AddressType = AddressType.P2WPKH, networkType: NetworkType = NetworkType.MAINNET) {
     const network = toPsbtNetwork(networkType);
     const keyPair = ECPair.fromWIF(wif, network);
-    this.keyring = new SimpleKeyring([keyPair.privateKey.toString("hex")]);
+    this.keyring = new SimpleKeyring([keyPair.privateKey.toString('hex')]);
     this.keyring.addAccounts(1);
-    this.pubkey = keyPair.publicKey.toString("hex");
+    this.pubkey = keyPair.publicKey.toString('hex');
     this.address = publicKeyToAddress(this.pubkey, addressType, networkType);
     this.network = network;
     this.networkType = networkType;
@@ -67,22 +67,22 @@ export class LocalWallet implements AbstractWallet {
       // but we allow address to be specified in addition to publicKey for convenience.
       toSignInputs = options.toSignInputs.map((input) => {
         const index = Number(input.index);
-        if (isNaN(index)) throw new Error("invalid index in toSignInput");
+        if (isNaN(index)) throw new Error('invalid index in toSignInput');
 
         if (!(input as AddressUserToSignInput).address && !(input as PublicKeyUserToSignInput).publicKey) {
-          throw new Error("no address or public key in toSignInput");
+          throw new Error('no address or public key in toSignInput');
         }
 
         if ((input as AddressUserToSignInput).address && (input as AddressUserToSignInput).address != accountAddress) {
-          throw new Error("invalid address in toSignInput");
+          throw new Error('invalid address in toSignInput');
         }
 
         if ((input as PublicKeyUserToSignInput).publicKey && (input as PublicKeyUserToSignInput).publicKey != accountPubkey) {
-          throw new Error("invalid public key in toSignInput");
+          throw new Error('invalid public key in toSignInput');
         }
 
         const sighashTypes = input.sighashTypes?.map(Number);
-        if (sighashTypes?.some(isNaN)) throw new Error("invalid sighash type in toSignInput");
+        if (sighashTypes?.some(isNaN)) throw new Error('invalid sighash type in toSignInput');
 
         return {
           index,
@@ -95,7 +95,7 @@ export class LocalWallet implements AbstractWallet {
       const networkType = this.getNetworkType();
       const psbtNetwork = toPsbtNetwork(networkType);
 
-      const psbt = typeof _psbt === "string" ? bitcoin.Psbt.fromHex(_psbt as string, { network: psbtNetwork }) : (_psbt as bitcoin.Psbt);
+      const psbt = typeof _psbt === 'string' ? bitcoin.Psbt.fromHex(_psbt as string, { network: psbtNetwork }) : (_psbt as bitcoin.Psbt);
       psbt.data.inputs.forEach((v, index) => {
         let script: any = null;
         if (v.witnessUtxo) {
@@ -129,7 +129,7 @@ export class LocalWallet implements AbstractWallet {
     let _inputs: ToSignInput[] = await this.formatOptionsToSignInputs(psbt, opts);
 
     if (_inputs.length == 0) {
-      throw new Error("no input to sign");
+      throw new Error('no input to sign');
     }
 
     psbt.data.inputs.forEach((v) => {
@@ -138,12 +138,12 @@ export class LocalWallet implements AbstractWallet {
       const lostInternalPubkey = !v.tapInternalKey;
       // Special measures taken for compatibility with certain applications.
       if (isNotSigned && isP2TR && lostInternalPubkey) {
-        const tapInternalKey = toXOnly(Buffer.from(this.pubkey, "hex"));
+        const tapInternalKey = toXOnly(Buffer.from(this.pubkey, 'hex'));
         const { output } = bitcoin.payments.p2tr({
           internalPubkey: tapInternalKey,
           network: toPsbtNetwork(this.networkType),
         });
-        if (v.witnessUtxo?.script.toString("hex") == output?.toString("hex")) {
+        if (v.witnessUtxo?.script.toString('hex') == output?.toString('hex')) {
           v.tapInternalKey = tapInternalKey;
         }
       }
@@ -164,8 +164,8 @@ export class LocalWallet implements AbstractWallet {
     return pubkeys[0];
   }
 
-  async signMessage(text: string, type: "bip322-simple" | "ecdsa"): Promise<string> {
-    if (type === "bip322-simple") {
+  async signMessage(text: string, type: 'bip322-simple' | 'ecdsa'): Promise<string> {
+    if (type === 'bip322-simple') {
       return await signMessageOfBIP322Simple({
         message: text,
         address: this.address,
@@ -178,7 +178,7 @@ export class LocalWallet implements AbstractWallet {
     }
   }
 
-  async signData(data: string, type: "ecdsa" | "schnorr" = "ecdsa") {
+  async signData(data: string, type: 'ecdsa' | 'schnorr' = 'ecdsa') {
     const pubkey = await this.getPublicKey();
     return await this.keyring.signData(pubkey, data, type);
   }

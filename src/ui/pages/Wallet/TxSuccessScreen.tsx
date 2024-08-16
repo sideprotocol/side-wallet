@@ -1,5 +1,5 @@
 import { CHAINS_ENUM } from '@/shared/constant';
-import { Button, Column, Content, Footer, Header, Icon, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Footer, Icon, Layout, Row, Text } from '@/ui/components';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
 import { spacing } from '@/ui/theme/spacing';

@@ -1,7 +1,7 @@
 //@ts-nocheck
 
-import { UTXO_DUST } from "../constants";
-import { UnspentOutput } from "../types";
+import { UTXO_DUST } from '../constants';
+import { UnspentOutput } from '../types';
 
 export class InscriptionUnit {
   satoshis: number; // satoshis of this unit
@@ -151,7 +151,7 @@ export class InscriptionUnspendOutput {
   // print each units
   dump() {
     this.inscriptionUnits.forEach((v) => {
-      console.log("satoshis:", v.satoshis, "inscriptions:", v.inscriptions);
+      console.log('satoshis:', v.satoshis, 'inscriptions:', v.inscriptions);
     });
   }
 }

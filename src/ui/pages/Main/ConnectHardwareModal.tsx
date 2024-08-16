@@ -60,7 +60,7 @@ export const ConnectHardwareModal = ({ onClose }: { onClose: () => void }) => {
           <Text
             size="sm"
             color="textDim"
-            text={`The hardware wallet feature is experimental. Use it with caution as potential issues may arise`}
+            text={'The hardware wallet feature is experimental. Use it with caution as potential issues may arise'}
           />
 
           <WalletItem

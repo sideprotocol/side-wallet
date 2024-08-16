@@ -1,10 +1,10 @@
 //@ts-nocheck
 
-import { UTXO_DUST } from "../constants";
-import { ErrorCodes, WalletUtilsError } from "../error";
-import { NetworkType } from "../network";
-import { InscriptionUnit, InscriptionUnspendOutput, Transaction, utxoHelper } from "../transaction";
-import { ToSignInput, UnspentOutput } from "../types";
+import { UTXO_DUST } from '../constants';
+import { ErrorCodes, WalletUtilsError } from '../error';
+import { NetworkType } from '../network';
+import { InscriptionUnit, InscriptionUnspendOutput, Transaction, utxoHelper } from '../transaction';
+import { ToSignInput, UnspentOutput } from '../types';
 
 export async function splitInscriptionUtxo({
   btcUtxos,

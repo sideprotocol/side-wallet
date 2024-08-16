@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme } from '@mui/material';
 
 const customTheme = createTheme({
   breakpoints: {
@@ -11,20 +11,20 @@ const customTheme = createTheme({
     },
   },
   palette: {
-    mode: "light",
+    mode: 'light',
     common: {
-      black: "#000",
-      white: "#fff",
+      black: '#000',
+      white: '#fff',
     },
     background: {
-      default: "#fff",
+      default: '#fff',
     },
     primary: {
-      main: "#0DD4C3",
+      main: '#0DD4C3',
     },
   },
   typography: {
-    fontFamily: "Inter, sans-serif",
+    fontFamily: 'Inter, sans-serif',
   },
   components: {
     MuiButtonBase: {
@@ -34,8 +34,8 @@ const customTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          "&.MuiMenuItem-root.Mui-selected": {
-            backgroundColor: "#6DE5DA !important",
+          '&.MuiMenuItem-root.Mui-selected': {
+            backgroundColor: '#6DE5DA !important',
           },
         },
       },
@@ -43,33 +43,33 @@ const customTheme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          width: "100%",
-          height: "62px",
-          background: "#fff",
-          borderRadius: "8px",
-          p: "0 12px 0 24px",
-          mb: "24px",
-          "& input": {
-            color: "#000",
-            fontSize: "16px",
-            fontFamily: "Inter, sans-serif",
+          width: '100%',
+          height: '62px',
+          background: '#fff',
+          borderRadius: '8px',
+          p: '0 12px 0 24px',
+          mb: '24px',
+          '& input': {
+            color: '#000',
+            fontSize: '16px',
+            fontFamily: 'Inter, sans-serif',
             p: 0,
-            "::placeholder": {
+            '::placeholder': {
               opacity: 0.4,
             },
           },
-          "& .Mui-disabled": {
-            textFillColor: "#6C7080",
+          '& .Mui-disabled': {
+            textFillColor: '#6C7080',
           },
-          "&.MuiOutlinedInput-root": {
+          '&.MuiOutlinedInput-root': {
             fieldset: {
-              border: "none",
+              border: 'none',
             },
-            "&:hover fieldset": {
-              border: "none",
+            '&:hover fieldset': {
+              border: 'none',
             },
-            "&.Mui-focused fieldset": {
-              border: "none",
+            '&.Mui-focused fieldset': {
+              border: 'none',
             },
           },
         },
@@ -78,26 +78,26 @@ const customTheme = createTheme({
     MuiTableHead: {
       styleOverrides: {
         root: {
-          paddingLeft: "37px",
-          borderCollapse: "separate",
-          background: "transparent",
-          ".MuiTableRow-root": {
-            background: "transparent",
-            borderBottom: "1px solid rgba(36, 45, 57, 0.60)",
+          paddingLeft: '37px',
+          borderCollapse: 'separate',
+          background: 'transparent',
+          '.MuiTableRow-root': {
+            background: 'transparent',
+            borderBottom: '1px solid rgba(36, 45, 57, 0.60)',
           },
-          ".MuiTableCell-root": {
-            border: "none",
-            color: "#fff",
-            padding: "14px 24px",
-            "&:last-child": {
-              borderTopRightRadius: "4px",
-              borderBottomRightRadius: "4px",
-              paddingRight: "24px",
+          '.MuiTableCell-root': {
+            border: 'none',
+            color: '#fff',
+            padding: '14px 24px',
+            '&:last-child': {
+              borderTopRightRadius: '4px',
+              borderBottomRightRadius: '4px',
+              paddingRight: '24px',
             },
-            "&:first-of-type": {
-              borderTopLeftRadius: "4px",
-              borderBottomLeftRadius: "4px",
-              paddingLeft: "37px",
+            '&:first-of-type': {
+              borderTopLeftRadius: '4px',
+              borderBottomLeftRadius: '4px',
+              paddingLeft: '37px',
             },
           },
         },
@@ -106,16 +106,16 @@ const customTheme = createTheme({
     MuiTableBody: {
       styleOverrides: {
         root: {
-          paddingLeft: "37px",
-          ".MuiTableRow-root": {
-            "& td": { border: 0 },
+          paddingLeft: '37px',
+          '.MuiTableRow-root': {
+            '& td': { border: 0 },
           },
-          ".MuiTableCell-root": {
-            padding: "16px 24px",
+          '.MuiTableCell-root': {
+            padding: '16px 24px',
             // paddingTop:'16px',
             // paddingBottom:'16px',
-            "&:first-of-type": { paddingLeft: "24px" },
-            "&:last-child": { paddingRight: "24px" },
+            '&:first-of-type': { paddingLeft: '24px' },
+            '&:last-child': { paddingRight: '24px' },
           },
         },
       },

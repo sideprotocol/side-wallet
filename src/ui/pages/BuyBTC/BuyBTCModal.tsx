@@ -65,7 +65,7 @@ export const BuyBTCModal = ({ onClose }: { onClose: () => void }) => {
         <Row fullX style={{ borderTopWidth: 1, borderColor: colors.border }} my="md" />
 
         <Column gap="zero" mt="sm" mb="lg">
-          <Text size="sm" color="textDim" text={`Please select a service provider below to buy BTC.`} />
+          <Text size="sm" color="textDim" text={'Please select a service provider below to buy BTC.'} />
 
           {isMoonpayEnabled ? (
             <PaymentItem

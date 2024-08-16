@@ -90,7 +90,6 @@ export default function useSwapSimulation() {
         resultQuote = await services.dex.getValidRoutes(swapPair.native.denom, unitAmount, swapPair.remote.denom);
       } catch (e) {
         console.log(e);
-        debugger;
       }
       // const resultQuote = [];
 

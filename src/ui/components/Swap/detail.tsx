@@ -41,8 +41,8 @@ function SwapDetail() {
       ? swapPair.remote.amount
       : minReceived0;
 
-  console.log(`priceImpact: `, priceImpact);
-  console.log(`priceImpact: minReceived: `, minReceived);
+  console.log('priceImpact: ', priceImpact);
+  console.log('priceImpact: minReceived: ', minReceived);
   const itemData: {
     id: string;
     text: string;

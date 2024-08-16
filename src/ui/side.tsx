@@ -13,13 +13,12 @@ import '@/ui/styles/global.css';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ActionComponentProvider } from './components/ActionComponent';
-import { AppDimensions, AppSideDimensions } from './components/Responsive';
+import { AppSideDimensions } from './components/Responsive';
 import AsyncMainRoute from './pages/MainRoute';
 import store from './state';
 import { WalletProvider } from './utils';
 import { globalActions } from '@/ui/state/global/reducer';
 import { useAppDispatch, useAppSelector } from '@/ui/state/hooks';
-import { SettingsState } from '@/ui/state/settings/reducer';
 
 // disabled sentry
 // Sentry.init({
@@ -148,7 +147,7 @@ function Updaters() {
 
   const onIdle = () => {
     setState('Idle');
-    console.log(`settingsState: `, settingsState);
+    console.log('settingsState: ', settingsState);
     // setOpen(false)
     dispatch(globalActions.update({ isUnlocked: false }));
     const basePath = location.href.split('#')[0];

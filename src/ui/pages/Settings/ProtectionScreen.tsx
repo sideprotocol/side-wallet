@@ -117,7 +117,7 @@ export default function ProtectionScreen() {
                   preset="sub"
                   size="sm"
                   text={
-                    "If you enable this setting, you might get signature requests that aren't readable. By signing a message you don't understand, you could be agreeing to give away your funds and NFTs.You're at risk for phishing attacks. Protect yourself by turning off signData."
+                    'If you enable this setting, you might get signature requests that aren\'t readable. By signing a message you don\'t understand, you could be agreeing to give away your funds and NFTs.You\'re at risk for phishing attacks. Protect yourself by turning off signData.'
                   }
                 />
               </Row>
@@ -216,7 +216,7 @@ export const EnableSignDataPopover = ({ onNext, onCancel }: { onNext: () => void
 
                 <Text
                   color="red_disconnect"
-                  text={"If you've been asked to turn this setting on, you might be getting scammed"}
+                  text={'If you\'ve been asked to turn this setting on, you might be getting scammed'}
                 />
               </Row>
             </Row>

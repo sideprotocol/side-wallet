@@ -40,7 +40,7 @@
 // standalone and requires a support library to be linked with it. This
 // support library is itself covered by the above license.
 
-import { utf8Length, utf8Read, utf8Write } from "./utf8";
+import { utf8Length, utf8Read, utf8Write } from './utf8';
 import {
   int64ToString,
   readInt32,
@@ -56,7 +56,7 @@ import {
   writeByte,
   zzDecode,
   zzEncode,
-} from "./varint";
+} from './varint';
 
 export enum WireType {
   Varint = 0,
@@ -101,7 +101,7 @@ export class BinaryReader implements IBinaryReader {
   len: number;
 
   assertBounds(): void {
-    if (this.pos > this.len) throw new RangeError("premature EOF");
+    if (this.pos > this.len) throw new RangeError('premature EOF');
   }
 
   constructor(buf?: ArrayLike<number>) {
@@ -117,13 +117,13 @@ export class BinaryReader implements IBinaryReader {
       wireType = tag & 7;
     if (fieldNo <= 0 || wireType < 0 || wireType > 5)
       throw new Error(
-        "illegal tag: field no " + fieldNo + " wire type " + wireType
+        'illegal tag: field no ' + fieldNo + ' wire type ' + wireType
       );
     return [fieldNo, wireType, tag];
   }
 
   skip(length?: number) {
-    if (typeof length === "number") {
+    if (typeof length === 'number') {
       if (this.pos + length > this.len) throw indexOutOfRange(this, length);
       this.pos += length;
     } else {
@@ -156,7 +156,7 @@ export class BinaryReader implements IBinaryReader {
 
       /* istanbul ignore next */
       default:
-        throw Error("invalid wire type " + wireType + " at offset " + this.pos);
+        throw Error('invalid wire type ' + wireType + ' at offset ' + this.pos);
     }
     return this;
   }
@@ -215,11 +215,11 @@ export class BinaryReader implements IBinaryReader {
   }
 
   float(): number {
-    throw new Error("float not supported");
+    throw new Error('float not supported');
   }
 
   double(): number {
-    throw new Error("double not supported");
+    throw new Error('double not supported');
   }
 
   bool(): boolean {
@@ -335,7 +335,7 @@ export class BinaryWriter implements IBinaryWriter {
   }
 
   static alloc(size: number): Uint8Array | number[] {
-    if (typeof Uint8Array !== "undefined") {
+    if (typeof Uint8Array !== 'undefined') {
       return pool(
         (size) => new Uint8Array(size),
         Uint8Array.prototype.subarray
@@ -467,11 +467,11 @@ export class BinaryWriter implements IBinaryWriter {
   sfixed32 = BinaryWriter.prototype.fixed32;
 
   float(value: number): BinaryWriter {
-    throw new Error("float not supported" + value);
+    throw new Error('float not supported' + value);
   }
 
   double(value: number): BinaryWriter {
-    throw new Error("double not supported" + value);
+    throw new Error('double not supported' + value);
   }
 
   bytes(value: Uint8Array): BinaryWriter {
@@ -493,7 +493,7 @@ function writeBytes(
   buf: Uint8Array | number[],
   pos: number
 ) {
-  if (typeof Uint8Array !== "undefined") {
+  if (typeof Uint8Array !== 'undefined') {
     (buf as Uint8Array).set(val, pos);
   } else {
     for (let i = 0; i < val.length; ++i) buf[pos + i] = val[i];
@@ -525,11 +525,11 @@ function pool(
 
 function indexOutOfRange(reader: BinaryReader, writeLength?: number) {
   return RangeError(
-    "index out of range: " +
+    'index out of range: ' +
       reader.pos +
-      " + " +
+      ' + ' +
       (writeLength || 1) +
-      " > " +
+      ' > ' +
       reader.len
   );
 }

@@ -19,11 +19,11 @@ export type RequestConfig = {
 };
 
 export interface BaseRequestPage {
-  "pagination.key"?: string;
-  "pagination.offset"?: string;
-  "pagination.limit"?: string;
-  "pagination.count_total"?: boolean;
-  "pagination.reverse"?: boolean;
+  'pagination.key'?: string;
+  'pagination.offset'?: string;
+  'pagination.limit'?: string;
+  'pagination.count_total'?: boolean;
+  'pagination.reverse'?: boolean;
 }
 
 export interface PaginationResponse {

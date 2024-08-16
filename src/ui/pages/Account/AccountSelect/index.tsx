@@ -1,7 +1,7 @@
 import { Drawer } from 'antd';
 import { useState } from 'react';
 
-import { Column, Header, Icon, Image, Row, Text } from '@/ui/components';
+import { Header, Icon, Image, Row, Text } from '@/ui/components';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { shortAddress } from '@/ui/utils';

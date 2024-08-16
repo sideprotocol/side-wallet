@@ -1,6 +1,6 @@
 //@ts-nocheck
 
-import bigInt from "big-integer";
+import bigInt from 'big-integer';
 
 export class RuneId {
   block: number;
@@ -17,7 +17,7 @@ export class RuneId {
     const tx = bigN.and(0xffff);
 
     if (block.greater(Number.MAX_SAFE_INTEGER) || tx.greater(Number.MAX_SAFE_INTEGER)) {
-      throw new Error("Integer overflow");
+      throw new Error('Integer overflow');
     }
     return new RuneId({ block: block.toJSNumber(), tx: tx.toJSNumber() });
   }
@@ -26,7 +26,7 @@ export class RuneId {
   }
 
   static fromString(s: string) {
-    const [block, tx] = s.split(":").map(Number);
+    const [block, tx] = s.split(':').map(Number);
     return new RuneId({ block, tx });
   }
 }

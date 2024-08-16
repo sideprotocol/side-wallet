@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { BinaryReader, BinaryWriter } from "../../binary";
+import { BinaryReader, BinaryWriter } from '../../binary';
 /**
  * Defines the HTTP configuration for an API service. It contains a list of
  * [HttpRule][google.api.HttpRule], each specifying the mapping of an RPC method
@@ -8,7 +8,7 @@ import { BinaryReader, BinaryWriter } from "../../binary";
 export interface Http {
   /**
    * A list of HTTP configuration rules that apply to individual API methods.
-   * 
+   *
    * **NOTE:** All service configuration rules follow "last one wins" order.
    */
   rules: HttpRule[];
@@ -16,14 +16,14 @@ export interface Http {
    * When set to true, URL path parmeters will be fully URI-decoded except in
    * cases of single segment matches in reserved expansion, where "%2F" will be
    * left encoded.
-   * 
+   *
    * The default behavior is to not decode RFC 6570 reserved characters in multi
    * segment matches.
    */
   fullyDecodeReservedExpansion: boolean;
 }
 export interface HttpProtoMsg {
-  typeUrl: "/google.api.Http";
+  typeUrl: '/google.api.Http';
   value: Uint8Array;
 }
 /**
@@ -34,7 +34,7 @@ export interface HttpProtoMsg {
 export interface HttpAmino {
   /**
    * A list of HTTP configuration rules that apply to individual API methods.
-   * 
+   *
    * **NOTE:** All service configuration rules follow "last one wins" order.
    */
   rules?: HttpRuleAmino[];
@@ -42,14 +42,14 @@ export interface HttpAmino {
    * When set to true, URL path parmeters will be fully URI-decoded except in
    * cases of single segment matches in reserved expansion, where "%2F" will be
    * left encoded.
-   * 
+   *
    * The default behavior is to not decode RFC 6570 reserved characters in multi
    * segment matches.
    */
   fully_decode_reserved_expansion?: boolean;
 }
 export interface HttpAminoMsg {
-  type: "/google.api.Http";
+  type: '/google.api.Http';
   value: HttpAmino;
 }
 /**
@@ -68,13 +68,13 @@ export interface HttpSDKType {
  * HTTP request body. The mapping is typically specified as an
  * `google.api.http` annotation on the RPC method,
  * see "google/api/annotations.proto" for details.
- * 
+ *
  * The mapping consists of a field specifying the path template and
  * method kind.  The path template can refer to fields in the request
  * message, as in the example below which describes a REST GET
  * operation on a resource collection of messages:
- * 
- * 
+ *
+ *
  *     service Messaging {
  *       rpc GetMessage(GetMessageRequest) returns (Message) {
  *         option (google.api.http).get = "/v1/messages/{message_id}/{sub.subfield}";
@@ -90,31 +90,31 @@ export interface HttpSDKType {
  *     message Message {
  *       string text = 1; // content of the resource
  *     }
- * 
+ *
  * The same http annotation can alternatively be expressed inside the
  * `GRPC API Configuration` YAML file.
- * 
+ *
  *     http:
  *       rules:
  *         - selector: <proto_package_name>.Messaging.GetMessage
  *           get: /v1/messages/{message_id}/{sub.subfield}
- * 
+ *
  * This definition enables an automatic, bidrectional mapping of HTTP
  * JSON to RPC. Example:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `GET /v1/messages/123456/foo`  | `GetMessage(message_id: "123456" sub: SubMessage(subfield: "foo"))`
- * 
+ *
  * In general, not only fields but also field paths can be referenced
  * from a path pattern. Fields mapped to the path pattern cannot be
  * repeated and must have a primitive (non-message) type.
- * 
+ *
  * Any fields in the request message which are not bound by the path
  * pattern automatically become (optional) HTTP query
  * parameters. Assume the following definition of the request message:
- * 
- * 
+ *
+ *
  *     service Messaging {
  *       rpc GetMessage(GetMessageRequest) returns (Message) {
  *         option (google.api.http).get = "/v1/messages/{message_id}";
@@ -128,24 +128,24 @@ export interface HttpSDKType {
  *       int64 revision = 2;    // becomes a parameter
  *       SubMessage sub = 3;    // `sub.subfield` becomes a parameter
  *     }
- * 
- * 
+ *
+ *
  * This enables a HTTP JSON to RPC mapping as below:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `GET /v1/messages/123456?revision=2&sub.subfield=foo` | `GetMessage(message_id: "123456" revision: 2 sub: SubMessage(subfield: "foo"))`
- * 
+ *
  * Note that fields which are mapped to HTTP parameters must have a
  * primitive type or a repeated primitive type. Message types are not
  * allowed. In the case of a repeated type, the parameter can be
  * repeated in the URL, as in `...?param=A&param=B`.
- * 
+ *
  * For HTTP method kinds which allow a request body, the `body` field
  * specifies the mapping. Consider a REST update method on the
  * message resource collection:
- * 
- * 
+ *
+ *
  *     service Messaging {
  *       rpc UpdateMessage(UpdateMessageRequest) returns (Message) {
  *         option (google.api.http) = {
@@ -158,21 +158,21 @@ export interface HttpSDKType {
  *       string message_id = 1; // mapped to the URL
  *       Message message = 2;   // mapped to the body
  *     }
- * 
- * 
+ *
+ *
  * The following HTTP JSON to RPC mapping is enabled, where the
  * representation of the JSON in the request body is determined by
  * protos JSON encoding:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `PUT /v1/messages/123456 { "text": "Hi!" }` | `UpdateMessage(message_id: "123456" message { text: "Hi!" })`
- * 
+ *
  * The special name `*` can be used in the body mapping to define that
  * every field not bound by the path template should be mapped to the
  * request body.  This enables the following alternative definition of
  * the update method:
- * 
+ *
  *     service Messaging {
  *       rpc UpdateMessage(Message) returns (Message) {
  *         option (google.api.http) = {
@@ -185,23 +185,23 @@ export interface HttpSDKType {
  *       string message_id = 1;
  *       string text = 2;
  *     }
- * 
- * 
+ *
+ *
  * The following HTTP JSON to RPC mapping is enabled:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `PUT /v1/messages/123456 { "text": "Hi!" }` | `UpdateMessage(message_id: "123456" text: "Hi!")`
- * 
+ *
  * Note that when using `*` in the body mapping, it is not possible to
  * have HTTP parameters, as all fields not bound by the path end in
  * the body. This makes this option more rarely used in practice of
  * defining REST APIs. The common usage of `*` is in custom methods
  * which don't use the URL at all for transferring data.
- * 
+ *
  * It is possible to define multiple HTTP methods for one RPC by using
  * the `additional_bindings` option. Example:
- * 
+ *
  *     service Messaging {
  *       rpc GetMessage(GetMessageRequest) returns (Message) {
  *         option (google.api.http) = {
@@ -216,21 +216,21 @@ export interface HttpSDKType {
  *       string message_id = 1;
  *       string user_id = 2;
  *     }
- * 
- * 
+ *
+ *
  * This enables the following two alternative HTTP JSON to RPC
  * mappings:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `GET /v1/messages/123456` | `GetMessage(message_id: "123456")`
  * `GET /v1/users/me/messages/123456` | `GetMessage(user_id: "me" message_id: "123456")`
- * 
+ *
  * # Rules for HTTP mapping
- * 
+ *
  * The rules for mapping HTTP path, query parameters, and body fields
  * to the request message are as follows:
- * 
+ *
  * 1. The `body` field specifies either `*` or a field path, or is
  *    omitted. If omitted, it indicates there is no HTTP request body.
  * 2. Leaf fields (recursive expansion of nested messages in the
@@ -241,49 +241,49 @@ export interface HttpSDKType {
  *     (c) All other fields.
  * 3. URL query parameters found in the HTTP request are mapped to (c) fields.
  * 4. Any body sent with an HTTP request can contain only (b) fields.
- * 
+ *
  * The syntax of the path template is as follows:
- * 
+ *
  *     Template = "/" Segments [ Verb ] ;
  *     Segments = Segment { "/" Segment } ;
  *     Segment  = "*" | "**" | LITERAL | Variable ;
  *     Variable = "{" FieldPath [ "=" Segments ] "}" ;
  *     FieldPath = IDENT { "." IDENT } ;
  *     Verb     = ":" LITERAL ;
- * 
+ *
  * The syntax `*` matches a single path segment. The syntax `**` matches zero
  * or more path segments, which must be the last part of the path except the
  * `Verb`. The syntax `LITERAL` matches literal text in the path.
- * 
+ *
  * The syntax `Variable` matches part of the URL path as specified by its
  * template. A variable template must not contain other variables. If a variable
  * matches a single path segment, its template may be omitted, e.g. `{var}`
  * is equivalent to `{var=*}`.
- * 
+ *
  * If a variable contains exactly one path segment, such as `"{var}"` or
  * `"{var=*}"`, when such a variable is expanded into a URL path, all characters
  * except `[-_.~0-9a-zA-Z]` are percent-encoded. Such variables show up in the
  * Discovery Document as `{var}`.
- * 
+ *
  * If a variable contains one or more path segments, such as `"{var=foo/*}"`
  * or `"{var=**}"`, when such a variable is expanded into a URL path, all
  * characters except `[-_.~/0-9a-zA-Z]` are percent-encoded. Such variables
  * show up in the Discovery Document as `{+var}`.
- * 
+ *
  * NOTE: While the single segment variable matches the semantics of
  * [RFC 6570](https://tools.ietf.org/html/rfc6570) Section 3.2.2
  * Simple String Expansion, the multi segment variable **does not** match
  * RFC 6570 Reserved Expansion. The reason is that the Reserved Expansion
  * does not expand special characters like `?` and `#`, which would lead
  * to invalid URLs.
- * 
+ *
  * NOTE: the field paths in variables and in the `body` must not refer to
  * repeated fields or map fields.
  */
 export interface HttpRule {
   /**
    * Selects methods to which this rule applies.
-   * 
+   *
    * Refer to [selector][google.api.DocumentationRule.selector] for syntax details.
    */
   selector: string;
@@ -325,7 +325,7 @@ export interface HttpRule {
   additionalBindings: HttpRule[];
 }
 export interface HttpRuleProtoMsg {
-  typeUrl: "/google.api.HttpRule";
+  typeUrl: '/google.api.HttpRule';
   value: Uint8Array;
 }
 /**
@@ -335,13 +335,13 @@ export interface HttpRuleProtoMsg {
  * HTTP request body. The mapping is typically specified as an
  * `google.api.http` annotation on the RPC method,
  * see "google/api/annotations.proto" for details.
- * 
+ *
  * The mapping consists of a field specifying the path template and
  * method kind.  The path template can refer to fields in the request
  * message, as in the example below which describes a REST GET
  * operation on a resource collection of messages:
- * 
- * 
+ *
+ *
  *     service Messaging {
  *       rpc GetMessage(GetMessageRequest) returns (Message) {
  *         option (google.api.http).get = "/v1/messages/{message_id}/{sub.subfield}";
@@ -357,31 +357,31 @@ export interface HttpRuleProtoMsg {
  *     message Message {
  *       string text = 1; // content of the resource
  *     }
- * 
+ *
  * The same http annotation can alternatively be expressed inside the
  * `GRPC API Configuration` YAML file.
- * 
+ *
  *     http:
  *       rules:
  *         - selector: <proto_package_name>.Messaging.GetMessage
  *           get: /v1/messages/{message_id}/{sub.subfield}
- * 
+ *
  * This definition enables an automatic, bidrectional mapping of HTTP
  * JSON to RPC. Example:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `GET /v1/messages/123456/foo`  | `GetMessage(message_id: "123456" sub: SubMessage(subfield: "foo"))`
- * 
+ *
  * In general, not only fields but also field paths can be referenced
  * from a path pattern. Fields mapped to the path pattern cannot be
  * repeated and must have a primitive (non-message) type.
- * 
+ *
  * Any fields in the request message which are not bound by the path
  * pattern automatically become (optional) HTTP query
  * parameters. Assume the following definition of the request message:
- * 
- * 
+ *
+ *
  *     service Messaging {
  *       rpc GetMessage(GetMessageRequest) returns (Message) {
  *         option (google.api.http).get = "/v1/messages/{message_id}";
@@ -395,24 +395,24 @@ export interface HttpRuleProtoMsg {
  *       int64 revision = 2;    // becomes a parameter
  *       SubMessage sub = 3;    // `sub.subfield` becomes a parameter
  *     }
- * 
- * 
+ *
+ *
  * This enables a HTTP JSON to RPC mapping as below:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `GET /v1/messages/123456?revision=2&sub.subfield=foo` | `GetMessage(message_id: "123456" revision: 2 sub: SubMessage(subfield: "foo"))`
- * 
+ *
  * Note that fields which are mapped to HTTP parameters must have a
  * primitive type or a repeated primitive type. Message types are not
  * allowed. In the case of a repeated type, the parameter can be
  * repeated in the URL, as in `...?param=A&param=B`.
- * 
+ *
  * For HTTP method kinds which allow a request body, the `body` field
  * specifies the mapping. Consider a REST update method on the
  * message resource collection:
- * 
- * 
+ *
+ *
  *     service Messaging {
  *       rpc UpdateMessage(UpdateMessageRequest) returns (Message) {
  *         option (google.api.http) = {
@@ -425,21 +425,21 @@ export interface HttpRuleProtoMsg {
  *       string message_id = 1; // mapped to the URL
  *       Message message = 2;   // mapped to the body
  *     }
- * 
- * 
+ *
+ *
  * The following HTTP JSON to RPC mapping is enabled, where the
  * representation of the JSON in the request body is determined by
  * protos JSON encoding:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `PUT /v1/messages/123456 { "text": "Hi!" }` | `UpdateMessage(message_id: "123456" message { text: "Hi!" })`
- * 
+ *
  * The special name `*` can be used in the body mapping to define that
  * every field not bound by the path template should be mapped to the
  * request body.  This enables the following alternative definition of
  * the update method:
- * 
+ *
  *     service Messaging {
  *       rpc UpdateMessage(Message) returns (Message) {
  *         option (google.api.http) = {
@@ -452,23 +452,23 @@ export interface HttpRuleProtoMsg {
  *       string message_id = 1;
  *       string text = 2;
  *     }
- * 
- * 
+ *
+ *
  * The following HTTP JSON to RPC mapping is enabled:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `PUT /v1/messages/123456 { "text": "Hi!" }` | `UpdateMessage(message_id: "123456" text: "Hi!")`
- * 
+ *
  * Note that when using `*` in the body mapping, it is not possible to
  * have HTTP parameters, as all fields not bound by the path end in
  * the body. This makes this option more rarely used in practice of
  * defining REST APIs. The common usage of `*` is in custom methods
  * which don't use the URL at all for transferring data.
- * 
+ *
  * It is possible to define multiple HTTP methods for one RPC by using
  * the `additional_bindings` option. Example:
- * 
+ *
  *     service Messaging {
  *       rpc GetMessage(GetMessageRequest) returns (Message) {
  *         option (google.api.http) = {
@@ -483,21 +483,21 @@ export interface HttpRuleProtoMsg {
  *       string message_id = 1;
  *       string user_id = 2;
  *     }
- * 
- * 
+ *
+ *
  * This enables the following two alternative HTTP JSON to RPC
  * mappings:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `GET /v1/messages/123456` | `GetMessage(message_id: "123456")`
  * `GET /v1/users/me/messages/123456` | `GetMessage(user_id: "me" message_id: "123456")`
- * 
+ *
  * # Rules for HTTP mapping
- * 
+ *
  * The rules for mapping HTTP path, query parameters, and body fields
  * to the request message are as follows:
- * 
+ *
  * 1. The `body` field specifies either `*` or a field path, or is
  *    omitted. If omitted, it indicates there is no HTTP request body.
  * 2. Leaf fields (recursive expansion of nested messages in the
@@ -508,49 +508,49 @@ export interface HttpRuleProtoMsg {
  *     (c) All other fields.
  * 3. URL query parameters found in the HTTP request are mapped to (c) fields.
  * 4. Any body sent with an HTTP request can contain only (b) fields.
- * 
+ *
  * The syntax of the path template is as follows:
- * 
+ *
  *     Template = "/" Segments [ Verb ] ;
  *     Segments = Segment { "/" Segment } ;
  *     Segment  = "*" | "**" | LITERAL | Variable ;
  *     Variable = "{" FieldPath [ "=" Segments ] "}" ;
  *     FieldPath = IDENT { "." IDENT } ;
  *     Verb     = ":" LITERAL ;
- * 
+ *
  * The syntax `*` matches a single path segment. The syntax `**` matches zero
  * or more path segments, which must be the last part of the path except the
  * `Verb`. The syntax `LITERAL` matches literal text in the path.
- * 
+ *
  * The syntax `Variable` matches part of the URL path as specified by its
  * template. A variable template must not contain other variables. If a variable
  * matches a single path segment, its template may be omitted, e.g. `{var}`
  * is equivalent to `{var=*}`.
- * 
+ *
  * If a variable contains exactly one path segment, such as `"{var}"` or
  * `"{var=*}"`, when such a variable is expanded into a URL path, all characters
  * except `[-_.~0-9a-zA-Z]` are percent-encoded. Such variables show up in the
  * Discovery Document as `{var}`.
- * 
+ *
  * If a variable contains one or more path segments, such as `"{var=foo/*}"`
  * or `"{var=**}"`, when such a variable is expanded into a URL path, all
  * characters except `[-_.~/0-9a-zA-Z]` are percent-encoded. Such variables
  * show up in the Discovery Document as `{+var}`.
- * 
+ *
  * NOTE: While the single segment variable matches the semantics of
  * [RFC 6570](https://tools.ietf.org/html/rfc6570) Section 3.2.2
  * Simple String Expansion, the multi segment variable **does not** match
  * RFC 6570 Reserved Expansion. The reason is that the Reserved Expansion
  * does not expand special characters like `?` and `#`, which would lead
  * to invalid URLs.
- * 
+ *
  * NOTE: the field paths in variables and in the `body` must not refer to
  * repeated fields or map fields.
  */
 export interface HttpRuleAmino {
   /**
    * Selects methods to which this rule applies.
-   * 
+   *
    * Refer to [selector][google.api.DocumentationRule.selector] for syntax details.
    */
   selector?: string;
@@ -592,7 +592,7 @@ export interface HttpRuleAmino {
   additional_bindings?: HttpRuleAmino[];
 }
 export interface HttpRuleAminoMsg {
-  type: "/google.api.HttpRule";
+  type: '/google.api.HttpRule';
   value: HttpRuleAmino;
 }
 /**
@@ -602,13 +602,13 @@ export interface HttpRuleAminoMsg {
  * HTTP request body. The mapping is typically specified as an
  * `google.api.http` annotation on the RPC method,
  * see "google/api/annotations.proto" for details.
- * 
+ *
  * The mapping consists of a field specifying the path template and
  * method kind.  The path template can refer to fields in the request
  * message, as in the example below which describes a REST GET
  * operation on a resource collection of messages:
- * 
- * 
+ *
+ *
  *     service Messaging {
  *       rpc GetMessage(GetMessageRequest) returns (Message) {
  *         option (google.api.http).get = "/v1/messages/{message_id}/{sub.subfield}";
@@ -624,31 +624,31 @@ export interface HttpRuleAminoMsg {
  *     message Message {
  *       string text = 1; // content of the resource
  *     }
- * 
+ *
  * The same http annotation can alternatively be expressed inside the
  * `GRPC API Configuration` YAML file.
- * 
+ *
  *     http:
  *       rules:
  *         - selector: <proto_package_name>.Messaging.GetMessage
  *           get: /v1/messages/{message_id}/{sub.subfield}
- * 
+ *
  * This definition enables an automatic, bidrectional mapping of HTTP
  * JSON to RPC. Example:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `GET /v1/messages/123456/foo`  | `GetMessage(message_id: "123456" sub: SubMessage(subfield: "foo"))`
- * 
+ *
  * In general, not only fields but also field paths can be referenced
  * from a path pattern. Fields mapped to the path pattern cannot be
  * repeated and must have a primitive (non-message) type.
- * 
+ *
  * Any fields in the request message which are not bound by the path
  * pattern automatically become (optional) HTTP query
  * parameters. Assume the following definition of the request message:
- * 
- * 
+ *
+ *
  *     service Messaging {
  *       rpc GetMessage(GetMessageRequest) returns (Message) {
  *         option (google.api.http).get = "/v1/messages/{message_id}";
@@ -662,24 +662,24 @@ export interface HttpRuleAminoMsg {
  *       int64 revision = 2;    // becomes a parameter
  *       SubMessage sub = 3;    // `sub.subfield` becomes a parameter
  *     }
- * 
- * 
+ *
+ *
  * This enables a HTTP JSON to RPC mapping as below:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `GET /v1/messages/123456?revision=2&sub.subfield=foo` | `GetMessage(message_id: "123456" revision: 2 sub: SubMessage(subfield: "foo"))`
- * 
+ *
  * Note that fields which are mapped to HTTP parameters must have a
  * primitive type or a repeated primitive type. Message types are not
  * allowed. In the case of a repeated type, the parameter can be
  * repeated in the URL, as in `...?param=A&param=B`.
- * 
+ *
  * For HTTP method kinds which allow a request body, the `body` field
  * specifies the mapping. Consider a REST update method on the
  * message resource collection:
- * 
- * 
+ *
+ *
  *     service Messaging {
  *       rpc UpdateMessage(UpdateMessageRequest) returns (Message) {
  *         option (google.api.http) = {
@@ -692,21 +692,21 @@ export interface HttpRuleAminoMsg {
  *       string message_id = 1; // mapped to the URL
  *       Message message = 2;   // mapped to the body
  *     }
- * 
- * 
+ *
+ *
  * The following HTTP JSON to RPC mapping is enabled, where the
  * representation of the JSON in the request body is determined by
  * protos JSON encoding:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `PUT /v1/messages/123456 { "text": "Hi!" }` | `UpdateMessage(message_id: "123456" message { text: "Hi!" })`
- * 
+ *
  * The special name `*` can be used in the body mapping to define that
  * every field not bound by the path template should be mapped to the
  * request body.  This enables the following alternative definition of
  * the update method:
- * 
+ *
  *     service Messaging {
  *       rpc UpdateMessage(Message) returns (Message) {
  *         option (google.api.http) = {
@@ -719,23 +719,23 @@ export interface HttpRuleAminoMsg {
  *       string message_id = 1;
  *       string text = 2;
  *     }
- * 
- * 
+ *
+ *
  * The following HTTP JSON to RPC mapping is enabled:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `PUT /v1/messages/123456 { "text": "Hi!" }` | `UpdateMessage(message_id: "123456" text: "Hi!")`
- * 
+ *
  * Note that when using `*` in the body mapping, it is not possible to
  * have HTTP parameters, as all fields not bound by the path end in
  * the body. This makes this option more rarely used in practice of
  * defining REST APIs. The common usage of `*` is in custom methods
  * which don't use the URL at all for transferring data.
- * 
+ *
  * It is possible to define multiple HTTP methods for one RPC by using
  * the `additional_bindings` option. Example:
- * 
+ *
  *     service Messaging {
  *       rpc GetMessage(GetMessageRequest) returns (Message) {
  *         option (google.api.http) = {
@@ -750,21 +750,21 @@ export interface HttpRuleAminoMsg {
  *       string message_id = 1;
  *       string user_id = 2;
  *     }
- * 
- * 
+ *
+ *
  * This enables the following two alternative HTTP JSON to RPC
  * mappings:
- * 
+ *
  * HTTP | RPC
  * -----|-----
  * `GET /v1/messages/123456` | `GetMessage(message_id: "123456")`
  * `GET /v1/users/me/messages/123456` | `GetMessage(user_id: "me" message_id: "123456")`
- * 
+ *
  * # Rules for HTTP mapping
- * 
+ *
  * The rules for mapping HTTP path, query parameters, and body fields
  * to the request message are as follows:
- * 
+ *
  * 1. The `body` field specifies either `*` or a field path, or is
  *    omitted. If omitted, it indicates there is no HTTP request body.
  * 2. Leaf fields (recursive expansion of nested messages in the
@@ -775,42 +775,42 @@ export interface HttpRuleAminoMsg {
  *     (c) All other fields.
  * 3. URL query parameters found in the HTTP request are mapped to (c) fields.
  * 4. Any body sent with an HTTP request can contain only (b) fields.
- * 
+ *
  * The syntax of the path template is as follows:
- * 
+ *
  *     Template = "/" Segments [ Verb ] ;
  *     Segments = Segment { "/" Segment } ;
  *     Segment  = "*" | "**" | LITERAL | Variable ;
  *     Variable = "{" FieldPath [ "=" Segments ] "}" ;
  *     FieldPath = IDENT { "." IDENT } ;
  *     Verb     = ":" LITERAL ;
- * 
+ *
  * The syntax `*` matches a single path segment. The syntax `**` matches zero
  * or more path segments, which must be the last part of the path except the
  * `Verb`. The syntax `LITERAL` matches literal text in the path.
- * 
+ *
  * The syntax `Variable` matches part of the URL path as specified by its
  * template. A variable template must not contain other variables. If a variable
  * matches a single path segment, its template may be omitted, e.g. `{var}`
  * is equivalent to `{var=*}`.
- * 
+ *
  * If a variable contains exactly one path segment, such as `"{var}"` or
  * `"{var=*}"`, when such a variable is expanded into a URL path, all characters
  * except `[-_.~0-9a-zA-Z]` are percent-encoded. Such variables show up in the
  * Discovery Document as `{var}`.
- * 
+ *
  * If a variable contains one or more path segments, such as `"{var=foo/*}"`
  * or `"{var=**}"`, when such a variable is expanded into a URL path, all
  * characters except `[-_.~/0-9a-zA-Z]` are percent-encoded. Such variables
  * show up in the Discovery Document as `{+var}`.
- * 
+ *
  * NOTE: While the single segment variable matches the semantics of
  * [RFC 6570](https://tools.ietf.org/html/rfc6570) Section 3.2.2
  * Simple String Expansion, the multi segment variable **does not** match
  * RFC 6570 Reserved Expansion. The reason is that the Reserved Expansion
  * does not expand special characters like `?` and `#`, which would lead
  * to invalid URLs.
- * 
+ *
  * NOTE: the field paths in variables and in the `body` must not refer to
  * repeated fields or map fields.
  */
@@ -834,7 +834,7 @@ export interface CustomHttpPattern {
   path: string;
 }
 export interface CustomHttpPatternProtoMsg {
-  typeUrl: "/google.api.CustomHttpPattern";
+  typeUrl: '/google.api.CustomHttpPattern';
   value: Uint8Array;
 }
 /** A custom pattern is used for defining custom HTTP verb. */
@@ -845,7 +845,7 @@ export interface CustomHttpPatternAmino {
   path?: string;
 }
 export interface CustomHttpPatternAminoMsg {
-  type: "/google.api.CustomHttpPattern";
+  type: '/google.api.CustomHttpPattern';
   value: CustomHttpPatternAmino;
 }
 /** A custom pattern is used for defining custom HTTP verb. */
@@ -860,7 +860,7 @@ function createBaseHttp(): Http {
   };
 }
 export const Http = {
-  typeUrl: "/google.api.Http",
+  typeUrl: '/google.api.Http',
   encode(message: Http, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.rules) {
       HttpRule.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -925,29 +925,29 @@ export const Http = {
   },
   toProtoMsg(message: Http): HttpProtoMsg {
     return {
-      typeUrl: "/google.api.Http",
+      typeUrl: '/google.api.Http',
       value: Http.encode(message).finish()
     };
   }
 };
 function createBaseHttpRule(): HttpRule {
   return {
-    selector: "",
+    selector: '',
     get: undefined,
     put: undefined,
     post: undefined,
     delete: undefined,
     patch: undefined,
     custom: undefined,
-    body: "",
-    responseBody: "",
+    body: '',
+    responseBody: '',
     additionalBindings: []
   };
 }
 export const HttpRule = {
-  typeUrl: "/google.api.HttpRule",
+  typeUrl: '/google.api.HttpRule',
   encode(message: HttpRule, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.selector !== "") {
+    if (message.selector !== '') {
       writer.uint32(10).string(message.selector);
     }
     if (message.get !== undefined) {
@@ -968,10 +968,10 @@ export const HttpRule = {
     if (message.custom !== undefined) {
       CustomHttpPattern.encode(message.custom, writer.uint32(66).fork()).ldelim();
     }
-    if (message.body !== "") {
+    if (message.body !== '') {
       writer.uint32(58).string(message.body);
     }
-    if (message.responseBody !== "") {
+    if (message.responseBody !== '') {
       writer.uint32(98).string(message.responseBody);
     }
     for (const v of message.additionalBindings) {
@@ -1025,15 +1025,15 @@ export const HttpRule = {
   },
   fromPartial(object: Partial<HttpRule>): HttpRule {
     const message = createBaseHttpRule();
-    message.selector = object.selector ?? "";
+    message.selector = object.selector ?? '';
     message.get = object.get ?? undefined;
     message.put = object.put ?? undefined;
     message.post = object.post ?? undefined;
     message.delete = object.delete ?? undefined;
     message.patch = object.patch ?? undefined;
     message.custom = object.custom !== undefined && object.custom !== null ? CustomHttpPattern.fromPartial(object.custom) : undefined;
-    message.body = object.body ?? "";
-    message.responseBody = object.responseBody ?? "";
+    message.body = object.body ?? '';
+    message.responseBody = object.responseBody ?? '';
     message.additionalBindings = object.additionalBindings?.map(e => HttpRule.fromPartial(e)) || [];
     return message;
   },
@@ -1071,15 +1071,15 @@ export const HttpRule = {
   },
   toAmino(message: HttpRule): HttpRuleAmino {
     const obj: any = {};
-    obj.selector = message.selector === "" ? undefined : message.selector;
+    obj.selector = message.selector === '' ? undefined : message.selector;
     obj.get = message.get === null ? undefined : message.get;
     obj.put = message.put === null ? undefined : message.put;
     obj.post = message.post === null ? undefined : message.post;
     obj.delete = message.delete === null ? undefined : message.delete;
     obj.patch = message.patch === null ? undefined : message.patch;
     obj.custom = message.custom ? CustomHttpPattern.toAmino(message.custom) : undefined;
-    obj.body = message.body === "" ? undefined : message.body;
-    obj.response_body = message.responseBody === "" ? undefined : message.responseBody;
+    obj.body = message.body === '' ? undefined : message.body;
+    obj.response_body = message.responseBody === '' ? undefined : message.responseBody;
     if (message.additionalBindings) {
       obj.additional_bindings = message.additionalBindings.map(e => e ? HttpRule.toAmino(e) : undefined);
     } else {
@@ -1098,24 +1098,24 @@ export const HttpRule = {
   },
   toProtoMsg(message: HttpRule): HttpRuleProtoMsg {
     return {
-      typeUrl: "/google.api.HttpRule",
+      typeUrl: '/google.api.HttpRule',
       value: HttpRule.encode(message).finish()
     };
   }
 };
 function createBaseCustomHttpPattern(): CustomHttpPattern {
   return {
-    kind: "",
-    path: ""
+    kind: '',
+    path: ''
   };
 }
 export const CustomHttpPattern = {
-  typeUrl: "/google.api.CustomHttpPattern",
+  typeUrl: '/google.api.CustomHttpPattern',
   encode(message: CustomHttpPattern, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.kind !== "") {
+    if (message.kind !== '') {
       writer.uint32(10).string(message.kind);
     }
-    if (message.path !== "") {
+    if (message.path !== '') {
       writer.uint32(18).string(message.path);
     }
     return writer;
@@ -1142,8 +1142,8 @@ export const CustomHttpPattern = {
   },
   fromPartial(object: Partial<CustomHttpPattern>): CustomHttpPattern {
     const message = createBaseCustomHttpPattern();
-    message.kind = object.kind ?? "";
-    message.path = object.path ?? "";
+    message.kind = object.kind ?? '';
+    message.path = object.path ?? '';
     return message;
   },
   fromAmino(object: CustomHttpPatternAmino): CustomHttpPattern {
@@ -1158,8 +1158,8 @@ export const CustomHttpPattern = {
   },
   toAmino(message: CustomHttpPattern): CustomHttpPatternAmino {
     const obj: any = {};
-    obj.kind = message.kind === "" ? undefined : message.kind;
-    obj.path = message.path === "" ? undefined : message.path;
+    obj.kind = message.kind === '' ? undefined : message.kind;
+    obj.path = message.path === '' ? undefined : message.path;
     return obj;
   },
   fromAminoMsg(object: CustomHttpPatternAminoMsg): CustomHttpPattern {
@@ -1173,7 +1173,7 @@ export const CustomHttpPattern = {
   },
   toProtoMsg(message: CustomHttpPattern): CustomHttpPatternProtoMsg {
     return {
-      typeUrl: "/google.api.CustomHttpPattern",
+      typeUrl: '/google.api.CustomHttpPattern',
       value: CustomHttpPattern.encode(message).finish()
     };
   }

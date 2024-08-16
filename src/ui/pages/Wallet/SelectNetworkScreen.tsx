@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CHAINS_ENUM } from '@/shared/constant';
-import { Button, Column, Content, Header, Image, Layout, Row } from '@/ui/components';
+import { Column, Content, Header, Image, Layout } from '@/ui/components';
 
 import { useNavigate } from '../MainRoute';
 

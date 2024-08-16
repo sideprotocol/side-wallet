@@ -243,7 +243,6 @@ export default function useSwap() {
       navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
       // confirmTx(result?.tx_response?.txhash);
     } catch (error) {
-      debugger;
       toast.custom(
         (t) => (
           <ToastView toaster={t} type="fail">

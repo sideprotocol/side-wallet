@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { BinaryReader, BinaryWriter } from "../../binary";
+import { BinaryReader, BinaryWriter } from '../../binary';
 /** AssetType defines the type of asset */
 export enum AssetType {
   /** ASSET_TYPE_UNSPECIFIED - Unspecified asset type */
@@ -17,19 +17,19 @@ export const AssetTypeAmino = AssetType;
 export function assetTypeFromJSON(object: any): AssetType {
   switch (object) {
     case 0:
-    case "ASSET_TYPE_UNSPECIFIED":
+    case 'ASSET_TYPE_UNSPECIFIED':
       return AssetType.ASSET_TYPE_UNSPECIFIED;
     case 1:
-    case "ASSET_TYPE_BTC":
+    case 'ASSET_TYPE_BTC':
       return AssetType.ASSET_TYPE_BTC;
     case 2:
-    case "ASSET_TYPE_BRC20":
+    case 'ASSET_TYPE_BRC20':
       return AssetType.ASSET_TYPE_BRC20;
     case 3:
-    case "ASSET_TYPE_RUNE":
+    case 'ASSET_TYPE_RUNE':
       return AssetType.ASSET_TYPE_RUNE;
     case -1:
-    case "UNRECOGNIZED":
+    case 'UNRECOGNIZED':
     default:
       return AssetType.UNRECOGNIZED;
   }
@@ -37,16 +37,16 @@ export function assetTypeFromJSON(object: any): AssetType {
 export function assetTypeToJSON(object: AssetType): string {
   switch (object) {
     case AssetType.ASSET_TYPE_UNSPECIFIED:
-      return "ASSET_TYPE_UNSPECIFIED";
+      return 'ASSET_TYPE_UNSPECIFIED';
     case AssetType.ASSET_TYPE_BTC:
-      return "ASSET_TYPE_BTC";
+      return 'ASSET_TYPE_BTC';
     case AssetType.ASSET_TYPE_BRC20:
-      return "ASSET_TYPE_BRC20";
+      return 'ASSET_TYPE_BRC20';
     case AssetType.ASSET_TYPE_RUNE:
-      return "ASSET_TYPE_RUNE";
+      return 'ASSET_TYPE_RUNE';
     case AssetType.UNRECOGNIZED:
     default:
-      return "UNRECOGNIZED";
+      return 'UNRECOGNIZED';
   }
 }
 /** Params defines the parameters for the module. */
@@ -62,7 +62,7 @@ export interface Params {
   vaults: Vault[];
 }
 export interface ParamsProtoMsg {
-  typeUrl: "/side.btcbridge.Params";
+  typeUrl: '/side.btcbridge.Params';
   value: Uint8Array;
 }
 /** Params defines the parameters for the module. */
@@ -78,7 +78,7 @@ export interface ParamsAmino {
   vaults?: VaultAmino[];
 }
 export interface ParamsAminoMsg {
-  type: "/side.btcbridge.Params";
+  type: '/side.btcbridge.Params';
   value: ParamsAmino;
 }
 /** Params defines the parameters for the module. */
@@ -99,7 +99,7 @@ export interface Vault {
   assetType: AssetType;
 }
 export interface VaultProtoMsg {
-  typeUrl: "/side.btcbridge.Vault";
+  typeUrl: '/side.btcbridge.Vault';
   value: Uint8Array;
 }
 /** Vault defines the parameters for the module. */
@@ -112,7 +112,7 @@ export interface VaultAmino {
   asset_type?: AssetType;
 }
 export interface VaultAminoMsg {
-  type: "/side.btcbridge.Vault";
+  type: '/side.btcbridge.Vault';
   value: VaultAmino;
 }
 /** Vault defines the parameters for the module. */
@@ -126,12 +126,12 @@ function createBaseParams(): Params {
     authorizedRelayers: [],
     confirmations: 0,
     maxAcceptableBlockDepth: BigInt(0),
-    btcVoucherDenom: "",
+    btcVoucherDenom: '',
     vaults: []
   };
 }
 export const Params = {
-  typeUrl: "/side.btcbridge.Params",
+  typeUrl: '/side.btcbridge.Params',
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.authorizedRelayers) {
       writer.uint32(10).string(v!);
@@ -142,7 +142,7 @@ export const Params = {
     if (message.maxAcceptableBlockDepth !== BigInt(0)) {
       writer.uint32(24).uint64(message.maxAcceptableBlockDepth);
     }
-    if (message.btcVoucherDenom !== "") {
+    if (message.btcVoucherDenom !== '') {
       writer.uint32(34).string(message.btcVoucherDenom);
     }
     for (const v of message.vaults) {
@@ -184,7 +184,7 @@ export const Params = {
     message.authorizedRelayers = object.authorizedRelayers?.map(e => e) || [];
     message.confirmations = object.confirmations ?? 0;
     message.maxAcceptableBlockDepth = object.maxAcceptableBlockDepth !== undefined && object.maxAcceptableBlockDepth !== null ? BigInt(object.maxAcceptableBlockDepth.toString()) : BigInt(0);
-    message.btcVoucherDenom = object.btcVoucherDenom ?? "";
+    message.btcVoucherDenom = object.btcVoucherDenom ?? '';
     message.vaults = object.vaults?.map(e => Vault.fromPartial(e)) || [];
     return message;
   },
@@ -212,7 +212,7 @@ export const Params = {
     }
     obj.confirmations = message.confirmations === 0 ? undefined : message.confirmations;
     obj.max_acceptable_block_depth = message.maxAcceptableBlockDepth !== BigInt(0) ? message.maxAcceptableBlockDepth.toString() : undefined;
-    obj.btc_voucher_denom = message.btcVoucherDenom === "" ? undefined : message.btcVoucherDenom;
+    obj.btc_voucher_denom = message.btcVoucherDenom === '' ? undefined : message.btcVoucherDenom;
     if (message.vaults) {
       obj.vaults = message.vaults.map(e => e ? Vault.toAmino(e) : undefined);
     } else {
@@ -231,25 +231,25 @@ export const Params = {
   },
   toProtoMsg(message: Params): ParamsProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.Params",
+      typeUrl: '/side.btcbridge.Params',
       value: Params.encode(message).finish()
     };
   }
 };
 function createBaseVault(): Vault {
   return {
-    address: "",
-    pubKey: "",
+    address: '',
+    pubKey: '',
     assetType: 0
   };
 }
 export const Vault = {
-  typeUrl: "/side.btcbridge.Vault",
+  typeUrl: '/side.btcbridge.Vault',
   encode(message: Vault, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== "") {
+    if (message.address !== '') {
       writer.uint32(10).string(message.address);
     }
-    if (message.pubKey !== "") {
+    if (message.pubKey !== '') {
       writer.uint32(18).string(message.pubKey);
     }
     if (message.assetType !== 0) {
@@ -282,8 +282,8 @@ export const Vault = {
   },
   fromPartial(object: Partial<Vault>): Vault {
     const message = createBaseVault();
-    message.address = object.address ?? "";
-    message.pubKey = object.pubKey ?? "";
+    message.address = object.address ?? '';
+    message.pubKey = object.pubKey ?? '';
     message.assetType = object.assetType ?? 0;
     return message;
   },
@@ -302,8 +302,8 @@ export const Vault = {
   },
   toAmino(message: Vault): VaultAmino {
     const obj: any = {};
-    obj.address = message.address === "" ? undefined : message.address;
-    obj.pub_key = message.pubKey === "" ? undefined : message.pubKey;
+    obj.address = message.address === '' ? undefined : message.address;
+    obj.pub_key = message.pubKey === '' ? undefined : message.pubKey;
     obj.asset_type = message.assetType === 0 ? undefined : message.assetType;
     return obj;
   },
@@ -318,7 +318,7 @@ export const Vault = {
   },
   toProtoMsg(message: Vault): VaultProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.Vault",
+      typeUrl: '/side.btcbridge.Vault',
       value: Vault.encode(message).finish()
     };
   }

@@ -30,7 +30,7 @@ export default class DexService {
     });
   }
   async getAllPoolList(): Promise<IPoolOne[]> {
-    return this.apiClient.get<IPoolOne[]>(`/pool/list`, {
+    return this.apiClient.get<IPoolOne[]>('/pool/list', {
       baseURL: SERVICE_BASE_URL
     });
   }
@@ -91,7 +91,7 @@ export default class DexService {
     });
   }
   async getOverviewData(): Promise<IGetOverviewDataResponse> {
-    return this.apiClient.get<IGetOverviewDataResponse>(`/pool/getStatisticsData?`, {
+    return this.apiClient.get<IGetOverviewDataResponse>('/pool/getStatisticsData?', {
       baseURL: SERVICE_BASE_URL
     });
   }

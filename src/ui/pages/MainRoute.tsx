@@ -452,7 +452,7 @@ const Main = () => {
     wallet.hasVault().then((val) => {
       if (val) {
         wallet.isUnlocked().then((isUnlocked) => {
-          console.log(`isUnlocked: `, isUnlocked);
+          console.log('isUnlocked: ', isUnlocked);
           dispatch(globalActions.update({ isUnlocked }));
           if (!isUnlocked && location.href.includes(routes.UnlockScreen.path) === false) {
             const basePath = location.href.split('#')[0];

@@ -1,6 +1,6 @@
 //@ts-nocheck
-import { Tendermint34Client, HttpEndpoint } from "@cosmjs/tendermint-rpc";
-import { QueryClient } from "@cosmjs/stargate";
+import { Tendermint34Client, HttpEndpoint } from '@cosmjs/tendermint-rpc';
+import { QueryClient } from '@cosmjs/stargate';
 export const createRPCQueryClient = async ({
   rpcEndpoint
 }: {
@@ -10,7 +10,7 @@ export const createRPCQueryClient = async ({
   const client = new QueryClient(tmClient);
   return {
     side: {
-      btcbridge: (await import("./btcbridge/query.rpc.Query")).createRpcQueryExtension(client)
+      btcbridge: (await import('./btcbridge/query.rpc.Query')).createRpcQueryExtension(client)
     }
   };
 };

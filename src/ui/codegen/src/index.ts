@@ -4,12 +4,12 @@
   * DO NOT MODIFY BY HAND. Instead, download the latest proto files for your chain
     * and run the transpile command or npm scripts command that is used to regenerate this bundle.
   */
- 
-export * from "./cosmos/bundle";
-export * from "./gogoproto/bundle";
-export * from "./side/bundle";
-export * from "./side/client";
-export * from "./google/bundle";
-export * from "./varint";
-export * from "./utf8";
-export * from "./binary";
+
+export * from './cosmos/bundle';
+export * from './gogoproto/bundle';
+export * from './side/bundle';
+export * from './side/client';
+export * from './google/bundle';
+export * from './varint';
+export * from './utf8';
+export * from './binary';

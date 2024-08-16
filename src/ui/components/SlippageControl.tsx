@@ -65,7 +65,7 @@ export default function SlippageControl(props) {
               padding: '5px',
               borderRadius: '16px',
               fontSize: '14px',
-              border: `1px solid #ffffff/10`,
+              border: '1px solid #ffffff/10',
               height: '50px',
               backgroundColor: '#000'
             }}>
@@ -79,7 +79,7 @@ export default function SlippageControl(props) {
                       width: '80px',
                       display: 'flex',
                       alignItems: 'center',
-                      border: `1px solid #848E9C`,
+                      border: '1px solid #848E9C',
                       borderRadius: '100px',
                       padding: '0px 12px',
                       fontWeight: 600,

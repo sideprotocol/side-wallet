@@ -1,7 +1,7 @@
 //@ts-nocheck
-import { Params, ParamsAmino, ParamsSDKType } from "./params";
-import { BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType } from "./bitcoin";
-import { BinaryReader, BinaryWriter } from "../../binary";
+import { Params, ParamsAmino, ParamsSDKType } from './params';
+import { BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType } from './bitcoin';
+import { BinaryReader, BinaryWriter } from '../../binary';
 /** GenesisState defines the btc light client module's genesis state. */
 export interface GenesisState {
   params: Params;
@@ -11,7 +11,7 @@ export interface GenesisState {
   utxos: UTXO[];
 }
 export interface GenesisStateProtoMsg {
-  typeUrl: "/side.btcbridge.GenesisState";
+  typeUrl: '/side.btcbridge.GenesisState';
   value: Uint8Array;
 }
 /** GenesisState defines the btc light client module's genesis state. */
@@ -23,7 +23,7 @@ export interface GenesisStateAmino {
   utxos?: UTXOAmino[];
 }
 export interface GenesisStateAminoMsg {
-  type: "/side.btcbridge.GenesisState";
+  type: '/side.btcbridge.GenesisState';
   value: GenesisStateAmino;
 }
 /** GenesisState defines the btc light client module's genesis state. */
@@ -42,7 +42,7 @@ function createBaseGenesisState(): GenesisState {
   };
 }
 export const GenesisState = {
-  typeUrl: "/side.btcbridge.GenesisState",
+  typeUrl: '/side.btcbridge.GenesisState',
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -131,7 +131,7 @@ export const GenesisState = {
   },
   toProtoMsg(message: GenesisState): GenesisStateProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.GenesisState",
+      typeUrl: '/side.btcbridge.GenesisState',
       value: GenesisState.encode(message).finish()
     };
   }

@@ -1,6 +1,6 @@
-import base58 from "bs58";
+import base58 from 'bs58';
 
-import { sha256 } from "@noble/hashes/sha256";
+import { sha256 } from '@noble/hashes/sha256';
 function bs58checkBase(checksumFn) {
   // Encode a buffer as a base58-check encoded string
   function encode(payload) {
@@ -29,7 +29,7 @@ function bs58checkBase(checksumFn) {
   function decode(str) {
     var buffer = base58.decode(str);
     var payload = decodeRaw(buffer);
-    if (payload == null) throw new Error("Invalid checksum");
+    if (payload == null) throw new Error('Invalid checksum');
     return payload;
   }
   return {

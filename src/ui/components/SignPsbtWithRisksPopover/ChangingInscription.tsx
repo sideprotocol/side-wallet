@@ -66,10 +66,10 @@ export const ChangingInscription = ({ decodedPsbt, onClose }: { decodedPsbt: Dec
               }}>
               <InscriptionPreview key={'inscription_sending_' + index} data={inscription.data} preset="small" />
               <Column justifyCenter>
-                <Text text={`Old Value: `} preset="sub" textEnd />
+                <Text text={'Old Value: '} preset="sub" textEnd />
                 <Text text={`${inscription.in} sats`} textEnd />
 
-                <Text text={`New Value: `} preset="sub" textEnd />
+                <Text text={'New Value: '} preset="sub" textEnd />
                 <Text text={`${inscription.out} sats`} textEnd />
               </Column>
             </Row>

@@ -49,7 +49,7 @@ export default function AtomicalsNFTScreen() {
       <Content>
         <Column>
           <Text
-            text={isUnconfirmed ? 'Atomicals Inscription (not confirmed yet)' : `Atomicals Inscription`}
+            text={isUnconfirmed ? 'Atomicals Inscription (not confirmed yet)' : 'Atomicals Inscription'}
             preset="title-bold"
             textCenter
           />

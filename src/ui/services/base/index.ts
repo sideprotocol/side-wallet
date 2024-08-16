@@ -1,7 +1,7 @@
-import ApiClient from "@/ui/services/network/ApiClient";
+import ApiClient from '@/ui/services/network/ApiClient';
 import { AxiosRequestConfig } from 'axios';
 
-import { GetBlocksLatestResponse, GetValidatorsetsResponse } from "./types";
+import { GetBlocksLatestResponse, GetValidatorsetsResponse } from './types';
 
 export default class BaseService {
   private apiClient: ApiClient;
@@ -14,7 +14,7 @@ export default class BaseService {
     config: AxiosRequestConfig
   ): Promise<GetBlocksLatestResponse> {
     return await this.apiClient.get<GetBlocksLatestResponse>(
-      `/cosmos/base/tendermint/v1beta1/blocks/latest`,
+      '/cosmos/base/tendermint/v1beta1/blocks/latest',
       config
     );
   }

@@ -1,9 +1,8 @@
-import { SWAP_ASSETS } from "@/ui/constants";
-import { Coin } from "@cosmjs/stargate";
-import BigNumber from "bignumber.js";
-import { toReadableAmount } from "./formatter";
-import { LimitOrderConfig, QueueStateType } from "@/ui/services/dex/type";
-import { CosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { SWAP_ASSETS } from '@/ui/constants';
+import { Coin } from '@cosmjs/stargate';
+import BigNumber from 'bignumber.js';
+import { toReadableAmount } from './formatter';
+import { LimitOrderConfig } from '@/ui/services/dex/type';
 
 export function findAssetIcon(coin: Coin) {
   return SWAP_ASSETS.assets.find((asset) => asset.base === coin.denom);
@@ -36,7 +35,7 @@ function get_creation_fee(qs: string, config: LimitOrderConfig) {
   const x1 = config.queue_size_left;
   const x2 = config.queue_size_right;
   const y1 = config.creation_fee_min;
-  console.log("config.creation_fee_min: ", config.creation_fee_min);
+  console.log('config.creation_fee_min: ', config.creation_fee_min);
   const y2 = config.creation_fee_max;
 
   const slope = (Number(y2) - Number(y1)) / (Number(x2) - Number(x1));

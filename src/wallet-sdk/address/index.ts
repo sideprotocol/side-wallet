@@ -1,8 +1,8 @@
 //@ts-nocheck
 
-import { bitcoin } from "../bitcoin-core";
-import { NetworkType, toPsbtNetwork } from "../network";
-import { AddressType } from "../types";
+import { bitcoin } from '../bitcoin-core';
+import { NetworkType, toPsbtNetwork } from '../network';
+import { AddressType } from '../types';
 
 /**
  * Convert public key to bitcoin payment object.
@@ -10,7 +10,7 @@ import { AddressType } from "../types";
 export function publicKeyToPayment(publicKey: string, type: AddressType, networkType: NetworkType) {
   const network = toPsbtNetwork(networkType);
   if (!publicKey) return null;
-  const pubkey = Buffer.from(publicKey, "hex");
+  const pubkey = Buffer.from(publicKey, 'hex');
   if (type === AddressType.P2PKH) {
     return bitcoin.payments.p2pkh({
       pubkey,
@@ -47,7 +47,7 @@ export function publicKeyToAddress(publicKey: string, type: AddressType, network
   if (payment && payment.address) {
     return payment.address;
   } else {
-    return "";
+    return '';
   }
 }
 
@@ -56,7 +56,7 @@ export function publicKeyToAddress(publicKey: string, type: AddressType, network
  */
 export function publicKeyToScriptPk(publicKey: string, type: AddressType, networkType: NetworkType) {
   const payment = publicKeyToPayment(publicKey, type, networkType);
-  return payment.output.toString("hex");
+  return payment.output.toString('hex');
 }
 
 /**
@@ -92,7 +92,7 @@ export function decodeAddress(address: string) {
   let decodeBech32: bitcoin.address.Bech32Result;
   let networkType: NetworkType;
   let addressType: AddressType;
-  if (address.startsWith("bc1") || address.startsWith("tb1") || address.startsWith("bcrt1")) {
+  if (address.startsWith('bc1') || address.startsWith('tb1') || address.startsWith('bcrt1')) {
     try {
       decodeBech32 = bitcoin.address.fromBech32(address);
       if (decodeBech32.prefix === mainnet.bech32) {
@@ -118,7 +118,9 @@ export function decodeAddress(address: string) {
         addressType,
         dust: getAddressTypeDust(addressType),
       };
-    } catch (e) {}
+    } catch (e) {
+      console.log('e', e);
+    }
   } else {
     try {
       decodeBase58 = bitcoin.address.fromBase58Check(address);
@@ -148,7 +150,9 @@ export function decodeAddress(address: string) {
         addressType,
         dust: getAddressTypeDust(addressType),
       };
-    } catch (e) {}
+    } catch (e) {
+      console.log('e', e);
+    }
   }
 
   return {
@@ -182,9 +186,9 @@ export function getAddressType(address: string, networkType: NetworkType = Netwo
 export function scriptPkToAddress(scriptPk: string | Buffer, networkType: NetworkType = NetworkType.MAINNET) {
   const network = toPsbtNetwork(networkType);
   try {
-    const address = bitcoin.address.fromOutputScript(typeof scriptPk === "string" ? Buffer.from(scriptPk, "hex") : scriptPk, network);
+    const address = bitcoin.address.fromOutputScript(typeof scriptPk === 'string' ? Buffer.from(scriptPk, 'hex') : scriptPk, network);
     return address;
   } catch (e) {
-    return "";
+    return '';
   }
 }

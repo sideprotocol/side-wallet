@@ -1,5 +1,5 @@
-import { BaseRequestPage, PaginationResponse } from "../types";
-import { Coin } from "@cosmjs/stargate";
+import { BaseRequestPage, PaginationResponse } from '../types';
+import { Coin } from '@cosmjs/stargate';
 
 export type GetTxRequest = {
   events: string[];
@@ -9,9 +9,9 @@ export type GetTxRequest = {
 } & BaseRequestPage;
 
 export interface Tx {
-  "@type"?: string;
+  '@type'?: string;
   body: {
-    messages: { "@type": string; amount?: string }[];
+    messages: { '@type': string; amount?: string }[];
     memo: string;
     timeout_height: string;
     extension_options: any[];
@@ -21,7 +21,7 @@ export interface Tx {
     signer_infos: [
       {
         public_key: {
-          "@type": string;
+          '@type': string;
           key: string;
         };
         mode_info: {
@@ -62,11 +62,11 @@ export interface TxResponse {
       events: Attributes[];
     }
   ];
-  info: "";
-  gas_wanted: "204431";
-  gas_used: "202682";
+  info: '';
+  gas_wanted: '204431';
+  gas_used: '202682';
   tx: Tx;
-  timestamp: "2022-08-13T23:24:54Z";
+  timestamp: '2022-08-13T23:24:54Z';
   events: {
     type: string;
     attributes: Attributes[];

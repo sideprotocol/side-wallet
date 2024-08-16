@@ -1,11 +1,11 @@
 //@ts-nocheck
 
-import KeystoneSDK, { KeystoneBitcoinSDK, UR } from "@keystonehq/keystone-sdk";
-import { uuid } from "@keystonehq/keystone-sdk/dist/utils";
-import { Psbt } from "bitcoinjs-lib";
-import bitcore from "bitcore-lib";
-import { EventEmitter } from "events";
-import { verifyMessageOfECDSA } from "../message";
+import KeystoneSDK, { KeystoneBitcoinSDK, UR } from '@keystonehq/keystone-sdk';
+import { uuid } from '@keystonehq/keystone-sdk/dist/utils';
+import { Psbt } from 'bitcoinjs-lib';
+import bitcore from 'bitcore-lib';
+import { EventEmitter } from 'events';
+import { verifyMessageOfECDSA } from '../message';
 
 interface KeystoneKey {
   path: string;
@@ -25,12 +25,12 @@ interface Wallet {
   path: string;
 }
 
-const type = "Keystone";
+const type = 'Keystone';
 
 export class KeystoneKeyring extends EventEmitter {
   static type = type;
   type = type;
-  mfp = "";
+  mfp = '';
   keys: KeystoneKey[] = [];
   hdPath?: string;
   activeIndexes?: number[] = [];
@@ -39,7 +39,7 @@ export class KeystoneKeyring extends EventEmitter {
   page = 0;
   perPage = 5;
 
-  origin = "UniSat Wallet";
+  origin = 'UniSat Wallet';
 
   constructor(opts?: DeserializeOption) {
     super();
@@ -52,7 +52,7 @@ export class KeystoneKeyring extends EventEmitter {
     const keystoneSDK = new KeystoneSDK({
       origin: this.origin,
     });
-    const account = keystoneSDK.parseAccount(new UR(Buffer.from(cbor, "hex"), type));
+    const account = keystoneSDK.parseAccount(new UR(Buffer.from(cbor, 'hex'), type));
     await this.deserialize({
       mfp: account.masterFingerprint,
       keys: account.keys.map((k) => ({
@@ -63,21 +63,21 @@ export class KeystoneKeyring extends EventEmitter {
   }
 
   getHardenedPath(hdPath: string) {
-    const paths = hdPath.split("/");
-    return paths.slice(0, 4).join("/");
+    const paths = hdPath.split('/');
+    return paths.slice(0, 4).join('/');
   }
 
   getHDPublicKey(hdPath: string) {
     const path = this.getHardenedPath(hdPath);
     const key = this.keys.find((v) => v.path === path);
     if (!key) {
-      throw new Error("Invalid path");
+      throw new Error('Invalid path');
     }
     return new bitcore.HDPublicKey(key.extendedPublicKey);
   }
 
   getDefaultHdPath() {
-    return "m/44'/0'/0'/0";
+    return 'm/44\'/0\'/0\'/0';
   }
 
   initRoot() {
@@ -90,8 +90,8 @@ export class KeystoneKeyring extends EventEmitter {
     this.hdPath = opts.hdPath ?? this.getDefaultHdPath();
     this.activeIndexes = opts.activeIndexes ? [...opts.activeIndexes] : [];
     this.initRoot();
-    if (opts.hdPath !== null && opts.hdPath !== undefined && opts.hdPath.length >= 13 && opts.hdPath[opts.hdPath.length - 1] === "1") {
-      this.root = this.root.derive(`m/1`);
+    if (opts.hdPath !== null && opts.hdPath !== undefined && opts.hdPath.length >= 13 && opts.hdPath[opts.hdPath.length - 1] === '1') {
+      this.root = this.root.derive('m/1');
     }
   }
 
@@ -143,10 +143,10 @@ export class KeystoneKeyring extends EventEmitter {
   }
 
   async getAccounts() {
-    if (this.hdPath !== null && this.hdPath !== undefined && this.hdPath.length >= 13 && this.hdPath[this.hdPath.length - 1] === "1") {
+    if (this.hdPath !== null && this.hdPath !== undefined && this.hdPath.length >= 13 && this.hdPath[this.hdPath.length - 1] === '1') {
       return this.activeIndexes.map((index) => {
         const child = this.root.derive(`m/${index}`);
-        return child.publicKey.toString("hex");
+        return child.publicKey.toString('hex');
       });
     }
     return this.activeIndexes.map((i) => this.getWalletByIndex(i).publicKey);
@@ -158,7 +158,7 @@ export class KeystoneKeyring extends EventEmitter {
       return {
         index,
         path: `${this.hdPath}/${index}`,
-        publicKey: child.publicKey.toString("hex"),
+        publicKey: child.publicKey.toString('hex'),
       };
     });
   }
@@ -178,7 +178,7 @@ export class KeystoneKeyring extends EventEmitter {
     return {
       index,
       path: `${this.hdPath}/${index}`,
-      publicKey: child.publicKey.toString("hex"),
+      publicKey: child.publicKey.toString('hex'),
     };
   }
 
@@ -187,7 +187,7 @@ export class KeystoneKeyring extends EventEmitter {
     return {
       index,
       path: `${this.hdPath}/${index}`,
-      publicKey: child.publicKey.toString("hex"),
+      publicKey: child.publicKey.toString('hex'),
     };
   }
 
@@ -203,7 +203,7 @@ export class KeystoneKeyring extends EventEmitter {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async exportAccount(_publicKey: string) {
-    throw new Error("Not supported");
+    throw new Error('Not supported');
   }
 
   getFirstPage() {
@@ -282,7 +282,7 @@ export class KeystoneKeyring extends EventEmitter {
   changeChangeAddressHdPath(hdPath: string) {
     this.hdPath = hdPath;
     this.root = this.getHDPublicKey(this.hdPath ?? this.getDefaultHdPath());
-    this.root = this.root.derive(`m/1`);
+    this.root = this.root.derive('m/1');
     this.activeIndexes = [];
     return [];
   }
@@ -290,13 +290,13 @@ export class KeystoneKeyring extends EventEmitter {
   getAccountByHdPath(hdPath: string, index: number) {
     const root = this.getHDPublicKey(hdPath);
     const child = root.derive(`m/0/${index}`);
-    return child.publicKey.toString("hex");
+    return child.publicKey.toString('hex');
   }
 
   getChangeAddressAccountByHdPath(hdPath: string, index: number) {
     const root = this.getHDPublicKey(hdPath);
     const child = root.derive(`m/1/${index}`);
-    return child.publicKey.toString("hex");
+    return child.publicKey.toString('hex');
   }
 
   async genSignPsbtUr(psbtHex: string) {
@@ -307,7 +307,7 @@ export class KeystoneKeyring extends EventEmitter {
     const ur = keystoneSDK.btc.generatePSBT(psbt.data.toBuffer());
     return {
       type: ur.type,
-      cbor: ur.cbor.toString("hex"),
+      cbor: ur.cbor.toString('hex'),
     };
   }
 
@@ -315,7 +315,7 @@ export class KeystoneKeyring extends EventEmitter {
     const keystoneSDK = new KeystoneSDK({
       origin: this.origin,
     });
-    return keystoneSDK.btc.parsePSBT(new UR(Buffer.from(cbor, "hex"), type));
+    return keystoneSDK.btc.parsePSBT(new UR(Buffer.from(cbor, 'hex'), type));
   }
 
   async genSignMsgUr(publicKey: string, text: string) {
@@ -323,11 +323,11 @@ export class KeystoneKeyring extends EventEmitter {
       origin: this.origin,
     });
     let i = undefined;
-    if (this.hdPath !== null && this.hdPath !== undefined && this.hdPath.length >= 13 && this.hdPath[this.hdPath.length - 1] === "1") {
+    if (this.hdPath !== null && this.hdPath !== undefined && this.hdPath.length >= 13 && this.hdPath[this.hdPath.length - 1] === '1') {
       const root = this.getHDPublicKey(this.hdPath);
       i = this.activeIndexes.find((i) => {
         const child = root.derive(`m/1/${i}`);
-        if (child.publicKey.toString("hex") === publicKey) {
+        if (child.publicKey.toString('hex') === publicKey) {
           return true;
         }
       });
@@ -336,12 +336,12 @@ export class KeystoneKeyring extends EventEmitter {
     }
 
     if (i === undefined) {
-      throw new Error("publicKey not found");
+      throw new Error('publicKey not found');
     }
     const requestId = uuid.v4();
     const ur = keystoneSDK.btc.generateSignRequest({
       requestId,
-      signData: Buffer.from(text).toString("hex"),
+      signData: Buffer.from(text).toString('hex'),
       dataType: KeystoneBitcoinSDK.DataType.message,
       accounts: [
         {
@@ -354,7 +354,7 @@ export class KeystoneKeyring extends EventEmitter {
     return {
       requestId,
       type: ur.type,
-      cbor: ur.cbor.toString("hex"),
+      cbor: ur.cbor.toString('hex'),
     };
   }
 
@@ -362,12 +362,12 @@ export class KeystoneKeyring extends EventEmitter {
     const keystoneSDK = new KeystoneSDK({
       origin: this.origin,
     });
-    return keystoneSDK.btc.parseSignature(new UR(Buffer.from(cbor, "hex"), type));
+    return keystoneSDK.btc.parseSignature(new UR(Buffer.from(cbor, 'hex'), type));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async signMessage(publicKey: string, text: string) {
-    return "Signing Message with Keystone should use genSignMsgUr and parseSignMsgUr";
+    return 'Signing Message with Keystone should use genSignMsgUr and parseSignMsgUr';
   }
 
   async verifyMessage(publicKey: string, text: string, sig: string) {

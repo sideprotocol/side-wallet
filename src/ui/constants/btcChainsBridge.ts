@@ -9,7 +9,7 @@ export const BTC_CHAINS_BRIDGE_DEV: IChain[] = [
     rpcUrl: 'https://rpc.testcosmos.directory/osmosistestnet',
     restUrl: 'https://rest.testcosmos.directory/osmosistestnet',
     denom: 'uosmo',
-    hdPath: "m/44'/118/0'/0/0",
+    hdPath: 'm/44\'/118/0\'/0/0',
     logo: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.svg',
     faucetUrl: 'https://faucet.circle.com',
     explorerUrl: 'https://mintscan.io/osmosis-testnet'
@@ -21,7 +21,7 @@ export const BTC_CHAINS_BRIDGE_DEV: IChain[] = [
     rpcUrl: 'https://rpc-axelar-testnet.imperator.co:443',
     restUrl: 'https://lcd-axelar-testnet.imperator.co:443',
     denom: 'uaxl',
-    hdPath: "m/44'/118/0'/0/0",
+    hdPath: 'm/44\'/118/0\'/0/0',
     logo: 'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/axelar-dojo/chain.png',
     faucetUrl: 'https://faucet.testnet.axelar.dev',
     explorerUrl: 'https://testnet.axelarscan.io'
@@ -36,7 +36,7 @@ export const BTC_CHAINS_BRIDGE_TEST: IChain[] = [
     rpcUrl: 'https://rpc.testcosmos.directory/osmosistestnet',
     restUrl: 'https://rest.testcosmos.directory/osmosistestnet',
     denom: 'uosmo',
-    hdPath: "m/44'/118/0'/0/0",
+    hdPath: 'm/44\'/118/0\'/0/0',
     logo: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.svg',
     faucetUrl: 'https://faucet.circle.com',
     explorerUrl: 'https://mintscan.io/osmosis-testnet'
@@ -48,7 +48,7 @@ export const BTC_CHAINS_BRIDGE_TEST: IChain[] = [
     rpcUrl: 'https://rpc-axelar-testnet.imperator.co:443',
     restUrl: 'https://lcd-axelar-testnet.imperator.co:443',
     denom: 'uaxl',
-    hdPath: "m/44'/118/0'/0/0",
+    hdPath: 'm/44\'/118/0\'/0/0',
     logo: 'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/axelar-dojo/chain.png',
     faucetUrl: 'https://faucet.testnet.axelar.dev',
     explorerUrl: 'https://testnet.axelarscan.io'

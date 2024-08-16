@@ -50,7 +50,8 @@ function decodeVec(inBuffer) {
 
   // return vec;
 
-  while (true) {
+  let shouldContinue = true;
+  while (shouldContinue) {
     const { num, index } = decode(buffer);
 
     vec.push(num);

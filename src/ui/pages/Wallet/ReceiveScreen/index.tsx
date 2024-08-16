@@ -62,7 +62,7 @@ export default function ReceiveScreen() {
   // };
 
   const tools = useTools();
-  console.log(`chain, type, base: `, state, currentAccount);
+  console.log('chain, type, base: ', state, currentAccount);
   // debugger;
 
   return (

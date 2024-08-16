@@ -1,15 +1,15 @@
 //@ts-nocheck
-import { SigningStatus, BitcoinSigningRequest, BitcoinSigningRequestAmino, BitcoinSigningRequestSDKType, BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType } from "./bitcoin";
-import { PageResponse, PageResponseAmino, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
-import { Params, ParamsAmino, ParamsSDKType } from "./params";
-import { BinaryReader, BinaryWriter } from "../../binary";
+import { SigningStatus, BitcoinSigningRequest, BitcoinSigningRequestAmino, BitcoinSigningRequestSDKType, BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType } from './bitcoin';
+import { PageResponse, PageResponseAmino, PageResponseSDKType } from '../../cosmos/base/query/v1beta1/pagination';
+import { Params, ParamsAmino, ParamsSDKType } from './params';
+import { BinaryReader, BinaryWriter } from '../../binary';
 /** QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method. */
 export interface QuerySigningRequestRequest {
   status: SigningStatus;
   pagination?: PageResponse;
 }
 export interface QuerySigningRequestRequestProtoMsg {
-  typeUrl: "/side.btcbridge.QuerySigningRequestRequest";
+  typeUrl: '/side.btcbridge.QuerySigningRequestRequest';
   value: Uint8Array;
 }
 /** QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method. */
@@ -18,7 +18,7 @@ export interface QuerySigningRequestRequestAmino {
   pagination?: PageResponseAmino;
 }
 export interface QuerySigningRequestRequestAminoMsg {
-  type: "/side.btcbridge.QuerySigningRequestRequest";
+  type: '/side.btcbridge.QuerySigningRequestRequest';
   value: QuerySigningRequestRequestAmino;
 }
 /** QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method. */
@@ -32,7 +32,7 @@ export interface QuerySigningRequestResponse {
   pagination?: PageResponse;
 }
 export interface QuerySigningRequestResponseProtoMsg {
-  typeUrl: "/side.btcbridge.QuerySigningRequestResponse";
+  typeUrl: '/side.btcbridge.QuerySigningRequestResponse';
   value: Uint8Array;
 }
 /** QuerySigningRequestResponse is response type for the Query/SigningRequest RPC method. */
@@ -41,7 +41,7 @@ export interface QuerySigningRequestResponseAmino {
   pagination?: PageResponseAmino;
 }
 export interface QuerySigningRequestResponseAminoMsg {
-  type: "/side.btcbridge.QuerySigningRequestResponse";
+  type: '/side.btcbridge.QuerySigningRequestResponse';
   value: QuerySigningRequestResponseAmino;
 }
 /** QuerySigningRequestResponse is response type for the Query/SigningRequest RPC method. */
@@ -52,13 +52,13 @@ export interface QuerySigningRequestResponseSDKType {
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 export interface QueryParamsRequestProtoMsg {
-  typeUrl: "/side.btcbridge.QueryParamsRequest";
+  typeUrl: '/side.btcbridge.QueryParamsRequest';
   value: Uint8Array;
 }
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequestAmino {}
 export interface QueryParamsRequestAminoMsg {
-  type: "/side.btcbridge.QueryParamsRequest";
+  type: '/side.btcbridge.QueryParamsRequest';
   value: QueryParamsRequestAmino;
 }
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
@@ -69,7 +69,7 @@ export interface QueryParamsResponse {
   params: Params;
 }
 export interface QueryParamsResponseProtoMsg {
-  typeUrl: "/side.btcbridge.QueryParamsResponse";
+  typeUrl: '/side.btcbridge.QueryParamsResponse';
   value: Uint8Array;
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
@@ -78,7 +78,7 @@ export interface QueryParamsResponseAmino {
   params?: ParamsAmino;
 }
 export interface QueryParamsResponseAminoMsg {
-  type: "/side.btcbridge.QueryParamsResponse";
+  type: '/side.btcbridge.QueryParamsResponse';
   value: QueryParamsResponseAmino;
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
@@ -88,13 +88,13 @@ export interface QueryParamsResponseSDKType {
 /** QueryChainTipRequest is request type for the Query/ChainTip RPC method. */
 export interface QueryChainTipRequest {}
 export interface QueryChainTipRequestProtoMsg {
-  typeUrl: "/side.btcbridge.QueryChainTipRequest";
+  typeUrl: '/side.btcbridge.QueryChainTipRequest';
   value: Uint8Array;
 }
 /** QueryChainTipRequest is request type for the Query/ChainTip RPC method. */
 export interface QueryChainTipRequestAmino {}
 export interface QueryChainTipRequestAminoMsg {
-  type: "/side.btcbridge.QueryChainTipRequest";
+  type: '/side.btcbridge.QueryChainTipRequest';
   value: QueryChainTipRequestAmino;
 }
 /** QueryChainTipRequest is request type for the Query/ChainTip RPC method. */
@@ -105,7 +105,7 @@ export interface QueryChainTipResponse {
   height: bigint;
 }
 export interface QueryChainTipResponseProtoMsg {
-  typeUrl: "/side.btcbridge.QueryChainTipResponse";
+  typeUrl: '/side.btcbridge.QueryChainTipResponse';
   value: Uint8Array;
 }
 /** QueryChainTipResponse is response type for the Query/ChainTip RPC method. */
@@ -114,7 +114,7 @@ export interface QueryChainTipResponseAmino {
   height?: string;
 }
 export interface QueryChainTipResponseAminoMsg {
-  type: "/side.btcbridge.QueryChainTipResponse";
+  type: '/side.btcbridge.QueryChainTipResponse';
   value: QueryChainTipResponseAmino;
 }
 /** QueryChainTipResponse is response type for the Query/ChainTip RPC method. */
@@ -127,7 +127,7 @@ export interface QueryBlockHeaderByHeightRequest {
   height: bigint;
 }
 export interface QueryBlockHeaderByHeightRequestProtoMsg {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightRequest";
+  typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightRequest';
   value: Uint8Array;
 }
 /** QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method. */
@@ -135,7 +135,7 @@ export interface QueryBlockHeaderByHeightRequestAmino {
   height?: string;
 }
 export interface QueryBlockHeaderByHeightRequestAminoMsg {
-  type: "/side.btcbridge.QueryBlockHeaderByHeightRequest";
+  type: '/side.btcbridge.QueryBlockHeaderByHeightRequest';
   value: QueryBlockHeaderByHeightRequestAmino;
 }
 /** QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method. */
@@ -147,7 +147,7 @@ export interface QueryBlockHeaderByHeightResponse {
   blockHeader?: BlockHeader;
 }
 export interface QueryBlockHeaderByHeightResponseProtoMsg {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightResponse";
+  typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightResponse';
   value: Uint8Array;
 }
 /** QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method. */
@@ -155,7 +155,7 @@ export interface QueryBlockHeaderByHeightResponseAmino {
   block_header?: BlockHeaderAmino;
 }
 export interface QueryBlockHeaderByHeightResponseAminoMsg {
-  type: "/side.btcbridge.QueryBlockHeaderByHeightResponse";
+  type: '/side.btcbridge.QueryBlockHeaderByHeightResponse';
   value: QueryBlockHeaderByHeightResponseAmino;
 }
 /** QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method. */
@@ -167,7 +167,7 @@ export interface QueryBlockHeaderByHashRequest {
   hash: string;
 }
 export interface QueryBlockHeaderByHashRequestProtoMsg {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashRequest";
+  typeUrl: '/side.btcbridge.QueryBlockHeaderByHashRequest';
   value: Uint8Array;
 }
 /** QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method. */
@@ -175,7 +175,7 @@ export interface QueryBlockHeaderByHashRequestAmino {
   hash?: string;
 }
 export interface QueryBlockHeaderByHashRequestAminoMsg {
-  type: "/side.btcbridge.QueryBlockHeaderByHashRequest";
+  type: '/side.btcbridge.QueryBlockHeaderByHashRequest';
   value: QueryBlockHeaderByHashRequestAmino;
 }
 /** QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method. */
@@ -187,7 +187,7 @@ export interface QueryBlockHeaderByHashResponse {
   blockHeader?: BlockHeader;
 }
 export interface QueryBlockHeaderByHashResponseProtoMsg {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashResponse";
+  typeUrl: '/side.btcbridge.QueryBlockHeaderByHashResponse';
   value: Uint8Array;
 }
 /** QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method. */
@@ -195,7 +195,7 @@ export interface QueryBlockHeaderByHashResponseAmino {
   block_header?: BlockHeaderAmino;
 }
 export interface QueryBlockHeaderByHashResponseAminoMsg {
-  type: "/side.btcbridge.QueryBlockHeaderByHashResponse";
+  type: '/side.btcbridge.QueryBlockHeaderByHashResponse';
   value: QueryBlockHeaderByHashResponseAmino;
 }
 /** QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method. */
@@ -205,13 +205,13 @@ export interface QueryBlockHeaderByHashResponseSDKType {
 /** QueryUTXOsRequest is the request type for the Query/UTXOs RPC method. */
 export interface QueryUTXOsRequest {}
 export interface QueryUTXOsRequestProtoMsg {
-  typeUrl: "/side.btcbridge.QueryUTXOsRequest";
+  typeUrl: '/side.btcbridge.QueryUTXOsRequest';
   value: Uint8Array;
 }
 /** QueryUTXOsRequest is the request type for the Query/UTXOs RPC method. */
 export interface QueryUTXOsRequestAmino {}
 export interface QueryUTXOsRequestAminoMsg {
-  type: "/side.btcbridge.QueryUTXOsRequest";
+  type: '/side.btcbridge.QueryUTXOsRequest';
   value: QueryUTXOsRequestAmino;
 }
 /** QueryUTXOsRequest is the request type for the Query/UTXOs RPC method. */
@@ -221,7 +221,7 @@ export interface QueryUTXOsResponse {
   utxos: UTXO[];
 }
 export interface QueryUTXOsResponseProtoMsg {
-  typeUrl: "/side.btcbridge.QueryUTXOsResponse";
+  typeUrl: '/side.btcbridge.QueryUTXOsResponse';
   value: Uint8Array;
 }
 /** QueryUTXOsResponse is the response type for the Query/UTXOs RPC method. */
@@ -229,7 +229,7 @@ export interface QueryUTXOsResponseAmino {
   utxos?: UTXOAmino[];
 }
 export interface QueryUTXOsResponseAminoMsg {
-  type: "/side.btcbridge.QueryUTXOsResponse";
+  type: '/side.btcbridge.QueryUTXOsResponse';
   value: QueryUTXOsResponseAmino;
 }
 /** QueryUTXOsResponse is the response type for the Query/UTXOs RPC method. */
@@ -241,7 +241,7 @@ export interface QueryUTXOsByAddressRequest {
   address: string;
 }
 export interface QueryUTXOsByAddressRequestProtoMsg {
-  typeUrl: "/side.btcbridge.QueryUTXOsByAddressRequest";
+  typeUrl: '/side.btcbridge.QueryUTXOsByAddressRequest';
   value: Uint8Array;
 }
 /** QueryUTXOsByAddressRequest is the request type for the Query/UTXOsByAddress RPC method. */
@@ -249,7 +249,7 @@ export interface QueryUTXOsByAddressRequestAmino {
   address?: string;
 }
 export interface QueryUTXOsByAddressRequestAminoMsg {
-  type: "/side.btcbridge.QueryUTXOsByAddressRequest";
+  type: '/side.btcbridge.QueryUTXOsByAddressRequest';
   value: QueryUTXOsByAddressRequestAmino;
 }
 /** QueryUTXOsByAddressRequest is the request type for the Query/UTXOsByAddress RPC method. */
@@ -261,7 +261,7 @@ export interface QueryUTXOsByAddressResponse {
   utxos: UTXO[];
 }
 export interface QueryUTXOsByAddressResponseProtoMsg {
-  typeUrl: "/side.btcbridge.QueryUTXOsByAddressResponse";
+  typeUrl: '/side.btcbridge.QueryUTXOsByAddressResponse';
   value: Uint8Array;
 }
 /** QueryUTXOsByAddressResponse is the response type for the Query/UTXOsByAddress RPC method. */
@@ -269,7 +269,7 @@ export interface QueryUTXOsByAddressResponseAmino {
   utxos?: UTXOAmino[];
 }
 export interface QueryUTXOsByAddressResponseAminoMsg {
-  type: "/side.btcbridge.QueryUTXOsByAddressResponse";
+  type: '/side.btcbridge.QueryUTXOsByAddressResponse';
   value: QueryUTXOsByAddressResponseAmino;
 }
 /** QueryUTXOsByAddressResponse is the response type for the Query/UTXOsByAddress RPC method. */
@@ -283,7 +283,7 @@ function createBaseQuerySigningRequestRequest(): QuerySigningRequestRequest {
   };
 }
 export const QuerySigningRequestRequest = {
-  typeUrl: "/side.btcbridge.QuerySigningRequestRequest",
+  typeUrl: '/side.btcbridge.QuerySigningRequestRequest',
   encode(message: QuerySigningRequestRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.status !== 0) {
       writer.uint32(8).int32(message.status);
@@ -346,7 +346,7 @@ export const QuerySigningRequestRequest = {
   },
   toProtoMsg(message: QuerySigningRequestRequest): QuerySigningRequestRequestProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QuerySigningRequestRequest",
+      typeUrl: '/side.btcbridge.QuerySigningRequestRequest',
       value: QuerySigningRequestRequest.encode(message).finish()
     };
   }
@@ -358,7 +358,7 @@ function createBaseQuerySigningRequestResponse(): QuerySigningRequestResponse {
   };
 }
 export const QuerySigningRequestResponse = {
-  typeUrl: "/side.btcbridge.QuerySigningRequestResponse",
+  typeUrl: '/side.btcbridge.QuerySigningRequestResponse',
   encode(message: QuerySigningRequestResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.requests) {
       BitcoinSigningRequest.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -423,7 +423,7 @@ export const QuerySigningRequestResponse = {
   },
   toProtoMsg(message: QuerySigningRequestResponse): QuerySigningRequestResponseProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QuerySigningRequestResponse",
+      typeUrl: '/side.btcbridge.QuerySigningRequestResponse',
       value: QuerySigningRequestResponse.encode(message).finish()
     };
   }
@@ -432,7 +432,7 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
 export const QueryParamsRequest = {
-  typeUrl: "/side.btcbridge.QueryParamsRequest",
+  typeUrl: '/side.btcbridge.QueryParamsRequest',
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -473,7 +473,7 @@ export const QueryParamsRequest = {
   },
   toProtoMsg(message: QueryParamsRequest): QueryParamsRequestProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryParamsRequest",
+      typeUrl: '/side.btcbridge.QueryParamsRequest',
       value: QueryParamsRequest.encode(message).finish()
     };
   }
@@ -484,7 +484,7 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
   };
 }
 export const QueryParamsResponse = {
-  typeUrl: "/side.btcbridge.QueryParamsResponse",
+  typeUrl: '/side.btcbridge.QueryParamsResponse',
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -536,7 +536,7 @@ export const QueryParamsResponse = {
   },
   toProtoMsg(message: QueryParamsResponse): QueryParamsResponseProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryParamsResponse",
+      typeUrl: '/side.btcbridge.QueryParamsResponse',
       value: QueryParamsResponse.encode(message).finish()
     };
   }
@@ -545,7 +545,7 @@ function createBaseQueryChainTipRequest(): QueryChainTipRequest {
   return {};
 }
 export const QueryChainTipRequest = {
-  typeUrl: "/side.btcbridge.QueryChainTipRequest",
+  typeUrl: '/side.btcbridge.QueryChainTipRequest',
   encode(_: QueryChainTipRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -586,21 +586,21 @@ export const QueryChainTipRequest = {
   },
   toProtoMsg(message: QueryChainTipRequest): QueryChainTipRequestProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryChainTipRequest",
+      typeUrl: '/side.btcbridge.QueryChainTipRequest',
       value: QueryChainTipRequest.encode(message).finish()
     };
   }
 };
 function createBaseQueryChainTipResponse(): QueryChainTipResponse {
   return {
-    hash: "",
+    hash: '',
     height: BigInt(0)
   };
 }
 export const QueryChainTipResponse = {
-  typeUrl: "/side.btcbridge.QueryChainTipResponse",
+  typeUrl: '/side.btcbridge.QueryChainTipResponse',
   encode(message: QueryChainTipResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.hash !== "") {
+    if (message.hash !== '') {
       writer.uint32(10).string(message.hash);
     }
     if (message.height !== BigInt(0)) {
@@ -630,7 +630,7 @@ export const QueryChainTipResponse = {
   },
   fromPartial(object: Partial<QueryChainTipResponse>): QueryChainTipResponse {
     const message = createBaseQueryChainTipResponse();
-    message.hash = object.hash ?? "";
+    message.hash = object.hash ?? '';
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     return message;
   },
@@ -646,7 +646,7 @@ export const QueryChainTipResponse = {
   },
   toAmino(message: QueryChainTipResponse): QueryChainTipResponseAmino {
     const obj: any = {};
-    obj.hash = message.hash === "" ? undefined : message.hash;
+    obj.hash = message.hash === '' ? undefined : message.hash;
     obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
     return obj;
   },
@@ -661,7 +661,7 @@ export const QueryChainTipResponse = {
   },
   toProtoMsg(message: QueryChainTipResponse): QueryChainTipResponseProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryChainTipResponse",
+      typeUrl: '/side.btcbridge.QueryChainTipResponse',
       value: QueryChainTipResponse.encode(message).finish()
     };
   }
@@ -672,7 +672,7 @@ function createBaseQueryBlockHeaderByHeightRequest(): QueryBlockHeaderByHeightRe
   };
 }
 export const QueryBlockHeaderByHeightRequest = {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightRequest",
+  typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightRequest',
   encode(message: QueryBlockHeaderByHeightRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.height !== BigInt(0)) {
       writer.uint32(8).uint64(message.height);
@@ -724,7 +724,7 @@ export const QueryBlockHeaderByHeightRequest = {
   },
   toProtoMsg(message: QueryBlockHeaderByHeightRequest): QueryBlockHeaderByHeightRequestProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightRequest",
+      typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightRequest',
       value: QueryBlockHeaderByHeightRequest.encode(message).finish()
     };
   }
@@ -735,7 +735,7 @@ function createBaseQueryBlockHeaderByHeightResponse(): QueryBlockHeaderByHeightR
   };
 }
 export const QueryBlockHeaderByHeightResponse = {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightResponse",
+  typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightResponse',
   encode(message: QueryBlockHeaderByHeightResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeader !== undefined) {
       BlockHeader.encode(message.blockHeader, writer.uint32(10).fork()).ldelim();
@@ -787,20 +787,20 @@ export const QueryBlockHeaderByHeightResponse = {
   },
   toProtoMsg(message: QueryBlockHeaderByHeightResponse): QueryBlockHeaderByHeightResponseProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightResponse",
+      typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightResponse',
       value: QueryBlockHeaderByHeightResponse.encode(message).finish()
     };
   }
 };
 function createBaseQueryBlockHeaderByHashRequest(): QueryBlockHeaderByHashRequest {
   return {
-    hash: ""
+    hash: ''
   };
 }
 export const QueryBlockHeaderByHashRequest = {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashRequest",
+  typeUrl: '/side.btcbridge.QueryBlockHeaderByHashRequest',
   encode(message: QueryBlockHeaderByHashRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.hash !== "") {
+    if (message.hash !== '') {
       writer.uint32(10).string(message.hash);
     }
     return writer;
@@ -824,7 +824,7 @@ export const QueryBlockHeaderByHashRequest = {
   },
   fromPartial(object: Partial<QueryBlockHeaderByHashRequest>): QueryBlockHeaderByHashRequest {
     const message = createBaseQueryBlockHeaderByHashRequest();
-    message.hash = object.hash ?? "";
+    message.hash = object.hash ?? '';
     return message;
   },
   fromAmino(object: QueryBlockHeaderByHashRequestAmino): QueryBlockHeaderByHashRequest {
@@ -836,7 +836,7 @@ export const QueryBlockHeaderByHashRequest = {
   },
   toAmino(message: QueryBlockHeaderByHashRequest): QueryBlockHeaderByHashRequestAmino {
     const obj: any = {};
-    obj.hash = message.hash === "" ? undefined : message.hash;
+    obj.hash = message.hash === '' ? undefined : message.hash;
     return obj;
   },
   fromAminoMsg(object: QueryBlockHeaderByHashRequestAminoMsg): QueryBlockHeaderByHashRequest {
@@ -850,7 +850,7 @@ export const QueryBlockHeaderByHashRequest = {
   },
   toProtoMsg(message: QueryBlockHeaderByHashRequest): QueryBlockHeaderByHashRequestProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryBlockHeaderByHashRequest",
+      typeUrl: '/side.btcbridge.QueryBlockHeaderByHashRequest',
       value: QueryBlockHeaderByHashRequest.encode(message).finish()
     };
   }
@@ -861,7 +861,7 @@ function createBaseQueryBlockHeaderByHashResponse(): QueryBlockHeaderByHashRespo
   };
 }
 export const QueryBlockHeaderByHashResponse = {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashResponse",
+  typeUrl: '/side.btcbridge.QueryBlockHeaderByHashResponse',
   encode(message: QueryBlockHeaderByHashResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeader !== undefined) {
       BlockHeader.encode(message.blockHeader, writer.uint32(10).fork()).ldelim();
@@ -913,7 +913,7 @@ export const QueryBlockHeaderByHashResponse = {
   },
   toProtoMsg(message: QueryBlockHeaderByHashResponse): QueryBlockHeaderByHashResponseProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryBlockHeaderByHashResponse",
+      typeUrl: '/side.btcbridge.QueryBlockHeaderByHashResponse',
       value: QueryBlockHeaderByHashResponse.encode(message).finish()
     };
   }
@@ -922,7 +922,7 @@ function createBaseQueryUTXOsRequest(): QueryUTXOsRequest {
   return {};
 }
 export const QueryUTXOsRequest = {
-  typeUrl: "/side.btcbridge.QueryUTXOsRequest",
+  typeUrl: '/side.btcbridge.QueryUTXOsRequest',
   encode(_: QueryUTXOsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -963,7 +963,7 @@ export const QueryUTXOsRequest = {
   },
   toProtoMsg(message: QueryUTXOsRequest): QueryUTXOsRequestProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryUTXOsRequest",
+      typeUrl: '/side.btcbridge.QueryUTXOsRequest',
       value: QueryUTXOsRequest.encode(message).finish()
     };
   }
@@ -974,7 +974,7 @@ function createBaseQueryUTXOsResponse(): QueryUTXOsResponse {
   };
 }
 export const QueryUTXOsResponse = {
-  typeUrl: "/side.btcbridge.QueryUTXOsResponse",
+  typeUrl: '/side.btcbridge.QueryUTXOsResponse',
   encode(message: QueryUTXOsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.utxos) {
       UTXO.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1028,20 +1028,20 @@ export const QueryUTXOsResponse = {
   },
   toProtoMsg(message: QueryUTXOsResponse): QueryUTXOsResponseProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryUTXOsResponse",
+      typeUrl: '/side.btcbridge.QueryUTXOsResponse',
       value: QueryUTXOsResponse.encode(message).finish()
     };
   }
 };
 function createBaseQueryUTXOsByAddressRequest(): QueryUTXOsByAddressRequest {
   return {
-    address: ""
+    address: ''
   };
 }
 export const QueryUTXOsByAddressRequest = {
-  typeUrl: "/side.btcbridge.QueryUTXOsByAddressRequest",
+  typeUrl: '/side.btcbridge.QueryUTXOsByAddressRequest',
   encode(message: QueryUTXOsByAddressRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== "") {
+    if (message.address !== '') {
       writer.uint32(10).string(message.address);
     }
     return writer;
@@ -1065,7 +1065,7 @@ export const QueryUTXOsByAddressRequest = {
   },
   fromPartial(object: Partial<QueryUTXOsByAddressRequest>): QueryUTXOsByAddressRequest {
     const message = createBaseQueryUTXOsByAddressRequest();
-    message.address = object.address ?? "";
+    message.address = object.address ?? '';
     return message;
   },
   fromAmino(object: QueryUTXOsByAddressRequestAmino): QueryUTXOsByAddressRequest {
@@ -1077,7 +1077,7 @@ export const QueryUTXOsByAddressRequest = {
   },
   toAmino(message: QueryUTXOsByAddressRequest): QueryUTXOsByAddressRequestAmino {
     const obj: any = {};
-    obj.address = message.address === "" ? undefined : message.address;
+    obj.address = message.address === '' ? undefined : message.address;
     return obj;
   },
   fromAminoMsg(object: QueryUTXOsByAddressRequestAminoMsg): QueryUTXOsByAddressRequest {
@@ -1091,7 +1091,7 @@ export const QueryUTXOsByAddressRequest = {
   },
   toProtoMsg(message: QueryUTXOsByAddressRequest): QueryUTXOsByAddressRequestProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryUTXOsByAddressRequest",
+      typeUrl: '/side.btcbridge.QueryUTXOsByAddressRequest',
       value: QueryUTXOsByAddressRequest.encode(message).finish()
     };
   }
@@ -1102,7 +1102,7 @@ function createBaseQueryUTXOsByAddressResponse(): QueryUTXOsByAddressResponse {
   };
 }
 export const QueryUTXOsByAddressResponse = {
-  typeUrl: "/side.btcbridge.QueryUTXOsByAddressResponse",
+  typeUrl: '/side.btcbridge.QueryUTXOsByAddressResponse',
   encode(message: QueryUTXOsByAddressResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.utxos) {
       UTXO.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1156,7 +1156,7 @@ export const QueryUTXOsByAddressResponse = {
   },
   toProtoMsg(message: QueryUTXOsByAddressResponse): QueryUTXOsByAddressResponseProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.QueryUTXOsByAddressResponse",
+      typeUrl: '/side.btcbridge.QueryUTXOsByAddressResponse',
       value: QueryUTXOsByAddressResponse.encode(message).finish()
     };
   }

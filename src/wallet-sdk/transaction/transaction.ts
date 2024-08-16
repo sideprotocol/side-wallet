@@ -1,14 +1,14 @@
 //@ts-nocheck
 
-import { addressToScriptPk } from "../address";
-import { bitcoin } from "../bitcoin-core";
-import { UTXO_DUST } from "../constants";
-import { ErrorCodes, WalletUtilsError } from "../error";
-import { NetworkType, toPsbtNetwork } from "../network";
-import { AddressType, ToSignInput, UnspentOutput } from "../types";
-import { toXOnly } from "../utils";
-import { EstimateWallet } from "../wallet";
-import { utxoHelper } from "./utxo";
+import { addressToScriptPk } from '../address';
+import { bitcoin } from '../bitcoin-core';
+import { UTXO_DUST } from '../constants';
+import { ErrorCodes, WalletUtilsError } from '../error';
+import { NetworkType, toPsbtNetwork } from '../network';
+import { AddressType, ToSignInput, UnspentOutput } from '../types';
+import { toXOnly } from '../utils';
+import { EstimateWallet } from '../wallet';
+import { utxoHelper } from './utxo';
 interface TxInput {
   data: {
     hash: string;
@@ -36,9 +36,9 @@ function utxoToInput(utxo: UnspentOutput, estimate?: boolean): TxInput {
       index: utxo.vout,
       witnessUtxo: {
         value: utxo.satoshis,
-        script: Buffer.from(utxo.scriptPk, "hex"),
+        script: Buffer.from(utxo.scriptPk, 'hex'),
       },
-      tapInternalKey: toXOnly(Buffer.from(utxo.pubkey, "hex")),
+      tapInternalKey: toXOnly(Buffer.from(utxo.pubkey, 'hex')),
     };
     return {
       data,
@@ -50,7 +50,7 @@ function utxoToInput(utxo: UnspentOutput, estimate?: boolean): TxInput {
       index: utxo.vout,
       witnessUtxo: {
         value: utxo.satoshis,
-        script: Buffer.from(utxo.scriptPk, "hex"),
+        script: Buffer.from(utxo.scriptPk, 'hex'),
       },
     };
     return {
@@ -64,7 +64,7 @@ function utxoToInput(utxo: UnspentOutput, estimate?: boolean): TxInput {
         index: utxo.vout,
         witnessUtxo: {
           value: utxo.satoshis,
-          script: Buffer.from(utxo.scriptPk, "hex"),
+          script: Buffer.from(utxo.scriptPk, 'hex'),
         },
       };
       return {
@@ -75,7 +75,7 @@ function utxoToInput(utxo: UnspentOutput, estimate?: boolean): TxInput {
       const data = {
         hash: utxo.txid,
         index: utxo.vout,
-        nonWitnessUtxo: Buffer.from(utxo.rawtx, "hex"),
+        nonWitnessUtxo: Buffer.from(utxo.rawtx, 'hex'),
       };
       return {
         data,
@@ -84,14 +84,14 @@ function utxoToInput(utxo: UnspentOutput, estimate?: boolean): TxInput {
     }
   } else if (utxo.addressType === AddressType.P2SH_P2WPKH) {
     const redeemData = bitcoin.payments.p2wpkh({
-      pubkey: Buffer.from(utxo.pubkey, "hex"),
+      pubkey: Buffer.from(utxo.pubkey, 'hex'),
     });
     const data = {
       hash: utxo.txid,
       index: utxo.vout,
       witnessUtxo: {
         value: utxo.satoshis,
-        script: Buffer.from(utxo.scriptPk, "hex"),
+        script: Buffer.from(utxo.scriptPk, 'hex'),
       },
       redeemScript: redeemData.output,
     };
@@ -117,7 +117,6 @@ export class Transaction {
   private _cacheNetworkFee = 0;
   private _cacheBtcUtxos: UnspentOutput[] = [];
   private _cacheToSignInputs: ToSignInput[] = [];
-  constructor() {}
 
   setNetworkType(network: NetworkType) {
     this.networkType = network;
@@ -222,7 +221,6 @@ export class Transaction {
     this.inputs.forEach((v, index) => {
       if (v.utxo.addressType === AddressType.P2PKH) {
         if (v.data.witnessUtxo) {
-          //@ts-ignore
           psbt.__CACHE.__UNSAFE_SIGN_NONSEGWIT = true;
         }
       }
@@ -263,7 +261,7 @@ export class Transaction {
   async createEstimatePsbt() {
     const estimateWallet = EstimateWallet.fromRandom(this.inputs[0].utxo.addressType, this.networkType);
 
-    const scriptPk = addressToScriptPk(estimateWallet.address, this.networkType).toString("hex");
+    const scriptPk = addressToScriptPk(estimateWallet.address, this.networkType).toString('hex');
 
     const tx = this.clone();
     tx.utxos.forEach((v) => {
@@ -370,7 +368,7 @@ ${this.inputs
 `;
     return str;
   })
-  .join("")}
+  .join('')}
 total: ${this.getTotalInput()} Sats
 ----------------------------------------------------------------------------------------------
 Outputs
@@ -380,7 +378,7 @@ ${this.outputs
 =>${index} ${output.address} ${output.value} Sats`;
     return str;
   })
-  .join("")}
+  .join('')}
 
 total: ${this.getTotalOutput()} Sats
 =============================================================================================

@@ -1,14 +1,14 @@
 //@ts-nocheck
 
-import bigInt from "big-integer";
-import { bitcoin } from "../bitcoin-core";
-import { ErrorCodes, WalletUtilsError } from "../error";
-import { NetworkType } from "../network";
-import { varint } from "../runes";
-import { RuneId } from "../runes/rund_id";
-import { Transaction } from "../transaction/transaction";
-import { utxoHelper } from "../transaction/utxo";
-import { ToSignInput, UnspentOutput } from "../types";
+import bigInt from 'big-integer';
+import { bitcoin } from '../bitcoin-core';
+import { ErrorCodes, WalletUtilsError } from '../error';
+import { NetworkType } from '../network';
+import { varint } from '../runes';
+import { RuneId } from '../runes/rund_id';
+import { Transaction } from '../transaction/transaction';
+import { utxoHelper } from '../transaction/utxo';
+import { ToSignInput, UnspentOutput } from '../types';
 
 // only one arc20 can be send
 export async function sendRunes({

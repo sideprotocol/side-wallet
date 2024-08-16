@@ -10,16 +10,16 @@ import {
   BABYLON_TEST_ID,
   OSMOSIS_DEV_ID,
   OSMOSIS_TEST_ID,
-} from "@/ui/constants/chains/chainId";
-import { IBridgeAsset, IChainAsset } from "./type";
-import { SIDE_DEV_ASSETLIST, SIDE_TEST_ASSETLIST } from "./sideAsset";
-import { COSMOS_DEV_ASSETLIST, COSMOS_TEST_ASSETLIST } from "./cosmosAsset";
-import { NOBLE_DEV_ASSETLIST, NOBLE_TEST_ASSETLIST } from "./nobleAsset";
-import { AXELAR_DEV_ASSETLIST, AXELAR_TEST_ASSETLIST } from "./axelarAsset";
-import { BABYLON_TEST_ASSETLIST } from "./babylonAsset";
-import { OSMOSIS_DEV_ASSETLIST, OSMOSIS_TEST_ASSETLIST } from "./osmosisAsset";
+} from '@/ui/constants/chains/chainId';
+import { IBridgeAsset, IChainAsset } from './type';
+import { SIDE_DEV_ASSETLIST, SIDE_TEST_ASSETLIST } from './sideAsset';
+import { COSMOS_DEV_ASSETLIST, COSMOS_TEST_ASSETLIST } from './cosmosAsset';
+import { NOBLE_DEV_ASSETLIST, NOBLE_TEST_ASSETLIST } from './nobleAsset';
+import { AXELAR_DEV_ASSETLIST, AXELAR_TEST_ASSETLIST } from './axelarAsset';
+import { BABYLON_TEST_ASSETLIST } from './babylonAsset';
+import { OSMOSIS_DEV_ASSETLIST, OSMOSIS_TEST_ASSETLIST } from './osmosisAsset';
 
-export type { IAsset } from "./type";
+export type { IAsset } from './type';
 
 // all chain asset
 export const ASSETS_DEV: IChainAsset[] = [
@@ -83,7 +83,7 @@ export const SWAP_ASSETS_DEV: IChainAsset = {
     SIDE_DEV_ASSETLIST.Usdt,
     SIDE_DEV_ASSETLIST.Btc,
     SIDE_DEV_ASSETLIST.Wbtc,
-    SIDE_DEV_ASSETLIST["runes/8776:1"],
+    SIDE_DEV_ASSETLIST['runes/8776:1'],
   ],
 };
 

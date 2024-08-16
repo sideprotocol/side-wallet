@@ -1,11 +1,10 @@
 // import { Box, DialogContent, Typography } from "@mui/material";
 
-import { IWalletItem, useWalletContext } from "./WalletContext";
-import { createWallet, writeClient, writeWallet } from "./WalletConnect/Wallet";
-import { useState, useContext } from "react";
+import { IWalletItem, useWalletContext } from './WalletContext';
+import { createWallet, writeClient, writeWallet } from './WalletConnect/Wallet';
+import { useState } from 'react';
 // import * as BridgeStore from "@/stores/BridgeStore";
-import SideDialog from "@/components/SideDialog";
-import { globalContext } from "@/context";
+import SideDialog from '@/components/SideDialog';
 // import { LoadingButton } from "@/components/UI/Button";
 
 interface IConnectWalletDialog {}
@@ -34,7 +33,7 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
   async function handleOnConnect() {
     try {
       setSending(true);
-      setConnectError("");
+      setConnectError('');
       const wa = createWallet(
         curWallet.name,
         {
@@ -99,25 +98,25 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
         });
       }}
       sx={{
-        ".MuiPaper-root": {
-          borderRadius: "24px",
-          width: "400px",
+        '.MuiPaper-root': {
+          borderRadius: '24px',
+          width: '400px',
         },
       }}
       title="Connect Wallet"
     >
       <div
         style={{
-          padding: "0 0 24px",
+          padding: '0 0 24px',
         }}
       >
         <div
           style={{
-            borderRadius: "8px",
-            padding: "16px 0",
-            display: "flex",
-            flexDirection: "column",
-            marginBottom: "12px",
+            borderRadius: '8px',
+            padding: '16px 0',
+            display: 'flex',
+            flexDirection: 'column',
+            marginBottom: '12px',
           }}
         >
           {filterWallets.map((item) => {
@@ -134,34 +133,34 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
                   }
                 }}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderRadius: "14px",
-                  marginBottom: "2px",
-                  padding: "9px 16px",
-                  cursor: "pointer",
-                  color: "#fff",
-                  bgcolor: isActive ? "#EAEAEA" : "transparent",
-                  border: `1px solid ${isActive ? "black" : "transparent"}`,
-                  ":hover": {
-                    bgcolor: "#EAEAEA",
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  borderRadius: '14px',
+                  marginBottom: '2px',
+                  padding: '9px 16px',
+                  cursor: 'pointer',
+                  color: '#fff',
+                  bgcolor: isActive ? '#EAEAEA' : 'transparent',
+                  border: `1px solid ${isActive ? 'black' : 'transparent'}`,
+                  ':hover': {
+                    bgcolor: '#EAEAEA',
                   },
                 }}
               >
                 <img
                   src={item.logo}
                   style={{
-                    width: "32px",
-                    height: "32px",
-                    marginRight: "12px",
+                    width: '32px',
+                    height: '32px',
+                    marginRight: '12px',
                   }}
                 />
                 <div
                   style={{
-                    textAlign: "left",
+                    textAlign: 'left',
                     flex: 1,
-                    color: "#000",
+                    color: '#000',
                     fontWeight: 700,
                   }}
                 >
@@ -172,7 +171,7 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
           })}
         </div>
 
-        <div style={{ paddingBottom: "12px", fontSize: "14px", color: "red" }}>{connectError}</div>
+        <div style={{ paddingBottom: '12px', fontSize: '14px', color: 'red' }}>{connectError}</div>
 
         <LoadingButton themetype="primary" fullWidth disabled={sending} loading={sending} onClick={handleOnConnect}>
           Connect

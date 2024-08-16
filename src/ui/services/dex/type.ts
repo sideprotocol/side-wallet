@@ -400,4 +400,4 @@ export interface IGetPoolIncentivesActiveResponse extends IPoolTranscationRespon
   }>;
 }
 
-export type PoolType = "xyk" | "stable" | "custom-transmuter";
+export type PoolType = 'xyk' | 'stable' | 'custom-transmuter';

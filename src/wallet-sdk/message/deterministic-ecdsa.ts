@@ -1,11 +1,11 @@
 //@ts-nocheck
 
-import * as hmac from "@noble/hashes/hmac";
-import * as sha256 from "@noble/hashes/sha256";
-import * as noble_secp256k1 from "@noble/secp256k1";
-import { ECPairInterface, bitcoin } from "../bitcoin-core";
+import * as hmac from '@noble/hashes/hmac';
+import * as sha256 from '@noble/hashes/sha256';
+import * as noble_secp256k1 from '@noble/secp256k1';
+import { ECPairInterface, bitcoin } from '../bitcoin-core';
 noble_secp256k1.utils.hmacSha256Sync = (key, ...msgs) => hmac.hmac(sha256.sha256, key, noble_secp256k1.utils.concatBytes(...msgs));
-const MAGIC_BYTES = Buffer.from("Bitcoin Signed Message:\n");
+const MAGIC_BYTES = Buffer.from('Bitcoin Signed Message:\n');
 
 function varintBufNum(n: number) {
   let buf;
@@ -39,7 +39,7 @@ function magicHash(message: string) {
 
 function toCompact(i: number, signature: Uint8Array, compressed: boolean) {
   if (!(i === 0 || i === 1 || i === 2 || i === 3)) {
-    throw new Error("i must be equal to 0, 1, 2, or 3");
+    throw new Error('i must be equal to 0, 1, 2, or 3');
   }
 
   let val = i + 27 + 4;
@@ -51,10 +51,10 @@ function toCompact(i: number, signature: Uint8Array, compressed: boolean) {
 
 export function signMessageOfDeterministicECDSA(ecpair: ECPairInterface, message: string): string {
   const hash = magicHash(message);
-  const [signature, i] = noble_secp256k1.signSync(Buffer.from(hash), ecpair.privateKey.toString("hex"), {
+  const [signature, i] = noble_secp256k1.signSync(Buffer.from(hash), ecpair.privateKey.toString('hex'), {
     canonical: true,
     recovered: true,
     der: false,
   });
-  return toCompact(i, signature, true).toString("base64");
+  return toCompact(i, signature, true).toString('base64');
 }
