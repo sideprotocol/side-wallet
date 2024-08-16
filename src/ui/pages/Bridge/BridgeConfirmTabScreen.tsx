@@ -74,9 +74,7 @@ export default function BridgeTabScreen() {
 
   useEffect(() => {
     estimateNetworkFee({ amount: unitAmount, fee }).then((res) => {
-      setNetworkFee(res.networkFee as number);
-
-      setTx(res.walletInputs);
+      setTx(res?.walletInputs || []);
     });
   }, [fee]);
 
@@ -156,13 +154,13 @@ export default function BridgeTabScreen() {
                   <Row key={item.txid} relative full justifyBetween color={'white'}>
                     <a
                       target="_blank"
-                      className="underline text-white w-1/3 text-left"
-                      href={`${SIDE_BTC_EXPLORER}/tx/${accountUtxo?.txid}`}
+                      className="underline text-white w-1/3 text-left hover:text-white"
+                      href={`${SIDE_BTC_EXPLORER}/tx/${item?.txid}`}
                       rel="noreferrer">
                       {formatAddress(item.txid || '-', 6)}
                     </a>
 
-                    <Typography className="w-1/3 text-center">{item.vout || '-'}</Typography>
+                    <Typography className="w-1/3 text-center">{item.vout}</Typography>
                     <Typography className="w-1/3 text-right">
                       {' '}
                       {toReadableAmount(item.satoshis.toString() || '0', 8)}
