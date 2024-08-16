@@ -10,7 +10,7 @@ import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { useUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
 import { parseUnitAmount } from '@/ui/utils';
-import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
+import { toReadableAmount } from '@/ui/utils/formatter';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { useNavigate } from '../../MainRoute';
@@ -38,11 +38,7 @@ export default function SideTxConfirmScreen() {
     };
   }, [sideTokenList.length, denom, feeDenom]);
 
-  const { data: feeByUSD } = useCalcPrice(
-    toUnitAmount(uiState.fee || '0', feeToken?.exponent || 6),
-    feeToken?.base,
-    feeToken?.exponent || 6
-  );
+  const { data: feeByUSD } = useCalcPrice(uiState.fee || '0', feeToken?.base, feeToken?.exponent || 6);
   if (!curToken) {
     return <Layout />;
   }
@@ -164,7 +160,8 @@ export default function SideTxConfirmScreen() {
               text={toInfo.address}
               style={{
                 fontSize: '14px',
-                lineHeight: '16px'
+                lineHeight: '16px',
+                wordBreak: 'break-all'
               }}
             />
           </Column>
