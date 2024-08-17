@@ -39,7 +39,7 @@ export default function WelcomeScreen() {
               alignItems: 'center',
               marginTop: '115px'
             }}>
-            <Image src="./images/img/phone.png" size={174} />
+            <Image src="./images/img/welcome.gif" size={174} />
           </Row>
           <Button
             style={{

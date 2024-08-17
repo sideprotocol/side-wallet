@@ -11,15 +11,16 @@ export default function useGetTokenPrice() {
     getAssetPrice();
     const unitInterval = setInterval(() => {
       getAssetPrice();
-    }, 3600000);
+    }, 360000);
     return () => {
       clearInterval(unitInterval);
     };
   }, []);
 
   const getAssetPrice = async () => {
-    const sideAssets = ASSETS.find((item) => item.chainID === SIDE_ID)!;
+    const sideAssets = ASSETS.find((item) => item.chainID === SIDE_ID);
     const priceMap: { [key: string]: string } = {};
+    if (!sideAssets) return;
     for (let i = 0; i < sideAssets.assets.length; i++) {
       const asset = sideAssets.assets[i];
       try {
