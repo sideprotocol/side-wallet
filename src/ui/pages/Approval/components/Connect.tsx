@@ -10,7 +10,7 @@ import { useCurrentKeyring, useKeyrings } from '@/ui/state/keyrings/hooks';
 import { keyringsActions } from '@/ui/state/keyrings/reducer';
 import { fontSizes } from '@/ui/theme/font';
 import { shortAddress, useApproval, useWallet } from '@/ui/utils';
-import { CheckCircleFilled, LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
 
 interface MyItemProps {
   account?: Account;
@@ -28,24 +28,59 @@ export function MyItem({ account, selected, onClick }: MyItemProps, ref) {
       justifyBetween
       mt="sm"
       style={{
-        border: '1px solid #FFFFFF1A',
-        backgroundColor: '#1E1E1F'
+        border: '1px solid #2D2D2D',
+        backgroundColor: '#2E2E2F',
+        borderRadius: '10px'
       }}
       onClick={onClick}>
-      <Row>
-        <Column style={{ width: 20 }} selfItemsCenter>
-          {selected && (
-            <Icon color={'primary'}>
-              <CheckCircleFilled />
-            </Icon>
-          )}
-        </Column>
+      <Row
+        justifyBetween
+        style={{
+          width: '100%'
+        }}>
         <Column gap={'sm'}>
           <Text text={account.alianName} />
           <Text text={`${shortAddress(account.address)}`} preset="sub" />
         </Column>
+        <Column selfItemsCenter>
+          {selected && (
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+              <g filter="url(#filter0_i_863_3849)">
+                <rect x="0.171875" width="20" height="20" rx="10" fill="#0DD4C3" />
+              </g>
+              <path
+                d="M5.17188 10.5L8.44308 13.3623C8.84931 13.7178 9.46433 13.6867 9.83264 13.292L16.1719 6.5"
+                stroke="black"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+              <defs>
+                <filter
+                  id="filter0_i_863_3849"
+                  x="0.171875"
+                  y="0"
+                  width="20"
+                  height="20"
+                  filterUnits="userSpaceOnUse"
+                  colorInterpolationFilters="sRGB">
+                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                  <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+                  <feColorMatrix
+                    in="SourceAlpha"
+                    type="matrix"
+                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                    result="hardAlpha"
+                  />
+                  <feOffset dy="1" />
+                  <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+                  <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.25 0" />
+                  <feBlend mode="normal" in2="shape" result="effect1_innerShadow_863_3849" />
+                </filter>
+              </defs>
+            </svg>
+          )}
+        </Column>
       </Row>
-      <Column relative></Column>
     </Card>
   );
 }
