@@ -37,13 +37,13 @@ export default function WelcomeScreen() {
             style={{
               flex: 1,
               alignItems: 'center',
-              marginTop: '115px'
+              marginTop: '80px'
             }}>
-            <Image src="./images/img/welcome.gif" size={174} />
+            <Image src="./images/img/welcome.gif" size={306} />
           </Row>
           <Button
             style={{
-              marginTop: '100px'
+              marginTop: '60px'
             }}
             text="Create new wallet"
             preset="primary"

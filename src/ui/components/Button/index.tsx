@@ -148,7 +148,7 @@ const $baseTextStyle: CSSProperties = {
   textAlign: 'center',
   flexShrink: 1,
   flexGrow: 0,
-  zIndex: 2,
+  // zIndex: 2,
   color: colors.white,
   paddingLeft: spacing.tiny,
   paddingRight: spacing.tiny
