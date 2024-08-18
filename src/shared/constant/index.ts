@@ -222,7 +222,7 @@ export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressT
 
 export const NETWORK_TYPES = [
   // { value: NetworkType.MAINNET, label: 'DEVNET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
-  { value: NetworkType.TESTNET, label: 'TESTNET', name: 'testnet', validNames: ['testnet'] },
+  { value: NetworkType.TESTNET, label: 'DEVNET', name: 'testnet', validNames: ['testnet'] },
   // { value: NetworkType.MAINNET, label: 'DEVNET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
 ];
 
