@@ -68,20 +68,22 @@ export function useChangeNetworkTypeCallback() {
 export function useBlockstreamUrl(chain?: CHAINS_ENUM) {
   const networkType = useNetworkType();
   if (chain === CHAINS_ENUM.SIDE) {
-    if (networkType === NetworkType.MAINNET) {
-      return 'https://testnet.ping.pub/side';
-    } else {
-      return 'https://explorer.side.exchange/testnet';
-    }
+    // if (networkType === NetworkType.MAINNET) {
+    //   return 'https://testnet.ping.pub/side';
+    // } else {
+    //   return 'https://explorer.side.exchange/testnet';
+    // }
+    return 'https://explorer.side.exchange/testnet';
   } else if (chain === CHAINS_ENUM.SIDE_SIGNET) {
     return 'https://signet.side.one';
   }
 
-  if (networkType === NetworkType.MAINNET) {
-    return 'https://mempool.space';
-  } else {
-    return 'https://mempool.space/testnet';
-  }
+  // if (networkType === NetworkType.MAINNET) {
+  //   return 'https://mempool.space';
+  // } else {
+  //   return 'https://mempool.space/testnet';
+  // }
+  return 'https://mempool.space/testnet';
 }
 
 export function useTxIdUrl(txid: string) {

@@ -17,7 +17,7 @@ export const CHAINS: Record<string, Chain> = {
     name: 'BTC',
     enum: CHAINS_ENUM.BTC,
     logo: '',
-    network: 'mainnet'
+    network: 'testnet'
   }
 };
 
@@ -181,7 +181,7 @@ export const OW_HD_PATH = "m/86'/0'/0'";
 export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressTypes: AddressType[] }[] = [
   {
     value: RestoreWalletType.UNISAT,
-    name: 'UniSat Wallet',
+    name: 'Side Wallet',
     addressTypes: [
       AddressType.P2WPKH,
       AddressType.P2SH_P2WPKH,
@@ -221,8 +221,8 @@ export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressT
 ];
 
 export const NETWORK_TYPES = [
-  // { value: NetworkType.MAINNET, label: 'TESTNET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
-  { value: NetworkType.TESTNET, label: 'grimoria-testnet-1', name: 'testnet', validNames: ['testnet'] }
+  // { value: NetworkType.MAINNET, label: 'DEVNET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
+  { value: NetworkType.TESTNET, label: 'DEVNET', name: 'testnet', validNames: ['testnet'] }
 ];
 
 export const MINIMUM_GAS_LIMIT = 21000;

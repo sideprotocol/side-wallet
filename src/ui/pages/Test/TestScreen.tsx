@@ -208,7 +208,7 @@ function TestApprovalSwitchNetwork() {
     <SwitchNetwork
       params={{
         data: {
-          networkType: NetworkType.MAINNET
+          networkType: NetworkType.TESTNET
         },
         session: {
           origin: 'https://mail.google.com/',

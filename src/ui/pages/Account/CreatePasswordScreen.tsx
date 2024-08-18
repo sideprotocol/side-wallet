@@ -113,8 +113,6 @@ export default function CreatePasswordScreen() {
       <Column
         style={{
           minHeight: '530px',
-          // height: '580px',
-          // overflow: 'hidden',
           flex: 1,
           padding: '0 16px 24px'
         }}>

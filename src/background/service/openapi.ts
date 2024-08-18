@@ -57,18 +57,19 @@ export class OpenApiService {
     this.store = await createPersistStore({
       name: 'openapi',
       template: {
-        host: OPENAPI_URL_MAINNET,
+        host: OPENAPI_URL_TESTNET,
         deviceId: randomstring.generate(12)
       }
     });
 
     if (![OPENAPI_URL_MAINNET, OPENAPI_URL_TESTNET].includes(this.store.host)) {
       const networkType = preferenceService.getNetworkType();
-      if (networkType === NetworkType.MAINNET) {
-        this.store.host = OPENAPI_URL_MAINNET;
-      } else {
-        this.store.host = OPENAPI_URL_TESTNET;
-      }
+      // if (networkType === NetworkType.MAINNET) {
+      //   this.store.host = OPENAPI_URL_MAINNET;
+      // } else {
+      //   this.store.host = OPENAPI_URL_TESTNET;
+      // }
+      this.store.host = OPENAPI_URL_TESTNET;
     }
 
     if (!this.store.deviceId) {

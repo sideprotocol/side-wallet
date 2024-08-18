@@ -105,7 +105,7 @@ const SettingList: Setting[] = [
   // },
   {
     label: 'Network',
-    value: 'MAINNET',
+    value: 'TESTNET',
     icon: 'setting-network',
     desc: '',
     action: 'networkType',

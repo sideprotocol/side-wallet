@@ -15,7 +15,8 @@ export interface SettingsState {
 export const initialState: SettingsState = {
   locale: 'English',
   addressType: AddressType.P2TR,
-  networkType: NetworkType.MAINNET,
+  // networkType: NetworkType.MAINNET,
+  networkType: NetworkType.TESTNET,
   walletConfig: {
     version: '',
     moonPayEnabled: true,
@@ -54,7 +55,8 @@ const slice = createSlice({
     builder.addCase(updateVersion, (state) => {
       // todo
       if (!state.networkType) {
-        state.networkType = NetworkType.MAINNET;
+        // state.networkType = NetworkType.MAINNET;
+        state.networkType = NetworkType.TESTNET;
       }
     });
   }

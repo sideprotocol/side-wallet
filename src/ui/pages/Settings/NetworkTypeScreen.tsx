@@ -70,7 +70,7 @@ export default function NetworkTypeScreen() {
                 itemsCenter
                 classname={item.value != networkType ? 'hover:bg-[#1e1e1f] ' : ''}>
                 <Row itemsCenter>
-                  <Text text={item.label} />
+                  <Text text={item.label === 'DEVNET' ? 'grimoria-testnet-1' : ''} />
                 </Row>
                 <Column>
                   {item.value == networkType && (
