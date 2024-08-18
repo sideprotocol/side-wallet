@@ -82,8 +82,10 @@ export function useSignAndBroadcastTxRaw() {
   const wallet = useWallet();
   const currentAccount = useCurrentAccount();
   const networkType = useNetworkType();
-  const restUrl = networkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET;
-  const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
+  // const restUrl = networkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET;
+  const restUrl = networkType === NetworkType.TESTNET ? SIDEREST_URL_TESTNET : SIDEREST_URL_MAINNET;
+  // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
+  const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
 
   const mockSignAmino = async (tx: CosmosTransaction): Promise<TxRaw> => {
     const accountFromSigner = currentAccount;

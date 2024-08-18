@@ -88,29 +88,32 @@ export function useBlockstreamUrl(chain?: CHAINS_ENUM) {
 
 export function useTxIdUrl(txid: string) {
   const networkType = useNetworkType();
-  if (networkType === NetworkType.MAINNET) {
-    return `https://mempool.space/tx/${txid}`;
-  } else {
-    return `https://mempool.space/testnet/tx/${txid}`;
-  }
+  // if (networkType === NetworkType.MAINNET) {
+  //   return `https://mempool.space/tx/${txid}`;
+  // } else {
+  //   return `https://mempool.space/testnet/tx/${txid}`;
+  // }
+  return `https://mempool.space/testnet/tx/${txid}`;
 }
 
 export function useUnisatWebsite() {
   const networkType = useNetworkType();
-  if (networkType === NetworkType.MAINNET) {
-    return 'https://side.one';
-  } else {
-    return 'https://testnet.side.one';
-  }
+  // if (networkType === NetworkType.MAINNET) {
+  //   return 'https://side.one';
+  // } else {
+  //   return 'https://testnet.side.one';
+  // }
+  return 'https://testnet.side.one';
 }
 
 export function useOrdinalsWebsite() {
   const networkType = useNetworkType();
-  if (networkType === NetworkType.MAINNET) {
-    return 'https://ordinals.com';
-  } else {
-    return 'https://testnet.ordinals.com';
-  }
+  // if (networkType === NetworkType.MAINNET) {
+  //   return 'https://ordinals.com';
+  // } else {
+  //   return 'https://testnet.ordinals.com';
+  // }
+  return 'https://testnet.ordinals.com';
 }
 
 export function useWalletConfig() {

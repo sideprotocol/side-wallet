@@ -54,23 +54,26 @@ export default function BridgeTabScreen() {
 
   const networkType = useNetworkType();
 
-  const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
+  // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
+  const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
 
   const disabled =
     !bridgeAmount || Number(bridgeAmount) === 0 || BigNumber(bridgeAmount || '0').gt(balance || '0') || loading;
 
   useEffect(() => {
-    const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
+    // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
+    const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
 
-    if (networkType === NetworkType.MAINNET) {
+    // if (networkType === NetworkType.MAINNET) {
+    if (networkType === NetworkType.TESTNET) {
       bridgeStore.from = {
         id: chainId,
         name: 'SIDE devnet',
         logo: '/images/logo/wallet-logo-white-v2.svg'
       };
       bridgeStore.to = {
-        id: 'mainnet',
-        name: 'Bitcoin',
+        id: 'LIVENET',
+        name: 'Bitcoin Signet',
         logo: '/images/icons/btc.svg'
       };
     } else {
@@ -80,8 +83,8 @@ export default function BridgeTabScreen() {
         logo: '/images/logo/wallet-logo-white-v2.svg'
       };
       bridgeStore.to = {
-        id: 'LIVENET',
-        name: 'Bitcoin Signet',
+        id: 'mainnet',
+        name: 'Bitcoin',
         logo: '/images/icons/btc.svg'
       };
     }

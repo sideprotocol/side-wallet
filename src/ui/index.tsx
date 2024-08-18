@@ -1,8 +1,8 @@
 import en from 'antd/es/locale/en_US';
 import message from 'antd/lib/message';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import { useIdleTimer } from 'react-idle-timer';
+// import { useIdleTimer } from 'react-idle-timer';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 
@@ -11,7 +11,7 @@ import { EVENTS } from '@/shared/constant';
 import eventBus from '@/shared/eventBus';
 import { Message } from '@/shared/utils';
 import AccountUpdater from '@/ui/state/accounts/updater';
-import { useAppDispatch, useAppSelector } from '@/ui/state/hooks';
+// import { useAppDispatch, useAppSelector } from '@/ui/state/hooks';
 import '@/ui/styles/global.css';
 
 import { ActionComponentProvider } from './components/ActionComponent';
@@ -136,115 +136,8 @@ eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
 });
 
 function Updaters() {
-  const settingsState = useAppSelector((state) => state.settings);
-  const dispatch = useAppDispatch();
-  // const timeout = settingsState.unLockTimeLimit * 60 * 1000
-  const timeout = location.href.split('#')[1] !== '/account/unlock' ? settingsState.unLockTimeLimit * 60 * 1000 : 1000;
-  const promptBeforeIdle = 0;
-  const [state, setState] = useState<string>('Active');
-  const [remaining, setRemaining] = useState<number>(timeout);
-  const [open, setOpen] = useState<boolean>(false);
   const wallet1 = useWallet();
-  // window.lockAccount = () => {
-  //   dispatch(globalActions.update({ isUnlocked: false }));
-  //   const basePath = location.href.split('#')[0];
-  //   location.href = `${basePath}#/account/unlock`;
-  // };
-
-  // useEffect(() => {
-  //   const handleMessage = (message, sender, sendResponse) => {
-  //     if (message.type === 'LOCK_ACCOUNT') {
-  //       console.log('Received auto lock time: seconds');
-  //       wallet1.isUnlocked().then((isUnlocked) => {
-  //         console.log(`isUnlocked: `, isUnlocked);
-  //         if (isUnlocked) return false;
-  //         wallet1.lockWallet();
-  //         dispatch(globalActions.update({ isUnlocked: false }));
-  //         const basePath = location.href.split('#')[0];
-  //         location.href = `${basePath}#/account/unlock`;
-  //       }).catch((err) => {
-  //         console.log(`err: `, err);
-  //       });
-  //     }
-  //   }
-  //   // window.addEventListener('message', handleMessage);
-  //   chrome.runtime.onMessage.addListener(handleMessage);
-  //
-  //   // 重置自动锁屏计时器
-  //   function resetAutoLockTimer() {
-  //     chrome.runtime.sendMessage({ type: 'SET_AUTO_LOCK_TIME', payload: { autoLockTime: localStorage.getItem('unLockTimeLimit') ? Number(localStorage.getItem('unLockTimeLimit')) : 5 } });
-  //   }
-  //
-  //   // 监听 popup.html 上的任何操作,并重置自动锁屏计时器
-  //   document.addEventListener('click', resetAutoLockTimer);
-  //   document.addEventListener('keydown', resetAutoLockTimer);
-  //   document.addEventListener('input', resetAutoLockTimer);
-  //   document.addEventListener('mousemove', resetAutoLockTimer);
-  //
-  //   return () => {
-  //     // window.removeEventListener('message', handleMessage);
-  //     chrome.runtime.onMessage.removeListener(handleMessage);
-  //     document.removeEventListener('click', resetAutoLockTimer);
-  //     document.removeEventListener('keydown', resetAutoLockTimer);
-  //     document.removeEventListener('input', resetAutoLockTimer);
-  //     document.removeEventListener('mousemove', resetAutoLockTimer);
-  //   };
-  // }, []);
-
-  // chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  //   if (message.type === 'LOCK_ACCOUNT') {
-  //     console.log('Received lock account message');
-  //     wallet.lockWallet();
-  //     dispatch(globalActions.update({ isUnlocked: false }));
-  //     const basePath = location.href.split('#')[0];
-  //     location.href = `${basePath}#/account/unlock`;
-  //     if (window.lockAccount) {
-  //       // window.lockAccount();
-  //       sendResponse({ status: 'Account locked' });
-  //     } else {
-  //       console.error('lockAccount method not found');
-  //       sendResponse({ status: 'Failed to lock account' });
-  //     }
-  //   }
-  // });
-  const onIdle = () => {
-    setState('Idle');
-    // console.log(`settingsState: `, settingsState);
-    // wallet1.isUnlocked().then((isUnlocked) => {
-    //   console.log(`isUnlocked: `, isUnlocked);
-    //   if (isUnlocked && !location.href.includes('/account/unlock')) {
-    //     // const basePath = location.href.split('#')[0];
-    //     // location.href = `${basePath}#/account/unlock`;
-    //     dispatch(globalActions.update({ isUnlocked: false }));
-    //     const basePath = location.href.split('#')[0];
-    //     location.href = `${basePath}#/account/unlock`;
-    //   }
-    // })
-  };
-
-  const onActive = () => {
-    setState('Active');
-  };
-
-  const onPrompt = () => {
-    setState('Prompted');
-  };
-
-  const { getRemainingTime, activate } = useIdleTimer({
-    onIdle,
-    onActive,
-    onPrompt,
-    timeout,
-    promptBeforeIdle,
-    throttle: 500
-  });
-
   useEffect(() => {
-    const interval = setInterval(() => {
-      // console.log(`Math.ceil(getRemainingTime() / 1000): `, Math.ceil(getRemainingTime() / 1000));
-      setRemaining(Math.ceil(getRemainingTime() / 1000));
-    }, 1000);
-
     chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], function (result) {
       const ONE_MINUTE = (result.unLockTimeLimit ? Number(result.unLockTimeLimit) : 5) * 60 * 1000;
       let lastActiveTimestamp = result.lastActiveTimestamp || Date.now();
@@ -289,11 +182,8 @@ function Updaters() {
       // 初始化时重置计时器
       resetTimer();
     });
-
-    return () => {
-      clearInterval(interval);
-      // window.removeEventListener('unload', close);
-    };
+    // return () => {
+    // };
   });
   return (
     <>
@@ -301,24 +191,6 @@ function Updaters() {
     </>
   );
 }
-
-// wallet.getLocale().then((locale) => {
-//   addResourceBundle(locale).then(() => {
-//     i18n.changeLanguage(locale);
-//     // ReactDOM.render(<Views wallet={wallet} />, document.getElementById('root'));
-//     const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-//     root.render(
-//       <Provider store={store}>
-//         <WalletProvider {...antdConfig} wallet={wallet as any}>
-//           <AppDimensions>
-//             <Updaters />
-//             <AsyncMainRoute />
-//           </AppDimensions>
-//         </WalletProvider>
-//       </Provider>
-//     );
-//   });
-// });
 
 let root = document.getElementById('root') && ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 if (root) {

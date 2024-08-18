@@ -34,7 +34,8 @@ export const useSendRune = () => {
   const networkType = useNetworkType();
 
   const RUNE_BRIDGE_VAULT =
-    networkType === NetworkType.MAINNET ? SIDE_RUNE_VAULT_ADDRESS_MAINNET : SIDE_RUNE_VAULT_ADDRESS_TESTNET;
+    // networkType === NetworkType.MAINNET ? SIDE_RUNE_VAULT_ADDRESS_MAINNET : SIDE_RUNE_VAULT_ADDRESS_TESTNET;
+    networkType === NetworkType.TESTNET ? SIDE_RUNE_VAULT_ADDRESS_TESTNET : SIDE_RUNE_VAULT_ADDRESS_MAINNET;
 
   const wallet = useWallet();
 
@@ -162,7 +163,8 @@ export const useSendRune = () => {
     const { psbt, toSignInputs } = await sendRunes({
       assetUtxos,
       btcUtxos: btcUtxos.filter((utxo) => utxo.satoshis !== 546),
-      networkType: networkType === NetworkType.MAINNET ? 0 : 1,
+      // networkType: networkType === NetworkType.MAINNET ? 0 : 1,
+      networkType: networkType === NetworkType.TESTNET ? 1 : 0,
       toAddress: to || RUNE_BRIDGE_VAULT,
       assetAddress: senderAddress,
       btcAddress: senderAddress,

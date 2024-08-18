@@ -269,7 +269,8 @@ export const useBridge = () => {
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
   const BTC_BRIDGE_VAULT =
-    networkType === NetworkType.MAINNET ? SIDE_BTC_VAULT_ADDRESS_MAINNET : SIDE_BTC_VAULT_ADDRESS_TESTNET;
+    // networkType === NetworkType.MAINNET ? SIDE_BTC_VAULT_ADDRESS_MAINNET : SIDE_BTC_VAULT_ADDRESS_TESTNET;
+    networkType === NetworkType.TESTNET ? SIDE_BTC_VAULT_ADDRESS_TESTNET : SIDE_BTC_VAULT_ADDRESS_MAINNET;
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 
@@ -374,7 +375,8 @@ export const useBridge = () => {
     const { psbt, toSignInputs } = await sendBTC({
       btcUtxos: btcUtxos.sort((a, b) => b.satoshis - a.satoshis),
       tos: [{ address: BTC_BRIDGE_VAULT, satoshis: amount }],
-      networkType: networkType === NetworkType.MAINNET ? 0 : 1,
+      // networkType: networkType === NetworkType.MAINNET ? 0 : 1,
+      networkType: networkType === NetworkType.TESTNET ? 1 : 0,
       changeAddress: senderAddress,
       feeRate: fee,
       enableRBF: false,
@@ -438,7 +440,8 @@ export const useBridge = () => {
       btcUtxos: btcUtxos.sort((a, b) => b.satoshis - a.satoshis),
 
       tos: [{ address: BTC_BRIDGE_VAULT, satoshis: amount }],
-      networkType: networkType === NetworkType.MAINNET ? 0 : 1,
+      // networkType: networkType === NetworkType.MAINNET ? 0 : 1,
+      networkType: networkType === NetworkType.TESTNET ? 1 : 0,
       changeAddress: senderAddress,
       feeRate: fee,
       enableRBF: false,
@@ -652,7 +655,8 @@ export const useRuneBridge = () => {
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
   const RUNE_BRIDGE_VAULT =
-    networkType === NetworkType.MAINNET ? SIDE_RUNE_VAULT_ADDRESS_MAINNET : SIDE_RUNE_VAULT_ADDRESS_TESTNET;
+    // networkType === NetworkType.MAINNET ? SIDE_RUNE_VAULT_ADDRESS_MAINNET : SIDE_RUNE_VAULT_ADDRESS_TESTNET;
+    networkType === NetworkType.TESTNET ? SIDE_RUNE_VAULT_ADDRESS_TESTNET : SIDE_RUNE_VAULT_ADDRESS_MAINNET;
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 
@@ -900,7 +904,8 @@ export const useRuneBridge = () => {
     const { psbt, toSignInputs } = await sendRunes({
       assetUtxos,
       btcUtxos: btcUtxos.filter((utxo) => utxo.satoshis !== 546),
-      networkType: networkType === NetworkType.MAINNET ? 0 : 1,
+      // networkType: networkType === NetworkType.MAINNET ? 0 : 1,
+      networkType: networkType === NetworkType.TESTNET ? 1 : 0,
       toAddress: to || RUNE_BRIDGE_VAULT,
       assetAddress: senderAddress,
       btcAddress: senderAddress,

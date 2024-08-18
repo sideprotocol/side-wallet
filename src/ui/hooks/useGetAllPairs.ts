@@ -11,7 +11,7 @@ import { useNetworkType } from '@/ui/state/settings/hooks';
 export default function useGetAllPairs() {
   // const { client, curChain } = useWalletContext();
   const networkType = useNetworkType();
-  const restUrl = networkType === NetworkType.MAINNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
+  const restUrl = networkType === NetworkType.TESTNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
   // debugger;
   const { data, isLoading: loading } = useQuery({
     queryKey: ['getAllPairs'],

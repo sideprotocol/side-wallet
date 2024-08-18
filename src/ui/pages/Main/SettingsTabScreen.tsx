@@ -85,24 +85,6 @@ const SettingList: Setting[] = [
     route: '/settings/address-type',
     right: true
   },
-
-  // {
-  //   label: 'Advanced',
-  //   value: 'Advanced settings',
-  //   desc: '',
-  //   action: 'advanced',
-  //   route: '/settings/advanced',
-  //   right: true
-  // },
-
-  // {
-  //   label: 'Connected Sites',
-  //   value: '',
-  //   desc: '',
-  //   action: 'connected-sites',
-  //   route: '/connected-sites',
-  //   right: true
-  // },
   {
     label: 'Network',
     value: 'TESTNET',
@@ -112,15 +94,6 @@ const SettingList: Setting[] = [
     route: '/settings/network-type',
     right: true
   },
-
-  // {
-  //   label: 'Change Password',
-  //   value: 'Change your lockscreen password',
-  //   desc: '',
-  //   action: 'password',
-  //   route: '/settings/password',
-  //   right: true
-  // },
   {
     label: '',
     value: '',
@@ -180,7 +153,8 @@ export default function SettingsTabScreen() {
     }
 
     if (v.action == 'networkType') {
-      v.value = NETWORK_TYPES[networkType].label;
+      console.log(`networkType: `, networkType);
+      v.value = NETWORK_TYPES[0].label;
     }
 
     if (v.action == 'addressType') {

@@ -116,7 +116,6 @@ class PreferenceService {
         firstOpen: false,
         currency: 'USD',
         addressType: AddressType.P2WPKH,
-        // networkType: NetworkType.MAINNET,
         networkType: NetworkType.TESTNET,
         keyringAlianNames: {},
         accountAlianNames: {},

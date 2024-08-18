@@ -29,24 +29,6 @@ export default function NetworkTypeScreen() {
         <Column gap={'md'}>
           {NETWORK_TYPES.map((item, index) => {
             return (
-              // <Card
-              //   key={index}
-              //   onClick={async () => {
-              //     if (item.value == networkType) {
-              //       return;
-              //     }
-              //     await changeNetworkType(item.value);
-              //     reloadAccounts();
-              //     navigate('MainScreen');
-              //     tools.toastSuccess('Network type changed');
-              //   }}>
-              //   <Row full justifyBetween itemsCenter>
-              //     <Row itemsCenter>
-              //       <Text text={item.label}  />
-              //     </Row>
-              //     <Column>{item.value == networkType && <Icon icon="check" />}</Column>
-              //   </Row>
-              // </Card>
               <Row
                 rounded
                 onClick={async () => {
@@ -70,7 +52,7 @@ export default function NetworkTypeScreen() {
                 itemsCenter
                 classname={item.value != networkType ? 'hover:bg-[#1e1e1f] ' : ''}>
                 <Row itemsCenter>
-                  <Text text={item.label === 'DEVNET' ? 'grimoria-testnet-1' : ''} />
+                  <Text text={item.label === 'DEVNET' ? 'grimoria-testnet-1' : item.label} />
                 </Row>
                 <Column>
                   {item.value == networkType && (

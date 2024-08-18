@@ -7,6 +7,8 @@ import { useCreateAccountCallback } from '@/ui/state/global/hooks';
 
 import { useNavigate } from '../../MainRoute';
 import { ContextData, UpdateContextDataParams } from './type';
+import { useChangeNetworkTypeCallback } from '@/ui/state/settings/hooks';
+import { useReloadAccounts } from '@/ui/state/accounts/hooks';
 
 export default function Step2_SetName({
   contextData,
@@ -15,6 +17,8 @@ export default function Step2_SetName({
   contextData: ContextData;
   updateContextData: (params: UpdateContextDataParams) => void;
 }) {
+  const changeNetworkType = useChangeNetworkTypeCallback();
+  const reloadAccounts = useReloadAccounts();
   const createAccount = useCreateAccountCallback();
   const navigate = useNavigate();
   const tools = useTools();
@@ -56,6 +60,8 @@ export default function Step2_SetName({
       const option = hdPathOptions[contextData.addressTypeIndex];
       const hdPath = contextData.customHdPath || option.hdPath;
       await createAccount(contextData.mnemonics, hdPath, contextData.passphrase, contextData.addressType, 1, alianName);
+      changeNetworkType(1);
+      reloadAccounts();
       navigate('MainScreen');
     } catch (e) {
       tools.toastError((e as any).message);

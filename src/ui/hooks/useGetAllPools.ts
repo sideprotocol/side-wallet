@@ -16,7 +16,8 @@ export default function useGetAllPools() {
   const networkType = useNetworkType();
   const currentAccount = useCurrentAccount();
   const { data: pairs } = useGetAllPairs();
-  const restUrl = networkType === NetworkType.MAINNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
+  // const restUrl = networkType === NetworkType.MAINNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
+  const restUrl = networkType === NetworkType.TESTNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
 
   const { data, isLoading: loading } = useQuery({
     queryKey: ['getAllPools'],

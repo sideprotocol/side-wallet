@@ -23,7 +23,7 @@ export function FeeRateBar({ readonly, onChange }: { readonly?: boolean; onChang
   const [feeOptions, setFeeOptions] = useState<{ title: string; desc?: string; feeRate: number }[]>([]);
   const networkType = useNetworkType();
 
-  const isMainnet = networkType === NetworkType.MAINNET;
+  const isMainnet = networkType !== NetworkType.TESTNET;
 
   useEffect(() => {
     if (!isMainnet) {

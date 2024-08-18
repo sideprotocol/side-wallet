@@ -25,7 +25,8 @@ export function useGetSideTokenBalance(base: string, flag?: boolean) {
     const _balanceAmount = await wallet.getAccountSideTokenBalance(currentAccount.address, base);
     setBalanceAmount(_balanceAmount);
     const cosmwasmClient = await CosmWasmClient.connect(
-      networkType === NetworkType.MAINNET ? SIDERPC_URL_MAINNET : SIDERPC_URL_TESTNET
+      // networkType === NetworkType.MAINNET ? SIDERPC_URL_MAINNET : SIDERPC_URL_TESTNET
+      networkType === NetworkType.TESTNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_MAINNET
     );
     console.log('SIDERPC_URL_TESTNET: ', SIDERPC_URL_TESTNET);
     const { amount } = await cosmwasmClient.getBalance(currentAccount.address, base);

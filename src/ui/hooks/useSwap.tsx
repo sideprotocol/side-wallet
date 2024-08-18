@@ -78,7 +78,8 @@ export default function useSwap() {
     timer.current = setTimeout(async () => {
       try {
         await services.tx.getTxByHash(txHash, {
-          baseURL: netWorkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET
+          // baseURL: netWorkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET
+          baseURL: netWorkType === NetworkType.TESTNET ? SIDEREST_URL_TESTNET : SIDEREST_URL_MAINNET
         });
 
         refreshData(async () => {

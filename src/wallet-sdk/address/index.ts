@@ -70,7 +70,7 @@ export function addressToScriptPk(address: string, networkType: NetworkType) {
 /**
  * Check if the address is valid.
  */
-export function isValidAddress(address: string, networkType: NetworkType = NetworkType.MAINNET) {
+export function isValidAddress(address: string, networkType: NetworkType = NetworkType.TESTNET) {
   let error;
   try {
     bitcoin.address.toOutputScript(address, toPsbtNetwork(networkType));
