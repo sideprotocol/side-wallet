@@ -101,7 +101,7 @@ export default function ReceiveScreen() {
                     padding: '0'
                   }}
                   color="black"
-                  text={state?.token?.name === 'Bitcoin' ? 'BTC' : state?.token?.name}></Text>
+                  text={state?.token?.name === 'Bitcoin' ? 'BTC' : state?.token?.symbol}></Text>
               </Row>
 
               <Row>
@@ -111,9 +111,10 @@ export default function ReceiveScreen() {
                     borderRadius: '8px'
                   }}
                   color="black"
-                  bg="orange"
+                  // bg="orange"
+                  bg={state?.base === 'BTC' ? 'orange' : 'primary'}
                   preset="sub"
-                  text={state?.base === 'BTC' ? 'Bitcoin' : 'Side'}></Text>
+                  text={state?.base === 'BTC' ? 'Bitcoin' : 'Side Chain'}></Text>
 
                 <Text
                   style={{
