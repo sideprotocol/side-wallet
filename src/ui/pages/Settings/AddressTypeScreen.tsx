@@ -95,8 +95,8 @@ export default function AddressTypeScreen() {
         }}>
         <Column>
           {addressTypes.map((item, index) => {
-            const address = addresses[item.value];
-            const assets = addressAssets[address] || {
+            const address = addresses?.[item.value];
+            const assets = addressAssets?.[address] || {
               total_btc: '--',
               satoshis: 0,
               total_inscription: 0

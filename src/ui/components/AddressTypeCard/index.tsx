@@ -20,7 +20,7 @@ interface AddressTypeCardProps {
 }
 export function AddressTypeCard(props: AddressTypeCardProps) {
   const { onClick, label, address, checked, assets } = props;
-  const hasVault = Boolean(assets.satoshis && assets.satoshis > 0);
+  const hasVault = Boolean(assets?.satoshis && assets?.satoshis > 0);
   return (
     <Card
       preset={checked ? 'styleChecked' : 'styleNotCheck'}
@@ -59,7 +59,7 @@ export function AddressTypeCard(props: AddressTypeCardProps) {
             </Row>
 
             <Row>
-              {assets.total_inscription > 0 && (
+              {assets?.total_inscription > 0 && (
                 <Text text={`${assets.total_inscription} INSCRIPTIONS`} color="gold" preset="bold" />
               )}
             </Row>

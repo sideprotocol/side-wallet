@@ -31,7 +31,7 @@ class AssetReplacePlugin {
         const replaceFn = replaceArr
           .map(([k, assetName]) => {
             // github.com/webpack/webpack-sources/blob/master/lib/ConcatSource.js
-            const content = compilation.assets[assetName]?.source();
+            const content = compilation?.assets?.[assetName]?.source();
 
             return (source) => {
               return source.split(new RegExp(`['"]?${k}['"]?`)).join(JSON.stringify(content));

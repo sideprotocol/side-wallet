@@ -20,12 +20,11 @@ export default function useGetTokenPrice() {
   const getAssetPrice = async () => {
     const sideAssets = ASSETS.find((item) => item.chainID === SIDE_ID);
     const priceMap: { [key: string]: string } = {};
-    if (!sideAssets) return;
-    for (let i = 0; i < sideAssets.assets.length; i++) {
-      const asset = sideAssets.assets[i];
+    for (let i = 0; i < sideAssets?.assets?.length; i++) {
+      const asset = sideAssets?.assets[i];
       try {
-        const result = await services.dex.getAssetPrice(asset.base);
-        priceMap[asset.base] = result;
+        const result = await services.dex.getAssetPrice(asset?.base);
+        priceMap[asset?.base] = result;
       } catch (err) {
         console.log(err);
       }

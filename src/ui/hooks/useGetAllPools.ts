@@ -37,7 +37,7 @@ export default function useGetAllPools() {
           };
           const pool = await cosmWasmClient.queryContractSmart(address, msg);
 
-          const assetsMeta = pool.assets.map((a: any) => {
+          const assetsMeta = pool?.assets.map((a: any) => {
             return findAssetIcon({
               denom: a.info.native_token.denom,
               amount: '',
