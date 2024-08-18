@@ -9,6 +9,7 @@ import { sizes } from '@/ui/theme/spacing';
 import { copyToClipboard } from '@/ui/utils';
 
 import './index.less';
+import ImageIcon from '@/ui/components/ImageIcon';
 
 function getAddressTypeUrl(address: string, chain: string) {
   if (address.startsWith('tb1') || chain === 'side') {
@@ -86,12 +87,20 @@ export default function ReceiveScreen() {
             borderRadius: '14px'
           }}>
           <Row full itemsCenter>
-            <Image
-              size={42}
+            <ImageIcon
+              url={state?.token?.logo_black ? state?.token?.logo_black : state?.token?.logo}
               style={{
-                borderRadius: '100%'
+                width: '42px',
+                height: '42px',
+                borderRadius: '50%'
               }}
-              src={state?.token?.logo_black ? state?.token?.logo_black : state?.token?.logo}></Image>
+            />
+            {/*<Image*/}
+            {/*  size={42}*/}
+            {/*  style={{*/}
+            {/*    borderRadius: '100%'*/}
+            {/*  }}*/}
+            {/*  src={state?.token?.logo_black ? state?.token?.logo_black : state?.token?.logo}></Image>*/}
 
             <Column>
               <Row>

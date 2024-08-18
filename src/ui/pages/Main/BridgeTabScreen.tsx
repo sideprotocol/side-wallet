@@ -67,14 +67,15 @@ export default function BridgeTabScreen() {
     // if (networkType === NetworkType.MAINNET) {
     if (networkType === NetworkType.TESTNET) {
       bridgeStore.from = {
-        id: chainId,
-        name: 'SIDE devnet',
-        logo: '/images/logo/wallet-logo-white-v2.svg'
-      };
-      bridgeStore.to = {
         id: 'LIVENET',
         name: 'Bitcoin Signet',
         logo: '/images/icons/btc.svg'
+      };
+      bridgeStore.to = {
+        id: chainId,
+        name: 'Side Chain',
+        // logo: '/images/icons/btc.svg'
+        logo: '/images/logo/wallet-logo-white-v2.svg'
       };
     } else {
       bridgeStore.from = {
@@ -275,13 +276,13 @@ export default function BridgeTabScreen() {
                   Amount
                 </div>
 
-                <div className={'flex gap-[8px]'}>
-                  <img src={WalletIcon} alt="" />
+                <div className={'flex gap-[5px] items-center'}>
+                  <img className={'w-[14px] h-[14px]'} src={WalletIcon} alt="" />
 
                   <Text
                     size="sm"
                     style={{
-                      paddingLeft: '3px'
+                      // paddingLeft: '3px'
                     }}>
                     {balance}
                   </Text>

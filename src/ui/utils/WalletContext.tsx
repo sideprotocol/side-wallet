@@ -38,14 +38,14 @@ import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 
 export interface WalletController {
   openapi: {
-    [key: string]: (...params: any) => Promise<any>;
+    [key: string]: () => Promise<any>;
   };
 
-  boot(password: string): Promise<void>;
+  boot(): Promise<void>;
   isBooted(): Promise<boolean>;
 
-  getApproval(): Promise<any>;
-  resolveApproval(data?: any, data2?: any): Promise<void>;
+  getApproval(): Promise<void>;
+  resolveApproval(data?: any): Promise<void>;
   rejectApproval(data?: any, data2?: any, data3?: any): Promise<void>;
 
   hasVault(): Promise<boolean>;

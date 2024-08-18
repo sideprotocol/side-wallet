@@ -73,8 +73,8 @@ export function useReadTab() {
     async (name: 'app' | 'home' | 'settings' | 'bridge' | 'summon') => {
       await wallet.readTab(name);
       if (name == 'app') {
-        const appSummary = await wallet.getAppSummary();
-        dispatch(accountActions.setAppSummary(appSummary));
+        // const appSummary = await wallet.getAppSummary();
+        // dispatch(accountActions.setAppSummary(appSummary));
       }
     },
     [dispatch, wallet, appSummary]
@@ -230,11 +230,11 @@ export function useReloadAccounts() {
     const account = await wallet.getCurrentAccount();
     dispatch(accountActions.setCurrent(account));
 
-    dispatch(accountActions.expireBalance());
-    dispatch(accountActions.expireInscriptions());
+    // dispatch(accountActions.expireBalance());
+    // dispatch(accountActions.expireInscriptions());
 
-    wallet.getWalletConfig().then((data) => {
-      dispatch(settingsActions.updateSettings({ walletConfig: data }));
-    });
+    // wallet.getWalletConfig().then((data) => {
+    //   dispatch(settingsActions.updateSettings({ walletConfig: data }));
+    // });
   }, [dispatch, wallet]);
 }

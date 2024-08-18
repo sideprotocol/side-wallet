@@ -380,7 +380,7 @@ export function useNavigate() {
 const Main = () => {
   const wallet = useWallet();
   const dispatch = useAppDispatch();
-
+  // const navigate = useNavigate();
   const isReady = useIsReady();
   const isUnlocked = useIsUnlocked();
   // console.log(`isUnlocked: `, isUnlocked);
@@ -423,23 +423,23 @@ const Main = () => {
       }
 
       if (!self.summaryLoaded) {
-        wallet.getInscriptionSummary().then((data) => {
-          dispatch(accountActions.setInscriptionSummary(data));
-        });
+        // wallet.getInscriptionSummary().then((data) => {
+        //   dispatch(accountActions.setInscriptionSummary(data));
+        // });
 
-        wallet.getAppSummary().then((data) => {
-          dispatch(accountActions.setAppSummary(data));
-        });
+        // wallet.getAppSummary().then((data) => {
+        //   dispatch(accountActions.setAppSummary(data));
+        // });
         self.summaryLoaded = true;
       }
 
       if (!self.configLoaded) {
-        wallet.getWalletConfig().then((data) => {
-          dispatch(settingsActions.updateSettings({ walletConfig: data }));
-        });
-        wallet.getSkippedVersion().then((data) => {
-          dispatch(settingsActions.updateSettings({ skippedVersion: data }));
-        });
+        // wallet.getWalletConfig().then((data) => {
+        //   dispatch(settingsActions.updateSettings({ walletConfig: data }));
+        // });
+        // wallet.getSkippedVersion().then((data) => {
+        //   dispatch(settingsActions.updateSettings({ skippedVersion: data }));
+        // });
       }
 
       dispatch(globalActions.update({ isReady: true }));
@@ -457,6 +457,7 @@ const Main = () => {
           if (!isUnlocked && location.href.includes(routes.UnlockScreen.path) === false) {
             const basePath = location.href.split('#')[0];
             location.href = `${basePath}#${routes.UnlockScreen.path}`;
+            // navigate(`${basePath}#${routes.UnlockScreen.path}`);
           }
         });
       }

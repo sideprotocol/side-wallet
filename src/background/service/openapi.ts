@@ -78,7 +78,7 @@ export class OpenApiService {
 
     const getConfig = async () => {
       try {
-        this.store.config = await this.getWalletConfig();
+        // this.store.config = await this.getWalletConfig();
       } catch (e) {
         this.store.config = {
           version: '0.0.0',
