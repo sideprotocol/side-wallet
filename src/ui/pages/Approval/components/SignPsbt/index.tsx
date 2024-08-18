@@ -1149,7 +1149,7 @@ export default function SignPsbt({
           <Button
             preset="primary"
             // icon={txInfo.decodedPsbt.risks.length > 0 ? 'risk' : undefined}
-            text={type == TxType.SIGN_TX ? 'Sign' : 'Sign & Pay'}
+            text={type == TxType.SIGN_TX ? 'Sign' : 'Sign'}
             onClick={() => {
               if (txInfo.decodedPsbt.risks.length > 0) {
                 setIsPsbtRiskPopoverVisible(true);
