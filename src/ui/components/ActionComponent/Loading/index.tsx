@@ -31,8 +31,9 @@ export function Loading(props: LoadingProps) {
       <div style={$baseViewStyle}>
         <LoadingOutlined
           style={{
-            fontSize: fontSizes.icon,
-            color: colors.primary
+            fontSize: fontSizes.logo,
+            color: colors.primary,
+            fontWeight: 600
           }}
         />
         {text && <Text text={text} preset="title" color="orange" />}

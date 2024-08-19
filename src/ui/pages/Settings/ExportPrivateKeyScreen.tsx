@@ -93,7 +93,7 @@ export default function ExportPrivateKeyScreen() {
             </Column>
             <Text
               text="Password"
-              color="white"
+              color="search_icon"
               style={{
                 fontSize: '14px',
                 lineHeight: '24px'
@@ -165,16 +165,19 @@ export default function ExportPrivateKeyScreen() {
                   {/*  }}>*/}
                   {/*  <Image src="/images/icons/copy-03.svg" size={16} />*/}
                   {/*</span>*/}
-                  <div className={'inline-block cursor-pointer'}
+                  <div
+                    className={'inline-block cursor-pointer'}
                     onMouseOver={handleMouseOver}
                     onMouseLeave={handleMouseLeave}
                     onClick={(e) => {
                       copy(privateKey.wif);
                       setIsClickCopy(true);
                     }}
-                    style={{
-                      // marginTop: '8px'
-                    }}>
+                    style={
+                      {
+                        // marginTop: '8px'
+                      }
+                    }>
                     <Icon
                       className={'inline-block relative top-[5px] ml-[5px] mr-[2px]'}
                       icon={isClickCopy ? 'check-circle-broken' : 'copy2'}

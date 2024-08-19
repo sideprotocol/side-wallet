@@ -55,20 +55,7 @@ export default function NetworkTypeScreen() {
                   <Text text={item.label === 'DEVNET' ? 'grimoria-testnet-1' : item.label} />
                 </Row>
                 <Column>
-                  {item.value == networkType && (
-                    <div
-                      style={{
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: '4px',
-                        backgroundColor: '#22AB38',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}>
-                      <Icon color={'white'} icon="check-square" />
-                    </div>
-                  )}
+                  {item.value == networkType && <Icon color={'green'} contain={'contain'} icon="check-circle" />}
                 </Column>
               </Row>
             );

@@ -45,18 +45,7 @@ export default function CurrencyTypeScreen() {
               <Text text={'USD'} />
             </Row>
             <Column>
-              <div
-                style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '4px',
-                  backgroundColor: '#22AB38',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}>
-                <Icon color={'white'} icon="check-square" />
-              </div>
+              <Icon color={'green'} contain={'contain'} icon="check-circle" />
             </Column>
           </Row>
         </Column>

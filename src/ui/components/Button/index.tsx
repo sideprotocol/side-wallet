@@ -68,7 +68,8 @@ const $baseViewStyle: CSSProperties = {
   alignSelf: 'stretch',
   fontWeight: 600,
   paddingLeft: spacing.small,
-  paddingRight: spacing.small
+  paddingRight: spacing.small,
+  fontSize: '14px'
 };
 
 // button view theme

@@ -60,7 +60,7 @@ export default function AutoLockScreen() {
         </Column>
 
         <Column>
-          <Text color={'white'} preset="sub" text={'Duration (minutes)'}></Text>
+          <Text color={'search_icon'} preset="sub" text={'Duration (minutes)'}></Text>
 
           <Input
             preset={'amount'}
