@@ -17,8 +17,13 @@ export default function BitcoinTxConfirmScreen() {
     <SignPsbt
       header={
         <Header
+          title="Signature request"
           onBack={() => {
             window.history.go(-1);
+          }}
+          style={{
+            fontWeight: 600,
+            fontSize: 20
           }}
         />
       }

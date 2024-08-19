@@ -162,7 +162,7 @@ export const useSendRune = () => {
 
     const { psbt, toSignInputs } = await sendRunes({
       assetUtxos,
-      btcUtxos: btcUtxos.filter((utxo) => utxo.satoshis !== 546),
+      btcUtxos: btcUtxos.filter((utxo) => utxo.satoshis !== 546).sort((a, b) => b.satoshis - a.satoshis),
       // networkType: networkType === NetworkType.MAINNET ? 0 : 1,
       networkType: networkType === NetworkType.TESTNET ? 1 : 0,
       toAddress: to || RUNE_BRIDGE_VAULT,

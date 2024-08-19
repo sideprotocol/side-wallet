@@ -194,6 +194,8 @@ export default function CreateSendRune() {
           />
         </Column>
 
+        {error && <Text text={error} color="error" />}
+
         <Column mt="lg">
           <Text text="Fee" color="white" mb="sm" />
 
@@ -214,7 +216,6 @@ export default function CreateSendRune() {
         </Column>
 
         <Column mt="lg">
-          {error && <Text text={error} color="error" />}
           <Button
             disabled={disabled || !!error}
             preset="primary"

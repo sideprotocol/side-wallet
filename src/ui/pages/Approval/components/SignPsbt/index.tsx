@@ -771,75 +771,77 @@ export default function SignPsbt({
       {header}
       <Content>
         <Column gap="xl">
-          <Row
-            itemsCenter
-            justifyBetween
-            mt="md"
-            style={{
-              background: '#1E1E1F',
-              border: '1px solid #FFFFFF1A',
-              padding: '16px 10px 16px 10px',
-              borderRadius: '8px',
-              position: 'relative'
-            }}>
-            <Column
+          {session && (
+            <Row
+              itemsCenter
+              justifyBetween
+              mt="md"
               style={{
-                width: '90%'
+                background: '#1E1E1F',
+                border: '1px solid #FFFFFF1A',
+                padding: '16px 10px 16px 10px',
+                borderRadius: '8px',
+                position: 'relative'
               }}>
-              <Text
+              <Column
                 style={{
-                  fontWeight: '500',
-                  fontSize: '16px'
-                }}>
-                Account connected
-              </Text>
-
-              <Text
-                size="sm"
-                style={{
-                  color: 'white',
-                  opacity: '0.5',
-                  wordBreak: 'break-word'
-                }}>
-                {currentAccount.address}
-              </Text>
-
-              <Row
-                itemsCenter
-                style={{
-                  gap: '4px',
-                  borderRadius: '10px',
-                  backgroundColor: '#0DD4C3',
-                  padding: '4px 10px',
-                  fontSize: '12px',
-                  width: 'max-content',
-                  color: 'black'
+                  width: '90%'
                 }}>
                 <Text
                   style={{
-                    fontWeight: '600',
-                    color: 'black'
+                    fontWeight: '500',
+                    fontSize: '16px'
                   }}>
-                  {currentKeyring.alianName}
+                  Account connected
                 </Text>
 
                 <Text
+                  size="sm"
                   style={{
-                    fontWeight: '600',
-                    color: 'black'
+                    color: 'white',
+                    opacity: '0.5',
+                    wordBreak: 'break-word'
                   }}>
-                  /
+                  {currentAccount.address}
                 </Text>
 
-                <Text
+                <Row
+                  itemsCenter
                   style={{
+                    gap: '4px',
+                    borderRadius: '10px',
+                    backgroundColor: '#0DD4C3',
+                    padding: '4px 10px',
+                    fontSize: '12px',
+                    width: 'max-content',
                     color: 'black'
                   }}>
-                  {currentAccount.alianName}
-                </Text>
-              </Row>
-            </Column>
-          </Row>
+                  <Text
+                    style={{
+                      fontWeight: '600',
+                      color: 'black'
+                    }}>
+                    {currentKeyring.alianName}
+                  </Text>
+
+                  <Text
+                    style={{
+                      fontWeight: '600',
+                      color: 'black'
+                    }}>
+                    /
+                  </Text>
+
+                  <Text
+                    style={{
+                      color: 'black'
+                    }}>
+                    {currentAccount.alianName}
+                  </Text>
+                </Row>
+              </Column>
+            </Row>
+          )}
 
           {detailsComponent}
           {canChanged == false && (
@@ -1149,7 +1151,7 @@ export default function SignPsbt({
           <Button
             preset="primary"
             // icon={txInfo.decodedPsbt.risks.length > 0 ? 'risk' : undefined}
-            text={type == TxType.SIGN_TX ? 'Sign' : 'Sign'}
+            text={'Sign'}
             onClick={() => {
               if (txInfo.decodedPsbt.risks.length > 0) {
                 setIsPsbtRiskPopoverVisible(true);
