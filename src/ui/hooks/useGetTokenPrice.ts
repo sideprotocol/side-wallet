@@ -20,6 +20,7 @@ export default function useGetTokenPrice() {
   const getAssetPrice = async () => {
     const sideAssets = ASSETS.find((item) => item.chainID === SIDE_ID);
     const priceMap: { [key: string]: string } = {};
+    if (!sideAssets) return;
     for (let i = 0; i < sideAssets?.assets?.length; i++) {
       const asset = sideAssets?.assets[i];
       try {
