@@ -10,8 +10,8 @@ import {
 import { NetworkType, RawTxInfo } from '@/shared/types';
 import { DepositBTCBridge } from '@/ui/stores/BridgeStore';
 import { useWallet } from '@/ui/utils';
-import { UnspentOutput } from '@/wallet-sdk';
-import { sendRunes } from '@/wallet-sdk/tx-helpers';
+import { UnspentOutput } from '@unisat/wallet-sdk';
+import { sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
 
 import { useCurrentAccount } from '../accounts/hooks';
 import { useNetworkType } from '../settings/hooks';

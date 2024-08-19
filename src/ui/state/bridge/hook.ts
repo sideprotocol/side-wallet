@@ -22,8 +22,8 @@ import { useNavigate } from '@/ui/pages/MainRoute';
 import { DepositBTCBridge, bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-import { sendBTC, sendRunes } from '@/wallet-sdk/tx-helpers';
 import { UnspentOutput } from '@unisat/wallet-sdk';
+import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
 
 import { useCurrentAccount } from '../accounts/hooks';
 import { useNetworkType } from '../settings/hooks';

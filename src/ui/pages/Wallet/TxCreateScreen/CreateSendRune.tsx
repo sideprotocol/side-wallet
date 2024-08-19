@@ -14,7 +14,7 @@ import { useSendRune } from '@/ui/state/send/hook';
 import { useBitcoinTx, useFetchUtxosCallback, useSafeBalance } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { parseUnitAmount, useLocationState } from '@/ui/utils';
-import { getAddressUtxoDust } from '@/wallet-sdk/transaction';
+import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
 
 interface LocationState {
   base: string;
