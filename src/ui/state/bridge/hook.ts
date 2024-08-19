@@ -189,6 +189,7 @@ export const useBitcoinBtcBalance = () => {
   const currentAccount = useCurrentAccount();
 
   const [btcBalance, setBtcBalance] = useState('0');
+  const [notBtcBalance, setNotBtcBalance] = useState('0');
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -216,12 +217,32 @@ export const useBitcoinBtcBalance = () => {
 
       return isRune && !tx.status.confirmed;
     });
+    const allRunes = txs.filter((tx) => {
+      return tx.vout.find(
+        (out) => Number(out.value) === 546 && out.scriptpubkey_address === currentAccount.address
+      );
+    });
+    const unconfirmedBTC = txs.filter((tx) => {
+      const notRune = tx.vout.find(
+        (out) => Number(out.value) !== 546 && out.scriptpubkey_address === currentAccount.address
+      );
+
+      return notRune && !tx.status.confirmed;
+    });
+
+    // const unConfirmBtc = txs.filter((tx) => {
+    //   return tx.vout.find(
+    //     (out) => Number(out.value) !== 546 &&  && out.scriptpubkey_address === currentAccount.address
+    //   );
+    // });
 
     let balance = BigNumber(addressInfo.mempool_stats.funded_txo_sum)
       .minus(addressInfo.mempool_stats.spent_txo_sum)
       .plus(addressInfo.chain_stats.funded_txo_sum)
       .minus(addressInfo.chain_stats.spent_txo_sum);
 
+    let unConfirmBalance = BigNumber(0);
+    // console.log(`outputs: `, outputs, balance, txs);
     outputs.forEach((output) => {
       const hasRune = Object.keys(output.runes).length > 0;
 
@@ -233,22 +254,35 @@ export const useBitcoinBtcBalance = () => {
     unconfirmedRunes.forEach((_) => {
       balance = balance.minus(546);
     });
+    allRunes?.forEach((_) => {
+      unConfirmBalance = unConfirmBalance.plus(546);
+    });
+    // console.log(`unconfirmedBTC: `, unconfirmedBTC);
+    unconfirmedBTC?.forEach((_) => {
+      unConfirmBalance = unConfirmBalance.plus(546);
+    });
+    const ba = toReadableAmount(balance.toFixed(), 8);
+    const _dataUnConfirmBalance = toReadableAmount(unConfirmBalance.toFixed(), 8);
 
-    const _data = toReadableAmount(balance.toFixed(), 8);
-
-    return _data;
+    return { ba, unba: _dataUnConfirmBalance };
   }
-
   // load btc balance
   useEffect(() => {
     setLoading(true);
     getBtcBalance()
-      .then(setBtcBalance)
+      .then(({ba, unba}) => {
+        setBtcBalance(ba);
+        setNotBtcBalance(unba);
+      })
       .finally(() => setLoading(false));
   }, [currentAccount.address]);
 
+  // console.log(`btcBalance: `, btcBalance);
   return {
-    data: btcBalance,
+    data: {
+      btc: btcBalance,
+      notBtc: notBtcBalance,
+    },
     loading
   };
 };
@@ -337,7 +371,7 @@ export const useBridge = () => {
   const wallet = useWallet();
 
   const depositBTC = async (params: DepositBTCBridge) => {
-    const { amount, fee } = params;
+    const { amount, fee, to } = params;
     const senderAddress = currentAccount.address;
 
     const rawUtxos = (
@@ -374,7 +408,7 @@ export const useBridge = () => {
 
     const { psbt, toSignInputs } = await sendBTC({
       btcUtxos: btcUtxos.sort((a, b) => b.satoshis - a.satoshis),
-      tos: [{ address: BTC_BRIDGE_VAULT, satoshis: amount }],
+      tos: [{ address: to || BTC_BRIDGE_VAULT, satoshis: amount }],
       // networkType: networkType === NetworkType.MAINNET ? 0 : 1,
       networkType: networkType === NetworkType.TESTNET ? 1 : 0,
       changeAddress: senderAddress,
@@ -452,7 +486,7 @@ export const useBridge = () => {
     return { networkFee, walletInputs };
   }
 
-  return { bridge, estimateNetworkFee };
+  return { bridge, estimateNetworkFee, depositBTC };
 };
 
 export const useRuneBalances = () => {
@@ -613,8 +647,9 @@ export const useRuneAndBtcBalances = () => {
 
   const satItem = assets.find((a) => a.base === 'sat');
 
-  const { data: bitcoinBtcBalance, loading: btcLoaing } = useBitcoinBtcBalance();
+  const { data: {btc: bitcoinBtcBalance, notBtc: bitcoinNotBtcBalance}, loading: btcLoaing } = useBitcoinBtcBalance();
 
+  let balance = BigNumber(bitcoinBtcBalance || '0').plus(bitcoinNotBtcBalance);
   const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
   const balancePrice = priceMap?.[satItem?.base || ''] || 0;
@@ -628,8 +663,11 @@ export const useRuneAndBtcBalances = () => {
   return [
     {
       ...satItem,
-      balance: bitcoinBtcBalance,
+      balance: balance?.toString(),
+      balanceAva: bitcoinBtcBalance,
+      balanceNot: bitcoinNotBtcBalance,
       amount: toUnitAmount(bitcoinBtcBalance || '0', 8),
+      amountNot: toUnitAmount(bitcoinNotBtcBalance || '0', 8),
       denom: satItem?.base,
       price
     },

@@ -19,7 +19,9 @@ import {
 } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { amountToSatoshis, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
+import { amountToSatoshis, isValidAddress, parseUnitAmount, satoshisToAmount, useLocationState } from '@/ui/utils';
+import { useBridge } from '@/ui/state/bridge/hook';
+import BigNumber from 'bignumber.js';
 
 interface LocationState {
   base: string;
@@ -31,6 +33,7 @@ export default function CreateSendBtc() {
   const safeBalance = useSafeBalance();
   const navigate = useNavigate();
   const bitcoinTx = useBitcoinTx();
+  const { depositBTC } = useBridge();
 
   const { base, token } = useLocationState<LocationState>();
 
@@ -96,7 +99,7 @@ export default function CreateSendBtc() {
 
   useEffect(() => {
     setError('');
-    setDisabled(true);
+    setDisabled(false);
 
     if (!isValidAddress(toInfo.address)) {
       return;
@@ -104,47 +107,58 @@ export default function CreateSendBtc() {
     if (!toSatoshis) {
       return;
     }
-    if (toSatoshis < COIN_DUST) {
-      setError(`Amount must be at least ${dustAmount} BTC`);
-      return;
-    }
-
-    if (toSatoshis > avaiableSatoshis + spendUnavailableSatoshis) {
-      setError('Amount exceeds your available balance');
-      return;
-    }
+    // if (toSatoshis < COIN_DUST) {
+    //   setError(`Amount must be at least ${dustAmount} BTC`);
+    //   return;
+    // }
+    //
+    // if (toSatoshis > avaiableSatoshis + spendUnavailableSatoshis) {
+    //   setError('Amount exceeds your available balance');
+    //   return;
+    // }
 
     if (feeRate <= 0) {
       return;
     }
 
-    if (
-      toInfo.address == bitcoinTx.toAddress &&
-      toSatoshis == bitcoinTx.toSatoshis &&
-      feeRate == bitcoinTx.feeRate &&
-      enableRBF == bitcoinTx.enableRBF
-    ) {
-      //Prevent repeated triggering caused by setAmount
-      setDisabled(false);
-      return;
-    }
+    // if (
+    //   toInfo.address == bitcoinTx.toAddress &&
+    //   toSatoshis == bitcoinTx.toSatoshis &&
+    //   feeRate == bitcoinTx.feeRate &&
+    //   enableRBF == bitcoinTx.enableRBF
+    // ) {
+    //   //Prevent repeated triggering caused by setAmount
+    //   setDisabled(false);
+    //   return;
+    // }
 
-    prepareSendBTC({ toAddressInfo: toInfo, toAmount: toSatoshis, feeRate, enableRBF })
-      .then((data) => {
-        // if (data.fee < data.estimateFee) {
-        //   setError(`Network fee must be at leat ${data.estimateFee}`);
-        //   return;
-        // }
-        setRawTxInfo(data);
-        setDisabled(false);
-      })
-      .catch((e) => {
-        console.log(e);
-        setError(e.message);
-      });
+    // if (
+    //   toInfo.address == bitcoinTx.toAddress &&
+    //   toSatoshis == bitcoinTx.toSatoshis &&
+    //   feeRate == bitcoinTx.feeRate &&
+    //   enableRBF == bitcoinTx.enableRBF
+    // ) {
+    //   //Prevent repeated triggering caused by setAmount
+    //   setDisabled(false);
+    //   return;
+    // }
+
+    // prepareSendBTC({ toAddressInfo: toInfo, toAmount: toSatoshis, feeRate, enableRBF })
+    //   .then((data) => {
+    //     // if (data.fee < data.estimateFee) {
+    //     //   setError(`Network fee must be at leat ${data.estimateFee}`);
+    //     //   return;
+    //     // }
+    //     setRawTxInfo(data);
+    //     setDisabled(false);
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //     setError(e.message);
+    //   });
   }, [toInfo, inputAmount, feeRate, enableRBF]);
 
-  const isRune = !!token?.denom?.includes('runes');
+  // console.log(`token: `, token);
 
   return (
     <Layout
@@ -215,14 +229,17 @@ export default function CreateSendBtc() {
               if (autoAdjust) {
                 setAutoAdjust(false);
               }
+              setError('');
               setUiState({ inputAmount: amount });
             }}
             enableMax={true}
             onMaxClick={() => {
               setAutoAdjust(true);
-              setUiState({ inputAmount: totalAvailableAmount.toString() });
+              // setUiState({ inputAmount: totalAvailableAmount.toString() });
+              setUiState({ inputAmount: token?.balanceAva?.toString() });
             }}
           />
+          {error && <Text text={error} color="error" />}
 
           <Row justifyBetween>
             <Text text="Available" color="primary" />
@@ -235,7 +252,7 @@ export default function CreateSendBtc() {
             )}
 
             <Row>
-              <Text text={`${avaiableAmount}`} size="sm" color="primary" />
+              <Text text={`${token?.balanceAva}`} size="sm" color="primary" />
               <Text text={'BTC'} size="sm" color="textDim" />
             </Row>
           </Row>
@@ -271,7 +288,7 @@ export default function CreateSendBtc() {
               </Row>
             ) : (
               <Row>
-                <Text text={`${unavailableAmount}`} size="sm" color="white" />
+                <Text text={`${token?.balanceNot}`} size="sm" color="white" />
                 <Text text={'BTC'} size="sm" color="textDim" />
               </Row>
             )}
@@ -280,7 +297,7 @@ export default function CreateSendBtc() {
           <Row justifyBetween>
             <Text text="Total" color="textDim" />
             <Row>
-              <Text text={`${totalAmount}`} size="sm" color="white" />
+              <Text text={`${token?.balance}`} size="sm" color="white" />
               <Text text={'BTC'} size="sm" color="textDim" />
             </Row>
           </Row>
@@ -306,13 +323,35 @@ export default function CreateSendBtc() {
         </Column>
 
         <Column mt="lg">
-          {error && <Text text={error} color="error" />}
+          {/*{error && <Text text={error} color="error" />}*/}
           <Button
             disabled={disabled}
             preset="primary"
             text="Next"
-            onClick={(e) => {
-              navigate('TxConfirmScreen', { rawTxInfo });
+            onClick={async(e) => {
+              try {
+                let res = await depositBTC({
+                  to: toInfo.address,
+                  amount: BigNumber(parseUnitAmount(inputAmount, 8)).toNumber(),
+                  fee: uiState.feeRate,
+                  // enableRBF: uiState.enableRBF,
+                });
+                if (res) {
+                  navigate('TxConfirmScreen', { rawTxInfo });
+                }
+              } catch (err) {
+                console.log('error: ', err);
+                tools.toastError(err.message);
+              }
+              // let res = await depositBTC({
+              //   to: toInfo.address,
+              //   amount: BigNumber(parseUnitAmount(inputAmount, 8)).toNumber(),
+              //   fee: uiState.feeRate,
+              //   // enableRBF: uiState.enableRBF,
+              // });
+              // console.log(`res: `, res);
+              // debugger;
+              // navigate('TxConfirmScreen', { rawTxInfo });
             }}></Button>
         </Column>
       </Content>

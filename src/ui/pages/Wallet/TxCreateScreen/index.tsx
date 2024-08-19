@@ -13,13 +13,13 @@ export default function TxCreateScreen() {
     token: any;
   };
 
-  console.log('token: ', token);
+  // console.log('token: ', token);
 
   const isRune = !!token?.base?.includes('runes');
 
   if (chain === CHAINS_ENUM.BTC) {
     if (isRune) {
-      return <CreateSendRune></CreateSendRune>;
+      return <CreateSendRune />;
     }
 
     return <CreateSendBtc />;

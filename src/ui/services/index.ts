@@ -6,6 +6,7 @@ import DexService from './dex';
 import NodeService from './node';
 import SignetService from './signet-index';
 import TxService from './tx';
+import BridgeService from "./bridge";
 
 class Services {
   tx: TxService;
@@ -13,6 +14,7 @@ class Services {
   dex: DexService;
   node: NodeService;
   signet: SignetService;
+  bridge: BridgeService;
 
   constructor() {
     const apiClient = new ApiConfiguration({ baseURL: '' });
@@ -20,6 +22,7 @@ class Services {
     this.base = new BaseService(new ApiClient(apiClient));
     this.dex = new DexService(new ApiClient(apiClient));
     this.node = new NodeService(new ApiClient(apiClient));
+    this.bridge = new BridgeService(new ApiClient(apiClient));
 
     this.signet = new SignetService(new ApiClient(apiClient));
   }
