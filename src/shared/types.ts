@@ -15,7 +15,6 @@ export enum AddressType {
 export enum NetworkType {
   MAINNET,
   TESTNET,
-  // MAINNET,
 }
 
 export enum RestoreWalletType {

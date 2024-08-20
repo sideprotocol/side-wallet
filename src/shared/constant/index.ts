@@ -181,7 +181,7 @@ export const OW_HD_PATH = "m/86'/0'/0'";
 export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressTypes: AddressType[] }[] = [
   {
     value: RestoreWalletType.UNISAT,
-    name: 'Side Wallet',
+    name: 'UNISAT Wallet',
     addressTypes: [
       AddressType.P2WPKH,
       AddressType.P2SH_P2WPKH,
@@ -221,7 +221,7 @@ export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressT
 ];
 
 export const NETWORK_TYPES = [
-  // { value: NetworkType.MAINNET, label: 'DEVNET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
+  { value: NetworkType.MAINNET, label: 'MAINNET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
   { value: NetworkType.TESTNET, label: 'DEVNET', name: 'testnet', validNames: ['testnet'] },
   // { value: NetworkType.MAINNET, label: 'DEVNET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
 ];

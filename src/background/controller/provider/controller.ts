@@ -69,10 +69,9 @@ class ProviderController extends BaseController {
 
   @Reflect.metadata('APPROVAL', ['SwitchNetwork', (req) => {
     const network = req.data.params.network;
-    // if (NETWORK_TYPES[NetworkType.MAINNET].validNames.includes(network)) {
-    //   req.data.params.networkType = NetworkType.MAINNET
-    // } else
-    if (NETWORK_TYPES[NetworkType.TESTNET].validNames.includes(network)) {
+    if (NETWORK_TYPES[NetworkType.MAINNET].validNames.includes(network)) {
+      req.data.params.networkType = NetworkType.MAINNET
+    } else if (NETWORK_TYPES[NetworkType.TESTNET].validNames.includes(network)) {
       req.data.params.networkType = NetworkType.TESTNET
     } else {
       throw new Error(`the network is invalid, supported networks: ${NETWORK_TYPES.map(v => v.name).join(',')}`)

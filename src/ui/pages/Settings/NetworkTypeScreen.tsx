@@ -27,39 +27,67 @@ export default function NetworkTypeScreen() {
           marginTop: 16
         }}>
         <Column gap={'md'}>
-          {NETWORK_TYPES.map((item, index) => {
-            return (
-              <Row
-                rounded
-                onClick={async () => {
-                  if (item.value == networkType) {
-                    return;
-                  }
-                  await changeNetworkType(item.value);
-                  reloadAccounts();
-                  navigate('MainScreen');
-                  tools.toastSuccess('Network type changed');
-                }}
-                key={index}
-                style={{
-                  height: 56,
-                  padding: '16px 10px',
-                  backgroundColor: item.value == networkType ? colors.green_light : 'tr',
-                  border: `1px solid ${item.value == networkType ? colors.green_light : 'transparent'}`
-                }}
-                full
-                justifyBetween
-                itemsCenter
-                classname={item.value != networkType ? 'hover:bg-[#1e1e1f] ' : ''}>
-                <Row itemsCenter>
-                  <Text text={item.label === 'DEVNET' ? 'grimoria-testnet-1' : item.label} />
-                </Row>
-                <Column>
-                  {item.value == networkType && <Icon color={'green'} contain={'contain'} icon="check-circle" />}
-                </Column>
-              </Row>
-            );
-          })}
+          <Row
+            rounded
+            onClick={async () => {
+              // if (item.value == networkType) {
+              //   return;
+              // }
+              // await changeNetworkType(item.value);
+              // reloadAccounts();
+              // navigate('MainScreen');
+              // tools.toastSuccess('Network type changed');
+            }}
+            style={{
+              height: 56,
+              padding: '16px 10px',
+              backgroundColor: colors.green_light ,
+              border: `1px solid ${colors.green_light}`
+            }}
+            full
+            justifyBetween
+            itemsCenter
+            classname={'hover:bg-[#1e1e1f] '}>
+            <Row itemsCenter>
+              <Text text={'grimoria-testnet-1'} />
+            </Row>
+            <Column>
+              <Icon color={'green'} contain={'contain'} icon="check-circle" />
+            </Column>
+          </Row>
+          {/*{NETWORK_TYPES.map((item, index) => {*/}
+          {/*  return (*/}
+          {/*    <Row*/}
+          {/*      rounded*/}
+          {/*      onClick={async () => {*/}
+          {/*        if (item.value == networkType) {*/}
+          {/*          return;*/}
+          {/*        }*/}
+          {/*        await changeNetworkType(item.value);*/}
+          {/*        reloadAccounts();*/}
+          {/*        navigate('MainScreen');*/}
+          {/*        tools.toastSuccess('Network type changed');*/}
+          {/*      }}*/}
+          {/*      key={index}*/}
+          {/*      style={{*/}
+          {/*        height: 56,*/}
+          {/*        padding: '16px 10px',*/}
+          {/*        backgroundColor: item.value == networkType ? colors.green_light : 'tr',*/}
+          {/*        border: `1px solid ${item.value == networkType ? colors.green_light : 'transparent'}`*/}
+          {/*      }}*/}
+          {/*      full*/}
+          {/*      justifyBetween*/}
+          {/*      itemsCenter*/}
+          {/*      classname={item.value != networkType ? 'hover:bg-[#1e1e1f] ' : ''}>*/}
+          {/*      <Row itemsCenter>*/}
+          {/*        <Text text={item.label === 'DEVNET' ? 'grimoria-testnet-1' : item.label} />*/}
+          {/*      </Row>*/}
+          {/*      <Column>*/}
+          {/*        {item.value == networkType && <Icon color={'green'} contain={'contain'} icon="check-circle" />}*/}
+          {/*      </Column>*/}
+          {/*    </Row>*/}
+          {/*  );*/}
+          {/*})}*/}
         </Column>
       </Content>
     </Layout>

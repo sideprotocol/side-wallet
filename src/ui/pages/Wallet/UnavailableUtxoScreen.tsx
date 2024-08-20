@@ -39,7 +39,7 @@ export default function UnavailableUtxoScreen() {
   const setSpendUnavailableUtxos = useSetSpendUnavailableUtxosCallback();
 
   const selectedCount = useMemo(() => {
-    return Object.keys(selectedUtxoIds).filter((key) => selectedUtxoIds[key]).length;
+    return Object.keys(selectedUtxoIds)?.filter((key) => selectedUtxoIds[key])?.length;
   }, [selectedUtxoIds]);
 
   const ordinalsWebsite = useOrdinalsWebsite();

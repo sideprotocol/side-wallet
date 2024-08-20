@@ -116,7 +116,7 @@ class PreferenceService {
         firstOpen: false,
         currency: 'USD',
         addressType: AddressType.P2WPKH,
-        networkType: NetworkType.TESTNET,
+        networkType: NetworkType.MAINNET,
         keyringAlianNames: {},
         accountAlianNames: {},
         uiCachedData: {},
@@ -164,7 +164,7 @@ class PreferenceService {
     }
 
     if (!this.store.networkType) {
-      this.store.networkType = NetworkType.TESTNET;
+      this.store.networkType = NetworkType.MAINNET;
     }
 
     if (this.store.currentAccount) {
