@@ -156,7 +156,7 @@ export default function CreateSendRune() {
               style={{
                 fontSize: '14px'
               }}>
-              <img src={WalletIcon}></img>
+              <img src={WalletIcon} alt={'WalletIcon'} />
 
               <div>{runeBalance}</div>
 

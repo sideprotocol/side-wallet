@@ -1,19 +1,19 @@
 import { Tooltip } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 
-import { CHAINS_ENUM, COIN_DUST } from '@/shared/constant';
-import { RawTxInfo, TxType } from '@/shared/types';
+import { COIN_DUST } from '@/shared/constant';
+import { TxType } from '@/shared/types';
 import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { RBFBar } from '@/ui/components/RBFBar';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
-import { useSendRune } from '@/ui/state/send/hook';
+// import { useSendRune } from '@/ui/state/send/hook';
 import {
-  useBitcoinTx,
+  // useBitcoinTx,
   useFetchUtxosCallback,
-  usePrepareSendBTCCallback,
+  // usePrepareSendBTCCallback,
   useSafeBalance,
   useSpendUnavailableUtxos
 } from '@/ui/state/transactions/hooks';
@@ -22,7 +22,7 @@ import { fontSizes } from '@/ui/theme/font';
 import { amountToSatoshis, isValidAddress, parseUnitAmount, satoshisToAmount, useLocationState } from '@/ui/utils';
 import { useBridge } from '@/ui/state/bridge/hook';
 import BigNumber from 'bignumber.js';
-import { bridgeStore } from '@/ui/stores/BridgeStore';
+// import { bridgeStore } from '@/ui/stores/BridgeStore';
 
 interface LocationState {
   base: string;
@@ -33,13 +33,14 @@ export default function CreateSendBtc() {
   const accountBalance = useAccountBalance();
   const safeBalance = useSafeBalance();
   const navigate = useNavigate();
-  const bitcoinTx = useBitcoinTx();
+  // const bitcoinTx = useBitcoinTx();
   const { depositBTC } = useBridge();
 
   const { base, token } = useLocationState<LocationState>();
 
   const [disabled, setDisabled] = useState(true);
 
+  const dustAmount = useMemo(() => satoshisToAmount(COIN_DUST), [COIN_DUST]);
   const setUiState = useUpdateUiTxCreateScreen();
   const uiState = useUiTxCreateScreen();
 
@@ -60,8 +61,7 @@ export default function CreateSendBtc() {
       tools.showLoading(false);
     });
   }, []);
-
-  const prepareSendBTC = usePrepareSendBTCCallback();
+  // console.log(`token: `, token);
 
   const avaiableSatoshis = useMemo(() => {
     return amountToSatoshis(safeBalance);
@@ -71,13 +71,6 @@ export default function CreateSendBtc() {
     if (!inputAmount) return 0;
     return amountToSatoshis(inputAmount);
   }, [inputAmount]);
-
-  const dustAmount = useMemo(() => satoshisToAmount(COIN_DUST), [COIN_DUST]);
-
-  const [rawTxInfo, setRawTxInfo] = useState<RawTxInfo>();
-
-  const { sendRune } = useSendRune();
-
   const spendUnavailableUtxos = useSpendUnavailableUtxos();
   const spendUnavailableSatoshis = useMemo(() => {
     return spendUnavailableUtxos.reduce((acc, cur) => {
@@ -85,22 +78,13 @@ export default function CreateSendBtc() {
     }, 0);
   }, [spendUnavailableUtxos]);
   const spendUnavailableAmount = satoshisToAmount(spendUnavailableSatoshis);
-
-  const totalAvailableSatoshis = avaiableSatoshis + spendUnavailableSatoshis;
-  const totalAvailableAmount = satoshisToAmount(totalAvailableSatoshis);
-
   const totalSatoshis = amountToSatoshis(accountBalance.amount);
   const unavailableSatoshis = totalSatoshis - avaiableSatoshis;
-
-  const avaiableAmount = safeBalance;
-  const unavailableAmount = satoshisToAmount(unavailableSatoshis);
-  const totalAmount = accountBalance.amount;
-
   const unspendUnavailableAmount = satoshisToAmount(unavailableSatoshis - spendUnavailableSatoshis);
 
   useEffect(() => {
     setError('');
-    setDisabled(false);
+    setDisabled(true);
 
     if (!isValidAddress(toInfo.address)) {
       return;
@@ -108,15 +92,18 @@ export default function CreateSendBtc() {
     if (!toSatoshis) {
       return;
     }
-    // if (toSatoshis < COIN_DUST) {
-    //   setError(`Amount must be at least ${dustAmount} BTC`);
-    //   return;
-    // }
-    //
-    // if (toSatoshis > avaiableSatoshis + spendUnavailableSatoshis) {
-    //   setError('Amount exceeds your available balance');
-    //   return;
-    // }
+    if (toSatoshis < COIN_DUST) {
+      setError(`Amount must be at least ${dustAmount} BTC`);
+      return;
+    }
+    if (BigNumber(inputAmount).gt(BigNumber(token?.balanceAva || '0'))) {
+      setError('Amount exceeds your available balance');
+      return;
+    }
+
+    if (!!inputAmount && BigNumber(inputAmount || '0').lte(BigNumber(token?.balanceAva || '0'))) {
+      setDisabled(false);
+    }
 
     if (feeRate <= 0) {
       return;
@@ -276,7 +263,6 @@ export default function CreateSendBtc() {
                     //   navigate('UnavailableUtxoScreen');
                     // }}
                   />
-
                   <Icon icon="circle-question" color="textDim" />
                 </Row>
               </div>
@@ -338,24 +324,6 @@ export default function CreateSendBtc() {
                   isSign: false,
                   // enableRBF: uiState.enableRBF,
                 })
-                // let res = await rawTxInfo?.text()
-              // .then((res) => {
-              //     return res.text();
-              //   })
-              //     .then((res) => {
-              //       if (res) {
-              //         navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
-              //
-              //         // tools.toastSuccess('Deposit Successful! ');
-              //       }
-              //     })
-              //     .catch((err) => {
-              //       console.log('err: ', err);
-              //       tools.toastError(err.message);
-              //     })
-              //     .finally(() => {
-              //       bridgeStore.loading = false;
-              //     });
                 console.log(`rawTxInfo: `, rawTxInfo);
                 if (rawTxInfo) {
                   // navigate('TxConfirmScreen', { rawTxInfo });
@@ -365,15 +333,6 @@ export default function CreateSendBtc() {
                 console.log('error: ', err);
                 tools.toastError(err.message);
               }
-              // let res = await depositBTC({
-              //   to: toInfo.address,
-              //   amount: BigNumber(parseUnitAmount(inputAmount, 8)).toNumber(),
-              //   fee: uiState.feeRate,
-              //   // enableRBF: uiState.enableRBF,
-              // });
-              // console.log(`res: `, res);
-              // debugger;
-              // navigate('TxConfirmScreen', { rawTxInfo });
             }}></Button>
         </Column>
       </Content>
