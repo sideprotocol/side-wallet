@@ -180,6 +180,7 @@ export const useSendRune = () => {
 
     const rawTransaction = signedPsbt.extractTransaction().toHex();
 
+    console.log(`psbt: `, psbt, toSignInputs, rawTransaction);
     return {
       psbtHex: psbt.toHex(),
       rawtx: rawTransaction,

@@ -371,7 +371,7 @@ export const useBridge = () => {
   const wallet = useWallet();
 
   const depositBTC = async (params: DepositBTCBridge) => {
-    const { amount, fee, to } = params;
+    const { amount, fee, to, isSign } = params;
     const senderAddress = currentAccount.address;
 
     const rawUtxos = (
@@ -424,6 +424,15 @@ export const useBridge = () => {
 
     const rawTransaction = signedPsbt.extractTransaction().toHex();
 
+    if (!isSign) {
+      return {
+        psbtHex: psbt.toHex(),
+        rawtx: rawTransaction,
+        toAddressInfo: {
+          address: to
+        }
+      }
+    }
     const res = await fetch(`${SIDE_BTC_INDEXER}/tx`, {
       method: 'POST',
       headers: {

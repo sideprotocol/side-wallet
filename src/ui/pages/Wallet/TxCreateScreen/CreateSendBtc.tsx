@@ -1,8 +1,8 @@
 import { Tooltip } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 
-import { COIN_DUST } from '@/shared/constant';
-import { RawTxInfo } from '@/shared/types';
+import { CHAINS_ENUM, COIN_DUST } from '@/shared/constant';
+import { RawTxInfo, TxType } from '@/shared/types';
 import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
@@ -22,6 +22,7 @@ import { fontSizes } from '@/ui/theme/font';
 import { amountToSatoshis, isValidAddress, parseUnitAmount, satoshisToAmount, useLocationState } from '@/ui/utils';
 import { useBridge } from '@/ui/state/bridge/hook';
 import BigNumber from 'bignumber.js';
+import { bridgeStore } from '@/ui/stores/BridgeStore';
 
 interface LocationState {
   base: string;
@@ -330,14 +331,35 @@ export default function CreateSendBtc() {
             text="Next"
             onClick={async(e) => {
               try {
-                let res = await depositBTC({
+                const rawTxInfo = await depositBTC({
                   to: toInfo.address,
                   amount: BigNumber(parseUnitAmount(inputAmount, 8)).toNumber(),
                   fee: uiState.feeRate,
+                  isSign: false,
                   // enableRBF: uiState.enableRBF,
-                });
-                if (res) {
-                  navigate('TxConfirmScreen', { rawTxInfo });
+                })
+                // let res = await rawTxInfo?.text()
+              // .then((res) => {
+              //     return res.text();
+              //   })
+              //     .then((res) => {
+              //       if (res) {
+              //         navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
+              //
+              //         // tools.toastSuccess('Deposit Successful! ');
+              //       }
+              //     })
+              //     .catch((err) => {
+              //       console.log('err: ', err);
+              //       tools.toastError(err.message);
+              //     })
+              //     .finally(() => {
+              //       bridgeStore.loading = false;
+              //     });
+                console.log(`rawTxInfo: `, rawTxInfo);
+                if (rawTxInfo) {
+                  // navigate('TxConfirmScreen', { rawTxInfo });
+                  navigate('TxConfirmScreen', {  rawTxInfo, type: TxType.SEND_BTC_TEST });
                 }
               } catch (err) {
                 console.log('error: ', err);

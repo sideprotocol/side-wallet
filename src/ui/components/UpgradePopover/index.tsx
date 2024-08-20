@@ -17,15 +17,15 @@ export const UpgradePopover = ({ onClose }: { onClose: () => void }) => {
   const [versionDetail, setVersionDetail] = useState<VersionDetail>({ version: '', changelogs: [], title: '' });
   const wallet = useWallet();
   useEffect(() => {
-    if (!versionInfo.newVersion) return;
-    wallet
-      .getVersionDetail(versionInfo.newVersion)
-      .then((res) => {
-        setVersionDetail(res);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    // if (!versionInfo.newVersion) return;
+    // wallet
+    //   .getVersionDetail(versionInfo.newVersion)
+    //   .then((res) => {
+    //     setVersionDetail(res);
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //   });
   }, [versionInfo.newVersion]);
   return (
     <Popover onClose={onClose}>
@@ -58,7 +58,7 @@ export const UpgradePopover = ({ onClose }: { onClose: () => void }) => {
             full
             preset="primary"
             onClick={(e) => {
-              window.open('https://unisat.io/extension/update');
+              // window.open('https://unisat.io/extension/update');
             }}
           />
         </Row>

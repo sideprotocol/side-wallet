@@ -10,6 +10,7 @@ export interface DepositBTCBridge {
   amount: number;
   fee: number;
   to?: string;
+  isSign?: boolean;
 }
 
 interface Status {
