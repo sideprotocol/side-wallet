@@ -96,12 +96,12 @@ export default function CreateSendBtc() {
       setError(`Amount must be at least ${dustAmount} BTC`);
       return;
     }
-    if (BigNumber(inputAmount).gt(BigNumber(token?.balanceAva || '0'))) {
+    if (BigNumber(inputAmount).gt(BigNumber(token?.balance || '0'))) {
       setError('Amount exceeds your available balance');
       return;
     }
 
-    if (!!inputAmount && BigNumber(inputAmount || '0').lte(BigNumber(token?.balanceAva || '0'))) {
+    if (!!inputAmount && BigNumber(inputAmount || '0').lte(BigNumber(token?.balance || '0'))) {
       setDisabled(false);
     }
 
@@ -224,7 +224,7 @@ export default function CreateSendBtc() {
             onMaxClick={() => {
               setAutoAdjust(true);
               // setUiState({ inputAmount: totalAvailableAmount.toString() });
-              setUiState({ inputAmount: token?.balanceAva?.toString() });
+              setUiState({ inputAmount: token?.balance?.toString() });
             }}
           />
           {error && <Text text={error} color="error" />}
@@ -240,7 +240,7 @@ export default function CreateSendBtc() {
             )}
 
             <Row>
-              <Text text={`${token?.balanceAva}`} size="sm" color="primary" />
+              <Text text={`${token?.balance}`} size="sm" color="primary" />
               <Text text={'BTC'} size="sm" color="textDim" />
             </Row>
           </Row>
@@ -248,7 +248,7 @@ export default function CreateSendBtc() {
           <Row justifyBetween>
             <Tooltip
               title={
-                'Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.'
+                'Only includes Runes in the current version.'
               }
               overlayStyle={{
                 fontSize: fontSizes.xs
@@ -284,7 +284,7 @@ export default function CreateSendBtc() {
           <Row justifyBetween>
             <Text text="Total" color="textDim" />
             <Row>
-              <Text text={`${token?.balance}`} size="sm" color="white" />
+              <Text text={`${token?.balanceAll}`} size="sm" color="white" />
               <Text text={'BTC'} size="sm" color="textDim" />
             </Row>
           </Row>

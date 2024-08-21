@@ -672,11 +672,12 @@ export const useRuneAndBtcBalances = () => {
   return [
     {
       ...satItem,
-      balance: balance?.toString(),
-      balanceAva: bitcoinBtcBalance,
+      balance: bitcoinBtcBalance,
+      balanceAll: balance?.toString(),
       balanceNot: bitcoinNotBtcBalance,
       amount: toUnitAmount(bitcoinBtcBalance || '0', 8),
       amountNot: toUnitAmount(bitcoinNotBtcBalance || '0', 8),
+      // amountAll: toUnitAmount(balance || '0', 8),
       denom: satItem?.base,
       price
     },
