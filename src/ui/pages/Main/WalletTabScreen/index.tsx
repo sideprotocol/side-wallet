@@ -276,13 +276,13 @@ export default function WalletTabScreen() {
           }}
         />
       )}
-      {!versionInfo.skipped && (
-        <UpgradePopover
-          onClose={() => {
-            skipVersion(versionInfo.newVersion);
-          }}
-        />
-      )}
+      {/*{!versionInfo.skipped && (*/}
+      {/*  <UpgradePopover*/}
+      {/*    onClose={() => {*/}
+      {/*      skipVersion(versionInfo.newVersion);*/}
+      {/*    }}*/}
+      {/*  />*/}
+      {/*)}*/}
 
       {showDisableUnconfirmedUtxoNotice && (
         <DisableUnconfirmedsPopover onClose={() => setShowDisableUnconfirmedUtxoNotice(false)} />
