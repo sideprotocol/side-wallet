@@ -23,6 +23,8 @@ import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
 
+const MIN_SAT = '0.001';
+
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
 
@@ -41,6 +43,9 @@ export default function BridgeTabScreen() {
   const runeBalance = useRuneBalance(base);
 
   const btcBalance = useBtcBalance();
+  const isDeposit = (to?.name || '').includes('Bitcoin');
+
+  const lessThanMinSat = isBtcBridge && BigNumber(bridgeAmount).lt(MIN_SAT) && isDeposit;
 
   const balance = isBtcBridge ? btcBalance : runeBalance;
 
@@ -58,7 +63,11 @@ export default function BridgeTabScreen() {
   const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
 
   const disabled =
-    !bridgeAmount || Number(bridgeAmount) === 0 || BigNumber(bridgeAmount || '0').gt(balance || '0') || loading;
+    !bridgeAmount ||
+    Number(bridgeAmount) === 0 ||
+    BigNumber(bridgeAmount || '0').gt(balance || '0') ||
+    loading ||
+    lessThanMinSat;
 
   useEffect(() => {
     // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
@@ -281,9 +290,11 @@ export default function BridgeTabScreen() {
 
                   <Text
                     size="sm"
-                    style={{
-                      // paddingLeft: '3px'
-                    }}>
+                    style={
+                      {
+                        // paddingLeft: '3px'
+                      }
+                    }>
                     {balance}
                   </Text>
                 </div>
@@ -351,7 +362,7 @@ export default function BridgeTabScreen() {
                 }}
                 disabled={disabled}
                 full
-                text="Bridge"
+                text={lessThanMinSat ? 'Minimum amount is 0.001 BTC' : 'Bridge'}
                 preset="primary"
               />
             </Row>
