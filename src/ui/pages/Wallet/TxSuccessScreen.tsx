@@ -48,7 +48,8 @@ export default function TxSuccessScreen() {
           full
           text="Finish"
           onClick={() => {
-            window.history.go(-1);
+            // window.history.go(-1);
+            navigate('MainScreen');
           }}
         />
       </Footer>
