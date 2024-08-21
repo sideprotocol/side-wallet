@@ -72,7 +72,7 @@ export default function UnlockScreen() {
             alignItems: 'center',
             gap: '16px'
           }}>
-          <Image src="/images/img/welcome.gif" size={306} />
+          <Image src="/images/img/welcome.gif" size={220} />
           <Text
             text="🎉 Welcome Back"
             textCenter
