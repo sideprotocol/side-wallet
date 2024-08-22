@@ -1,39 +1,36 @@
-import { useEffect, useState } from 'react';
-
-import * as BridgeStore from '@/ui/stores/BridgeStore';
-
-import services from '@/ui/services';
-// import { useWalletContext } from "@/components/WalletContext";
-
-// import Btc from "@/assets/images/btc.png";
 import BigNumber from 'bignumber.js';
+import * as bitcoin from 'bitcoinjs-lib';
+import { useEffect, useState } from 'react';
+import * as ecc from 'tiny-secp256k1';
+
+// import { useWalletContext } from "@/components/WalletContext";
+// import Btc from "@/assets/images/btc.png";
+import { decodeTxToGetValue } from '@/shared/lib/runes-utils';
+import services from '@/ui/services';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import * as BridgeStore from '@/ui/stores/BridgeStore';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
-import * as bitcoin from 'bitcoinjs-lib';
-
-import * as ecc from 'tiny-secp256k1';
-import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useBridgeStore } from '@/ui/stores/BridgeStore';
 bitcoin.initEccLib(ecc);
 
 function formatBitcoinItem(balance: string) {
-  const priceMap = JSON.parse(localStorage.getItem('priceMap') || "{}");
+  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
   const balancePrice = priceMap?.['sat'];
   const price = new BigNumber(balancePrice).multipliedBy(balance).toFixed(2);
   return {
     logo: '',
-    name: "Bitcoin",
+    name: 'Bitcoin',
     amount: toUnitAmount(balance, 8),
     exponent: 8,
-    symbol: "BTC",
-    label: "",
-    chain: "bitcoin",
+    symbol: 'BTC',
+    label: '',
+    chain: 'bitcoin',
     balance: balance,
     price,
     precision: 8,
-    coingecko_id: "bitcoin",
-    base: "sat",
+    coingecko_id: 'bitcoin',
+    base: 'sat'
   };
 }
 
@@ -50,7 +47,6 @@ export default function useGetBtcBalance(flag?: boolean) {
       //   setData("0");
       //   return;
       // }
-      console.log(`currentAccount.address: `, currentAccount.address);
 
       const addressInfo = await services.bridge.getAddressInfo(currentAccount.address);
 
@@ -60,23 +56,20 @@ export default function useGetBtcBalance(flag?: boolean) {
         return `${utxo.txid}:${utxo.vout}`;
       });
 
-      const outputs = await Promise.all(
-        runesOutputsData.map((key: string) =>
-          services.bridge.fetchRuneOutput(key)
-        )
-      );
-      console.log(`outputs: `, outputs);
+      const outputs = await Promise.all(runesOutputsData.map((key: string) => services.bridge.fetchRuneOutput(key)));
 
       const txs = await services.bridge.getAddressTxs(currentAccount.address);
 
-      const unconfirmedRunes = txs.filter((tx) => {
-        const isRune = tx.vout.find(
-          (out) =>
-            Number(out.value) === 546 &&
-            out.scriptpubkey_address === currentAccount.address
-        );
+      // const unconfirmedRunes = txs.filter((tx) => {
+      //   const isRune = tx.vout.find(
+      //     (out) => Number(out.value) === 546 && out.scriptpubkey_address === currentAccount.address
+      //   );
 
-        return isRune && !tx.status.confirmed;
+      //   return isRune && !tx.status.confirmed;
+      // });
+
+      const unconfirmedRunes = txs.filter((tx) => {
+        return !!decodeTxToGetValue(tx) && !tx.status.confirmed;
       });
 
       let balance = BigNumber(addressInfo.mempool_stats.funded_txo_sum)
@@ -92,8 +85,9 @@ export default function useGetBtcBalance(flag?: boolean) {
         }
       });
 
-      unconfirmedRunes.forEach((_) => {
-        balance = balance.minus(546);
+      unconfirmedRunes.forEach((tx) => {
+        const value = decodeTxToGetValue(tx);
+        balance = balance.minus(value);
       });
 
       const _data = toReadableAmount(balance.toFixed(), 8);
@@ -112,7 +106,6 @@ export default function useGetBtcBalance(flag?: boolean) {
   return {
     loading,
     data,
-    formattedData: formatBitcoinItem(data),
+    formattedData: formatBitcoinItem(data)
   };
 }
-
