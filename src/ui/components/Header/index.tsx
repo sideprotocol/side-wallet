@@ -28,7 +28,7 @@ export function Header(props: HeaderProps) {
     } else if (title) {
       return <Text size={'lg'} text={title} preset="regular-bold" />;
     } else {
-      return <Logo preset="small" />;
+      return '';
     }
   }, [title]);
   return (
