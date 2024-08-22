@@ -7,6 +7,7 @@ import {
   SIDE_RUNE_VAULT_ADDRESS_MAINNET,
   SIDE_RUNE_VAULT_ADDRESS_TESTNET
 } from '@/shared/constant';
+import { decodeTxToGetValue } from '@/shared/lib/runes-utils';
 import { NetworkType, RawTxInfo } from '@/shared/types';
 import { DepositBTCBridge } from '@/ui/stores/BridgeStore';
 import { useWallet } from '@/ui/utils';
@@ -68,17 +69,20 @@ export const useSendRune = () => {
     const isTaproot = decodeBech32.version === 1 && decodeBech32.data.length === 32;
 
     btcRawUtxos.forEach((tx, index) => {
-      btcUtxos.push({
-        txid: tx.txid,
-        vout: rawUtxos[index].vout,
-        satoshis: rawUtxos[index].value,
-        scriptPk: tx.vout[rawUtxos[index].vout].scriptpubkey,
-        pubkey: currentAccount.pubkey,
-        inscriptions: [],
-        atomicals: [],
-        addressType: isTaproot ? 2 : 1
-      });
+      if (decodeTxToGetValue(tx) == 0) {
+        btcUtxos.push({
+          txid: tx.txid,
+          vout: rawUtxos[index].vout,
+          satoshis: rawUtxos[index].value,
+          scriptPk: tx.vout[rawUtxos[index].vout].scriptpubkey,
+          pubkey: currentAccount.pubkey,
+          inscriptions: [],
+          atomicals: [],
+          addressType: isTaproot ? 2 : 1
+        });
+      }
     });
+
     const runesOutputsData = rawUtxos.map((utxo) => `${utxo.txid}:${utxo.vout}`);
 
     const allRunes = await fetch(`${SIDE_RUNE_INDEXER}/runes`, {
@@ -162,7 +166,7 @@ export const useSendRune = () => {
 
     const { psbt, toSignInputs } = await sendRunes({
       assetUtxos,
-      btcUtxos: btcUtxos.filter((utxo) => utxo.satoshis !== 546).sort((a, b) => b.satoshis - a.satoshis),
+      btcUtxos: btcUtxos.sort((a, b) => b.satoshis - a.satoshis),
       // networkType: networkType === NetworkType.MAINNET ? 0 : 1,
       networkType: networkType === NetworkType.TESTNET ? 1 : 0,
       toAddress: to || RUNE_BRIDGE_VAULT,
@@ -180,7 +184,7 @@ export const useSendRune = () => {
 
     const rawTransaction = signedPsbt.extractTransaction().toHex();
 
-    console.log(`psbt: `, psbt, toSignInputs, rawTransaction);
+    console.log('psbt: ', psbt, toSignInputs, rawTransaction);
     return {
       psbtHex: psbt.toHex(),
       rawtx: rawTransaction,
