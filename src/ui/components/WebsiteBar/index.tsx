@@ -2,7 +2,7 @@ import { Card } from '../Card';
 import { Row } from '../Row';
 import { Text } from '../Text';
 
-const WebsiteBar = ({ session }: { session: { origin: string; icon: string; name: string } }) => {
+const WebsiteBar = ({ session }: { session: { origin: string; icon?: string; name?: string } }) => {
   return (
     <Card bg="transparent" px="zero" preset="style2" selfItemsCenter>
       <Row itemsCenter px="zero">

@@ -214,18 +214,30 @@ export default function Connect({ params: { session } }: Props) {
         style={{
           borderBottom: '1px solid transparent'
         }}>
-        <WebsiteBar session={session} />
+        <WebsiteBar session={{
+          origin: 'Connect with Side Wallet'
+        }} />
       </Header>
       <Content>
         <Column>
           <Column
             style={{
-              background: '#0DD4C31A',
-              paddingBottom: '8px'
+              background: '#1E1E1F',
+              // padding: '8px 0 18px'
             }}
             gap="zero"
             rounded>
-            <Text text="Connect with Side Wallet" preset="title-bold" textCenter mt="lg" />
+            <Text text={session?.origin} textCenter preset="sub" mt="md" mb="md" />
+          </Column>
+          <Column
+            style={{
+              marginTop: '5px',
+              background: '#1E1E1F',
+              padding: '0 0 10px'
+            }}
+            gap="zero"
+            rounded>
+            {/*<Text text="Connect with Side Wallet" preset="title-bold" textCenter mt="lg" />*/}
             <Text text="Select the account to use on this site." textCenter preset="sub" mt="md" />
             <Text text="Only connect with sites you trust." preset="sub" textCenter />
           </Column>
