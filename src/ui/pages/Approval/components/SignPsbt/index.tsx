@@ -619,7 +619,7 @@ export default function SignPsbt({
       decodedPsbt.recommendedFeeRate = rcFee;
     }
 
-    if (realFeeRate > 5 * rcFee) {
+    if (realFeeRate >= 5 * rcFee) {
       decodedPsbt.shouldWarnFeeRate = true;
     } else {
       decodedPsbt.shouldWarnFeeRate = false;
