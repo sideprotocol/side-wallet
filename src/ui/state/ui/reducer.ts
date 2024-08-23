@@ -69,7 +69,7 @@ export const initialState: UIState = {
     },
     base: '',
     inputAmount: '',
-    fee: '600000',
+    fee: '6',
     feeDenom: 'uside',
     memo: ''
   }
