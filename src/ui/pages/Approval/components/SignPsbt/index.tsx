@@ -613,7 +613,7 @@ export default function SignPsbt({
 
     const realFeeRate = parseFloat(decodedPsbt.feeRate.toString().match(/[\d.]+/)?.[0] || '1.0');
 
-    decodedPsbt.feeRate = realFeeRate;
+    // decodedPsbt.feeRate = realFeeRate;
 
     if (!isMainnet) {
       decodedPsbt.recommendedFeeRate = rcFee;
