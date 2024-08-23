@@ -6,6 +6,7 @@ import {
   Atomical,
   DecodedPsbt,
   Inscription,
+  NetworkType,
   RawTxInfo,
   RuneBalance,
   SignPsbtOptions,
@@ -23,8 +24,10 @@ import InscriptionPreview from '@/ui/components/InscriptionPreview';
 import RunesPreviewCard from '@/ui/components/RunesPreviewCard';
 import { SignPsbtWithRisksPopover } from '@/ui/components/SignPsbtWithRisksPopover';
 import KeystoneSignScreen from '@/ui/pages/Wallet/KeystoneSignScreen';
+import services from '@/ui/services';
 import { useAccountAddress, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
+import { useNetworkType } from '@/ui/state/settings/hooks';
 import {
   usePrepareSendAtomicalsNFTCallback,
   usePrepareSendBTCCallback,
@@ -524,6 +527,10 @@ export default function SignPsbt({
     setIsHovered(false);
   };
 
+  const networkType = useNetworkType();
+
+  const isMainnet = networkType !== NetworkType.TESTNET;
+
   const init = async () => {
     let txError = '';
     if (type === TxType.SIGN_TX) {
@@ -583,6 +590,11 @@ export default function SignPsbt({
     }
 
     const decodedPsbt = await wallet.decodePsbt(psbtHex, session?.origin || '');
+    console.log('decodedPsbt: ', decodedPsbt);
+
+    const feeList = await services.signet.feeEstimates();
+
+    const rcFee = feeList.list[0].feeRate;
 
     let toSignInputs: ToSignInput[] = [];
     if (type === TxType.SEND_BITCOIN || type === TxType.SEND_ORDINALS_INSCRIPTION) {
@@ -597,6 +609,20 @@ export default function SignPsbt({
         txError = (e as Error).message;
         tools.toastError(txError);
       }
+    }
+
+    const realFeeRate = parseFloat(decodedPsbt.feeRate.toString().match(/[\d.]+/)?.[0] || '1.0');
+
+    decodedPsbt.feeRate = realFeeRate;
+
+    if (!isMainnet) {
+      decodedPsbt.recommendedFeeRate = rcFee;
+    }
+
+    if (realFeeRate > 5 * rcFee) {
+      decodedPsbt.shouldWarnFeeRate = true;
+    } else {
+      decodedPsbt.shouldWarnFeeRate = false;
     }
 
     setTxInfo({

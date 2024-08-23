@@ -6,21 +6,14 @@ import { ButtonGroup, Column, Footer, Image, Layout, Row, Text } from '@/ui/comp
 import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPopover';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
-import { UpgradePopover } from '@/ui/components/UpgradePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
 import { useGetAccountBalanceByUSD } from '@/ui/hooks/useGetBalance';
-import { useAddressSummary, useCurrentAccount, useReloadAccounts } from '@/ui/state/accounts/hooks';
+import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useRuneAndBtcBalances } from '@/ui/state/bridge/hook';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import {
-  useBlockstreamUrl,
-  useChangeNetworkTypeCallback,
-  useSkipVersionCallback,
-  useVersionInfo,
-  useWalletConfig
-} from '@/ui/state/settings/hooks';
+import { useBlockstreamUrl, useSkipVersionCallback, useVersionInfo, useWalletConfig } from '@/ui/state/settings/hooks';
 import { useAssetTabKey } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
 // import walletLogo from '/images/logo/wallet-logo.png';
@@ -81,7 +74,6 @@ export default function WalletTabScreen() {
     };
     run();
   }, []);
-
 
   const [currentTab, setCurrentTab] = useState<CHAINS_ENUM>(CHAINS_ENUM.SIDE);
   const blockstreamUrl = useBlockstreamUrl();

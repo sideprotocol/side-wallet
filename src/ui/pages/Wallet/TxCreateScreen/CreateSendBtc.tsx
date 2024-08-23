@@ -1,4 +1,5 @@
 import { Tooltip } from 'antd';
+import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
 
 import { COIN_DUST } from '@/shared/constant';
@@ -10,18 +11,17 @@ import { RBFBar } from '@/ui/components/RBFBar';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
 // import { useSendRune } from '@/ui/state/send/hook';
+import { useBridge } from '@/ui/state/bridge/hook';
 import {
   // useBitcoinTx,
-  useFetchUtxosCallback,
-  // usePrepareSendBTCCallback,
+  useFetchUtxosCallback, // usePrepareSendBTCCallback,
   useSafeBalance,
   useSpendUnavailableUtxos
 } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
 import { amountToSatoshis, isValidAddress, parseUnitAmount, satoshisToAmount, useLocationState } from '@/ui/utils';
-import { useBridge } from '@/ui/state/bridge/hook';
-import BigNumber from 'bignumber.js';
+
 // import { bridgeStore } from '@/ui/stores/BridgeStore';
 
 interface LocationState {
@@ -32,6 +32,7 @@ interface LocationState {
 export default function CreateSendBtc() {
   const accountBalance = useAccountBalance();
   const safeBalance = useSafeBalance();
+  console.log('safeBalance: ', safeBalance);
   const navigate = useNavigate();
   // const bitcoinTx = useBitcoinTx();
   const { depositBTC } = useBridge();
@@ -247,9 +248,7 @@ export default function CreateSendBtc() {
 
           <Row justifyBetween>
             <Tooltip
-              title={
-                'Only includes Runes in the current version.'
-              }
+              title={'Only includes Runes in the current version.'}
               overlayStyle={{
                 fontSize: fontSizes.xs
               }}>
@@ -315,19 +314,19 @@ export default function CreateSendBtc() {
             disabled={disabled}
             preset="primary"
             text="Next"
-            onClick={async(e) => {
+            onClick={async (e) => {
               try {
                 const rawTxInfo = await depositBTC({
                   to: toInfo.address,
                   amount: BigNumber(parseUnitAmount(inputAmount, 8)).toNumber(),
                   fee: uiState.feeRate,
-                  isSign: false,
+                  isSign: false
                   // enableRBF: uiState.enableRBF,
-                })
-                console.log(`rawTxInfo: `, rawTxInfo);
+                });
+                console.log('rawTxInfo: ', rawTxInfo);
                 if (rawTxInfo) {
                   // navigate('TxConfirmScreen', { rawTxInfo });
-                  navigate('TxConfirmScreen', {  rawTxInfo, type: TxType.SEND_BTC_TEST });
+                  navigate('TxConfirmScreen', { rawTxInfo, type: TxType.SEND_BTC_TEST });
                 }
               } catch (err) {
                 console.log('error: ', err);
