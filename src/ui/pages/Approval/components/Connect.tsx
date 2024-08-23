@@ -214,21 +214,38 @@ export default function Connect({ params: { session } }: Props) {
         style={{
           borderBottom: '1px solid transparent'
         }}>
-        <WebsiteBar session={{
-          origin: 'Connect with Side Wallet'
-        }} />
+        <WebsiteBar
+          session={{
+            origin: 'Connect with Side Wallet'
+          }}
+        />
       </Header>
       <Content>
         <Column>
-          <Column
-            style={{
-              background: '#1E1E1F',
-              // padding: '8px 0 18px'
-            }}
-            gap="zero"
-            rounded>
-            <Text text={session?.origin} textCenter preset="sub" mt="md" mb="md" />
-          </Column>
+          <Row full justifyCenter>
+            <Column
+              style={{
+                background: '#1E1E1F',
+                maxWidth: 'max-content'
+
+                // padding: '8px 0 18px'
+              }}
+              gap="zero"
+              rounded>
+              <Text
+                style={{
+                  color: '#828282'
+                }}
+                text={session?.origin}
+                textCenter
+                preset="sub"
+                mt="md"
+                mb="md"
+                px="xxl"
+              />
+            </Column>
+          </Row>
+
           <Column
             style={{
               marginTop: '5px',

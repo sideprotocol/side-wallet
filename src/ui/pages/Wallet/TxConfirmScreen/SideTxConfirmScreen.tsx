@@ -66,7 +66,7 @@ export default function SideTxConfirmScreen() {
       });
       navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
     } catch (err) {
-      // navigate('TxFailScreen', { error: err });
+      navigate('TxFailScreen', { error: err });
     } finally {
       setLoading(false);
     }
