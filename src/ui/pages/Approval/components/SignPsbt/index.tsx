@@ -791,7 +791,7 @@ export default function SignPsbt({
   return (
     <Layout
       style={{
-        height: '580px',
+        height: '100%',
         minHeight: '580px'
       }}>
       {header}
