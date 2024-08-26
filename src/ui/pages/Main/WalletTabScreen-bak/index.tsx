@@ -82,7 +82,6 @@ export default function WalletTabScreen() {
   const avaiableSatoshis = useMemo(() => {
     return amountToSatoshis(safeBalance);
   }, [safeBalance]);
-
   const totalSatoshis = amountToSatoshis(accountBalance.amount);
   const unavailableSatoshis = totalSatoshis - avaiableSatoshis;
   const avaiableAmount = safeBalance;

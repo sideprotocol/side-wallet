@@ -12,14 +12,6 @@ export enum CHAINS_ENUM {
   SIDE_SIGNET = 'SIDE_SIGNET'
 }
 
-export const CHAINS: Record<string, Chain> = {
-  [CHAINS_ENUM.BTC]: {
-    name: 'BTC',
-    enum: CHAINS_ENUM.BTC,
-    logo: '',
-    network: 'testnet'
-  }
-};
 
 export const KEYRING_TYPE = {
   HdKeyring: 'HD Key Tree',
@@ -439,3 +431,146 @@ export const BITCOIN_TOKENS: BitcoinToken[] = [
     isRune: true
   }
 ];
+
+export enum ChainType {
+  BITCOIN_MAINNET = 'BITCOIN_MAINNET',
+  BITCOIN_TESTNET = 'BITCOIN_TESTNET',
+  BITCOIN_TESTNET4 = 'BITCOIN_TESTNET4',
+  BITCOIN_SIGNET = 'BITCOIN_SIGNET',
+  FRACTAL_BITCOIN_MAINNET = 'FRACTAL_BITCOIN_MAINNET',
+  FRACTAL_BITCOIN_TESTNET = 'FRACTAL_BITCOIN_TESTNET'
+}
+
+type TypeChain = {
+  enum: ChainType;
+  label: string;
+  icon: string;
+  unit: string;
+  networkType: NetworkType;
+  endpoints: string[];
+  mempoolSpaceUrl: string;
+  unisatUrl: string;
+  ordinalsUrl: string;
+  unisatExplorerUrl: string;
+  okxExplorerUrl: string;
+  isViewTxHistoryInternally?: boolean;
+  disable?: boolean;
+  isFractal?: boolean;
+  showPrice: boolean;
+};
+
+export const CHAINS_MAP: { [key: string]: TypeChain } = {
+  [CHAINS_ENUM.BTC]: {
+      enum: ChainType.BITCOIN_TESTNET,
+      label: 'Bitcoin Testnet',
+      icon: './images/artifacts/bitcoin-testnet.svg',
+      unit: 'tBTC',
+      networkType: NetworkType.TESTNET,
+      endpoints: ['https://wallet-api-testnet.unisat.io'],
+      mempoolSpaceUrl: 'https://mempool.space/testnet',
+      unisatUrl: 'https://testnet.unisat.io',
+      ordinalsUrl: 'https://testnet.ordinals.com',
+      unisatExplorerUrl: '',
+      okxExplorerUrl: '',
+      showPrice: false
+  }
+  // [ChainType.BITCOIN_MAINNET]: {
+  //   enum: ChainType.BITCOIN_MAINNET,
+  //   label: 'Bitcoin Mainnet',
+  //   icon: './images/artifacts/bitcoin-mainnet.png',
+  //   unit: 'BTC',
+  //   networkType: NetworkType.MAINNET,
+  //   endpoints: ['https://wallet-api.unisat.io'],
+  //   mempoolSpaceUrl: 'https://mempool.space',
+  //   unisatUrl: 'https://unisat.io',
+  //   ordinalsUrl: 'https://ordinals.com',
+  //   unisatExplorerUrl: '',
+  //   okxExplorerUrl: '',
+  //   showPrice: true
+  // },
+  // [ChainType.BITCOIN_TESTNET]: {
+  //   enum: ChainType.BITCOIN_TESTNET,
+  //   label: 'Bitcoin Testnet',
+  //   icon: './images/artifacts/bitcoin-testnet.svg',
+  //   unit: 'tBTC',
+  //   networkType: NetworkType.TESTNET,
+  //   endpoints: ['https://wallet-api-testnet.unisat.io'],
+  //   mempoolSpaceUrl: 'https://mempool.space/testnet',
+  //   unisatUrl: 'https://testnet.unisat.io',
+  //   ordinalsUrl: 'https://testnet.ordinals.com',
+  //   unisatExplorerUrl: '',
+  //   okxExplorerUrl: '',
+  //   showPrice: false
+  // },
+  // [ChainType.BITCOIN_TESTNET4]: {
+  //   enum: ChainType.BITCOIN_TESTNET4,
+  //   label: 'Bitcoin Testnet4 (Beta)',
+  //   icon: './images/artifacts/bitcoin-testnet.svg',
+  //   unit: 'tBTC',
+  //   networkType: NetworkType.TESTNET,
+  //   endpoints: ['https://wallet-api-testnet4.unisat.io'],
+  //   mempoolSpaceUrl: 'https://mempool.space/testnet4',
+  //   unisatUrl: 'https://testnet4.unisat.io',
+  //   ordinalsUrl: 'https://testnet4.ordinals.com',
+  //   unisatExplorerUrl: '',
+  //   okxExplorerUrl: '',
+  //   showPrice: false
+  // },
+  // [ChainType.BITCOIN_SIGNET]: {
+  //   enum: ChainType.BITCOIN_SIGNET,
+  //   label: 'Bitcoin Signet',
+  //   icon: './images/artifacts/bitcoin-signet.svg',
+  //   unit: 'sBTC',
+  //   networkType: NetworkType.TESTNET,
+  //   endpoints: ['https://wallet-api-signet.unisat.io'],
+  //   mempoolSpaceUrl: 'https://mempool.space/signet',
+  //   unisatUrl: 'https://signet.unisat.io',
+  //   ordinalsUrl: 'https://signet.ordinals.com',
+  //   unisatExplorerUrl: '',
+  //   okxExplorerUrl: '',
+  //   showPrice: false
+  // },
+  // [ChainType.FRACTAL_BITCOIN_MAINNET]: {
+  //   enum: ChainType.FRACTAL_BITCOIN_MAINNET,
+  //   label: 'Fractal Bitcoin Mainnet (Not Ready)',
+  //   icon: './images/artifacts/fractal-mainnet.svg',
+  //   unit: 'FB',
+  //   networkType: NetworkType.MAINNET,
+  //   endpoints: ['https://wallet-api-fractal.unisat.io'],
+  //   mempoolSpaceUrl: 'https://mempool.fractalbitcoin.io',
+  //   unisatUrl: 'https://fractal.unisat.io',
+  //   ordinalsUrl: 'https://ordinals.fractalbitcoin.io',
+  //   unisatExplorerUrl: 'https://explorer.fractalbitcoin.io',
+  //   okxExplorerUrl: '',
+  //   isViewTxHistoryInternally: false,
+  //   disable: true,
+  //   isFractal: true,
+  //   showPrice: true
+  // },
+  // [ChainType.FRACTAL_BITCOIN_TESTNET]: {
+  //   enum: ChainType.FRACTAL_BITCOIN_TESTNET,
+  //   label: 'Fractal Bitcoin Testnet',
+  //   icon: './images/artifacts/fractal-testnet.svg',
+  //   unit: 'tFB',
+  //   networkType: NetworkType.MAINNET,
+  //   endpoints: ['https://wallet-api-fractal-testnet.unisat.io'],
+  //   mempoolSpaceUrl: 'https://mempool-testnet.fractalbitcoin.io',
+  //   unisatUrl: 'https://fractal-testnet.unisat.io',
+  //   ordinalsUrl: 'https://ordinals-testnet.fractalbitcoin.io',
+  //   unisatExplorerUrl: 'https://explorer-testnet.fractalbitcoin.io',
+  //   okxExplorerUrl: '',
+  //   isViewTxHistoryInternally: false,
+  //   isFractal: true,
+  //   showPrice: false
+  // }
+};
+
+// export const CHAINS: Record<string, Chain> = {
+//   [CHAINS_ENUM.BTC]: {
+//     name: 'BTC',
+//     enum: CHAINS_ENUM.BTC,
+//     logo: '',
+//     network: 'testnet'
+//   }
+// };
+export const CHAINS = Object.values(CHAINS_MAP);

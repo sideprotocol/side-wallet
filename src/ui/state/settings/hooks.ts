@@ -1,11 +1,11 @@
 import compareVersions from 'compare-versions';
 import { useCallback } from 'react';
 
-import { CHAINS_ENUM, VERSION } from '@/shared/constant';
+// import { CHAINS_ENUM, VERSION } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { useWallet } from '@/ui/utils';
 import i18n, { addResourceBundle } from '@/ui/utils/i18n';
-
+import { CHAINS_ENUM, CHAINS_MAP, VERSION } from '@/shared/constant';
 import { AppState } from '..';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { settingsActions } from './reducer';
@@ -168,4 +168,19 @@ export function useSkipVersionCallback() {
       dispatch(settingsActions.updateSettings({ skippedVersion: version }));
     });
   }, []);
+}
+
+export function useChainType() {
+  const accountsState = useSettingsState();
+  return accountsState.chainType;
+}
+
+export function useChain() {
+  const accountsState = useSettingsState();
+  return CHAINS_MAP[accountsState?.chainType];
+}
+
+export function useBTCUnit() {
+  const chainType = useChainType();
+  return CHAINS_MAP[chainType]?.unit;
 }

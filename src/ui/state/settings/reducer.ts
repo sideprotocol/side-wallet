@@ -1,6 +1,6 @@
 import { AddressType, NetworkType, WalletConfig } from '@/shared/types';
 import { createSlice } from '@reduxjs/toolkit';
-
+import { ChainType } from '@/shared/constant';
 import { updateVersion } from '../global/actions';
 
 export interface SettingsState {
@@ -10,6 +10,7 @@ export interface SettingsState {
   walletConfig: WalletConfig;
   skippedVersion: string;
   unLockTimeLimit: number;
+  chainType?: ChainType;
 }
 
 export const initialState: SettingsState = {
@@ -17,6 +18,7 @@ export const initialState: SettingsState = {
   addressType: AddressType.P2TR,
   // networkType: NetworkType.MAINNET,
   networkType: NetworkType.TESTNET,
+  chainType: ChainType.BITCOIN_MAINNET,
   walletConfig: {
     version: '',
     moonPayEnabled: true,
