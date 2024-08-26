@@ -25,10 +25,6 @@ async function restoreAppState() {
   keyringService.store.subscribe((value) => storage.set('keyringState', value));
 
   await preferenceService.init();
-
-  console.log('init');
-  // debugger;
-
   await openapiService.init();
 
   await permissionService.init();

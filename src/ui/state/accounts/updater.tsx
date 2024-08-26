@@ -39,7 +39,7 @@ export default function AccountUpdater() {
     onCurrentChange();
   }, [currentAccount && currentAccount.key, isUnlocked]);
 
-  // const fetchBalance = useFetchBalanceCallback();
+  const fetchBalance = useFetchBalanceCallback();
   useEffect(() => {
     if (self.loadingBalance) {
       return;
@@ -51,11 +51,11 @@ export default function AccountUpdater() {
       return;
     }
     self.loadingBalance = true;
-    // fetchBalance().finally(() => {
-    //   self.loadingBalance = false;
-    // });
-  }, [wallet, isUnlocked, self]);
-  // }, [fetchBalance, wallet, isUnlocked, self]);
+    fetchBalance().finally(() => {
+      self.loadingBalance = false;
+    });
+  // }, [wallet, isUnlocked, self]);
+  }, [fetchBalance, wallet, isUnlocked, self]);
 
   useEffect(() => {
     const accountChangeHandler = (account: Account) => {
