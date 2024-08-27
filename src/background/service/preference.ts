@@ -2,7 +2,7 @@ import compareVersions from 'compare-versions';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { createPersistStore } from '@/background/utils';
-import { AddressFlagType, EVENTS } from '@/shared/constant';
+import { AddressFlagType, CHAINS, ChainType, DEFAULT_LOCKTIME_ID, EVENTS } from '@/shared/constant';
 import eventBus from '@/shared/eventBus';
 import {
   Account,
@@ -42,6 +42,7 @@ export interface PreferenceStore {
   currency: string;
   addressType: AddressType;
   networkType: NetworkType;
+  chainType: ChainType;
   keyringAlianNames: {
     [key: string]: string;
   };
@@ -86,6 +87,7 @@ export interface PreferenceStore {
   showSafeNotice: boolean;
   addressFlags: { [key: string]: number };
   enableSignData: boolean;
+  autoLockTimeId: number;
 }
 
 const SUPPORT_LOCALES = ['en'];
@@ -117,6 +119,7 @@ class PreferenceService {
         currency: 'USD',
         addressType: AddressType.P2WPKH,
         networkType: NetworkType.MAINNET,
+        chainType: ChainType.BITCOIN_MAINNET,
         keyringAlianNames: {},
         accountAlianNames: {},
         uiCachedData: {},
@@ -129,6 +132,7 @@ class PreferenceService {
         showSafeNotice: true,
         addressFlags: {},
         enableSignData: false,
+        autoLockTimeId: DEFAULT_LOCKTIME_ID
       }
     });
     if (!this.store.locale || this.store.locale !== defaultLang) {
@@ -207,6 +211,18 @@ class PreferenceService {
 
     if (typeof this.store.enableSignData !== 'boolean') {
       this.store.enableSignData = false;
+    }
+
+    if (!this.store.chainType) {
+      if (this.store.networkType === NetworkType.MAINNET) {
+        this.store.chainType = ChainType.BITCOIN_MAINNET;
+      } else {
+        this.store.chainType = ChainType.BITCOIN_TESTNET;
+      }
+    }
+
+    if (typeof this.store.autoLockTimeId !== 'number') {
+      this.store.autoLockTimeId = DEFAULT_LOCKTIME_ID;
     }
   };
 
@@ -350,13 +366,25 @@ class PreferenceService {
     return this.store.addressType;
   };
 
-  // network type
-  getNetworkType = () => {
-    return this.store.networkType;
+  // // network type
+  // getNetworkType = () => {
+  //   return this.store.networkType;
+  // };
+
+  // setNetworkType = (networkType: NetworkType) => {
+  //   this.store.networkType = networkType;
+  // };
+
+  // chain type
+  getChainType = () => {
+    if (!CHAINS.find((chain) => chain.enum === this.store.chainType)) {
+      this.store.chainType = ChainType.BITCOIN_MAINNET;
+    }
+    return this.store.chainType;
   };
 
-  setNetworkType = (networkType: NetworkType) => {
-    this.store.networkType = networkType;
+  setChainType = (chainType: ChainType) => {
+    this.store.chainType = chainType;
   };
 
   // currentKeyringIndex
@@ -501,9 +529,12 @@ class PreferenceService {
     this.store.enableSignData = enableSignData;
   };
 
-  reset = () => {
-    this.store.keyringAlianNames = {};
-    this.store.accountAlianNames = {};
+  getAutoLockTimeId = () => {
+    return this.store.autoLockTimeId;
+  };
+
+  setAutoLockTimeId = (id: number) => {
+    this.store.autoLockTimeId = id;
   };
 }
 
