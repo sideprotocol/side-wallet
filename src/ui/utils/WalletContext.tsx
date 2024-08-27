@@ -31,7 +31,8 @@ import {
   UTXO_Detail,
   VersionDetail,
   WalletConfig,
-  WalletKeyring
+  WalletKeyring,
+  TickPriceItem,
 } from '@/shared/types';
 import { AddressType, UnspentOutput } from '@unisat/wallet-sdk';
 import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
@@ -213,6 +214,9 @@ export interface WalletController {
 
   setAccountAlianName(account: Account, name: string): Promise<Account>;
   getFeeSummary(): Promise<FeeSummary>;
+  getBtcPrice(): Promise<number>;
+  getBrc20sPrice(ticks: string[]): Promise<{ [tick: string]: TickPriceItem }>;
+  getRunesPrice(ticks: string[]): Promise<{ [tick: string]: TickPriceItem }>;
 
   setEditingKeyring(keyringIndex: number): Promise<void>;
   getEditingKeyring(): Promise<WalletKeyring>;

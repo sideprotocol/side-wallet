@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { CHAINS_ENUM } from '@/shared/constant';
@@ -9,26 +9,41 @@ import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
-import { useRuneAndBtcBalances } from '@/ui/state/bridge/hook';
+import { useRuneAndBtcBalances, useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
-import { formatUnitAmount, getTruncate } from '@/ui/utils';
+import { amountToSatoshis, formatUnitAmount, getTruncate, satoshisToAmount } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+import { runesUtils } from '@/shared/lib/runes-utils';
+import { useSafeBalance } from '@/ui/state/transactions/hooks';
 
-function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
+function BitcoinCryptoItem({ token }: { token }) {
   const accountBalance = useAccountBalance();
-  // const { data: totalPrice } = useCalcPrice(accountBalance.btc_amount, token.coingecko_id);
+  const safeBalance = useSafeBalance();
+  const totalSatoshis = amountToSatoshis(accountBalance.amount);
 
+  const avaiableSatoshis = useMemo(() => {
+    return amountToSatoshis(safeBalance);
+  }, [safeBalance]);
+  const unavailableSatoshis = totalSatoshis - avaiableSatoshis;
+  const avaiableAmount = safeBalance;
+  const unavailableAmount = satoshisToAmount(unavailableSatoshis);
+  const totalAmount = accountBalance.amount;
+  const { data: totalPrice } = useCalcPrice(totalAmount?.toString(), token.base, token.exponent);
+  const balance =  runesUtils.toDecimalNumber(totalAmount, token?.divisibility);
+  console.log(`totalAmount: `, avaiableAmount, totalAmount, unavailableAmount);
   return (
     <>
       <Row>
-        <Image src={token.logo} size={38}></Image>
+        {
+          token?.logo ? <Image src={token?.logo} size={38}></Image> : ''
+        }
         <Column
           style={{
             gap: '0px'
           }}>
-          <Text preset="regular" text={token.symbol}></Text>
-          <Text preset="sub" text={token.name}></Text>
+          <Text preset="regular" text={token?.spacedRune}></Text>
+          <Text preset="sub" text={token?.symbol}></Text>
         </Column>
       </Row>
 
@@ -36,15 +51,23 @@ function BitcoinCryptoItem({ token }: { token: BitcoinToken }) {
         style={{
           gap: '0px'
         }}>
-        <Text preset="regular" textEnd text={token?.balance}></Text>
-        <Text preset="sub" textEnd text={`${getTruncate(token?.price)}`}></Text>
+        <Text preset="regular" textEnd text={totalAmount}></Text>
+        <Text preset="sub" textEnd text={`${getTruncate(totalPrice)}`}></Text>
       </Column>
     </>
   );
 }
 
-function BitCrypto({ searchTerm }) {
-  const runeAndBtcTokens = useRuneAndBtcBalances();
+function BitCrypto() {
+  const item: BitcoinToken = {
+    base: 'btc',
+    coingecko_id: 'bitcoin',
+    exponent: '8',
+    logo: 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPCEtLSBDcmVhdG9yOiBDb3JlbERSQVcgMjAxOSAoNjQtQml0KSAtLT4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZlcnNpb249IjEuMSIgc2hhcGUtcmVuZGVyaW5nPSJnZW9tZXRyaWNQcmVjaXNpb24iIHRleHQtcmVuZGVyaW5nPSJnZW9tZXRyaWNQcmVjaXNpb24iIGltYWdlLXJlbmRlcmluZz0ib3B0aW1pemVRdWFsaXR5IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIKdmlld0JveD0iMCAwIDQwOTEuMjcgNDA5MS43MyIKIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIgogeG1sbnM6eG9kbT0iaHR0cDovL3d3dy5jb3JlbC5jb20vY29yZWxkcmF3L29kbS8yMDAzIj4KIDxnIGlkPSJMYXllcl94MDAyMF8xIj4KICA8bWV0YWRhdGEgaWQ9IkNvcmVsQ29ycElEXzBDb3JlbC1MYXllciIvPgogIDxnIGlkPSJfMTQyMTM0NDAyMzMyOCI+CiAgIDxwYXRoIGZpbGw9IiNGNzkzMUEiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTQwMzAuMDYgMjU0MC43N2MtMjczLjI0LDEwOTYuMDEgLTEzODMuMzIsMTc2My4wMiAtMjQ3OS40NiwxNDg5LjcxIC0xMDk1LjY4LC0yNzMuMjQgLTE3NjIuNjksLTEzODMuMzkgLTE0ODkuMzMsLTI0NzkuMzEgMjczLjEyLC0xMDk2LjEzIDEzODMuMiwtMTc2My4xOSAyNDc5LC0xNDg5Ljk1IDEwOTYuMDYsMjczLjI0IDE3NjMuMDMsMTM4My41MSAxNDg5Ljc2LDI0NzkuNTdsMC4wMiAtMC4wMnoiLz4KICAgPHBhdGggZmlsbD0id2hpdGUiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTI5NDcuNzcgMTc1NC4zOGM0MC43MiwtMjcyLjI2IC0xNjYuNTYsLTQxOC42MSAtNDUwLC01MTYuMjRsOTEuOTUgLTM2OC44IC0yMjQuNSAtNTUuOTQgLTg5LjUxIDM1OS4wOWMtNTkuMDIsLTE0LjcyIC0xMTkuNjMsLTI4LjU5IC0xNzkuODcsLTQyLjM0bDkwLjE2IC0zNjEuNDYgLTIyNC4zNiAtNTUuOTQgLTkyIDM2OC42OGMtNDguODQsLTExLjEyIC05Ni44MSwtMjIuMTEgLTE0My4zNSwtMzMuNjlsMC4yNiAtMS4xNiAtMzA5LjU5IC03Ny4zMSAtNTkuNzIgMjM5Ljc4YzAsMCAxNjYuNTYsMzguMTggMTYzLjA1LDQwLjUzIDkwLjkxLDIyLjY5IDEwNy4zNSw4Mi44NyAxMDQuNjIsMTMwLjU3bC0xMDQuNzQgNDIwLjE1YzYuMjYsMS41OSAxNC4zOCwzLjg5IDIzLjM0LDcuNDkgLTcuNDksLTEuODYgLTE1LjQ2LC0zLjg5IC0yMy43MywtNS44N2wtMTQ2LjgxIDU4OC41N2MtMTEuMTEsMjcuNjIgLTM5LjMxLDY5LjA3IC0xMDIuODcsNTMuMzMgMi4yNSwzLjI2IC0xNjMuMTcsLTQwLjcyIC0xNjMuMTcsLTQwLjcybC0xMTEuNDYgMjU2Ljk4IDI5Mi4xNSA3Mi44M2M1NC4zNSwxMy42MyAxMDcuNjEsMjcuODkgMTYwLjA2LDQxLjNsLTkyLjkgMzczLjAzIDIyNC4yNCA1NS45NCA5MiAtMzY5LjA3YzYxLjI2LDE2LjYzIDEyMC43MSwzMS45NyAxNzguOTEsNDYuNDNsLTkxLjY5IDM2Ny4zMyAyMjQuNTEgNTUuOTQgOTIuODkgLTM3Mi4zM2MzODIuODIsNzIuNDUgNjcwLjY3LDQzLjI0IDc5MS44MywtMzAzLjAyIDk3LjYzLC0yNzguNzggLTQuODYsLTQzOS41OCAtMjA2LjI2LC01NDQuNDQgMTQ2LjY5LC0zMy44MyAyNTcuMTgsLTEzMC4zMSAyODYuNjQsLTMyOS42MWwtMC4wNyAtMC4wNXptLTUxMi45MyA3MTkuMjZjLTY5LjM4LDI3OC43OCAtNTM4Ljc2LDEyOC4wOCAtNjkwLjk0LDkwLjI5bDEyMy4yOCAtNDk0LjJjMTUyLjE3LDM3Ljk5IDY0MC4xNywxMTMuMTcgNTY3LjY3LDQwMy45MXptNjkuNDMgLTcyMy4zYy02My4yOSwyNTMuNTggLTQ1My45NiwxMjQuNzUgLTU4MC42OSw5My4xNmwxMTEuNzcgLTQ0OC4yMWMxMjYuNzMsMzEuNTkgNTM0Ljg1LDkwLjU1IDQ2OC45NCwzNTUuMDVsLTAuMDIgMHoiLz4KICA8L2c+CiA8L2c+Cjwvc3ZnPgo=',
+    name: 'Bitcoin',
+    precision: 8,
+    symbol: 'BTC',
+  };
   const navigate = useNavigate();
   const { state } = useLocation();
   const { chain, type } = state as {
@@ -55,20 +78,59 @@ function BitCrypto({ searchTerm }) {
 
   return (
     <>
-      {runeAndBtcTokens.map((token) => {
+      <Row
+        classname={'bg-item-hover'}
+        onClick={() => {
+          if (type === 'receive') {
+            navigate('SelectAddressScreen', { ...state, base: item?.symbol, token: item });
+          } else {
+            resetUiTxCreateScreen();
+            navigate('TxCreateScreen', { ...state, base: item?.symbol, token: item });
+          }
+        }}
+        full
+        key={item?.symbol + item?.name}
+        justifyBetween
+        style={{
+          cursor: 'pointer',
+          margin: '0 16px',
+          padding: '10px 16px',
+          height: '44px'
+        }}>
+        <BitcoinCryptoItem token={item} />
+      </Row>
+    </>
+  );
+}
+
+function BitAndRuneCrypto({searchTerm}) {
+  const { tokens: runeList } = useRuneListV2();
+  // const runeAndBtcTokens = useRuneAndBtcBalances();
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const { chain, type } = state as {
+    chain: CHAINS_ENUM;
+    type: 'receive' | 'send';
+  };
+  const resetUiTxCreateScreen = useResetUiTxCreateScreen();
+
+  return (
+    <>
+      <BitCrypto />
+      {runeList.map((token) => {
         return (
           <Row
             classname={'bg-item-hover'}
             onClick={() => {
               if (type === 'receive') {
-                navigate('SelectAddressScreen', { ...state, base: token.symbol, token });
+                navigate('SelectAddressScreen', { ...state, base: token?.symbol, token });
               } else {
                 resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { ...state, base: token.symbol, token });
+                navigate('TxCreateScreen', { ...state, base: token?.symbol, token });
               }
             }}
             full
-            key={token.symbol + token.name}
+            key={token?.symbol + token?.name}
             justifyBetween
             style={{
               cursor: 'pointer',
@@ -237,7 +299,7 @@ export default function SelecCryptoScreen() {
         </Column>
 
         <Column>
-          {chain === CHAINS_ENUM.SIDE ? <SideCrypto searchTerm={searchTerm} /> : <BitCrypto searchTerm={searchTerm} />}
+          {chain === CHAINS_ENUM.SIDE ? <SideCrypto searchTerm={searchTerm} /> : <BitAndRuneCrypto searchTerm={searchTerm} />}
         </Column>
       </Content>
     </Layout>

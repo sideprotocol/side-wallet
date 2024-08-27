@@ -162,7 +162,7 @@ export default function CreateSendBtc() {
         onBack={() => {
           window.history.go(-1);
         }}
-        title={`Send ${token.symbol}`}
+        title={`Send ${token?.symbol}`}
       />
 
       <Row
@@ -184,7 +184,7 @@ export default function CreateSendBtc() {
           style={{
             marginTop: '6px'
           }}>
-          <Image src={token.logo} size={50}></Image>
+          <Image src={token?.logo} size={50}></Image>
           {/* <Icon icon={token.logo || 'btc'} size={50} /> */}
         </Row>
       </Row>

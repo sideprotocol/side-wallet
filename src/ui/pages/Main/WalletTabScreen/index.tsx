@@ -10,15 +10,15 @@ import { getCurrentTab } from '@/ui/features/browser/tabs';
 import { useGetAccountBalanceByUSD } from '@/ui/hooks/useGetBalance';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
-import { useRuneAndBtcBalances } from '@/ui/state/bridge/hook';
+import { useRuneAndBtcBalances, useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useBlockstreamUrl, useSkipVersionCallback, useVersionInfo, useWalletConfig } from '@/ui/state/settings/hooks';
 import { useAssetTabKey } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
-// import walletLogo from '/images/logo/wallet-logo.png';
+import { AssetTabKey, uiActions } from '@/ui/state/ui/reducer';
 import { getTruncate, useWallet } from '@/ui/utils';
-
+import { useChainType } from '@/ui/state/settings/hooks';
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
 import MainHeader from '../MainHeader';
@@ -89,8 +89,9 @@ export default function WalletTabScreen() {
     setIsHoveredMoney(false);
   };
 
-  const runeAndBtcTokens = useRuneAndBtcBalances();
-
+  // const runeAndBtcTokens = useRuneAndBtcBalances();
+  const { tokens: runeList } = useRuneListV2();
+  console.log(`runeList: `, runeList);
   return (
     <Layout
       style={{
@@ -238,9 +239,11 @@ export default function WalletTabScreen() {
                 label: 'Bitcoin'
               }
             ]}
-            onChange={(value) => {
+            onChange={(value, index) => {
               const tab = value as CHAINS_ENUM;
               setCurrentTab(tab);
+              // console.log(`value: `, value, tab, index);
+              // dispatch(uiActions.updateAssetTabScreen({ assetTabKey: index as unknown as AssetTabKey }));
             }}
             value={currentTab}
           />
@@ -255,7 +258,7 @@ export default function WalletTabScreen() {
           {currentTab === CHAINS_ENUM.SIDE ? (
             <SideTokenList balanceVisible={balanceVisible} />
           ) : (
-            <BtcTokenList balanceVisible={balanceVisible} runeAndBtcTokens={runeAndBtcTokens} />
+            <BtcTokenList balanceVisible={balanceVisible} runeAndBtcTokens={runeList} />
           )}
         </Column>
       </Column>

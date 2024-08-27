@@ -539,3 +539,8 @@ export interface CosmosTxResponse {
   }[];
   transactionHash: string;
 }
+
+export type TickPriceItem = {
+  curPrice: number;
+  changePercent: number;
+};

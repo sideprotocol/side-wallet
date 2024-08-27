@@ -13,7 +13,7 @@ export default function TxCreateScreen() {
     token: any;
   };
 
-  // console.log('token: ', token);
+  console.log('state: ', state, chain);
 
   const isRune = !!token?.base?.includes('runes');
 

@@ -1722,6 +1722,9 @@ export class WalletController extends BaseController {
     return openapiService.getVersionDetail(version);
   };
 
+  getRunesPrice = async (ticks: string[]) => {
+    return openapiService.getRunesPrice(ticks);
+  };
   isAtomicalsEnabled = async () => {
     const current = await this.getCurrentAccount();
     if (!current) return false;

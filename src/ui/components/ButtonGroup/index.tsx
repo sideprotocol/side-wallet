@@ -10,7 +10,7 @@ interface ButtonItem {
 interface IButtonGroupProps {
   list: ButtonItem[];
   value: ButtonItem['key'];
-  onChange: (value: ButtonItem['key']) => void;
+  onChange: (value: ButtonItem['key'], index: number) => void;
   rowProps: RowProps;
   size?: 'normal' | 'big';
 }
@@ -31,7 +31,7 @@ export function ButtonGroup(props: IButtonGroupProps) {
           padding: '3px 5px',
           gap: '0'
         }}>
-        {list.map((item) => {
+        {list.map((item, index) => {
           return (
             <div
               key={item.key}
@@ -53,7 +53,7 @@ export function ButtonGroup(props: IButtonGroupProps) {
                 if (item.key === value) {
                   return;
                 }
-                onChange(item.key);
+                onChange(item.key, index);
               }}>
               {item.label}
             </div>
