@@ -17,7 +17,7 @@ import { useNavigate } from '../MainRoute';
 import { runesUtils } from '@/shared/lib/runes-utils';
 import { useSafeBalance } from '@/ui/state/transactions/hooks';
 
-function BitcoinCryptoItem({ token }: { token }) {
+function RuneItem({ token }: { token }) {
   const accountBalance = useAccountBalance();
   const safeBalance = useSafeBalance();
   const totalSatoshis = amountToSatoshis(accountBalance.amount);
@@ -30,8 +30,47 @@ function BitcoinCryptoItem({ token }: { token }) {
   const unavailableAmount = satoshisToAmount(unavailableSatoshis);
   const totalAmount = accountBalance.amount;
   const { data: totalPrice } = useCalcPrice(totalAmount?.toString(), token.base, token.exponent);
-  const balance =  runesUtils.toDecimalNumber(totalAmount, token?.divisibility);
+  const balance =  runesUtils.toDecimalNumber(token?.amount, token?.divisibility);
   console.log(`totalAmount: `, avaiableAmount, totalAmount, unavailableAmount);
+  return (
+    <>
+      <Row>
+        {
+          token?.logo ? <Image src={token?.logo} size={38}></Image> : ''
+        }
+        <Column
+          style={{
+            gap: '0px'
+          }}>
+          <Text preset="regular" text={token?.spacedRune}></Text>
+          <Text preset="sub" text={token?.symbol}></Text>
+        </Column>
+      </Row>
+
+      <Column
+        style={{
+          gap: '0px'
+        }}>
+        <Text preset="regular" textEnd text={balance?.toString()}></Text>
+        <Text preset="sub" textEnd text={`${getTruncate(totalPrice)}`}></Text>
+      </Column>
+    </>
+  );
+}
+
+function BitcoinItem({ token }: { token }) {
+  const accountBalance = useAccountBalance();
+  const safeBalance = useSafeBalance();
+  const totalSatoshis = amountToSatoshis(accountBalance.amount);
+
+  const avaiableSatoshis = useMemo(() => {
+    return amountToSatoshis(safeBalance);
+  }, [safeBalance]);
+  const unavailableSatoshis = totalSatoshis - avaiableSatoshis;
+  const avaiableAmount = safeBalance;
+  const unavailableAmount = satoshisToAmount(unavailableSatoshis);
+  const totalAmount = accountBalance.amount;
+  const { data: totalPrice } = useCalcPrice(totalAmount?.toString(), token.base, token.exponent);
   return (
     <>
       <Row>
@@ -97,7 +136,7 @@ function BitCrypto() {
           padding: '10px 16px',
           height: '44px'
         }}>
-        <BitcoinCryptoItem token={item} />
+        <BitcoinItem token={item} />
       </Row>
     </>
   );
@@ -125,6 +164,8 @@ function BitAndRuneCrypto({searchTerm}) {
               if (type === 'receive') {
                 navigate('SelectAddressScreen', { ...state, base: token?.symbol, token });
               } else {
+                console.log(`token: `, token, state);
+                debugger;
                 resetUiTxCreateScreen();
                 navigate('TxCreateScreen', { ...state, base: token?.symbol, token });
               }
@@ -138,7 +179,7 @@ function BitAndRuneCrypto({searchTerm}) {
               padding: '10px 16px',
               height: '44px'
             }}>
-            <BitcoinCryptoItem token={token} />
+            <RuneItem token={token} />
           </Row>
         );
       })}
@@ -182,8 +223,6 @@ function SideCryptoItem({ token }: { token: SideToken }) {
 }
 
 function SideCrypto({ searchTerm }) {
-  // console.log(`searchTerm: `, searchTerm);
-  // debugger;
   const navigate = useNavigate();
   const { state } = useLocation();
   const { chain, type } = state as {
