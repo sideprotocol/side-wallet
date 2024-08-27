@@ -32,20 +32,20 @@ export default function BitcoinTxConfirmScreen() {
         window.history.go(-1);
       }}
       handleConfirm={(res) => {
-        if (type === TxType.SEND_RUNE_TEST || type === TxType.SEND_BTC_TEST) {
-          // console.log(`here11: `, type);
-          postRuneTest({
-            rawTransaction: rawTxInfo.rawtx
-          })
-            .then((txid) => {
-              navigate('TxSuccessScreen', { txid, chain: CHAINS_ENUM.SIDE_SIGNET });
-            })
-            .catch((error) => {
-              console.log('error: ', error);
-              navigate('TxFailScreen', { error });
-            });
-          return;
-        }
+        // if (type === TxType.SEND_RUNE_TEST || type === TxType.SEND_BTC_TEST) {
+        //   // console.log(`here11: `, type);
+        //   postRuneTest({
+        //     rawTransaction: rawTxInfo.rawtx
+        //   })
+        //     .then((txid) => {
+        //       navigate('TxSuccessScreen', { txid, chain: CHAINS_ENUM.SIDE_SIGNET });
+        //     })
+        //     .catch((error) => {
+        //       console.log('error: ', error);
+        //       navigate('TxFailScreen', { error });
+        //     });
+        //   return;
+        // }
         // console.log(`here22: `, type);
         pushBitcoinTx((res ?? rawTxInfo).rawtx).then(({ success, txid, error }) => {
           if (success) {

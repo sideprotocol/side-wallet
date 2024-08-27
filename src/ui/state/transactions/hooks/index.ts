@@ -621,7 +621,7 @@ export function useFetchAssetUtxosRunesCallback() {
   );
 }
 
-export function usePrepareSendRunesCallback() {
+export function usePrepareSendRunesCallbackV1() {
   const dispatch = useAppDispatch();
   const wallet = useWallet();
   const fromAddress = useAccountAddress();
@@ -646,6 +646,82 @@ export function usePrepareSendRunesCallback() {
       feeRate: number;
       enableRBF: boolean;
     }) => {
+      let btcUtxos = utxos;
+      if (btcUtxos.length === 0) {
+        btcUtxos = await fetchUtxos();
+      }
+
+      let assetUtxos = assetUtxosRunes;
+      if (assetUtxos.length == 0) {
+        assetUtxos = await fetchAssetUtxosRunes(runeid);
+      }
+
+      const psbtHex = await wallet.sendRunes({
+        to: toAddressInfo.address,
+        runeid,
+        runeAmount,
+        outputValue,
+        feeRate,
+        enableRBF,
+        btcUtxos,
+        assetUtxos
+      });
+      const psbt = bitcoin.Psbt.fromHex(psbtHex);
+
+      const rawtx = account.type === KEYRING_TYPE.KeystoneKeyring ? '' : psbt.extractTransaction().toHex();
+      dispatch(
+        transactionsActions.updateRunesTx({
+          rawtx,
+          psbtHex,
+          fromAddress,
+          feeRate,
+          enableRBF,
+          runeid,
+          runeAmount,
+          outputValue
+        })
+      );
+      const rawTxInfo: RawTxInfo = {
+        psbtHex,
+        rawtx,
+        toAddressInfo
+      };
+      return rawTxInfo;
+    },
+    [dispatch, wallet, fromAddress, utxos, assetUtxosRunes, fetchAssetUtxosRunes, account]
+  );
+}
+
+export function usePrepareSendRunesCallback() {
+  const dispatch = useAppDispatch();
+  const wallet = useWallet();
+  const fromAddress = useAccountAddress();
+  const utxos = useUtxos();
+  const fetchUtxos = useFetchUtxosCallback();
+  const assetUtxosRunes = useAssetUtxosRunes();
+  const fetchAssetUtxosRunes = useFetchAssetUtxosRunesCallback();
+  const account = useCurrentAccount();
+  return useCallback(
+    async ({
+             toAddressInfo,
+             runeid,
+             runeAmount,
+             outputValue,
+             feeRate,
+             enableRBF
+           }: {
+      toAddressInfo: ToAddressInfo;
+      runeid: string;
+      runeAmount: string;
+      outputValue?: number;
+      feeRate: number;
+      enableRBF: boolean;
+    }) => {
+      if (!feeRate) {
+        const summary = await wallet.getFeeSummary();
+        feeRate = summary.list[1].feeRate;
+      }
+
       let btcUtxos = utxos;
       if (btcUtxos.length === 0) {
         btcUtxos = await fetchUtxos();

@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
 
-import { TxType } from '@/shared/types';
+import { RawTxInfo } from '@/shared/types';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Button, Column, Content, Header, Image, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -9,12 +9,13 @@ import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { OutputValueBar } from '@/ui/components/OutputValueBar';
 import { RBFBar } from '@/ui/components/RBFBar';
 import { useNavigate } from '@/ui/pages/MainRoute';
-import { useBitcoinRuneBalance } from '@/ui/state/bridge/hook';
+import { useBitcoinRuneBalance, useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useSendRune } from '@/ui/state/send/hook';
-import { useBitcoinTx, useFetchUtxosCallback, useSafeBalance } from '@/ui/state/transactions/hooks';
+import { useBitcoinTx, useFetchUtxosCallback, useSafeBalance, usePrepareSendRunesCallback } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { parseUnitAmount, useLocationState } from '@/ui/utils';
 import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
+import { runesUtils } from '@/shared/lib/runes-utils';
 
 interface LocationState {
   base: string;
@@ -61,10 +62,19 @@ export default function CreateSendRune() {
       return 0;
     }
   }, [toInfo.address]);
-
-  const runeBalance = useBitcoinRuneBalance(token.base);
-
-  const { sendRune } = useSendRune();
+  const prepareSendRunes = usePrepareSendRunesCallback();
+  // const runeBalance = useBitcoinRuneBalance(token.base);
+  const [rawTxInfo, setRawTxInfo] = useState<RawTxInfo>();
+  const { tokens: runeList } = useRuneListV2();
+  const { balance: runeBalance, runeid} = useMemo(() => {
+    const rune = runeList.find((r) => r.base === token.base);
+    return {
+      ...rune,
+      balance: runesUtils.toDecimalNumber(rune?.amount, token?.divisibility)
+    };
+  }, [token, runeList]);
+  // const runeBalance =  runesUtils.toDecimalNumber(balance, token?.divisibility);
+  // const { sendRune } = useSendRune();
 
   useEffect(() => {
     setError('');
@@ -77,6 +87,24 @@ export default function CreateSendRune() {
     if (!!inputAmount && BigNumber(inputAmount || '0').lte(runeBalance)) {
       setDisabled(false);
     }
+
+    prepareSendRunes({
+      toAddressInfo: toInfo,
+      runeid: runeid,
+      runeAmount: inputAmount || '0',
+      outputValue: outputValue,
+      feeRate,
+      enableRBF
+    })
+      .then((data) => {
+        console.log(`data: `, data);
+        setRawTxInfo(data);
+        setDisabled(false);
+      })
+      .catch((e) => {
+        console.log(e);
+        setError(e.message);
+      });
   }, [toInfo, inputAmount, feeRate, enableRBF, runeBalance, minOutputValue, outputValue]);
 
   return (
@@ -158,7 +186,7 @@ export default function CreateSendRune() {
               }}>
               <img src={WalletIcon} alt={'WalletIcon'} />
 
-              <div>{runeBalance}</div>
+              <div>{runeBalance?.toString()}</div>
 
               {token.emoji}
             </Row>
@@ -221,25 +249,7 @@ export default function CreateSendRune() {
             preset="primary"
             text="Next"
             onClick={(e) => {
-              const unitAmount = BigNumber(parseUnitAmount(inputAmount, token?.exponent || 6)).toNumber();
-
-              sendRune({
-                to: toInfo.address,
-                fee: feeRate,
-                amount: unitAmount,
-                base: token.base,
-                enableRBF,
-                outputValue
-              })
-                .then((res) => {
-                  navigate('TxConfirmScreen', {
-                    rawTxInfo: res,
-                    type: TxType.SEND_RUNE_TEST
-                  });
-                })
-                .catch((error) => {
-                  navigate('TxFailScreen', { error: error.message });
-                });
+              navigate('TxConfirmScreen', { rawTxInfo });
             }}></Button>
         </Column>
       </Content>
