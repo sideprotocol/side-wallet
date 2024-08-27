@@ -86,6 +86,7 @@ export default function CreateSendRune() {
 
     if (!!inputAmount && BigNumber(inputAmount || '0').lte(runeBalance)) {
       setDisabled(false);
+      return;
     }
 
     prepareSendRunes({
