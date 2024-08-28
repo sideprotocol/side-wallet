@@ -112,7 +112,7 @@ export default function ChangePasswordScreen() {
               }}
               onBlur={(e) => {
                 setIsPwdFocus(false);
-                if (newPassword.length < 5) {
+                if (newPassword.length < 8) {
                   // tools.toastWarning('at least five characters');
                   setIsPwdError(true);
                   setPwdErrorMsg('Password must include at least 8 characters');

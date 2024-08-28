@@ -92,7 +92,7 @@ export default function CreatePasswordScreen() {
       setIsConfirmError(false);
       setConfirmErrorMsg('');
       if (password.length < 8) {
-        // tools.toastWarning('Password must contain at least 5 characters');
+        // tools.toastWarning('Password must contain at least 8 characters');
         setIsPwdError(true);
         setPwdErrorMsg('Password must include at least 8 characters');
         return;
