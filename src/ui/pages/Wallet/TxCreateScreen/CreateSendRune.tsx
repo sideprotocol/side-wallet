@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
 
+import { runesUtils } from '@/shared/lib/runes-utils';
 import { RawTxInfo } from '@/shared/types';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Button, Column, Content, Header, Image, Input, Layout, Row, Text } from '@/ui/components';
@@ -9,13 +10,16 @@ import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { OutputValueBar } from '@/ui/components/OutputValueBar';
 import { RBFBar } from '@/ui/components/RBFBar';
 import { useNavigate } from '@/ui/pages/MainRoute';
-import { useBitcoinRuneBalance, useRuneListV2 } from '@/ui/state/bridge/hook';
-import { useSendRune } from '@/ui/state/send/hook';
-import { useBitcoinTx, useFetchUtxosCallback, useSafeBalance, usePrepareSendRunesCallback } from '@/ui/state/transactions/hooks';
+import { useRuneListV2 } from '@/ui/state/bridge/hook';
+import {
+  useBitcoinTx,
+  useFetchUtxosCallback,
+  usePrepareSendRunesCallback,
+  useSafeBalance
+} from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
-import { parseUnitAmount, useLocationState } from '@/ui/utils';
+import { useLocationState } from '@/ui/utils';
 import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
-import { runesUtils } from '@/shared/lib/runes-utils';
 
 interface LocationState {
   base: string;
@@ -65,40 +69,47 @@ export default function CreateSendRune() {
   const prepareSendRunes = usePrepareSendRunesCallback();
   // const runeBalance = useBitcoinRuneBalance(token.base);
   const [rawTxInfo, setRawTxInfo] = useState<RawTxInfo>();
+
   const { tokens: runeList } = useRuneListV2();
-  const { balance: runeBalance, runeid} = useMemo(() => {
+
+  const {
+    balance: runeBalance,
+    runeid,
+    runeAmount
+  } = useMemo(() => {
     const rune = runeList.find((r) => r.base === token.base);
+
     return {
+      rune,
+      balance: runesUtils.toDecimalNumber(rune?.amount, token?.divisibility),
       ...rune,
-      balance: runesUtils.toDecimalNumber(rune?.amount, token?.divisibility)
+      runeAmount: runesUtils.fromDecimalAmount(inputAmount, rune?.divisibility || 2)
     };
-  }, [token, runeList]);
-  // const runeBalance =  runesUtils.toDecimalNumber(balance, token?.divisibility);
-  // const { sendRune } = useSendRune();
+  }, [token, runeList, inputAmount]);
 
   useEffect(() => {
     setError('');
     setDisabled(true);
 
+    if (!runeid || !inputAmount) return;
+
     if (outputValue < minOutputValue) {
       setError(`outputValue should be greater or equal than ${minOutputValue}`);
     }
 
-    if (!inputAmount || BigNumber(inputAmount || '0').lte(runeBalance)) {
+    if (BigNumber(inputAmount || '0').lte(runeBalance)) {
       setDisabled(false);
-      return;
     }
 
     prepareSendRunes({
       toAddressInfo: toInfo,
       runeid: runeid,
-      runeAmount: inputAmount || '0',
+      runeAmount: runeAmount || '0',
       outputValue: outputValue,
       feeRate,
       enableRBF
     })
       .then((data) => {
-        console.log(`data: `, data);
         setRawTxInfo(data);
         setDisabled(false);
       })
@@ -106,7 +117,7 @@ export default function CreateSendRune() {
         console.log('e: ', e);
         setError(e.message);
       });
-  }, [toInfo, inputAmount, feeRate, enableRBF, runeBalance, minOutputValue, outputValue]);
+  }, [toInfo, runeAmount, feeRate, enableRBF, runeBalance, minOutputValue, outputValue, runeid]);
 
   return (
     <Layout
@@ -250,6 +261,7 @@ export default function CreateSendRune() {
             preset="primary"
             text="Next"
             onClick={(e) => {
+              console.log({ rawTxInfo });
               navigate('TxConfirmScreen', { rawTxInfo });
             }}></Button>
         </Column>

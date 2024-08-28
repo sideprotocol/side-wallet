@@ -1,7 +1,5 @@
-import { CHAINS_ENUM } from '@/shared/constant';
 import { TxType } from '@/shared/types';
 import { Header } from '@/ui/components';
-import { postRuneTest } from '@/ui/state/send/hook';
 import { usePushBitcoinTxCallback } from '@/ui/state/transactions/hooks';
 import { useLocationState } from '@/ui/utils';
 
@@ -51,6 +49,7 @@ export default function BitcoinTxConfirmScreen() {
           if (success) {
             navigate('TxSuccessScreen', { txid });
           } else {
+            console.log('error: ', error);
             navigate('TxFailScreen', { error });
           }
         });
