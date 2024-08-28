@@ -91,7 +91,7 @@ export default function WalletTabScreen() {
 
   // const runeAndBtcTokens = useRuneAndBtcBalances();
   const { tokens: runeList } = useRuneListV2();
-  console.log(`runeList: `, runeList);
+  // console.log(`runeList: `, runeList);
   return (
     <Layout
       style={{

@@ -721,9 +721,14 @@ export const useRuneListV2 = () => {
       setTokens(list);
       setTotal(total);
       if(list.length > 0) {
-        wallet.getRunesPrice(list.map(item=>item.spacedRune)).then(setPriceMap)
+        console.log(`list.map(item=>item?.spacedRune): `, list.map(item=>item?.spacedRune));
+        wallet.getRunesPrice(list.map(item=>item?.spacedRune)).then((res) => {
+          console.log(`res: `, res);
+          setPriceMap(res)
+        })
       }
     } catch (e) {
+      console.log(`e: `, e);
       tools.toastError((e as Error).message);
     } finally {
       // tools.showLoading(false);
@@ -737,7 +742,8 @@ export const useRuneListV2 = () => {
     tokens,
     total,
     pagination,
-    fetchData
+    fetchData,
+    priceMap
   }
 }
 

@@ -5,7 +5,7 @@ import { AssetPriceType } from '@/background/service/asset';
 import { ContactBookItem, ContactBookStore } from '@/background/service/contactBook';
 import { ToSignInput } from '@/background/service/keyring';
 import { ConnectedSite } from '@/background/service/permission';
-import { AddressFlagType } from '@/shared/constant';
+import { AddressFlagType, ChainType } from '@/shared/constant';
 import {
   Account,
   AddressRunesTokenSummary,
@@ -199,6 +199,9 @@ export interface WalletController {
 
   getNetworkType(): Promise<NetworkType>;
   setNetworkType(type: NetworkType): Promise<void>;
+
+  getChainType(): Promise<ChainType>;
+  setChainType(type: ChainType): Promise<void>;
 
   getConnectedSites(): Promise<ConnectedSite[]>;
   removeConnectedSite(origin: string): Promise<void>;

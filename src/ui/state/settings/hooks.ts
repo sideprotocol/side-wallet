@@ -1,11 +1,10 @@
 import compareVersions from 'compare-versions';
 import { useCallback } from 'react';
-
 // import { CHAINS_ENUM, VERSION } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { useWallet } from '@/ui/utils';
 import i18n, { addResourceBundle } from '@/ui/utils/i18n';
-import { CHAINS_ENUM, CHAINS_MAP, VERSION } from '@/shared/constant';
+import { CHAINS_ENUM, CHAINS_MAP, VERSION, ChainType } from '@/shared/constant';
 import { AppState } from '..';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { settingsActions } from './reducer';
@@ -54,12 +53,21 @@ export function useChangeNetworkTypeCallback() {
   const wallet = useWallet();
   return useCallback(
     async (type: NetworkType) => {
-      await wallet.setNetworkType(type);
-      dispatch(
-        settingsActions.updateSettings({
-          networkType: type
-        })
-      );
+      if (type === NetworkType.MAINNET) {
+        await wallet.setChainType(ChainType.BITCOIN_MAINNET);
+        dispatch(
+          settingsActions.updateSettings({
+            chainType: ChainType.BITCOIN_MAINNET
+          })
+        );
+      } else if (type === NetworkType.TESTNET) {
+        await wallet.setChainType(ChainType.BITCOIN_TESTNET);
+        dispatch(
+          settingsActions.updateSettings({
+            chainType: ChainType.BITCOIN_TESTNET
+          })
+        );
+      }
     },
     [dispatch]
   );
@@ -183,4 +191,20 @@ export function useChain() {
 export function useBTCUnit() {
   const chainType = useChainType();
   return CHAINS_MAP[chainType]?.unit;
+}
+
+export function useChangeChainTypeCallback() {
+  const dispatch = useAppDispatch();
+  const wallet = useWallet();
+  return useCallback(
+    async (type: ChainType) => {
+      await wallet.setChainType(type);
+      dispatch(
+        settingsActions.updateSettings({
+          chainType: type
+        })
+      );
+    },
+    [dispatch]
+  );
 }

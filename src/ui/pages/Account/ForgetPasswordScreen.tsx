@@ -1,5 +1,5 @@
 import { Checkbox } from 'antd';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Lottie from 'react-lottie';
 import { useNavigate as useNavigateRouter } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import { keyringsActions } from '@/ui/state/keyrings/reducer';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+import { getPasswordStrengthWord } from '@/ui/utils/password-utils';
 
 export default function CreateHDWalletScreen() {
   const navigateRouter = useNavigateRouter();
@@ -19,6 +20,22 @@ export default function CreateHDWalletScreen() {
   const [checked3, setChecked3] = useState(false);
   const wallet = useWallet();
   const dispatch = useAppDispatch();
+
+  // const strongText = useMemo(() => {
+  //   if (!password) {
+  //     return;
+  //   }
+  //   const { text, color, tip } = getPasswordStrengthWord(password);
+  //
+  //   return (
+  //     <Column>
+  //       <Row>
+  //         <Text size="xs" text={'Password strength: '} />
+  //         <Text size="xs" text={text} style={{ color: color }} />
+  //       </Row>
+  //     </Column>
+  //   );
+  // }, [password]);
 
   return (
     <Layout style={{}}>

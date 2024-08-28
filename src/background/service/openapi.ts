@@ -133,7 +133,7 @@ export class OpenApiService {
   httpPost = async (route: string, params: any) => {
     const url = this.endpoint + route;
     const headers = new Headers();
-    headers.append('X-Client', 'UniSat Wallet');
+    headers.append('X-Client', 'Side Wallet');
     headers.append('X-Version', VERSION);
     headers.append('x-address', this.clientAddress);
     headers.append('x-flag', this.addressFlag + '');
@@ -347,7 +347,7 @@ export class OpenApiService {
     }
     const tickLine = ticks.join('');
     if (!tickLine) return {};
-
+    console.log(`this.currentRequestRune: `, this.currentRequestRune);
     try {
       while (this.currentRequestRune[tickLine]) {
         await new Promise((resolve) => setTimeout(resolve, 100));

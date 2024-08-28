@@ -27,7 +27,7 @@ export default function useGetTokenPrice() {
         const result = await services.dex.getAssetPrice(asset?.base);
         priceMap[asset?.base] = result;
       } catch (err) {
-        console.log(err);
+        console.log('err', err);
       }
     }
     localStorage.setItem('priceMap', JSON.stringify(priceMap));

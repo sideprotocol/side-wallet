@@ -362,6 +362,8 @@ export interface WalletConfig {
   version: string;
   moonPayEnabled: boolean;
   statusMessage: string;
+  endpoint: string;
+  chainTip: string;
 }
 
 export enum WebsiteState {
@@ -544,3 +546,8 @@ export type TickPriceItem = {
   curPrice: number;
   changePercent: number;
 };
+
+export interface BtcPrice {
+  price: number;
+  updateTime: number;
+}

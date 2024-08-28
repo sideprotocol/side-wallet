@@ -460,7 +460,7 @@ type TypeChain = {
 };
 
 export const CHAINS_MAP: { [key: string]: TypeChain } = {
-  [CHAINS_ENUM.BTC]: {
+  [ChainType.BITCOIN_TESTNET]: {
       enum: ChainType.BITCOIN_TESTNET,
       label: 'Bitcoin Testnet',
       icon: './images/artifacts/bitcoin-testnet.svg',
@@ -473,21 +473,21 @@ export const CHAINS_MAP: { [key: string]: TypeChain } = {
       unisatExplorerUrl: '',
       okxExplorerUrl: '',
       showPrice: false
+  },
+  [ChainType.BITCOIN_MAINNET]: {
+    enum: ChainType.BITCOIN_MAINNET,
+    label: 'Bitcoin Mainnet',
+    icon: './images/artifacts/bitcoin-mainnet.png',
+    unit: 'BTC',
+    networkType: NetworkType.MAINNET,
+    endpoints: ['https://wallet-api.unisat.io'],
+    mempoolSpaceUrl: 'https://mempool.space',
+    unisatUrl: 'https://unisat.io',
+    ordinalsUrl: 'https://ordinals.com',
+    unisatExplorerUrl: '',
+    okxExplorerUrl: '',
+    showPrice: true
   }
-  // [ChainType.BITCOIN_MAINNET]: {
-  //   enum: ChainType.BITCOIN_MAINNET,
-  //   label: 'Bitcoin Mainnet',
-  //   icon: './images/artifacts/bitcoin-mainnet.png',
-  //   unit: 'BTC',
-  //   networkType: NetworkType.MAINNET,
-  //   endpoints: ['https://wallet-api.unisat.io'],
-  //   mempoolSpaceUrl: 'https://mempool.space',
-  //   unisatUrl: 'https://unisat.io',
-  //   ordinalsUrl: 'https://ordinals.com',
-  //   unisatExplorerUrl: '',
-  //   okxExplorerUrl: '',
-  //   showPrice: true
-  // },
   // [ChainType.BITCOIN_TESTNET]: {
   //   enum: ChainType.BITCOIN_TESTNET,
   //   label: 'Bitcoin Testnet',

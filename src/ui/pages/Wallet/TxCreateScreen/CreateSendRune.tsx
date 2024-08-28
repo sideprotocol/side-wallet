@@ -84,7 +84,7 @@ export default function CreateSendRune() {
       setError(`outputValue should be greater or equal than ${minOutputValue}`);
     }
 
-    if (!!inputAmount && BigNumber(inputAmount || '0').lte(runeBalance)) {
+    if (!inputAmount || BigNumber(inputAmount || '0').lte(runeBalance)) {
       setDisabled(false);
       return;
     }
@@ -103,7 +103,7 @@ export default function CreateSendRune() {
         setDisabled(false);
       })
       .catch((e) => {
-        console.log(e);
+        console.log('e: ', e);
         setError(e.message);
       });
   }, [toInfo, inputAmount, feeRate, enableRBF, runeBalance, minOutputValue, outputValue]);

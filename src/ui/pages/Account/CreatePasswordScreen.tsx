@@ -1,11 +1,11 @@
 import { Checkbox } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useLocation, useNavigate as useNavigateRouter } from 'react-router-dom';
 
 import { Button, Column, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useWallet, useWalletRequest } from '@/ui/utils';
-
+import { getPasswordStrengthWord, MIN_PASSWORD_LENGTH } from '@/ui/utils/password-utils';
 import { useNavigate } from '../MainRoute';
 
 type Status = '' | 'error' | 'warning' | undefined;
@@ -55,6 +55,22 @@ export default function CreatePasswordScreen() {
     }
   });
 
+  const strongText = useMemo(() => {
+    if (!password) {
+      return;
+    }
+    const { text, color, tip } = getPasswordStrengthWord(password);
+
+    return (
+      <Column>
+        <Row>
+          <Text size="xs" text={'Password strength: '} />
+          <Text size="xs" text={text} style={{ color: color }} />
+        </Row>
+      </Column>
+    );
+  }, [password]);
+
   const btnClick = () => {
     run(password.trim());
   };
@@ -70,16 +86,15 @@ export default function CreatePasswordScreen() {
 
   useEffect(() => {
     setDisabled(true);
-
     if (password) {
       setIsPwdError(false);
       setPwdErrorMsg('');
       setIsConfirmError(false);
       setConfirmErrorMsg('');
-      if (password.length < 5) {
+      if (password.length < 8) {
         // tools.toastWarning('Password must contain at least 5 characters');
         setIsPwdError(true);
-        setPwdErrorMsg('Password must include at least 5 characters');
+        setPwdErrorMsg('Password must include at least 8 characters');
         return;
       }
       if (!check) {
@@ -96,10 +111,6 @@ export default function CreatePasswordScreen() {
   }, [password, password2, check]);
 
   const handleOnKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // setIsPwdError(false);
-    // setPwdErrorMsg('');
-    // setIsConfirmError(false);
-    // setConfirmErrorMsg('');
     if (!disabled && 'Enter' == e.key) {
       btnClick();
     }
@@ -159,6 +170,7 @@ export default function CreatePasswordScreen() {
             }}
             autoFocus={true}
           />
+          {strongText}
           <div style={{
             color: '#ff0000',
             fontSize: '14px',
