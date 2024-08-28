@@ -721,7 +721,7 @@ export const useRuneListV2 = () => {
       setTokens(list);
       setTotal(total);
       if(list.length > 0) {
-        console.log(`list.map(item=>item?.spacedRune): `, list.map(item=>item?.spacedRune));
+        // console.log(`list.map(item=>item?.spacedRune): `, list.map(item=>item?.spacedRune));
         wallet.getRunesPrice(list.map(item=>item?.spacedRune)).then((res) => {
           console.log(`res: `, res);
           setPriceMap(res)

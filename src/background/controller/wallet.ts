@@ -747,7 +747,7 @@ export class WalletController extends BaseController {
 
   getNetworkType = () => {
     const chainType = this.getChainType();
-    console.log(`chainType: `, chainType);
+    // console.log(`chainType: `, chainType);
     return CHAINS_MAP[chainType]?.networkType ?? '';
   };
 

@@ -68,8 +68,7 @@ export default function Index(props) {
       );
     });
   }
-  console.log('runeAndBtcTokens: ', runeAndBtcTokens);
-
+  // console.log('runeAndBtcTokens: ', runeAndBtcTokens);
   return (
     <Layout
       style={{
