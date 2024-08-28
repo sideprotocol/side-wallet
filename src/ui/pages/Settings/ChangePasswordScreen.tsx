@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Column, Content, Header, Input, Layout, Text } from '@/ui/components';
+import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+import { getPasswordStrengthWord } from '@/ui/utils/password-utils';
 
 type Status = '' | 'error' | 'warning' | undefined;
 
@@ -29,8 +30,23 @@ export default function ChangePasswordScreen() {
   const [confirmErrorMsg, setConfirmErrorMsg] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const strongText = useMemo(() => {
+    if (!newPassword) {
+      return;
+    }
+    const { text, color, tip } = getPasswordStrengthWord(newPassword);
+
+    return (
+      <Column>
+        <Row>
+          <Text size="xs" text={'Password strength: '} />
+          <Text size="xs" text={text} style={{ color: color }} />
+        </Row>
+      </Column>
+    );
+  }, [newPassword]);
   useEffect(() => {
-    if (originPassword.length > 0 && newPassword.length >= 5 && newPassword === confirmPassword) {
+    if (originPassword.length > 0 && newPassword.length >= 8 && newPassword === confirmPassword) {
       setDisabled(false);
     } else {
       setDisabled(true);
@@ -99,7 +115,7 @@ export default function ChangePasswordScreen() {
                 if (newPassword.length < 5) {
                   // tools.toastWarning('at least five characters');
                   setIsPwdError(true);
-                  setPwdErrorMsg('Password must include at least 5 characters');
+                  setPwdErrorMsg('Password must include at least 8 characters');
                   return;
                 }
                 if (newPassword.length > 0 && confirmPassword.length > 0 && newPassword !== confirmPassword) {
@@ -116,6 +132,9 @@ export default function ChangePasswordScreen() {
                 setConfirmErrorMsg('');
               }}
             />
+            {
+              strongText
+            }
             <Text text={pwdErrorMsg} color={'red'} preset="sub"></Text>
           </Column>
 
