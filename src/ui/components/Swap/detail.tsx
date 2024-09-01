@@ -111,7 +111,7 @@ function SwapDetail() {
           1 {findAssetIcon(swapPair.native)?.symbol || swapPair.native?.denom || '-'} = {swapRate}{' '}
           {findAssetIcon(swapPair.remote)?.symbol || swapPair.remote?.denom || '-'} (${ratePrice})
         </div>
-        <div className="" onClick={() => {
+        <div className="cursor-pointer" onClick={() => {
           setIsCollapse(!isCollapse)
         }}>
           <Icon style={{ fontSize: '14px', transform: isCollapse ? 'rotate(180deg)' : 'rotate(0deg)', transition: '.4s' }} type="side-down" />
