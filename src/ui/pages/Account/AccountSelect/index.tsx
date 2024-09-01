@@ -85,7 +85,7 @@ const AccountSelect = () => {
                 cursor: 'pointer',
                 position: 'relative',
                 right: '-25px',
-                padding: '10px'
+                padding: '6px'
               }}
               onClick={() => setOpen(false)}>
               <Image src="./images/icons/x.svg" size={24} />

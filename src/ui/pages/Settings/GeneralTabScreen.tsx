@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ADDRESS_TYPES, KEYRING_TYPE, NETWORK_TYPES } from '@/shared/constant';
@@ -10,7 +10,8 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { useWallet } from '@/ui/utils';
-import { RightOutlined } from '@ant-design/icons';
+import { Icon } from '@/ui/components/TokenCurrent/';
+// import { RightOutlined } from '@ant-design/icons';
 
 interface Setting {
   label?: string;
@@ -169,12 +170,17 @@ export default function GeneralTabScreen() {
 
                     <Row itemsCenter>
                       {item.rightComponent}
-                      {item.right && (
-                        <>
-                          <Text text={item.value} preset="regular" style={{ opacity: 0.5 }} />
-                          <RightOutlined style={{ color: 'rgb(107,107,107)', fontSize: '14px' }} />
-                        </>
-                      )}
+                      {/*{item.right && (*/}
+                      {/*  <>*/}
+                      {/*    <Text text={item.value} preset="regular" style={{ opacity: 0.5 }} />*/}
+                      {/*    <RightOutlined style={{ color: 'rgb(107,107,107)', fontSize: '14px' }} />*/}
+                      {/*  </>*/}
+                      {/*)}*/}
+
+                      {item.right && <Icon type="side-down" className={'hover-100'} style={{
+                        transform: 'rotate(-90deg)',
+                        opacity: '0.6',
+                      }}  />}
                     </Row>
                   </Row>
                 </Card>

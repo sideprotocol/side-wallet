@@ -30,7 +30,7 @@ export const getPasswordStrengthWord = (password: string) => {
   } else if (strength === 3) {
     return {
       text: 'Average',
-      color: colors.orange,
+      color: colors.primary,
       tip: strongTip
     };
   } else {

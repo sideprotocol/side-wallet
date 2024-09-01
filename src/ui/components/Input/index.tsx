@@ -112,6 +112,7 @@ function PasswordInput(props: InputProps) {
       />
       {type === 'password' && (
         <Icon
+          size={24}
           onMouseLeave={() => setIsMouse(false)}
           onMouseOver={() => setIsMouse(true)}
           icon={isMouse ? 'eye-slash-hover' : 'eye-slash'}
@@ -121,7 +122,7 @@ function PasswordInput(props: InputProps) {
           color={isMouse ? 'white' : 'textDim'}
         />
       )}
-      {type === 'text' && <Icon icon="eye" style={{ marginLeft: spacing.tiny }} onClick={() => setType('password')} />}
+      {type === 'text' && <Icon icon="eye" size={24} style={{ marginLeft: spacing.tiny }} onClick={() => setType('password')} />}
     </div>
   );
 }

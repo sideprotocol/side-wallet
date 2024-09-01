@@ -42,8 +42,10 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
         />
 
         <Column gap="lg">
-          <Text text={'Please be aware that:'} />
-          <div style={{ marginTop: 8, display: 'flex' }}>
+          <Text style={{
+            fontWeight: '300',
+          }} text={'Please be aware that:'} />
+          <div style={{ marginTop: 0, display: 'flex' }}>
             <Checkbox
               style={{
                 display: 'flex',

@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ADDRESS_TYPES, KEYRING_TYPE, NETWORK_TYPES } from '@/shared/constant';
 import { Card, Column, Content, Header, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { Button } from '@/ui/components/Button';
-import { Icon, IconTypes } from '@/ui/components/Icon';
+import { Icon as ImageIcon, IconTypes } from '@/ui/components/Icon';
+import { Icon } from '@/ui/components/TokenCurrent/';
 import { getCurrentTab, useExtensionIsInTab, useOpenExtensionInTab } from '@/ui/features/browser/tabs';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
@@ -24,6 +25,22 @@ interface Setting {
   route: string;
   right: boolean;
 }
+
+// function Icon({ type, style, className }: { type: string; style?: React.CSSProperties; className?: string }) {
+//   return (
+//     <svg
+//       className={className ?? className}
+//       style={{
+//         width: '16px',
+//         height: '16px',
+//         flexShrink: '0',
+//         ...style
+//       }}
+//     >
+//       <use xlinkHref={`#${type}`} />
+//     </svg>
+//   );
+// }
 
 const SettingList: Setting[] = [
   // {
@@ -219,12 +236,16 @@ export default function SettingsTabScreen() {
                   }}>
                   <Row full justifyBetween>
                     <Row itemsCenter>
-                      <Icon size={24} icon={item.icon}></Icon>
+                      <ImageIcon size={24} icon={item.icon}></ImageIcon>
                       <Text text={item.label || item.desc} preset="regular" />
                     </Row>
 
                     <Column justifyCenter>
-                      {item.right && <span className={'iconRight'}><RightOutlined style={{ fontSize: 14, color: 'rgb(107,107,107)' }} /></span>}
+                      {/*{item.right && <span className={'iconRight'}><RightOutlined style={{ fontSize: 14, color: 'rgb(107,107,107)' }} /></span>}*/}
+                      {item.right && <Icon type="side-down" className={'hover-100'} style={{
+                        transform: 'rotate(-90deg)',
+                        opacity: '0.6',
+                      }}  />}
                     </Column>
                   </Row>
                 </Card>

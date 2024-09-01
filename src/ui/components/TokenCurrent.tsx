@@ -2,20 +2,26 @@
 import ImageIcon from './ImageIcon';
 import { Coin } from '@cosmjs/stargate';
 import { SWAP_ASSETS } from '@/ui/constants';
+import React from 'react';
 
 
-function Icon({ type }: { type: string }) {
+function Icon({ type, style, className }: { type: string; style?: React.CSSProperties; className?: string }) {
   return (
     <svg
+      className={className ?? className}
       style={{
         width: '16px',
         height: '16px',
         flexShrink: '0',
+        ...style
       }}
     >
       <use xlinkHref={`#${type}`} />
     </svg>
   );
+}
+export {
+  Icon
 }
 
 export default function TokenCurrent({ value, setShow }: { value: Coin; setShow: any }) {

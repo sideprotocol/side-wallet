@@ -220,7 +220,7 @@ export default function CreatePasswordScreen() {
           </div>
           <Row
             style={{
-              marginTop: '16px',
+              marginTop: '6px',
               alignItems: 'start'
             }}
             justifyBetween>

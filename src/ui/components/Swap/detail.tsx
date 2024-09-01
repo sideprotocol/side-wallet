@@ -1,12 +1,12 @@
 // import { Box, ListItem } from "@mui/material";
 import BigNumber from 'bignumber.js';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 // import Collapse from "@mui/material/Collapse";
 import { findAssetIcon } from '@/ui/utils/swap';
 import { DownOutlined } from '@ant-design/icons';
-
+import { Icon } from '@/ui/components/TokenCurrent/';
 // import SwapRoutes from "./SwapRoutes";
 
 function SwapDetail() {
@@ -111,10 +111,11 @@ function SwapDetail() {
           1 {findAssetIcon(swapPair.native)?.symbol || swapPair.native?.denom || '-'} = {swapRate}{' '}
           {findAssetIcon(swapPair.remote)?.symbol || swapPair.remote?.denom || '-'} (${ratePrice})
         </div>
-        <DownOutlined
-          style={{ fontSize: '14px', transform: isCollapse ? 'rotate(180deg)' : 'rotate(0deg)', transition: '.4s' }}
-          onClick={() => setIsCollapse(!isCollapse)}
-        />
+        <div className="" onClick={() => {
+          setIsCollapse(!isCollapse)
+        }}>
+          <Icon style={{ fontSize: '14px', transform: isCollapse ? 'rotate(180deg)' : 'rotate(0deg)', transition: '.4s' }} type="side-down" />
+        </div>
       </div>
       <div
         style={{

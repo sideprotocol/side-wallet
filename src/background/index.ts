@@ -162,3 +162,9 @@ if (MANIFEST_VERSION === 'mv3') {
     .setPanelBehavior({ openPanelOnActionClick: false })
     .catch((error) => console.error(error));
 }
+
+
+// ['error', 'info'].forEach( (item) => {
+//   // eslint-disable-next-line @typescript-eslint/no-empty-function
+//   console[item] = () => {};
+// })
