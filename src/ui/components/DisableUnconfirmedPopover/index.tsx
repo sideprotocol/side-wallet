@@ -9,19 +9,21 @@ export const DisableUnconfirmedsPopover = ({ onClose }: { onClose: () => void })
   return (
     <Popover>
       <Column justifyCenter itemsCenter>
-        <Image src="./images/artifacts/security.png" size={80} />
-        <Text text="Security Notice:" color="gold" textCenter size="lg" />
+        <Image src="/images/icons/info.svg" size={80} />
+        <Text text="Security Notice:" color="primary" textCenter size="lg" />
 
-        <Text text="Unconfirmed Balance Not Spendable" color="gold" textCenter size="md" />
+        <Text text="Unconfirmed Balance Not Spendable" color="primary" textCenter size="md" />
 
         <Column gap="zero" mt="sm">
           <Text
+            color="white_muted"
             size="sm"
             text={`This message serves as a notice that if Runes (or ARC-20) assets are detected in your address, your
           unconfirmed balances will not be spendable. You don't need to do anything.`}
           />
 
           <Text
+            color="white_muted"
             mt="md"
             preset="sub"
             size="sm"
@@ -31,9 +33,9 @@ export const DisableUnconfirmedsPopover = ({ onClose }: { onClose: () => void })
 
         <Column full mt={'xl'}>
           <Button
+            preset="primary"
             text="I understand"
-            full
-            preset="defaultV2"
+            // full
             onClick={(e) => {
               if (onClose) {
                 onClose();
