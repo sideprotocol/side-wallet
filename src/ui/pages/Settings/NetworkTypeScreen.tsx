@@ -49,7 +49,7 @@ export default function NetworkTypeScreen() {
             itemsCenter
             classname={'hover:bg-[#1e1e1f] '}>
             <Row itemsCenter>
-              <Text text={'grimoria-testnet-1'} />
+              <Text text={'devenet'} />
             </Row>
             <Column>
               <Icon color={'green'} contain={'contain'} icon="check-circle" />

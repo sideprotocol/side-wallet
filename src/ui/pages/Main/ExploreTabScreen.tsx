@@ -5,7 +5,7 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import { colors } from '@/ui/theme/colors';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 
-import { Image } from '@/ui/components';
+// import { Image } from '@/ui/components';
 
 export default function SettingsTabScreen() {
   const [searchTerm, setSearchTerm] = useState('');
