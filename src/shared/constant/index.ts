@@ -246,11 +246,13 @@ export const OPENAPI_URL_TESTNET = 'https://wallet-api-testnet.unisat.io/v5';
 export const SIDEREST_URL_MAINNET = 'https://testnet-rest.side.one';
 // export const SIDEREST_URL_TESTNET = 'https://devnet-rest.side.one';
 export const SIDEREST_URL_TESTNET = 'https://testnet-rest.side.one';
-export const SIDERPC_URL_MAINNET = 'https://testnet-rpc.side.one';
+export const SIDERPC_URL_MAINNET = 'https://devnet-rpc.side.one';
 // export const SIDERPC_URL_TESTNET = 'https://devnet-rpc.side.one';
 export const SIDERPC_URL_TESTNET = 'https://testnet-rpc.side.one';
-export const SIDE_CHAINID_MAINNET = 'grimoria-testnet-1';
-export const SIDE_CHAINID_TESTNET = 'grimoria-testnet-1';
+// export const SIDE_CHAINID_MAINNET = 'grimoria-testnet-1';
+export const SIDE_CHAINID_MAINNET = 'devnet';
+// export const SIDE_CHAINID_TESTNET = 'grimoria-testnet-1';
+export const SIDE_CHAINID_TESTNET = 'devnet';
 
 export const SIDE_BTC_INDEXER = 'https://index.side.one';
 

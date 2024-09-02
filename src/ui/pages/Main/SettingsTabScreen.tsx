@@ -13,7 +13,6 @@ import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { spacing } from '@/ui/theme/spacing';
 import { useWallet } from '@/ui/utils';
-import { RightOutlined } from '@ant-design/icons';
 
 interface Setting {
   label?: string;

@@ -35,7 +35,7 @@ import BoostScreen from './Main/BoostScreen';
 import BridgeTabScreen from './Main/BridgeTabScreen';
 import DiscoverTabScreen from './Main/DiscoverTabScreen';
 import SettingsTabScreen from './Main/SettingsTabScreen';
-import SummonTabScreen from './Main/SummonTabScreen';
+import ExploreTabScreen from './Main/ExploreTabScreen';
 import SwapTabScreen from './Main/SwapTabScreen';
 import WalletTabScreen from './Main/WalletTabScreen';
 import WelcomeScreen from './Main/WelcomeScreen';
@@ -102,9 +102,9 @@ const routes = {
     path: '/settings',
     element: <SettingsTabScreen />
   },
-  SummonTabScreen: {
+  ExploreTabScreen: {
     path: '/explore',
-    element: <SummonTabScreen />
+    element: <ExploreTabScreen />
   },
   BridgeTabScreen: {
     path: '/bridge',
