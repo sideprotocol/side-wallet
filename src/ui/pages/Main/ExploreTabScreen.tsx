@@ -95,7 +95,7 @@ export default function SettingsTabScreen() {
                 <img className={'w-[48px] h-[5px]'} src="/images/icons/search/icon-station.png" alt="station" />
               </div>
               <div className="   flex flex-col justify-center gap-[6px]">
-                <div className={'text-[16px] font-[600]'}>Side Hub</div>
+                <div className={'text-[16px] font-[600]'}>Side Station</div>
                 <div className={'font-[300] text-[12px] text-[#ffffff]/30'}>Dashboard for Side Chain</div>
               </div>
             </div>
