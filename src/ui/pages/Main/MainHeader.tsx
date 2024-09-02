@@ -12,6 +12,7 @@ export default function Index({title}) {
   const navigate = useNavigate();
   const currentKeyring = useCurrentKeyring();
   const [isHovered, setIsHovered] = useState(false);
+  console.log('currentKeyring.type: ', currentKeyring.type, '|', KEYRING_TYPE.HdKeyring, '|', KEYRING_TYPE.KeystoneKeyring);
   return (
     <Header
       LeftComponent={
