@@ -61,52 +61,77 @@ export default function SettingsTabScreen() {
           </div>
         </div>
 
-        <img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />
-
-        <div className="">
-          <div className="my-[16px] font-[600]">Recommend</div>
-          <div className="flex gap-[16px] ">
-            <div className="flex flex-col items-center gap-[6px]">
-              <div className="w-[56px] h-[56px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
-                <img className={'w-[48px] h-[5px]'} src="/images/icons/search/icon-station.png" alt="station" />
-              </div>
-              <div className="text-[12px]">
-                Side Station
-              </div>
+        <div className={`${searchTerm ? '' : '!hidden'} flex flex-col gap-[16px] mt-[16px]`}>
+          <div className="flex  gap-[16px] mb-[10px] items-center">
+            <div className="w-[36px] h-[36px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
+              <img className={'w-[36px] h-[5px]'} src="/images/icons/search/icon-station.png" alt="station" />
             </div>
+            <div className=" relative  flex flex-col justify-center gap-[2px] flex-1">
+              <div className={'text-[14px] font-[600]'}>Side Station</div>
+              <div className={'font-[300] text-[12px] text-[#ffffff]/30'}>Dashboard for Side Chain</div>
+              <div className="border-b-[1px] border-[#fff]/10 w-full absolute -bottom-[10px] "></div>
+            </div>
+          </div>
 
-            <div className="flex flex-col items-center gap-[6px]">
-              <div className="w-[56px] h-[56px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
-                <img className={'w-[30px] h-[9.5px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
-              </div>
-              <div className="text-[12px] font-[300]">
-                Side Hub
-              </div>
+          <div className="flex  gap-[16px]">
+            <div className="w-[36px] h-[36px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
+              <img className={'w-[36px] h-[9.5px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
+            </div>
+            <div
+              className=" relative flex flex-col justify-center gap-[2px] flex-1">
+              <div className={'text-[14px] font-[600]'}>Side Hub</div>
+              <div className={'font-[300] text-[12px] text-[#ffffff]/30'}>DeFi Hub Side Protocol</div>
+              <div className="border-b-[1px] border-[#fff]/10 w-full absolute -bottom-[10px] "></div>
             </div>
           </div>
         </div>
 
-        <div className="">
-          <div className=" font-[600] my-[16px]">Explore <span className={'text-[#F2C526]'}>Bitcoin</span> on the Side</div>
-
-          <div className="flex flex-col gap-[16px] ">
-            <div className="flex  gap-[16px]">
-              <div className="w-[60px] h-[60px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
-                <img className={'w-[48px] h-[5px]'} src="/images/icons/search/icon-station.png" alt="station" />
+        <div className={!searchTerm ? '' : '!hidden'}>
+          <img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />
+          <div className="">
+            <div className="my-[16px] font-[600]">Recommend</div>
+            <div className="flex gap-[16px] ">
+              <div className="flex flex-col items-center gap-[6px]">
+                <div className="w-[56px] h-[56px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
+                  <img className={'w-[48px] h-[5px]'} src="/images/icons/search/icon-station.png" alt="station" />
+                </div>
+                <div className="text-[12px]">
+                  Side Station
+                </div>
               </div>
-              <div className="   flex flex-col justify-center gap-[6px]">
-                <div className={'text-[16px] font-[600]'}>Side Station</div>
-                <div className={'font-[300] text-[12px] text-[#ffffff]/30'}>Dashboard for Side Chain</div>
+
+              <div className="flex flex-col items-center gap-[6px]">
+                <div className="w-[56px] h-[56px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
+                  <img className={'w-[30px] h-[9.5px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
+                </div>
+                <div className="text-[12px] font-[300]">
+                  Side Hub
+                </div>
               </div>
             </div>
+          </div>
+          <div className="">
+            <div className=" font-[600] my-[16px]">Explore <span className={'text-[#F2C526]'}>Bitcoin</span> on the Side</div>
 
-            <div className="flex  gap-[16px]">
-              <div className="w-[60px] h-[60px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
-                <img className={'w-[30px] h-[9.5px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
+            <div className="flex flex-col gap-[16px] ">
+              <div className="flex  gap-[16px]">
+                <div className="w-[60px] h-[60px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
+                  <img className={'w-[48px] h-[5px]'} src="/images/icons/search/icon-station.png" alt="station" />
+                </div>
+                <div className="   flex flex-col justify-center gap-[6px]">
+                  <div className={'text-[16px] font-[600]'}>Side Station</div>
+                  <div className={'font-[300] text-[12px] text-[#ffffff]/30'}>Dashboard for Side Chain</div>
+                </div>
               </div>
-              <div className="  flex flex-col justify-center gap-[6px]">
-                <div className={'text-[16px] font-[600]'}>Side Hub</div>
-                <div className={'font-[300] text-[12px] text-[#ffffff]/30'}>Dashboard for Side Chain</div>
+
+              <div className="flex  gap-[16px]">
+                <div className="w-[60px] h-[60px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
+                  <img className={'w-[30px] h-[9.5px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
+                </div>
+                <div className="  flex flex-col justify-center gap-[6px]">
+                  <div className={'text-[16px] font-[600]'}>Side Hub</div>
+                  <div className={'font-[300] text-[12px] text-[#ffffff]/30'}>DeFi Hub Side Protocol </div>
+                </div>
               </div>
             </div>
           </div>

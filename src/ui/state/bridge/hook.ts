@@ -713,6 +713,7 @@ export const useRuneListV2 = () => {
   const tools = useTools();
   const fetchData = async () => {
     try {
+      if (!currentAccount.address) return;
       let { list, total } = await wallet.getRunesList(
         currentAccount.address,
         pagination.currentPage,
