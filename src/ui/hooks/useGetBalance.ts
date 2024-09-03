@@ -52,6 +52,7 @@ export function useGetAccountBalanceByUSD() {
 
   const getTotalBalance = async () => {
     const accountSideTokenBalanceList = await wallet.getAccountSideTokenBalanceList(currentAccount.address);
+
     const accountBitcoinTokenBalanceList = await wallet.getAccountBitcoinTokenBalanceList(currentAccount.address);
     const priceMap = await wallet.getAssetPriceMap();
     let sideAccountBalanceByUSD = new BigNumber('0'),
@@ -61,7 +62,7 @@ export function useGetAccountBalanceByUSD() {
       const curSideToken = sideTokenList.find((item) => item.base === curSideTokenBalance.base);
       if (curSideToken) {
         const formatAmount = formatUnitAmount(curSideTokenBalance.amount, curSideToken.exponent);
-        const curBalanceByUSD = new BigNumber(priceMap[curSideToken.base]).multipliedBy(formatAmount);
+        const curBalanceByUSD = new BigNumber(priceMap?.[curSideToken.base] || '0').multipliedBy(formatAmount);
         sideAccountBalanceByUSD = sideAccountBalanceByUSD.plus(curBalanceByUSD);
       }
     }

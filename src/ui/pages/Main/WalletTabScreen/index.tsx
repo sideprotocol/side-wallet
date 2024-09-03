@@ -10,15 +10,14 @@ import { getCurrentTab } from '@/ui/features/browser/tabs';
 import { useGetAccountBalanceByUSD } from '@/ui/hooks/useGetBalance';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
-import { useRuneAndBtcBalances, useRuneListV2 } from '@/ui/state/bridge/hook';
+import { useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useBlockstreamUrl, useSkipVersionCallback, useVersionInfo, useWalletConfig } from '@/ui/state/settings/hooks';
 import { useAssetTabKey } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { AssetTabKey, uiActions } from '@/ui/state/ui/reducer';
 import { getTruncate, useWallet } from '@/ui/utils';
-import { useChainType } from '@/ui/state/settings/hooks';
+
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
 import MainHeader from '../MainHeader';
