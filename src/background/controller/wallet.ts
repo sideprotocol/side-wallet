@@ -93,7 +93,7 @@ export class WalletController extends BaseController {
 
     if (contacts.length !== 0 && keyrings.length !== 0) {
       const allAccounts = keyrings.map((item) => item.accounts).flat();
-      const sameAddressList = contacts?.filter((item) => allAccounts?.find((contact) => contact.pubkey == item.address));
+      const sameAddressList = contacts.filter((item) => allAccounts.find((contact) => contact.pubkey == item.address));
       if (sameAddressList.length > 0) {
         sameAddressList.forEach((item) => this.updateAlianName(item.address, item.name));
       }
