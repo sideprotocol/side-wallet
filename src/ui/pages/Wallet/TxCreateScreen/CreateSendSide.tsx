@@ -184,7 +184,7 @@ export default function CreateSendSide() {
               style={{
                 alignItems: 'center'
               }}>
-              <Image src="./images/icons/wallet-04.svg" size={24} />
+              <Image src="./images/icons/wallet-04.svg" size={14} />
               <Text
                 text={available}
                 style={{
