@@ -27,7 +27,11 @@ export default function Index({title}) {
         </>
       }
       title={
-        title ? title : <AccountSelect />
+        title ? title : currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
+          <AccountSelect />
+        ) : (
+          ''
+        )
       }
       RightComponent={window.location.pathname !== '/sidePanel.html'
         ? <img onMouseOver={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}  alt={''} width={isHovered ? 24 : 20} height={isHovered ? 24 : 20} src={isHovered ? '/images/icons/main/sidebar-modal-h.gif' : '/images/icons/main/sidebar-modal.svg'} />
