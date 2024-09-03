@@ -113,6 +113,7 @@ export class WalletController extends BaseController {
     const alianNames = contactBookService.listAlias();
     await keyringService.submitPassword(password);
     sessionService.broadcastEvent('unlock');
+    console.log(`alianNames: `, alianNameInited, alianNames);
     if (!alianNameInited && alianNames.length === 0) {
       this.initAlianNames();
     }

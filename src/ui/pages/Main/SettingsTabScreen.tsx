@@ -56,7 +56,7 @@ const SettingList: Setting[] = [
     value: '',
     icon: 'general',
     desc: '',
-    action: '',
+    action: 'general',
     route: '/settings/general',
     right: true
   },
@@ -76,7 +76,7 @@ const SettingList: Setting[] = [
     value: '',
     icon: 'security',
     desc: '',
-    action: '',
+    action: 'security',
     route: '/settings/security',
     right: true
   },
@@ -86,7 +86,7 @@ const SettingList: Setting[] = [
     value: '',
     icon: 'about',
     desc: '',
-    action: '',
+    action: 'about',
     route: '/settings/about',
 
     right: true
