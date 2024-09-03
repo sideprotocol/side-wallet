@@ -4,7 +4,9 @@ import { Column, Content, Footer, Icon, Input, Layout, Row } from '@/ui/componen
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { colors } from '@/ui/theme/colors';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-
+import { Swiper, SwiperSlide } from 'swiper/react';
+// Import Swiper styles
+import 'swiper/css';
 // import { Image } from '@/ui/components';
 
 export default function SettingsTabScreen() {
@@ -88,7 +90,15 @@ export default function SettingsTabScreen() {
         </div>
 
         <div className={!searchTerm ? '' : '!hidden'}>
-          <img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />
+          {/*<img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />*/}
+          <Swiper className="mySwiper">
+            <SwiperSlide>
+              <img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />
+            </SwiperSlide>
+            <SwiperSlide>
+              <img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />
+            </SwiperSlide>
+          </Swiper>
           <div className="">
             <div className="my-[16px] font-[600]">Recommend</div>
             <div className="flex gap-[16px] ">
