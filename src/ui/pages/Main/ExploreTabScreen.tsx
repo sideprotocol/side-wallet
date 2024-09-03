@@ -21,7 +21,7 @@ export default function SettingsTabScreen() {
       <MainHeader title={''} />
       <Content >
         <div
-          className={`mt-[16px] w-full border-[1px] border-solid px-[10px] flex items-center rounded-[10px] bg-[#1E1E1F] relative gap-[8px] ${
+          className={`mt-[16px] w-full border-[1px] border-solid px-[10px] flex items-center rounded-[10px] bg-[#1E1E1F] relative gap-[8px] !min-h-[40px] ${
             isFocus ? 'border-white' : ' border-[#ffffff20] hover:border-[#ffffff50]'
           }`}>
           <Icon icon="search" color={'search_icon'} size={20}></Icon>
@@ -39,7 +39,8 @@ export default function SettingsTabScreen() {
             containerStyle={{
               width: '100%',
               border: 'none',
-              padding: '0'
+              padding: '0',
+              minHeight: '38px',
             }}
             placeholder="Search applications"
           />
