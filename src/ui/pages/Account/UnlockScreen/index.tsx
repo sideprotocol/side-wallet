@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Column, Image, Layout } from '@/ui/components';
-import { useTools } from '@/ui/components/ActionComponent';
+// import { useTools } from '@/ui/components/ActionComponent';
 import { Button } from '@/ui/components/Button';
 import { Input } from '@/ui/components/Input';
 import { Text } from '@/ui/components/Text';
@@ -22,7 +22,7 @@ export default function UnlockScreen() {
   const UIType = getUiType();
   const isInNotification = UIType.isNotification;
   const unlock = useUnlockCallback();
-  const tools = useTools();
+  // const tools = useTools();
   const btnClick = async () => {
     try {
       await unlock(password);

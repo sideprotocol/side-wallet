@@ -19,6 +19,8 @@ import { AppDimensions, AppSideDimensions } from './components/Responsive';
 import AsyncMainRoute from './pages/MainRoute';
 import store from './state';
 import { WalletProvider, useWallet } from './utils';
+import { globalActions } from '@/ui/state/global/reducer';
+import { useAppDispatch } from '@/ui/state/hooks';
 
 // disabled sentry
 // Sentry.init({
@@ -136,6 +138,7 @@ eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
 });
 
 function Updaters() {
+  const dispatch = useAppDispatch();
   const wallet1 = useWallet();
   useEffect(() => {
     chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], function (result) {
@@ -152,11 +155,9 @@ function Updaters() {
       // 检查是否超过时间限制
       function checkForInactivity() {
         if (Date.now() - lastActiveTimestamp > ONE_MINUTE) {
-          // document.getElementById('status').innerText = '活动状态：超时';
           // 在这里可以添加其他处理逻辑，比如锁屏操作
           wallet1.isUnlocked().then((isUnlocked) => {
             if (isUnlocked && !location.href.includes('/account/unlock')) {
-              // dispatch(globalActions.update({ isUnlocked: false }));
               wallet1.lockWallet();
               const basePath = location.href.split('#')[0];
               location.href = `${basePath}#/account/unlock`;
