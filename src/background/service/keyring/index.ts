@@ -88,6 +88,8 @@ export interface Keyring {
   parseSignPsbtUr?(type: string, cbor: string): Promise<string>;
   genSignMsgUr?(publicKey: string, text: string): Promise<{ type: string; cbor: string; requestId: string }>;
   parseSignMsgUr?(type: string, cbor: string): Promise<{ requestId: string; publicKey: string; signature: string }>;
+
+  mnemonic?: string;
 }
 
 class EmptyKeyring implements Keyring {
@@ -359,7 +361,7 @@ class KeyringService extends EventEmitter {
 
   addKeyring = async (keyring: Keyring, addressType: AddressType) => {
     const accounts = await keyring.getAccounts();
-    await this.checkForDuplicate(keyring.type, accounts);
+    await this.checkForDuplicate(keyring, accounts);
     this.keyrings.push(keyring);
     this.addressTypes.push(addressType);
     await this.persistAllKeyrings();
@@ -506,18 +508,18 @@ class KeyringService extends EventEmitter {
    *
    * Only supports 'Simple Key Pair'.
    *
-   * @param {string} type - The key pair type to check for.
+   * @param {Keyring} keyring - The key pair type to check for.
    * @param {Array<string>} newAccountArray - Array of new accounts.
    * @returns {Promise<Array<string>>} The account, if no duplicate is found.
    */
-  checkForDuplicate = async (type: string, newAccountArray: string[]): Promise<string[]> => {
-    const keyrings = this.getKeyringsByType(type);
-    const _accounts = await Promise.all(keyrings.map((keyring) => keyring.getAccounts()));
+  checkForDuplicate = async (keyring: Keyring, newAccountArray: string[]): Promise<string[]> => {
+    const keyrings = this.getKeyringsByType(keyring.type);
+    // const _accounts = await Promise.all(keyrings.map((keyring) => keyring.getAccounts()));
 
-    const accounts: string[] = _accounts.reduce((m, n) => m.concat(n), [] as string[]);
+    // const accounts: string[] = _accounts.reduce((m, n) => m.concat(n), [] as string[]);
 
-    const isIncluded = newAccountArray.some((account) => {
-      return accounts.find((key) => key === account);
+    const isIncluded = keyrings.some((item) => {
+      return item.mnemonic === keyring.mnemonic;
     });
 
     return isIncluded ? Promise.reject(new Error(i18n.t('Wallet existed.'))) : Promise.resolve(newAccountArray);
