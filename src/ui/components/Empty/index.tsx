@@ -20,7 +20,8 @@ export function Empty(props: EmptyProps) {
         }
       }>
       <Image
-        src={'./images/img/no-data.gif'}
+        // src={'./images/img/no-data.gif'}
+        src={'./images/icons/main/no-data.svg'}
         size={64}
         style={{
           height: '80px'

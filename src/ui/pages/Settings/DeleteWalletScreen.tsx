@@ -127,15 +127,20 @@ export default function DeleteWalletScreen() {
               }}
             />
           </Row>
-          <Text
-            text="Make sure that you have backed up your recovery phrase.  Back Up My Wallet"
-            style={{
-              color: '#fff',
-              lineHeight: '18px',
-              fontSize: '12px',
-              fontWeight: 400
-            }}
-          />
+          {/*<Text*/}
+          {/*  text="Make sure that you have backed up your recovery phrase.  Back Up My Wallet"*/}
+          {/*  style={{*/}
+          {/*    color: '#fff',*/}
+          {/*    lineHeight: '18px',*/}
+          {/*    fontSize: '12px',*/}
+          {/*    fontWeight: 400*/}
+          {/*  }}*/}
+          {/*/>*/}
+          <div className="text-[12px] text-white leading-[18px] font-[400] ">
+            Make sure that you have backed up your recovery phrase. <span className={'underline cursor-pointer'} onClick={() => {
+              navigate('ExportMnemonicsScreen', { keyring });
+          }}>Back Up My Wallet</span>
+          </div>
           <Text
             text="After deletion, you will need to import your wallet to restore access."
             style={{
