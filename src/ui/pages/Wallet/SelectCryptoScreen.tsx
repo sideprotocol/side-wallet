@@ -78,12 +78,12 @@ function BitcoinItem({ token }: { token }) {
           token?.logo ? <Image src={token?.logo} size={38}></Image> : ''
         }
         <Column
-          justifyCenter
           style={{
             gap: '0px'
           }}>
           {/*<Text preset="regular" text={token?.spacedRune}></Text>*/}
-          <Text preset="sub" text={token?.symbol}></Text>
+          <Text preset="regular" text={token?.symbol}></Text>
+          <Text preset="sub" text={'Bitcoin'}></Text>
         </Column>
       </Row>
 
