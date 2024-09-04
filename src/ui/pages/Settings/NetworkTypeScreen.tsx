@@ -49,7 +49,7 @@ export default function NetworkTypeScreen() {
             itemsCenter
             classname={'hover:bg-[#1e1e1f] '}>
             <Row itemsCenter>
-              <Text text={'Side Chain Devnet & Bitcoin Testnet 4'} />
+              <Text text={'Side Chain Devnet & Bitcoin Testnet 3'} />
             </Row>
             <Column>
               <Icon color={'green'} contain={'contain'} icon="check-circle" />

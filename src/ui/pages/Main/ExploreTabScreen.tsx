@@ -5,7 +5,7 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import { colors } from '@/ui/theme/colors';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { Swiper, SwiperSlide } from 'swiper/react';
-// Import Swiper styles
+import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 // import { Image } from '@/ui/components';
 
@@ -91,12 +91,16 @@ export default function SettingsTabScreen() {
 
         <div className={!searchTerm ? '' : '!hidden'}>
           {/*<img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />*/}
-          <Swiper className="mySwiper">
+          <Swiper modules={[Autoplay]} // 引入 Autoplay 模块
+                  autoplay={{
+                    delay: 1000, // 自动播放延迟时间，单位为毫秒
+                    disableOnInteraction: false, // 用户交互后仍然继续自动播放
+                  }} className="mySwiper">
             <SwiperSlide>
               <img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />
             </SwiperSlide>
             <SwiperSlide>
-              <img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />
+              <img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explor-banner-2.png'} alt={'banner2'} />
             </SwiperSlide>
           </Swiper>
           <div className="">
