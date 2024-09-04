@@ -71,6 +71,8 @@ export function usePrepareSendBTCCallback() {
       }
       let psbtHex = '';
 
+      console.log('_utxos: ', _utxos, feeRate, toAmount);
+
       if (safeBalance === toAmount && !disableAutoAdjust) {
         psbtHex = await wallet.sendAllBTC({
           to: toAddressInfo.address,
@@ -93,6 +95,9 @@ export function usePrepareSendBTCCallback() {
       const psbt = bitcoin.Psbt.fromHex(psbtHex);
       const rawtx = account.type === KEYRING_TYPE.KeystoneKeyring ? '' : psbt.extractTransaction().toHex();
       const fee = account.type === KEYRING_TYPE.KeystoneKeyring ? 0 : psbt.getFee();
+
+      console.log('fee: ', fee);
+
       dispatch(
         transactionsActions.updateBitcoinTx({
           rawtx,
@@ -703,13 +708,13 @@ export function usePrepareSendRunesCallback() {
   const account = useCurrentAccount();
   return useCallback(
     async ({
-             toAddressInfo,
-             runeid,
-             runeAmount,
-             outputValue,
-             feeRate,
-             enableRBF
-           }: {
+      toAddressInfo,
+      runeid,
+      runeAmount,
+      outputValue,
+      feeRate,
+      enableRBF
+    }: {
       toAddressInfo: ToAddressInfo;
       runeid: string;
       runeAmount: string;
