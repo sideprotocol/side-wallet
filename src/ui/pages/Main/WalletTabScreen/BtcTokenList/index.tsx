@@ -8,6 +8,7 @@ import { amountToSatoshis, formatUnitAmount, getTruncate, satoshisToAmount } fro
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useSafeBalance } from '@/ui/state/transactions/hooks';
+import { useNavigate } from '@/ui/pages/MainRoute';
 
 function TokenItem({
   token,
@@ -29,11 +30,16 @@ function TokenItem({
     amount
   });
   const balance =  runesUtils.toDecimalNumber(amount, divisibility);
-
+  const navigate = useNavigate();
   return (
     <Row
       classname={'bg-item-hover-v2'}
       justifyBetween
+      onClick={() => {
+        navigate('RunesTokenScreen', {
+          runeid: token.runeid
+        });
+      }}
       style={{
         cursor: 'pointer',
         backgroundColor: '#1D1D1F',
@@ -46,8 +52,10 @@ function TokenItem({
           style={{
             gap: '0px'
           }}>
-          <Text preset="regular" text={token?.spacedRune}></Text>
-          <Text preset="sub" text={token?.symbol}></Text>
+          <div>
+            <Text preset="regular" text={token?.spacedRune}></Text>
+            <Text preset="sub" text={token?.symbol}></Text>
+          </div>
         </Column>
       </Row>
 

@@ -54,7 +54,7 @@ const $containerPresets: Record<Presets, CSSProperties> = {
   },
   small: {
     backgroundColor: colors.black,
-    width: 80
+    width: 60
   }
 };
 
@@ -68,8 +68,10 @@ const $iframePresets: Record<Presets, CSSProperties> = {
     height: 144
   },
   small: {
-    width: 80,
-    height: 80
+    width: 60,
+    height: 60,
+    borderRadius: '50%',
+    fontSize: '30px'
   }
 };
 

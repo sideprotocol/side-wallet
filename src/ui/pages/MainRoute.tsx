@@ -362,7 +362,7 @@ const routes = {
   DeleteWalletScreen: {
     path: '/keyring/delete',
     element: <DeleteWalletScreen />
-  }
+  },
 };
 
 type RouteTypes = keyof typeof routes;

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { runesUtils } from '@/shared/lib/runes-utils';
-import { AddressRunesTokenSummary } from '@/shared/types';
-import { Button, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
+import { AddressRunesTokenSummary, TxType } from '@/shared/types';
+import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { BRC20Ticker } from '@/ui/components/BRC20Ticker';
 import InscriptionPreview from '@/ui/components/InscriptionPreview';
@@ -14,6 +14,8 @@ import { copyToClipboard, useLocationState, useWallet } from '@/ui/utils';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { useNavigate } from '../MainRoute';
+import ImageIcon from '@/ui/components/ImageIcon';
+import { toReadableAmount } from '@/ui/utils/formatter';
 
 interface LocationState {
   runeid: string;
@@ -109,141 +111,136 @@ export default function RunesTokenScreen() {
   return (
     <Layout>
       <Header
+        title={tokenSummary.runeInfo.spacedRune}
         onBack={() => {
           window.history.go(-1);
         }}
       />
       {tokenSummary && (
-        <Content>
-          <Column py="xl" style={{ borderBottomWidth: 1, borderColor: colors.white_muted }}>
-            <Row itemsCenter fullX justifyCenter>
-              <Text
-                text={`${runesUtils.toDecimalAmount(
-                  tokenSummary.runeBalance.amount,
-                  tokenSummary.runeBalance.divisibility
-                )}`}
-                preset="bold"
-                textCenter
-                size="xxl"
-                wrap
-              />
-              <BRC20Ticker tick={tokenSummary.runeBalance.symbol} preset="lg" />
-            </Row>
+        <Content style={{
+          padding: 0,
+          // marginBottom: '40px'
+        }}>
+          <Column
+            style={{
+              flex: 1,
+              borderTop: '1px solid #404045',
+              borderRadius: '10px',
+              background: '#222',
+              padding: '0 16px',
+              paddingBottom: '44px',
+              marginTop: '66px'
+            }}>
+            <Column
+              style={{
+                flex: '1',
+                gap: '10px',
+              }}>
+              <Row
+                justifyCenter
+                style={{
+                  marginTop: '-35px'
+                }}>
+                <Row
+                  style={{
+                    background: '#1E1E1F',
+                    width: '74px',
+                    height: '74px',
+                    borderRadius: '50%',
+                    alignItems: 'center'
+                  }}
+                  justifyCenter>
+                  {/*<Image src={curToken.logo} size={62} />*/}
+                  {
+                    tokenSummary.runeLogo ? (
+                      <InscriptionPreview data={tokenSummary?.runeLogo} preset="small" asLogo />
+                    ) : ''
+                  }
+                </Row>
+              </Row>
 
-            <Row justifyBetween mt="lg">
-              <Button
-                text="Mint"
-                preset="primary"
-                style={!enableMint ? { backgroundColor: 'grey' } : {}}
-                disabled={!enableMint}
-                icon="pencil"
-                onClick={(e) => {
-                  window.open(`${unisatWebsite}/runes/inscribe?tab=mint&rune=${tokenSummary.runeInfo.rune}`);
-                }}
-                full
-              />
+              <div className="text-[#0DD4C3] text-center mt-[16px] text-[16px]">
+                {tokenSummary?.runeInfo?.spacedRune}
+              </div>
 
-              <Button
-                text="Send"
-                preset="primary"
-                icon="send"
-                style={!enableTransfer ? { backgroundColor: 'grey' } : {}}
-                disabled={!enableTransfer}
-                onClick={(e) => {
-                  navigate('SendRunesScreen', {
-                    runeBalance: tokenSummary.runeBalance,
-                    runeInfo: tokenSummary.runeInfo
-                  });
-                }}
-                full
-              />
-            </Row>
-          </Column>
+              <div className="w-ull flex text-[14px] items-center justify-center gap-[6px]">
+                <Icon icon={'wallet-icon'} size={14} color={'search_icon'}></Icon>
+                {
+                  runesUtils.toDecimalAmount(
+                    tokenSummary.runeBalance.amount,
+                    tokenSummary.runeBalance.divisibility
+                  )
+                }
+              </div>
 
-          <Text
-            text={tokenSummary.runeInfo.spacedRune}
-            preset="title-bold"
-            onClick={() => {
-              copyToClipboard(tokenSummary.runeInfo.spacedRune).then(() => {
-                tools.toastSuccess('Copied');
-              });
-            }}></Text>
-          {tokenSummary.runeLogo ? (
-            <Row>
-              <InscriptionPreview data={tokenSummary.runeLogo} preset="small" asLogo />
-            </Row>
-          ) : null}
+              <div className=" w-full px-[10px] h-[1px] py-[16px]">
+                <div className="h-[1px] bg-[#fff]/10 w-full"></div>
+              </div>
 
-          <Column gap="lg">
-            <Section title="runeid" value={tokenSummary.runeInfo.runeid} />
+              <div className="flex w-full justify-between text-[14px] px-[10px]">
+                <span className={'text-[#828282]'}>runeid</span> <span>{tokenSummary.runeInfo.runeid}</span>
+              </div>
 
-            <Section title="mints" value={tokenSummary.runeInfo.mints} />
+              <div className="flex w-full justify-between text-[14px] px-[10px]">
+                <span className={'text-[#828282]'}>mints</span> <span>{tokenSummary.runeInfo.mints}</span>
+              </div>
 
-            <Section
-              title="supply"
-              value={`${runesUtils.toDecimalAmount(tokenSummary.runeInfo.supply, tokenSummary.runeInfo.divisibility)} ${
-                tokenSummary.runeInfo.symbol
-              }`}
-            />
+              <div className="flex w-full justify-between text-[14px] px-[10px]">
+                <span className={'text-[#828282]'}>supply</span>
+                <span>
+                {runesUtils.toDecimalAmount(tokenSummary.runeInfo.supply, tokenSummary.runeInfo.divisibility)}
+                  {tokenSummary.runeInfo.symbol}
+              </span>
+              </div>
 
-            <Section
-              title="premine"
-              value={`${runesUtils.toDecimalAmount(
-                tokenSummary.runeInfo.premine,
-                tokenSummary.runeInfo.divisibility
-              )} ${tokenSummary.runeInfo.symbol}`}
-            />
+              <div className="flex w-full justify-between text-[14px] px-[10px]">
+                <span className={'text-[#828282]'}>premine</span>
+                <span>
+                {runesUtils.toDecimalAmount(
+                  tokenSummary.runeInfo.premine,
+                  tokenSummary.runeInfo.divisibility
+                )}
+                  {tokenSummary.runeInfo.symbol}
+              </span>
+              </div>
 
-            <Section title="burned" value={tokenSummary.runeInfo.burned} />
+              <div className="flex w-full justify-between text-[14px] px-[10px]">
+                <span className={'text-[#828282]'}>burned</span> <span>{tokenSummary.runeInfo.burned}</span>
+              </div>
 
-            <Section title="divisibility" value={tokenSummary.runeInfo.divisibility} />
+              <div className="flex w-full justify-between text-[14px] px-[10px]">
+                <span className={'text-[#828282]'}>divisibility</span> <span>{tokenSummary.runeInfo.divisibility}</span>
+              </div>
 
-            <Section title="symbol" value={tokenSummary.runeInfo.symbol} />
+              <div className="flex w-full justify-between text-[14px] px-[10px]">
+                <span className={'text-[#828282]'}>symbol</span> <span>{tokenSummary.runeInfo.symbol}</span>
+              </div>
 
-            <Section title="holders" value={tokenSummary.runeInfo.holders} />
+              <div className="flex w-full justify-between text-[14px] px-[10px]">
+                <span className={'text-[#828282]'}>holders</span> <span>{tokenSummary.runeInfo.holders}</span>
+              </div>
 
-            <Section title="transactions" value={tokenSummary.runeInfo.transactions} />
+              <div className="flex w-full justify-between text-[14px] px-[10px]">
+                <span className={'text-[#828282]'}>transactions</span> <span>{tokenSummary.runeInfo.transactions}</span>
+              </div>
 
-            <Section
-              title="etching"
-              value={tokenSummary.runeInfo.etching}
-              link={`${mempoolWebsite}/tx/${tokenSummary.runeInfo.etching}`}
-            />
+              <div className="flex flex-col w-full justify-between text-[14px] px-[10px] overflow-hidden">
+                <span className={'text-[#828282]'}>etching</span>
+                <a className={'text-[#0DD4C3] text-[12px]'}
+                   href={`${mempoolWebsite}/tx/${tokenSummary.runeInfo.etching}`}>{tokenSummary.runeInfo.etching}</a>
+              </div>
 
-            {tokenSummary.runeInfo.parent ? (
-              <Section
-                title="parent"
-                value={tokenSummary.runeInfo.parent}
-                link={`${ordinalsWebsite}/inscription/${tokenSummary.runeInfo.parent}`}
-              />
-            ) : null}
+              <div className="flex flex-col w-full justify-between text-[14px] px-[10px] overflow-hidden ">
+                <span className={'text-[#828282]'}>parent</span>
+                <a className={'text-[#0DD4C3] text-[12px]'}
+                   href={`${ordinalsWebsite}/inscription/${tokenSummary.runeInfo.parent}`}>{tokenSummary.runeInfo.parent}</a>
+              </div>
+
+            </Column>
+
           </Column>
         </Content>
       )}
     </Layout>
-  );
-}
-
-function Section({ value, title, link }: { value: string | number; title: string; link?: string }) {
-  const tools = useTools();
-  return (
-    <Column>
-      <Text text={title} preset="sub" />
-      <Text
-        text={value}
-        preset={link ? 'link' : 'regular'}
-        size="xs"
-        wrap
-        onClick={() => {
-          if (link) {
-            window.open(link);
-          } else {
-            copyToClipboard(value).then(() => {
-              tools.toastSuccess('Copied');
-            });
-          }
-        }}
-      />
-    </Column>
   );
 }
