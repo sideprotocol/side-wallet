@@ -93,7 +93,7 @@ export default function SettingsTabScreen() {
           {/*<img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />*/}
           <Swiper modules={[Autoplay]} // 引入 Autoplay 模块
                   autoplay={{
-                    delay: 1000, // 自动播放延迟时间，单位为毫秒
+                    delay: 2000, // 自动播放延迟时间，单位为毫秒
                     disableOnInteraction: false, // 用户交互后仍然继续自动播放
                   }} className="mySwiper">
             <SwiperSlide>
@@ -106,20 +106,20 @@ export default function SettingsTabScreen() {
           <div className="">
             <div className="my-[16px] font-[600]">Recommend</div>
             <div className="flex gap-[16px] ">
-              <div className="flex flex-col items-center gap-[6px]">
-                <div className="w-[56px] h-[56px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
-                  <img className={'w-[48px] h-[5px]'} src="/images/icons/search/icon-station.png" alt="station" />
+              <div className="flex flex-col items-center gap-[6px] group cursor-pointer" onClick={() => window.open('https://testnet.side.one/')}>
+                <div className="w-[56px] h-[56px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 ">
+                  <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-station.png" alt="station" />
                 </div>
-                <div className="text-[12px]">
+                <div className="text-[12px] font-[300] group-hover:text-[#ffffff]/80">
                   Side Station
                 </div>
               </div>
 
-              <div className="flex flex-col items-center gap-[6px]">
-                <div className="w-[56px] h-[56px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
-                  <img className={'w-[30px] h-[9.5px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
+              <div className="flex flex-col items-center gap-[6px] group cursor-pointer" onClick={() => window.open('https://testnet.side.one/')}>
+                <div className="w-[56px] h-[56px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 ">
+                  <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
                 </div>
-                <div className="text-[12px] font-[300]">
+                <div className="text-[12px] font-[300] group-hover:text-[#ffffff]/80">
                   Side Hub
                 </div>
               </div>
@@ -129,22 +129,22 @@ export default function SettingsTabScreen() {
             <div className=" font-[600] my-[16px]">Explore <span className={'text-[#F2C526]'}>Bitcoin</span> on the Side</div>
 
             <div className="flex flex-col gap-[16px] ">
-              <div className="flex  gap-[16px]">
-                <div className="w-[60px] h-[60px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
-                  <img className={'w-[48px] h-[5px]'} src="/images/icons/search/icon-station.png" alt="station" />
+              <div className="flex  gap-[16px] group cursor-pointer" onClick={() => window.open('https://testnet.side.one/')}>
+                <div className="w-[60px] h-[60px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 cursor-pointer">
+                  <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-station.png" alt="station" />
                 </div>
-                <div className="   flex flex-col justify-center gap-[6px]">
-                  <div className={'text-[16px] font-[600]'}>Side Station</div>
+                <div className="   flex flex-col justify-center gap-[6px]" >
+                  <div className={'text-[16px] font-[600] group-hover:text-[#ffffff]/80'}>Side Station</div>
                   <div className={'font-[300] text-[12px] text-[#ffffff]/30'}>Dashboard for Side Chain</div>
                 </div>
               </div>
 
-              <div className="flex  gap-[16px]">
-                <div className="w-[60px] h-[60px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
-                  <img className={'w-[30px] h-[9.5px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
+              <div className="flex  gap-[16px] group cursor-pointer" onClick={() => window.open('https://testnet.side.one/')}>
+                <div className="w-[60px] h-[60px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 cursor-pointer">
+                  <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
                 </div>
                 <div className="  flex flex-col justify-center gap-[6px]">
-                  <div className={'text-[16px] font-[600]'}>Side Hub</div>
+                  <div className={'text-[16px] font-[600] group-hover:text-[#ffffff]/80'}>Side Hub</div>
                   <div className={'font-[300] text-[12px] text-[#ffffff]/30'}>DeFi Hub Side Protocol </div>
                 </div>
               </div>
