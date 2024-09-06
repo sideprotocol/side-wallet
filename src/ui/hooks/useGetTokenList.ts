@@ -18,6 +18,8 @@ export function useGetSideTokenList() {
     setTimeout(async () => {
       await wallet.setSideTokens(SIDE_TOKENS);
       setData(SIDE_TOKENS);
+      // const result = await services.dex.getSideAssets();
+      // setSideAssets(result);
     }, 2000);
   };
 

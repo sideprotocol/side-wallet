@@ -6,7 +6,7 @@ import { useOrdinalsWebsite } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
 import { fontSizes } from '@/ui/theme/font';
 
-import { formatDate } from '../../utils';
+import { formatDate } from '@/ui/utils';
 import { Column } from '../Column';
 import Iframe from '../Iframe';
 import { Row } from '../Row';
@@ -39,7 +39,8 @@ const $viewPresets = {
 
   medium: {},
 
-  small: {}
+  small: {},
+  ssmall: {}
 };
 
 const $containerPresets: Record<Presets, CSSProperties> = {
@@ -55,6 +56,10 @@ const $containerPresets: Record<Presets, CSSProperties> = {
   small: {
     backgroundColor: colors.black,
     width: 60
+  },
+  ssmall: {
+    backgroundColor: colors.black,
+    width: 42
   }
 };
 
@@ -72,19 +77,27 @@ const $iframePresets: Record<Presets, CSSProperties> = {
     height: 60,
     borderRadius: '50%',
     fontSize: '30px'
-  }
+  },
+  ssmall: {
+    width: 42,
+    height: 42,
+    borderRadius: '50%',
+    fontSize: '22px'
+  },
 };
 
 const $timePresets: Record<Presets, string> = {
   large: 'sm',
   medium: 'sm',
-  small: 'xxs'
+  small: 'xxs',
+  ssmall: 'xxs',
 };
 
 const $numberPresets: Record<Presets, string> = {
   large: 'md',
   medium: 'sm',
-  small: 'xxs'
+  small: 'xxs',
+  ssmall: 'xxs',
 };
 
 type Presets = keyof typeof $viewPresets;
