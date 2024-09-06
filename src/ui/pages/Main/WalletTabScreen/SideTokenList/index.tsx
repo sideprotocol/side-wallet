@@ -3,16 +3,13 @@ import {Fragment} from 'react';
 import {SideToken} from '@/shared/types';
 import {Column, Row, Text} from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
-import {useCalcPrice} from '@/ui/hooks/useCalcPrice';
-import {useGetSideBalanceList, useGetSideTokenBalance} from '@/ui/hooks/useGetBalance';
-import {useGetSideTokenList} from '@/ui/hooks/useGetTokenList';
-import {formatUnitAmount, getTruncate} from '@/ui/utils';
+// import {useCalcPrice} from '@/ui/hooks/useCalcPrice';
+import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
+// import {useGetSideTokenList} from '@/ui/hooks/useGetTokenList';
+// import {formatUnitAmount, getTruncate} from '@/ui/utils';
 import {useCurrentAccount} from '@/ui/state/accounts/hooks';
 
 function TokenItem({token, balanceVisible}: { token: SideToken; balanceVisible: boolean }) {
-    // const {balanceAmount} = useGetSideTokenBalance(token.denom);
-    // const {data: totalPrice} = useCalcPrice(balanceAmount, token.denom, token.asset.exponent);
-    console.log(`token: `, token);
     return (
         <Row
             classname={'bg-item-hover-v2'}

@@ -39,7 +39,9 @@ export const useGetBalanceList = ({ assets, restUrl, address }: { assets: IAsset
         }
       );
       setBalances(result.balances);
-    } catch (err) {}
+    } catch (err) {
+      console.log('e: ', err);
+    }
   };
 
   const getAssetPrice = async () => {
@@ -49,7 +51,9 @@ export const useGetBalanceList = ({ assets, restUrl, address }: { assets: IAsset
       try {
         const result = await services.dex.getAssetPrice(asset?.denom);
         _priceMap[asset?.denom] = result;
-      } catch (err) {}
+      } catch (err) {
+        console.log('e: ', err);
+      }
     }
     setPriceMap(_priceMap);
     if (timerRef.current) {

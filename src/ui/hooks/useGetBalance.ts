@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import {useEffect, useState} from 'react';
-import { useGetBalanceList } from './useGetBalanceList';
-import { CHAINS, SIDE_ID } from '@/ui/constants';
+import {useGetBalanceList} from './useGetBalanceList';
+import {CHAINS, SIDE_ID} from '@/ui/constants';
 import {SIDERPC_URL_MAINNET, SIDERPC_URL_TESTNET} from '@/shared/constant';
 import {NetworkType} from '@/shared/types';
 import {useCurrentAccount} from '@/ui/state/accounts/hooks';
@@ -10,7 +10,7 @@ import {CosmWasmClient} from '@cosmjs/cosmwasm-stargate';
 import services from '@/ui/services';
 
 import {formatUnitAmount, useWallet} from '../utils';
-import { useGetSideTokenList } from './useGetTokenList';
+import {useGetSideTokenList} from './useGetTokenList';
 
 export function useGetSideTokenBalance(base: string, flag?: boolean) {
     const [balanceAmount, setBalanceAmount] = useState('0');
@@ -44,7 +44,7 @@ export function useGetSideTokenBalance(base: string, flag?: boolean) {
 export function useGetAccountBalanceByUSD() {
     const currentAccount = useCurrentAccount();
     const wallet = useWallet();
-    const { data: sideTokenList} = useGetSideTokenList();
+    const {data: sideTokenList} = useGetSideTokenList();
     // const { data: bitcoinTokenList } = useGetBitcoinTokenList();
     const [accountBalanceByUSD, setAccountBalanceByUSD] = useState('0');
 
@@ -89,6 +89,7 @@ export function useGetAccountBalanceByUSD() {
 }
 
 const sideChain = CHAINS.find((item) => item.chainID === SIDE_ID)!;
+
 export function useGetSideBalanceList(address?: string) {
     const [sideAssets, setSideAssets] = useState<[]>([]);
 
@@ -100,12 +101,14 @@ export function useGetSideBalanceList(address?: string) {
     const getSideAssets = async () => {
         try {
             const result = await services.dex.getSideAssets();
-            console.log(`result--: `, result);
+            // console.log(`result--: `, result);
             setSideAssets(result);
-        } catch {}
+        } catch (e) {
+            console.log(`e: `, e);
+        }
     };
 
-    const { balanceList } = useGetBalanceList({
+    const {balanceList} = useGetBalanceList({
         assets: sideAssets,
         restUrl: sideChain.restUrl,
         address,
