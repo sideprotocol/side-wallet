@@ -7,9 +7,9 @@ import { BitcoinToken, SideToken } from '@/shared/types';
 import { Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
-import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
+import {useGetSideBalanceList, useGetSideTokenBalance} from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
-import { useAccountBalance } from '@/ui/state/accounts/hooks';
+import {useAccountBalance, useCurrentAccount} from '@/ui/state/accounts/hooks';
 import { useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useSafeBalance } from '@/ui/state/transactions/hooks';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
@@ -189,14 +189,13 @@ function BitAndRuneCrypto({ searchTerm }) {
 }
 
 function SideCryptoItem({ token }: { token: SideToken }) {
-  const { balanceAmount } = useGetSideTokenBalance(token.base);
-  const { data: totalPrice } = useCalcPrice(balanceAmount, token.base, token.exponent);
-
+  // const { balanceAmount } = useGetSideTokenBalance(token.base);
+  // const { data: totalPrice } = useCalcPrice(balanceAmount, token.base, token.exponent);
   return (
     <>
       <Row classname={'bg-item-hover'}>
         <ImageIcon
-          url={token.logo}
+          url={token?.asset?.logo}
           style={{
             width: '38px',
             height: '38px',
@@ -208,8 +207,8 @@ function SideCryptoItem({ token }: { token: SideToken }) {
             gap: '0px'
           }}
         >
-          <Text preset="regular" text={token.symbol}></Text>
-          <Text preset="sub" text={token.name}></Text>
+          <Text preset="regular" text={token?.asset?.symbol}></Text>
+          <Text preset="sub" text={token?.asset?.name}></Text>
         </Column>
       </Row>
 
@@ -218,8 +217,8 @@ function SideCryptoItem({ token }: { token: SideToken }) {
           gap: '0px'
         }}
       >
-        <Text preset="regular" textEnd text={formatUnitAmount(balanceAmount, token.exponent)}></Text>
-        <Text preset="sub" textEnd text={`$${getTruncate(totalPrice)}`}></Text>
+        <Text preset="regular" textEnd text={token?.formatAmount}></Text>
+        <Text preset="sub" textEnd text={`$${token?.totalValue}`}></Text>
       </Column>
     </>
   );
@@ -233,29 +232,32 @@ function SideCrypto({ searchTerm }) {
     type: 'receive' | 'send';
   };
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
-  let { data: sideTokenList } = useGetSideTokenList();
-  sideTokenList = sideTokenList.filter((item) => {
+  const currentAccount = useCurrentAccount();
+  let {balanceList} = useGetSideBalanceList(currentAccount?.address);
+  balanceList = balanceList.filter((item) => {
     return (
-      item.symbol.toLocaleLowerCase().includes(searchTerm.trim()) ||
-      item.name.toLocaleLowerCase().includes(searchTerm.trim())
+      item.asset.symbol.toLocaleLowerCase().includes(searchTerm.trim()) ||
+      item.asset.name.toLocaleLowerCase().includes(searchTerm.trim())
     );
   });
   return (
     <>
-      {sideTokenList.map((token) => {
+      {balanceList.map((token) => {
         return (
           <Row
             classname={'bg-item-hover'}
             onClick={() => {
               if (type === 'receive') {
-                navigate('SelectAddressScreen', { ...state, base: token.base, token });
+                // navigate('SelectAddressScreen', { ...state, base: token.base, token });
+                navigate('SelectAddressScreen', { ...state, denom: token.denom, token });
               } else {
                 resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { ...state, base: token.base });
+                // navigate('TxCreateScreen', { ...state, base: token.base });
+                navigate('TxCreateScreen', { ...state, denom: token.denom });
               }
             }}
             full
-            key={token.symbol + token.name}
+            key={token.asset.symbol + token.asset.name}
             justifyBetween
             style={{
               margin: '0 16px',

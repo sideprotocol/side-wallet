@@ -89,12 +89,10 @@ export function useGetAccountBalanceByUSD() {
 }
 
 const sideChain = CHAINS.find((item) => item.chainID === SIDE_ID)!;
-
 export function useGetSideBalanceList(address?: string) {
     const [sideAssets, setSideAssets] = useState<[]>([]);
 
     useEffect(() => {
-        // console.log(`111111: `, 111111);
         getSideAssets();
     }, []);
 
