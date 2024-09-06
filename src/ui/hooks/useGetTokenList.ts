@@ -14,6 +14,7 @@ export function useGetSideTokenList() {
 
   const getData = async () => {
     const tokens = await wallet.getSideTokens();
+    console.log(`tokens: `, tokens);
     setData(tokens);
     setTimeout(async () => {
       await wallet.setSideTokens(SIDE_TOKENS);

@@ -203,7 +203,7 @@ export default function CreateSendBtc() {
         }}
       >
         <Column mt="xxl">
-          <Text text="Recipient" preset="regular" color="textDim" />
+          <Text text="Recipient" preset="regular" color="white" />
           <Input
             preset="address"
             addressInputData={toInfo}
@@ -215,7 +215,7 @@ export default function CreateSendBtc() {
         </Column>
 
         <Column mt="lg">
-          <Text text="Transfer amount" preset="regular" color="textDim" />
+          <Text text="Transfer amount" preset="regular" color="white" />
           <Input
             preset="amount"
             placeholder={'Amount'}

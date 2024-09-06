@@ -29,7 +29,7 @@ interface LocationState {
 
 export default function CreateSendRune() {
   // const { runeid } = useLocationState<LocationState>();
-  
+
   const [tokenSummary, setTokenSummary] = useState<AddressRunesTokenSummary>({
     runeBalance: {
       runeid: '',
@@ -237,7 +237,7 @@ export default function CreateSendRune() {
             {token.symbol}
           </Row>
 
-          <Text text="Recipient" preset="regular" color="textDim" />
+          <Text text="Recipient" preset="regular" color="white" />
           <Input
             preset="address"
             addressInputData={toInfo}
@@ -250,7 +250,7 @@ export default function CreateSendRune() {
 
         <Column mt="lg">
           <Row full justifyBetween>
-            <Text text="Balance" preset="regular" color="textDim" />
+            <Text text="Balance" preset="regular" color="white" />
 
             <Row
               gap="sm"
@@ -259,7 +259,7 @@ export default function CreateSendRune() {
               }}
             >
               <img src={WalletIcon} alt={'WalletIcon'} />
-              
+
               <div>{runeBalance?.toString()}</div>
 
               {token.emoji}

@@ -157,7 +157,7 @@ export default function CreateSendSide() {
           </Row>
           <Text
             text="Recipient"
-            color="white_muted"
+            color="white"
             style={{
               fontSize: '14px',
               lineHeight: '24px'
@@ -179,7 +179,7 @@ export default function CreateSendSide() {
           >
             <Text
               text="Amount"
-              color="white_muted"
+              color="white"
               style={{
                 fontSize: '14px',
                 lineHeight: '24px'
@@ -214,7 +214,7 @@ export default function CreateSendSide() {
           />
           <Text
             text="Memo"
-            color="white_muted"
+            color="white"
             style={{
               fontSize: '14px',
               lineHeight: '24px',
