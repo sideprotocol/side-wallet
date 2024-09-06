@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
-
+import { AddressRunesTokenSummary } from '@/shared/types';
 import { runesUtils } from '@/shared/lib/runes-utils';
 import { RawTxInfo } from '@/shared/types';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
@@ -11,6 +11,8 @@ import { OutputValueBar } from '@/ui/components/OutputValueBar';
 import { RBFBar } from '@/ui/components/RBFBar';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useRuneListV2 } from '@/ui/state/bridge/hook';
+import { useLocationState, useWallet } from '@/ui/utils';
+import InscriptionPreview from '@/ui/components/InscriptionPreview';
 import {
   useBitcoinTx,
   useFetchUtxosCallback,
@@ -18,15 +20,57 @@ import {
   useSafeBalance
 } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
-import { useLocationState } from '@/ui/utils';
 import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
-
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 interface LocationState {
   base: string;
   token: any;
 }
 
 export default function CreateSendRune() {
+  // const { runeid } = useLocationState<LocationState>();
+  
+  const [tokenSummary, setTokenSummary] = useState<AddressRunesTokenSummary>({
+    runeBalance: {
+      runeid: '',
+      rune: '',
+      spacedRune: '',
+      amount: '',
+      symbol: '',
+      divisibility: 0
+    },
+    runeInfo: {
+      rune: '',
+      runeid: '',
+      spacedRune: '',
+      symbol: '',
+      premine: '',
+      mints: '',
+      divisibility: 0,
+      etching: '',
+      terms: {
+        amount: '',
+        cap: '',
+        heightStart: 0,
+        heightEnd: 0,
+        offsetStart: 0,
+        offsetEnd: 0
+      },
+      number: 0,
+      height: 0,
+      txidx: 0,
+      timestamp: 0,
+      burned: '',
+      holders: 0,
+      transactions: 0,
+      mintable: false,
+      remaining: '',
+      start: 0,
+      end: 0,
+      supply: '0',
+      parent: ''
+    }
+  });
   const safeBalance = useSafeBalance();
   const navigate = useNavigate();
   const bitcoinTx = useBitcoinTx();
@@ -38,7 +82,7 @@ export default function CreateSendRune() {
   const setUiState = useUpdateUiTxCreateScreen();
 
   const [outputValue, setOutputValue] = useState<number>(546);
-
+  const wallet = useWallet();
   const uiState = useUiTxCreateScreen();
 
   const toInfo = uiState.toInfo;
@@ -47,7 +91,7 @@ export default function CreateSendRune() {
   const feeRate = uiState.feeRate;
 
   const [error, setError] = useState('');
-
+  const account = useCurrentAccount();
   const [autoAdjust, setAutoAdjust] = useState(false);
   const fetchUtxos = useFetchUtxosCallback();
 
@@ -56,6 +100,13 @@ export default function CreateSendRune() {
     tools.showLoading(true);
     fetchUtxos().finally(() => {
       tools.showLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    wallet.getAddressRunesTokenSummary(account.address, token.runeid).then((tokenSummary) => {
+      console.log('tokenSummary: ', tokenSummary)
+      setTokenSummary(tokenSummary);
     });
   }, []);
 
@@ -153,7 +204,12 @@ export default function CreateSendRune() {
             marginTop: '6px'
           }}
         >
-          <Image src={token.logo} size={50}></Image>
+          {/* <Image src={token.logo} size={50}></Image> */}
+          {tokenSummary.runeLogo ? (
+                <InscriptionPreview data={tokenSummary?.runeLogo} preset="small" asLogo />
+          ) : (
+            ''
+          )}
         </Row>
       </Row>
 
@@ -203,7 +259,7 @@ export default function CreateSendRune() {
               }}
             >
               <img src={WalletIcon} alt={'WalletIcon'} />
-
+              
               <div>{runeBalance?.toString()}</div>
 
               {token.emoji}
