@@ -1,6 +1,6 @@
+import { Select } from 'antd';
 import { useEffect, useState } from 'react';
 
-import { Select } from 'antd';
 import { AddressFlagType } from '@/shared/constant';
 import { checkAddressFlag } from '@/shared/utils';
 import { Card, Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
@@ -84,11 +84,13 @@ export default function ChangeEndpointsScreen() {
             <Text color={'white'} preset="sub" text={'LCD'} />
             <Input preset="text" />
           </Column>
-          <Column style={{
-            marginTop: '10px'
-          }}>
+          <Column
+            style={{
+              marginTop: '10px'
+            }}
+          >
             <Card style={{ borderRadius: 10 }}>
-              <Column >
+              <Column>
                 <Row>
                   <Icon icon="alert-circle" size={24} color="white" />
                   <Text text={'Restart to apply new endpoints'} preset="bold" size="sm" />
@@ -109,12 +111,16 @@ export default function ChangeEndpointsScreen() {
         </Column>
 
         <Column itemsCenter>
-          <Button style={{
-            width: '87px',
-            height: '36px',
-            background: '#22AB384D',
-            border: '1px solid #22AB38!important'
-          }} preset="reset" text="Reset" />
+          <Button
+            style={{
+              width: '87px',
+              height: '36px',
+              background: '#22AB384D',
+              border: '1px solid #22AB38!important'
+            }}
+            preset="reset"
+            text="Reset"
+          />
 
           <Button
             preset="primary"

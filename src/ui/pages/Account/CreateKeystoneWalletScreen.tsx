@@ -48,7 +48,8 @@ function Step1({ onNext }) {
             background: 'linear-gradient(270deg, rgba(4, 5, 7, 0.00) 0.06%, #040507 8.94%)',
             position: 'relative',
             overflow: 'hidden'
-          }}>
+          }}
+        >
           <img
             src={KeystoneProductImg}
             style={{
@@ -69,7 +70,8 @@ function Step1({ onNext }) {
               position: 'relative',
               zIndex: 2,
               width: '50%'
-            }}>
+            }}
+          >
             <KeystoneLogo width={64} height={64} />
             <Text text="Keystone hardware wallet" preset="title" />
             <Text

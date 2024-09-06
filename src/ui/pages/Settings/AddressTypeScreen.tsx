@@ -92,7 +92,8 @@ export default function AddressTypeScreen() {
       <Content
         style={{
           marginTop: 16
-        }}>
+        }}
+      >
         <Column>
           {addressTypes.map((item, index) => {
             const address = addresses?.[item.value];

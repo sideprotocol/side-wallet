@@ -10,7 +10,8 @@ const WebsiteBar = ({ session }: { session: { origin: string; icon?: string; nam
         px="zero"
         style={{
           maxWidth: 'max-content'
-        }}>
+        }}
+      >
         {/* <Image src={session.icon} size={fontSizes.logo} /> */}
         <Text
           size="xl"

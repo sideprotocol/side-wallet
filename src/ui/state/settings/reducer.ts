@@ -1,6 +1,7 @@
+import { ChainType } from '@/shared/constant';
 import { AddressType, NetworkType, WalletConfig } from '@/shared/types';
 import { createSlice } from '@reduxjs/toolkit';
-import { ChainType } from '@/shared/constant';
+
 import { updateVersion } from '../global/actions';
 
 export interface SettingsState {

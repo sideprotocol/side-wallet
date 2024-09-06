@@ -2,11 +2,11 @@
 import BigNumber from 'bignumber.js';
 import React, { useState } from 'react';
 
+import { Icon } from '@/ui/components/TokenCurrent/';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 // import Collapse from "@mui/material/Collapse";
 import { findAssetIcon } from '@/ui/utils/swap';
-import { DownOutlined } from '@ant-design/icons';
-import { Icon } from '@/ui/components/TokenCurrent/';
+
 // import SwapRoutes from "./SwapRoutes";
 
 function SwapDetail() {
@@ -83,18 +83,21 @@ function SwapDetail() {
           alignItems: 'center',
           justifyContent: 'space-between',
           fontSize: '14px'
-        }}>
+        }}
+      >
         <div
           style={{
             color: '#7D7D7D'
-          }}>
+          }}
+        >
           {text}
         </div>
 
         <div
           style={{
             color: text !== 'Price impact' ? 'white' : 'rgb(246, 70, 93)'
-          }}>
+          }}
+        >
           {value}
         </div>
       </div>
@@ -106,15 +109,22 @@ function SwapDetail() {
       <div
         className={`flex justify-between items-center ${
           isCollapse ? 'pb-[0px]' : 'pb-[10px] border-b-[1px] border-b-solid border-b-[#8E8E8F]/20'
-        }`}>
+        }`}
+      >
         <div className="text-[14px]">
           1 {findAssetIcon(swapPair.native)?.symbol || swapPair.native?.denom || '-'} = {swapRate}{' '}
           {findAssetIcon(swapPair.remote)?.symbol || swapPair.remote?.denom || '-'} (${ratePrice})
         </div>
-        <div className="cursor-pointer" onClick={() => {
-          setIsCollapse(!isCollapse)
-        }}>
-          <Icon style={{ fontSize: '14px', transform: isCollapse ? 'rotate(180deg)' : 'rotate(0deg)', transition: '.4s' }} type="side-down" />
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            setIsCollapse(!isCollapse);
+          }}
+        >
+          <Icon
+            style={{ fontSize: '14px', transform: isCollapse ? 'rotate(180deg)' : 'rotate(0deg)', transition: '.4s' }}
+            type="side-down"
+          />
         </div>
       </div>
       <div
@@ -122,7 +132,8 @@ function SwapDetail() {
           height: isCollapse ? '0px' : 'max-content',
           overflow: 'hidden',
           transition: '.4s'
-        }}>
+        }}
+      >
         {itemData?.map((item) => {
           return RenderItem({
             text: item.text,

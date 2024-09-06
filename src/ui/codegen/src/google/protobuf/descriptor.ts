@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from '../../binary';
 import { bytesFromBase64, base64FromBytes } from '../../helpers';
+
 export enum FieldDescriptorProto_Type {
   /**
    * TYPE_DOUBLE - 0 is reserved for errors.
@@ -41,7 +42,7 @@ export enum FieldDescriptorProto_Type {
   TYPE_SINT32 = 17,
   /** TYPE_SINT64 - Uses ZigZag encoding. */
   TYPE_SINT64 = 18,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 export const FieldDescriptorProto_TypeSDKType = FieldDescriptorProto_Type;
 export const FieldDescriptorProto_TypeAmino = FieldDescriptorProto_Type;
@@ -155,7 +156,7 @@ export enum FieldDescriptorProto_Label {
   LABEL_OPTIONAL = 1,
   LABEL_REQUIRED = 2,
   LABEL_REPEATED = 3,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 export const FieldDescriptorProto_LabelSDKType = FieldDescriptorProto_Label;
 export const FieldDescriptorProto_LabelAmino = FieldDescriptorProto_Label;
@@ -200,7 +201,7 @@ export enum FileOptions_OptimizeMode {
   CODE_SIZE = 2,
   /** LITE_RUNTIME - Generate code using MessageLite and the lite runtime. */
   LITE_RUNTIME = 3,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 export const FileOptions_OptimizeModeSDKType = FileOptions_OptimizeMode;
 export const FileOptions_OptimizeModeAmino = FileOptions_OptimizeMode;
@@ -239,7 +240,7 @@ export enum FieldOptions_CType {
   STRING = 0,
   CORD = 1,
   STRING_PIECE = 2,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 export const FieldOptions_CTypeSDKType = FieldOptions_CType;
 export const FieldOptions_CTypeAmino = FieldOptions_CType;
@@ -280,7 +281,7 @@ export enum FieldOptions_JSType {
   JS_STRING = 1,
   /** JS_NUMBER - Use JavaScript numbers. */
   JS_NUMBER = 2,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 export const FieldOptions_JSTypeSDKType = FieldOptions_JSType;
 export const FieldOptions_JSTypeAmino = FieldOptions_JSType;
@@ -325,7 +326,7 @@ export enum MethodOptions_IdempotencyLevel {
   NO_SIDE_EFFECTS = 1,
   /** IDEMPOTENT - idempotent, but may have side effects */
   IDEMPOTENT = 2,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 export const MethodOptions_IdempotencyLevelSDKType = MethodOptions_IdempotencyLevel;
 export const MethodOptions_IdempotencyLevelAmino = MethodOptions_IdempotencyLevel;
@@ -2229,18 +2230,18 @@ export const FileDescriptorSet = {
   },
   fromPartial(object: Partial<FileDescriptorSet>): FileDescriptorSet {
     const message = createBaseFileDescriptorSet();
-    message.file = object.file?.map(e => FileDescriptorProto.fromPartial(e)) || [];
+    message.file = object.file?.map((e) => FileDescriptorProto.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: FileDescriptorSetAmino): FileDescriptorSet {
     const message = createBaseFileDescriptorSet();
-    message.file = object.file?.map(e => FileDescriptorProto.fromAmino(e)) || [];
+    message.file = object.file?.map((e) => FileDescriptorProto.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: FileDescriptorSet): FileDescriptorSetAmino {
     const obj: any = {};
     if (message.file) {
-      obj.file = message.file.map(e => e ? FileDescriptorProto.toAmino(e) : undefined);
+      obj.file = message.file.map((e) => (e ? FileDescriptorProto.toAmino(e) : undefined));
     } else {
       obj.file = message.file;
     }
@@ -2391,15 +2392,19 @@ export const FileDescriptorProto = {
     const message = createBaseFileDescriptorProto();
     message.name = object.name ?? '';
     message.package = object.package ?? '';
-    message.dependency = object.dependency?.map(e => e) || [];
-    message.publicDependency = object.publicDependency?.map(e => e) || [];
-    message.weakDependency = object.weakDependency?.map(e => e) || [];
-    message.messageType = object.messageType?.map(e => DescriptorProto.fromPartial(e)) || [];
-    message.enumType = object.enumType?.map(e => EnumDescriptorProto.fromPartial(e)) || [];
-    message.service = object.service?.map(e => ServiceDescriptorProto.fromPartial(e)) || [];
-    message.extension = object.extension?.map(e => FieldDescriptorProto.fromPartial(e)) || [];
-    message.options = object.options !== undefined && object.options !== null ? FileOptions.fromPartial(object.options) : undefined;
-    message.sourceCodeInfo = object.sourceCodeInfo !== undefined && object.sourceCodeInfo !== null ? SourceCodeInfo.fromPartial(object.sourceCodeInfo) : undefined;
+    message.dependency = object.dependency?.map((e) => e) || [];
+    message.publicDependency = object.publicDependency?.map((e) => e) || [];
+    message.weakDependency = object.weakDependency?.map((e) => e) || [];
+    message.messageType = object.messageType?.map((e) => DescriptorProto.fromPartial(e)) || [];
+    message.enumType = object.enumType?.map((e) => EnumDescriptorProto.fromPartial(e)) || [];
+    message.service = object.service?.map((e) => ServiceDescriptorProto.fromPartial(e)) || [];
+    message.extension = object.extension?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
+    message.options =
+      object.options !== undefined && object.options !== null ? FileOptions.fromPartial(object.options) : undefined;
+    message.sourceCodeInfo =
+      object.sourceCodeInfo !== undefined && object.sourceCodeInfo !== null
+        ? SourceCodeInfo.fromPartial(object.sourceCodeInfo)
+        : undefined;
     message.syntax = object.syntax ?? '';
     return message;
   },
@@ -2411,13 +2416,13 @@ export const FileDescriptorProto = {
     if (object.package !== undefined && object.package !== null) {
       message.package = object.package;
     }
-    message.dependency = object.dependency?.map(e => e) || [];
-    message.publicDependency = object.public_dependency?.map(e => e) || [];
-    message.weakDependency = object.weak_dependency?.map(e => e) || [];
-    message.messageType = object.message_type?.map(e => DescriptorProto.fromAmino(e)) || [];
-    message.enumType = object.enum_type?.map(e => EnumDescriptorProto.fromAmino(e)) || [];
-    message.service = object.service?.map(e => ServiceDescriptorProto.fromAmino(e)) || [];
-    message.extension = object.extension?.map(e => FieldDescriptorProto.fromAmino(e)) || [];
+    message.dependency = object.dependency?.map((e) => e) || [];
+    message.publicDependency = object.public_dependency?.map((e) => e) || [];
+    message.weakDependency = object.weak_dependency?.map((e) => e) || [];
+    message.messageType = object.message_type?.map((e) => DescriptorProto.fromAmino(e)) || [];
+    message.enumType = object.enum_type?.map((e) => EnumDescriptorProto.fromAmino(e)) || [];
+    message.service = object.service?.map((e) => ServiceDescriptorProto.fromAmino(e)) || [];
+    message.extension = object.extension?.map((e) => FieldDescriptorProto.fromAmino(e)) || [];
     if (object.options !== undefined && object.options !== null) {
       message.options = FileOptions.fromAmino(object.options);
     }
@@ -2434,37 +2439,37 @@ export const FileDescriptorProto = {
     obj.name = message.name === '' ? undefined : message.name;
     obj.package = message.package === '' ? undefined : message.package;
     if (message.dependency) {
-      obj.dependency = message.dependency.map(e => e);
+      obj.dependency = message.dependency.map((e) => e);
     } else {
       obj.dependency = message.dependency;
     }
     if (message.publicDependency) {
-      obj.public_dependency = message.publicDependency.map(e => e);
+      obj.public_dependency = message.publicDependency.map((e) => e);
     } else {
       obj.public_dependency = message.publicDependency;
     }
     if (message.weakDependency) {
-      obj.weak_dependency = message.weakDependency.map(e => e);
+      obj.weak_dependency = message.weakDependency.map((e) => e);
     } else {
       obj.weak_dependency = message.weakDependency;
     }
     if (message.messageType) {
-      obj.message_type = message.messageType.map(e => e ? DescriptorProto.toAmino(e) : undefined);
+      obj.message_type = message.messageType.map((e) => (e ? DescriptorProto.toAmino(e) : undefined));
     } else {
       obj.message_type = message.messageType;
     }
     if (message.enumType) {
-      obj.enum_type = message.enumType.map(e => e ? EnumDescriptorProto.toAmino(e) : undefined);
+      obj.enum_type = message.enumType.map((e) => (e ? EnumDescriptorProto.toAmino(e) : undefined));
     } else {
       obj.enum_type = message.enumType;
     }
     if (message.service) {
-      obj.service = message.service.map(e => e ? ServiceDescriptorProto.toAmino(e) : undefined);
+      obj.service = message.service.map((e) => (e ? ServiceDescriptorProto.toAmino(e) : undefined));
     } else {
       obj.service = message.service;
     }
     if (message.extension) {
-      obj.extension = message.extension.map(e => e ? FieldDescriptorProto.toAmino(e) : undefined);
+      obj.extension = message.extension.map((e) => (e ? FieldDescriptorProto.toAmino(e) : undefined));
     } else {
       obj.extension = message.extension;
     }
@@ -2585,15 +2590,16 @@ export const DescriptorProto = {
   fromPartial(object: Partial<DescriptorProto>): DescriptorProto {
     const message = createBaseDescriptorProto();
     message.name = object.name ?? '';
-    message.field = object.field?.map(e => FieldDescriptorProto.fromPartial(e)) || [];
-    message.extension = object.extension?.map(e => FieldDescriptorProto.fromPartial(e)) || [];
-    message.nestedType = object.nestedType?.map(e => DescriptorProto.fromPartial(e)) || [];
-    message.enumType = object.enumType?.map(e => EnumDescriptorProto.fromPartial(e)) || [];
-    message.extensionRange = object.extensionRange?.map(e => DescriptorProto_ExtensionRange.fromPartial(e)) || [];
-    message.oneofDecl = object.oneofDecl?.map(e => OneofDescriptorProto.fromPartial(e)) || [];
-    message.options = object.options !== undefined && object.options !== null ? MessageOptions.fromPartial(object.options) : undefined;
-    message.reservedRange = object.reservedRange?.map(e => DescriptorProto_ReservedRange.fromPartial(e)) || [];
-    message.reservedName = object.reservedName?.map(e => e) || [];
+    message.field = object.field?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
+    message.extension = object.extension?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
+    message.nestedType = object.nestedType?.map((e) => DescriptorProto.fromPartial(e)) || [];
+    message.enumType = object.enumType?.map((e) => EnumDescriptorProto.fromPartial(e)) || [];
+    message.extensionRange = object.extensionRange?.map((e) => DescriptorProto_ExtensionRange.fromPartial(e)) || [];
+    message.oneofDecl = object.oneofDecl?.map((e) => OneofDescriptorProto.fromPartial(e)) || [];
+    message.options =
+      object.options !== undefined && object.options !== null ? MessageOptions.fromPartial(object.options) : undefined;
+    message.reservedRange = object.reservedRange?.map((e) => DescriptorProto_ReservedRange.fromPartial(e)) || [];
+    message.reservedName = object.reservedName?.map((e) => e) || [];
     return message;
   },
   fromAmino(object: DescriptorProtoAmino): DescriptorProto {
@@ -2601,60 +2607,62 @@ export const DescriptorProto = {
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     }
-    message.field = object.field?.map(e => FieldDescriptorProto.fromAmino(e)) || [];
-    message.extension = object.extension?.map(e => FieldDescriptorProto.fromAmino(e)) || [];
-    message.nestedType = object.nested_type?.map(e => DescriptorProto.fromAmino(e)) || [];
-    message.enumType = object.enum_type?.map(e => EnumDescriptorProto.fromAmino(e)) || [];
-    message.extensionRange = object.extension_range?.map(e => DescriptorProto_ExtensionRange.fromAmino(e)) || [];
-    message.oneofDecl = object.oneof_decl?.map(e => OneofDescriptorProto.fromAmino(e)) || [];
+    message.field = object.field?.map((e) => FieldDescriptorProto.fromAmino(e)) || [];
+    message.extension = object.extension?.map((e) => FieldDescriptorProto.fromAmino(e)) || [];
+    message.nestedType = object.nested_type?.map((e) => DescriptorProto.fromAmino(e)) || [];
+    message.enumType = object.enum_type?.map((e) => EnumDescriptorProto.fromAmino(e)) || [];
+    message.extensionRange = object.extension_range?.map((e) => DescriptorProto_ExtensionRange.fromAmino(e)) || [];
+    message.oneofDecl = object.oneof_decl?.map((e) => OneofDescriptorProto.fromAmino(e)) || [];
     if (object.options !== undefined && object.options !== null) {
       message.options = MessageOptions.fromAmino(object.options);
     }
-    message.reservedRange = object.reserved_range?.map(e => DescriptorProto_ReservedRange.fromAmino(e)) || [];
-    message.reservedName = object.reserved_name?.map(e => e) || [];
+    message.reservedRange = object.reserved_range?.map((e) => DescriptorProto_ReservedRange.fromAmino(e)) || [];
+    message.reservedName = object.reserved_name?.map((e) => e) || [];
     return message;
   },
   toAmino(message: DescriptorProto): DescriptorProtoAmino {
     const obj: any = {};
     obj.name = message.name === '' ? undefined : message.name;
     if (message.field) {
-      obj.field = message.field.map(e => e ? FieldDescriptorProto.toAmino(e) : undefined);
+      obj.field = message.field.map((e) => (e ? FieldDescriptorProto.toAmino(e) : undefined));
     } else {
       obj.field = message.field;
     }
     if (message.extension) {
-      obj.extension = message.extension.map(e => e ? FieldDescriptorProto.toAmino(e) : undefined);
+      obj.extension = message.extension.map((e) => (e ? FieldDescriptorProto.toAmino(e) : undefined));
     } else {
       obj.extension = message.extension;
     }
     if (message.nestedType) {
-      obj.nested_type = message.nestedType.map(e => e ? DescriptorProto.toAmino(e) : undefined);
+      obj.nested_type = message.nestedType.map((e) => (e ? DescriptorProto.toAmino(e) : undefined));
     } else {
       obj.nested_type = message.nestedType;
     }
     if (message.enumType) {
-      obj.enum_type = message.enumType.map(e => e ? EnumDescriptorProto.toAmino(e) : undefined);
+      obj.enum_type = message.enumType.map((e) => (e ? EnumDescriptorProto.toAmino(e) : undefined));
     } else {
       obj.enum_type = message.enumType;
     }
     if (message.extensionRange) {
-      obj.extension_range = message.extensionRange.map(e => e ? DescriptorProto_ExtensionRange.toAmino(e) : undefined);
+      obj.extension_range = message.extensionRange.map((e) =>
+        e ? DescriptorProto_ExtensionRange.toAmino(e) : undefined
+      );
     } else {
       obj.extension_range = message.extensionRange;
     }
     if (message.oneofDecl) {
-      obj.oneof_decl = message.oneofDecl.map(e => e ? OneofDescriptorProto.toAmino(e) : undefined);
+      obj.oneof_decl = message.oneofDecl.map((e) => (e ? OneofDescriptorProto.toAmino(e) : undefined));
     } else {
       obj.oneof_decl = message.oneofDecl;
     }
     obj.options = message.options ? MessageOptions.toAmino(message.options) : undefined;
     if (message.reservedRange) {
-      obj.reserved_range = message.reservedRange.map(e => e ? DescriptorProto_ReservedRange.toAmino(e) : undefined);
+      obj.reserved_range = message.reservedRange.map((e) => (e ? DescriptorProto_ReservedRange.toAmino(e) : undefined));
     } else {
       obj.reserved_range = message.reservedRange;
     }
     if (message.reservedName) {
-      obj.reserved_name = message.reservedName.map(e => e);
+      obj.reserved_name = message.reservedName.map((e) => e);
     } else {
       obj.reserved_name = message.reservedName;
     }
@@ -2724,7 +2732,10 @@ export const DescriptorProto_ExtensionRange = {
     const message = createBaseDescriptorProto_ExtensionRange();
     message.start = object.start ?? 0;
     message.end = object.end ?? 0;
-    message.options = object.options !== undefined && object.options !== null ? ExtensionRangeOptions.fromPartial(object.options) : undefined;
+    message.options =
+      object.options !== undefined && object.options !== null
+        ? ExtensionRangeOptions.fromPartial(object.options)
+        : undefined;
     return message;
   },
   fromAmino(object: DescriptorProto_ExtensionRangeAmino): DescriptorProto_ExtensionRange {
@@ -2870,18 +2881,20 @@ export const ExtensionRangeOptions = {
   },
   fromPartial(object: Partial<ExtensionRangeOptions>): ExtensionRangeOptions {
     const message = createBaseExtensionRangeOptions();
-    message.uninterpretedOption = object.uninterpretedOption?.map(e => UninterpretedOption.fromPartial(e)) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: ExtensionRangeOptionsAmino): ExtensionRangeOptions {
     const message = createBaseExtensionRangeOptions();
-    message.uninterpretedOption = object.uninterpreted_option?.map(e => UninterpretedOption.fromAmino(e)) || [];
+    message.uninterpretedOption = object.uninterpreted_option?.map((e) => UninterpretedOption.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: ExtensionRangeOptions): ExtensionRangeOptionsAmino {
     const obj: any = {};
     if (message.uninterpretedOption) {
-      obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e) : undefined);
+      obj.uninterpreted_option = message.uninterpretedOption.map((e) =>
+        e ? UninterpretedOption.toAmino(e) : undefined
+      );
     } else {
       obj.uninterpreted_option = message.uninterpretedOption;
     }
@@ -2966,10 +2979,10 @@ export const FieldDescriptorProto = {
           message.number = reader.int32();
           break;
         case 4:
-          message.label = (reader.int32() as any);
+          message.label = reader.int32() as any;
           break;
         case 5:
-          message.type = (reader.int32() as any);
+          message.type = reader.int32() as any;
           break;
         case 6:
           message.typeName = reader.string();
@@ -3007,7 +3020,8 @@ export const FieldDescriptorProto = {
     message.defaultValue = object.defaultValue ?? '';
     message.oneofIndex = object.oneofIndex ?? 0;
     message.jsonName = object.jsonName ?? '';
-    message.options = object.options !== undefined && object.options !== null ? FieldOptions.fromPartial(object.options) : undefined;
+    message.options =
+      object.options !== undefined && object.options !== null ? FieldOptions.fromPartial(object.options) : undefined;
     return message;
   },
   fromAmino(object: FieldDescriptorProtoAmino): FieldDescriptorProto {
@@ -3114,7 +3128,8 @@ export const OneofDescriptorProto = {
   fromPartial(object: Partial<OneofDescriptorProto>): OneofDescriptorProto {
     const message = createBaseOneofDescriptorProto();
     message.name = object.name ?? '';
-    message.options = object.options !== undefined && object.options !== null ? OneofOptions.fromPartial(object.options) : undefined;
+    message.options =
+      object.options !== undefined && object.options !== null ? OneofOptions.fromPartial(object.options) : undefined;
     return message;
   },
   fromAmino(object: OneofDescriptorProtoAmino): OneofDescriptorProto {
@@ -3210,10 +3225,12 @@ export const EnumDescriptorProto = {
   fromPartial(object: Partial<EnumDescriptorProto>): EnumDescriptorProto {
     const message = createBaseEnumDescriptorProto();
     message.name = object.name ?? '';
-    message.value = object.value?.map(e => EnumValueDescriptorProto.fromPartial(e)) || [];
-    message.options = object.options !== undefined && object.options !== null ? EnumOptions.fromPartial(object.options) : undefined;
-    message.reservedRange = object.reservedRange?.map(e => EnumDescriptorProto_EnumReservedRange.fromPartial(e)) || [];
-    message.reservedName = object.reservedName?.map(e => e) || [];
+    message.value = object.value?.map((e) => EnumValueDescriptorProto.fromPartial(e)) || [];
+    message.options =
+      object.options !== undefined && object.options !== null ? EnumOptions.fromPartial(object.options) : undefined;
+    message.reservedRange =
+      object.reservedRange?.map((e) => EnumDescriptorProto_EnumReservedRange.fromPartial(e)) || [];
+    message.reservedName = object.reservedName?.map((e) => e) || [];
     return message;
   },
   fromAmino(object: EnumDescriptorProtoAmino): EnumDescriptorProto {
@@ -3221,30 +3238,32 @@ export const EnumDescriptorProto = {
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     }
-    message.value = object.value?.map(e => EnumValueDescriptorProto.fromAmino(e)) || [];
+    message.value = object.value?.map((e) => EnumValueDescriptorProto.fromAmino(e)) || [];
     if (object.options !== undefined && object.options !== null) {
       message.options = EnumOptions.fromAmino(object.options);
     }
-    message.reservedRange = object.reserved_range?.map(e => EnumDescriptorProto_EnumReservedRange.fromAmino(e)) || [];
-    message.reservedName = object.reserved_name?.map(e => e) || [];
+    message.reservedRange = object.reserved_range?.map((e) => EnumDescriptorProto_EnumReservedRange.fromAmino(e)) || [];
+    message.reservedName = object.reserved_name?.map((e) => e) || [];
     return message;
   },
   toAmino(message: EnumDescriptorProto): EnumDescriptorProtoAmino {
     const obj: any = {};
     obj.name = message.name === '' ? undefined : message.name;
     if (message.value) {
-      obj.value = message.value.map(e => e ? EnumValueDescriptorProto.toAmino(e) : undefined);
+      obj.value = message.value.map((e) => (e ? EnumValueDescriptorProto.toAmino(e) : undefined));
     } else {
       obj.value = message.value;
     }
     obj.options = message.options ? EnumOptions.toAmino(message.options) : undefined;
     if (message.reservedRange) {
-      obj.reserved_range = message.reservedRange.map(e => e ? EnumDescriptorProto_EnumReservedRange.toAmino(e) : undefined);
+      obj.reserved_range = message.reservedRange.map((e) =>
+        e ? EnumDescriptorProto_EnumReservedRange.toAmino(e) : undefined
+      );
     } else {
       obj.reserved_range = message.reservedRange;
     }
     if (message.reservedName) {
-      obj.reserved_name = message.reservedName.map(e => e);
+      obj.reserved_name = message.reservedName.map((e) => e);
     } else {
       obj.reserved_name = message.reservedName;
     }
@@ -3389,7 +3408,10 @@ export const EnumValueDescriptorProto = {
     const message = createBaseEnumValueDescriptorProto();
     message.name = object.name ?? '';
     message.number = object.number ?? 0;
-    message.options = object.options !== undefined && object.options !== null ? EnumValueOptions.fromPartial(object.options) : undefined;
+    message.options =
+      object.options !== undefined && object.options !== null
+        ? EnumValueOptions.fromPartial(object.options)
+        : undefined;
     return message;
   },
   fromAmino(object: EnumValueDescriptorProtoAmino): EnumValueDescriptorProto {
@@ -3475,8 +3497,9 @@ export const ServiceDescriptorProto = {
   fromPartial(object: Partial<ServiceDescriptorProto>): ServiceDescriptorProto {
     const message = createBaseServiceDescriptorProto();
     message.name = object.name ?? '';
-    message.method = object.method?.map(e => MethodDescriptorProto.fromPartial(e)) || [];
-    message.options = object.options !== undefined && object.options !== null ? ServiceOptions.fromPartial(object.options) : undefined;
+    message.method = object.method?.map((e) => MethodDescriptorProto.fromPartial(e)) || [];
+    message.options =
+      object.options !== undefined && object.options !== null ? ServiceOptions.fromPartial(object.options) : undefined;
     return message;
   },
   fromAmino(object: ServiceDescriptorProtoAmino): ServiceDescriptorProto {
@@ -3484,7 +3507,7 @@ export const ServiceDescriptorProto = {
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     }
-    message.method = object.method?.map(e => MethodDescriptorProto.fromAmino(e)) || [];
+    message.method = object.method?.map((e) => MethodDescriptorProto.fromAmino(e)) || [];
     if (object.options !== undefined && object.options !== null) {
       message.options = ServiceOptions.fromAmino(object.options);
     }
@@ -3494,7 +3517,7 @@ export const ServiceDescriptorProto = {
     const obj: any = {};
     obj.name = message.name === '' ? undefined : message.name;
     if (message.method) {
-      obj.method = message.method.map(e => e ? MethodDescriptorProto.toAmino(e) : undefined);
+      obj.method = message.method.map((e) => (e ? MethodDescriptorProto.toAmino(e) : undefined));
     } else {
       obj.method = message.method;
     }
@@ -3587,7 +3610,8 @@ export const MethodDescriptorProto = {
     message.name = object.name ?? '';
     message.inputType = object.inputType ?? '';
     message.outputType = object.outputType ?? '';
-    message.options = object.options !== undefined && object.options !== null ? MethodOptions.fromPartial(object.options) : undefined;
+    message.options =
+      object.options !== undefined && object.options !== null ? MethodOptions.fromPartial(object.options) : undefined;
     message.clientStreaming = object.clientStreaming ?? false;
     message.serverStreaming = object.serverStreaming ?? false;
     return message;
@@ -3756,7 +3780,7 @@ export const FileOptions = {
           message.javaStringCheckUtf8 = reader.bool();
           break;
         case 9:
-          message.optimizeFor = (reader.int32() as any);
+          message.optimizeFor = reader.int32() as any;
           break;
         case 11:
           message.goPackage = reader.string();
@@ -3832,7 +3856,7 @@ export const FileOptions = {
     message.phpNamespace = object.phpNamespace ?? '';
     message.phpMetadataNamespace = object.phpMetadataNamespace ?? '';
     message.rubyPackage = object.rubyPackage ?? '';
-    message.uninterpretedOption = object.uninterpretedOption?.map(e => UninterpretedOption.fromPartial(e)) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: FileOptionsAmino): FileOptions {
@@ -3897,7 +3921,7 @@ export const FileOptions = {
     if (object.ruby_package !== undefined && object.ruby_package !== null) {
       message.rubyPackage = object.ruby_package;
     }
-    message.uninterpretedOption = object.uninterpreted_option?.map(e => UninterpretedOption.fromAmino(e)) || [];
+    message.uninterpretedOption = object.uninterpreted_option?.map((e) => UninterpretedOption.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: FileOptions): FileOptionsAmino {
@@ -3905,7 +3929,8 @@ export const FileOptions = {
     obj.java_package = message.javaPackage === '' ? undefined : message.javaPackage;
     obj.java_outer_classname = message.javaOuterClassname === '' ? undefined : message.javaOuterClassname;
     obj.java_multiple_files = message.javaMultipleFiles === false ? undefined : message.javaMultipleFiles;
-    obj.java_generate_equals_and_hash = message.javaGenerateEqualsAndHash === false ? undefined : message.javaGenerateEqualsAndHash;
+    obj.java_generate_equals_and_hash =
+      message.javaGenerateEqualsAndHash === false ? undefined : message.javaGenerateEqualsAndHash;
     obj.java_string_check_utf8 = message.javaStringCheckUtf8 === false ? undefined : message.javaStringCheckUtf8;
     obj.optimize_for = message.optimizeFor === 1 ? undefined : message.optimizeFor;
     obj.go_package = message.goPackage === '' ? undefined : message.goPackage;
@@ -3923,7 +3948,9 @@ export const FileOptions = {
     obj.php_metadata_namespace = message.phpMetadataNamespace === '' ? undefined : message.phpMetadataNamespace;
     obj.ruby_package = message.rubyPackage === '' ? undefined : message.rubyPackage;
     if (message.uninterpretedOption) {
-      obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e) : undefined);
+      obj.uninterpreted_option = message.uninterpretedOption.map((e) =>
+        e ? UninterpretedOption.toAmino(e) : undefined
+      );
     } else {
       obj.uninterpreted_option = message.uninterpretedOption;
     }
@@ -4009,7 +4036,7 @@ export const MessageOptions = {
     message.noStandardDescriptorAccessor = object.noStandardDescriptorAccessor ?? false;
     message.deprecated = object.deprecated ?? false;
     message.mapEntry = object.mapEntry ?? false;
-    message.uninterpretedOption = object.uninterpretedOption?.map(e => UninterpretedOption.fromPartial(e)) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: MessageOptionsAmino): MessageOptions {
@@ -4026,17 +4053,20 @@ export const MessageOptions = {
     if (object.map_entry !== undefined && object.map_entry !== null) {
       message.mapEntry = object.map_entry;
     }
-    message.uninterpretedOption = object.uninterpreted_option?.map(e => UninterpretedOption.fromAmino(e)) || [];
+    message.uninterpretedOption = object.uninterpreted_option?.map((e) => UninterpretedOption.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: MessageOptions): MessageOptionsAmino {
     const obj: any = {};
     obj.message_set_wire_format = message.messageSetWireFormat === false ? undefined : message.messageSetWireFormat;
-    obj.no_standard_descriptor_accessor = message.noStandardDescriptorAccessor === false ? undefined : message.noStandardDescriptorAccessor;
+    obj.no_standard_descriptor_accessor =
+      message.noStandardDescriptorAccessor === false ? undefined : message.noStandardDescriptorAccessor;
     obj.deprecated = message.deprecated === false ? undefined : message.deprecated;
     obj.map_entry = message.mapEntry === false ? undefined : message.mapEntry;
     if (message.uninterpretedOption) {
-      obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e) : undefined);
+      obj.uninterpreted_option = message.uninterpretedOption.map((e) =>
+        e ? UninterpretedOption.toAmino(e) : undefined
+      );
     } else {
       obj.uninterpreted_option = message.uninterpretedOption;
     }
@@ -4103,13 +4133,13 @@ export const FieldOptions = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.ctype = (reader.int32() as any);
+          message.ctype = reader.int32() as any;
           break;
         case 2:
           message.packed = reader.bool();
           break;
         case 6:
-          message.jstype = (reader.int32() as any);
+          message.jstype = reader.int32() as any;
           break;
         case 5:
           message.lazy = reader.bool();
@@ -4138,7 +4168,7 @@ export const FieldOptions = {
     message.lazy = object.lazy ?? false;
     message.deprecated = object.deprecated ?? false;
     message.weak = object.weak ?? false;
-    message.uninterpretedOption = object.uninterpretedOption?.map(e => UninterpretedOption.fromPartial(e)) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: FieldOptionsAmino): FieldOptions {
@@ -4161,7 +4191,7 @@ export const FieldOptions = {
     if (object.weak !== undefined && object.weak !== null) {
       message.weak = object.weak;
     }
-    message.uninterpretedOption = object.uninterpreted_option?.map(e => UninterpretedOption.fromAmino(e)) || [];
+    message.uninterpretedOption = object.uninterpreted_option?.map((e) => UninterpretedOption.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: FieldOptions): FieldOptionsAmino {
@@ -4173,7 +4203,9 @@ export const FieldOptions = {
     obj.deprecated = message.deprecated === false ? undefined : message.deprecated;
     obj.weak = message.weak === false ? undefined : message.weak;
     if (message.uninterpretedOption) {
-      obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e) : undefined);
+      obj.uninterpreted_option = message.uninterpretedOption.map((e) =>
+        e ? UninterpretedOption.toAmino(e) : undefined
+      );
     } else {
       obj.uninterpreted_option = message.uninterpretedOption;
     }
@@ -4227,18 +4259,20 @@ export const OneofOptions = {
   },
   fromPartial(object: Partial<OneofOptions>): OneofOptions {
     const message = createBaseOneofOptions();
-    message.uninterpretedOption = object.uninterpretedOption?.map(e => UninterpretedOption.fromPartial(e)) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: OneofOptionsAmino): OneofOptions {
     const message = createBaseOneofOptions();
-    message.uninterpretedOption = object.uninterpreted_option?.map(e => UninterpretedOption.fromAmino(e)) || [];
+    message.uninterpretedOption = object.uninterpreted_option?.map((e) => UninterpretedOption.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: OneofOptions): OneofOptionsAmino {
     const obj: any = {};
     if (message.uninterpretedOption) {
-      obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e) : undefined);
+      obj.uninterpreted_option = message.uninterpretedOption.map((e) =>
+        e ? UninterpretedOption.toAmino(e) : undefined
+      );
     } else {
       obj.uninterpreted_option = message.uninterpretedOption;
     }
@@ -4308,7 +4342,7 @@ export const EnumOptions = {
     const message = createBaseEnumOptions();
     message.allowAlias = object.allowAlias ?? false;
     message.deprecated = object.deprecated ?? false;
-    message.uninterpretedOption = object.uninterpretedOption?.map(e => UninterpretedOption.fromPartial(e)) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: EnumOptionsAmino): EnumOptions {
@@ -4319,7 +4353,7 @@ export const EnumOptions = {
     if (object.deprecated !== undefined && object.deprecated !== null) {
       message.deprecated = object.deprecated;
     }
-    message.uninterpretedOption = object.uninterpreted_option?.map(e => UninterpretedOption.fromAmino(e)) || [];
+    message.uninterpretedOption = object.uninterpreted_option?.map((e) => UninterpretedOption.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: EnumOptions): EnumOptionsAmino {
@@ -4327,7 +4361,9 @@ export const EnumOptions = {
     obj.allow_alias = message.allowAlias === false ? undefined : message.allowAlias;
     obj.deprecated = message.deprecated === false ? undefined : message.deprecated;
     if (message.uninterpretedOption) {
-      obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e) : undefined);
+      obj.uninterpreted_option = message.uninterpretedOption.map((e) =>
+        e ? UninterpretedOption.toAmino(e) : undefined
+      );
     } else {
       obj.uninterpreted_option = message.uninterpretedOption;
     }
@@ -4389,7 +4425,7 @@ export const EnumValueOptions = {
   fromPartial(object: Partial<EnumValueOptions>): EnumValueOptions {
     const message = createBaseEnumValueOptions();
     message.deprecated = object.deprecated ?? false;
-    message.uninterpretedOption = object.uninterpretedOption?.map(e => UninterpretedOption.fromPartial(e)) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: EnumValueOptionsAmino): EnumValueOptions {
@@ -4397,14 +4433,16 @@ export const EnumValueOptions = {
     if (object.deprecated !== undefined && object.deprecated !== null) {
       message.deprecated = object.deprecated;
     }
-    message.uninterpretedOption = object.uninterpreted_option?.map(e => UninterpretedOption.fromAmino(e)) || [];
+    message.uninterpretedOption = object.uninterpreted_option?.map((e) => UninterpretedOption.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: EnumValueOptions): EnumValueOptionsAmino {
     const obj: any = {};
     obj.deprecated = message.deprecated === false ? undefined : message.deprecated;
     if (message.uninterpretedOption) {
-      obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e) : undefined);
+      obj.uninterpreted_option = message.uninterpretedOption.map((e) =>
+        e ? UninterpretedOption.toAmino(e) : undefined
+      );
     } else {
       obj.uninterpreted_option = message.uninterpretedOption;
     }
@@ -4466,7 +4504,7 @@ export const ServiceOptions = {
   fromPartial(object: Partial<ServiceOptions>): ServiceOptions {
     const message = createBaseServiceOptions();
     message.deprecated = object.deprecated ?? false;
-    message.uninterpretedOption = object.uninterpretedOption?.map(e => UninterpretedOption.fromPartial(e)) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: ServiceOptionsAmino): ServiceOptions {
@@ -4474,14 +4512,16 @@ export const ServiceOptions = {
     if (object.deprecated !== undefined && object.deprecated !== null) {
       message.deprecated = object.deprecated;
     }
-    message.uninterpretedOption = object.uninterpreted_option?.map(e => UninterpretedOption.fromAmino(e)) || [];
+    message.uninterpretedOption = object.uninterpreted_option?.map((e) => UninterpretedOption.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: ServiceOptions): ServiceOptionsAmino {
     const obj: any = {};
     obj.deprecated = message.deprecated === false ? undefined : message.deprecated;
     if (message.uninterpretedOption) {
-      obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e) : undefined);
+      obj.uninterpreted_option = message.uninterpretedOption.map((e) =>
+        e ? UninterpretedOption.toAmino(e) : undefined
+      );
     } else {
       obj.uninterpreted_option = message.uninterpretedOption;
     }
@@ -4535,7 +4575,7 @@ export const MethodOptions = {
           message.deprecated = reader.bool();
           break;
         case 34:
-          message.idempotencyLevel = (reader.int32() as any);
+          message.idempotencyLevel = reader.int32() as any;
           break;
         case 999:
           message.uninterpretedOption.push(UninterpretedOption.decode(reader, reader.uint32()));
@@ -4551,7 +4591,7 @@ export const MethodOptions = {
     const message = createBaseMethodOptions();
     message.deprecated = object.deprecated ?? false;
     message.idempotencyLevel = object.idempotencyLevel ?? 1;
-    message.uninterpretedOption = object.uninterpretedOption?.map(e => UninterpretedOption.fromPartial(e)) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: MethodOptionsAmino): MethodOptions {
@@ -4562,7 +4602,7 @@ export const MethodOptions = {
     if (object.idempotency_level !== undefined && object.idempotency_level !== null) {
       message.idempotencyLevel = object.idempotency_level;
     }
-    message.uninterpretedOption = object.uninterpreted_option?.map(e => UninterpretedOption.fromAmino(e)) || [];
+    message.uninterpretedOption = object.uninterpreted_option?.map((e) => UninterpretedOption.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: MethodOptions): MethodOptionsAmino {
@@ -4570,7 +4610,9 @@ export const MethodOptions = {
     obj.deprecated = message.deprecated === false ? undefined : message.deprecated;
     obj.idempotency_level = message.idempotencyLevel === 1 ? undefined : message.idempotencyLevel;
     if (message.uninterpretedOption) {
-      obj.uninterpreted_option = message.uninterpretedOption.map(e => e ? UninterpretedOption.toAmino(e) : undefined);
+      obj.uninterpreted_option = message.uninterpretedOption.map((e) =>
+        e ? UninterpretedOption.toAmino(e) : undefined
+      );
     } else {
       obj.uninterpreted_option = message.uninterpretedOption;
     }
@@ -4666,10 +4708,16 @@ export const UninterpretedOption = {
   },
   fromPartial(object: Partial<UninterpretedOption>): UninterpretedOption {
     const message = createBaseUninterpretedOption();
-    message.name = object.name?.map(e => UninterpretedOption_NamePart.fromPartial(e)) || [];
+    message.name = object.name?.map((e) => UninterpretedOption_NamePart.fromPartial(e)) || [];
     message.identifierValue = object.identifierValue ?? '';
-    message.positiveIntValue = object.positiveIntValue !== undefined && object.positiveIntValue !== null ? BigInt(object.positiveIntValue.toString()) : BigInt(0);
-    message.negativeIntValue = object.negativeIntValue !== undefined && object.negativeIntValue !== null ? BigInt(object.negativeIntValue.toString()) : BigInt(0);
+    message.positiveIntValue =
+      object.positiveIntValue !== undefined && object.positiveIntValue !== null
+        ? BigInt(object.positiveIntValue.toString())
+        : BigInt(0);
+    message.negativeIntValue =
+      object.negativeIntValue !== undefined && object.negativeIntValue !== null
+        ? BigInt(object.negativeIntValue.toString())
+        : BigInt(0);
     message.doubleValue = object.doubleValue ?? 0;
     message.stringValue = object.stringValue ?? new Uint8Array();
     message.aggregateValue = object.aggregateValue ?? '';
@@ -4677,7 +4725,7 @@ export const UninterpretedOption = {
   },
   fromAmino(object: UninterpretedOptionAmino): UninterpretedOption {
     const message = createBaseUninterpretedOption();
-    message.name = object.name?.map(e => UninterpretedOption_NamePart.fromAmino(e)) || [];
+    message.name = object.name?.map((e) => UninterpretedOption_NamePart.fromAmino(e)) || [];
     if (object.identifier_value !== undefined && object.identifier_value !== null) {
       message.identifierValue = object.identifier_value;
     }
@@ -4701,7 +4749,7 @@ export const UninterpretedOption = {
   toAmino(message: UninterpretedOption): UninterpretedOptionAmino {
     const obj: any = {};
     if (message.name) {
-      obj.name = message.name.map(e => e ? UninterpretedOption_NamePart.toAmino(e) : undefined);
+      obj.name = message.name.map((e) => (e ? UninterpretedOption_NamePart.toAmino(e) : undefined));
     } else {
       obj.name = message.name;
     }
@@ -4836,18 +4884,18 @@ export const SourceCodeInfo = {
   },
   fromPartial(object: Partial<SourceCodeInfo>): SourceCodeInfo {
     const message = createBaseSourceCodeInfo();
-    message.location = object.location?.map(e => SourceCodeInfo_Location.fromPartial(e)) || [];
+    message.location = object.location?.map((e) => SourceCodeInfo_Location.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: SourceCodeInfoAmino): SourceCodeInfo {
     const message = createBaseSourceCodeInfo();
-    message.location = object.location?.map(e => SourceCodeInfo_Location.fromAmino(e)) || [];
+    message.location = object.location?.map((e) => SourceCodeInfo_Location.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: SourceCodeInfo): SourceCodeInfoAmino {
     const obj: any = {};
     if (message.location) {
-      obj.location = message.location.map(e => e ? SourceCodeInfo_Location.toAmino(e) : undefined);
+      obj.location = message.location.map((e) => (e ? SourceCodeInfo_Location.toAmino(e) : undefined));
     } else {
       obj.location = message.location;
     }
@@ -4947,42 +4995,42 @@ export const SourceCodeInfo_Location = {
   },
   fromPartial(object: Partial<SourceCodeInfo_Location>): SourceCodeInfo_Location {
     const message = createBaseSourceCodeInfo_Location();
-    message.path = object.path?.map(e => e) || [];
-    message.span = object.span?.map(e => e) || [];
+    message.path = object.path?.map((e) => e) || [];
+    message.span = object.span?.map((e) => e) || [];
     message.leadingComments = object.leadingComments ?? '';
     message.trailingComments = object.trailingComments ?? '';
-    message.leadingDetachedComments = object.leadingDetachedComments?.map(e => e) || [];
+    message.leadingDetachedComments = object.leadingDetachedComments?.map((e) => e) || [];
     return message;
   },
   fromAmino(object: SourceCodeInfo_LocationAmino): SourceCodeInfo_Location {
     const message = createBaseSourceCodeInfo_Location();
-    message.path = object.path?.map(e => e) || [];
-    message.span = object.span?.map(e => e) || [];
+    message.path = object.path?.map((e) => e) || [];
+    message.span = object.span?.map((e) => e) || [];
     if (object.leading_comments !== undefined && object.leading_comments !== null) {
       message.leadingComments = object.leading_comments;
     }
     if (object.trailing_comments !== undefined && object.trailing_comments !== null) {
       message.trailingComments = object.trailing_comments;
     }
-    message.leadingDetachedComments = object.leading_detached_comments?.map(e => e) || [];
+    message.leadingDetachedComments = object.leading_detached_comments?.map((e) => e) || [];
     return message;
   },
   toAmino(message: SourceCodeInfo_Location): SourceCodeInfo_LocationAmino {
     const obj: any = {};
     if (message.path) {
-      obj.path = message.path.map(e => e);
+      obj.path = message.path.map((e) => e);
     } else {
       obj.path = message.path;
     }
     if (message.span) {
-      obj.span = message.span.map(e => e);
+      obj.span = message.span.map((e) => e);
     } else {
       obj.span = message.span;
     }
     obj.leading_comments = message.leadingComments === '' ? undefined : message.leadingComments;
     obj.trailing_comments = message.trailingComments === '' ? undefined : message.trailingComments;
     if (message.leadingDetachedComments) {
-      obj.leading_detached_comments = message.leadingDetachedComments.map(e => e);
+      obj.leading_detached_comments = message.leadingDetachedComments.map((e) => e);
     } else {
       obj.leading_detached_comments = message.leadingDetachedComments;
     }
@@ -5036,18 +5084,18 @@ export const GeneratedCodeInfo = {
   },
   fromPartial(object: Partial<GeneratedCodeInfo>): GeneratedCodeInfo {
     const message = createBaseGeneratedCodeInfo();
-    message.annotation = object.annotation?.map(e => GeneratedCodeInfo_Annotation.fromPartial(e)) || [];
+    message.annotation = object.annotation?.map((e) => GeneratedCodeInfo_Annotation.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: GeneratedCodeInfoAmino): GeneratedCodeInfo {
     const message = createBaseGeneratedCodeInfo();
-    message.annotation = object.annotation?.map(e => GeneratedCodeInfo_Annotation.fromAmino(e)) || [];
+    message.annotation = object.annotation?.map((e) => GeneratedCodeInfo_Annotation.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: GeneratedCodeInfo): GeneratedCodeInfoAmino {
     const obj: any = {};
     if (message.annotation) {
-      obj.annotation = message.annotation.map(e => e ? GeneratedCodeInfo_Annotation.toAmino(e) : undefined);
+      obj.annotation = message.annotation.map((e) => (e ? GeneratedCodeInfo_Annotation.toAmino(e) : undefined));
     } else {
       obj.annotation = message.annotation;
     }
@@ -5131,7 +5179,7 @@ export const GeneratedCodeInfo_Annotation = {
   },
   fromPartial(object: Partial<GeneratedCodeInfo_Annotation>): GeneratedCodeInfo_Annotation {
     const message = createBaseGeneratedCodeInfo_Annotation();
-    message.path = object.path?.map(e => e) || [];
+    message.path = object.path?.map((e) => e) || [];
     message.sourceFile = object.sourceFile ?? '';
     message.begin = object.begin ?? 0;
     message.end = object.end ?? 0;
@@ -5139,7 +5187,7 @@ export const GeneratedCodeInfo_Annotation = {
   },
   fromAmino(object: GeneratedCodeInfo_AnnotationAmino): GeneratedCodeInfo_Annotation {
     const message = createBaseGeneratedCodeInfo_Annotation();
-    message.path = object.path?.map(e => e) || [];
+    message.path = object.path?.map((e) => e) || [];
     if (object.source_file !== undefined && object.source_file !== null) {
       message.sourceFile = object.source_file;
     }
@@ -5154,7 +5202,7 @@ export const GeneratedCodeInfo_Annotation = {
   toAmino(message: GeneratedCodeInfo_Annotation): GeneratedCodeInfo_AnnotationAmino {
     const obj: any = {};
     if (message.path) {
-      obj.path = message.path.map(e => e);
+      obj.path = message.path.map((e) => e);
     } else {
       obj.path = message.path;
     }

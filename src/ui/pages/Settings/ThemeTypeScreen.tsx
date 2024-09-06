@@ -25,21 +25,30 @@ export default function LanguageTypeScreen() {
       {/*  </Column>*/}
       {/*</Content>*/}
 
-      <Content style={{
-        padding: '0 16px',
-        marginTop: '16px',
-      }}>
+      <Content
+        style={{
+          padding: '0 16px',
+          marginTop: '16px'
+        }}
+      >
         <Column gap={'md'}>
-          <Row rounded style={{
-            padding: '16px 10px',
-            backgroundColor: colors.green_light,
-            border: `1px solid ${colors.green_light}`,
-          }} full justifyBetween itemsCenter classname={''}>
+          <Row
+            rounded
+            style={{
+              padding: '16px 10px',
+              backgroundColor: colors.green_light,
+              border: `1px solid ${colors.green_light}`
+            }}
+            full
+            justifyBetween
+            itemsCenter
+            classname={''}
+          >
             <Row itemsCenter>
               <Text text={'Black'} />
             </Row>
             <Column>
-              <Icon color={'green'} icon="check-circle"  />
+              <Icon color={'green'} icon="check-circle" />
             </Column>
           </Row>
         </Column>

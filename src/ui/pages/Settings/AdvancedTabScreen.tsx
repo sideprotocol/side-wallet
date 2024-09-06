@@ -143,7 +143,8 @@ export default function AdvancedTabScreen() {
                   }}
                   style={{
                     backgroundColor: 'transparent'
-                  }}>
+                  }}
+                >
                   <Row full justifyBetween>
                     <Text text={item.label || item.desc} preset="regular-bold" />
 

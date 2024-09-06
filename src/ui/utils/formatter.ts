@@ -1,15 +1,16 @@
+import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 import numeral from 'numeral';
-import BigNumber from 'bignumber.js';
+
+import { Ripemd160, sha256 } from '@cosmjs/crypto';
 import {
   fromBase64,
-  fromBech32,
-  // fromHex,
+  fromBech32, // fromHex,
   // toBase64,
   toBech32,
-  toHex,
+  toHex
 } from '@cosmjs/encoding';
-import { Ripemd160, sha256 } from '@cosmjs/crypto';
+
 export const toDay = (time?: string | number | Date, format = 'long') => {
   if (!time) return '';
   if (format === 'long') {
@@ -30,10 +31,7 @@ export const toDay = (time?: string | number | Date, format = 'long') => {
   return dayjs(time).format('YYYY-MM-DD HH:mm:ss');
 };
 
-export const calculatePercent = (
-  input?: string | number,
-  total?: string | number
-) => {
+export const calculatePercent = (input?: string | number, total?: string | number) => {
   if (!input || !total) return '0';
   const percent = new BigNumber(input).div(total).toNumber();
   if (percent === Infinity) {
@@ -56,10 +54,7 @@ export function operatorAddressToAccount(operAddress?: string) {
   return toBech32(prefix.replace('valoper', ''), data);
 }
 
-export function consensusPubkeyToHexAddress(consensusPubkey?: {
-  '@type': string;
-  key: string;
-}) {
+export function consensusPubkeyToHexAddress(consensusPubkey?: { '@type': string; key: string }) {
   if (!consensusPubkey) return '';
   const raw = '';
   if (consensusPubkey['@type'] === '/cosmos.crypto.ed25519.PubKey') {
@@ -74,10 +69,7 @@ export function consensusPubkeyToHexAddress(consensusPubkey?: {
   return raw;
 }
 
-export function pubKeyToValcons(
-  consensusPubkey: { '@type': string; key: string },
-  prefix: string
-) {
+export function pubKeyToValcons(consensusPubkey: { '@type': string; key: string }, prefix: string) {
   if (consensusPubkey && consensusPubkey.key) {
     const pubkey = fromBase64(consensusPubkey.key);
     if (pubkey) {
@@ -99,11 +91,7 @@ export function toUnitAmount(amount: string, exp: number | string) {
   return BigNumber(amount).times(BigNumber(10).pow(exp)).toFixed(0);
 }
 
-export function toReadableAmount(
-  amount: string,
-  exp: number | string,
-  pre?: string | number
-) {
+export function toReadableAmount(amount: string, exp: number | string, pre?: string | number) {
   if (BigNumber(amount).isZero()) {
     return '0';
   }

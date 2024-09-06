@@ -30,7 +30,8 @@ export default function AboutScreen() {
             style={{
               paddingTop: '30px',
               paddingBottom: '25px'
-            }}>
+            }}
+          >
             <Image
               src={aboutIcon}
               size={120}
@@ -47,25 +48,29 @@ export default function AboutScreen() {
                 textAlign: 'center',
                 paddingTop: '20px'
               }}
-              text="Side Wallet"></Text>
+              text="Side Wallet"
+            ></Text>
           </Column>
 
           <Column
             style={{
               gap: '10px'
-            }}>
+            }}
+          >
             <Card
               style={{
                 height: '58px',
                 borderRadius: '10px'
-              }}>
+              }}
+            >
               <Row
                 style={{
                   padding: '0 8px'
                 }}
                 justifyBetween
                 itemsCenter
-                full>
+                full
+              >
                 <Text preset="regular" text={'Terms of Service'}></Text>
                 <Icon icon={'link'} size={18}></Icon>
               </Row>
@@ -75,14 +80,16 @@ export default function AboutScreen() {
               style={{
                 height: '58px',
                 borderRadius: '10px'
-              }}>
+              }}
+            >
               <Row
                 style={{
                   padding: '0 8px'
                 }}
                 justifyBetween
                 itemsCenter
-                full>
+                full
+              >
                 <Text preset="regular" text={'Privacy Policy'}></Text>
 
                 <Icon icon={'link'} size={18}></Icon>
@@ -93,14 +100,16 @@ export default function AboutScreen() {
               style={{
                 height: '58px',
                 borderRadius: '10px'
-              }}>
+              }}
+            >
               <Row
                 style={{
                   padding: '0 8px'
                 }}
                 justifyBetween
                 itemsCenter
-                full>
+                full
+              >
                 <Text preset="regular" text={'Contact us'}></Text>
 
                 <Row itemsCenter>
@@ -109,7 +118,8 @@ export default function AboutScreen() {
                     text="contact@side.one"
                     style={{
                       color: 'white'
-                    }}></Text>
+                    }}
+                  ></Text>
                   <Icon
                     className={'copy-icon'}
                     onClick={(e) => {
@@ -138,7 +148,8 @@ export default function AboutScreen() {
                 borderRadius: '40px',
                 width: '40px',
                 height: '40px'
-              }}>
+              }}
+            >
               <Icon
                 size={20}
                 icon="twitter"
@@ -156,7 +167,8 @@ export default function AboutScreen() {
                 borderRadius: '100%',
                 width: '40px',
                 height: '40px'
-              }}>
+              }}
+            >
               <Icon
                 size={20}
                 icon="telegram"
@@ -174,7 +186,8 @@ export default function AboutScreen() {
                 borderRadius: '100%',
                 width: '40px',
                 height: '40px'
-              }}>
+              }}
+            >
               <Icon
                 contain={'contain'}
                 icon="discord"

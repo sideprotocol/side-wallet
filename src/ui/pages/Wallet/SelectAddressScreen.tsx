@@ -1,13 +1,14 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+
+import { ADDRESS_TYPES, KEYRING_TYPE } from '@/shared/constant';
 import { Column, Content, Header, Layout, Row, Text } from '@/ui/components';
+import { useTools } from '@/ui/components/ActionComponent';
+import { useAccountAddress, useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { satoshisToAmount, shortAddress, useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
-import { useAccountAddress, useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useLocation } from 'react-router-dom';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { ADDRESS_TYPES, KEYRING_TYPE } from '@/shared/constant';
-import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import { useTools } from '@/ui/components/ActionComponent';
 
 interface Address {
   type: string;
@@ -108,12 +109,16 @@ export default function SelecAddressScreen() {
         }}
         title="Select address type"
       />
-      <Content style={{
-        padding: 0,
-      }}>
-        <Column style={{
-          margin: '16px 0'
-        }}>
+      <Content
+        style={{
+          padding: 0
+        }}
+      >
+        <Column
+          style={{
+            margin: '16px 0'
+          }}
+        >
           {addressTypes.map((item) => {
             const address = addresses[item.value];
             const assets = addressAssets[address] || {
@@ -132,7 +137,7 @@ export default function SelecAddressScreen() {
                   // height: '71px',
                   margin: '0 16px',
                   padding: '8px 16px',
-                  borderRadius: '8px',
+                  borderRadius: '8px'
                 }}
                 full
                 onClick={() => {
@@ -143,15 +148,18 @@ export default function SelecAddressScreen() {
                   });
                 }}
                 key={address}
-                justifyBetween>
+                justifyBetween
+              >
                 <Column gap={'zero'}>
                   <Text preset="regular" text={item.name}></Text>
                   <Text preset="sub" text={shortAddress(address)}></Text>
                 </Column>
 
-                <Column style={{
-                  display: 'none'
-                }}>
+                <Column
+                  style={{
+                    display: 'none'
+                  }}
+                >
                   <Text preset="regular" text={item?.balance}></Text>
                   <Text preset="sub" text={item?.value}></Text>
                 </Column>

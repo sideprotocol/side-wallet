@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useWallet } from '@/ui/utils';
+import { getPasswordStrengthWord } from '@/ui/utils/password-utils';
 
 import { useNavigate } from '../MainRoute';
-import { getPasswordStrengthWord } from '@/ui/utils/password-utils';
 
 type Status = '' | 'error' | 'warning' | undefined;
 
@@ -60,17 +60,17 @@ export default function ChangePasswordScreen() {
       // navigate('MainScreen');
       // setIsSuccess(true);
       // setTimeout(() => {
-        // setConfirmErrorMsg('Your password has been reset!');
-        tools.toastSuccess('Your password has been reset!');
+      // setConfirmErrorMsg('Your password has been reset!');
+      tools.toastSuccess('Your password has been reset!');
       // }, 1000);
       // setTimeout(() => {
       //   setIsSuccess(false);
-        navigate('MainScreen');
+      navigate('MainScreen');
       // }, 1500);
     } catch (err) {
       // tools.toastError((err as any).message);
       setIsOldPwdError(true);
-      setOldPwdErrorMsg('You entered wrong password.')
+      setOldPwdErrorMsg('You entered wrong password.');
     }
   };
   return (
@@ -81,9 +81,12 @@ export default function ChangePasswordScreen() {
         }}
         title="Change Password"
       />
-      <Content style={{
-        marginTop: 16
-      }} justifyBetween>
+      <Content
+        style={{
+          marginTop: 16
+        }}
+        justifyBetween
+      >
         <Column gap="lg">
           <Column>
             <Text text={'Old Password'} color={'white'} preset="sub"></Text>
@@ -132,9 +135,7 @@ export default function ChangePasswordScreen() {
                 setConfirmErrorMsg('');
               }}
             />
-            {
-              strongText
-            }
+            {strongText}
             <Text text={pwdErrorMsg} color={'red'} preset="sub"></Text>
           </Column>
 

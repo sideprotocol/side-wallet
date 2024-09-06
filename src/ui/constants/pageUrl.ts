@@ -13,5 +13,5 @@ export default {
   swap: '/swap',
   asset: '/asset',
   summon: '/summon',
-  summonDetail: '/summon/:summonId',
+  summonDetail: '/summon/:summonId'
 };

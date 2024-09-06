@@ -89,13 +89,15 @@ export default function Step1_Import({
         flex: 1,
         overflow: 'hidden',
         padding: '0 16px 24px'
-      }}>
+      }}
+    >
       <Column
         classname="hide-scrollbar"
         style={{
           flex: 1,
           overflow: 'auto'
-        }}>
+        }}
+      >
         <Column
           style={{
             marginTop: '16px',
@@ -103,7 +105,8 @@ export default function Step1_Import({
             backgroundColor: '#222222',
             borderRadius: '14px',
             padding: '16px'
-          }}>
+          }}
+        >
           {wordsItems.length > 1 ? (
             <ButtonGroup
               rowProps={{
@@ -134,7 +137,8 @@ export default function Step1_Import({
                       borderRadius: '8px',
                       border: '1px solid #FFFFFF33',
                       backgroundColor: '#121212'
-                    }}>
+                    }}
+                  >
                     <Text
                       text={`${index + 1}. `}
                       style={{ width: 25, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
@@ -189,11 +193,13 @@ export default function Step1_Import({
             borderRadius: '14px',
             padding: '10px 16px',
             gap: '6px'
-          }}>
+          }}
+        >
           <Row
             style={{
               alignItems: 'center'
-            }}>
+            }}
+          >
             <Image src="/images/icons/info-circle.svg" size={24} />
             <Text
               text="Note:"

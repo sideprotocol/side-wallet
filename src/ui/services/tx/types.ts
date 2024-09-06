@@ -1,5 +1,6 @@
-import { BaseRequestPage, PaginationResponse } from '../types';
 import { Coin } from '@cosmjs/stargate';
+
+import { BaseRequestPage, PaginationResponse } from '../types';
 
 export type GetTxRequest = {
   events: string[];

@@ -2,11 +2,11 @@ import ApiClient from '@/ui/services/network/ApiClient';
 import { ApiConfiguration } from '@/ui/services/network/ApiConfiguration';
 
 import BaseService from './base';
+import BridgeService from './bridge';
 import DexService from './dex';
 import NodeService from './node';
 import SignetService from './signet-index';
 import TxService from './tx';
-import BridgeService from "./bridge";
 
 class Services {
   tx: TxService;

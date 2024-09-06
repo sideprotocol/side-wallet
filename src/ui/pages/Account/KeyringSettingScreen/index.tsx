@@ -28,13 +28,15 @@ export default function () {
         style={{
           flex: 1,
           padding: '0 16px 24px'
-        }}>
+        }}
+      >
         <Column
           style={{
             flex: 1,
             gap: '10px',
             marginTop: '16px'
-          }}>
+          }}
+        >
           <div
             style={{
               height: '50px',
@@ -48,7 +50,8 @@ export default function () {
             className="walletSettingItem"
             onClick={() => {
               navigate('EditWalletNameScreen', { keyring });
-            }}>
+            }}
+          >
             <Text
               text="Edit Wallet Name"
               color="text"
@@ -75,7 +78,8 @@ export default function () {
               className="walletSettingItem"
               onClick={() => {
                 navigate('ExportMnemonicsScreen', { keyring });
-              }}>
+              }}
+            >
               <Text
                 text="View Recovery Phrase"
                 color="text"

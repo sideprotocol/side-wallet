@@ -1,9 +1,10 @@
 // import { Typography, Stack } from "@mui/material";
-import ImageIcon from './ImageIcon';
-import { Coin } from '@cosmjs/stargate';
-import { SWAP_ASSETS } from '@/ui/constants';
 import React from 'react';
 
+import { SWAP_ASSETS } from '@/ui/constants';
+import { Coin } from '@cosmjs/stargate';
+
+import ImageIcon from './ImageIcon';
 
 function Icon({ type, style, className }: { type: string; style?: React.CSSProperties; className?: string }) {
   return (
@@ -20,32 +21,36 @@ function Icon({ type, style, className }: { type: string; style?: React.CSSPrope
     </svg>
   );
 }
-export {
-  Icon
-}
+export { Icon };
 
 export default function TokenCurrent({ value, setShow }: { value: Coin; setShow: any }) {
   const newValue = SWAP_ASSETS.assets.find((asset) => asset.base === value?.denom);
 
   const unSelected = !newValue?.base;
 
-  let limitWidth = newValue?.logo ? {
-    maxWidth: '72px',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden'
-  } : {};
+  let limitWidth = newValue?.logo
+    ? {
+        maxWidth: '72px',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden'
+      }
+    : {};
   return (
-    <div className={`hover:bg-[#000]/70 bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 ${unSelected ? 'bg-[#000]' : ''}`} style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '8px 8px',
-      cursor: 'pointer',
-      borderRadius: '24px',
-      color: unSelected ? 'white' : 'white',
-      // background: unSelected ? 'rgba(41, 40, 40, 1)' : 'black',
-      minWidth: 'max-content',
-    }}
+    <div
+      className={`hover:bg-[#000]/70 bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 ${
+        unSelected ? 'bg-[#000]' : ''
+      }`}
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '8px 8px',
+        cursor: 'pointer',
+        borderRadius: '24px',
+        color: unSelected ? 'white' : 'white',
+        // background: unSelected ? 'rgba(41, 40, 40, 1)' : 'black',
+        minWidth: 'max-content'
+      }}
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -58,14 +63,12 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
             width: '20px',
             height: '20px',
             marginRight: '4px',
-            borderRadius: '20px',
+            borderRadius: '20px'
           }}
           url={newValue?.logo || newValue?.logo}
         />
       )}
-      <div style={{ fontSize: '14px', paddingRight: '6px', whiteSpace: 'nowrap',
-        ...limitWidth
-      }}>
+      <div style={{ fontSize: '14px', paddingRight: '6px', whiteSpace: 'nowrap', ...limitWidth }}>
         {newValue?.symbol || newValue?.symbol || newValue?.base || 'Select Token'}
       </div>
       <Icon type="side-down" />

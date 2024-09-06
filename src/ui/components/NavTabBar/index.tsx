@@ -56,7 +56,8 @@ function TabButton({
         } else if (tabName === 'explore') {
           navigate('ExploreTabScreen');
         }
-      }}>
+      }}
+    >
       <Column
         itemsCenter
         style={{
@@ -64,14 +65,16 @@ function TabButton({
           opacity: isHover ? 0.8 : 1
         }}
         onMouseOver={() => setIsHover(true)}
-        onMouseLeave={() => setIsHover(false)}>
+        onMouseLeave={() => setIsHover(false)}
+      >
         <Icon size={24} icon={icon} color={isActive || isHover ? 'white' : 'white_muted'} />
         <span
           style={{
             textTransform: 'capitalize' as const,
             fontSize: 15,
             color: isActive || isHover ? '#fff' : 'rgb(130 130 130 / 50%)'
-          }}>
+          }}
+        >
           {name ? name : tabName}
         </span>
       </Column>
@@ -86,7 +89,8 @@ function TabButton({
               height: 5,
               backgroundColor: 'red',
               borderRadius: '50%'
-            }}></BaseView>
+            }}
+          ></BaseView>
         )}
       </BaseView>
     </Column>

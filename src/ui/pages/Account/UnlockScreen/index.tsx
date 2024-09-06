@@ -64,14 +64,16 @@ export default function UnlockScreen() {
         fullY
         style={{
           padding: '0 16px 24px'
-        }}>
+        }}
+      >
         <Column
           justifyCenter
           style={{
             flex: 1,
             alignItems: 'center',
             gap: '16px'
-          }}>
+          }}
+        >
           <Image src="/images/img/welcome.gif" size={220} />
           <Text
             text="🎉 Welcome Back"
@@ -89,7 +91,7 @@ export default function UnlockScreen() {
             color: '#828282',
             fontSize: '14px',
             lineHeight: '24px',
-            marginTop: '50px',
+            marginTop: '50px'
           }}
         />
         <Input
@@ -113,11 +115,14 @@ export default function UnlockScreen() {
           onKeyUp={(e) => handleOnKeyUp(e)}
           autoFocus={true}
         />
-        <div style={{
-          color: '#ff0000',
-          fontSize: '14px',
-          opacity: errorMsg ? 1 : 0
-        }} className="">
+        <div
+          style={{
+            color: '#ff0000',
+            fontSize: '14px',
+            opacity: errorMsg ? 1 : 0
+          }}
+          className=""
+        >
           {errorMsg}
         </div>
         {/*<Button disabled={disabled} text="Unlock" preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />*/}
@@ -135,7 +140,6 @@ export default function UnlockScreen() {
             navigate('ForgetPasswordScreen');
           }}
         />
-
       </Column>
     </Layout>
   );

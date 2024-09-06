@@ -167,7 +167,8 @@ export default function RunesTokenScreen() {
               copyToClipboard(tokenSummary.runeInfo.spacedRune).then(() => {
                 tools.toastSuccess('Copied');
               });
-            }}></Text>
+            }}
+          ></Text>
           {tokenSummary.runeLogo ? (
             <Row>
               <InscriptionPreview data={tokenSummary.runeLogo} preset="small" asLogo />

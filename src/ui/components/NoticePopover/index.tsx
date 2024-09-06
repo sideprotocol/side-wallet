@@ -42,9 +42,12 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
         />
 
         <Column gap="lg">
-          <Text style={{
-            fontWeight: '300',
-          }} text={'Please be aware that:'} />
+          <Text
+            style={{
+              fontWeight: '300'
+            }}
+            text={'Please be aware that:'}
+          />
           <div style={{ marginTop: 0, display: 'flex' }}>
             <Checkbox
               style={{
@@ -54,7 +57,8 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
               checked={checked1}
               onChange={(e) => {
                 setChecked1(e.target.checked);
-              }}>
+              }}
+            >
               <div style={{ fontSize: fontSizes.sm }}>
                 This is an experimental product; do not use it on the mainnet.
               </div>
@@ -68,7 +72,8 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
                 alignItems: 'self-start'
               }}
               checked={checked2}
-              onChange={(e) => setChecked2(e.target.checked)}>
+              onChange={(e) => setChecked2(e.target.checked)}
+            >
               <div style={{ fontSize: fontSizes.sm }}>Ordinals assets are not currently supported.</div>
             </Checkbox>
           </div>
@@ -80,7 +85,8 @@ export const NoticePopover = ({ onClose }: { onClose: () => void }) => {
                 alignItems: 'self-start'
               }}
               checked={checked3}
-              onChange={(e) => setChecked3(e.target.checked)}>
+              onChange={(e) => setChecked3(e.target.checked)}
+            >
               <div style={{ fontSize: fontSizes.sm }}>Atomicals assets are not currently supported.</div>
             </Checkbox>
           </div>

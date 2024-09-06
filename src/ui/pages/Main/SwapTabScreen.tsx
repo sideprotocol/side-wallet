@@ -128,7 +128,8 @@ const NativeBalance = () => {
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%'
-      }}>
+      }}
+    >
       {/*{validNativeInput ? (*/}
       {/*  <div>*/}
       {/*    ${nativePrice == 'NaN' ? '0' : BigNumber(nativePrice).toFormat()}*/}
@@ -148,7 +149,8 @@ const NativeBalance = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '4px'
-            }}>
+            }}
+          >
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(nativeBalance)
@@ -162,7 +164,8 @@ const NativeBalance = () => {
                   ...swapPair['native'],
                   amount: nativeBalance
                 };
-              }}>
+              }}
+            >
               Max
             </div>
           </div>
@@ -196,14 +199,16 @@ const NativePrice = () => {
           style={{
             fontSize: '12px',
             color: 'rgb(125, 125, 125)'
-          }}>
+          }}
+        >
           ${nativePrice == 'NaN' ? '0' : BigNumber(nativePrice).toFormat()}
         </div>
       ) : (
         <div
           style={{
             height: '22px'
-          }}></div>
+          }}
+        ></div>
       )}
     </>
   );
@@ -239,7 +244,8 @@ const RemoteBalance = () => {
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%'
-      }}>
+      }}
+    >
       <div />
       {/*{validRemoteInput ? (*/}
       {/*  <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px' }}>${remotePrice == 'NaN' ? '0' : BigNumber(remotePrice).toFormat()}</div>*/}
@@ -256,7 +262,8 @@ const RemoteBalance = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '3px'
-          }}>
+          }}
+        >
           <Icon icon={'wallet-icon'} size={14} color={'search_icon'}></Icon>
           <div
             style={{
@@ -265,7 +272,8 @@ const RemoteBalance = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '4px'
-            }}>
+            }}
+          >
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(remoteBalance)
@@ -283,7 +291,8 @@ const RemoteBalance = () => {
             }}
             onClick={() => {
               return;
-            }}></div>
+            }}
+          ></div>
         </div>
       )}
     </div>
@@ -315,14 +324,16 @@ const RemotePrice = () => {
           style={{
             fontSize: '12px',
             color: 'rgb(125, 125, 125)'
-          }}>
+          }}
+        >
           ${nativePrice == 'NaN' ? '0.00' : BigNumber(remoteBalance)?.toFormat(2)}
         </div>
       ) : (
         <div
           style={{
             height: '22px'
-          }}></div>
+          }}
+        ></div>
       )}
     </>
   );
@@ -504,7 +515,8 @@ export default function SwapTabScreen() {
       <Layout
         style={{
           display: !tokenModalShow ? 'flex' : 'none!important'
-        }}>
+        }}
+      >
         <MainHeader title={''} />
         <Content classname={'hide-scrollbar'}>
           <InitBalance></InitBalance>
@@ -512,17 +524,20 @@ export default function SwapTabScreen() {
             relative
             style={{
               gap: '6px'
-            }}>
+            }}
+          >
             <div className="flex justify-between mt-[16px]">
               <div className="pl-[10px]"></div>
               <div
                 className="w-[108px] flex items-center justify-center rounded-[24px] border-[1px] border-[#14a89b1a]  bg-[#0dd4c31a] h-[30px] cursor-pointer"
-                onClick={showModal}>
+                onClick={showModal}
+              >
                 <span className={'font-medium text-sm whitespace-nowrap mr-3 text-teal-400'}>{slippage}%</span>
                 <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M18.28 12.6514L16.7296 11.0746C16.7534 10.8426 16.7639 10.6026 16.7639 10.3601C16.7639 10.1175 16.7534 9.88281 16.7296 9.64551L18.2774 8.06875C18.7467 7.79717 18.9076 7.19863 18.6386 6.7293L17.1673 4.17959C16.8957 3.71025 16.2972 3.54941 15.8279 3.81836L13.6868 4.36943C13.2993 4.09258 12.8853 3.85264 12.4502 3.65488L11.8596 1.52969C11.8596 0.98916 11.4193 0.548828 10.8787 0.548828H7.93089C7.39036 0.548828 6.95003 0.98916 6.95003 1.52969L6.35941 3.66016C5.92171 3.85791 5.50775 4.10049 5.12279 4.37471L2.98177 3.82363C2.51243 3.55205 1.9139 3.71553 1.64232 4.18486L0.176302 6.73457C-0.0952804 7.20391 0.0681965 7.80244 0.537532 8.07402L2.08529 9.65078C2.06156 9.88281 2.05101 10.1228 2.05101 10.3653C2.05101 10.6053 2.06156 10.8426 2.08529 11.0799L0.537532 12.6566C0.0681965 12.9282 -0.0926437 13.5268 0.176302 13.9961L1.64759 16.5458C1.91917 17.0151 2.51771 17.176 2.98704 16.907L5.12806 16.356C5.51566 16.6328 5.92962 16.8728 6.36468 17.0705L6.95531 19.201C6.95531 19.7415 7.39564 20.1818 7.93617 20.1818H10.8814C11.4219 20.1818 11.8622 19.7415 11.8622 19.201L12.4529 17.0705C12.8906 16.8728 13.3045 16.6302 13.6895 16.356L15.8279 16.907C16.2972 17.1786 16.8957 17.0151 17.1673 16.5458L18.6386 13.9961C18.9076 13.5241 18.7493 12.9229 18.28 12.6514ZM9.40745 13.7957C7.51165 13.7957 5.97181 12.2559 5.97181 10.3601C5.97181 8.46426 7.51165 6.92441 9.40745 6.92441C11.3033 6.92441 12.8431 8.46426 12.8431 10.3601C12.8378 12.2585 11.3033 13.7957 9.40745 13.7957Z"
-                    fill="#ffffff99"></path>
+                    fill="#ffffff99"
+                  ></path>
                 </svg>
               </div>
             </div>
@@ -532,7 +547,8 @@ export default function SwapTabScreen() {
                   style={{
                     fontSize: '12px',
                     color: '#7D7D7D'
-                  }}>
+                  }}
+                >
                   From
                 </div>
 
@@ -546,7 +562,8 @@ export default function SwapTabScreen() {
                   height: '32px',
                   borderRadius: '100px',
                   padding: '20px 0px'
-                }}>
+                }}
+              >
                 <NativeInput />
 
                 <TokenCurrent
@@ -564,7 +581,8 @@ export default function SwapTabScreen() {
               relative
               style={{
                 top: 0
-              }}>
+              }}
+            >
               <div
                 style={{
                   position: 'absolute',
@@ -601,7 +619,8 @@ export default function SwapTabScreen() {
                     ...nativePair,
                     amount: ''
                   };
-                }}>
+                }}
+              >
                 <Icon size={hoverExchange ? 22 : 11} icon={hoverExchange ? 'swap-down-hover' : 'swap-down-icon'}></Icon>
                 {/*{!hoverExchange ? <ExchangeDefaultSVG color="black" /> : <ExchangeSVG />}*/}
               </div>
@@ -613,7 +632,8 @@ export default function SwapTabScreen() {
                   style={{
                     fontSize: '12px',
                     color: '#7D7D7D'
-                  }}>
+                  }}
+                >
                   To
                 </div>
                 <RemoteBalance />
@@ -627,7 +647,8 @@ export default function SwapTabScreen() {
                   borderRadius: '100px',
                   padding: '20px 0px',
                   gap: '5px'
-                }}>
+                }}
+              >
                 <RemoteInput />
 
                 <TokenCurrent
@@ -646,7 +667,8 @@ export default function SwapTabScreen() {
               full
               style={{
                 marginTop: '8px'
-              }}>
+              }}
+            >
               <ConfirmButton />
             </Row>
             {showValidDetail && (

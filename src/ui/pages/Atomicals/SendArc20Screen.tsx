@@ -155,7 +155,8 @@ export default function SendArc20Screen() {
               itemsCenter
               onClick={() => {
                 setInputAmount(arc20AvailableBalance.toString());
-              }}>
+              }}
+            >
               <Text text="MAX" preset="sub" style={{ color: colors.white_muted }} />
               <Text text={`${arc20AvailableBalance} ${arc20Balance.ticker}`} preset="bold" size="sm" />
             </Row>
@@ -197,7 +198,8 @@ export default function SendArc20Screen() {
           text="Next"
           onClick={(e) => {
             navigate('TxConfirmScreen', { rawTxInfo });
-          }}></Button>
+          }}
+        ></Button>
       </Content>
     </Layout>
   );

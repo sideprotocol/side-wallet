@@ -123,7 +123,8 @@ export default function CreateSendRune() {
     <Layout
       style={{
         position: 'relative'
-      }}>
+      }}
+    >
       <Header
         onBack={() => {
           window.history.go(-1);
@@ -145,11 +146,13 @@ export default function CreateSendRune() {
           borderTop: '1px solid #404045',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
         }}
-        justifyCenter>
+        justifyCenter
+      >
         <Row
           style={{
             marginTop: '6px'
-          }}>
+          }}
+        >
           <Image src={token.logo} size={50}></Image>
         </Row>
       </Row>
@@ -163,7 +166,8 @@ export default function CreateSendRune() {
           padding: '16px 16px 64px 16px',
           marginTop: '30px',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
-        }}>
+        }}
+      >
         <Column mt="xxl">
           <Row
             itemsCenter
@@ -172,7 +176,8 @@ export default function CreateSendRune() {
             style={{
               fontSize: '16px',
               color: '#0DD4C3'
-            }}>
+            }}
+          >
             {token.symbol}
           </Row>
 
@@ -195,7 +200,8 @@ export default function CreateSendRune() {
               gap="sm"
               style={{
                 fontSize: '14px'
-              }}>
+              }}
+            >
               <img src={WalletIcon} alt={'WalletIcon'} />
 
               <div>{runeBalance?.toString()}</div>
@@ -263,7 +269,8 @@ export default function CreateSendRune() {
             onClick={(e) => {
               console.log({ rawTxInfo });
               navigate('TxConfirmScreen', { rawTxInfo });
-            }}></Button>
+            }}
+          ></Button>
         </Column>
       </Content>
     </Layout>

@@ -5,12 +5,13 @@ import { ADDRESS_TYPES, KEYRING_TYPE, NETWORK_TYPES } from '@/shared/constant';
 import { Card, Column, Content, Header, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { IconTypes } from '@/ui/components/Icon';
+import { Icon } from '@/ui/components/TokenCurrent/';
 import { getCurrentTab, useExtensionIsInTab } from '@/ui/features/browser/tabs';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { useWallet } from '@/ui/utils';
-import { Icon } from '@/ui/components/TokenCurrent/';
+
 // import { RightOutlined } from '@ant-design/icons';
 
 interface Setting {
@@ -164,7 +165,8 @@ export default function GeneralTabScreen() {
                     backgroundColor: 'transparent',
                     paddingLeft: '10px',
                     paddingRight: '10px'
-                  }}>
+                  }}
+                >
                   <Row full justifyBetween>
                     <Text text={item.label || item.desc} preset="regular-bold" />
 
@@ -177,10 +179,16 @@ export default function GeneralTabScreen() {
                       {/*  </>*/}
                       {/*)}*/}
 
-                      {item.right && <Icon type="side-down" className={'hover-100'} style={{
-                        transform: 'rotate(-90deg)',
-                        opacity: '0.6',
-                      }}  />}
+                      {item.right && (
+                        <Icon
+                          type="side-down"
+                          className={'hover-100'}
+                          style={{
+                            transform: 'rotate(-90deg)',
+                            opacity: '0.6'
+                          }}
+                        />
+                      )}
                     </Row>
                   </Row>
                 </Card>

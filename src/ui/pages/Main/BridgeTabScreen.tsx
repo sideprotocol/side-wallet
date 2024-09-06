@@ -121,14 +121,16 @@ export default function BridgeTabScreen() {
             relative
             style={{
               gap: '5px'
-            }}>
+            }}
+          >
             <Column mt={'medium'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
                     fontSize: '12px',
                     color: '#7D7D7D'
-                  }}>
+                  }}
+                >
                   From
                 </div>
               </Row>
@@ -140,13 +142,15 @@ export default function BridgeTabScreen() {
                   height: '32px',
                   borderRadius: '100px',
                   padding: '10px 0px'
-                }}>
+                }}
+              >
                 <Image size={28} src={from.logo} />
                 <span
                   style={{
                     fontSize: '14px',
                     paddingLeft: '5px'
-                  }}>
+                  }}
+                >
                   {from.name}
                 </span>
               </Row>
@@ -179,7 +183,8 @@ export default function BridgeTabScreen() {
                   const from = bridgeStore.from;
                   bridgeStore.from = to;
                   bridgeStore.to = from;
-                }}>
+                }}
+              >
                 {/*<Icon icon={'swap-down-icon'}></Icon>*/}
                 <Icon size={hoverExchange ? 22 : 11} icon={hoverExchange ? 'swap-down-hover' : 'swap-down-icon'}></Icon>
               </div>
@@ -191,7 +196,8 @@ export default function BridgeTabScreen() {
                   style={{
                     fontSize: '12px',
                     color: '#7D7D7D'
-                  }}>
+                  }}
+                >
                   To
                 </div>
               </Row>
@@ -203,13 +209,15 @@ export default function BridgeTabScreen() {
                   height: '32px',
                   borderRadius: '100px',
                   padding: '10px 0px'
-                }}>
+                }}
+              >
                 <Image size={28} src={to.logo} />
                 <span
                   style={{
                     fontSize: '14px',
                     paddingLeft: '5px'
-                  }}>
+                  }}
+                >
                   {to.name}
                 </span>
               </Row>
@@ -220,7 +228,8 @@ export default function BridgeTabScreen() {
                 style={{
                   fontSize: '12px',
                   color: '#7D7D7D'
-                }}>
+                }}
+              >
                 Transfer
               </div>
 
@@ -241,7 +250,8 @@ export default function BridgeTabScreen() {
                     e.stopPropagation();
                     // setShow(true);
                     bridgeStore.selectTokenModalShow = true;
-                  }}>
+                  }}
+                >
                   <ImageIcon
                     style={{
                       width: '20px',
@@ -259,7 +269,8 @@ export default function BridgeTabScreen() {
                       maxWidth: '72px',
                       textOverflow: 'ellipsis',
                       overflow: 'hidden'
-                    }}>
+                    }}
+                  >
                     {bridgeAsset?.symbol || bridgeAsset?.symbol || bridgeAsset?.base || 'Select Token'}
                   </div>
                   {/*<Icon type="" />*/}
@@ -268,7 +279,8 @@ export default function BridgeTabScreen() {
                       width: '16px',
                       height: '16px',
                       flexShrink: '0'
-                    }}>
+                    }}
+                  >
                     <use xlinkHref={'#side-down'} />
                   </svg>
                 </div>
@@ -281,7 +293,8 @@ export default function BridgeTabScreen() {
                   style={{
                     fontSize: '12px',
                     color: '#7D7D7D'
-                  }}>
+                  }}
+                >
                   Amount
                 </div>
 
@@ -294,7 +307,8 @@ export default function BridgeTabScreen() {
                       {
                         // paddingLeft: '3px'
                       }
-                    }>
+                    }
+                  >
                     {balance}
                   </Text>
                 </div>
@@ -307,7 +321,8 @@ export default function BridgeTabScreen() {
                 style={{
                   height: '50px',
                   background: '#09090A'
-                }}>
+                }}
+              >
                 <Row
                   itemsCenter
                   gap={'zero'}
@@ -315,7 +330,8 @@ export default function BridgeTabScreen() {
                     height: '50px',
                     borderRadius: '100px',
                     padding: '20px 10px'
-                  }}>
+                  }}
+                >
                   <CoinInput
                     size={14}
                     coin={{
@@ -343,7 +359,8 @@ export default function BridgeTabScreen() {
                     }}
                     onClick={() => {
                       bridgeStore.bridgeAmount = balance;
-                    }}>
+                    }}
+                  >
                     Max
                   </div>
                 </Row>

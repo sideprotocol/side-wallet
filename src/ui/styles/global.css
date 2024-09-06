@@ -180,7 +180,7 @@ div {
 }
 
 .bg-item-hover:hover .hover-100 {
-    opacity: 100!important;
+  opacity: 100 !important;
 }
 
 .bg-item-hover .icon-right {

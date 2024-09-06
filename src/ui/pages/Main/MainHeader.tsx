@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
-import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 // import { KEYRING_TYPE } from '@/shared/constant';
-import { Header, Image} from '@/ui/components';
+import { Header, Image } from '@/ui/components';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 // import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { fontSizes } from '@/ui/theme/font';
 
 import { useNavigate } from '../MainRoute';
 
-export default function Index({title}) {
+export default function Index({ title }) {
   const navigate = useNavigate();
   const currentAccount = useCurrentAccount();
   const address = currentAccount.address;
@@ -31,29 +31,32 @@ export default function Index({title}) {
       }
       title={
         // title ? title : currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
-        title ? title : address ? (
-          <AccountSelect />
+        title ? title : address ? <AccountSelect /> : ''
+      }
+      RightComponent={
+        window.location.pathname !== '/sidePanel.html' ? (
+          <img
+            onMouseOver={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            alt={''}
+            width={isHovered ? 24 : 20}
+            height={isHovered ? 24 : 20}
+            src={isHovered ? '/images/icons/main/sidebar-modal-h.gif' : '/images/icons/main/sidebar-modal.svg'}
+          />
         ) : (
-          ''
+          <Image size={22} src={'/images/icons/main/popuo-modal.svg'} />
         )
       }
-      RightComponent={window.location.pathname !== '/sidePanel.html'
-        ? <img onMouseOver={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}  alt={''} width={isHovered ? 24 : 20} height={isHovered ? 24 : 20} src={isHovered ? '/images/icons/main/sidebar-modal-h.gif' : '/images/icons/main/sidebar-modal.svg'} />
-        : <Image size={22} src={'/images/icons/main/popuo-modal.svg'} />}
       onClickRight={async () => {
         if (window.location.pathname === '/sidePanel.html') {
-          chrome.sidePanel
-            .setPanelBehavior({ openPanelOnActionClick: false })
-            .catch((error) => console.error(error));
+          chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false }).catch((error) => console.error(error));
           setTimeout(() => {
             window.close();
           }, 500);
           // debugger;
         } else {
           window.close();
-          chrome.sidePanel
-            .setPanelBehavior({ openPanelOnActionClick: true })
-            .catch((error) => console.error(error));
+          chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch((error) => console.error(error));
           const [tab] = await chrome.tabs.query({
             active: true,
             lastFocusedWindow: true

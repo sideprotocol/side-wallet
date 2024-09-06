@@ -31,13 +31,15 @@ export default function RunesPreviewCard({ balance, onClick }: RunesPreviewCardP
         borderRadius: 5,
         padding: 0
       }}
-      onClick={onClick}>
+      onClick={onClick}
+    >
       <Row
         style={{
           borderTopLeftRadius: 5,
           borderTopRightRadius: 5,
           position: 'absolute'
-        }}>
+        }}
+      >
         <Row
           style={{
             backgroundColor: 'rgba(255,255,255,0.2)',
@@ -45,7 +47,8 @@ export default function RunesPreviewCard({ balance, onClick }: RunesPreviewCardP
             borderTopLeftRadius: 5,
             width: 70
           }}
-          px="sm">
+          px="sm"
+        >
           <Text text={balance.spacedRune} wrap color="white" size="xxxs" />
         </Row>
       </Row>

@@ -220,11 +220,13 @@ export function Button(props: ButtonProps) {
         style={$viewStyle}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        onClick={disabled ? undefined : onClick}>
+        onClick={disabled ? undefined : onClick}
+      >
         <Row
           style={{
             gap: spacing.tiny
-          }}>
+          }}
+        >
           {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
           {icon}
           <Column justifyCenter gap="zero">
@@ -252,7 +254,8 @@ export function Button(props: ButtonProps) {
       } `}
       onClick={disabled ? undefined : onClick}
       onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}>
+      onMouseLeave={() => setHover(false)}
+    >
       {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
       {/*{icon}*/}
       <Icon icon={icon} color={icon === 'expand' ? 'black' : icon === 'plus' ? 'primary' : 'white'} />

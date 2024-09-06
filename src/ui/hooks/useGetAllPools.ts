@@ -1,15 +1,16 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { useQuery } from 'react-query';
 
+import { SIDERPC_URL_TESTNET } from '@/shared/constant';
+import { NetworkType } from '@/shared/types';
 // import { useWalletContext } from "@/ui/components/WalletContext";
 import { IPoolItem } from '@/ui/services/dex/type';
-import useGetAllPairs from './useGetAllPairs';
-import { findAssetIcon } from '@/ui/utils/swap';
-import { swapStore } from '@/ui/stores/SwapStore';
-import { NetworkType } from '@/shared/types';
-import { SIDERPC_URL_TESTNET } from '@/shared/constant';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
+import { swapStore } from '@/ui/stores/SwapStore';
+import { findAssetIcon } from '@/ui/utils/swap';
+import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+
+import useGetAllPairs from './useGetAllPairs';
 
 export default function useGetAllPools() {
   // const { client, curChain } = useWalletContext();
@@ -33,14 +34,14 @@ export default function useGetAllPools() {
         pairs.map(async (p) => {
           const address = p.contract_addr;
           const msg = {
-            pool: {},
+            pool: {}
           };
           const pool = await cosmWasmClient.queryContractSmart(address, msg);
 
           const assetsMeta = pool?.assets?.map((a: any) => {
             return findAssetIcon({
               denom: a.info.native_token.denom,
-              amount: '',
+              amount: ''
             });
           });
 
@@ -52,9 +53,9 @@ export default function useGetAllPools() {
             assetsMeta: assetsMeta?.reduce((pre: any, cur: any) => {
               return {
                 ...pre,
-                [cur.base]: cur,
+                [cur.base]: cur
               };
-            }, {}),
+            }, {})
           };
         })
       );
@@ -63,11 +64,11 @@ export default function useGetAllPools() {
       console.log('pools: ', pools);
 
       return pools as IPoolItem[];
-    },
+    }
   });
 
   return {
     data: (data || []).filter((item) => !!item.total_share),
-    loading,
+    loading
   };
 }

@@ -1,8 +1,20 @@
 //@ts-nocheck
-import { SigningStatus, BitcoinSigningRequest, BitcoinSigningRequestAmino, BitcoinSigningRequestSDKType, BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType } from './bitcoin';
-import { PageResponse, PageResponseAmino, PageResponseSDKType } from '../../cosmos/base/query/v1beta1/pagination';
-import { Params, ParamsAmino, ParamsSDKType } from './params';
 import { BinaryReader, BinaryWriter } from '../../binary';
+import { PageResponse, PageResponseAmino, PageResponseSDKType } from '../../cosmos/base/query/v1beta1/pagination';
+import {
+  SigningStatus,
+  BitcoinSigningRequest,
+  BitcoinSigningRequestAmino,
+  BitcoinSigningRequestSDKType,
+  BlockHeader,
+  BlockHeaderAmino,
+  BlockHeaderSDKType,
+  UTXO,
+  UTXOAmino,
+  UTXOSDKType
+} from './bitcoin';
+import { Params, ParamsAmino, ParamsSDKType } from './params';
+
 /** QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method. */
 export interface QuerySigningRequestRequest {
   status: SigningStatus;
@@ -301,7 +313,7 @@ export const QuerySigningRequestRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.status = (reader.int32() as any);
+          message.status = reader.int32() as any;
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32());
@@ -316,7 +328,10 @@ export const QuerySigningRequestRequest = {
   fromPartial(object: Partial<QuerySigningRequestRequest>): QuerySigningRequestRequest {
     const message = createBaseQuerySigningRequestRequest();
     message.status = object.status ?? 0;
-    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
   fromAmino(object: QuerySigningRequestRequestAmino): QuerySigningRequestRequest {
@@ -390,13 +405,16 @@ export const QuerySigningRequestResponse = {
   },
   fromPartial(object: Partial<QuerySigningRequestResponse>): QuerySigningRequestResponse {
     const message = createBaseQuerySigningRequestResponse();
-    message.requests = object.requests?.map(e => BitcoinSigningRequest.fromPartial(e)) || [];
-    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    message.requests = object.requests?.map((e) => BitcoinSigningRequest.fromPartial(e)) || [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
   fromAmino(object: QuerySigningRequestResponseAmino): QuerySigningRequestResponse {
     const message = createBaseQuerySigningRequestResponse();
-    message.requests = object.requests?.map(e => BitcoinSigningRequest.fromAmino(e)) || [];
+    message.requests = object.requests?.map((e) => BitcoinSigningRequest.fromAmino(e)) || [];
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageResponse.fromAmino(object.pagination);
     }
@@ -405,7 +423,7 @@ export const QuerySigningRequestResponse = {
   toAmino(message: QuerySigningRequestResponse): QuerySigningRequestResponseAmino {
     const obj: any = {};
     if (message.requests) {
-      obj.requests = message.requests.map(e => e ? BitcoinSigningRequest.toAmino(e) : undefined);
+      obj.requests = message.requests.map((e) => (e ? BitcoinSigningRequest.toAmino(e) : undefined));
     } else {
       obj.requests = message.requests;
     }
@@ -510,7 +528,8 @@ export const QueryParamsResponse = {
   },
   fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
-    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    message.params =
+      object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
   },
   fromAmino(object: QueryParamsResponseAmino): QueryParamsResponse {
@@ -631,7 +650,8 @@ export const QueryChainTipResponse = {
   fromPartial(object: Partial<QueryChainTipResponse>): QueryChainTipResponse {
     const message = createBaseQueryChainTipResponse();
     message.hash = object.hash ?? '';
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
+    message.height =
+      object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: QueryChainTipResponseAmino): QueryChainTipResponse {
@@ -698,7 +718,8 @@ export const QueryBlockHeaderByHeightRequest = {
   },
   fromPartial(object: Partial<QueryBlockHeaderByHeightRequest>): QueryBlockHeaderByHeightRequest {
     const message = createBaseQueryBlockHeaderByHeightRequest();
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
+    message.height =
+      object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: QueryBlockHeaderByHeightRequestAmino): QueryBlockHeaderByHeightRequest {
@@ -761,7 +782,10 @@ export const QueryBlockHeaderByHeightResponse = {
   },
   fromPartial(object: Partial<QueryBlockHeaderByHeightResponse>): QueryBlockHeaderByHeightResponse {
     const message = createBaseQueryBlockHeaderByHeightResponse();
-    message.blockHeader = object.blockHeader !== undefined && object.blockHeader !== null ? BlockHeader.fromPartial(object.blockHeader) : undefined;
+    message.blockHeader =
+      object.blockHeader !== undefined && object.blockHeader !== null
+        ? BlockHeader.fromPartial(object.blockHeader)
+        : undefined;
     return message;
   },
   fromAmino(object: QueryBlockHeaderByHeightResponseAmino): QueryBlockHeaderByHeightResponse {
@@ -887,7 +911,10 @@ export const QueryBlockHeaderByHashResponse = {
   },
   fromPartial(object: Partial<QueryBlockHeaderByHashResponse>): QueryBlockHeaderByHashResponse {
     const message = createBaseQueryBlockHeaderByHashResponse();
-    message.blockHeader = object.blockHeader !== undefined && object.blockHeader !== null ? BlockHeader.fromPartial(object.blockHeader) : undefined;
+    message.blockHeader =
+      object.blockHeader !== undefined && object.blockHeader !== null
+        ? BlockHeader.fromPartial(object.blockHeader)
+        : undefined;
     return message;
   },
   fromAmino(object: QueryBlockHeaderByHashResponseAmino): QueryBlockHeaderByHashResponse {
@@ -1000,18 +1027,18 @@ export const QueryUTXOsResponse = {
   },
   fromPartial(object: Partial<QueryUTXOsResponse>): QueryUTXOsResponse {
     const message = createBaseQueryUTXOsResponse();
-    message.utxos = object.utxos?.map(e => UTXO.fromPartial(e)) || [];
+    message.utxos = object.utxos?.map((e) => UTXO.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: QueryUTXOsResponseAmino): QueryUTXOsResponse {
     const message = createBaseQueryUTXOsResponse();
-    message.utxos = object.utxos?.map(e => UTXO.fromAmino(e)) || [];
+    message.utxos = object.utxos?.map((e) => UTXO.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: QueryUTXOsResponse): QueryUTXOsResponseAmino {
     const obj: any = {};
     if (message.utxos) {
-      obj.utxos = message.utxos.map(e => e ? UTXO.toAmino(e) : undefined);
+      obj.utxos = message.utxos.map((e) => (e ? UTXO.toAmino(e) : undefined));
     } else {
       obj.utxos = message.utxos;
     }
@@ -1128,18 +1155,18 @@ export const QueryUTXOsByAddressResponse = {
   },
   fromPartial(object: Partial<QueryUTXOsByAddressResponse>): QueryUTXOsByAddressResponse {
     const message = createBaseQueryUTXOsByAddressResponse();
-    message.utxos = object.utxos?.map(e => UTXO.fromPartial(e)) || [];
+    message.utxos = object.utxos?.map((e) => UTXO.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: QueryUTXOsByAddressResponseAmino): QueryUTXOsByAddressResponse {
     const message = createBaseQueryUTXOsByAddressResponse();
-    message.utxos = object.utxos?.map(e => UTXO.fromAmino(e)) || [];
+    message.utxos = object.utxos?.map((e) => UTXO.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: QueryUTXOsByAddressResponse): QueryUTXOsByAddressResponseAmino {
     const obj: any = {};
     if (message.utxos) {
-      obj.utxos = message.utxos.map(e => e ? UTXO.toAmino(e) : undefined);
+      obj.utxos = message.utxos.map((e) => (e ? UTXO.toAmino(e) : undefined));
     } else {
       obj.utxos = message.utxos;
     }

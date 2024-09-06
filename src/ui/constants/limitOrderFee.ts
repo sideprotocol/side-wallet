@@ -20,5 +20,5 @@ export const LIMIT_ORDER_FEE_DEV = {
   duration_days_limit: '180',
   queue_size_left: '5000',
   queue_size_right: '50000',
-  burn_fee_rate: '25',
+  burn_fee_rate: '25'
 };

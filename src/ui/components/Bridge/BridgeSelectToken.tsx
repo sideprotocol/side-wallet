@@ -35,7 +35,8 @@ function SideCryptoItem({ token }: { token: SideToken & { price: string; amount:
         <Column
           style={{
             gap: '0px'
-          }}>
+          }}
+        >
           <Text preset="regular" text={token.symbol}></Text>
           <Text preset="sub" text={token.name}></Text>
         </Column>
@@ -44,7 +45,8 @@ function SideCryptoItem({ token }: { token: SideToken & { price: string; amount:
       <Column
         style={{
           gap: '0px'
-        }}>
+        }}
+      >
         <Text preset="regular" textEnd text={formatUnitAmount(displayAmount, token.exponent)}></Text>
         <Text preset="sub" textEnd text={`$${getTruncate(displayPrice)}`}></Text>
       </Column>
@@ -78,7 +80,8 @@ export default function Index(props) {
         left: '50%',
         top: '50%',
         display: open ? 'flex' : 'none'
-      }}>
+      }}
+    >
       <Header
         onBack={() => {
           onClose();
@@ -90,11 +93,13 @@ export default function Index(props) {
           backgroundColor: '#09090A',
           padding: 0,
           marginTop: 16
-        }}>
+        }}
+      >
         <Column
           style={{
             padding: '0 24px'
-          }}>
+          }}
+        >
           {/*<Row*/}
           {/*  style={{*/}
           {/*    padding: '0px 10px',*/}
@@ -108,7 +113,8 @@ export default function Index(props) {
           <div
             className={
               'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '
-            }>
+            }
+          >
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
             <Input
@@ -139,7 +145,8 @@ export default function Index(props) {
                 transform: 'translateY(-50%)',
                 cursor: 'pointer',
                 display: searchValue ? 'block' : 'none'
-              }}>
+              }}
+            >
               <Icon icon="clear" color={isHover ? 'white' : 'search_icon'} size={20}></Icon>
             </div>
           </div>
@@ -149,7 +156,8 @@ export default function Index(props) {
           gap="xl"
           style={{
             margin: '0 16px'
-          }}>
+          }}
+        >
           {runeAndBtcTokens?.map((asset) => {
             return (
               <Row
@@ -166,7 +174,8 @@ export default function Index(props) {
                   height: '44px',
                   padding: '10px 16px'
                   // margin: '0 16px',
-                }}>
+                }}
+              >
                 <SideCryptoItem token={asset} />
               </Row>
             );

@@ -59,7 +59,8 @@ export default function ProtectionScreen() {
       <Content
         style={{
           marginTop: 16
-        }}>
+        }}
+      >
         <Column>
           <Card style={{ borderRadius: 10 }}>
             <Column fullX>
@@ -102,7 +103,8 @@ export default function ProtectionScreen() {
                       setUnconfirmedPopoverVisible(true);
                     }
                   }}
-                  checked={enableUnconfirmed}></Switch>
+                  checked={enableUnconfirmed}
+                ></Switch>
               </Row>
             </Column>
           </Card>
@@ -137,7 +139,8 @@ export default function ProtectionScreen() {
                       setEnableSignDataPopoverVisible(true);
                     }
                   }}
-                  checked={enableSignData}></Switch>
+                  checked={enableSignData}
+                ></Switch>
               </Row>
             </Column>
           </Card>
@@ -226,7 +229,8 @@ export const EnableSignDataPopover = ({ onNext, onCancel }: { onNext: () => void
                   onChange={() => {
                     setUnderstand(!understand);
                   }}
-                  checked={understand}></Checkbox>
+                  checked={understand}
+                ></Checkbox>
                 <Text
                   size="xs"
                   text={'I understand that I can lose all of my funds and NFTs if I enable signData requests.'}

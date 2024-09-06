@@ -1,21 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { runesUtils } from '@/shared/lib/runes-utils';
-import { AddressRunesTokenSummary, TxType } from '@/shared/types';
-import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
+import { AddressRunesTokenSummary } from '@/shared/types';
+import { Column, Content, Header, Icon, Layout, Row } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
-import { BRC20Ticker } from '@/ui/components/BRC20Ticker';
 import InscriptionPreview from '@/ui/components/InscriptionPreview';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBlockstreamUrl, useOrdinalsWebsite, useUnisatWebsite } from '@/ui/state/settings/hooks';
-import { colors } from '@/ui/theme/colors';
 import { fontSizes } from '@/ui/theme/font';
-import { copyToClipboard, useLocationState, useWallet } from '@/ui/utils';
+import { useLocationState, useWallet } from '@/ui/utils';
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { useNavigate } from '../MainRoute';
-import ImageIcon from '@/ui/components/ImageIcon';
-import { toReadableAmount } from '@/ui/utils/formatter';
 
 interface LocationState {
   runeid: string;
@@ -101,7 +97,7 @@ export default function RunesTokenScreen() {
     return (
       <Layout>
         <Content itemsCenter justifyCenter>
-          <Icon size={fontSizes.xxxl} color="gold">
+          <Icon size={fontSizes.xxxl} color="primary">
             <LoadingOutlined />
           </Icon>
         </Content>
@@ -117,10 +113,12 @@ export default function RunesTokenScreen() {
         }}
       />
       {tokenSummary && (
-        <Content style={{
-          padding: 0,
-          // marginBottom: '40px'
-        }}>
+        <Content
+          style={{
+            padding: 0
+            // marginBottom: '40px'
+          }}
+        >
           <Column
             style={{
               flex: 1,
@@ -129,18 +127,21 @@ export default function RunesTokenScreen() {
               background: '#222',
               padding: '0 16px',
               paddingBottom: '44px',
-              marginTop: '66px'
-            }}>
+              marginTop: '52px'
+            }}
+          >
             <Column
               style={{
                 flex: '1',
-                gap: '10px',
-              }}>
+                gap: '10px'
+              }}
+            >
               <Row
                 justifyCenter
                 style={{
                   marginTop: '-35px'
-                }}>
+                }}
+              >
                 <Row
                   style={{
                     background: '#1E1E1F',
@@ -149,13 +150,14 @@ export default function RunesTokenScreen() {
                     borderRadius: '50%',
                     alignItems: 'center'
                   }}
-                  justifyCenter>
+                  justifyCenter
+                >
                   {/*<Image src={curToken.logo} size={62} />*/}
-                  {
-                    tokenSummary.runeLogo ? (
-                      <InscriptionPreview data={tokenSummary?.runeLogo} preset="small" asLogo />
-                    ) : ''
-                  }
+                  {tokenSummary.runeLogo ? (
+                    <InscriptionPreview data={tokenSummary?.runeLogo} preset="small" asLogo />
+                  ) : (
+                    ''
+                  )}
                 </Row>
               </Row>
 
@@ -165,12 +167,7 @@ export default function RunesTokenScreen() {
 
               <div className="w-ull flex text-[14px] items-center justify-center gap-[6px]">
                 <Icon icon={'wallet-icon'} size={14} color={'search_icon'}></Icon>
-                {
-                  runesUtils.toDecimalAmount(
-                    tokenSummary.runeBalance.amount,
-                    tokenSummary.runeBalance.divisibility
-                  )
-                }
+                {runesUtils.toDecimalAmount(tokenSummary.runeBalance.amount, tokenSummary.runeBalance.divisibility)}
               </div>
 
               <div className=" w-full px-[10px] h-[1px] py-[16px]">
@@ -188,20 +185,17 @@ export default function RunesTokenScreen() {
               <div className="flex w-full justify-between text-[14px] px-[10px]">
                 <span className={'text-[#828282]'}>supply</span>
                 <span>
-                {runesUtils.toDecimalAmount(tokenSummary.runeInfo.supply, tokenSummary.runeInfo.divisibility)}
+                  {runesUtils.toDecimalAmount(tokenSummary.runeInfo.supply, tokenSummary.runeInfo.divisibility)}
                   {tokenSummary.runeInfo.symbol}
-              </span>
+                </span>
               </div>
 
               <div className="flex w-full justify-between text-[14px] px-[10px]">
                 <span className={'text-[#828282]'}>premine</span>
                 <span>
-                {runesUtils.toDecimalAmount(
-                  tokenSummary.runeInfo.premine,
-                  tokenSummary.runeInfo.divisibility
-                )}
+                  {runesUtils.toDecimalAmount(tokenSummary.runeInfo.premine, tokenSummary.runeInfo.divisibility)}
                   {tokenSummary.runeInfo.symbol}
-              </span>
+                </span>
               </div>
 
               <div className="flex w-full justify-between text-[14px] px-[10px]">
@@ -226,18 +220,28 @@ export default function RunesTokenScreen() {
 
               <div className="flex flex-col w-full justify-between text-[14px] px-[10px] overflow-hidden">
                 <span className={'text-[#828282]'}>etching</span>
-                <a className={'text-[#0DD4C3] text-[12px]'}
-                   href={`${mempoolWebsite}/tx/${tokenSummary.runeInfo.etching}`}>{tokenSummary.runeInfo.etching}</a>
+                <a
+                  className={'text-[#0DD4C3] text-[12px] hover:underline hover:!text-[#0DD4C3]'}
+                  href={`${mempoolWebsite}/tx/${tokenSummary.runeInfo.etching}`}
+                  target={'_blank'}
+                  rel="noreferrer"
+                >
+                  {tokenSummary.runeInfo.etching}
+                </a>
               </div>
 
               <div className="flex flex-col w-full justify-between text-[14px] px-[10px] overflow-hidden ">
                 <span className={'text-[#828282]'}>parent</span>
-                <a className={'text-[#0DD4C3] text-[12px]'}
-                   href={`${ordinalsWebsite}/inscription/${tokenSummary.runeInfo.parent}`}>{tokenSummary.runeInfo.parent}</a>
+                <a
+                  className={'text-[#0DD4C3] text-[12px] hover:underline hover:!text-[#0DD4C3]'}
+                  href={`${ordinalsWebsite}/inscription/${tokenSummary.runeInfo.parent}`}
+                  target={'_blank'}
+                  rel="noreferrer"
+                >
+                  {tokenSummary.runeInfo.parent}
+                </a>
               </div>
-
             </Column>
-
           </Column>
         </Content>
       )}

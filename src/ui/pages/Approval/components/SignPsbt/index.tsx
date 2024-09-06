@@ -225,7 +225,8 @@ function SignTxDetails({ txInfo, type, rawTxInfo }: { txInfo: TxInfo; rawTxInfo?
                 borderRadius: 10,
                 borderWidth: 1,
                 borderColor: colors.border
-              }}>
+              }}
+            >
               <Row>
                 <AssetTag type="Inscription" />
               </Row>
@@ -249,7 +250,8 @@ function SignTxDetails({ txInfo, type, rawTxInfo }: { txInfo: TxInfo; rawTxInfo?
                 borderRadius: 10,
                 borderWidth: 1,
                 borderColor: colors.border
-              }}>
+              }}
+            >
               <Row>
                 <AssetTag type="ARC20" />
               </Row>
@@ -273,7 +275,8 @@ function SignTxDetails({ txInfo, type, rawTxInfo }: { txInfo: TxInfo; rawTxInfo?
                 borderRadius: 10,
                 borderWidth: 1,
                 borderColor: colors.border
-              }}>
+              }}
+            >
               <Row>
                 <AssetTag type="BRC20" />
               </Row>
@@ -306,7 +309,8 @@ function SignTxDetails({ txInfo, type, rawTxInfo }: { txInfo: TxInfo; rawTxInfo?
                 borderRadius: 10,
                 borderWidth: 1,
                 borderColor: colors.border
-              }}>
+              }}
+            >
               <Row>
                 <AssetTag type="RUNES" />
               </Row>
@@ -331,13 +335,15 @@ function SignTxDetails({ txInfo, type, rawTxInfo }: { txInfo: TxInfo; rawTxInfo?
         style={{
           backgroundColor: '#1E1E1F',
           paddingBottom: '12px'
-        }}>
+        }}
+      >
         <Text text="Sign Transaction" preset="title-bold" textCenter mt="lg" />
         <Row
           justifyCenter
           style={{
             padding: '0px 20px'
-          }}>
+          }}
+        >
           <Card
             style={{
               maxWidth: 320,
@@ -347,7 +353,8 @@ function SignTxDetails({ txInfo, type, rawTxInfo }: { txInfo: TxInfo; rawTxInfo?
               borderWidth: '1px !important',
               backgroundColor: '#000000',
               borderRadius: '10px'
-            }}>
+            }}
+          >
             <Column gap="lg">
               <Column>
                 <Column>
@@ -707,13 +714,15 @@ export default function SignPsbt({
         itemsCenter
         style={{
           paddingBottom: '4px'
-        }}>
+        }}
+      >
         <Text
           textCenter
           size="xl"
           style={{
             fontWeight: '600'
-          }}>
+          }}
+        >
           Signature request
         </Text>
 
@@ -727,7 +736,8 @@ export default function SignPsbt({
             fontSize: '14px',
             maxWidth: 'max-content'
           }}
-          classname="">
+          classname=""
+        >
           {session.origin}
         </Text>
       </Column>
@@ -775,7 +785,8 @@ export default function SignPsbt({
       style={{
         height: '100%',
         minHeight: '580px'
-      }}>
+      }}
+    >
       {header}
       <Content>
         <Column gap="xl">
@@ -790,16 +801,19 @@ export default function SignPsbt({
                 padding: '16px 10px 16px 10px',
                 borderRadius: '8px',
                 position: 'relative'
-              }}>
+              }}
+            >
               <Column
                 style={{
                   width: '90%'
-                }}>
+                }}
+              >
                 <Text
                   style={{
                     fontWeight: '500',
                     fontSize: '16px'
-                  }}>
+                  }}
+                >
                   Account connected
                 </Text>
 
@@ -809,7 +823,8 @@ export default function SignPsbt({
                     color: 'white',
                     opacity: '0.5',
                     wordBreak: 'break-word'
-                  }}>
+                  }}
+                >
                   {currentAccount.address}
                 </Text>
 
@@ -823,12 +838,14 @@ export default function SignPsbt({
                     fontSize: '12px',
                     width: 'max-content',
                     color: 'black'
-                  }}>
+                  }}
+                >
                   <Text
                     style={{
                       fontWeight: '600',
                       color: 'black'
-                    }}>
+                    }}
+                  >
                     {currentKeyring.alianName}
                   </Text>
 
@@ -836,14 +853,16 @@ export default function SignPsbt({
                     style={{
                       fontWeight: '600',
                       color: 'black'
-                    }}>
+                    }}
+                  >
                     /
                   </Text>
 
                   <Text
                     style={{
                       color: 'black'
-                    }}>
+                    }}
+                  >
                     {currentAccount.alianName}
                   </Text>
                 </Row>
@@ -870,7 +889,8 @@ export default function SignPsbt({
                   }
                   overlayStyle={{
                     fontSize: fontSizes.xs
-                  }}>
+                  }}
+                >
                   <div>
                     <Row itemsCenter>
                       <Text text={txInfo.decodedPsbt.feeRate.toString()} />
@@ -916,7 +936,8 @@ export default function SignPsbt({
                         <Row
                           key={'output_' + index}
                           style={index === 0 ? {} : { borderColor: colors.border, borderTopWidth: 1, paddingTop: 10 }}
-                          itemsCenter>
+                          itemsCenter
+                        >
                           <Column fullX>
                             <Row fullX justifyBetween>
                               <Column>
@@ -930,7 +951,8 @@ export default function SignPsbt({
                                         borderRadius: 5,
                                         padding: 2,
                                         background: '#0DD4C31A'
-                                      }}>
+                                      }}
+                                    >
                                       <Text text="to sign" color="primary" size="xs" />
                                     </Row>
                                   )}
@@ -1034,7 +1056,8 @@ export default function SignPsbt({
                       return (
                         <Column
                           key={'output_' + index}
-                          style={index === 0 ? {} : { borderColor: colors.border, borderTopWidth: 1, paddingTop: 10 }}>
+                          style={index === 0 ? {} : { borderColor: colors.border, borderTopWidth: 1, paddingTop: 10 }}
+                        >
                           <Column>
                             <Row justifyBetween>
                               <AddressText address={v.address} color={isMyAddress ? 'white' : 'textDim'} />
@@ -1138,7 +1161,8 @@ export default function SignPsbt({
                     setIsClickCopy(false);
                   }, 3000);
                 });
-              }}>
+              }}
+            >
               <Text text={`${txInfo.psbtHex.length / 2} bytes`} color="textDim" />
               {/*<Icon icon="copy" color="textDim" />*/}
               <Icon

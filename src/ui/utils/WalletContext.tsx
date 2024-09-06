@@ -32,7 +32,7 @@ import {
   VersionDetail,
   WalletConfig,
   WalletKeyring,
-  TickPriceItem,
+  TickPriceItem
 } from '@/shared/types';
 import { AddressType, UnspentOutput } from '@unisat/wallet-sdk';
 import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';

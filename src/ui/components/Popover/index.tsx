@@ -10,7 +10,8 @@ export const Popover = ({ children, onClose }: { children: React.ReactNode; onCl
       className="popover-container"
       style={{
         backgroundColor: 'rgba(0,0,0,0.8)'
-      }}>
+      }}
+    >
       <div style={{ backgroundColor: '#1E1E1F', width: 340, padding: 20, borderRadius: 15, position: 'relative' }}>
         {onClose && (
           <Row
@@ -18,7 +19,8 @@ export const Popover = ({ children, onClose }: { children: React.ReactNode; onCl
             justifyEnd
             onClick={() => {
               onClose();
-            }}>
+            }}
+          >
             <CloseOutlined />
           </Row>
         )}

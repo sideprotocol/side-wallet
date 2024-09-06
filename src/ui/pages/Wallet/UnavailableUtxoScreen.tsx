@@ -62,7 +62,8 @@ export default function UnavailableUtxoScreen() {
                 return (
                   <Card
                     key={item.txid + '' + item.vout}
-                    style={{ flexDirection: 'column', borderColor: selected ? 'gold' : 'transparent', borderWidth: 1 }}>
+                    style={{ flexDirection: 'column', borderColor: selected ? 'gold' : 'transparent', borderWidth: 1 }}
+                  >
                     <Row full justifyBetween itemsCenter>
                       <Row itemsCenter>
                         <Text
@@ -127,7 +128,8 @@ export default function UnavailableUtxoScreen() {
                             selectedUtxoIds[item.txid + '' + item.vout] = e.target.checked;
                             setSelectedUtxoIds(Object.assign({}, selectedUtxoIds));
                           }}
-                          style={{ fontSize: fontSizes.sm }}></Checkbox>
+                          style={{ fontSize: fontSizes.sm }}
+                        ></Checkbox>
                       </Row>
                     </Row>
                   </Card>

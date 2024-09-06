@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from '../../binary';
 import { bytesFromBase64, base64FromBytes } from '../../helpers';
+
 /** Bitcoin Signing Status */
 export enum SigningStatus {
   /** SIGNING_STATUS_UNSPECIFIED - SIGNING_STATUS_UNSPECIFIED - Default value, should not be used */
@@ -15,7 +16,7 @@ export enum SigningStatus {
   SIGNING_STATUS_CONFIRMED = 4,
   /** SIGNING_STATUS_REJECTED - SIGNING_STATUS_REJECTED - The signing request is rejected */
   SIGNING_STATUS_REJECTED = 5,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 export const SigningStatusSDKType = SigningStatus;
 export const SigningStatusAmino = SigningStatus;
@@ -276,9 +277,11 @@ export const BlockHeader = {
   },
   fromPartial(object: Partial<BlockHeader>): BlockHeader {
     const message = createBaseBlockHeader();
-    message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
+    message.version =
+      object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
     message.hash = object.hash ?? '';
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
+    message.height =
+      object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.previousBlockHash = object.previousBlockHash ?? '';
     message.merkleRoot = object.merkleRoot ?? '';
     message.nonce = object.nonce !== undefined && object.nonce !== null ? BigInt(object.nonce.toString()) : BigInt(0);
@@ -397,7 +400,7 @@ export const BitcoinSigningRequest = {
           message.psbt = reader.string();
           break;
         case 4:
-          message.status = (reader.int32() as any);
+          message.status = reader.int32() as any;
           break;
         case 5:
           message.sequence = reader.uint64();
@@ -418,7 +421,8 @@ export const BitcoinSigningRequest = {
     message.txid = object.txid ?? '';
     message.psbt = object.psbt ?? '';
     message.status = object.status ?? 0;
-    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
+    message.sequence =
+      object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     message.vaultAddress = object.vaultAddress ?? '';
     return message;
   },
@@ -554,8 +558,10 @@ export const UTXO = {
     message.txid = object.txid ?? '';
     message.vout = object.vout !== undefined && object.vout !== null ? BigInt(object.vout.toString()) : BigInt(0);
     message.address = object.address ?? '';
-    message.amount = object.amount !== undefined && object.amount !== null ? BigInt(object.amount.toString()) : BigInt(0);
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
+    message.amount =
+      object.amount !== undefined && object.amount !== null ? BigInt(object.amount.toString()) : BigInt(0);
+    message.height =
+      object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.pubKeyScript = object.pubKeyScript ?? new Uint8Array();
     message.isCoinbase = object.isCoinbase ?? false;
     message.isLocked = object.isLocked ?? false;

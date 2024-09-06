@@ -7,8 +7,8 @@ export const OSMOSIS_DEV_ASSETLIST = {
     exponent: '6',
     coingecko_id: 'osmosis',
     logo: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.svg',
-    precision: 6,
-  },
+    precision: 6
+  }
   // ibc token
 };
 
@@ -21,8 +21,8 @@ export const OSMOSIS_TEST_ASSETLIST = {
     exponent: '6',
     coingecko_id: 'osmosis',
     logo: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.svg',
-    precision: 6,
-  },
+    precision: 6
+  }
   // ibc token
 };
 

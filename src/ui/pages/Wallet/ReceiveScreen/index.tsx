@@ -2,14 +2,14 @@ import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Button, Card, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Button, Card, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
+import ImageIcon from '@/ui/components/ImageIcon';
 import { useAccountAddress, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { sizes } from '@/ui/theme/spacing';
 import { copyToClipboard } from '@/ui/utils';
 
 import './index.less';
-import ImageIcon from '@/ui/components/ImageIcon';
 
 function getAddressTypeUrl(address: string, chain: string) {
   if (address.startsWith('tb1') || chain === 'side') {
@@ -77,7 +77,8 @@ export default function ReceiveScreen() {
       <Content
         style={{
           marginTop: '32px'
-        }}>
+        }}
+      >
         <Card
           bg="white"
           gap="lg"
@@ -85,7 +86,8 @@ export default function ReceiveScreen() {
             flexDirection: 'column',
             justifyItems: 'start',
             borderRadius: '14px'
-          }}>
+          }}
+        >
           <Row full itemsCenter>
             <ImageIcon
               url={state?.token?.logo_black ? state?.token?.logo_black : state?.token?.logo}
@@ -110,7 +112,8 @@ export default function ReceiveScreen() {
                     padding: '0'
                   }}
                   color="black"
-                  text={state?.token?.name === 'Bitcoin' ? 'BTC' : state?.token?.symbol}></Text>
+                  text={state?.token?.name === 'Bitcoin' ? 'BTC' : state?.token?.symbol}
+                ></Text>
               </Row>
 
               <Row>
@@ -123,7 +126,8 @@ export default function ReceiveScreen() {
                   // bg="orange"
                   bg={state?.base === 'BTC' ? 'orange' : 'primary'}
                   preset="sub"
-                  text={state?.base === 'BTC' ? 'Bitcoin' : 'Side Chain'}></Text>
+                  text={state?.base === 'BTC' ? 'Bitcoin' : 'Side Chain'}
+                ></Text>
 
                 <Text
                   style={{
@@ -134,7 +138,8 @@ export default function ReceiveScreen() {
                   color="black"
                   preset="sub"
                   bg="light_gray"
-                  text={state.addressType}></Text>
+                  text={state.addressType}
+                ></Text>
               </Row>
             </Column>
           </Row>
@@ -145,7 +150,8 @@ export default function ReceiveScreen() {
               height: '1px',
               borderBottom: '1px solid #1E1E1F20'
             }}
-            bg="border"></Row>
+            bg="border"
+          ></Row>
 
           <Row
             full
@@ -157,7 +163,8 @@ export default function ReceiveScreen() {
                 }, 3000);
               });
               setIsClickCopy(true);
-            }}>
+            }}
+          >
             <Text
               wrap
               text={
@@ -173,14 +180,16 @@ export default function ReceiveScreen() {
                       marginLeft: '8px',
                       position: 'relative',
                       top: '3px'
-                    }}></Icon>
+                    }}
+                  ></Icon>
                   <span
                     style={{
                       display: isClickCopy ? 'inline-block' : 'none',
                       color: '#41B530',
                       fontSize: '12px',
                       marginLeft: '4px'
-                    }}>
+                    }}
+                  >
                     Copied!
                   </span>
                 </>
@@ -188,7 +197,8 @@ export default function ReceiveScreen() {
               style={{
                 fontWeight: '400'
               }}
-              color="background"></Text>
+              color="background"
+            ></Text>
           </Row>
           <Column>
             <QRCode value={state.address || ''} renderAs="svg" size={sizes.qrcode}></QRCode>
@@ -202,14 +212,16 @@ export default function ReceiveScreen() {
                 margin: 'auto',
                 textAlign: 'center'
               }}
-              text={`Send only ${state?.chain === 'BTC' ? 'BTC' : 'Side'} network assets to this address`}></Text>
+              text={`Send only ${state?.chain === 'BTC' ? 'BTC' : 'Side'} network assets to this address`}
+            ></Text>
           </Column>
 
           <Row
             style={{
               display: 'none'
             }}
-            full>
+            full
+          >
             <Button full preset="primary" text="Set amount"></Button>
           </Row>
         </Card>

@@ -55,7 +55,7 @@ export interface BridgeTxItem {
   time: number;
   txid: string;
   amount: string;
-  status: "pending" | "confirmed";
+  status: 'pending' | 'confirmed';
   url: string;
 }
 

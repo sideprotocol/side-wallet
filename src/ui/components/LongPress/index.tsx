@@ -9,7 +9,8 @@ export function LongPress() {
           marginTop: '112px',
           display: 'flex',
           justifyContent: 'center'
-        }}>
+        }}
+      >
         <Image src="./images/img/long-press.png" size={90} />
       </div>
       <Text

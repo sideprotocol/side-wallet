@@ -21,9 +21,14 @@ export default function TxSuccessScreen() {
 
       <Content style={{ gap: spacing.small, marginTop: '50px' }}>
         <Column justifyCenter mt="xxl" gap="xl">
-          <Row style={{
-            // width: '105px',
-          }} justifyCenter>
+          <Row
+            style={
+              {
+                // width: '105px',
+              }
+            }
+            justifyCenter
+          >
             {/*<Icon icon="icon-correct" size={50} style={{ alignSelf: 'center' }} />*/}
             <img width={'105px'} src="/images/icons/main/correct.gif" alt="" />
           </Row>
@@ -36,7 +41,8 @@ export default function TxSuccessScreen() {
             justifyCenter
             onClick={() => {
               window.open(`${blockstreamUrl}/tx/${txid}`);
-            }}>
+            }}
+          >
             <Icon icon="eye" color="white" />
             <Text preset="regular-bold" text="View on Block Explorer" color="white" />
           </Row>

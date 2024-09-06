@@ -1,6 +1,7 @@
 import VirtualList from 'rc-virtual-list';
 import { forwardRef, useMemo, useState } from 'react';
 
+import { KEYRING_TYPE } from '@/shared/constant';
 import { Account } from '@/shared/types';
 import { Card, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -19,7 +20,6 @@ import {
   PlusCircleOutlined
 } from '@ant-design/icons';
 
-import { KEYRING_TYPE } from '@/shared/constant';
 import { useNavigate } from '../MainRoute';
 
 export interface ItemData {
@@ -65,7 +65,8 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
               dispatch(accountActions.setCurrent(_currentAccount));
             }
             if (autoNav) navigate('MainScreen');
-          }}>
+          }}
+        >
           <Text text={account.alianName} />
           <Text text={`${shortAddress(account.address)} (${path})`} preset="sub" />
         </Column>
@@ -86,13 +87,15 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
             }}
             onMouseDown={(e) => {
               setOptionsVisible(false);
-            }}></div>
+            }}
+          ></div>
         )}
 
         <Icon
           onClick={async (e) => {
             setOptionsVisible(!optionsVisible);
-          }}>
+          }}
+        >
           <EllipsisOutlined />
         </Icon>
 
@@ -105,11 +108,13 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
               right: 0,
               padding: 5,
               zIndex: 10
-            }}>
+            }}
+          >
             <Row
               onClick={() => {
                 navigate('EditAccountNameScreen', { account });
-              }}>
+              }}
+            >
               <EditOutlined />
               <Text text="Edit Name" size="sm" />
             </Row>
@@ -118,17 +123,21 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                 copyToClipboard(account.address);
                 tools.toastSuccess('copied');
                 setOptionsVisible(false);
-              }}>
+              }}
+            >
               <CopyOutlined />
               <Text text="Copy address" size="sm" />
             </Row>
-            {account.type !== KEYRING_TYPE.KeystoneKeyring && <Row
-              onClick={() => {
-                navigate('ExportPrivateKeyScreen', { account });
-              }}>
-              <KeyOutlined />
-              <Text text="Export Private Key" size="sm" />
-            </Row>}
+            {account.type !== KEYRING_TYPE.KeystoneKeyring && (
+              <Row
+                onClick={() => {
+                  navigate('ExportPrivateKeyScreen', { account });
+                }}
+              >
+                <KeyOutlined />
+                <Text text="Export Private Key" size="sm" />
+              </Row>
+            )}
           </Column>
         )}
       </Column>
@@ -161,7 +170,8 @@ export default function SwitchAccountScreen() {
           <Icon
             onClick={() => {
               navigate('CreateAccountScreen');
-            }}>
+            }}
+          >
             <PlusCircleOutlined />
           </Icon>
         }

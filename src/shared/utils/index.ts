@@ -31,7 +31,6 @@ export const getChain = (chainId?: string) => {
   return chainsDict[chainId];
 };
 
-
 // Check if address flag is enabled
 export const checkAddressFlag = (currentFlag: number, flag: AddressFlagType): boolean => {
   return Boolean(currentFlag & flag);

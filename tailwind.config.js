@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Saira', 'sans-serif'], // 使用 'Inter' 作为主要的无衬线字体
+        sans: ['Saira', 'sans-serif'] // 使用 'Inter' 作为主要的无衬线字体
       },
       transitionDuration: {
         80: '80ms'

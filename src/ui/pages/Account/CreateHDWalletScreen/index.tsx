@@ -90,11 +90,13 @@ export default function CreateHDWalletScreen() {
   }, [items, contextData.tabType]);
 
   return (
-    <Layout style={{
-      maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
-      height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
-      overflowY: 'hidden',
-    }}>
+    <Layout
+      style={{
+        maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
+        height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
+        overflowY: 'hidden'
+      }}
+    >
       <Header
         onBack={() => {
           if (fromUnlock) {
@@ -110,7 +112,8 @@ export default function CreateHDWalletScreen() {
           padding: '0 16px 0',
           marginTop: '10px',
           marginBottom: '10px'
-        }}>
+        }}
+      >
         <StepBar
           activeKey={contextData.tabType}
           items={items.map((v) => ({

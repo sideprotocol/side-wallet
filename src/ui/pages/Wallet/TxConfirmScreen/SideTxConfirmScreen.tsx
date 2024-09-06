@@ -96,12 +96,14 @@ export default function SideTxConfirmScreen() {
         style={{
           flex: 1,
           padding: '40px 16px 24px'
-        }}>
+        }}
+      >
         <Column
           style={{
             flex: 1,
             gap: '10px'
-          }}>
+          }}
+        >
           <Row
             justifyBetween
             style={{
@@ -109,11 +111,13 @@ export default function SideTxConfirmScreen() {
               padding: '11px 16px',
               backgroundColor: '#1E1E1F',
               borderRadius: '14px'
-            }}>
+            }}
+          >
             <Row
               style={{
                 alignItems: 'center'
-              }}>
+              }}
+            >
               <ImageIcon
                 url={curToken.logo}
                 style={{
@@ -147,7 +151,8 @@ export default function SideTxConfirmScreen() {
               backgroundColor: '#1E1E1F',
               borderRadius: '14px',
               overflow: 'hidden'
-            }}>
+            }}
+          >
             <Text
               text="Recipient"
               color="white_muted"
@@ -173,7 +178,8 @@ export default function SideTxConfirmScreen() {
               backgroundColor: '#1E1E1F',
               borderRadius: '14px',
               overflow: 'hidden'
-            }}>
+            }}
+          >
             <Text
               text="Memo"
               color="white_muted"
@@ -197,7 +203,8 @@ export default function SideTxConfirmScreen() {
             padding: '14px 12px',
             borderRadius: '10px',
             backgroundColor: '#1E1E1F'
-          }}>
+          }}
+        >
           <Text
             text="Tx Fee:"
             style={{

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext } from 'react';
+
 const WalletContext = createContext(null);
 
 export interface IWalletConfig {
@@ -7,11 +8,7 @@ export interface IWalletConfig {
 }
 
 const WalletConfig: React.FC<IWalletConfig> = ({ children, chains }) => {
-  return (
-    <div>
-      {children}
-    </div>
-  );
+  return <div>{children}</div>;
 };
 
 export default WalletConfig;

@@ -3,7 +3,6 @@ import * as bitcoin from 'bitcoinjs-lib';
 import qs from 'qs';
 import { useEffect, useState } from 'react';
 
-import { RuneBalance, TickPriceItem } from '@/shared/types';
 import {
   CHAINS_ENUM,
   SIDE_BTC_INDEXER,
@@ -15,14 +14,16 @@ import {
   SIDE_TOKENS
 } from '@/shared/constant';
 import { decodeTxToGetValue } from '@/shared/lib/runes-utils';
+import { RuneBalance, TickPriceItem } from '@/shared/types';
 import { NetworkType } from '@/shared/types';
 import { MessageComposer } from '@/ui/codegen/src/side/btcbridge/tx.registry';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import { useNavigate } from '@/ui/pages/MainRoute';
+import { useChainType } from '@/ui/state/settings/hooks';
 import { DepositBTCBridge, bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
-import { amountToSatoshis, formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
+import { formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
@@ -30,7 +31,6 @@ import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
 import { useCurrentAccount } from '../accounts/hooks';
 import { useNetworkType } from '../settings/hooks';
 import { useSignAndBroadcastTxRaw } from '../transactions/hooks/cosmos';
-import { useChainType } from '@/ui/state/settings/hooks';
 
 async function fetchRuneOutput(key: string) {
   return fetch(`${SIDE_RUNE_INDEXER}/output/${key}`, {
@@ -708,7 +708,7 @@ export const useRuneListV2 = () => {
   const [tokens, setTokens] = useState<RuneBalance[]>([]);
   const [total, setTotal] = useState(-1);
   const [pagination, setPagination] = useState({ currentPage: 1, pageSize: 100 });
-  const [priceMap, setPriceMap] = useState<{[key:string]:TickPriceItem}>();
+  const [priceMap, setPriceMap] = useState<{ [key: string]: TickPriceItem }>();
 
   const tools = useTools();
   const fetchData = async () => {
@@ -721,15 +721,15 @@ export const useRuneListV2 = () => {
       );
       setTokens(list);
       setTotal(total);
-      if(list.length > 0) {
+      if (list.length > 0) {
         // console.log(`list.map(item=>item?.spacedRune): `, list.map(item=>item?.spacedRune));
-        wallet.getRunesPrice(list.map(item=>item?.spacedRune)).then((res) => {
-          console.log(`res: `, res);
-          setPriceMap(res)
-        })
+        wallet.getRunesPrice(list.map((item) => item?.spacedRune)).then((res) => {
+          console.log('res: ', res);
+          setPriceMap(res);
+        });
       }
     } catch (e) {
-      console.log(`e: `, e);
+      console.log('e: ', e);
       tools.toastError((e as Error).message);
     } finally {
       // tools.showLoading(false);
@@ -745,9 +745,8 @@ export const useRuneListV2 = () => {
     pagination,
     fetchData,
     priceMap
-  }
-}
-
+  };
+};
 
 export const useRuneBridge = () => {
   const { from, bridgeAmount, fee, base, loading } = useBridgeStore();

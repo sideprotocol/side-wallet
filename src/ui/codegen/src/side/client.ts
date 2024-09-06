@@ -2,8 +2,10 @@
 import { GeneratedType, Registry, OfflineSigner } from '@cosmjs/proto-signing';
 import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from '@cosmjs/stargate';
 import { HttpEndpoint } from '@cosmjs/tendermint-rpc';
-import * as sideBtcbridgeTxRegistry from './btcbridge/tx.registry';
+
 import * as sideBtcbridgeTxAmino from './btcbridge/tx.amino';
+import * as sideBtcbridgeTxRegistry from './btcbridge/tx.registry';
+
 export const sideAminoConverters = {
   ...sideBtcbridgeTxAmino.AminoConverter
 };
@@ -34,14 +36,11 @@ export const getSigningSideClient = async ({
   signer: OfflineSigner;
   defaultTypes?: ReadonlyArray<[string, GeneratedType]>;
 }) => {
-  const {
-    registry,
-    aminoTypes
-  } = getSigningSideClientOptions({
+  const { registry, aminoTypes } = getSigningSideClientOptions({
     defaultTypes
   });
   const client = await SigningStargateClient.connectWithSigner(rpcEndpoint, signer, {
-    registry: (registry as any),
+    registry: registry as any,
     aminoTypes
   });
   return client;

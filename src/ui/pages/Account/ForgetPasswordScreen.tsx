@@ -1,5 +1,5 @@
 import { Checkbox } from 'antd';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import Lottie from 'react-lottie';
 import { useNavigate as useNavigateRouter } from 'react-router-dom';
 
@@ -10,7 +10,6 @@ import { keyringsActions } from '@/ui/state/keyrings/reducer';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
-import { getPasswordStrengthWord } from '@/ui/utils/password-utils';
 
 export default function CreateHDWalletScreen() {
   const navigateRouter = useNavigateRouter();
@@ -45,17 +44,20 @@ export default function CreateHDWalletScreen() {
           flex: 1,
           paddingBottom: '10px',
           padding: '0 16px 24px'
-        }}>
+        }}
+      >
         <Column
           style={{
             flex: 1,
             overflow: 'auto'
-          }}>
+          }}
+        >
           <Row
             justifyCenter
             style={{
               padding: '34px 0 16px'
-            }}>
+            }}
+          >
             {/*<Image src="./images/icons/wallet.svg" size={90} />*/}
             <Lottie
               options={
@@ -75,7 +77,8 @@ export default function CreateHDWalletScreen() {
               gap: '8px',
               backgroundColor: '#222222',
               borderRadius: '14px'
-            }}>
+            }}
+          >
             <Checkbox
               checked={checked1}
               onChange={(e) => {
@@ -100,7 +103,8 @@ export default function CreateHDWalletScreen() {
               backgroundColor: '#222222',
               borderRadius: '14px',
               marginTop: '10px'
-            }}>
+            }}
+          >
             <Checkbox
               checked={checked2}
               onChange={(e) => {
@@ -125,7 +129,8 @@ export default function CreateHDWalletScreen() {
               backgroundColor: '#222222',
               borderRadius: '14px',
               marginTop: '10px'
-            }}>
+            }}
+          >
             <Checkbox
               checked={checked3}
               onChange={(e) => {

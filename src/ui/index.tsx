@@ -11,6 +11,7 @@ import { EVENTS } from '@/shared/constant';
 import eventBus from '@/shared/eventBus';
 import { Message } from '@/shared/utils';
 import AccountUpdater from '@/ui/state/accounts/updater';
+import { useAppDispatch } from '@/ui/state/hooks';
 // import { useAppDispatch, useAppSelector } from '@/ui/state/hooks';
 import '@/ui/styles/global.css';
 
@@ -19,8 +20,6 @@ import { AppDimensions, AppSideDimensions } from './components/Responsive';
 import AsyncMainRoute from './pages/MainRoute';
 import store from './state';
 import { WalletProvider, useWallet } from './utils';
-import { globalActions } from '@/ui/state/global/reducer';
-import { useAppDispatch } from '@/ui/state/hooks';
 
 // disabled sentry
 // Sentry.init({

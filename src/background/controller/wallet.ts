@@ -20,10 +20,8 @@ import {
   KEYRING_TYPE,
   NETWORK_TYPES,
   CHAINS_MAP,
-  OPENAPI_URL_MAINNET,
-  OPENAPI_URL_TESTNET,
   UNCONFIRMED_HEIGHT,
-  ChainType,
+  ChainType
 } from '@/shared/constant';
 import { runesUtils } from '@/shared/lib/runes-utils';
 import {
@@ -113,7 +111,7 @@ export class WalletController extends BaseController {
     const alianNames = contactBookService.listAlias();
     await keyringService.submitPassword(password);
     sessionService.broadcastEvent('unlock');
-    console.log(`alianNames: `, alianNameInited, alianNames);
+    console.log('alianNames: ', alianNameInited, alianNames);
     if (!alianNameInited && alianNames.length === 0) {
       this.initAlianNames();
     }
@@ -805,7 +803,6 @@ export class WalletController extends BaseController {
       return 'unknown';
     }
   };
-
 
   getNetworkName = () => {
     const networkType = this.getNetworkType();

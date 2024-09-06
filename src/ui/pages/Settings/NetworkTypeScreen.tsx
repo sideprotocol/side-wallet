@@ -1,4 +1,3 @@
-import { NETWORK_TYPES } from '@/shared/constant';
 import { Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useReloadAccounts } from '@/ui/state/accounts/hooks';
@@ -25,7 +24,8 @@ export default function NetworkTypeScreen() {
         style={{
           padding: '0 16px',
           marginTop: 16
-        }}>
+        }}
+      >
         <Column gap={'md'}>
           <Row
             rounded
@@ -41,13 +41,14 @@ export default function NetworkTypeScreen() {
             style={{
               height: 56,
               padding: '16px 10px',
-              backgroundColor: colors.green_light ,
+              backgroundColor: colors.green_light,
               border: `1px solid ${colors.green_light}`
             }}
             full
             justifyBetween
             itemsCenter
-            classname={'hover:bg-[#1e1e1f] '}>
+            classname={'hover:bg-[#1e1e1f] '}
+          >
             <Row itemsCenter>
               <Text text={'Side Chain Devnet & Bitcoin Testnet 3'} />
             </Row>

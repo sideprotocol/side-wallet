@@ -75,7 +75,8 @@ export default function BRC20BalanceCard2(props: BRC20BalanceCard2Props) {
       fullX
       onClick={() => {
         onClick && onClick();
-      }}>
+      }}
+    >
       <Column full py="zero" gap="zero">
         <Row fullY justifyBetween justifyCenter>
           <Column fullY justifyCenter>
@@ -108,7 +109,8 @@ export default function BRC20BalanceCard2(props: BRC20BalanceCard2Props) {
                   }
                 }}
                 size={10}
-                color="textDim"></Icon>
+                color="textDim"
+              ></Icon>
             </Row>
           </Row>
         </Row>
@@ -133,7 +135,8 @@ export default function BRC20BalanceCard2(props: BRC20BalanceCard2Props) {
                     <Card
                       key={'transfer_' + index}
                       style={{ width: 68, height: 68 }}
-                      bg={v === 'Transfer' ? 'brc20_transfer' : v === 'Deploy' ? 'brc20_deploy' : 'brc20_other'}>
+                      bg={v === 'Transfer' ? 'brc20_transfer' : v === 'Deploy' ? 'brc20_deploy' : 'brc20_other'}
+                    >
                       <Column gap="zero">
                         <Text text={v} size={v === 'Transfer' ? 'sm' : v === 'Deploy' ? 'sm' : 'md'} />
                         {v === 'Transfer' ? <Text text={`(${_amounts[index]})`} size="xxs" textCenter wrap /> : null}

@@ -4,7 +4,7 @@ import {
   NOBLE_TEST_ID,
   AXELAR_DEV_ID,
   AXELAR_TEST_ID,
-  BABYLON_TEST_ID,
+  BABYLON_TEST_ID
 } from '@/ui/constants/chains/chainId';
 
 export const CHAINS_BRIDGE_DEV: IChain[] = [
@@ -18,7 +18,7 @@ export const CHAINS_BRIDGE_DEV: IChain[] = [
     hdPath: 'm/44\'/118/0\'/0/0',
     logo: 'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/noble/chain.png',
     faucetUrl: 'https://faucet.circle.com',
-    explorerUrl: 'https://www.mintscan.io/noble-testnet',
+    explorerUrl: 'https://www.mintscan.io/noble-testnet'
   },
   {
     chainID: AXELAR_DEV_ID,
@@ -30,8 +30,8 @@ export const CHAINS_BRIDGE_DEV: IChain[] = [
     hdPath: 'm/44\'/118/0\'/0/0',
     logo: 'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/axelar-dojo/chain.png',
     faucetUrl: 'https://faucet.testnet.axelar.dev',
-    explorerUrl: 'https://testnet.axelarscan.io',
-  },
+    explorerUrl: 'https://testnet.axelarscan.io'
+  }
 ];
 
 export const CHAINS_BRIDGE_TEST: IChain[] = [
@@ -45,7 +45,7 @@ export const CHAINS_BRIDGE_TEST: IChain[] = [
     hdPath: 'm/44\'/118/0\'/0/0',
     logo: 'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/noble/chain.png',
     faucetUrl: 'https://faucet.circle.com',
-    explorerUrl: 'https://www.mintscan.io/noble-testnet',
+    explorerUrl: 'https://www.mintscan.io/noble-testnet'
   },
   {
     chainID: AXELAR_TEST_ID,
@@ -57,7 +57,7 @@ export const CHAINS_BRIDGE_TEST: IChain[] = [
     hdPath: 'm/44\'/118/0\'/0/0',
     logo: 'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/axelar-dojo/chain.png',
     faucetUrl: 'https://faucet.testnet.axelar.dev',
-    explorerUrl: 'https://testnet.axelarscan.io',
+    explorerUrl: 'https://testnet.axelarscan.io'
   },
   {
     chainID: BABYLON_TEST_ID,
@@ -69,8 +69,8 @@ export const CHAINS_BRIDGE_TEST: IChain[] = [
     hdPath: 'm/44\'/118/0\'/0/0',
     logo: 'https://raw.githubusercontent.com/chainapsis/keplr-chain-registry/main/images/bbn-test/chain.png',
     faucetUrl: '',
-    explorerUrl: 'https://testnet.babylon.explorers.guru',
-  },
+    explorerUrl: 'https://testnet.babylon.explorers.guru'
+  }
 ];
 
 export const CHAINS_BRIDGE_MAIN: IChain[] = [];

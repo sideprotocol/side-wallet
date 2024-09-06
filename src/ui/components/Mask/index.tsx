@@ -17,7 +17,8 @@ export function Mask({ children, onClick }: { children: React.ReactNode; onClick
     <div
       style={{
         position: 'relative'
-      }}>
+      }}
+    >
       {children}
       <div
         style={{
@@ -33,14 +34,16 @@ export function Mask({ children, onClick }: { children: React.ReactNode; onClick
           justifyContent: 'center',
           alignItems: 'center'
           // maxHeight: '185px'
-        }}>
+        }}
+      >
         <div
           onMouseOver={handleMouseOver}
           onMouseLeave={handleMouseLeave}
           onClick={() => {
             setVisible(!visible);
             onClick();
-          }}>
+          }}
+        >
           <Image
             src={isHovered ? '/images/icons/eye-white.svg' : '/images/icons/eye-off.svg'}
             size={40}

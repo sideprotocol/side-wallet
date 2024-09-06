@@ -120,17 +120,20 @@ export default function CreateSendSide() {
           paddingBottom: '14px',
           marginTop: '66px',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
-        }}>
+        }}
+      >
         <Column
           style={{
             flex: '1',
             gap: '10px'
-          }}>
+          }}
+        >
           <Row
             justifyCenter
             style={{
               marginTop: '-35px'
-            }}>
+            }}
+          >
             <Row
               style={{
                 background: '#1E1E1F',
@@ -139,7 +142,8 @@ export default function CreateSendSide() {
                 borderRadius: '50%',
                 alignItems: 'center'
               }}
-              justifyCenter>
+              justifyCenter
+            >
               {/*<Image src={curToken.logo} size={62} />*/}
               <ImageIcon
                 url={curToken.logo}
@@ -171,7 +175,8 @@ export default function CreateSendSide() {
             justifyBetween
             style={{
               marginTop: '16px'
-            }}>
+            }}
+          >
             <Text
               text="Amount"
               color="white_muted"
@@ -183,7 +188,8 @@ export default function CreateSendSide() {
             <Row
               style={{
                 alignItems: 'center'
-              }}>
+              }}
+            >
               <Image src="./images/icons/wallet-04.svg" size={14} />
               <Text
                 text={available}
@@ -230,7 +236,8 @@ export default function CreateSendSide() {
             paddingTop: '16px',
             borderRadius: '10px'
             // opacity: 0
-          }}>
+          }}
+        >
           <Text
             text="Tx Fee:"
             style={{

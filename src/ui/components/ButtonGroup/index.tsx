@@ -30,7 +30,8 @@ export function ButtonGroup(props: IButtonGroupProps) {
           borderRadius: '100px',
           padding: '3px 5px',
           gap: '0'
-        }}>
+        }}
+      >
         {list.map((item, index) => {
           return (
             <div
@@ -54,7 +55,8 @@ export function ButtonGroup(props: IButtonGroupProps) {
                   return;
                 }
                 onChange(item.key, index);
-              }}>
+              }}
+            >
               {item.label}
             </div>
           );

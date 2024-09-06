@@ -18,7 +18,8 @@ export function Empty(props: EmptyProps) {
           // gap: spacing.small,
           // alignSelf: 'center'
         }
-      }>
+      }
+    >
       <Image
         // src={'./images/img/no-data.gif'}
         src={'./images/icons/main/no-data.svg'}

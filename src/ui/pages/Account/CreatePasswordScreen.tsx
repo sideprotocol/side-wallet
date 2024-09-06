@@ -5,7 +5,8 @@ import { useLocation, useNavigate as useNavigateRouter } from 'react-router-dom'
 import { Button, Column, Header, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useWallet, useWalletRequest } from '@/ui/utils';
-import { getPasswordStrengthWord, MIN_PASSWORD_LENGTH } from '@/ui/utils/password-utils';
+import { getPasswordStrengthWord } from '@/ui/utils/password-utils';
+
 import { useNavigate } from '../MainRoute';
 
 type Status = '' | 'error' | 'warning' | undefined;
@@ -117,20 +118,24 @@ export default function CreatePasswordScreen() {
   };
 
   return (
-    <Layout style={{
-      maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
-    }}>
+    <Layout
+      style={{
+        maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px'
+      }}
+    >
       <Header onBack={() => navigateRouter(-1)} title="Create Password"></Header>
       <Column
         style={{
           minHeight: '530px',
           flex: 1,
           padding: '0 16px 24px'
-        }}>
+        }}
+      >
         <Column
           style={{
             flex: 1
-          }}>
+          }}
+        >
           <Text
             text="Your password can unlock your wallet only this local device. if you forget your password,you will not be able to access your wallet on this decice."
             style={{
@@ -171,11 +176,14 @@ export default function CreatePasswordScreen() {
             autoFocus={true}
           />
           {strongText}
-          <div style={{
-            color: '#ff0000',
-            fontSize: '14px',
-            opacity: pwdErrorMsg ? 1 : 0
-          }} className="">
+          <div
+            style={{
+              color: '#ff0000',
+              fontSize: '14px',
+              opacity: pwdErrorMsg ? 1 : 0
+            }}
+            className=""
+          >
             {pwdErrorMsg}
           </div>
           <Text
@@ -211,11 +219,14 @@ export default function CreatePasswordScreen() {
             }}
             onKeyUp={(e) => handleOnKeyUp(e)}
           />
-          <div style={{
-            color: '#ff0000',
-            fontSize: '14px',
-            opacity: confirmErrorMsg ? 1 : 0
-          }} className="">
+          <div
+            style={{
+              color: '#ff0000',
+              fontSize: '14px',
+              opacity: confirmErrorMsg ? 1 : 0
+            }}
+            className=""
+          >
             {confirmErrorMsg}
           </div>
           <Row
@@ -223,10 +234,11 @@ export default function CreatePasswordScreen() {
               marginTop: '6px',
               alignItems: 'start'
             }}
-            justifyBetween>
+            justifyBetween
+          >
             <Checkbox
               style={{
-                borderRadius: '4px',
+                borderRadius: '4px'
               }}
               defaultChecked={check}
               onChange={(e) => {

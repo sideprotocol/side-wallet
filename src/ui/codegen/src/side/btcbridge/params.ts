@@ -1,5 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from '../../binary';
+
 /** AssetType defines the type of asset */
 export enum AssetType {
   /** ASSET_TYPE_UNSPECIFIED - Unspecified asset type */
@@ -10,7 +11,7 @@ export enum AssetType {
   ASSET_TYPE_BRC20 = 2,
   /** ASSET_TYPE_RUNE - RUNE, dog*go*to*the*moon */
   ASSET_TYPE_RUNE = 3,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 export const AssetTypeSDKType = AssetType;
 export const AssetTypeAmino = AssetType;
@@ -181,16 +182,19 @@ export const Params = {
   },
   fromPartial(object: Partial<Params>): Params {
     const message = createBaseParams();
-    message.authorizedRelayers = object.authorizedRelayers?.map(e => e) || [];
+    message.authorizedRelayers = object.authorizedRelayers?.map((e) => e) || [];
     message.confirmations = object.confirmations ?? 0;
-    message.maxAcceptableBlockDepth = object.maxAcceptableBlockDepth !== undefined && object.maxAcceptableBlockDepth !== null ? BigInt(object.maxAcceptableBlockDepth.toString()) : BigInt(0);
+    message.maxAcceptableBlockDepth =
+      object.maxAcceptableBlockDepth !== undefined && object.maxAcceptableBlockDepth !== null
+        ? BigInt(object.maxAcceptableBlockDepth.toString())
+        : BigInt(0);
     message.btcVoucherDenom = object.btcVoucherDenom ?? '';
-    message.vaults = object.vaults?.map(e => Vault.fromPartial(e)) || [];
+    message.vaults = object.vaults?.map((e) => Vault.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: ParamsAmino): Params {
     const message = createBaseParams();
-    message.authorizedRelayers = object.authorized_relayers?.map(e => e) || [];
+    message.authorizedRelayers = object.authorized_relayers?.map((e) => e) || [];
     if (object.confirmations !== undefined && object.confirmations !== null) {
       message.confirmations = object.confirmations;
     }
@@ -200,21 +204,22 @@ export const Params = {
     if (object.btc_voucher_denom !== undefined && object.btc_voucher_denom !== null) {
       message.btcVoucherDenom = object.btc_voucher_denom;
     }
-    message.vaults = object.vaults?.map(e => Vault.fromAmino(e)) || [];
+    message.vaults = object.vaults?.map((e) => Vault.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};
     if (message.authorizedRelayers) {
-      obj.authorized_relayers = message.authorizedRelayers.map(e => e);
+      obj.authorized_relayers = message.authorizedRelayers.map((e) => e);
     } else {
       obj.authorized_relayers = message.authorizedRelayers;
     }
     obj.confirmations = message.confirmations === 0 ? undefined : message.confirmations;
-    obj.max_acceptable_block_depth = message.maxAcceptableBlockDepth !== BigInt(0) ? message.maxAcceptableBlockDepth.toString() : undefined;
+    obj.max_acceptable_block_depth =
+      message.maxAcceptableBlockDepth !== BigInt(0) ? message.maxAcceptableBlockDepth.toString() : undefined;
     obj.btc_voucher_denom = message.btcVoucherDenom === '' ? undefined : message.btcVoucherDenom;
     if (message.vaults) {
-      obj.vaults = message.vaults.map(e => e ? Vault.toAmino(e) : undefined);
+      obj.vaults = message.vaults.map((e) => (e ? Vault.toAmino(e) : undefined));
     } else {
       obj.vaults = message.vaults;
     }
@@ -271,7 +276,7 @@ export const Vault = {
           message.pubKey = reader.string();
           break;
         case 4:
-          message.assetType = (reader.int32() as any);
+          message.assetType = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);

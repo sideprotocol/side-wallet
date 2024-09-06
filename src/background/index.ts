@@ -124,8 +124,6 @@ browserRuntimeOnInstalled((details) => {
   }
 });
 
-
-
 if (MANIFEST_VERSION === 'mv3') {
   // Keep alive for MV3
   const INTERNAL_STAYALIVE_PORT = 'CT_Internal_port_alive';
@@ -158,11 +156,8 @@ if (MANIFEST_VERSION === 'mv3') {
     }
   }, 5000);
 
-  chrome.sidePanel
-    .setPanelBehavior({ openPanelOnActionClick: false })
-    .catch((error) => console.error(error));
+  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false }).catch((error) => console.error(error));
 }
-
 
 // ['error', 'info'].forEach( (item) => {
 //   // eslint-disable-next-line @typescript-eslint/no-empty-function

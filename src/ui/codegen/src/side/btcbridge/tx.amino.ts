@@ -1,5 +1,14 @@
 //@ts-nocheck
-import { MsgSubmitBlockHeaderRequest, MsgSubmitDepositTransactionRequest, MsgSubmitWithdrawTransactionRequest, MsgUpdateQualifiedRelayersRequest, MsgWithdrawBitcoinRequest, MsgSubmitWithdrawSignaturesRequest, MsgSubmitWithdrawStatusRequest } from './tx';
+import {
+  MsgSubmitBlockHeaderRequest,
+  MsgSubmitDepositTransactionRequest,
+  MsgSubmitWithdrawTransactionRequest,
+  MsgUpdateQualifiedRelayersRequest,
+  MsgWithdrawBitcoinRequest,
+  MsgSubmitWithdrawSignaturesRequest,
+  MsgSubmitWithdrawStatusRequest
+} from './tx';
+
 export const AminoConverter = {
   '/side.btcbridge.MsgSubmitBlockHeaderRequest': {
     aminoType: '/side.btcbridge.MsgSubmitBlockHeaderRequest',

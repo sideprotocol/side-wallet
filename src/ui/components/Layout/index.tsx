@@ -1,7 +1,8 @@
 import React, { CSSProperties } from 'react';
 
-import './index.less';
 import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
+
+import './index.less';
 
 export interface LayoutProps {
   children?: React.ReactNode;
@@ -19,16 +20,22 @@ export function Layout(props: LayoutProps) {
           display: 'flex',
           flexDirection: 'column',
           width: '100%',
-          maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px' ,
+          maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
           minHeight: $styleBase?.minHeight || '600px',
-          height: window.location.pathname === '/sidePanel.html' ? '100vh' : $styleBase?.height ? $styleBase?.height : '600px',
+          height:
+            window.location.pathname === '/sidePanel.html'
+              ? '100vh'
+              : $styleBase?.height
+              ? $styleBase?.height
+              : '600px',
           overflowY: 'auto',
           overflowX: 'hidden',
           border: !isInTab ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
-          justifyContent: 'center',
+          justifyContent: 'center'
         },
         $styleBase
-      )}>
+      )}
+    >
       {children}
     </div>
   );

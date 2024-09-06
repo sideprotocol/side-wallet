@@ -21,7 +21,8 @@ function TokenItem({ token, balanceVisible }: { token: SideToken; balanceVisible
         backgroundColor: '#1A1A1A',
         padding: '10px 16px',
         borderRadius: 10
-      }}>
+      }}
+    >
       <Row>
         <ImageIcon
           url={token.logo}
@@ -34,7 +35,8 @@ function TokenItem({ token, balanceVisible }: { token: SideToken; balanceVisible
         <Column
           style={{
             gap: '0px'
-          }}>
+          }}
+        >
           <Text classname={'symbol'} preset="regular" text={token.symbol}></Text>
           <Text preset="sub" text={token.name}></Text>
         </Column>
@@ -43,7 +45,8 @@ function TokenItem({ token, balanceVisible }: { token: SideToken; balanceVisible
       <Column
         style={{
           gap: '0px'
-        }}>
+        }}
+      >
         <Text preset="regular" text={balanceVisible ? formatUnitAmount(balanceAmount, token.exponent) : '**'} textEnd />
         {/*<Text preset="sub" text={`${'$' + getTruncate(totalPrice)}`} textEnd />*/}
         <Text preset="sub" text={`${balanceVisible ? '$' + getTruncate(totalPrice) : '**'}`} textEnd />

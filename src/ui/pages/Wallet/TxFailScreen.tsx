@@ -1,7 +1,7 @@
 import { Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
+import { useNavigate } from '@/ui/pages/MainRoute';
 import { colors } from '@/ui/theme/colors';
 import { useLocationState } from '@/ui/utils';
-import { useNavigate } from '@/ui/pages/MainRoute';
 
 export default function TxFailScreen() {
   const { error } = useLocationState<{ error: string }>();

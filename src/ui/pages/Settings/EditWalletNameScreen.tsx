@@ -47,7 +47,8 @@ export default function EditWalletNameScreen() {
         style={{
           flex: 1,
           padding: '0 16px 24px'
-        }}>
+        }}
+      >
         <Column style={{ flex: 1, gap: '8px' }}>
           <Text
             text="Previous Wallet Name"

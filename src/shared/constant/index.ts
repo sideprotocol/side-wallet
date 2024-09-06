@@ -4,14 +4,13 @@
 import GrimoriaRune from '@/ui/assets/icons/grimoria-rune.png';
 import USDT from '@/ui/assets/icons/usdt.svg';
 
-import { AddressType, BitcoinToken, Chain, NetworkType, RestoreWalletType, SideToken } from '../types';
+import { AddressType, BitcoinToken, NetworkType, RestoreWalletType, SideToken } from '../types';
 
 export enum CHAINS_ENUM {
   BTC = 'BTC',
   SIDE = 'SIDE',
   SIDE_SIGNET = 'SIDE_SIGNET'
 }
-
 
 export const KEYRING_TYPE = {
   HdKeyring: 'HD Key Tree',
@@ -214,7 +213,7 @@ export const RESTORE_WALLETS: { value: RestoreWalletType; name: string; addressT
 
 export const NETWORK_TYPES = [
   { value: NetworkType.MAINNET, label: 'MAINNET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
-  { value: NetworkType.TESTNET, label: 'DEVNET', name: 'testnet', validNames: ['testnet'] },
+  { value: NetworkType.TESTNET, label: 'DEVNET', name: 'testnet', validNames: ['testnet'] }
   // { value: NetworkType.MAINNET, label: 'DEVNET', name: 'livenet', validNames: [0, 'livenet', 'mainnet'] },
 ];
 
@@ -463,18 +462,18 @@ type TypeChain = {
 
 export const CHAINS_MAP: { [key: string]: TypeChain } = {
   [ChainType.BITCOIN_TESTNET]: {
-      enum: ChainType.BITCOIN_TESTNET,
-      label: 'Bitcoin Testnet',
-      icon: './images/artifacts/bitcoin-testnet.svg',
-      unit: 'tBTC',
-      networkType: NetworkType.TESTNET,
-      endpoints: ['https://wallet-api-testnet.unisat.io'],
-      mempoolSpaceUrl: 'https://mempool.space/testnet',
-      unisatUrl: 'https://testnet.unisat.io',
-      ordinalsUrl: 'https://testnet.ordinals.com',
-      unisatExplorerUrl: '',
-      okxExplorerUrl: '',
-      showPrice: false
+    enum: ChainType.BITCOIN_TESTNET,
+    label: 'Bitcoin Testnet',
+    icon: './images/artifacts/bitcoin-testnet.svg',
+    unit: 'tBTC',
+    networkType: NetworkType.TESTNET,
+    endpoints: ['https://wallet-api-testnet.unisat.io'],
+    mempoolSpaceUrl: 'https://mempool.space/testnet',
+    unisatUrl: 'https://testnet.unisat.io',
+    ordinalsUrl: 'https://testnet.ordinals.com',
+    unisatExplorerUrl: '',
+    okxExplorerUrl: '',
+    showPrice: false
   },
   [ChainType.BITCOIN_MAINNET]: {
     enum: ChainType.BITCOIN_MAINNET,

@@ -97,19 +97,22 @@ export default function SignData({ params: { data, session } }: Props) {
       style={{
         minHeight: '560px',
         height: '560px'
-      }}>
+      }}
+    >
       <Content>
         <Column
           itemsCenter
           style={{
             paddingBottom: '4px'
-          }}>
+          }}
+        >
           <Text
             textCenter
             size="xl"
             style={{
               fontWeight: '600'
-            }}>
+            }}
+          >
             Signature request
           </Text>
 
@@ -123,7 +126,8 @@ export default function SignData({ params: { data, session } }: Props) {
               fontSize: '14px',
               maxWidth: 'max-content'
             }}
-            classname="">
+            classname=""
+          >
             {session.origin}
           </Text>
         </Column>
@@ -133,7 +137,8 @@ export default function SignData({ params: { data, session } }: Props) {
           <Card
             style={{
               flexDirection: 'column'
-            }}>
+            }}
+          >
             <Text text="You are signing data:" textCenter mt="lg" />
             <div
               style={{
@@ -144,7 +149,8 @@ export default function SignData({ params: { data, session } }: Props) {
                 wordBreak: 'break-word',
                 flexWrap: 'wrap',
                 lineHeight: '18px'
-              }}>
+              }}
+            >
               {data.data}
             </div>
           </Card>
@@ -165,7 +171,8 @@ export default function SignData({ params: { data, session } }: Props) {
               copyToClipboard(AGREEMENT_TEXT).then(() => {
                 tools.toastSuccess('Copied');
               });
-            }}>
+            }}
+          >
             <Text text={`Enter “${AGREEMENT_TEXT}” to continue`} preset="bold" />
             <Icon icon="copy" color="textDim" />
           </Row>

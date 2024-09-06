@@ -1,9 +1,8 @@
 import { Tooltip } from 'antd';
-import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
-import { RawTxInfo } from '@/shared/types';
+
 import { COIN_DUST } from '@/shared/constant';
-import { TxType } from '@/shared/types';
+import { RawTxInfo } from '@/shared/types';
 import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
@@ -11,7 +10,7 @@ import { RBFBar } from '@/ui/components/RBFBar';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
 // import { useSendRune } from '@/ui/state/send/hook';
-import { useBridge } from '@/ui/state/bridge/hook';
+import { useBTCUnit, useChain } from '@/ui/state/settings/hooks';
 import {
   useBitcoinTx,
   useFetchUtxosCallback, // usePrepareSendBTCCallback,
@@ -21,8 +20,8 @@ import {
 } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { amountToSatoshis, isValidAddress, parseUnitAmount, satoshisToAmount, useLocationState } from '@/ui/utils';
-import { useBTCUnit, useChain } from '@/ui/state/settings/hooks';
+import { amountToSatoshis, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
+
 // import { bridgeStore } from '@/ui/stores/BridgeStore';
 
 interface LocationState {
@@ -49,7 +48,7 @@ export default function CreateSendBtc() {
   const feeRate = uiState.feeRate;
 
   const [error, setError] = useState('');
-  console.log(`accountBalance: `, accountBalance);
+  console.log('accountBalance: ', accountBalance);
   const [autoAdjust, setAutoAdjust] = useState(false);
   const fetchUtxos = useFetchUtxosCallback();
 
@@ -96,12 +95,12 @@ export default function CreateSendBtc() {
 
   const unspendUnavailableAmount = satoshisToAmount(unavailableSatoshis - spendUnavailableSatoshis);
 
-  console.log(`totalAvailableSatoshis: `, totalAvailableSatoshis);
-  console.log(`totalAvailableSatoshis: totalAvailableAmount`, totalAvailableAmount);
-  console.log(`totalAvailableSatoshis: totalSatoshis`, totalSatoshis);
-  console.log(`totalAvailableSatoshis: avaiableAmount`, avaiableAmount);
-  console.log(`totalAvailableSatoshis: totalAmount`, totalAmount);
-  console.log(`totalAvailableSatoshis: unavailableAmount`, unavailableAmount);
+  console.log('totalAvailableSatoshis: ', totalAvailableSatoshis);
+  console.log('totalAvailableSatoshis: totalAvailableAmount', totalAvailableAmount);
+  console.log('totalAvailableSatoshis: totalSatoshis', totalSatoshis);
+  console.log('totalAvailableSatoshis: avaiableAmount', avaiableAmount);
+  console.log('totalAvailableSatoshis: totalAmount', totalAmount);
+  console.log('totalAvailableSatoshis: unavailableAmount', unavailableAmount);
   const chain = useChain();
   useEffect(() => {
     setError('');
@@ -157,7 +156,8 @@ export default function CreateSendBtc() {
     <Layout
       style={{
         position: 'relative'
-      }}>
+      }}
+    >
       <Header
         onBack={() => {
           window.history.go(-1);
@@ -179,11 +179,13 @@ export default function CreateSendBtc() {
           borderTop: '1px solid #404045',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
         }}
-        justifyCenter>
+        justifyCenter
+      >
         <Row
           style={{
             marginTop: '6px'
-          }}>
+          }}
+        >
           <Image src={token?.logo} size={50}></Image>
           {/* <Icon icon={token.logo || 'btc'} size={50} /> */}
         </Row>
@@ -198,7 +200,8 @@ export default function CreateSendBtc() {
           padding: '16px 16px 64px 16px',
           marginTop: '66px',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
-        }}>
+        }}
+      >
         <Column mt="xxl">
           <Text text="Recipient" preset="regular" color="textDim" />
           <Input
@@ -255,7 +258,8 @@ export default function CreateSendBtc() {
               title={'Only includes Runes in the current version.'}
               overlayStyle={{
                 fontSize: fontSizes.xs
-              }}>
+              }}
+            >
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Row itemsCenter>
                   <Text
@@ -320,7 +324,8 @@ export default function CreateSendBtc() {
             text="Next"
             onClick={async (e) => {
               navigate('TxConfirmScreen', { rawTxInfo });
-            }}></Button>
+            }}
+          ></Button>
         </Column>
       </Content>
     </Layout>

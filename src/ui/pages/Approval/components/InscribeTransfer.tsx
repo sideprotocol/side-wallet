@@ -300,7 +300,8 @@ function InscribeTransferStep({ contextData, updateContextData }: StepProps) {
                           title={`${tokenBalance.availableBalanceUnSafe} ${tokenBalance.ticker} is unconfirmed, please wait for confirmation `}
                           overlayStyle={{
                             fontSize: fontSizes.xs
-                          }}>
+                          }}
+                        >
                           <div>
                             <Row>
                               <Text
@@ -321,7 +322,8 @@ function InscribeTransferStep({ contextData, updateContextData }: StepProps) {
                         itemsCenter
                         onClick={() => {
                           setInputAmount(tokenBalance.availableBalanceSafe);
-                        }}>
+                        }}
+                      >
                         <Text text={`${tokenBalance.availableBalanceSafe}`} textCenter size="xs" />
 
                         <BRC20Ticker tick={tokenBalance.ticker} preset="sm" />

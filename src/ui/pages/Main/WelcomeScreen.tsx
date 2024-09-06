@@ -19,7 +19,8 @@ export default function WelcomeScreen() {
         maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
         height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
         overflow: 'hidden'
-      }}>
+      }}
+    >
       {state?.addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}
       <Column
         fullX
@@ -27,24 +28,29 @@ export default function WelcomeScreen() {
         style={{
           gap: '0',
           padding: '0 16px 24px'
-        }}>
+        }}
+      >
         <Column
           style={{
             flex: 1
-          }}>
+          }}
+        >
           <Row
             justifyCenter
             style={{
               flex: 1,
-              alignItems: 'center',
+              alignItems: 'center'
               // marginTop: '80px'
-            }}>
+            }}
+          >
             <Image src="/images/img/welcome.gif" size={330} />
           </Row>
           <Button
-            style={{
-              // marginTop: '60px'
-            }}
+            style={
+              {
+                // marginTop: '60px'
+              }
+            }
             text="Create new wallet"
             preset="primary"
             onClick={async () => {

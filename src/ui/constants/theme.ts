@@ -7,38 +7,38 @@ const customTheme = createTheme({
       sm: 375,
       md: 768,
       lg: 1200,
-      xl: 1440,
-    },
+      xl: 1440
+    }
   },
   palette: {
     mode: 'light',
     common: {
       black: '#000',
-      white: '#fff',
+      white: '#fff'
     },
     background: {
-      default: '#fff',
+      default: '#fff'
     },
     primary: {
-      main: '#0DD4C3',
-    },
+      main: '#0DD4C3'
+    }
   },
   typography: {
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'Inter, sans-serif'
   },
   components: {
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
-        disableTouchRipple: true,
+        disableTouchRipple: true
       },
       styleOverrides: {
         root: {
           '&.MuiMenuItem-root.Mui-selected': {
-            backgroundColor: '#6DE5DA !important',
-          },
-        },
-      },
+            backgroundColor: '#6DE5DA !important'
+          }
+        }
+      }
     },
     MuiOutlinedInput: {
       styleOverrides: {
@@ -55,25 +55,25 @@ const customTheme = createTheme({
             fontFamily: 'Inter, sans-serif',
             p: 0,
             '::placeholder': {
-              opacity: 0.4,
-            },
+              opacity: 0.4
+            }
           },
           '& .Mui-disabled': {
-            textFillColor: '#6C7080',
+            textFillColor: '#6C7080'
           },
           '&.MuiOutlinedInput-root': {
             fieldset: {
-              border: 'none',
+              border: 'none'
             },
             '&:hover fieldset': {
-              border: 'none',
+              border: 'none'
             },
             '&.Mui-focused fieldset': {
-              border: 'none',
-            },
-          },
-        },
-      },
+              border: 'none'
+            }
+          }
+        }
+      }
     },
     MuiTableHead: {
       styleOverrides: {
@@ -83,7 +83,7 @@ const customTheme = createTheme({
           background: 'transparent',
           '.MuiTableRow-root': {
             background: 'transparent',
-            borderBottom: '1px solid rgba(36, 45, 57, 0.60)',
+            borderBottom: '1px solid rgba(36, 45, 57, 0.60)'
           },
           '.MuiTableCell-root': {
             border: 'none',
@@ -92,35 +92,35 @@ const customTheme = createTheme({
             '&:last-child': {
               borderTopRightRadius: '4px',
               borderBottomRightRadius: '4px',
-              paddingRight: '24px',
+              paddingRight: '24px'
             },
             '&:first-of-type': {
               borderTopLeftRadius: '4px',
               borderBottomLeftRadius: '4px',
-              paddingLeft: '37px',
-            },
-          },
-        },
-      },
+              paddingLeft: '37px'
+            }
+          }
+        }
+      }
     },
     MuiTableBody: {
       styleOverrides: {
         root: {
           paddingLeft: '37px',
           '.MuiTableRow-root': {
-            '& td': { border: 0 },
+            '& td': { border: 0 }
           },
           '.MuiTableCell-root': {
             padding: '16px 24px',
             // paddingTop:'16px',
             // paddingBottom:'16px',
             '&:first-of-type': { paddingLeft: '24px' },
-            '&:last-child': { paddingRight: '24px' },
-          },
-        },
-      },
-    },
-  },
+            '&:last-child': { paddingRight: '24px' }
+          }
+        }
+      }
+    }
+  }
 });
 
 export default customTheme;

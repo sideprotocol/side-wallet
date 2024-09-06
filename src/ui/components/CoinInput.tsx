@@ -1,6 +1,6 @@
-import { Coin } from '@cosmjs/stargate';
-
 import { NumericFormat } from 'react-number-format';
+
+import { Coin } from '@cosmjs/stargate';
 
 export type CoinInputProps = {
   coin: Coin;

@@ -67,7 +67,8 @@ export function TabBar(props: TabBarProps) {
               itemsCenter
               onClick={() => {
                 setTabKey(v.key);
-              }}>
+              }}
+            >
               <Text text={v.label} color={'white'} />
             </Column>
           );
@@ -95,7 +96,8 @@ export function TabBar(props: TabBarProps) {
                 classname={isSelected ? 'selected-tab' : ''}
                 onClick={() => {
                   setTabKey(v.key);
-                }}>
+                }}
+              >
                 <Text
                   text={v.label}
                   size={'md'}
@@ -131,7 +133,8 @@ export function TabBar(props: TabBarProps) {
                 color={isSelected ? 'gold' : 'white_muted'}
                 onClick={() => {
                   setTabKey(v.key);
-                }}>
+                }}
+              >
                 <Text text={v.label} size="xxs" color={isSelected ? 'gold' : 'white_muted'} mx="md" my="sm" />
               </Column>
             );
@@ -157,7 +160,8 @@ export function TabBar(props: TabBarProps) {
               classname={isSelected ? 'selected-tab' : ''}
               onClick={() => {
                 setTabKey(v.key);
-              }}>
+              }}
+            >
               <Text text={v.label} color={isSelected ? 'gold' : 'white'} />
             </Column>
           );

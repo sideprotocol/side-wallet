@@ -31,7 +31,8 @@ export default function DisclaimerModal({ channelType, onClose }: { channelType:
           <Row
             onClick={() => {
               onClose();
-            }}>
+            }}
+          >
             <CloseOutlined />
           </Row>
         </Row>
@@ -44,7 +45,8 @@ export default function DisclaimerModal({ channelType, onClose }: { channelType:
           <Text
             mt="lg"
             style={{ fontSize: fontSizes.sm, lineHeight: 2 }}
-            text={'Before proceeding, please carefully read and accept the disclaimer:'}></Text>
+            text={'Before proceeding, please carefully read and accept the disclaimer:'}
+          ></Text>
         </Column>
 
         <Row justifyCenter>
@@ -53,7 +55,8 @@ export default function DisclaimerModal({ channelType, onClose }: { channelType:
               setUnderstand(!understand);
             }}
             checked={understand}
-            style={{ fontSize: fontSizes.sm }}>
+            style={{ fontSize: fontSizes.sm }}
+          >
             <Text text="I have read and agree to the above disclaimer" />
           </Checkbox>
         </Row>

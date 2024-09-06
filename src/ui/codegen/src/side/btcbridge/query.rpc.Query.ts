@@ -1,8 +1,25 @@
 //@ts-nocheck
-import { Rpc } from '../../helpers';
-import { BinaryReader } from '../../binary';
 import { QueryClient, createProtobufRpcClient } from '@cosmjs/stargate';
-import { QueryParamsRequest, QueryParamsResponse, QueryChainTipRequest, QueryChainTipResponse, QueryBlockHeaderByHeightRequest, QueryBlockHeaderByHeightResponse, QueryBlockHeaderByHashRequest, QueryBlockHeaderByHashResponse, QuerySigningRequestRequest, QuerySigningRequestResponse, QueryUTXOsRequest, QueryUTXOsResponse, QueryUTXOsByAddressRequest, QueryUTXOsByAddressResponse } from './query';
+
+import { BinaryReader } from '../../binary';
+import { Rpc } from '../../helpers';
+import {
+  QueryParamsRequest,
+  QueryParamsResponse,
+  QueryChainTipRequest,
+  QueryChainTipResponse,
+  QueryBlockHeaderByHeightRequest,
+  QueryBlockHeaderByHeightResponse,
+  QueryBlockHeaderByHashRequest,
+  QueryBlockHeaderByHashResponse,
+  QuerySigningRequestRequest,
+  QuerySigningRequestResponse,
+  QueryUTXOsRequest,
+  QueryUTXOsResponse,
+  QueryUTXOsByAddressRequest,
+  QueryUTXOsByAddressResponse
+} from './query';
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -35,37 +52,37 @@ export class QueryClientImpl implements Query {
   queryParams(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request('side.btcbridge.Query', 'QueryParams', data);
-    return promise.then(data => QueryParamsResponse.decode(new BinaryReader(data)));
+    return promise.then((data) => QueryParamsResponse.decode(new BinaryReader(data)));
   }
   queryChainTip(request: QueryChainTipRequest = {}): Promise<QueryChainTipResponse> {
     const data = QueryChainTipRequest.encode(request).finish();
     const promise = this.rpc.request('side.btcbridge.Query', 'QueryChainTip', data);
-    return promise.then(data => QueryChainTipResponse.decode(new BinaryReader(data)));
+    return promise.then((data) => QueryChainTipResponse.decode(new BinaryReader(data)));
   }
   queryBlockHeaderByHeight(request: QueryBlockHeaderByHeightRequest): Promise<QueryBlockHeaderByHeightResponse> {
     const data = QueryBlockHeaderByHeightRequest.encode(request).finish();
     const promise = this.rpc.request('side.btcbridge.Query', 'QueryBlockHeaderByHeight', data);
-    return promise.then(data => QueryBlockHeaderByHeightResponse.decode(new BinaryReader(data)));
+    return promise.then((data) => QueryBlockHeaderByHeightResponse.decode(new BinaryReader(data)));
   }
   queryBlockHeaderByHash(request: QueryBlockHeaderByHashRequest): Promise<QueryBlockHeaderByHashResponse> {
     const data = QueryBlockHeaderByHashRequest.encode(request).finish();
     const promise = this.rpc.request('side.btcbridge.Query', 'QueryBlockHeaderByHash', data);
-    return promise.then(data => QueryBlockHeaderByHashResponse.decode(new BinaryReader(data)));
+    return promise.then((data) => QueryBlockHeaderByHashResponse.decode(new BinaryReader(data)));
   }
   querySigningRequest(request: QuerySigningRequestRequest): Promise<QuerySigningRequestResponse> {
     const data = QuerySigningRequestRequest.encode(request).finish();
     const promise = this.rpc.request('side.btcbridge.Query', 'QuerySigningRequest', data);
-    return promise.then(data => QuerySigningRequestResponse.decode(new BinaryReader(data)));
+    return promise.then((data) => QuerySigningRequestResponse.decode(new BinaryReader(data)));
   }
   queryUTXOs(request: QueryUTXOsRequest = {}): Promise<QueryUTXOsResponse> {
     const data = QueryUTXOsRequest.encode(request).finish();
     const promise = this.rpc.request('side.btcbridge.Query', 'QueryUTXOs', data);
-    return promise.then(data => QueryUTXOsResponse.decode(new BinaryReader(data)));
+    return promise.then((data) => QueryUTXOsResponse.decode(new BinaryReader(data)));
   }
   queryUTXOsByAddress(request: QueryUTXOsByAddressRequest): Promise<QueryUTXOsByAddressResponse> {
     const data = QueryUTXOsByAddressRequest.encode(request).finish();
     const promise = this.rpc.request('side.btcbridge.Query', 'QueryUTXOsByAddress', data);
-    return promise.then(data => QueryUTXOsByAddressResponse.decode(new BinaryReader(data)));
+    return promise.then((data) => QueryUTXOsByAddressResponse.decode(new BinaryReader(data)));
   }
 }
 export const createRpcQueryExtension = (base: QueryClient) => {

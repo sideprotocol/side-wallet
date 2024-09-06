@@ -1,8 +1,10 @@
-import { SWAP_ASSETS } from '@/ui/constants';
-import { Coin } from '@cosmjs/stargate';
 import BigNumber from 'bignumber.js';
-import { toReadableAmount } from './formatter';
+
+import { SWAP_ASSETS } from '@/ui/constants';
 import { LimitOrderConfig } from '@/ui/services/dex/type';
+import { Coin } from '@cosmjs/stargate';
+
+import { toReadableAmount } from './formatter';
 
 export function findAssetIcon(coin: Coin) {
   return SWAP_ASSETS.assets.find((asset) => asset.base === coin.denom);
@@ -27,7 +29,7 @@ export function compute_swap(
   return {
     return_amount: toReadableAmount(return_amount.toFixed(0, BigNumber.ROUND_DOWN), assetOutExp),
     commission_amount: toReadableAmount(commission_amount.toFixed(0, BigNumber.ROUND_DOWN), assetOutExp),
-    spread_amount: toReadableAmount(spread_amount.toFixed(0, BigNumber.ROUND_DOWN), assetOutExp),
+    spread_amount: toReadableAmount(spread_amount.toFixed(0, BigNumber.ROUND_DOWN), assetOutExp)
   };
 }
 

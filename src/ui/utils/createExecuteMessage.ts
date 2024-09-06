@@ -1,5 +1,6 @@
-import { Coin } from 'cosmwasm';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
+import { Coin } from 'cosmwasm';
+
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate';
 
 type CreateExecuteMessageArgs = {
@@ -13,7 +14,7 @@ const createExecuteMessage = ({
   senderAddress,
   contractAddress,
   message,
-  funds,
+  funds
 }: CreateExecuteMessageArgs): MsgExecuteContractEncodeObject => {
   return {
     typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
@@ -21,8 +22,8 @@ const createExecuteMessage = ({
       sender: senderAddress,
       contract: contractAddress,
       msg: new TextEncoder().encode(JSON.stringify(message)), // new TextDecoder().encoding() , //toUtf8(JSON.stringify(message)),
-      funds: funds || [],
-    }),
+      funds: funds || []
+    })
   };
 };
 

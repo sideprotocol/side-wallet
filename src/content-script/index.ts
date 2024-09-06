@@ -118,7 +118,7 @@ function shouldInjectProvider() {
   return doctypeCheck() && suffixCheck() && documentElementCheck() && !blockedDomainCheck() && !iframeCheck();
 }
 
-['error', 'info'].forEach( (item) => {
+['error', 'info'].forEach((item) => {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   console[item] = () => {};
 });
@@ -126,4 +126,3 @@ function shouldInjectProvider() {
 if (shouldInjectProvider()) {
   injectScript();
 }
-

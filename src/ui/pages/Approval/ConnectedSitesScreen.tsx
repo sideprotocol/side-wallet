@@ -35,12 +35,14 @@ export default function ConnectedSitesScreen() {
       <Content
         style={{
           marginTop: 16
-        }}>
+        }}
+      >
         {/*{sites.length > 0 && (*/}
         <Text
           preset="sub"
           color={'white'}
-          text={'The current account is connected to these sites. They can view your account details.'}></Text>
+          text={'The current account is connected to these sites. They can view your account details.'}
+        ></Text>
         {/*)}*/}
 
         <Column>
@@ -72,7 +74,8 @@ export default function ConnectedSitesScreen() {
                         onClick={() => {
                           handleRemove(item.origin);
                         }}
-                        text={'Disconnect'}></Text>
+                        text={'Disconnect'}
+                      ></Text>
                     </Column>
                   </Row>
                 </Card>
@@ -82,7 +85,8 @@ export default function ConnectedSitesScreen() {
             <div
               style={{
                 marginTop: '100px'
-              }}>
+              }}
+            >
               <Empty />
             </div>
           )}

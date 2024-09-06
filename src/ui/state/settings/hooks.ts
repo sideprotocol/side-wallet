@@ -1,10 +1,12 @@
 import compareVersions from 'compare-versions';
 import { useCallback } from 'react';
+
+import { CHAINS_ENUM, CHAINS_MAP, VERSION, ChainType } from '@/shared/constant';
 // import { CHAINS_ENUM, VERSION } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { useWallet } from '@/ui/utils';
 import i18n, { addResourceBundle } from '@/ui/utils/i18n';
-import { CHAINS_ENUM, CHAINS_MAP, VERSION, ChainType } from '@/shared/constant';
+
 import { AppState } from '..';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { settingsActions } from './reducer';

@@ -14,7 +14,7 @@ interface ImageProps {
 }
 
 export function Image(props: ImageProps) {
-  const { className, src, size, style: $imageStyleOverride, onClick, onMouseEnter, onMouseLeave,  } = props;
+  const { className, src, size, style: $imageStyleOverride, onClick, onMouseEnter, onMouseLeave } = props;
 
   return (
     <img

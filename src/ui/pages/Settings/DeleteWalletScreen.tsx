@@ -94,13 +94,15 @@ export default function DeleteWalletScreen() {
         style={{
           gap: '0',
           padding: '0 16px 24px'
-        }}>
+        }}
+      >
         <Column
           justifyCenter
           style={{
             flex: 1,
             alignItems: 'center'
-          }}>
+          }}
+        >
           <Image src="/images/img/delete-icon.png" size={90} />
         </Column>
         <Column
@@ -110,12 +112,14 @@ export default function DeleteWalletScreen() {
             borderRadius: '10px',
             padding: '10px',
             gap: '4px'
-          }}>
+          }}
+        >
           <Row
             style={{
               alignItems: 'center',
               gap: '8px'
-            }}>
+            }}
+          >
             <Image src="/images/icons/alert-triangle.svg" size={24} />
             <Text
               text="Alert"
@@ -137,9 +141,15 @@ export default function DeleteWalletScreen() {
           {/*  }}*/}
           {/*/>*/}
           <div className="text-[12px] text-white leading-[18px] font-[400] ">
-            Make sure that you have backed up your recovery phrase. <span className={'underline cursor-pointer'} onClick={() => {
-              navigate('ExportMnemonicsScreen', { keyring });
-          }}>Back Up My Wallet</span>
+            Make sure that you have backed up your recovery phrase.{' '}
+            <span
+              className={'underline cursor-pointer'}
+              onClick={() => {
+                navigate('ExportMnemonicsScreen', { keyring });
+              }}
+            >
+              Back Up My Wallet
+            </span>
           </div>
           <Text
             text="After deletion, you will need to import your wallet to restore access."

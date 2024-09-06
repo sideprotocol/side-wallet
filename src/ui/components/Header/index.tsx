@@ -3,7 +3,6 @@ import { useMemo } from 'react';
 import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 
 import { Column } from '../Column';
-import { Logo } from '../Logo';
 import { Row } from '../Row';
 import { Text } from '../Text';
 import './index.module.less';
@@ -43,7 +42,8 @@ export function Header(props: HeaderProps) {
         minHeight: '60px',
         maxHeight: '60px',
         ...(props.style || {})
-      }}>
+      }}
+    >
       <Row full>
         <Column selfItemsCenter style={{ gap: '10px' }}>
           {LeftComponent}
@@ -54,7 +54,8 @@ export function Header(props: HeaderProps) {
               }}
               onClick={(e) => {
                 onBack();
-              }}>
+              }}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                 <path
                   d="M20 8L12 16L20 24"

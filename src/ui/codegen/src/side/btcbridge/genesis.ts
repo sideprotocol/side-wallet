@@ -1,7 +1,8 @@
 //@ts-nocheck
-import { Params, ParamsAmino, ParamsSDKType } from './params';
-import { BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType } from './bitcoin';
 import { BinaryReader, BinaryWriter } from '../../binary';
+import { BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType } from './bitcoin';
+import { Params, ParamsAmino, ParamsSDKType } from './params';
+
 /** GenesisState defines the btc light client module's genesis state. */
 export interface GenesisState {
   params: Params;
@@ -86,10 +87,14 @@ export const GenesisState = {
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
-    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
-    message.bestBlockHeader = object.bestBlockHeader !== undefined && object.bestBlockHeader !== null ? BlockHeader.fromPartial(object.bestBlockHeader) : undefined;
-    message.blockHeaders = object.blockHeaders?.map(e => BlockHeader.fromPartial(e)) || [];
-    message.utxos = object.utxos?.map(e => UTXO.fromPartial(e)) || [];
+    message.params =
+      object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    message.bestBlockHeader =
+      object.bestBlockHeader !== undefined && object.bestBlockHeader !== null
+        ? BlockHeader.fromPartial(object.bestBlockHeader)
+        : undefined;
+    message.blockHeaders = object.blockHeaders?.map((e) => BlockHeader.fromPartial(e)) || [];
+    message.utxos = object.utxos?.map((e) => UTXO.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
@@ -100,8 +105,8 @@ export const GenesisState = {
     if (object.best_block_header !== undefined && object.best_block_header !== null) {
       message.bestBlockHeader = BlockHeader.fromAmino(object.best_block_header);
     }
-    message.blockHeaders = object.block_headers?.map(e => BlockHeader.fromAmino(e)) || [];
-    message.utxos = object.utxos?.map(e => UTXO.fromAmino(e)) || [];
+    message.blockHeaders = object.block_headers?.map((e) => BlockHeader.fromAmino(e)) || [];
+    message.utxos = object.utxos?.map((e) => UTXO.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: GenesisState): GenesisStateAmino {
@@ -109,12 +114,12 @@ export const GenesisState = {
     obj.params = message.params ? Params.toAmino(message.params) : undefined;
     obj.best_block_header = message.bestBlockHeader ? BlockHeader.toAmino(message.bestBlockHeader) : undefined;
     if (message.blockHeaders) {
-      obj.block_headers = message.blockHeaders.map(e => e ? BlockHeader.toAmino(e) : undefined);
+      obj.block_headers = message.blockHeaders.map((e) => (e ? BlockHeader.toAmino(e) : undefined));
     } else {
       obj.block_headers = message.blockHeaders;
     }
     if (message.utxos) {
-      obj.utxos = message.utxos.map(e => e ? UTXO.toAmino(e) : undefined);
+      obj.utxos = message.utxos.map((e) => (e ? UTXO.toAmino(e) : undefined));
     } else {
       obj.utxos = message.utxos;
     }

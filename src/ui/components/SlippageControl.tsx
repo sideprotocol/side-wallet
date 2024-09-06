@@ -25,11 +25,13 @@ export default function SlippageControl(props) {
       open={open}
       footer={null}
       width={314}
-      onCancel={onClose}>
+      onCancel={onClose}
+    >
       <div
         style={{
           padding: '12px 10px 16px'
-        }}>
+        }}
+      >
         <div
           style={{
             fontWeight: '500',
@@ -39,7 +41,8 @@ export default function SlippageControl(props) {
             fontSize: '13px',
             margin: '20px 0px 10px',
             color: 'white'
-          }}>
+          }}
+        >
           <span className="font-normal pl-[10px]">Slippage tolerance</span>
           <div className="pr-[10px]">
             <span>{slippage}% </span>
@@ -53,7 +56,8 @@ export default function SlippageControl(props) {
             flexWrap: 'wrap',
             gap: '12px',
             marginBottom: '12px'
-          }}>
+          }}
+        >
           <div
             style={{
               flex: 1,
@@ -68,7 +72,8 @@ export default function SlippageControl(props) {
               border: '1px solid #ffffff/10',
               height: '50px',
               backgroundColor: '#000'
-            }}>
+            }}
+          >
             {['0.25', '0.5', '1', ''].map((item, index) => {
               if (!item && index === 3) {
                 return (
@@ -84,7 +89,8 @@ export default function SlippageControl(props) {
                       padding: '0px 12px',
                       fontWeight: 600,
                       background: '#000'
-                    }}>
+                    }}
+                  >
                     <input
                       className=" w-[40px] h-[33px] py-0.5 text-center focus:outline-none bg-transparent border-side-secondary rounded-[100px]   "
                       type="text"
@@ -115,7 +121,8 @@ export default function SlippageControl(props) {
                   }}
                   onClick={() => {
                     onQuickSet(item);
-                  }}>
+                  }}
+                >
                   <span>{item}%</span>
                 </div>
               );
@@ -133,7 +140,8 @@ export default function SlippageControl(props) {
               onClick={() => {
                 swapStore.slippageIsAuto = true;
                 swapStore.slippage = '0.25';
-              }}>
+              }}
+            >
               Auto
             </Button>
           </div>

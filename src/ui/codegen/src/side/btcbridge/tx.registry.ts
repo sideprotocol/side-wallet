@@ -1,6 +1,6 @@
 //@ts-nocheck
-
 import { GeneratedType, Registry } from '@cosmjs/proto-signing';
+
 import {
   MsgSubmitBlockHeaderRequest,
   MsgSubmitDepositTransactionRequest,
@@ -8,7 +8,7 @@ import {
   MsgUpdateQualifiedRelayersRequest,
   MsgWithdrawBitcoinRequest,
   MsgSubmitWithdrawSignaturesRequest,
-  MsgSubmitWithdrawStatusRequest,
+  MsgSubmitWithdrawStatusRequest
 } from './tx';
 
 export const registry: ReadonlyArray<[string, GeneratedType]> = [
@@ -18,7 +18,7 @@ export const registry: ReadonlyArray<[string, GeneratedType]> = [
   ['/side.btcbridge.MsgUpdateQualifiedRelayersRequest', MsgUpdateQualifiedRelayersRequest],
   ['/side.btcbridge.MsgWithdrawBitcoinRequest', MsgWithdrawBitcoinRequest],
   ['/side.btcbridge.MsgSubmitWithdrawSignaturesRequest', MsgSubmitWithdrawSignaturesRequest],
-  ['/side.btcbridge.MsgSubmitWithdrawStatusRequest', MsgSubmitWithdrawStatusRequest],
+  ['/side.btcbridge.MsgSubmitWithdrawStatusRequest', MsgSubmitWithdrawStatusRequest]
 ];
 
 export const load = (protoRegistry: Registry) => {
@@ -31,132 +31,132 @@ export const MessageComposer = {
     submitBlockHeaders(value: MsgSubmitBlockHeaderRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitBlockHeaderRequest',
-        value: MsgSubmitBlockHeaderRequest.encode(value).finish(),
+        value: MsgSubmitBlockHeaderRequest.encode(value).finish()
       };
     },
     submitDepositTransaction(value: MsgSubmitDepositTransactionRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitDepositTransactionRequest',
-        value: MsgSubmitDepositTransactionRequest.encode(value).finish(),
+        value: MsgSubmitDepositTransactionRequest.encode(value).finish()
       };
     },
     submitWithdrawTransaction(value: MsgSubmitWithdrawTransactionRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitWithdrawTransactionRequest',
-        value: MsgSubmitWithdrawTransactionRequest.encode(value).finish(),
+        value: MsgSubmitWithdrawTransactionRequest.encode(value).finish()
       };
     },
     updateQualifiedRelayers(value: MsgUpdateQualifiedRelayersRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgUpdateQualifiedRelayersRequest',
-        value: MsgUpdateQualifiedRelayersRequest.encode(value).finish(),
+        value: MsgUpdateQualifiedRelayersRequest.encode(value).finish()
       };
     },
     withdrawBitcoin(value: MsgWithdrawBitcoinRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgWithdrawBitcoinRequest',
-        value: MsgWithdrawBitcoinRequest.encode(value).finish(),
+        value: MsgWithdrawBitcoinRequest.encode(value).finish()
       };
     },
     submitWithdrawSignatures(value: MsgSubmitWithdrawSignaturesRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitWithdrawSignaturesRequest',
-        value: MsgSubmitWithdrawSignaturesRequest.encode(value).finish(),
+        value: MsgSubmitWithdrawSignaturesRequest.encode(value).finish()
       };
     },
     submitWithdrawStatus(value: MsgSubmitWithdrawStatusRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitWithdrawStatusRequest',
-        value: MsgSubmitWithdrawStatusRequest.encode(value).finish(),
+        value: MsgSubmitWithdrawStatusRequest.encode(value).finish()
       };
-    },
+    }
   },
   withTypeUrl: {
     submitBlockHeaders(value: MsgSubmitBlockHeaderRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitBlockHeaderRequest',
-        value,
+        value
       };
     },
     submitDepositTransaction(value: MsgSubmitDepositTransactionRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitDepositTransactionRequest',
-        value,
+        value
       };
     },
     submitWithdrawTransaction(value: MsgSubmitWithdrawTransactionRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitWithdrawTransactionRequest',
-        value,
+        value
       };
     },
     updateQualifiedRelayers(value: MsgUpdateQualifiedRelayersRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgUpdateQualifiedRelayersRequest',
-        value,
+        value
       };
     },
     withdrawBitcoin(value: MsgWithdrawBitcoinRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgWithdrawBitcoinRequest',
-        value,
+        value
       };
     },
     submitWithdrawSignatures(value: MsgSubmitWithdrawSignaturesRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitWithdrawSignaturesRequest',
-        value,
+        value
       };
     },
     submitWithdrawStatus(value: MsgSubmitWithdrawStatusRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitWithdrawStatusRequest',
-        value,
+        value
       };
-    },
+    }
   },
   fromPartial: {
     submitBlockHeaders(value: MsgSubmitBlockHeaderRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitBlockHeaderRequest',
-        value: MsgSubmitBlockHeaderRequest.fromPartial(value),
+        value: MsgSubmitBlockHeaderRequest.fromPartial(value)
       };
     },
     submitDepositTransaction(value: MsgSubmitDepositTransactionRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitDepositTransactionRequest',
-        value: MsgSubmitDepositTransactionRequest.fromPartial(value),
+        value: MsgSubmitDepositTransactionRequest.fromPartial(value)
       };
     },
     submitWithdrawTransaction(value: MsgSubmitWithdrawTransactionRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitWithdrawTransactionRequest',
-        value: MsgSubmitWithdrawTransactionRequest.fromPartial(value),
+        value: MsgSubmitWithdrawTransactionRequest.fromPartial(value)
       };
     },
     updateQualifiedRelayers(value: MsgUpdateQualifiedRelayersRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgUpdateQualifiedRelayersRequest',
-        value: MsgUpdateQualifiedRelayersRequest.fromPartial(value),
+        value: MsgUpdateQualifiedRelayersRequest.fromPartial(value)
       };
     },
     withdrawBitcoin(value: MsgWithdrawBitcoinRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgWithdrawBitcoinRequest',
-        value: MsgWithdrawBitcoinRequest.fromPartial(value),
+        value: MsgWithdrawBitcoinRequest.fromPartial(value)
       };
     },
     submitWithdrawSignatures(value: MsgSubmitWithdrawSignaturesRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitWithdrawSignaturesRequest',
-        value: MsgSubmitWithdrawSignaturesRequest.fromPartial(value),
+        value: MsgSubmitWithdrawSignaturesRequest.fromPartial(value)
       };
     },
     submitWithdrawStatus(value: MsgSubmitWithdrawStatusRequest) {
       return {
         typeUrl: '/side.btcbridge.MsgSubmitWithdrawStatusRequest',
-        value: MsgSubmitWithdrawStatusRequest.fromPartial(value),
+        value: MsgSubmitWithdrawStatusRequest.fromPartial(value)
       };
-    },
-  },
+    }
+  }
 };

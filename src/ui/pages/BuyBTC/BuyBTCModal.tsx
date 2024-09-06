@@ -57,7 +57,8 @@ export const BuyBTCModal = ({ onClose }: { onClose: () => void }) => {
           <Row
             onClick={() => {
               onClose();
-            }}>
+            }}
+          >
             <CloseOutlined />
           </Row>
         </Row>

@@ -1,6 +1,7 @@
 //@ts-nocheck
-import { BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, SigningStatus } from './bitcoin';
 import { BinaryReader, BinaryWriter } from '../../binary';
+import { BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, SigningStatus } from './bitcoin';
+
 /** MsgSubmitWithdrawStatusRequest defines the Msg/SubmitWithdrawStatus request type. */
 export interface MsgSubmitWithdrawStatusRequest {
   sender: string;
@@ -310,7 +311,7 @@ function createBaseMsgSubmitWithdrawStatusRequest(): MsgSubmitWithdrawStatusRequ
   return {
     sender: '',
     txid: '',
-    status: 0,
+    status: 0
   };
 }
 export const MsgSubmitWithdrawStatusRequest = {
@@ -389,9 +390,9 @@ export const MsgSubmitWithdrawStatusRequest = {
   toProtoMsg(message: MsgSubmitWithdrawStatusRequest): MsgSubmitWithdrawStatusRequestProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgSubmitWithdrawStatusRequest',
-      value: MsgSubmitWithdrawStatusRequest.encode(message).finish(),
+      value: MsgSubmitWithdrawStatusRequest.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgSubmitWithdrawStatusResponse(): MsgSubmitWithdrawStatusResponse {
   return {};
@@ -439,14 +440,14 @@ export const MsgSubmitWithdrawStatusResponse = {
   toProtoMsg(message: MsgSubmitWithdrawStatusResponse): MsgSubmitWithdrawStatusResponseProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgSubmitWithdrawStatusResponse',
-      value: MsgSubmitWithdrawStatusResponse.encode(message).finish(),
+      value: MsgSubmitWithdrawStatusResponse.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgSubmitBlockHeaderRequest(): MsgSubmitBlockHeaderRequest {
   return {
     sender: '',
-    blockHeaders: [],
+    blockHeaders: []
   };
 }
 export const MsgSubmitBlockHeaderRequest = {
@@ -516,9 +517,9 @@ export const MsgSubmitBlockHeaderRequest = {
   toProtoMsg(message: MsgSubmitBlockHeaderRequest): MsgSubmitBlockHeaderRequestProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgSubmitBlockHeaderRequest',
-      value: MsgSubmitBlockHeaderRequest.encode(message).finish(),
+      value: MsgSubmitBlockHeaderRequest.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgSubmitBlockHeadersResponse(): MsgSubmitBlockHeadersResponse {
   return {};
@@ -566,9 +567,9 @@ export const MsgSubmitBlockHeadersResponse = {
   toProtoMsg(message: MsgSubmitBlockHeadersResponse): MsgSubmitBlockHeadersResponseProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgSubmitBlockHeadersResponse',
-      value: MsgSubmitBlockHeadersResponse.encode(message).finish(),
+      value: MsgSubmitBlockHeadersResponse.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgSubmitDepositTransactionRequest(): MsgSubmitDepositTransactionRequest {
   return {
@@ -576,7 +577,7 @@ function createBaseMsgSubmitDepositTransactionRequest(): MsgSubmitDepositTransac
     blockhash: '',
     prevTxBytes: '',
     txBytes: '',
-    proof: [],
+    proof: []
   };
 }
 export const MsgSubmitDepositTransactionRequest = {
@@ -679,9 +680,9 @@ export const MsgSubmitDepositTransactionRequest = {
   toProtoMsg(message: MsgSubmitDepositTransactionRequest): MsgSubmitDepositTransactionRequestProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgSubmitDepositTransactionRequest',
-      value: MsgSubmitDepositTransactionRequest.encode(message).finish(),
+      value: MsgSubmitDepositTransactionRequest.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgSubmitDepositTransactionResponse(): MsgSubmitDepositTransactionResponse {
   return {};
@@ -729,16 +730,16 @@ export const MsgSubmitDepositTransactionResponse = {
   toProtoMsg(message: MsgSubmitDepositTransactionResponse): MsgSubmitDepositTransactionResponseProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgSubmitDepositTransactionResponse',
-      value: MsgSubmitDepositTransactionResponse.encode(message).finish(),
+      value: MsgSubmitDepositTransactionResponse.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgSubmitWithdrawTransactionRequest(): MsgSubmitWithdrawTransactionRequest {
   return {
     sender: '',
     blockhash: '',
     txBytes: '',
-    proof: [],
+    proof: []
   };
 }
 export const MsgSubmitWithdrawTransactionRequest = {
@@ -830,9 +831,9 @@ export const MsgSubmitWithdrawTransactionRequest = {
   toProtoMsg(message: MsgSubmitWithdrawTransactionRequest): MsgSubmitWithdrawTransactionRequestProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgSubmitWithdrawTransactionRequest',
-      value: MsgSubmitWithdrawTransactionRequest.encode(message).finish(),
+      value: MsgSubmitWithdrawTransactionRequest.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgSubmitWithdrawTransactionResponse(): MsgSubmitWithdrawTransactionResponse {
   return {};
@@ -880,14 +881,14 @@ export const MsgSubmitWithdrawTransactionResponse = {
   toProtoMsg(message: MsgSubmitWithdrawTransactionResponse): MsgSubmitWithdrawTransactionResponseProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgSubmitWithdrawTransactionResponse',
-      value: MsgSubmitWithdrawTransactionResponse.encode(message).finish(),
+      value: MsgSubmitWithdrawTransactionResponse.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgUpdateQualifiedRelayersRequest(): MsgUpdateQualifiedRelayersRequest {
   return {
     sender: '',
-    relayers: [],
+    relayers: []
   };
 }
 export const MsgUpdateQualifiedRelayersRequest = {
@@ -957,9 +958,9 @@ export const MsgUpdateQualifiedRelayersRequest = {
   toProtoMsg(message: MsgUpdateQualifiedRelayersRequest): MsgUpdateQualifiedRelayersRequestProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgUpdateQualifiedRelayersRequest',
-      value: MsgUpdateQualifiedRelayersRequest.encode(message).finish(),
+      value: MsgUpdateQualifiedRelayersRequest.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgUpdateQualifiedRelayersResponse(): MsgUpdateQualifiedRelayersResponse {
   return {};
@@ -1007,15 +1008,15 @@ export const MsgUpdateQualifiedRelayersResponse = {
   toProtoMsg(message: MsgUpdateQualifiedRelayersResponse): MsgUpdateQualifiedRelayersResponseProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgUpdateQualifiedRelayersResponse',
-      value: MsgUpdateQualifiedRelayersResponse.encode(message).finish(),
+      value: MsgUpdateQualifiedRelayersResponse.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgWithdrawBitcoinRequest(): MsgWithdrawBitcoinRequest {
   return {
     sender: '',
     amount: '',
-    feeRate: '',
+    feeRate: ''
   };
 }
 export const MsgWithdrawBitcoinRequest = {
@@ -1094,9 +1095,9 @@ export const MsgWithdrawBitcoinRequest = {
   toProtoMsg(message: MsgWithdrawBitcoinRequest): MsgWithdrawBitcoinRequestProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgWithdrawBitcoinRequest',
-      value: MsgWithdrawBitcoinRequest.encode(message).finish(),
+      value: MsgWithdrawBitcoinRequest.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgWithdrawBitcoinResponse(): MsgWithdrawBitcoinResponse {
   return {};
@@ -1144,15 +1145,15 @@ export const MsgWithdrawBitcoinResponse = {
   toProtoMsg(message: MsgWithdrawBitcoinResponse): MsgWithdrawBitcoinResponseProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgWithdrawBitcoinResponse',
-      value: MsgWithdrawBitcoinResponse.encode(message).finish(),
+      value: MsgWithdrawBitcoinResponse.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgSubmitWithdrawSignaturesRequest(): MsgSubmitWithdrawSignaturesRequest {
   return {
     sender: '',
     txid: '',
-    psbt: '',
+    psbt: ''
   };
 }
 export const MsgSubmitWithdrawSignaturesRequest = {
@@ -1231,9 +1232,9 @@ export const MsgSubmitWithdrawSignaturesRequest = {
   toProtoMsg(message: MsgSubmitWithdrawSignaturesRequest): MsgSubmitWithdrawSignaturesRequestProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgSubmitWithdrawSignaturesRequest',
-      value: MsgSubmitWithdrawSignaturesRequest.encode(message).finish(),
+      value: MsgSubmitWithdrawSignaturesRequest.encode(message).finish()
     };
-  },
+  }
 };
 function createBaseMsgSubmitWithdrawSignaturesResponse(): MsgSubmitWithdrawSignaturesResponse {
   return {};
@@ -1281,7 +1282,7 @@ export const MsgSubmitWithdrawSignaturesResponse = {
   toProtoMsg(message: MsgSubmitWithdrawSignaturesResponse): MsgSubmitWithdrawSignaturesResponseProtoMsg {
     return {
       typeUrl: '/side.btcbridge.MsgSubmitWithdrawSignaturesResponse',
-      value: MsgSubmitWithdrawSignaturesResponse.encode(message).finish(),
+      value: MsgSubmitWithdrawSignaturesResponse.encode(message).finish()
     };
-  },
+  }
 };

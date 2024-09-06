@@ -100,7 +100,8 @@ function PasswordInput(props: InputProps) {
       } `}
       style={Object.assign({}, $baseContainerStyle, containerStyle, {
         // borderColor: isContainerMouseOver ? '#ffffff50!important' : 'transparent'
-      })}>
+      })}
+    >
       <input
         placeholder={isNull(placeholder) ? 'Password' : placeholder}
         className="placeholder:opacity-30"
@@ -122,7 +123,9 @@ function PasswordInput(props: InputProps) {
           color={isMouse ? 'white' : 'textDim'}
         />
       )}
-      {type === 'text' && <Icon icon="eye" size={24} style={{ marginLeft: spacing.tiny }} onClick={() => setType('password')} />}
+      {type === 'text' && (
+        <Icon icon="eye" size={24} style={{ marginLeft: spacing.tiny }} onClick={() => setType('password')} />
+      )}
     </div>
   );
 }
@@ -184,7 +187,8 @@ function AmountInput(props: InputProps) {
       className={` border-[1px] border-solid ${
         isFocus ? 'border-white' : 'border-[#ffffff20] hover:border-[#ffffff50] '
       } `}
-      style={Object.assign({}, $baseContainerStyle, { padding: '4px 10px' })}>
+      style={Object.assign({}, $baseContainerStyle, { padding: '4px 10px' })}
+    >
       <input
         placeholder={placeholder || 'Amount'}
         className="placeholder:opacity-30"
@@ -336,7 +340,8 @@ export const AddressInput = (props: InputProps) => {
         className={`hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] ${
           formatError ? '!border-[#e52937]' : ''
         }`}
-        style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '50px' })}>
+        style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '50px' })}
+      >
         <input
           placeholder={'Address...'}
           className="placeholder:opacity-30"
@@ -399,7 +404,8 @@ function TextInput(props: InputProps) {
       className={` border-[1px] border-solid ${
         isFocus ? 'border-white' : 'border-[#ffffff20] hover:border-[#ffffff50] '
       } `}
-      style={Object.assign({}, $baseContainerStyle, containerStyle)}>
+      style={Object.assign({}, $baseContainerStyle, containerStyle)}
+    >
       <input
         value={value}
         onChange={onChange}

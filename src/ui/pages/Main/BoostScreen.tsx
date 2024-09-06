@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { getUiType, useApproval, useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+
 // import { globalActions } from '@/ui/state/global/reducer';
 // import { useAppDispatch } from '@/ui/state/hooks';
 
@@ -78,7 +79,7 @@ export default function BoostScreen() {
 
   useEffect(() => {
     init();
-  }, [])
+  }, []);
 
   return <div></div>;
 }

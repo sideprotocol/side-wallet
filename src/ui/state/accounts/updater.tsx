@@ -54,7 +54,7 @@ export default function AccountUpdater() {
     fetchBalance().finally(() => {
       self.loadingBalance = false;
     });
-  // }, [wallet, isUnlocked, self]);
+    // }, [wallet, isUnlocked, self]);
   }, [fetchBalance, wallet, isUnlocked, self]);
 
   useEffect(() => {

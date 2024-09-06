@@ -28,7 +28,8 @@ export default function CurrencyTypeScreen() {
         style={{
           padding: '0 16px',
           marginTop: '16px'
-        }}>
+        }}
+      >
         <Column gap={'md'}>
           <Row
             rounded
@@ -40,7 +41,8 @@ export default function CurrencyTypeScreen() {
             full
             justifyBetween
             itemsCenter
-            classname={''}>
+            classname={''}
+          >
             <Row itemsCenter>
               <Text text={'USD'} />
             </Row>

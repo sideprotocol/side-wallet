@@ -32,12 +32,14 @@ export function MyItem({ account, selected, onClick }: MyItemProps, ref) {
         backgroundColor: '#2E2E2F',
         borderRadius: '10px'
       }}
-      onClick={onClick}>
+      onClick={onClick}
+    >
       <Row
         justifyBetween
         style={{
           width: '100%'
-        }}>
+        }}
+      >
         <Column gap={'sm'}>
           <Text text={account.alianName} />
           <Text text={`${shortAddress(account.address)}`} preset="sub" />
@@ -62,7 +64,8 @@ export function MyItem({ account, selected, onClick }: MyItemProps, ref) {
                   width="20"
                   height="20"
                   filterUnits="userSpaceOnUse"
-                  colorInterpolationFilters="sRGB">
+                  colorInterpolationFilters="sRGB"
+                >
                   <feFlood floodOpacity="0" result="BackgroundImageFix" />
                   <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
                   <feColorMatrix
@@ -135,7 +138,8 @@ export default function Connect({ params: { session } }: Props) {
         style={{
           minHeight: '560px',
           height: '560px'
-        }}>
+        }}
+      >
         <Content itemsCenter justifyCenter>
           <Icon size={fontSizes.xxxl} color="gold">
             <LoadingOutlined />
@@ -151,7 +155,8 @@ export default function Connect({ params: { session } }: Props) {
         style={{
           minHeight: '560px',
           height: '560px'
-        }}>
+        }}
+      >
         <Header>
           <WebsiteBar session={session} />
         </Header>
@@ -178,7 +183,8 @@ export default function Connect({ params: { session } }: Props) {
         style={{
           minHeight: '560px',
           height: '560px'
-        }}>
+        }}
+      >
         <Header>
           <WebsiteBar session={session} />
         </Header>
@@ -209,11 +215,13 @@ export default function Connect({ params: { session } }: Props) {
       style={{
         minHeight: '560px',
         height: '560px'
-      }}>
+      }}
+    >
       <Header
         style={{
           borderBottom: '1px solid transparent'
-        }}>
+        }}
+      >
         <WebsiteBar
           session={{
             origin: 'Connect with Side Wallet'
@@ -231,7 +239,8 @@ export default function Connect({ params: { session } }: Props) {
                 // padding: '8px 0 18px'
               }}
               gap="zero"
-              rounded>
+              rounded
+            >
               <Text
                 style={{
                   color: '#828282'
@@ -253,7 +262,8 @@ export default function Connect({ params: { session } }: Props) {
               padding: '0 0 10px'
             }}
             gap="zero"
-            rounded>
+            rounded
+          >
             {/*<Text text="Connect with Side Wallet" preset="title-bold" textCenter mt="lg" />*/}
             <Text text="Select the account to use on this site." textCenter preset="sub" mt="md" />
             <Text text="Only connect with sites you trust." preset="sub" textCenter />

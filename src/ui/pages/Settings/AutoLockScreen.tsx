@@ -27,7 +27,8 @@ export default function AutoLockScreen() {
           style={{
             paddingTop: '70px',
             paddingBottom: '25px'
-          }}>
+          }}
+        >
           {/*<Image*/}
           {/*  style={{*/}
           {/*    margin: 'auto'*/}
@@ -56,7 +57,8 @@ export default function AutoLockScreen() {
               width: '200px',
               margin: 'auto'
             }}
-            text="Set the duration for the wallet to automatically lock."></Text>
+            text="Set the duration for the wallet to automatically lock."
+          ></Text>
         </Column>
 
         <Column>
@@ -65,7 +67,8 @@ export default function AutoLockScreen() {
           <Input
             preset={'amount'}
             placeholder={localStorage.getItem('unLockTimeLimit') ? localStorage.getItem('unLockTimeLimit') : '5'}
-            onAmountInputChange={async (e) => setTime(e)}></Input>
+            onAmountInputChange={async (e) => setTime(e)}
+          ></Input>
 
           <Button
             preset="primary"
@@ -88,7 +91,8 @@ export default function AutoLockScreen() {
               chrome.storage.local.set({ unLockTimeLimit: Number(time) }, function () {
                 console.log('锁屏时间限制已保存为 ' + Number(time) + ' 分钟。');
               });
-            }}></Button>
+            }}
+          ></Button>
         </Column>
       </Content>
     </Layout>

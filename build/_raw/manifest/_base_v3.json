@@ -27,11 +27,21 @@
   "background": {
     "service_worker": "background.js"
   },
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "host_permissions": ["<all_urls>"],
   "homepage_url": "https://side.one/",
-  "permissions": ["storage", "unlimitedStorage", "sidePanel", "contextMenus", "alarms", "tabs", "activeTab", "scripting", "webRequest", "nativeMessaging", "webNavigation"],
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "sidePanel",
+    "contextMenus",
+    "alarms",
+    "tabs",
+    "activeTab",
+    "scripting",
+    "webRequest",
+    "nativeMessaging",
+    "webNavigation"
+  ],
   "short_name": "__MSG_appName__",
 
   "content_scripts": [

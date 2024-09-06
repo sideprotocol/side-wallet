@@ -1,9 +1,9 @@
 import { proxy } from 'valtio';
-import { Coin } from '@cosmjs/stargate';
-
 import { useSnapshot } from 'valtio';
-import { IPoolItem, LimitOrderConfig, SwapRouteResult } from '@/ui/services/dex/type';
+
 import services from '@/ui/services';
+import { IPoolItem, LimitOrderConfig, SwapRouteResult } from '@/ui/services/dex/type';
+import { Coin } from '@cosmjs/stargate';
 
 const initData = {
   tokenModalShow: false,
@@ -24,7 +24,7 @@ const initData = {
   swapRouteResult: {} as SwapRouteResult,
   swapPair: {
     native: { amount: '', denom: 'uside' } as Coin,
-    remote: { amount: '', denom: '' } as Coin,
+    remote: { amount: '', denom: '' } as Coin
   },
   balances: {} as Record<string, { available: string; raw: string }>,
   senderAddress: '',
@@ -38,7 +38,7 @@ const initData = {
   limitRate: '',
   limitExpire: {
     text: '7 Days',
-    value: 7 * 24 * 60 * 60 * 1000,
+    value: 7 * 24 * 60 * 60 * 1000
   },
   limitType: 'Fill or Kill',
   rateModified: false,
@@ -46,7 +46,7 @@ const initData = {
   cancelOrderLoading: false,
   executingId: '',
   LimitOrderConfig: {} as LimitOrderConfig,
-  allPools: [] as IPoolItem[],
+  allPools: [] as IPoolItem[]
 };
 
 export const swapStore = proxy(initData);

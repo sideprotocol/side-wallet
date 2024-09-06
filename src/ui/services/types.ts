@@ -36,9 +36,9 @@ export interface Coin {
 }
 export interface Delegation {
   delegation: {
-      delegator_address: string,
-      validator_address: string,
-      shares: string
-  },
-  balance: Coin
+    delegator_address: string;
+    validator_address: string;
+    shares: string;
+  };
+  balance: Coin;
 }

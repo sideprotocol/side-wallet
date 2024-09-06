@@ -3,12 +3,12 @@ import { useMemo, useState } from 'react';
 import { ADDRESS_TYPES, RESTORE_WALLETS } from '@/shared/constant';
 import { Button, Column, Image, Input, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
+import { useReloadAccounts } from '@/ui/state/accounts/hooks';
 import { useCreateAccountCallback } from '@/ui/state/global/hooks';
+import { useChangeNetworkTypeCallback } from '@/ui/state/settings/hooks';
 
 import { useNavigate } from '../../MainRoute';
 import { ContextData, UpdateContextDataParams } from './type';
-import { useChangeNetworkTypeCallback } from '@/ui/state/settings/hooks';
-import { useReloadAccounts } from '@/ui/state/accounts/hooks';
 
 export default function Step2_SetName({
   contextData,
@@ -73,14 +73,16 @@ export default function Step2_SetName({
         flex: 1,
         overflow: 'hidden',
         padding: '0 16px 24px'
-      }}>
+      }}
+    >
       <Column
         style={{
           flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'auto'
-        }}>
+        }}
+      >
         <Column
           style={{
             border: '1px solid #404045',
@@ -89,7 +91,8 @@ export default function Step2_SetName({
             borderRadius: '14px',
             padding: '32px 16px 24px',
             width: '100%'
-          }}>
+          }}
+        >
           <Row justifyCenter>
             <Image src="/images/icons/wallet.svg" size={78} />
           </Row>

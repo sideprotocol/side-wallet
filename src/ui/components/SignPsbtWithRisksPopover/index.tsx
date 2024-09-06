@@ -81,7 +81,8 @@ export const SignPsbtWithRisksPopover = ({
                 key={'risk_' + index}
                 style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 10 }}
                 px="md"
-                py="sm">
+                py="sm"
+              >
                 <Row justifyBetween justifyCenter mt="sm">
                   <Text text={risk.title} color={risk.level === 'danger' ? 'danger' : 'warning'} />
                   {visibleRiskDetailTypes.includes(risk.type) ? (

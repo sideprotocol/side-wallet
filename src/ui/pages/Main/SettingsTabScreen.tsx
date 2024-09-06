@@ -169,7 +169,7 @@ export default function SettingsTabScreen() {
     }
 
     if (v.action == 'networkType') {
-      console.log(`networkType: `, networkType);
+      console.log('networkType: ', networkType);
       v.value = NETWORK_TYPES[0].label;
     }
 
@@ -231,8 +231,9 @@ export default function SettingsTabScreen() {
                   style={{
                     backgroundColor: 'transparent',
                     paddingLeft: '6px',
-                    paddingRight: '6px',
-                  }}>
+                    paddingRight: '6px'
+                  }}
+                >
                   <Row full justifyBetween>
                     <Row itemsCenter>
                       <ImageIcon size={24} icon={item.icon}></ImageIcon>
@@ -241,10 +242,16 @@ export default function SettingsTabScreen() {
 
                     <Column justifyCenter>
                       {/*{item.right && <span className={'iconRight'}><RightOutlined style={{ fontSize: 14, color: 'rgb(107,107,107)' }} /></span>}*/}
-                      {item.right && <Icon type="side-down" className={'hover-100'} style={{
-                        transform: 'rotate(-90deg)',
-                        opacity: '0.6',
-                      }}  />}
+                      {item.right && (
+                        <Icon
+                          type="side-down"
+                          className={'hover-100'}
+                          style={{
+                            transform: 'rotate(-90deg)',
+                            opacity: '0.6'
+                          }}
+                        />
+                      )}
                     </Column>
                   </Row>
                 </Card>

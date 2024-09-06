@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from '../../../../binary';
 import { bytesFromBase64, base64FromBytes } from '../../../../helpers';
+
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
@@ -231,7 +232,8 @@ export const PageRequest = {
   fromPartial(object: Partial<PageRequest>): PageRequest {
     const message = createBasePageRequest();
     message.key = object.key ?? new Uint8Array();
-    message.offset = object.offset !== undefined && object.offset !== null ? BigInt(object.offset.toString()) : BigInt(0);
+    message.offset =
+      object.offset !== undefined && object.offset !== null ? BigInt(object.offset.toString()) : BigInt(0);
     message.limit = object.limit !== undefined && object.limit !== null ? BigInt(object.limit.toString()) : BigInt(0);
     message.countTotal = object.countTotal ?? false;
     message.reverse = object.reverse ?? false;

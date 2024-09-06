@@ -1,10 +1,12 @@
 // import { Box, DialogContent, Typography } from "@mui/material";
-
-import { IWalletItem, useWalletContext } from './WalletContext';
-import { createWallet, writeClient, writeWallet } from './WalletConnect/Wallet';
 import { useState } from 'react';
+
 // import * as BridgeStore from "@/stores/BridgeStore";
 import SideDialog from '@/components/SideDialog';
+
+import { createWallet, writeClient, writeWallet } from './WalletConnect/Wallet';
+import { IWalletItem, useWalletContext } from './WalletContext';
+
 // import { LoadingButton } from "@/components/UI/Button";
 
 interface IConnectWalletDialog {}
@@ -21,7 +23,7 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
     client,
     connectChainId,
     setConnectChainId,
-    getSingleAccount,
+    getSingleAccount
   } = useWalletContext();
 
   const [sending, setSending] = useState<boolean>(false);
@@ -39,7 +41,7 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
         {
           chainId: curChain.chainID,
           hdPath: curChain.hdPath,
-          prefix: curChain.prefix,
+          prefix: curChain.prefix
         },
         curChain
       );
@@ -52,7 +54,7 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
         const connected = {
           wallet: curWallet.name,
           ...first,
-          ...curChain,
+          ...curChain
         };
         // bridge
         if (client?.address && connectChainId) {
@@ -84,7 +86,9 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
     }
   }
 
-  const filterWallets = connectChainId ? wallets.filter((item) => item.supportChain.includes(connectChainId!)) : wallets;
+  const filterWallets = connectChainId
+    ? wallets.filter((item) => item.supportChain.includes(connectChainId!))
+    : wallets;
 
   return (
     <SideDialog
@@ -100,14 +104,14 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
       sx={{
         '.MuiPaper-root': {
           borderRadius: '24px',
-          width: '400px',
-        },
+          width: '400px'
+        }
       }}
       title="Connect Wallet"
     >
       <div
         style={{
-          padding: '0 0 24px',
+          padding: '0 0 24px'
         }}
       >
         <div
@@ -116,7 +120,7 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
             padding: '16px 0',
             display: 'flex',
             flexDirection: 'column',
-            marginBottom: '12px',
+            marginBottom: '12px'
           }}
         >
           {filterWallets.map((item) => {
@@ -144,8 +148,8 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
                   bgcolor: isActive ? '#EAEAEA' : 'transparent',
                   border: `1px solid ${isActive ? 'black' : 'transparent'}`,
                   ':hover': {
-                    bgcolor: '#EAEAEA',
-                  },
+                    bgcolor: '#EAEAEA'
+                  }
                 }}
               >
                 <img
@@ -153,7 +157,7 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
                   style={{
                     width: '32px',
                     height: '32px',
-                    marginRight: '12px',
+                    marginRight: '12px'
                   }}
                 />
                 <div
@@ -161,7 +165,7 @@ const ConnectWalletDialog: React.FC<IConnectWalletDialog> = () => {
                     textAlign: 'left',
                     flex: 1,
                     color: '#000',
-                    fontWeight: 700,
+                    fontWeight: 700
                   }}
                 >
                   {item.name}

@@ -34,8 +34,8 @@ import AppTabScrren from './Main/AppTabScreen';
 import BoostScreen from './Main/BoostScreen';
 import BridgeTabScreen from './Main/BridgeTabScreen';
 import DiscoverTabScreen from './Main/DiscoverTabScreen';
-import SettingsTabScreen from './Main/SettingsTabScreen';
 import ExploreTabScreen from './Main/ExploreTabScreen';
+import SettingsTabScreen from './Main/SettingsTabScreen';
 import SwapTabScreen from './Main/SwapTabScreen';
 import WalletTabScreen from './Main/WalletTabScreen';
 import WelcomeScreen from './Main/WelcomeScreen';
@@ -362,7 +362,7 @@ const routes = {
   DeleteWalletScreen: {
     path: '/keyring/delete',
     element: <DeleteWalletScreen />
-  },
+  }
 };
 
 type RouteTypes = keyof typeof routes;

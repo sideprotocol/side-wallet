@@ -79,14 +79,16 @@ export default function ExportMnemonicsScreen() {
         style={{
           flex: 1,
           padding: '0 16px 24px'
-        }}>
+        }}
+      >
         {mnemonic == '' ? (
           <>
             <Column
               style={{
                 flex: 1,
                 gap: '16px'
-              }}>
+              }}
+            >
               <LongPress />
             </Column>
             <Text
@@ -125,7 +127,8 @@ export default function ExportMnemonicsScreen() {
             <Column
               style={{
                 flex: 1
-              }}>
+              }}
+            >
               <Column
                 justifyCenter
                 style={{
@@ -136,7 +139,8 @@ export default function ExportMnemonicsScreen() {
                   borderRadius: '14px',
                   padding: '16px',
                   gap: '8px'
-                }}>
+                }}
+              >
                 <Grid columns={2}>
                   {words.map((v, index) => {
                     return (
@@ -148,7 +152,8 @@ export default function ExportMnemonicsScreen() {
                           borderRadius: '8px',
                           border: '1px solid #FFFFFF33',
                           backgroundColor: '#121212'
-                        }}>
+                        }}
+                      >
                         <Text
                           text={`${index + 1}. `}
                           style={{ width: 25, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
@@ -192,7 +197,8 @@ export default function ExportMnemonicsScreen() {
                   }}
                   style={{
                     marginTop: '8px'
-                  }}>
+                  }}
+                >
                   <Icon
                     icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
                     color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}

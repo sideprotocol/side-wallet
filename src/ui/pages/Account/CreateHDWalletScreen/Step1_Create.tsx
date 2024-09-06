@@ -86,19 +86,22 @@ export default function Step1_Create({
           flex: 1,
           overflow: 'hidden',
           padding: '0 16px 32px'
-        }}>
+        }}
+      >
         <Column
           classname={'hide-scrollbar'}
           style={{
             flex: 1,
             overflow: 'auto'
-          }}>
+          }}
+        >
           <Mask
             onClick={() => {
               // alert('Mask');
               setIsClickMask(true);
               setDisabled(false);
-            }}>
+            }}
+          >
             <Column
               style={{
                 marginTop: '16px',
@@ -107,7 +110,8 @@ export default function Step1_Create({
                 padding: '16px',
                 // height: isClickMask ? 'auto' : '165px',
                 overflow: 'hidden'
-              }}>
+              }}
+            >
               {wordsItems.length > 1 ? (
                 <ButtonGroup
                   rowProps={{
@@ -137,7 +141,8 @@ export default function Step1_Create({
                           borderRadius: '8px',
                           border: '1px solid #FFFFFF33',
                           backgroundColor: '#121212'
-                        }}>
+                        }}
+                      >
                         <Text
                           text={`${index + 1}. `}
                           style={{ width: 25, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
@@ -172,7 +177,8 @@ export default function Step1_Create({
                 }}
                 style={{
                   marginTop: '8px'
-                }}>
+                }}
+              >
                 <Icon
                   icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
                   color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
@@ -193,12 +199,14 @@ export default function Step1_Create({
               borderRadius: '8px',
               padding: '10px',
               gap: '4px'
-            }}>
+            }}
+          >
             <Row
               style={{
                 alignItems: 'center',
                 gap: '8px'
-              }}>
+              }}
+            >
               <Image src="/images/icons/alert-triangle.svg" size={24} />
               <Text
                 text="Keep It Private:"
@@ -228,12 +236,14 @@ export default function Step1_Create({
               borderRadius: '10px',
               padding: '10px',
               gap: '4px'
-            }}>
+            }}
+          >
             <Row
               style={{
                 alignItems: 'center',
                 gap: '8px'
-              }}>
+              }}
+            >
               <Image src="/images/icons/alert-triangle.svg" size={24} />
               <Text
                 text="No Recovery Options:"
@@ -264,12 +274,14 @@ export default function Step1_Create({
               borderRadius: '10px',
               padding: '10px',
               gap: '4px'
-            }}>
+            }}
+          >
             <Row
               style={{
                 alignItems: 'center',
                 gap: '8px'
-              }}>
+              }}
+            >
               <Image src="/images/icons/alert-triangle.svg" size={24} />
               <Text
                 text="Store Securely:"

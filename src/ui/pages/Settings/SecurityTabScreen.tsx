@@ -153,7 +153,8 @@ export default function SecurityTabScreen() {
                   }}
                   style={{
                     backgroundColor: 'transparent'
-                  }}>
+                  }}
+                >
                   <Row full justifyBetween>
                     <Column justifyCenter>
                       <Text text={item.label || item.desc} preset="regular-bold" />
