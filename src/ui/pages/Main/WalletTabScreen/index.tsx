@@ -7,7 +7,7 @@ import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPo
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
-import { useGetAccountBalanceByUSD } from '@/ui/hooks/useGetBalance';
+import {useGetAccountBalanceByUSD, useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useRuneListV2 } from '@/ui/state/bridge/hook';
@@ -38,12 +38,14 @@ export default function WalletTabScreen() {
   const skipVersion = useSkipVersionCallback();
   const walletConfig = useWalletConfig();
   const versionInfo = useVersionInfo();
+  // const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
   const [showSafeNotice, setShowSafeNotice] = useState(false);
   const [showDisableUnconfirmedUtxoNotice, setShowDisableUnconfirmedUtxoNotice] = useState(false);
 
   const addressSummary = useAddressSummary();
 
+  // console.log(`balanceList: `, balanceList);
   useEffect(() => {
     if (currentAccount.address === addressSummary.address) {
       if (addressSummary.arc20Count > 0 || addressSummary.runesCount > 0) {

@@ -402,3 +402,19 @@ export interface IGetPoolIncentivesActiveResponse extends IPoolTranscationRespon
 }
 
 export type PoolType = 'xyk' | 'stable' | 'custom-transmuter';
+
+export interface IGetMarketListItem {
+  tokenDenom: string;
+  tokenSymbol: string;
+  tokenName: string;
+  tokenExponent: string;
+  tokenPrecision: number;
+  tokenLogo: string;
+  dollarPrice: string;
+  priceChange: string;
+  volume: string;
+  tradeCount: number;
+  traderCount: number;
+  tvl: string;
+  marketCap: string;
+}

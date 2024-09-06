@@ -59,10 +59,10 @@ export const IBC_CHANNELS_SIDE_CHAIN = isProduction
   : isTest
   ? IBC_CHANNELS_SIDE_CHAIN_TEST
   : IBC_CHANNELS_SIDE_CHAIN_DEV;
-export const CHAINS = isProduction ? CHAINS_MAIN : isTest ? CHAINS_TEST : CHAINS_DEV;
+export const CHAINS = isProduction ? CHAINS_MAIN : isTest ? CHAINS_DEV : CHAINS_DEV;
 export const CHAINS_BRIDGE = isProduction ? CHAINS_BRIDGE_MAIN : isTest ? CHAINS_BRIDGE_TEST : CHAINS_BRIDGE_DEV;
 
-export const SIDE_ID = isProduction ? SIDE_MAIN_ID : isTest ? SIDE_TEST_ID : SIDE_DEV_ID;
+export const SIDE_ID = isProduction ? SIDE_MAIN_ID : isTest ? SIDE_DEV_ID : SIDE_DEV_ID;
 export const COSMOS_ID = isProduction ? COSMOS_MAIN_ID : isTest ? COSMOS_TEST_ID : COSMOS_DEV_ID;
 
 export const NOBLE_ID = isProduction ? NOBLE_MAIN_ID : isTest ? NOBLE_TEST_ID : NOBLE_DEV_ID;

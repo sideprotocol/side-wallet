@@ -14,8 +14,19 @@ import {
   IPoolTranscationRequest,
   IPoolTranscationSwapsResponse,
   IPoolTranscationWithdrawsResponse,
-  SwapRouteResult
+  SwapRouteResult,
+  IGetMarketListItem,
 } from './type';
+
+export interface IAsset {
+  denom: string;
+  exponent: string;
+  logo: string;
+  name: string;
+  precision: number;
+  rune: boolean;
+  symbol: string;
+}
 
 export default class DexService {
   private apiClient: ApiClient;
@@ -99,6 +110,18 @@ export default class DexService {
   async getAssetPrice(denom: string): Promise<string> {
     return this.apiClient.get<string>(`/asset/getAssetPrice?denom=${denom}`, {
       baseURL: SERVICE_BASE_URL
+    });
+  }
+
+  async getMarketList(): Promise<IGetMarketListItem[]> {
+    return this.apiClient.get<IGetMarketListItem[]>('/market/list', {
+      baseURL: SERVICE_BASE_URL,
+    });
+  }
+
+  async getSideAssets(): Promise<IAsset[]> {
+    return this.apiClient.get<IAsset[]>('/asset/assets', {
+      baseURL: SERVICE_BASE_URL,
     });
   }
 }
