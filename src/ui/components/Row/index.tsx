@@ -16,5 +16,5 @@ const $rowStyle = {
 export function Row(props: RowProps) {
   const { style: $styleOverride, ...rest } = props;
   const $style = Object.assign({}, $rowStyle, $styleOverride);
-  return <BaseView style={$style} {...rest} classname={`row-container ${rest.classname ? rest.classname : ''}`} />;
+  return <BaseView onClick={props.onClick} style={$style} {...rest} classname={`row-container ${rest.classname ? rest.classname : ''}`} />;
 }
