@@ -2,7 +2,7 @@ import { Fragment, useMemo } from 'react';
 
 import { runesUtils } from '@/shared/lib/runes-utils';
 import { BitcoinToken, SideToken } from '@/shared/types';
-import { Column, Row, Text } from '@/ui/components';
+import { Column, Row, Text, Image } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useNavigate } from '@/ui/pages/MainRoute';
@@ -47,7 +47,7 @@ function TokenItem({
       }}
     >
       <Row>
-        {/*<Image src={token.logo} size={38}></Image>*/}
+        <Image className={'rounded-full'} src={`https://api-t2.unisat.io/icon-v1/icon/runes/${token?.spacedRune}`} size={38}></Image>
         <Column
           style={{
             gap: '0px'
