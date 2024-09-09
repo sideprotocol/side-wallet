@@ -35,7 +35,8 @@ function RuneItem({token}: { token }) {
   return (
     <>
       <Row>
-        {token?.logo ? <Image src={token?.logo} size={38}></Image> : ''}
+        {/*{token?.logo ? <Image src={token?.logo} size={38}></Image> : ''}*/}
+        {token?.spacedRune ? <Image className={'rounded-full'} src={`https://api-t2.unisat.io/icon-v1/icon/runes/${token?.spacedRune}`} size={38}></Image> : ''}
         <Column
           style={{
             gap: '0px'
