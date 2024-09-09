@@ -13,15 +13,15 @@ import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 
 function SideCryptoItem({ token }: { token: SideToken }) {
-  const { balanceAmount } = useGetSideTokenBalance(token.base);
-  const { data: totalPrice } = useCalcPrice(balanceAmount, token.base, token.exponent);
+  const { balanceAmount } = useGetSideTokenBalance(token.tokenDenom);
+  const { data: totalPrice } = useCalcPrice(balanceAmount, token.tokenDenom, token.tokenExponent);
 
   return (
     <>
       <Row>
         {/*<Image src={token.logo} size={42}></Image>*/}
         <ImageIcon
-          url={token.logo}
+          url={token?.tokenLogo}
           style={{
             width: '38px',
             height: '38px',
@@ -33,8 +33,8 @@ function SideCryptoItem({ token }: { token: SideToken }) {
             gap: '0px'
           }}
         >
-          <Text preset="regular" text={token.symbol}></Text>
-          <Text preset="sub" text={token.name}></Text>
+          <Text preset="regular" text={token?.tokenSymbol}></Text>
+          <Text preset="sub" text={token?.tokenName}></Text>
         </Column>
       </Row>
 
@@ -43,7 +43,7 @@ function SideCryptoItem({ token }: { token: SideToken }) {
           gap: '0px'
         }}
       >
-        <Text preset="regular" textEnd text={formatUnitAmount(balanceAmount, token.exponent)}></Text>
+        <Text preset="regular" textEnd text={formatUnitAmount(balanceAmount, token.tokenExponent)}></Text>
         <Text preset="sub" textEnd text={`$${getTruncate(totalPrice)}`}></Text>
       </Column>
     </>
@@ -56,11 +56,11 @@ export default function Index(props) {
   const [focus, setFocus] = useState<boolean>(false);
   const [isHover, setIsHover] = useState(false);
   let { open, onClose, onSelect, assetsList, popularList, onSearch, searchValue, curTokenDenom } = props;
-  // console.log(`popularList: `, popularList);
+  console.log(`popularList: `, popularList);
   popularList = popularList.filter((item) => {
     return (
-      item.symbol.toLocaleLowerCase().includes(searchValue.trim()) ||
-      item.name.toLocaleLowerCase().includes(searchValue.trim())
+      item.tokenSymbol.toLocaleLowerCase().includes(searchValue.trim()) ||
+      item.tokenName.toLocaleLowerCase().includes(searchValue.trim())
     );
   });
   return (
@@ -147,13 +147,13 @@ export default function Index(props) {
                 onClick={() => {
                   // onSelect();
                   onSelect({
-                    denom: asset.base,
+                    denom: asset.tokenDenom,
                     amount: '1'
                   });
                   onClose();
                 }}
                 full
-                key={asset.symbol + asset.name}
+                key={asset.tokenSymbol + asset.tokenName}
                 justifyBetween
                 style={{
                   cursor: 'pointer',
