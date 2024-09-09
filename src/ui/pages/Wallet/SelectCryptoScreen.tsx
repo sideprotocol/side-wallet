@@ -1,23 +1,23 @@
-import { useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import {useMemo, useState} from 'react';
+import {useLocation} from 'react-router-dom';
 
-import { CHAINS_ENUM } from '@/shared/constant';
-import { runesUtils } from '@/shared/lib/runes-utils';
-import { BitcoinToken, SideToken } from '@/shared/types';
-import { Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
+import {CHAINS_ENUM} from '@/shared/constant';
+import {runesUtils} from '@/shared/lib/runes-utils';
+import {BitcoinToken, SideToken} from '@/shared/types';
+import {Column, Content, Header, Icon, Image, Input, Layout, Row, Text} from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
-import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
+import {useCalcPrice} from '@/ui/hooks/useCalcPrice';
 import {useGetSideBalanceList, useGetSideTokenBalance} from '@/ui/hooks/useGetBalance';
-import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
+import {useGetSideTokenList} from '@/ui/hooks/useGetTokenList';
 import {useAccountBalance, useCurrentAccount} from '@/ui/state/accounts/hooks';
-import { useRuneListV2 } from '@/ui/state/bridge/hook';
-import { useSafeBalance } from '@/ui/state/transactions/hooks';
-import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
-import { amountToSatoshis, formatUnitAmount, getTruncate, satoshisToAmount } from '@/ui/utils';
+import {useRuneListV2} from '@/ui/state/bridge/hook';
+import {useSafeBalance} from '@/ui/state/transactions/hooks';
+import {useResetUiTxCreateScreen} from '@/ui/state/ui/hooks';
+import {amountToSatoshis, formatUnitAmount, getTruncate, satoshisToAmount} from '@/ui/utils';
 
-import { useNavigate } from '../MainRoute';
+import {useNavigate} from '../MainRoute';
 
-function RuneItem({ token }: { token }) {
+function RuneItem({token}: { token }) {
   const accountBalance = useAccountBalance();
   const safeBalance = useSafeBalance();
   const totalSatoshis = amountToSatoshis(accountBalance.amount);
@@ -29,7 +29,7 @@ function RuneItem({ token }: { token }) {
   const avaiableAmount = safeBalance;
   const unavailableAmount = satoshisToAmount(unavailableSatoshis);
   const totalAmount = accountBalance.amount;
-  const { data: totalPrice } = useCalcPrice(totalAmount?.toString(), token.base, token.exponent);
+  const {data: totalPrice} = useCalcPrice(totalAmount?.toString(), token.base, token.exponent);
   const balance = runesUtils.toDecimalNumber(token?.amount, token?.divisibility);
   console.log('totalAmount: ', avaiableAmount, totalAmount, unavailableAmount);
   return (
@@ -58,7 +58,7 @@ function RuneItem({ token }: { token }) {
   );
 }
 
-function BitcoinItem({ token }: { token }) {
+function BitcoinItem({token}: { token }) {
   const accountBalance = useAccountBalance();
   const safeBalance = useSafeBalance();
   const totalSatoshis = amountToSatoshis(accountBalance.amount);
@@ -70,7 +70,7 @@ function BitcoinItem({ token }: { token }) {
   const avaiableAmount = safeBalance;
   const unavailableAmount = satoshisToAmount(unavailableSatoshis);
   const totalAmount = accountBalance.amount;
-  const { data: totalPrice } = useCalcPrice(totalAmount?.toString(), token.base, token.exponent);
+  const {data: totalPrice} = useCalcPrice(totalAmount?.toString(), token.base, token.exponent);
   return (
     <>
       <Row>
@@ -109,8 +109,8 @@ function BitCrypto() {
     symbol: 'BTC'
   };
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { chain, type } = state as {
+  const {state} = useLocation();
+  const {chain, type} = state as {
     chain: CHAINS_ENUM;
     type: 'receive' | 'send';
   };
@@ -122,10 +122,10 @@ function BitCrypto() {
         classname={'bg-item-hover'}
         onClick={() => {
           if (type === 'receive') {
-            navigate('SelectAddressScreen', { ...state, base: item?.symbol, token: item });
+            navigate('SelectAddressScreen', {...state, base: item?.symbol, token: item});
           } else {
             resetUiTxCreateScreen();
-            navigate('TxCreateScreen', { ...state, base: item?.symbol, token: item });
+            navigate('TxCreateScreen', {...state, base: item?.symbol, token: item});
           }
         }}
         full
@@ -138,36 +138,39 @@ function BitCrypto() {
           height: '44px'
         }}
       >
-        <BitcoinItem token={item} />
+        <BitcoinItem token={item}/>
       </Row>
     </>
   );
 }
 
-function BitAndRuneCrypto({ searchTerm }) {
-  const { tokens: runeList } = useRuneListV2();
+function BitAndRuneCrypto({searchTerm}) {
+  const {tokens: runeList} = useRuneListV2();
   // const runeAndBtcTokens = useRuneAndBtcBalances();
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { chain, type } = state as {
+  const {state} = useLocation();
+  const {chain, type} = state as {
     chain: CHAINS_ENUM;
     type: 'receive' | 'send';
   };
   const resetUiTxCreateScreen = useResetUiTxCreateScreen();
 
+  // console.log(`runeList: `, runeList);
   return (
     <>
-      <BitCrypto />
+      <BitCrypto/>
       {runeList.map((token) => {
         return (
           <Row
             classname={'bg-item-hover'}
             onClick={() => {
               if (type === 'receive') {
-                navigate('SelectAddressScreen', { ...state, base: token?.symbol, token });
+                navigate('SelectAddressScreen', {...state, base: token?.symbol, token});
               } else {
+                console.log(`token: `, token);
+                debugger;
                 resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { ...state, base: token?.symbol, token });
+                navigate('TxCreateScreen', {...state, base: token?.symbol, token});
               }
             }}
             full
@@ -180,7 +183,7 @@ function BitAndRuneCrypto({ searchTerm }) {
               height: '44px'
             }}
           >
-            <RuneItem token={token} />
+            <RuneItem token={token}/>
           </Row>
         );
       })}
@@ -188,7 +191,7 @@ function BitAndRuneCrypto({ searchTerm }) {
   );
 }
 
-function SideCryptoItem({ token }: { token: SideToken }) {
+function SideCryptoItem({token}: { token: SideToken }) {
   // const { balanceAmount } = useGetSideTokenBalance(token.base);
   // const { data: totalPrice } = useCalcPrice(balanceAmount, token.base, token.exponent);
   return (
@@ -224,10 +227,10 @@ function SideCryptoItem({ token }: { token: SideToken }) {
   );
 }
 
-function SideCrypto({ searchTerm }) {
+function SideCrypto({searchTerm}) {
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const { chain, type } = state as {
+  const {state} = useLocation();
+  const {chain, type} = state as {
     chain: CHAINS_ENUM;
     type: 'receive' | 'send';
   };
@@ -249,11 +252,11 @@ function SideCrypto({ searchTerm }) {
             onClick={() => {
               if (type === 'receive') {
                 // navigate('SelectAddressScreen', { ...state, base: token.base, token });
-                navigate('SelectAddressScreen', { ...state, denom: token.denom, token });
+                navigate('SelectAddressScreen', {...state, denom: token.denom, token});
               } else {
                 resetUiTxCreateScreen();
                 // navigate('TxCreateScreen', { ...state, base: token.base });
-                navigate('TxCreateScreen', { ...state, denom: token.denom });
+                navigate('TxCreateScreen', {...state, denom: token.denom});
               }
             }}
             full
@@ -266,7 +269,7 @@ function SideCrypto({ searchTerm }) {
               height: '44px'
             }}
           >
-            <SideCryptoItem token={token} />
+            <SideCryptoItem token={token}/>
           </Row>
         );
       })}
@@ -278,8 +281,8 @@ export default function SelecCryptoScreen() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const [isHover, setIsHover] = useState(false);
-  const { state } = useLocation();
-  const { chain } = state as {
+  const {state} = useLocation();
+  const {chain} = state as {
     chain: CHAINS_ENUM;
   };
   return (
@@ -349,9 +352,9 @@ export default function SelecCryptoScreen() {
 
         <Column>
           {chain === CHAINS_ENUM.SIDE ? (
-            <SideCrypto searchTerm={searchTerm} />
+            <SideCrypto searchTerm={searchTerm}/>
           ) : (
-            <BitAndRuneCrypto searchTerm={searchTerm} />
+            <BitAndRuneCrypto searchTerm={searchTerm}/>
           )}
         </Column>
       </Content>
