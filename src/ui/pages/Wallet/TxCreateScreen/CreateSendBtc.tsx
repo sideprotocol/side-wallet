@@ -255,7 +255,7 @@ export default function CreateSendBtc() {
 
           <Row justifyBetween>
             <Tooltip
-              title={'Only includes Runes in the current version.'}
+              title={'Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.'}
               overlayStyle={{
                 fontSize: fontSizes.xs
               }}
