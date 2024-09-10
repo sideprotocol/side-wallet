@@ -124,12 +124,13 @@ export default function CreateSendRune() {
 
   const {tokens: runeList} = useRuneListV2();
 
+  console.log(`runeList: `, runeList, token);
   const {
     balance: runeBalance,
     runeid,
     runeAmount
   } = useMemo(() => {
-    const rune = runeList.find((r) => r.base === token.base);
+    const rune = runeList.find((r) => r.runeid === token.runeid);
 
     return {
       rune,
@@ -153,6 +154,7 @@ export default function CreateSendRune() {
       setDisabled(false);
     }
 
+    console.log(`toInfo: `, toInfo, runeid);
     prepareSendRunes({
       toAddressInfo: toInfo,
       runeid: runeid,
