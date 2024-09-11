@@ -1,6 +1,6 @@
 import en from 'antd/es/locale/en_US';
 import message from 'antd/lib/message';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 // import { useIdleTimer } from 'react-idle-timer';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -11,7 +11,6 @@ import { EVENTS } from '@/shared/constant';
 import eventBus from '@/shared/eventBus';
 import { Message } from '@/shared/utils';
 import AccountUpdater from '@/ui/state/accounts/updater';
-import { useAppDispatch } from '@/ui/state/hooks';
 // import { useAppDispatch, useAppSelector } from '@/ui/state/hooks';
 import '@/ui/styles/global.css';
 
@@ -137,59 +136,48 @@ eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
 });
 
 function Updaters() {
-  const dispatch = useAppDispatch();
-  const wallet1 = useWallet();
+  const timer = useRef<NodeJS.Timeout | null>(null);
+  const _wallet = useWallet();
+
   useEffect(() => {
     chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], function (result) {
-      const ONE_MINUTE = (result.unLockTimeLimit ? Number(result.unLockTimeLimit) : 5) * 60 * 1000;
-      let lastActiveTimestamp = result.lastActiveTimestamp || Date.now();
-
-      // 更新最后活动时间戳并重置倒计时
-      function resetTimer() {
-        lastActiveTimestamp = Date.now();
-        chrome.storage.local.set({ lastActiveTimestamp: lastActiveTimestamp });
-        // document.getElementById('status').innerText = '活动状态：正常';
+      const curTimestamp = new Date().getTime();
+      if (!result.lastActiveTimestamp) {
+        chrome.storage.local.set({ lastActiveTimestamp: curTimestamp });
       }
-
-      // 检查是否超过时间限制
-      function checkForInactivity() {
-        if (Date.now() - lastActiveTimestamp > ONE_MINUTE) {
-          // 在这里可以添加其他处理逻辑，比如锁屏操作
-          wallet1.isUnlocked().then((isUnlocked) => {
-            if (isUnlocked && !location.href.includes('/account/unlock')) {
-              wallet1.lockWallet();
-              const basePath = location.href.split('#')[0];
-              location.href = `${basePath}#/account/unlock`;
-            }
-          });
-        } else {
-          // document.getElementById('status').innerText = '活动状态：正常';
-        }
+      if (result.lastActiveTimestamp && curTimestamp - result.lastActiveTimestamp > +result.unLockTimeLimit * 60000) {
+        lock();
       }
-
-      // 监听所有用户操作以重置倒计时
-      ['mousemove', 'keydown', 'click', 'scroll'].forEach((event) => {
-        document.removeEventListener(event, resetTimer);
-        document.addEventListener(event, resetTimer);
-      });
-
-      // 每次打开 popup 时立即检查是否已经超时
-      checkForInactivity();
-
-      // 定期检查不活动时间
-      setInterval(checkForInactivity, 1000); // 每秒检查一次
-
-      // 初始化时重置计时器
-      resetTimer();
     });
-    // return () => {
-    // };
-  });
-  return (
-    <>
-      <AccountUpdater />
-    </>
-  );
+  }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      chrome.storage.local.set({ lastActiveTimestamp: new Date().getTime() });
+      chrome.storage.local.get(['unLockTimeLimit'], function (result) {
+        if (timer.current) {
+          clearTimeout(timer.current);
+        }
+        timer.current = setTimeout(() => {
+          lock();
+        }, +result.unLockTimeLimit * 60000);
+      });
+    };
+
+    document.body.querySelector('#root')?.addEventListener('mousemove', handler, true);
+  }, []);
+
+  const lock = () => {
+    _wallet.isUnlocked().then((isUnlocked) => {
+      if (isUnlocked && !location.href.includes('/account/unlock')) {
+        _wallet.lockWallet();
+        const basePath = location.href.split('#')[0];
+        location.href = `${basePath}#/account/unlock`;
+      }
+    });
+  };
+
+  return <AccountUpdater />;
 }
 
 let root = document.getElementById('root') && ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
