@@ -448,20 +448,37 @@ const Main = () => {
     }
   }, [wallet, dispatch, isReady, isUnlocked]);
 
-  useEffect(() => {
-    wallet.hasVault().then((val) => {
-      if (val) {
-        wallet.isUnlocked().then((isUnlocked) => {
-          console.log('isUnlocked: ', isUnlocked);
-          dispatch(globalActions.update({ isUnlocked }));
-          if (!isUnlocked && location.href.includes(routes.UnlockScreen.path) === false) {
-            const basePath = location.href.split('#')[0];
-            location.href = `${basePath}#${routes.UnlockScreen.path}`;
-            // navigate(`${basePath}#${routes.UnlockScreen.path}`);
-          }
-        });
+  const timer = useRef<NodeJS.Timeout | null>(null);
+
+  const hasVault = async () => {
+    const val = await wallet.hasVault();
+    if (val) {
+      const isUnlocked = await wallet.isUnlocked();
+      dispatch(globalActions.update({ isUnlocked }));
+      if (!isUnlocked && location.href.includes(routes.UnlockScreen.path) === false) {
+        const basePath = location.href.split('#')[0];
+        location.href = `${basePath}#${routes.UnlockScreen.path}`;
+        // navigate(`${basePath}#${routes.UnlockScreen.path}`);
       }
-    });
+    }
+  };
+
+  useEffect(() => {
+    hasVault();
+    // wallet.hasVault().then((val) => {
+    //   if (val) {
+    //     wallet.isUnlocked().then((isUnlocked) => {
+    //       console.log(1111);
+    //       console.log('isLocked: ', !isUnlocked);
+    //       dispatch(globalActions.update({ isUnlocked }));
+    //       if (!isUnlocked && location.href.includes(routes.UnlockScreen.path) === false) {
+    //         const basePath = location.href.split('#')[0];
+    //         location.href = `${basePath}#${routes.UnlockScreen.path}`;
+    //         // navigate(`${basePath}#${routes.UnlockScreen.path}`);
+    //       }
+    //     });
+    //   }
+    // });
   }, []);
 
   useEffect(() => {

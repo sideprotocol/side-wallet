@@ -15,13 +15,13 @@ import {
   AddressFlagType,
   BRAND_ALIAN_TYPE_TEXT,
   CHAINS_ENUM,
+  CHAINS_MAP,
   COIN_NAME,
   COIN_SYMBOL,
+  ChainType,
   KEYRING_TYPE,
   NETWORK_TYPES,
-  CHAINS_MAP,
-  UNCONFIRMED_HEIGHT,
-  ChainType
+  UNCONFIRMED_HEIGHT
 } from '@/shared/constant';
 import { runesUtils } from '@/shared/lib/runes-utils';
 import {
@@ -111,7 +111,7 @@ export class WalletController extends BaseController {
     const alianNames = contactBookService.listAlias();
     await keyringService.submitPassword(password);
     sessionService.broadcastEvent('unlock');
-    console.log('alianNames: ', alianNameInited, alianNames);
+    // console.log('alianNames: ', alianNameInited, alianNames)
     if (!alianNameInited && alianNames.length === 0) {
       this.initAlianNames();
     }

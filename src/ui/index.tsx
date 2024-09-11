@@ -140,13 +140,16 @@ function Updaters() {
   const _wallet = useWallet();
 
   useEffect(() => {
-    chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], function (result) {
+    chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], async function (result) {
       const curTimestamp = new Date().getTime();
       if (!result.lastActiveTimestamp) {
         chrome.storage.local.set({ lastActiveTimestamp: curTimestamp });
       }
-      if (result.lastActiveTimestamp && curTimestamp - result.lastActiveTimestamp > +result.unLockTimeLimit * 60000) {
-        lock();
+      if (
+        result.lastActiveTimestamp &&
+        curTimestamp - result.lastActiveTimestamp > +(result.unLockTimeLimit || '5') * 60000
+      ) {
+        await lock();
       }
     });
   }, []);
@@ -158,19 +161,24 @@ function Updaters() {
         if (timer.current) {
           clearTimeout(timer.current);
         }
-        timer.current = setTimeout(() => {
-          lock();
-        }, +result.unLockTimeLimit * 60000);
+        timer.current = setTimeout(async () => {
+          await lock();
+        }, +(result.unLockTimeLimit || '5') * 60000);
       });
     };
 
     document.body.querySelector('#root')?.addEventListener('mousemove', handler, true);
+    return () => {
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
+    };
   }, []);
 
-  const lock = () => {
+  const lock = async () => {
+    await _wallet.lockWallet();
     _wallet.isUnlocked().then((isUnlocked) => {
-      if (isUnlocked && !location.href.includes('/account/unlock')) {
-        _wallet.lockWallet();
+      if (!isUnlocked && !location.href.includes('/account/unlock')) {
         const basePath = location.href.split('#')[0];
         location.href = `${basePath}#/account/unlock`;
       }
