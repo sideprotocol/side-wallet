@@ -37,8 +37,7 @@ export default function AddressTypeScreen() {
   const tools = useTools();
   const loadAddresses = async () => {
     tools.showLoading(true);
-
-    const _res = await wallet.getAllAddresses(currentKeyring, account.index || 0);
+    let _res = await wallet.getAllAddresses(currentKeyring, account.index || 0);
     setAddresses(_res);
     const balances = await wallet.getMultiAddressAssets(_res.join(','));
     for (let i = 0; i < _res.length; i++) {
@@ -96,12 +95,14 @@ export default function AddressTypeScreen() {
       >
         <Column>
           {addressTypes.map((item, index) => {
+            if (item.displayIndex !== 0 && item.displayIndex !== 2) return null;
             const address = addresses?.[item.value];
             const assets = addressAssets?.[address] || {
               total_btc: '--',
               satoshis: 0,
               total_inscription: 0
             };
+            console.log(`addressTypes: `, addressTypes, addresses, currentKeyring.addressType);
             let name = `${item.name} (${item.hdPath}/${account.index})`;
             if (currentKeyring.type === KEYRING_TYPE.SimpleKeyring) {
               name = `${item.name}`;
@@ -112,11 +113,12 @@ export default function AddressTypeScreen() {
                 label={name}
                 address={address}
                 assets={assets}
-                checked={item.value == currentKeyring.addressType}
+                checked={item.value === currentKeyring.addressType}
                 onClick={async () => {
-                  if (item.value == currentKeyring.addressType) {
+                  if (item.value === currentKeyring.addressType) {
                     return;
                   }
+                  console.log(`changeAddressType: `, item.value);
                   await wallet.changeAddressType(item.value);
                   reloadAccounts();
                   navigate('MainScreen');
