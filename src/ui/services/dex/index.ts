@@ -113,6 +113,12 @@ export default class DexService {
     });
   }
 
+  async getAssetsPrice(denomList: string[]): Promise<{ [key: string]: string }> {
+    return this.apiClient.get<{ [key: string]: string }>(`/asset/getAssetsPrice?denoms=${denomList.join(',')}`, {
+      baseURL: SERVICE_BASE_URL,
+    });
+  }
+
   async getMarketList(): Promise<IGetMarketListItem[]> {
     return this.apiClient.get<IGetMarketListItem[]>('/market/list', {
       baseURL: SERVICE_BASE_URL,

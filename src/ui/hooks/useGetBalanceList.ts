@@ -45,17 +45,15 @@ export const useGetBalanceList = ({ assets, restUrl, address }: { assets: IAsset
   };
 
   const getAssetPrice = async () => {
-    const _priceMap: { [key: string]: string } = {};
-    for (let i = 0; i < assets.length; i++) {
-      const asset = assets[i];
-      try {
-        const result = await services.dex.getAssetPrice(asset?.denom);
-        _priceMap[asset?.denom] = result;
-      } catch (err) {
-        console.log('e: ', err);
-      }
+    try {
+      const result = await services.dex.getAssetsPrice(assets.map(item => item.denom));
+      // console.log(`result: `, result, assets);
+      setPriceMap(result);
+    } catch (err) {
+      console.log('e: ', err);
+    } finally {
+      // setPriceMap(_priceMap);
     }
-    setPriceMap(_priceMap);
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
