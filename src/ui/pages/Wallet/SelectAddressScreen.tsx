@@ -120,7 +120,7 @@ export default function SelecAddressScreen() {
           }}
         >
           {addressTypes.map((item) => {
-            if (item.displayIndex !== 0 && item.displayIndex !== 2) return null;
+            if (item.displayIndex === 1) return null;
             const address = addresses[item.value];
             const assets = addressAssets[address] || {
               total_btc: '--',
