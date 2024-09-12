@@ -536,6 +536,11 @@ class PreferenceService {
   setAutoLockTimeId = (id: number) => {
     this.store.autoLockTimeId = id;
   };
+
+  reset = () => {
+    this.store.keyringAlianNames = {};
+    this.store.accountAlianNames = {};
+  };
 }
 
 export default new PreferenceService();
