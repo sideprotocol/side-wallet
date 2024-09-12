@@ -27,18 +27,17 @@ import SideTokenList from './SideTokenList';
 export default function WalletTabScreen() {
   const navigate = useNavigate();
   const [balanceVisible, setBalanceVisible] = useState(true);
-  const { accountBalanceByUSD } = useGetAccountBalanceByUSD();
   const currentKeyring = useCurrentKeyring();
   const currentAccount = useCurrentAccount();
 
   const wallet = useWallet();
   const [connected, setConnected] = useState(false);
   const dispatch = useAppDispatch();
-  const assetTabKey = useAssetTabKey();
-  const skipVersion = useSkipVersionCallback();
-  const walletConfig = useWalletConfig();
-  const versionInfo = useVersionInfo();
-  // const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+  // const assetTabKey = useAssetTabKey();
+  // const skipVersion = useSkipVersionCallback();
+  // const walletConfig = useWalletConfig();
+  // const versionInfo = useVersionInfo();
+  const { totalValue: accountBalanceByUSD } = useGetSideBalanceList(currentAccount?.address);
 
   const [showSafeNotice, setShowSafeNotice] = useState(false);
   const [showDisableUnconfirmedUtxoNotice, setShowDisableUnconfirmedUtxoNotice] = useState(false);

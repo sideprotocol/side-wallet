@@ -92,7 +92,7 @@ export function useGetAccountBalanceByUSD() {
 const sideChain = CHAINS.find((item) => item.chainID === SIDE_ID)!;
 export function useGetSideBalanceList(address?: string) {
   const [sideAssets, setSideAssets] = useState<[]>([]);
-
+  // const [accountBalanceByUSD, setAccountBalanceByUSD] = useState('0');
   useEffect(() => {
     getSideAssets();
   }, []);
@@ -107,13 +107,23 @@ export function useGetSideBalanceList(address?: string) {
     }
   };
 
-  const { balanceList } = useGetBalanceList({
+  const { balanceList, totalValue } = useGetBalanceList({
     assets: sideAssets,
     restUrl: sideChain.restUrl,
     address
   });
 
+  console.log(`totalValue: `, totalValue);
+  // balanceList?.map(async (item) => {
+  //   new BigNumber(item.totalValue).plus(accountBalanceByUSD);
+  //   setAccountBalanceByUSD(accountBalanceByUSD);
+  // });
+
   return {
-    balanceList
+    balanceList,
+    totalValue
+    // accountBalanceByUSD: accountBalanceByUSD?.toString()
   };
 }
+
+

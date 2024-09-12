@@ -38,6 +38,7 @@ export const useGetBalanceList = ({ assets, restUrl, address }: { assets: IAsset
           baseURL: restUrl,
         }
       );
+      // console.log(`result: `, result);
       setBalances(result.balances);
     } catch (err) {
       console.log('e: ', err);
@@ -64,6 +65,7 @@ export const useGetBalanceList = ({ assets, restUrl, address }: { assets: IAsset
 
   const balanceList = useMemo(() => {
     let _balanceList: BalanceItem[] = [];
+    let _totalValue: BigNumber = 0x0;
     if (assets.length) {
       _balanceList = assets.map((item) => {
         const denomPrice = priceMap[item.denom] || '0';
@@ -75,6 +77,8 @@ export const useGetBalanceList = ({ assets, restUrl, address }: { assets: IAsset
 
         const formatAmount = formatUnitAmount(balance.amount, item.exponent || 2);
         const totalValue = new BigNumber(denomPrice).multipliedBy(formatAmount).toString();
+
+        _totalValue = new BigNumber(totalValue).plus(_totalValue);
         return {
           denom: item.denom,
           amount: balance.amount || '0',
@@ -85,10 +89,14 @@ export const useGetBalanceList = ({ assets, restUrl, address }: { assets: IAsset
         };
       });
     }
-    return _balanceList;
+    return {
+      _balanceList,
+      _totalValue: _totalValue.toString(),
+    };
   }, [balances, assets, priceMap]);
 
   return {
-    balanceList,
+    balanceList: balanceList._balanceList,
+    totalValue: balanceList._totalValue
   };
 };
