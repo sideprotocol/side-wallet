@@ -119,7 +119,6 @@ export default function CreateSendRune() {
     }
   }, [toInfo.address]);
   const prepareSendRunes = usePrepareSendRunesCallback();
-  // const runeBalance = useBitcoinRuneBalance(token.base);
   const [rawTxInfo, setRawTxInfo] = useState<RawTxInfo>();
 
   const {tokens: runeList} = useRuneListV2();

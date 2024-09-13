@@ -30,8 +30,8 @@ export interface UTXOAddress {
 const initData = {
   base: 'sat',
   bridgeAmount: '',
-  from: null || ({} as ChainItem),
-  to: null || ({} as ChainItem),
+  from: ({} as ChainItem),
+  to: ({} as ChainItem),
   balance: '',
   fee: 20,
   loading: false,

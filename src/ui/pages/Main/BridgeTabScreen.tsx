@@ -14,7 +14,7 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
 import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-import { useBridge, useBtcBalance, useRuneBalance, useRuneBridge } from '@/ui/state/bridge/hook';
+import { useBridge, useBtcBalance, useRuneBalanceV2, useRuneBridge } from '@/ui/state/bridge/hook';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
@@ -22,6 +22,7 @@ import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+import {useAccountBalance} from '@/ui/state/accounts/hooks';
 
 const MIN_SAT = '0.001';
 
@@ -35,14 +36,17 @@ export default function BridgeTabScreen() {
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeStore();
 
   const { data: assets } = useGetSideTokenList();
+  console.log(`assets: `, assets);
 
   const bridgeAsset = assets.find((a) => a.base == base);
 
   const isBtcBridge = base === 'sat';
 
-  const runeBalance = useRuneBalance(base);
+  // const runeBalance = useRuneBalance(base);
+  const runeBalance = useRuneBalanceV2(base);
 
-  const btcBalance = useBtcBalance();
+  const accountBalance = useAccountBalance();
+  const btcBalance = accountBalance?.amount;
   const isDeposit = (to?.name || '').includes('Bitcoin');
 
   const lessThanMinSat = isBtcBridge && BigNumber(bridgeAmount).lt(MIN_SAT) && isDeposit;

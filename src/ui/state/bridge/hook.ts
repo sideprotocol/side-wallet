@@ -161,23 +161,38 @@ export const useBtcBalance = () => {
   return balance;
 };
 
-export const useRuneBalance = (base: string) => {
+// export const useRuneBalance = (base: string) => {
+//   const { from } = useBridgeStore();
+//
+//   const isDeposit = (from?.name || '').includes('Bitcoin');
+//   const { data: runesBalance, loading: runeLoading } = useRuneBalances();
+//
+//   const rune = runesBalance.find((rune) => rune.base === base);
+//
+//   const { balanceAmount } = useGetSideTokenBalance(base);
+//
+//   if (!rune || runeLoading) return '0';
+//
+//   return isDeposit ? rune.balance || '0' : toReadableAmount(balanceAmount, rune.exponent || '6');
+// };
+
+export const useRuneBalanceV2 = (base: string) => {
   const { from } = useBridgeStore();
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
-  const { data: runesBalance, loading: runeLoading } = useRuneBalances();
+  // const { data: runesBalance, loading: runeLoading } = useRuneBalances();
+  //
+  // const rune = runesBalance.find((rune) => rune.base === base);
+  //
+  // const { balanceAmount } = useGetSideTokenBalance(base);
+  //
+  // if (!rune || runeLoading) return '0';
 
-  const rune = runesBalance.find((rune) => rune.base === base);
-
-  const { balanceAmount } = useGetSideTokenBalance(base);
-
-  if (!rune || runeLoading) return '0';
-
-  return isDeposit ? rune.balance || '0' : toReadableAmount(balanceAmount, rune.exponent || '6');
+  return 0
 };
 
 export const useBitcoinRuneBalance = (base: string) => {
-  const { data: runesBalance, loading: runeLoading } = useRuneBalances();
+  const { data: runesBalance, loading: runeLoading } = useRuneBalancesV2();
 
   const rune = runesBalance.find((rune) => rune.base === base);
 
@@ -186,101 +201,111 @@ export const useBitcoinRuneBalance = (base: string) => {
   return rune.balance || '0';
 };
 
-export const useBitcoinBtcBalance = () => {
-  const currentAccount = useCurrentAccount();
+export const useBitcoinRuneBalanceV2 = (base: string) => {
+  // const { data: runesBalance, loading: runeLoading } = useRuneBalances();
+  //
+  // const rune = runesBalance.find((rune) => rune.base === base);
+  //
+  // if (!rune || runeLoading) return '0';
 
-  const [btcBalance, setBtcBalance] = useState('0');
-  const [notBtcBalance, setNotBtcBalance] = useState('0');
-
-  const [loading, setLoading] = useState<boolean>(true);
-
-  async function getBtcBalance() {
-    setLoading(true);
-
-    const addressInfo = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}`).then((res) => res.json());
-
-    const rawUtxos = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) =>
-      res.json()
-    );
-
-    const runesOutputsData = rawUtxos.map((utxo) => {
-      return `${utxo.txid}:${utxo.vout}`;
-    });
-
-    const outputs = await Promise.all(runesOutputsData.map((key: string) => fetchRuneOutput(key)));
-
-    const txs = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/txs`).then((res) => res.json());
-
-    const unconfirmedRunes = txs.filter((tx) => {
-      return !!decodeTxToGetValue(tx) && !tx.status.confirmed;
-    });
-
-    const allRunes = txs.filter((tx) => {
-      // return tx.vout.find((out) => Number(out.value) === 546 && out.scriptpubkey_address === currentAccount.address);
-
-      return !!decodeTxToGetValue(tx);
-    });
-    const unconfirmedBTC = txs.filter((tx) => {
-      const notRune = !decodeTxToGetValue(tx);
-      return notRune && !tx.status.confirmed;
-    });
-
-    let balance = BigNumber(addressInfo.mempool_stats.funded_txo_sum)
-      .minus(addressInfo.mempool_stats.spent_txo_sum)
-      .plus(addressInfo.chain_stats.funded_txo_sum)
-      .minus(addressInfo.chain_stats.spent_txo_sum);
-
-    let unConfirmBalance = BigNumber(0);
-    // console.log(`outputs: `, outputs, balance, txs);
-    outputs.forEach((output) => {
-      const hasRune = Object.keys(output.runes).length > 0;
-
-      if (hasRune) {
-        balance = balance.minus(output.value);
-      }
-    });
-
-    unconfirmedRunes.forEach((tx) => {
-      const value = decodeTxToGetValue(tx);
-      balance = balance.minus(value);
-    });
-
-    allRunes?.forEach((tx) => {
-      const value = decodeTxToGetValue(tx);
-
-      unConfirmBalance = unConfirmBalance.plus(value);
-    });
-    // console.log(`unconfirmedBTC: `, unconfirmedBTC);
-    unconfirmedBTC?.forEach((tx) => {
-      const value = decodeTxToGetValue(tx);
-
-      unConfirmBalance = unConfirmBalance.plus(value);
-    });
-    const ba = toReadableAmount(balance.toFixed(), 8);
-    const _dataUnConfirmBalance = toReadableAmount(unConfirmBalance.toFixed(), 8);
-
-    return { ba, unba: _dataUnConfirmBalance };
-  }
-  // load btc balance
-  useEffect(() => {
-    setLoading(true);
-    getBtcBalance()
-      .then(({ ba, unba }) => {
-        setBtcBalance(ba);
-        setNotBtcBalance(unba);
-      })
-      .finally(() => setLoading(false));
-  }, [currentAccount.address]);
-
-  // console.log(`btcBalance: `, btcBalance);
-  return {
-    data: {
-      btc: btcBalance,
-      notBtc: notBtcBalance
-    },
-    loading
-  };
+  return '0';
 };
+
+// export const useBitcoinBtcBalance = () => {
+//   const currentAccount = useCurrentAccount();
+//
+//   const [btcBalance, setBtcBalance] = useState('0');
+//   const [notBtcBalance, setNotBtcBalance] = useState('0');
+//
+//   const [loading, setLoading] = useState<boolean>(true);
+//
+//   async function getBtcBalance() {
+//     setLoading(true);
+//
+//     const addressInfo = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}`).then((res) => res.json());
+//
+//     const rawUtxos = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) =>
+//       res.json()
+//     );
+//
+//     const runesOutputsData = rawUtxos.map((utxo) => {
+//       return `${utxo.txid}:${utxo.vout}`;
+//     });
+//
+//     const outputs = await Promise.all(runesOutputsData.map((key: string) => fetchRuneOutput(key)));
+//
+//     const txs = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/txs`).then((res) => res.json());
+//
+//     const unconfirmedRunes = txs.filter((tx) => {
+//       return !!decodeTxToGetValue(tx) && !tx.status.confirmed;
+//     });
+//
+//     const allRunes = txs.filter((tx) => {
+//       // return tx.vout.find((out) => Number(out.value) === 546 && out.scriptpubkey_address === currentAccount.address);
+//
+//       return !!decodeTxToGetValue(tx);
+//     });
+//     const unconfirmedBTC = txs.filter((tx) => {
+//       const notRune = !decodeTxToGetValue(tx);
+//       return notRune && !tx.status.confirmed;
+//     });
+//
+//     let balance = BigNumber(addressInfo.mempool_stats.funded_txo_sum)
+//       .minus(addressInfo.mempool_stats.spent_txo_sum)
+//       .plus(addressInfo.chain_stats.funded_txo_sum)
+//       .minus(addressInfo.chain_stats.spent_txo_sum);
+//
+//     let unConfirmBalance = BigNumber(0);
+//     // console.log(`outputs: `, outputs, balance, txs);
+//     outputs.forEach((output) => {
+//       const hasRune = Object.keys(output.runes).length > 0;
+//
+//       if (hasRune) {
+//         balance = balance.minus(output.value);
+//       }
+//     });
+//
+//     unconfirmedRunes.forEach((tx) => {
+//       const value = decodeTxToGetValue(tx);
+//       balance = balance.minus(value);
+//     });
+//
+//     allRunes?.forEach((tx) => {
+//       const value = decodeTxToGetValue(tx);
+//
+//       unConfirmBalance = unConfirmBalance.plus(value);
+//     });
+//     // console.log(`unconfirmedBTC: `, unconfirmedBTC);
+//     unconfirmedBTC?.forEach((tx) => {
+//       const value = decodeTxToGetValue(tx);
+//
+//       unConfirmBalance = unConfirmBalance.plus(value);
+//     });
+//     const ba = toReadableAmount(balance.toFixed(), 8);
+//     const _dataUnConfirmBalance = toReadableAmount(unConfirmBalance.toFixed(), 8);
+//
+//     return { ba, unba: _dataUnConfirmBalance };
+//   }
+//   // load btc balance
+//   useEffect(() => {
+//     setLoading(true);
+//     getBtcBalance()
+//       .then(({ ba, unba }) => {
+//         setBtcBalance(ba);
+//         setNotBtcBalance(unba);
+//       })
+//       .finally(() => setLoading(false));
+//   }, [currentAccount.address]);
+//
+//   // console.log(`btcBalance: `, btcBalance);
+//   return {
+//     data: {
+//       btc: btcBalance,
+//       notBtc: notBtcBalance
+//     },
+//     loading
+//   };
+// };
 
 export const useBridge = () => {
   const { from, bridgeAmount, fee } = useBridgeStore();
@@ -662,42 +687,46 @@ export const useRuneBalances = () => {
   return { data: bitcoinRunes, loading };
 };
 
-export const useRuneAndBtcBalances = () => {
-  const { data: assets } = useGetSideTokenList();
-
-  const satItem = assets.find((a) => a.base === 'sat');
-
-  const {
-    data: { btc: bitcoinBtcBalance, notBtc: bitcoinNotBtcBalance },
-    loading: btcLoaing
-  } = useBitcoinBtcBalance();
-
-  let balance = BigNumber(bitcoinBtcBalance || '0').plus(bitcoinNotBtcBalance);
-  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
-
-  const balancePrice = priceMap?.[satItem?.base || ''] || 0;
-
-  const price = new BigNumber(balancePrice).multipliedBy(bitcoinBtcBalance || '0').toFixed(2);
-
-  const { data: bitcoinRunesBalances, loading: runesLoading } = useRuneBalances();
-
-  if (btcLoaing || runesLoading) return [];
-
-  return [
-    {
-      ...satItem,
-      balance: bitcoinBtcBalance,
-      balanceAll: balance?.toString(),
-      balanceNot: bitcoinNotBtcBalance,
-      amount: toUnitAmount(bitcoinBtcBalance || '0', 8),
-      amountNot: toUnitAmount(bitcoinNotBtcBalance || '0', 8),
-      // amountAll: toUnitAmount(balance || '0', 8),
-      denom: satItem?.base,
-      price
-    },
-    ...bitcoinRunesBalances
-  ];
+export const useRuneBalancesV2 = () => {
+  return { data: {}, loading: false };
 };
+
+// export const useRuneAndBtcBalances = () => {
+//   const { data: assets } = useGetSideTokenList();
+//
+//   const satItem = assets.find((a) => a.base === 'sat');
+//
+//   const {
+//     data: { btc: bitcoinBtcBalance, notBtc: bitcoinNotBtcBalance },
+//     loading: btcLoaing
+//   } = useBitcoinBtcBalance();
+//
+//   let balance = BigNumber(bitcoinBtcBalance || '0').plus(bitcoinNotBtcBalance);
+//   const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
+//
+//   const balancePrice = priceMap?.[satItem?.base || ''] || 0;
+//
+//   const price = new BigNumber(balancePrice).multipliedBy(bitcoinBtcBalance || '0').toFixed(2);
+//
+//   const { data: bitcoinRunesBalances, loading: runesLoading } = useRuneBalances();
+//
+//   if (btcLoaing || runesLoading) return [];
+//
+//   return [
+//     {
+//       ...satItem,
+//       balance: bitcoinBtcBalance,
+//       balanceAll: balance?.toString(),
+//       balanceNot: bitcoinNotBtcBalance,
+//       amount: toUnitAmount(bitcoinBtcBalance || '0', 8),
+//       amountNot: toUnitAmount(bitcoinNotBtcBalance || '0', 8),
+//       // amountAll: toUnitAmount(balance || '0', 8),
+//       denom: satItem?.base,
+//       price
+//     },
+//     ...bitcoinRunesBalances
+//   ];
+// };
 
 export const useRuneListV2 = () => {
   const navigate = useNavigate();
