@@ -90,6 +90,8 @@ export const SIDE_FAUCET = '';
 
 export const BTC_BRIDGE_VAULT = '';
 export const SIDE_BTC_INDEXER = '';
+export const UNISAT_IO_API = 'https://devnet-rest.side.one/side/btcbridge';
+export const UNISAT_SERVICE_ENDPOINT = 'https://wallet-api-testnet.unisat.io';
 
 export const SIDE_BTC_EXPLORER = 'https://signet.side.one';
 export const SIDE_RUNE_INDEXER = 'https://signet.side.one';

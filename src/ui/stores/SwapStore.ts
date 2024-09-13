@@ -52,7 +52,7 @@ const initData = {
 export const swapStore = proxy(initData);
 
 export const useSwapStore = () => {
-  window.swapStore = swapStore;
+  // window.swapStore = swapStore;
   return useSnapshot(swapStore);
 };
 

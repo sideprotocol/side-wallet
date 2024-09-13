@@ -84,7 +84,7 @@ export default function BridgeTabScreen() {
         id: chainId,
         name: 'Side Chain',
         // logo: '/images/icons/btc.svg'
-        logo: '/images/logo/wallet-logo-white-v2.svg'
+        logo: '/images/logo/wallet-logo-white-v2.png'
       };
     } else {
       bridgeStore.from = {

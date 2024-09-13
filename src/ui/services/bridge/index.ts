@@ -3,13 +3,59 @@ import ApiClient from '@/ui/services/network/ApiClient';
 
 import { AddressInfo, RuneOutput, Runes, UTXO, UTXOAddress, WithdrawRequest } from './types';
 
+interface Params {
+  confirmations: number;
+  max_acceptable_block_depth: string;
+  btc_voucher_denom: string;
+  deposit_enabled: boolean;
+  withdraw_enabled: boolean;
+  non_btc_relayers: string[];
+  vaults: Vault[];
+  protocol_limits: Protocollimits;
+  protocol_fees: Protocolfees;
+  tss_params: Tssparams;
+}
+
+interface Tssparams {
+  dkg_timeout_period: string;
+  participant_update_transition_period: string;
+}
+
+export interface Protocolfees {
+  deposit_fee: string;
+  withdraw_fee: string;
+  collector: string;
+}
+
+export interface Protocollimits {
+  btc_min_deposit: string;
+  btc_min_withdraw: string;
+  btc_max_withdraw: string;
+}
+
+interface Vault {
+  address: string;
+  pub_key: string;
+  asset_type: 'ASSET_TYPE_RUNES' | 'ASSET_TYPE_BTC';
+  version: string;
+}
+
 // import { IChain } from '@/ui/components/WalletConnect/Wallet';
+export interface SideBridgeParams {
+  params: Params;
+}
 
 export default class BridgeService {
   private apiClient: ApiClient;
 
   constructor(apiClient: ApiClient) {
     this.apiClient = apiClient;
+  }
+
+  async getBridgeParams(): Promise<SideBridgeParams> {
+    return this.apiClient.get('/params', {
+      baseURL: SIDE_BTC_INDEXER,
+    });
   }
 
   async getAddressInfo(address: string): Promise<AddressInfo> {
