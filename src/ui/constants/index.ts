@@ -98,3 +98,9 @@ export const SIDE_RUNE_INDEXER = 'https://signet.side.one';
 
 export const DEX_CONTRACT = 'tb1pwkwy0xh89ksdgj9hr347dyd2dw7zesmtrue6kfzyml4vdtz6e5ws93fqnh';
 export const DEX_ROUTER_CONTRACT = 'tb1p7p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgscc4xdz';
+
+export const SIDE_UNISAT_IO_API = 'https://api-testnet.unisat.io'
+export const SIDE_BRIDGE_BASE_URL = 'https://devnet-rest.side.one/side/btcbridge'
+export const SIDE_UNISAT_SERVICE_URL = 'https://wallet-api-testnet.unisat.io'
+export const  SIDE_UNISAT_RUNE_ICON_URL = 'https://api-t2.unisat.io/icon-v1/icon/runes'
+

@@ -113,7 +113,7 @@ export function useGetSideBalanceList(address?: string) {
     address
   });
 
-  console.log(`totalValue: `, totalValue);
+  // console.log(`totalValue: `, totalValue);
   // balanceList?.map(async (item) => {
   //   new BigNumber(item.totalValue).plus(accountBalanceByUSD);
   //   setAccountBalanceByUSD(accountBalanceByUSD);

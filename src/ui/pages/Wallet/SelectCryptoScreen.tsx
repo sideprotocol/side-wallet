@@ -168,8 +168,6 @@ function BitAndRuneCrypto({searchTerm}) {
               if (type === 'receive') {
                 navigate('SelectAddressScreen', {...state, base: token?.symbol, token});
               } else {
-                console.log(`token: `, token);
-                debugger;
                 resetUiTxCreateScreen();
                 navigate('TxCreateScreen', {...state, base: token?.symbol, token});
               }

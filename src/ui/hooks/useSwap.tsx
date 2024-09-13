@@ -16,10 +16,12 @@ import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { refreshData, swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import createExecuteMessage from '@/ui/utils/createExecuteMessage';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-import { findAssetIcon } from '@/ui/utils/swap';
+// import { findAssetIcon } from '@/ui/utils/swap';
 import { coin } from '@cosmjs/stargate';
 
 import { useNetworkType } from '../state/settings/hooks';
+// import useGetMarketList from '@/ui/hooks/useGetMarketList';
+import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
 
 export default function useSwap() {
   const { slippage, swapPair, swapRouteResult } = useSwapStore();
@@ -30,12 +32,16 @@ export default function useSwap() {
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
   const { pools, returnToken } = swapRouteResult;
   const { native, remote } = swapPair;
+  // const {data: balanceList} = useGetMarketList();
+  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+  const assetIn = balanceList.find((item) => item.denom === native.denom);
 
-  const assetIn = findAssetIcon(native);
+  const assetOut = balanceList.find((item) => item.denom === remote.denom);
 
-  const assetOut = findAssetIcon(remote);
-
-  const unitAmount = toUnitAmount(native.amount, assetIn?.exponent || 6);
+  console.log(`swapRouteResult: `, swapRouteResult);
+  // console.log(`assetIn: `, assetIn, balanceList);
+  // console.log(`assetOut: `, assetIn, balanceList);
+  const unitAmount = toUnitAmount(native.amount, assetIn?.asset?.exponent || 6);
 
   const minReceived =
     swapRouteResult?.pools?.length === 1 && swapRouteResult.pools[0].pairType.includes('transmuter')
@@ -77,12 +83,13 @@ export default function useSwap() {
     // @ts-ignore
     timer.current = setTimeout(async () => {
       try {
-        await services.tx.getTxByHash(txHash, {
+        const result = await services.tx.getTxByHash(txHash, {
           // baseURL: netWorkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET
           baseURL: netWorkType === NetworkType.TESTNET ? SIDEREST_URL_TESTNET : SIDEREST_URL_MAINNET
         });
-
+        console.log('result: ', result);
         refreshData(async () => {
+          debugger;
           const resultQuote = await services.dex.getValidRoutes(
             swapPair.native.denom,
             unitAmount,
@@ -97,7 +104,7 @@ export default function useSwap() {
                 swapPair.remote.denom in p.assetsMeta &&
                 p.pair.pair_type?.['custom'] === 'transmuter' &&
                 BigNumber(pAssetOut?.amount || 0).gte(
-                  toUnitAmount(toReadableAmount(unitAmount, assetIn?.exponent || 6), assetOut?.exponent || 6)
+                  toUnitAmount(toReadableAmount(unitAmount, assetIn?.asset?.exponent || 6), assetOut?.asset?.exponent || 6)
                 )
               );
             })
@@ -120,13 +127,13 @@ export default function useSwap() {
               amount: unitAmount,
               showAmount: swapPair.native.amount,
               denom: swapPair.native.denom,
-              price: priceMap?.[assetIn?.base || ''] || '0',
+              price: priceMap?.[assetIn?.denom || ''] || '0',
               volume: ''
             };
 
             const remoteAmount = toUnitAmount(
-              toReadableAmount(unitAmount, assetIn?.exponent || 6),
-              assetOut?.exponent || 6
+              toReadableAmount(unitAmount, assetIn?.asset?.exponent || 6),
+              assetOut?.asset?.exponent || 6
             );
 
             const returnToken = {
@@ -134,7 +141,7 @@ export default function useSwap() {
               amount: remoteAmount,
               showAmount: swapPair.native.amount,
               denom: swapPair.remote.denom,
-              price: priceMap?.[assetOut?.base || ''] || '0',
+              price: priceMap?.[assetOut?.denom || ''] || '0',
               volume: ''
             };
 

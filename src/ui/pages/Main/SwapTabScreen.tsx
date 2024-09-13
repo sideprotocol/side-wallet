@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useDebouncedCallback} from 'use-debounce';
-
+// import { IGetMarketListItem } from '@/ui/services';
 // import { Modal } from 'antd';
 import LoadingIcon from '@/ui/assets/icons/loading.svg';
 import {Column, Content, Footer, Layout, Row} from '@/ui/components';
@@ -14,8 +14,6 @@ import SlippageControl from '@/ui/components/SlippageControl';
 import SwapSelectToken from '@/ui/components/Swap/SwapSelectToken';
 import SwapDetail from '@/ui/components/Swap/detail';
 import TokenCurrent from '@/ui/components/TokenCurrent';
-import {SWAP_ASSETS} from '@/ui/constants';
-import {IAsset} from '@/ui/constants/assets';
 import {getCurrentTab} from '@/ui/features/browser/tabs';
 import useGetAllPools from '@/ui/hooks/useGetAllPools';
 import useSwap from '@/ui/hooks/useSwap';
@@ -26,50 +24,31 @@ import {useCurrentKeyring} from '@/ui/state/keyrings/hooks';
 import {swapStore, useSwapStore} from '@/ui/stores/SwapStore';
 import {useWallet} from '@/ui/utils';
 import {removeStartZero} from '@/ui/utils/format';
-import {findAssetIcon} from '@/ui/utils/swap';
-import {CosmWasmClient} from '@cosmjs/cosmwasm-stargate';
+// import {findAssetIcon} from '@/ui/utils/swap';
 import {Coin} from '@cosmjs/stargate';
 import useGetMarketList from '@/ui/hooks/useGetMarketList';
+import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
   // const { client: curClient, curChain } = useWalletContext();
-
+  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+  const {data: marketList} = useGetMarketList();
   const {reloadDataTrigger} = useSwapStore();
 
-  const getBalance = async (asset: IAsset) => {
-    if (!currentAccount?.address) {
-      return {
-        available: '0',
-        raw: '0'
-      };
-    }
-
-    // const client = await CosmWasmClient.connect('https://testnet-rpc.side.one');
-    const client = await CosmWasmClient.connect('https://devnet-rpc.side.one');
-
-    console.log('currentAccount?.address, asset.base: ', currentAccount?.address, asset.base);
-    const balance = await client.getBalance(currentAccount?.address, asset.base);
-
-    console.log('client: ', client);
-    console.log('client: ', balance);
-    return {
-      available: BigNumber(balance?.amount || '0')
-        .div(BigNumber(10).pow(asset.exponent))
-        .toFixed(),
-      raw: balance.amount
-    };
-  };
-
   const getBalancesAll = async () => {
-    console.log('SWAP_ASSETS.assets: ', SWAP_ASSETS.assets);
-    const balances = await Promise.all(SWAP_ASSETS.assets.map((asset) => getBalance(asset)));
-    swapStore.balances = balances.reduce((acc, cur, index) => {
+    const balancesObject = balanceList.reduce((acc, cur, index) => {
+      // console.log('cur: ', cur, index, balanceList);
       return {
         ...acc,
-        [SWAP_ASSETS.assets[index].base]: cur
+        [balanceList[index].denom]: {
+          raw: cur.amount,
+          available: cur.formatAmount,
+        },
       };
     }, {});
+
+    swapStore.balances = balancesObject;
   };
 
   useEffect(() => {
@@ -78,23 +57,19 @@ const InitBalance = () => {
       return;
     }
     getBalancesAll();
-  }, [currentAccount?.address, reloadDataTrigger]);
+  }, [currentAccount?.address, reloadDataTrigger, balanceList]);
 
   return <></>;
 };
 
 const NativeBalance = () => {
-  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
-
   const {swapLoading, swapPair, balances, swapRouteResult} = useSwapStore();
   const currentAccount = useCurrentAccount();
   const connected = !!currentAccount?.address && swapPair?.native.denom;
 
-  const {data: balanceList} = useGetMarketList();
-  const validNativeInput = BigNumber(swapPair?.native?.amount || 0).gt(0) && swapPair?.native?.denom;
-
+  // const {data: marketList} = useGetMarketList();
+  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
   const nativeBalance = balances[swapPair?.native?.denom || '']?.available || '0';
-
   const assetNativeIcon = balanceList.find((item) => item.denom === swapPair.native.denom);
 
   function insufficientBalance() {
@@ -115,12 +90,7 @@ const NativeBalance = () => {
       BigNumber(priceImpactRaw || '0').gt(0.5)
     );
   };
-  const nativePrice = (
-    new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(priceMap[assetNativeIcon?.denom || ''] || '0') || 0
-  )
-    .toFixed(8, BigNumber.ROUND_DOWN)
-    .replace(/\.?0+$/, '');
-  const newValue = SWAP_ASSETS.assets.find((asset) => asset.base === swapStore.swapPair['native']?.denom);
+
   return (
     <div
       style={{
@@ -154,7 +124,7 @@ const NativeBalance = () => {
             {' '}
             {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(nativeBalance)
-              .toFormat(assetNativeIcon?.precision || 8, BigNumber.ROUND_CEIL)
+              .toFormat(assetNativeIcon?.asset?.precision || 8, BigNumber.ROUND_CEIL)
               .replace(/\.?0+$/, '')}
             &nbsp;
             <div
@@ -176,17 +146,19 @@ const NativeBalance = () => {
 };
 
 const NativePrice = () => {
-  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
+  // const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
   const {swapPair, balances} = useSwapStore();
   const currentAccount = useCurrentAccount();
 
+  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
   const validNativeInput = BigNumber(swapPair?.native?.amount || 0).gt(0) && swapPair?.native?.denom;
-  const assetNativeIcon = findAssetIcon(swapPair?.native);
+  // const assetNativeIcon = findAssetIcon(swapPair?.native);
+  const assetNativeIcon = balanceList.find(item => item.denom === swapPair.native.denom);
 
   const nativePrice = (
     new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(
-      priceMap[assetNativeIcon?.base || ''] || '0'
+      assetNativeIcon?.denomPrice || '0',
     ) || 0
   )
     .toFixed(8, BigNumber.ROUND_DOWN)
@@ -215,7 +187,6 @@ const NativePrice = () => {
 };
 
 const RemoteBalance = () => {
-  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
   const {swapPair, balances} = useSwapStore();
   const currentAccount = useCurrentAccount();
@@ -225,15 +196,9 @@ const RemoteBalance = () => {
   const {data: balanceList} = useGetMarketList();
   const validRemoteInput = BigNumber(swapPair?.remote?.amount || 0).gt(0) && swapPair?.native?.denom;
 
-  const remoteBalance = balances[swapPair?.remote?.denom || ""]?.available || "0";
+  const remoteBalance = balances[swapPair?.remote?.denom || '']?.available || '0';
 
   const assetRemoteIcon = balanceList.find((item) => item.denom === swapPair.remote.denom);
-
-  const remotePrice = (
-    new BigNumber(!swapPair?.remote?.amount ? 0 : swapPair?.remote?.amount).multipliedBy(priceMap[assetRemoteIcon?.denom || ""] || "0") || 0
-  )
-    .toFixed(8, BigNumber.ROUND_DOWN)
-    .replace(/\.?0+$/, '');
 
   return (
     <div
@@ -245,14 +210,6 @@ const RemoteBalance = () => {
       }}
     >
       <div/>
-      {/*{validRemoteInput ? (*/}
-      {/*  <div style={{ color: 'rgb(125, 125, 125)', fontSize: '14px' }}>${remotePrice == 'NaN' ? '0' : BigNumber(remotePrice).toFormat()}</div>*/}
-      {/*) : (*/}
-      {/*  <div style={{*/}
-      {/*    height: '22px'*/}
-      {/*  }}></div>*/}
-      {/*)}*/}
-
       {connected && (
         <div
           style={{
@@ -298,17 +255,19 @@ const RemoteBalance = () => {
 };
 
 const RemotePrice = () => {
-  const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
+  // const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
   const {swapPair, balances} = useSwapStore();
   const currentAccount = useCurrentAccount();
 
+  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
   const validNativeInput = BigNumber(swapPair?.native?.amount || 0).gt(0) && swapPair?.native?.denom;
-  const assetNativeIcon = findAssetIcon(swapPair?.native);
+  // const assetNativeIcon = findAssetIcon(swapPair?.native);
+  const assetNativeIcon = balanceList.find((item) => item.denom === swapPair.native.denom);
 
   const nativePrice = (
     new BigNumber(!swapPair?.native?.amount ? 0 : swapPair?.native?.amount).multipliedBy(
-      priceMap[assetNativeIcon?.base || ''] || '0'
+      assetNativeIcon?.denomPrice || '0',
     ) || 0
   )
     .toFixed(8, BigNumber.ROUND_DOWN)
@@ -386,9 +345,6 @@ function LoadingIndicator() {
 }
 
 const ConfirmButton = () => {
-  // const { client, setConnectModal } = useWalletContext();
-  const currentAccount = useCurrentAccount();
-  // const notConnected = !currentAccount || !currentAccount?.address;
 
   const {swap} = useSwap();
 
@@ -442,6 +398,13 @@ const ConfirmButton = () => {
   );
 };
 
+function findIntersection(data1, data2) {
+  // 创建一个集合存储第二个数组中的 denom 值
+  const denomSet = new Set(data1.map(item => item.tokenDenom));
+  // 过滤第一个数组中的项目，只保留那些 denom 值在集合中的项目
+  return data2.filter(item => denomSet.has(item.denom));
+}
+
 export default function SwapTabScreen() {
   // const { swapPair, balances } = useSwapStore();
   const {
@@ -457,10 +420,13 @@ export default function SwapTabScreen() {
     searchTokenValue,
     showValidDetail
   } = useSwapStore();
+  const currentAccount = useCurrentAccount();
   const navigate = useNavigate();
   const [connected, setConnected] = useState(false);
   const currentKeyring = useCurrentKeyring();
-  const {data: balanceList} = useGetMarketList();
+  const {data: marketList} = useGetMarketList();
+  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+  const balanceListFilter = findIntersection(marketList, balanceList);
   useSwapSimulation();
   useGetAllPools();
   // const networkType = useNetworkType();
@@ -706,8 +672,8 @@ export default function SwapTabScreen() {
           };
           swapStore.tokenModalShow = false;
         }}
-        assetsList={balanceList}
-        popularList={balanceList}
+        assetsList={balanceListFilter}
+        popularList={balanceListFilter}
         onSearch={(value: string) => {
           swapStore.searchTokenValue = value;
         }}

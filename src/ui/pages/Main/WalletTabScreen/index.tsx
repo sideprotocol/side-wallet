@@ -7,7 +7,7 @@ import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPo
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
-import {useGetAccountBalanceByUSD, useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
+import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useRuneListV2 } from '@/ui/state/bridge/hook';

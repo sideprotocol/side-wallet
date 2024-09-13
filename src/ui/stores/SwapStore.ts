@@ -24,7 +24,7 @@ const initData = {
   swapRouteResult: {} as SwapRouteResult,
   swapPair: {
     native: { amount: '', denom: 'uside' } as Coin,
-    remote: { amount: '', denom: '' } as Coin
+    remote: { amount: '', denom: 'uusdc' } as Coin
   },
   balances: {} as Record<string, { available: string; raw: string }>,
   senderAddress: '',
@@ -52,7 +52,7 @@ const initData = {
 export const swapStore = proxy(initData);
 
 export const useSwapStore = () => {
-  // window.swapStore = swapStore;
+  window.swapStore = swapStore;
   return useSnapshot(swapStore);
 };
 

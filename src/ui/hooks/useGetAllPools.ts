@@ -11,11 +11,12 @@ import { findAssetIcon } from '@/ui/utils/swap';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
 import useGetAllPairs from './useGetAllPairs';
+import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
 
 export default function useGetAllPools() {
-  // const { client, curChain } = useWalletContext();
-  const networkType = useNetworkType();
   const currentAccount = useCurrentAccount();
+  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+  const networkType = useNetworkType();
   const { data: pairs } = useGetAllPairs();
   // const restUrl = networkType === NetworkType.MAINNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
   const restUrl = networkType === NetworkType.TESTNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
@@ -38,11 +39,14 @@ export default function useGetAllPools() {
           };
           const pool = await cosmWasmClient.queryContractSmart(address, msg);
 
-          const assetsMeta = pool?.assets?.map((a: any) => {
-            return findAssetIcon({
-              denom: a.info.native_token.denom,
-              amount: ''
-            });
+          // const assetsMeta = pool?.assets?.map((a: any) => {
+          //   return findAssetIcon({
+          //     denom: a.info.native_token.denom,
+          //     amount: ''
+          //   });
+          // });
+          const assetsMeta = pool.assets.map((a: any) => {
+            return balanceList.find(item => item.denom === a.info.native_token.denom);
           });
 
           // debugger;

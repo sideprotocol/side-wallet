@@ -50,8 +50,8 @@ export default class DexService {
     return this.apiClient.get<SwapRouteResult[]>(
       `/pool/getValidRoutes?offerDenom=${offerDenom}&offerAmount=${offerAmount}&askDenom=${askDenom}`,
       {
-        baseURL: SERVICE_BASE_URL
-      }
+        baseURL: SERVICE_BASE_URL,
+      },
     );
   }
 
