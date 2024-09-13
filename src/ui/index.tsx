@@ -139,7 +139,7 @@ function Updaters() {
   const timer = useRef<NodeJS.Timeout | null>(null);
   const _wallet = useWallet();
 
-  const unLockTimeLimitInit = '0.5';
+  const unLockTimeLimitInit = '5';
 
   useEffect(() => {
     chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], async function (result) {
