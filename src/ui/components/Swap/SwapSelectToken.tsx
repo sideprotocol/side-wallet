@@ -13,7 +13,7 @@ import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 
 function SideCryptoItem({ token }: { token: SideToken }) {
-  console.log(`token: `, token);
+  // console.log(`token: `, token);
   const { balanceAmount } = useGetSideTokenBalance(token?.denom);
   const { data: totalPrice } = useCalcPrice(balanceAmount, token.denom, token?.asset?.exponent);
 

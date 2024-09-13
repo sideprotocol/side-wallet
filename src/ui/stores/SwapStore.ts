@@ -46,7 +46,8 @@ const initData = {
   cancelOrderLoading: false,
   executingId: '',
   LimitOrderConfig: {} as LimitOrderConfig,
-  allPools: [] as IPoolItem[]
+  allPools: [] as IPoolItem[],
+  marketPrice: '',
 };
 
 export const swapStore = proxy(initData);

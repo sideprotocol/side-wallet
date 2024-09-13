@@ -194,7 +194,6 @@ const RemoteBalance = () => {
 
   const connected = !!currentAccount?.address && swapPair?.remote.denom;
   const {data: balanceList} = useGetMarketList();
-  const validRemoteInput = BigNumber(swapPair?.remote?.amount || 0).gt(0) && swapPair?.native?.denom;
 
   const remoteBalance = balances[swapPair?.remote?.denom || '']?.available || '0';
 
@@ -340,10 +339,6 @@ const RemoteInput = () => {
   );
 };
 
-function LoadingIndicator() {
-  return <img className="loading-obj" src={LoadingIcon} width={26} height={26} alt={'Loading'}/>;
-}
-
 const ConfirmButton = () => {
 
   const {swap} = useSwap();
@@ -353,6 +348,8 @@ const ConfirmButton = () => {
   const priceImpact = swapRouteResult.priceImpact;
 
   const priceImpactRaw = BigNumber(priceImpact).div(100);
+
+  // console.log(`balances: `, balances);
 
   function insufficientBalance() {
     return BigNumber(swapPair.native.amount || '0').gt(balances?.[swapPair.native?.denom || '']?.available || 0);

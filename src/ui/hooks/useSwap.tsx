@@ -38,7 +38,6 @@ export default function useSwap() {
 
   const assetOut = balanceList.find((item) => item.denom === remote.denom);
 
-  console.log(`swapRouteResult: `, swapRouteResult);
   // console.log(`assetIn: `, assetIn, balanceList);
   // console.log(`assetOut: `, assetIn, balanceList);
   const unitAmount = toUnitAmount(native.amount, assetIn?.asset?.exponent || 6);
@@ -50,6 +49,7 @@ export default function useSwap() {
           .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
           .toFixed(0, BigNumber.ROUND_DOWN);
 
+  // console.log(`swapRouteResult: `, swapRouteResult, minReceived);
   const timer = useRef(null);
 
   const msg = {
