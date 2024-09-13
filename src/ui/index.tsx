@@ -139,6 +139,8 @@ function Updaters() {
   const timer = useRef<NodeJS.Timeout | null>(null);
   const _wallet = useWallet();
 
+  const unLockTimeLimitInit = '0.5';
+
   useEffect(() => {
     chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], async function (result) {
       const curTimestamp = new Date().getTime();
@@ -147,7 +149,7 @@ function Updaters() {
       }
       if (
         result.lastActiveTimestamp &&
-        curTimestamp - result.lastActiveTimestamp > +(result.unLockTimeLimit || '5') * 60000
+        curTimestamp - result.lastActiveTimestamp > +(result.unLockTimeLimit || unLockTimeLimitInit) * 60000
       ) {
         await lock();
       }
@@ -163,7 +165,7 @@ function Updaters() {
         }
         timer.current = setTimeout(async () => {
           await lock();
-        }, +(result.unLockTimeLimit || '5') * 60000);
+        }, +(result.unLockTimeLimit || unLockTimeLimitInit) * 60000);
       });
     };
 
@@ -176,13 +178,20 @@ function Updaters() {
   }, []);
 
   const lock = async () => {
-    await _wallet.lockWallet();
-    _wallet.isUnlocked().then((isUnlocked) => {
-      if (!isUnlocked && !location.href.includes('/account/unlock')) {
-        const basePath = location.href.split('#')[0];
-        location.href = `${basePath}#/account/unlock`;
-      }
-    });
+    if (
+      !location.href.includes('/account/unlock') &&
+      !location.href.includes('/account/forget-password') &&
+      !location.href.includes('/account/create-password') &&
+      !location.href.includes('/welcome')
+    ) {
+      await _wallet.lockWallet();
+      _wallet.isUnlocked().then((isUnlocked) => {
+        if (!isUnlocked) {
+          const basePath = location.href.split('#')[0];
+          location.href = `${basePath}#/account/unlock`;
+        }
+      });
+    }
   };
 
   return <AccountUpdater />;
