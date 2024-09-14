@@ -102,5 +102,8 @@ export const DEX_ROUTER_CONTRACT = 'tb1p7p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw
 export const SIDE_UNISAT_IO_API = 'https://api-testnet.unisat.io'
 export const SIDE_BRIDGE_BASE_URL = 'https://devnet-rest.side.one/side/btcbridge'
 export const SIDE_UNISAT_SERVICE_URL = 'https://wallet-api-testnet.unisat.io'
-export const  SIDE_UNISAT_RUNE_ICON_URL = 'https://api-t2.unisat.io/icon-v1/icon/runes'
+export const SIDE_UNISAT_RUNE_ICON_URL = 'https://api-t2.unisat.io/icon-v1/icon/runes'
 
+
+export const SIDE_BTC_VAULT_ADDRESS="tb1qc5cafxdlqndn4hjy44nhs9smse207h33rqek7x"
+export const SIDE_RUNES_VAULT_ADDRESS="tb1q244e8laglhdj9tqllnkeq279q6unzgdgtwtvs5"

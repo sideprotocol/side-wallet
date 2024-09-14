@@ -20,12 +20,14 @@ import { useNetworkType } from '@/ui/state/settings/hooks';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { useWallet } from '@/ui/utils';
+import services from '@/ui/services';
 
 import { useNavigate } from '../MainRoute';
-import {useAccountBalance} from '@/ui/state/accounts/hooks';
-
+import {useAccountBalance, useCurrentAccount} from '@/ui/state/accounts/hooks';
+import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
+import {useSafeBalance} from '@/ui/state/transactions/hooks';
+import { utils } from '@/ui/wallet-sdk';
 const MIN_SAT = '0.001';
-
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
 
@@ -33,12 +35,13 @@ export default function BridgeTabScreen() {
   const currentKeyring = useCurrentKeyring();
   const wallet = useWallet();
 
+  const currentAccount = useCurrentAccount();
+  const {balanceList: assets} = useGetSideBalanceList(currentAccount?.address);
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeStore();
-
-  const { data: assets } = useGetSideTokenList();
-  console.log(`assets: `, assets);
-
-  const bridgeAsset = assets.find((a) => a.base == base);
+  // safe btc balance
+  const safeBalance = useSafeBalance();
+  // const { data: assets } = useGetSideTokenList();
+  const bridgeAsset = assets.find((a) => a.denom == base);
 
   const isBtcBridge = base === 'sat';
 
@@ -49,12 +52,20 @@ export default function BridgeTabScreen() {
   const btcBalance = accountBalance?.amount;
   const isDeposit = (to?.name || '').includes('Bitcoin');
 
+  console.log(`assets: `, assets, accountBalance);
   const lessThanMinSat = isBtcBridge && BigNumber(bridgeAmount).lt(MIN_SAT) && isDeposit;
 
   const balance = isBtcBridge ? btcBalance : runeBalance;
 
   useEffect(() => {
     bridgeStore.balance = balance;
+
+    const init = async () => {
+      // await bridgeStore.setBalance(balance);
+      const _utxos = await services.unisat.getBTCUtxos({ address: currentAccount?.address });
+      console.log(`_utxos: `, _utxos);
+    };
+    init();
   }, [balance]);
   const { hoverExchange } = useSwapStore();
   const { bridge } = useBridge();
@@ -63,6 +74,8 @@ export default function BridgeTabScreen() {
 
   const networkType = useNetworkType();
 
+
+  console.log(`bridgeAsset: `, bridgeAsset);
   // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
   const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
 
@@ -263,7 +276,7 @@ export default function BridgeTabScreen() {
                       marginRight: '4px',
                       borderRadius: '20px'
                     }}
-                    url={bridgeAsset?.logo || bridgeAsset?.logo}
+                    url={bridgeAsset?.asset?.logo || bridgeAsset?.asset?.logo}
                   />
                   <div
                     style={{
@@ -275,7 +288,7 @@ export default function BridgeTabScreen() {
                       overflow: 'hidden'
                     }}
                   >
-                    {bridgeAsset?.symbol || bridgeAsset?.symbol || bridgeAsset?.base || 'Select Token'}
+                    {bridgeAsset?.asset?.symbol || bridgeAsset?.asset?.symbol || bridgeAsset?.denom || 'Select Token'}
                   </div>
                   {/*<Icon type="" />*/}
                   <svg

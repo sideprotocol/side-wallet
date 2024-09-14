@@ -13,6 +13,9 @@ import {
   SIDE_RUNE_VAULT_ADDRESS_TESTNET,
   SIDE_TOKENS
 } from '@/shared/constant';
+import {
+  UNISAT_SERVICE_ENDPOINT,
+} from '@/ui/constants/';
 import { decodeTxToGetValue } from '@/shared/lib/runes-utils';
 import { RuneBalance, TickPriceItem } from '@/shared/types';
 import { NetworkType } from '@/shared/types';
@@ -394,10 +397,10 @@ export const useBridge = () => {
     const { amount, fee, to, isSign } = params;
     const senderAddress = currentAccount.address;
 
-    const txs = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/txs`).then((res) => res.json());
+    const txs = await fetch(`${UNISAT_SERVICE_ENDPOINT}/address/${currentAccount.address}/txs`).then((res) => res.json());
 
     const rawUtxos = (
-      await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) => res.json())
+      await fetch(`${UNISAT_SERVICE_ENDPOINT}/address/${currentAccount.address}/utxo`).then((res) => res.json())
     ).filter((utxo) => {
       const findTx = txs.find((tx) => tx.txid === utxo.txid);
       if (!findTx) return false;
@@ -408,7 +411,7 @@ export const useBridge = () => {
 
     const btcRawUtxos = await Promise.all(
       rawUtxos.map(async (item) => {
-        return fetch(`${SIDE_BTC_INDEXER}/tx/${item.txid}`).then((res) => res.json());
+        return fetch(`${UNISAT_SERVICE_ENDPOINT}/tx/${item.txid}`).then((res) => res.json());
       })
     );
 
@@ -475,10 +478,10 @@ export const useBridge = () => {
   async function estimateNetworkFee(params: DepositBTCBridge) {
     const { amount, fee } = params;
     const senderAddress = currentAccount.address;
-    const txs = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/txs`).then((res) => res.json());
+    const txs = await fetch(`${UNISAT_SERVICE_ENDPOINT}/address/${currentAccount.address}/txs`).then((res) => res.json());
 
     const rawUtxos = (
-      await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) => res.json())
+      await fetch(`${UNISAT_SERVICE_ENDPOINT}/address/${currentAccount.address}/utxo`).then((res) => res.json())
     ).filter((utxo) => {
       const findTx = txs.find((tx) => tx.txid === utxo.txid);
       if (!findTx) return false;
@@ -489,7 +492,7 @@ export const useBridge = () => {
 
     const btcRawUtxos = await Promise.all(
       rawUtxos.map(async (item) => {
-        return fetch(`${SIDE_BTC_INDEXER}/tx/${item.txid}`).then((res) => res.json());
+        return fetch(`${UNISAT_SERVICE_ENDPOINT}/tx/${item.txid}`).then((res) => res.json());
       })
     );
 
@@ -1079,7 +1082,7 @@ export const useRuneBridge = () => {
 
 export const queryAddressUtxo = async (address: string) => {
   if (!address) return;
-  const utxos = await fetch(`${SIDE_BTC_INDEXER}/address/${address}/utxo`).then((res) => res.json());
+  const utxos = await fetch(`${UNISAT_SERVICE_ENDPOINT}/address/${address}/utxo`).then((res) => res.json());
 
   if (utxos.length === 1) {
     bridgeStore.accountUtxo = utxos[0];
