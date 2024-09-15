@@ -1,6 +1,6 @@
-import { SIDE_BTC_INDEXER, SIDE_RUNE_INDEXER } from '@/ui/constants';
+import {SIDE_BTC_INDEXER, SIDE_RUNE_INDEXER, UNISAT_IO_API} from '@/ui/constants';
 import ApiClient from '@/ui/services/network/ApiClient';
-
+import { UNISAT_SERVICE_ENDPOINT } from '@/ui/constants';
 import { AddressInfo, RuneOutput, Runes, UTXO, UTXOAddress, WithdrawRequest } from './types';
 
 interface Params {
@@ -53,19 +53,19 @@ export default class BridgeService {
   }
 
   async getBridgeParams(): Promise<SideBridgeParams> {
-    return this.apiClient.get('/params', {
+    return this.apiClient.get(`${UNISAT_IO_API}/params`, {
       baseURL: SIDE_BTC_INDEXER,
     });
   }
 
   async getAddressInfo(address: string): Promise<AddressInfo> {
-    return this.apiClient.get<AddressInfo>(`/address/${address}`, {
+    return this.apiClient.get<AddressInfo>(`${UNISAT_SERVICE_ENDPOINT}/address/${address}`, {
       baseURL: SIDE_BTC_INDEXER
     });
   }
 
   async getRawUtxos(address: string): Promise<UTXOAddress[]> {
-    return this.apiClient.get<UTXOAddress[]>(`/address/${address}/utxo`, {
+    return this.apiClient.get<UTXOAddress[]>(`${UNISAT_SERVICE_ENDPOINT}/address/${address}/utxo`, {
       baseURL: SIDE_BTC_INDEXER
     });
   }

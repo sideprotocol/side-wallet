@@ -16,6 +16,7 @@ import { fontSizes } from '@/ui/theme/font';
 import { parseUnitAmount, useWallet } from '@/ui/utils';
 import { formatAddress } from '@/ui/utils/format';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
+import { estimateNetworkFeeHelper as estimateNetworkFee, abstractDepositBTC as depositBTC } from '@/ui/wallet-sdk/utils';
 import { Input } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
@@ -53,7 +54,7 @@ export default function BridgeTabScreen() {
   const currentKeyring = useCurrentKeyring();
   const wallet = useWallet();
 
-  const { estimateNetworkFee, bridge } = useBridge();
+  const { bridge } = useBridge();
 
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base, accountUtxo, fee } = useBridgeStore();
 
@@ -73,9 +74,13 @@ export default function BridgeTabScreen() {
   );
 
   useEffect(() => {
-    estimateNetworkFee({ amount: unitAmount, fee }).then((res) => {
-      setTx(res?.walletInputs || []);
-    });
+    console.log(`currentAccount: `, currentAccount);
+    const getFee = async () => {
+      const networkFee = await estimateNetworkFee({ amount: unitAmount, fee }, currentAccount);
+      console.log(`networkFee: `, networkFee);
+      setTx(networkFee?.walletInputs || []);
+    }
+    getFee();
   }, [fee]);
 
   const currentAccount = useCurrentAccount();

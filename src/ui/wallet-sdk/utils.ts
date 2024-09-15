@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 import { ECPair, bitcoin, ecc } from "./bitcoin-core";
 
-import { UTXOBridge } from "@side/services";
+// import { UTXOBridge } from '@/ui/services';
 
 import { Buffer } from "buffer";
 
@@ -14,7 +14,8 @@ import { UnspentOutput } from "./types";
 import { isProduction } from "@/ui/constants";
 import { sendAllBTC, sendBTC, sendRunesWithBTC } from "./tx-helpers";
 
-import { Account, DepositBTCBridge } from "../web3-wallet";
+// import { Account, DepositBTCBridge } from '../web3-wallet';
+import {useWallet} from '@/ui/utils';
 
 export const toXOnly = (pubKey: Buffer) => (pubKey.length === 32 ? pubKey : pubKey.slice(1, 33));
 
@@ -84,7 +85,7 @@ export function shortAddress(address?: string, len = 5) {
   return address.slice(0, len) + "..." + address.slice(address.length - len);
 }
 
-export function decodeTxToGetValue(tx: UTXOBridge) {
+export function decodeTxToGetValue(tx) {
   const runeOut = tx.vout.find((vout) => vout.scriptpubkey_address === SIDE_RUNES_VAULT_ADDRESS);
 
   if (!runeOut) return 0;
@@ -93,15 +94,14 @@ export function decodeTxToGetValue(tx: UTXOBridge) {
 }
 
 export async function abstractDepositBTC(
-  params: DepositBTCBridge,
-  getAccounts: () => Promise<any[]>,
-  signPsbt: (psbtHex: string, options: any) => Promise<string>
+  params,
+  currentAccount,
 ) {
   const { amount, fee: feeRate } = params;
 
-  const senderAddress = (await getAccounts())[0].address;
+  const senderAddress = currentAccount?.address;
 
-  const pbk = toHex((await getAccounts())[0].pubkey);
+  const pbk = toHex(currentAccount?.pubkey);
 
   const _utxos = await services.unisat.getBTCUtxos({ address: senderAddress });
 
@@ -153,23 +153,21 @@ export async function abstractDepositBTC(
           memo: undefined,
           memos: undefined,
         });
-  const signedTx = await signPsbt(psbt.toHex(), {
-    autoFinalized: true,
-    toSignInputs: toSignInputs,
-  });
+  const wallet = useWallet();
+  console.log(`wallet: `, wallet);
+  debugger;
+  const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
   const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
 
   const rawTx = signedPsbt.extractTransaction().toHex();
-
   const txid = await services.unisat.pushTx(rawTx);
-
   return txid;
 }
 
 export async function abstractDepositRune(
-  params: DepositBTCBridge,
-  getAccounts: () => Promise<Account[]>,
+  params,
+  getAccounts: () => Promise<any[]>,
   signPsbt: (psbtHex: string, options: any) => Promise<string>
 ) {
   const senderAddress = (await getAccounts())[0].address;
@@ -316,12 +314,12 @@ function toHex(data: Uint8Array): string {
   return Buffer.from(data).toString("hex");
 }
 
-export async function estimateNetworkFeeHelper(params: DepositBTCBridge, getAccounts: () => Promise<Account[]>) {
+export async function estimateNetworkFeeHelper(params, account) {
   const { amount, fee: feeRate } = params;
 
-  const senderAddress = (await getAccounts())[0].address;
+  const senderAddress = account?.address;
 
-  const pbk = toHex((await getAccounts())[0].pubkey);
+  const pbk = toHex(account?.pubkey);
 
   const _utxos = await services.unisat.getBTCUtxos({ address: senderAddress });
 
@@ -363,14 +361,14 @@ export async function estimateNetworkFeeHelper(params: DepositBTCBridge, getAcco
       ? await sendAllBTC({
           btcUtxos: btcUtxos,
           toAddress: btcVaultAddress,
-          networkType: isProduction ? 0 : 1,
+          networkType: 1,
           feeRate: feeRate,
           enableRBF: true,
         })
       : await sendBTC({
           btcUtxos: btcUtxos,
           tos: [{ address: btcVaultAddress, satoshis: amount }],
-          networkType: isProduction ? 0 : 1,
+          networkType: 1,
           changeAddress: senderAddress,
           feeRate: feeRate,
           enableRBF: true,

@@ -39,7 +39,7 @@ export default class UnisatService {
       code: number;
       data: UTXO[];
       msg: string;
-    } = await this.apiClient.get(`/v5/address/btc-utxo?${queryParams}`, {
+    } = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/v5/address/btc-utxo?${queryParams}`, {
       baseURL: this.baseURl,
     });
 
@@ -68,7 +68,7 @@ export default class UnisatService {
       code: number;
       data: AddressSummary;
       msg: string;
-    } = await this.apiClient.get(`/v5/address/summary?${queryParams}`, {
+    } = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/v5/address/summary?${queryParams}`, {
       baseURL: this.baseURl,
     });
 
@@ -81,7 +81,7 @@ export default class UnisatService {
       code: number;
       data: UTXO[];
       msg: string;
-    } = await this.apiClient.get(`/v5/address/btc-utxo?${queryParams}`, {
+    } = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/v5/address/btc-utxo?${queryParams}`, {
       baseURL: this.baseURl,
     });
 
@@ -123,7 +123,7 @@ export default class UnisatService {
     });
 
     const result: { data: { list: RuneBalance[]; total: number } } = await this.apiClient.get(
-      `/v5/runes/list?${queryParams}`,
+      `${UNISAT_SERVICE_ENDPOINT}/v5/runes/list?${queryParams}`,
       {
         baseURL: this.baseURl,
       },
@@ -174,7 +174,7 @@ export default class UnisatService {
         code: number;
         msg: string;
       } = await this.apiClient.post(
-        "/v5/market/runes/price",
+        `${UNISAT_SERVICE_ENDPOINT}/v5/market/runes/price`,
         {
           ticks,
           nftType: "runes",
@@ -197,7 +197,7 @@ export default class UnisatService {
   }
 
   async getRunesInfoList() {
-    const result: getRunesInfoListResponse = await this.apiClient.get(`/query-v4/runes/info-list`, {
+    const result: getRunesInfoListResponse = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/query-v4/runes/info-list`, {
       baseURL: this.unisatIoApi,
     });
     return result.data.detail;
@@ -209,7 +209,7 @@ export default class UnisatService {
       data: string;
       msg: string;
     } = await this.apiClient.post(
-      '/v5/tx/broadcast',
+      `${UNISAT_SERVICE_ENDPOINT}/v5/tx/broadcast`,
       {
         rawtx,
       },
@@ -230,7 +230,7 @@ export default class UnisatService {
       code: number;
       data: FeeSummary;
       msg: string;
-    } = await this.apiClient.get(`/v5/default/fee-summary`, {
+    } = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/v5/default/fee-summary`, {
       baseURL: this.baseURl,
     });
     return result.data;
@@ -245,7 +245,7 @@ export default class UnisatService {
       code: number;
       data: UTXO[];
       msg: string;
-    } = await this.apiClient.get(`/v5/runes/utxos?${queryParams}`, {
+    } = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/v5/runes/utxos?${queryParams}`, {
       baseURL: this.baseURl,
     });
 
