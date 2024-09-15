@@ -354,9 +354,8 @@ export const useBridge = () => {
           fee: Number(fee || '200')
         }, currentAccount)
           .then((res) => {
-            return res.text();
-          })
-          .then((res) => {
+            console.log(`res: `, res);
+            debugger;
             if (res) {
               navigate('TxSuccessScreen', {txid: res, chain: CHAINS_ENUM.SIDE_SIGNET});
               // tools.toastSuccess('Deposit Successful! ');
@@ -410,7 +409,7 @@ export const useBridge = () => {
 
     const senderAddress = currentAccount?.address;
 
-    const pbk = toHex(currentAccount?.pubkey);
+    const pbk = currentAccount?.pubkey;
 
     const _utxos = await services.unisat.getBTCUtxos({address: senderAddress});
 
@@ -462,7 +461,7 @@ export const useBridge = () => {
           memo: undefined,
           memos: undefined,
         });
-    console.log(`wallet: `, wallet);
+    console.log(`wallet: `, wallet, psbt, toSignInputs);
     debugger;
     const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
