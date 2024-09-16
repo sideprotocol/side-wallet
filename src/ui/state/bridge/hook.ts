@@ -474,7 +474,7 @@ export const useBridge = () => {
       }
     } else {
       const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
-        amount: `${unitAmount}sat`,
+        amount: `${unitAmount}${runeId}`,
         feeRate: `${fee || 200}`,
         sender: currentAccount?.address
       });
