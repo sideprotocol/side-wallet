@@ -4,6 +4,8 @@ import { SignMode } from 'cosmjs-types/cosmos/tx/signing/v1beta1/signing';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { Any } from 'cosmjs-types/google/protobuf/any';
 
+import { AminoConverter } from '@/codegen/src/side/btcbridge/tx.amino';
+import * as sideBTCBridgeRegistry from '@/codegen/src/side/btcbridge/tx.registry';
 import {
   SIDEREST_URL_MAINNET,
   SIDEREST_URL_TESTNET,
@@ -11,8 +13,6 @@ import {
   SIDE_CHAINID_TESTNET
 } from '@/shared/constant';
 import { CosmosTransaction, CosmosTxResponse, NetworkType } from '@/shared/types';
-import { AminoConverter } from '@/ui/codegen/src/side/btcbridge/tx.amino';
-import * as sideBTCBridgeRegistry from '@/ui/codegen/src/side/btcbridge/tx.registry';
 import services from '@/ui/services';
 import { useWallet } from '@/ui/utils';
 import { makeSignDoc as makeSignDocAmino } from '@cosmjs/amino';
