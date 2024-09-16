@@ -10,7 +10,7 @@ import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 // import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 // import { useAccountBalance } from '@/ui/state/accounts/hooks';
 // import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
-import { formatUnitAmount, getTruncate } from '@/ui/utils';
+import { formatUnitAmount } from '@/ui/utils';
 
 function SideCryptoItem({ token }: { token: SideToken }) {
   // console.log(`token: `, token);
@@ -20,7 +20,6 @@ function SideCryptoItem({ token }: { token: SideToken }) {
   return (
     <>
       <Row>
-        {/*<Image src={token.logo} size={42}></Image>*/}
         <ImageIcon
           url={token?.asset?.logo}
           style={{
@@ -32,8 +31,7 @@ function SideCryptoItem({ token }: { token: SideToken }) {
         <Column
           style={{
             gap: '0px'
-          }}
-        >
+          }}>
           <Text preset="regular" text={token?.asset?.symbol}></Text>
           <Text preset="sub" text={token?.asset?.name}></Text>
         </Column>
@@ -42,8 +40,7 @@ function SideCryptoItem({ token }: { token: SideToken }) {
       <Column
         style={{
           gap: '0px'
-        }}
-      >
+        }}>
         <Text preset="regular" textEnd text={formatUnitAmount(balanceAmount, token?.asset?.exponent)}></Text>
         <Text preset="sub" textEnd text={`$${token?.totalValue}`}></Text>
       </Column>
@@ -73,8 +70,7 @@ export default function Index(props) {
         left: '50%',
         top: '50%',
         display: open ? 'flex' : 'none'
-      }}
-    >
+      }}>
       <Header
         onBack={() => {
           onClose();
@@ -86,19 +82,16 @@ export default function Index(props) {
           backgroundColor: '#09090A',
           padding: 0,
           marginTop: 16
-        }}
-      >
+        }}>
         <Column
           style={{
             padding: '0 24px'
-          }}
-        >
+          }}>
           {/*<div className={'flex items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '}></div>*/}
           <div
             className={
               'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '
-            }
-          >
+            }>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
             <Input
@@ -129,8 +122,7 @@ export default function Index(props) {
                 transform: 'translateY(-50%)',
                 cursor: 'pointer',
                 display: searchValue ? 'block' : 'none'
-              }}
-            >
+              }}>
               <Icon icon="clear" color={isHover ? 'white' : 'search_icon'} size={20}></Icon>
             </div>
           </div>
@@ -139,8 +131,7 @@ export default function Index(props) {
         <Column
           style={{
             marginTop: '14px'
-          }}
-        >
+          }}>
           {popularList?.map((asset) => {
             return (
               <Row
@@ -161,8 +152,7 @@ export default function Index(props) {
                   height: '44px',
                   padding: '10px 16px',
                   margin: '0 16px'
-                }}
-              >
+                }}>
                 <SideCryptoItem token={asset} />
               </Row>
             );

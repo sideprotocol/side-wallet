@@ -9,6 +9,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
+import { IAsset } from '../constants/assets';
 import { formatUnitAmount, useWallet } from '../utils';
 import { useGetBalanceList } from './useGetBalanceList';
 import { useGetSideTokenList } from './useGetTokenList';
@@ -34,6 +35,7 @@ export function useGetSideTokenBalance(base: string, flag?: boolean) {
     console.log('SIDERPC_URL_TESTNET: ', SIDERPC_URL_TESTNET);
     const { amount } = await cosmwasmClient.getBalance(currentAccount.address, base);
     await wallet.setAccountSideTokenBalance(currentAccount.address, base, amount);
+
     setBalanceAmount(amount);
   };
 
@@ -89,6 +91,18 @@ export function useGetAccountBalanceByUSD() {
   };
 }
 
+function formateTokenList(tokens: IAsset[]) {
+  return tokens.map((token) => {
+    if (token.rune) {
+      return {
+        ...token,
+        logo: `https://api-t2.unisat.io/icon-v1/icon/runes/${token.symbol}`
+      };
+    }
+    return token;
+  });
+}
+
 const sideChain = CHAINS.find((item) => item.chainID === SIDE_ID)!;
 export function useGetSideBalanceList(address?: string) {
   const [sideAssets, setSideAssets] = useState<[]>([]);
@@ -100,10 +114,10 @@ export function useGetSideBalanceList(address?: string) {
   const getSideAssets = async () => {
     try {
       const result = await services.dex.getSideAssets();
-      // console.log(`result--: `, result);
-      setSideAssets(result);
+      const formatedResult = formateTokenList(result);
+      setSideAssets(formatedResult);
     } catch (e) {
-      console.log(`e: `, e);
+      console.log('e: ', e);
     }
   };
 
@@ -125,5 +139,3 @@ export function useGetSideBalanceList(address?: string) {
     // accountBalanceByUSD: accountBalanceByUSD?.toString()
   };
 }
-
-

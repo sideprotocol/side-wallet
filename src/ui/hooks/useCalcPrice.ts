@@ -1,10 +1,9 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 
-import { formatUnitAmount, useWallet } from '../utils';
+import { formatUnitAmount } from '../utils';
 
 export function useCalcPrice(balanceAmount: string, base: string, decimals?: number | string) {
-  const wallet = useWallet();
   const [totalPrice, setTotalPrice] = useState('0');
   useEffect(() => {
     calcPrice();

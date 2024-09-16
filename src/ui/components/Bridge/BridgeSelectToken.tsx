@@ -1,25 +1,27 @@
 // import { CHAINS_ENUM } from '@/shared/constant';
 import { useState } from 'react';
 
-import {BitcoinToken, SideToken} from '@/shared/types';
+import { runesUtils } from '@/shared/lib/runes-utils';
+import { BitcoinToken, SideToken } from '@/shared/types';
 import { Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
-import { useRuneListV2} from '@/ui/state/bridge/hook';
+import { useAccountBalance } from '@/ui/state/accounts/hooks';
+import { useRuneListV2 } from '@/ui/state/bridge/hook';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
-import { formatUnitAmount, getTruncate } from '@/ui/utils';
-import {runesUtils} from '@/shared/lib/runes-utils';
-import {useAccountBalance} from '@/ui/state/accounts/hooks';
+import { getTruncate } from '@/ui/utils';
 
 function BtcItem({ token }: { token: SideToken & { price: string; amount: string } }) {
   const { balanceAmount } = useGetSideTokenBalance(token.base);
   const { from } = useBridgeStore();
   const accountBalance = useAccountBalance();
   const totalAmount = accountBalance.amount;
-  const { data: totalPrice } = useCalcPrice(balanceAmount, token.base, token.exponent);
-
   const isDeposit = (from?.name || '').includes('Bitcoin');
+
+  const displayBalance = isDeposit ? totalAmount : balanceAmount;
+  const { data: totalPrice } = useCalcPrice(displayBalance, token.base, token.exponent);
+
   return (
     <>
       <Row>
@@ -34,8 +36,7 @@ function BtcItem({ token }: { token: SideToken & { price: string; amount: string
         <Column
           style={{
             gap: '0px'
-          }}
-        >
+          }}>
           <Text preset="regular" text={token.symbol}></Text>
           <Text preset="sub" text={token.name}></Text>
         </Column>
@@ -44,10 +45,9 @@ function BtcItem({ token }: { token: SideToken & { price: string; amount: string
       <Column
         style={{
           gap: '0px'
-        }}
-      >
-        <Text preset="regular" textEnd text={totalAmount}></Text>
-        <Text preset="sub" textEnd text={`$0`}></Text>
+        }}>
+        <Text preset="regular" textEnd text={displayBalance}></Text>
+        <Text preset="sub" textEnd text={`$${totalPrice}`}></Text>
       </Column>
     </>
   );
@@ -63,7 +63,8 @@ function SideCryptoItem({ token }: { token: SideToken & { price: string; amount:
 
   const displayAmount = isDeposit ? token.amount : balanceAmount;
   const displayPrice = isDeposit ? token.price : totalPrice;
-  const balance = runesUtils.toDecimalNumber(token.amount, token?.divisibility);
+
+  const balance = runesUtils.toDecimalNumber(displayAmount, token?.divisibility);
   return (
     <>
       <Row>
@@ -78,8 +79,7 @@ function SideCryptoItem({ token }: { token: SideToken & { price: string; amount:
         <Column
           style={{
             gap: '0px'
-          }}
-        >
+          }}>
           <Text preset="regular" text={token?.spacedRune}></Text>
           <Text preset="sub" text={token?.symbol}></Text>
         </Column>
@@ -88,8 +88,7 @@ function SideCryptoItem({ token }: { token: SideToken & { price: string; amount:
       <Column
         style={{
           gap: '0px'
-        }}
-      >
+        }}>
         <Text preset="regular" textEnd text={balance?.toString()}></Text>
         <Text preset="sub" textEnd text={`$${getTruncate(displayPrice)}`}></Text>
       </Column>
@@ -112,11 +111,10 @@ export default function Index(props) {
 
   // list, onSearch
   const [searchValue, onSearch] = useState<string>('');
-  const [focus, setFocus] = useState<boolean>(false);
   const [isHover, setIsHover] = useState(false);
-  // let runeAndBtcTokens = useRuneAndBtcBalances();
-  let {tokens} = useRuneListV2();
-  console.log(`runeAndBtcTokensV2: `, tokens);
+
+  let { tokens } = useRuneListV2();
+
   if (searchValue && tokens?.length) {
     tokens = tokens.filter((item) => {
       return (
@@ -125,6 +123,7 @@ export default function Index(props) {
       );
     });
   }
+
   // console.log('runeAndBtcTokens: ', runeAndBtcTokens);
   return (
     <Layout
@@ -135,9 +134,8 @@ export default function Index(props) {
         left: '50%',
         top: '50%',
         display: open ? 'flex' : 'none',
-        zIndex: 2,
-      }}
-    >
+        zIndex: 2
+      }}>
       <Header
         onBack={() => {
           onClose();
@@ -149,24 +147,19 @@ export default function Index(props) {
           backgroundColor: '#09090A',
           padding: 0,
           marginTop: 16
-        }}
-      >
+        }}>
         <Column
           style={{
             padding: '0 24px'
-          }}
-        >
+          }}>
           <div
             className={
               'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '
-            }
-          >
+            }>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
             <Input
               value={searchValue}
-              onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
               onChange={(e) => {
                 const value = e.target.value;
                 onSearch(value);
@@ -191,8 +184,7 @@ export default function Index(props) {
                 transform: 'translateY(-50%)',
                 cursor: 'pointer',
                 display: searchValue ? 'block' : 'none'
-              }}
-            >
+              }}>
               <Icon icon="clear" color={isHover ? 'white' : 'search_icon'} size={20}></Icon>
             </div>
           </div>
@@ -202,8 +194,7 @@ export default function Index(props) {
           gap="xl"
           style={{
             margin: '0 16px'
-          }}
-        >
+          }}>
           <Row
             full
             justifyBetween
@@ -230,9 +221,13 @@ export default function Index(props) {
                   cursor: 'pointer',
                   height: '44px',
                   padding: '10px 16px'
-                }}
-              >
-                <SideCryptoItem token={asset} />
+                }}>
+                <SideCryptoItem
+                  token={{
+                    ...asset,
+                    base: 'runes/' + asset.runeid
+                  }}
+                />
               </Row>
             );
           })}

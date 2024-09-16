@@ -12,21 +12,20 @@ import { Icon } from '@/ui/components/Icon';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
-import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-import { useBridge, useBtcBalance, useRuneBalanceV2, useRuneBridge } from '@/ui/state/bridge/hook';
+import services from '@/ui/services';
+import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useBridge, useRuneBalanceV2, useRuneBridge } from '@/ui/state/bridge/hook';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
+import { useSafeBalance } from '@/ui/state/transactions/hooks';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { useWallet } from '@/ui/utils';
-import services from '@/ui/services';
 
 import { useNavigate } from '../MainRoute';
-import {useAccountBalance, useCurrentAccount} from '@/ui/state/accounts/hooks';
-import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
-import {useSafeBalance} from '@/ui/state/transactions/hooks';
-import { utils } from '@/ui/wallet-sdk';
+
 const MIN_SAT = '0.001';
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
@@ -36,7 +35,7 @@ export default function BridgeTabScreen() {
   const wallet = useWallet();
 
   const currentAccount = useCurrentAccount();
-  const {balanceList: assets} = useGetSideBalanceList(currentAccount?.address);
+  const { balanceList: assets } = useGetSideBalanceList(currentAccount?.address);
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeStore();
   // safe btc balance
   const safeBalance = useSafeBalance();
@@ -52,7 +51,7 @@ export default function BridgeTabScreen() {
   const btcBalance = accountBalance?.amount;
   const isDeposit = (to?.name || '').includes('Bitcoin');
 
-  console.log(`assets: `, assets, accountBalance);
+  console.log('assets: ', assets, accountBalance);
   const lessThanMinSat = isBtcBridge && BigNumber(bridgeAmount).lt(MIN_SAT) && isDeposit;
 
   const balance = isBtcBridge ? btcBalance : runeBalance;
@@ -63,7 +62,7 @@ export default function BridgeTabScreen() {
     const init = async () => {
       // await bridgeStore.setBalance(balance);
       const _utxos = await services.unisat.getBTCUtxos({ address: currentAccount?.address });
-      console.log(`_utxos: `, _utxos);
+      console.log('_utxos: ', _utxos);
     };
     init();
   }, [balance]);
@@ -74,8 +73,7 @@ export default function BridgeTabScreen() {
 
   const networkType = useNetworkType();
 
-
-  console.log(`bridgeAsset: `, bridgeAsset);
+  console.log('bridgeAsset: ', bridgeAsset);
   // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
   const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
 
@@ -138,16 +136,14 @@ export default function BridgeTabScreen() {
             relative
             style={{
               gap: '5px'
-            }}
-          >
+            }}>
             <Column mt={'medium'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
                     fontSize: '12px',
                     color: '#7D7D7D'
-                  }}
-                >
+                  }}>
                   From
                 </div>
               </Row>
@@ -159,15 +155,13 @@ export default function BridgeTabScreen() {
                   height: '32px',
                   borderRadius: '100px',
                   padding: '10px 0px'
-                }}
-              >
+                }}>
                 <Image size={28} src={from.logo} />
                 <span
                   style={{
                     fontSize: '14px',
                     paddingLeft: '5px'
-                  }}
-                >
+                  }}>
                   {from.name}
                 </span>
               </Row>
@@ -200,8 +194,7 @@ export default function BridgeTabScreen() {
                   const from = bridgeStore.from;
                   bridgeStore.from = to;
                   bridgeStore.to = from;
-                }}
-              >
+                }}>
                 {/*<Icon icon={'swap-down-icon'}></Icon>*/}
                 <Icon size={hoverExchange ? 22 : 11} icon={hoverExchange ? 'swap-down-hover' : 'swap-down-icon'}></Icon>
               </div>
@@ -213,8 +206,7 @@ export default function BridgeTabScreen() {
                   style={{
                     fontSize: '12px',
                     color: '#7D7D7D'
-                  }}
-                >
+                  }}>
                   To
                 </div>
               </Row>
@@ -226,15 +218,13 @@ export default function BridgeTabScreen() {
                   height: '32px',
                   borderRadius: '100px',
                   padding: '10px 0px'
-                }}
-              >
+                }}>
                 <Image size={28} src={to.logo} />
                 <span
                   style={{
                     fontSize: '14px',
                     paddingLeft: '5px'
-                  }}
-                >
+                  }}>
                   {to.name}
                 </span>
               </Row>
@@ -245,8 +235,7 @@ export default function BridgeTabScreen() {
                 style={{
                   fontSize: '12px',
                   color: '#7D7D7D'
-                }}
-              >
+                }}>
                 Transfer
               </div>
 
@@ -267,8 +256,7 @@ export default function BridgeTabScreen() {
                     e.stopPropagation();
                     // setShow(true);
                     bridgeStore.selectTokenModalShow = true;
-                  }}
-                >
+                  }}>
                   <ImageIcon
                     style={{
                       width: '20px',
@@ -286,8 +274,7 @@ export default function BridgeTabScreen() {
                       maxWidth: '72px',
                       textOverflow: 'ellipsis',
                       overflow: 'hidden'
-                    }}
-                  >
+                    }}>
                     {bridgeAsset?.asset?.symbol || bridgeAsset?.asset?.symbol || bridgeAsset?.denom || 'Select Token'}
                   </div>
                   {/*<Icon type="" />*/}
@@ -296,8 +283,7 @@ export default function BridgeTabScreen() {
                       width: '16px',
                       height: '16px',
                       flexShrink: '0'
-                    }}
-                  >
+                    }}>
                     <use xlinkHref={'#side-down'} />
                   </svg>
                 </div>
@@ -310,8 +296,7 @@ export default function BridgeTabScreen() {
                   style={{
                     fontSize: '12px',
                     color: '#7D7D7D'
-                  }}
-                >
+                  }}>
                   Amount
                 </div>
 
@@ -324,8 +309,7 @@ export default function BridgeTabScreen() {
                       {
                         // paddingLeft: '3px'
                       }
-                    }
-                  >
+                    }>
                     {balance}
                   </Text>
                 </div>
@@ -338,8 +322,7 @@ export default function BridgeTabScreen() {
                 style={{
                   height: '50px',
                   background: '#09090A'
-                }}
-              >
+                }}>
                 <Row
                   itemsCenter
                   gap={'zero'}
@@ -347,8 +330,7 @@ export default function BridgeTabScreen() {
                     height: '50px',
                     borderRadius: '100px',
                     padding: '20px 10px'
-                  }}
-                >
+                  }}>
                   <CoinInput
                     size={14}
                     coin={{
@@ -376,8 +358,7 @@ export default function BridgeTabScreen() {
                     }}
                     onClick={() => {
                       bridgeStore.bridgeAmount = balance;
-                    }}
-                  >
+                    }}>
                     Max
                   </div>
                 </Row>
