@@ -15,7 +15,7 @@ import {
   SIDE_RUNE_VAULT_ADDRESS_TESTNET,
   SIDE_TOKENS
 } from '@/shared/constant';
-import { decodeTxToGetValue } from '@/shared/lib/runes-utils';
+import {decodeTxToGetValue, runesUtils} from '@/shared/lib/runes-utils';
 import { NetworkType, RuneBalance, TickPriceItem } from '@/shared/types';
 import { useTools } from '@/ui/components/ActionComponent';
 import { isProduction, UNISAT_SERVICE_ENDPOINT } from '@/ui/constants/';
@@ -186,6 +186,7 @@ export const useRuneBalanceV2 = (base: string) => {
   const { from } = useBridgeStore();
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
+  let {tokens} = useRuneListV2();
   // const { data: runesBalance, loading: runeLoading } = useRuneBalances();
   //
   // const rune = runesBalance.find((rune) => rune.base === base);
@@ -201,15 +202,63 @@ function toHex(data: Uint8Array): string {
   return Buffer.from(data).toString('hex');
 }
 
-export const useBitcoinRuneBalance = (base: string) => {
-  const { data: runesBalance, loading: runeLoading } = useRuneBalancesV2();
+export const useRuneListV2 = () => {
+  const wallet = useWallet();
+  const currentAccount = useCurrentAccount();
+  const chainType = useChainType();
 
-  const rune = runesBalance.find((rune) => rune.base === base);
+  const [tokens, setTokens] = useState<RuneBalance[]>([]);
+  const [total, setTotal] = useState(-1);
+  const [pagination, setPagination] = useState({ currentPage: 1, pageSize: 100 });
+  const [priceMap, setPriceMap] = useState<{ [key: string]: TickPriceItem }>();
 
-  if (!rune || runeLoading) return '0';
+  const tools = useTools();
+  const fetchData = async () => {
+    try {
+      if (!currentAccount.address) return;
+      let { list, total } = await wallet.getRunesList(
+        currentAccount.address,
+        pagination.currentPage,
+        pagination.pageSize
+      );
+      setTokens(list);
+      setTotal(total);
+      if (list.length > 0) {
+        // console.log(`list.map(item=>item?.spacedRune): `, list.map(item=>item?.spacedRune));
+        wallet.getRunesPrice(list.map((item) => item?.spacedRune)).then((res) => {
+          console.log('res: ', res);
+          setPriceMap(res);
+        });
+      }
+    } catch (e) {
+      console.log('e: ', e);
+      tools.toastError((e as Error).message);
+    } finally {
+      // tools.showLoading(false);
+    }
+  };
 
-  return rune.balance || '0';
+  useEffect(() => {
+    fetchData();
+  }, [pagination, currentAccount.address, chainType]);
+  return {
+    tokens,
+    total,
+    pagination,
+    fetchData,
+    priceMap,
+    // token: key
+  };
 };
+
+export const useBitcoinRuneBalance = (base: string) => {
+  const { tokens: runesBalance } = useRuneListV2();
+  console.log(`runesBalance: `, runesBalance, base);
+  if (base === 'sat') return '0';
+  const rune = runesBalance.find((rune) => rune.runeid === `runes/${base}`);
+  return runesUtils.toDecimalNumber(rune?.amount, rune?.divisibility)?.toString() || '0';
+};
+
 
 export const useBitcoinRuneBalanceV2 = (base: string) => {
   // const { data: runesBalance, loading: runeLoading } = useRuneBalances();
@@ -728,54 +777,6 @@ export const useRuneBalancesV2 = () => {
 //   ];
 // };
 
-export const useRuneListV2 = () => {
-  const navigate = useNavigate();
-  const wallet = useWallet();
-  const currentAccount = useCurrentAccount();
-  const chainType = useChainType();
-
-  const [tokens, setTokens] = useState<RuneBalance[]>([]);
-  const [total, setTotal] = useState(-1);
-  const [pagination, setPagination] = useState({ currentPage: 1, pageSize: 100 });
-  const [priceMap, setPriceMap] = useState<{ [key: string]: TickPriceItem }>();
-
-  const tools = useTools();
-  const fetchData = async () => {
-    try {
-      if (!currentAccount.address) return;
-      let { list, total } = await wallet.getRunesList(
-        currentAccount.address,
-        pagination.currentPage,
-        pagination.pageSize
-      );
-      setTokens(list);
-      setTotal(total);
-      if (list.length > 0) {
-        // console.log(`list.map(item=>item?.spacedRune): `, list.map(item=>item?.spacedRune));
-        wallet.getRunesPrice(list.map((item) => item?.spacedRune)).then((res) => {
-          console.log('res: ', res);
-          setPriceMap(res);
-        });
-      }
-    } catch (e) {
-      console.log('e: ', e);
-      tools.toastError((e as Error).message);
-    } finally {
-      // tools.showLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [pagination, currentAccount.address, chainType]);
-  return {
-    tokens,
-    total,
-    pagination,
-    fetchData,
-    priceMap
-  };
-};
 
 export const useRuneBridge = () => {
   const { from, bridgeAmount, fee, base, loading } = useBridgeStore();

@@ -16,7 +16,15 @@ import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import services from '@/ui/services';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useBridge, useRuneBalanceV2, useRuneBridge } from '@/ui/state/bridge/hook';
+import {
+  useBitcoinRuneBalance,
+  useBridge,
+  useBtcBalance,
+  useRuneBalanceV2,
+  useRuneBridge,
+  useRuneListV2
+} from '@/ui/state/bridge/hook';
+
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { useSafeBalance } from '@/ui/state/transactions/hooks';
@@ -25,7 +33,7 @@ import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
-
+// import { utils } from '@/ui/wallet-sdk';
 const MIN_SAT = '0.001';
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
@@ -40,12 +48,14 @@ export default function BridgeTabScreen() {
   // safe btc balance
   const safeBalance = useSafeBalance();
   // const { data: assets } = useGetSideTokenList();
-  const bridgeAsset = assets.find((a) => a.denom == base);
-
+  const bridgeAsset = assets.find((a) => a?.denom === `${base}`);
+  console.log(`assets: `, assets);
   const isBtcBridge = base === 'sat';
 
   // const runeBalance = useRuneBalance(base);
-  const runeBalance = useRuneBalanceV2(base);
+  // const runeBalance = useRuneBalanceV2(base);
+  // let {tokens: btcRuneBalanceList} = useRuneListV2();
+  let runeBalance = useBitcoinRuneBalance(base);
 
   const accountBalance = useAccountBalance();
   const btcBalance = accountBalance?.amount;
@@ -55,25 +65,18 @@ export default function BridgeTabScreen() {
   const lessThanMinSat = isBtcBridge && BigNumber(bridgeAmount).lt(MIN_SAT) && isDeposit;
 
   const balance = isBtcBridge ? btcBalance : runeBalance;
+  console.log(`runeBalance: `, runeBalance);
 
   useEffect(() => {
     bridgeStore.balance = balance;
-
-    const init = async () => {
-      // await bridgeStore.setBalance(balance);
-      const _utxos = await services.unisat.getBTCUtxos({ address: currentAccount?.address });
-      console.log('_utxos: ', _utxos);
-    };
-    init();
   }, [balance]);
   const { hoverExchange } = useSwapStore();
-  const { bridge } = useBridge();
+  // const { bridge } = useBridge();
 
   const { bridge: bridgeRune } = useRuneBridge();
 
   const networkType = useNetworkType();
 
-  console.log('bridgeAsset: ', bridgeAsset);
   // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
   const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
 
@@ -116,16 +119,18 @@ export default function BridgeTabScreen() {
   }, [networkType, chainId]);
 
   useEffect(() => {
-    const run = async () => {
-      const res = await getCurrentTab();
-      if (!res) return;
-      const site = await wallet.getCurrentConnectedSite(res.id);
-      if (site) {
-        setConnected(site.isConnected);
-      }
+    bridgeStore.from = {
+      id: 'LIVENET',
+      name: 'Bitcoin Signet',
+      logo: '/images/icons/btc.svg'
     };
-    run();
+    bridgeStore.to = {
+      id: chainId,
+      name: 'Side Chain',
+      logo: '/images/logo/wallet-logo-white-v2.png'
+    };
   }, []);
+
   return (
     <Layout>
       <MainHeader title={''} />

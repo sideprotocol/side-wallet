@@ -211,7 +211,7 @@ export default function Index(props) {
               <Row
                 classname={'bg-item-hover'}
                 onClick={() => {
-                  bridgeStore.base = asset?.runeid;
+                  bridgeStore.base = `runes/${asset?.runeid}`;
                   onClose();
                 }}
                 full
