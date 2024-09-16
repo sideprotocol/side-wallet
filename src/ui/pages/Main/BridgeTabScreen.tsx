@@ -73,8 +73,8 @@ export default function BridgeTabScreen() {
   const { hoverExchange } = useSwapStore();
   // const { bridge } = useBridge();
 
-  const { bridge: bridgeRune } = useRuneBridge();
-
+  // const { bridge, bridgeRune } = useRuneBridge();
+  const { bridgeRune } = useBridge();
   const networkType = useNetworkType();
 
   // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
@@ -356,7 +356,6 @@ export default function BridgeTabScreen() {
                       transform: 'translateY(-50%)',
                       color: '#0DD4C3',
                       fontSize: '14px',
-                      // background: 'rgba(13, 212, 195, 0.10)',
                       background: '#0DD4C31A',
                       cursor: 'pointer',
                       borderRadius: '8px'
@@ -377,7 +376,8 @@ export default function BridgeTabScreen() {
                   if (base === 'sat') {
                     navigate('BridgeConfirmTabScreen');
                   } else {
-                    bridgeRune();
+                    // navigate('BridgeConfirmTabScreen');
+                    bridgeRune(base?.split('/')[1]);
                   }
                 }}
                 disabled={disabled}

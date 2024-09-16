@@ -33,6 +33,7 @@ import {
 } from '@/ui/wallet-sdk/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
+import { sendRunesWithBTC } from '@/ui/wallet-sdk/tx-helpers';
 
 import { useCurrentAccount } from '../accounts/hooks';
 import { useNetworkType } from '../settings/hooks';
@@ -260,15 +261,6 @@ export const useBitcoinRuneBalance = (base: string) => {
 };
 
 
-export const useBitcoinRuneBalanceV2 = (base: string) => {
-  // const { data: runesBalance, loading: runeLoading } = useRuneBalances();
-  //
-  // const rune = runesBalance.find((rune) => rune.base === base);
-  //
-  // if (!rune || runeLoading) return '0';
-
-  return '0';
-};
 
 // export const useBitcoinBtcBalance = () => {
 //   const currentAccount = useCurrentAccount();
@@ -367,7 +359,7 @@ export const useBitcoinRuneBalanceV2 = (base: string) => {
 // };
 
 export const useBridge = () => {
-  const { from, bridgeAmount, fee } = useBridgeStore();
+  const { from, bridgeAmount, fee, exponent } = useBridgeStore();
 
   const currentAccount = useCurrentAccount();
 
@@ -396,6 +388,68 @@ export const useBridge = () => {
           {
             amount: unitAmount,
             fee: Number(fee || '200')
+          },
+          currentAccount
+        )
+          .then((res) => {
+            console.log('res: ', res);
+            debugger;
+            if (res) {
+              navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
+              // tools.toastSuccess('Deposit Successful! ');
+            }
+          })
+          .catch((err) => {
+            console.log('err: ', err);
+            tools.toastError(err.message);
+          })
+          .finally(() => {
+            bridgeStore.loading = false;
+          });
+      } catch (error) {
+        tools.toastError('Deposit Failed! ');
+        bridgeStore.loading = false;
+      }
+    } else {
+      const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
+        amount: `${unitAmount}sat`,
+        feeRate: `${fee || 200}`,
+        sender: currentAccount?.address
+      });
+
+      try {
+        signAndBroadcastTxRaw({
+          messages: [txMsg]
+        })
+          .then((result) => {
+            // tools.toastSuccess('Withdraw Successful!');
+
+            navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
+          })
+          .catch((err) => {
+            console.log('err: ', err);
+            tools.toastError(err.message);
+          })
+          .finally(() => {
+            bridgeStore.loading = false;
+          });
+      } catch (error) {
+        tools.toastError('Deposit Failed! ');
+        bridgeStore.loading = false;
+      }
+    }
+  };
+
+  const bridgeRune = async (runeId) => {
+    bridgeStore.loading = true;
+
+    if (isDeposit) {
+      try {
+        abstractDepositRune(
+          {
+            amount: bridgeAmount,
+            fee: Number(fee || '200'),
+            runeId
           },
           currentAccount
         )
@@ -517,6 +571,145 @@ export const useBridge = () => {
     return txid;
   }
 
+  async function abstractDepositRune(
+    params,
+    currentAccount,
+  ) {
+    const senderAddress = currentAccount?.address;
+    const pbk = currentAccount?.pubkey;
+
+    const { runeId, amount, fee } = params;
+    const runeid = runeId;
+    const runeAmount = runesUtils.fromDecimalAmount(bridgeAmount, exponent);
+
+    const bridgeParams = await services.bridge.getBridgeParams();
+
+    const btcVault = bridgeParams.params.vaults
+      .filter((vault) => vault.asset_type === "ASSET_TYPE_BTC")
+      .reduce((max, current) => {
+        return BigInt(current.version) > BigInt(max.version) ? current : max;
+      });
+
+    if (!btcVault) {
+      throw new Error("No valid vault address found.");
+    }
+
+    const runeVault = bridgeParams.params.vaults
+      .filter((vault) => vault.asset_type === "ASSET_TYPE_RUNES")
+      .reduce((max, current) => {
+        return BigInt(current.version) > BigInt(max.version) ? current : max;
+      });
+
+    if (!runeVault) {
+      throw new Error("No valid vault address found.");
+    }
+
+    const btcVaultAddress = btcVault.address;
+
+    const runeVaultAddress = runeVault.address;
+
+    const _utxos = await services.unisat.getBTCUtxos({ address: senderAddress });
+
+    const btcUtxos: UnspentOutput[] = _utxos.map((v) => {
+      return {
+        ...v,
+        pubkey: pbk,
+      };
+    });
+
+    const runes_utxos = await services.unisat.getRunesUtxos(senderAddress, runeid!);
+
+    const assetUtxosRunes = runes_utxos.map((v) => {
+      return Object.assign(v, { pubkey: pbk });
+    });
+
+    assetUtxosRunes.forEach((v) => {
+      v.inscriptions = [];
+      v.atomicals = [];
+    });
+
+    assetUtxosRunes.sort((a, b) => {
+      const bAmount = b.runes.find((v) => v.runeid == runeid)?.amount || "0";
+      const aAmount = a.runes.find((v) => v.runeid == runeid)?.amount || "0";
+      return compareAmount(bAmount, aAmount);
+    });
+
+    let assetUtxos = assetUtxosRunes;
+
+    const _assetUtxos: UnspentOutput[] = [];
+
+    // find the utxo that has the exact amount to split
+    for (let i = 0; i < assetUtxos.length; i++) {
+      const v = assetUtxos[i];
+      if (v.runes && v.runes.length > 1) {
+        const balance = v.runes.find((r) => r.runeid == runeid);
+        if (balance && balance.amount == runeAmount) {
+          _assetUtxos.push(v);
+          break;
+        }
+      }
+    }
+
+    if (_assetUtxos.length == 0) {
+      for (let i = 0; i < assetUtxos.length; i++) {
+        const v = assetUtxos[i];
+        if (v.runes) {
+          const balance = v.runes.find((r) => r.runeid == runeid);
+          if (balance && balance.amount == runeAmount) {
+            _assetUtxos.push(v);
+            break;
+          }
+        }
+      }
+    }
+
+    if (_assetUtxos.length == 0) {
+      let total = BigInt(0);
+      for (let i = 0; i < assetUtxos.length; i++) {
+        const v = assetUtxos[i];
+        v.runes?.forEach((r) => {
+          if (r.runeid == runeid) {
+            total = total + BigInt(r.amount);
+          }
+        });
+        _assetUtxos.push(v);
+        if (total >= BigInt(runeAmount)) {
+          break;
+        }
+      }
+    }
+
+    assetUtxos = _assetUtxos;
+
+    let p = {
+      assetUtxos,
+      btcUtxos: btcUtxos,
+      networkType: isProduction ? 0 : 1,
+      toAddress: runeVaultAddress,
+      btcToAddress: btcVaultAddress,
+      protocolFee: Number(bridgeParams.params.protocol_fees.deposit_fee),
+      assetAddress: senderAddress,
+      btcAddress: senderAddress,
+      feeRate: fee,
+      runeid: runeid!,
+      runeAmount: runeAmount,
+      outputValue: 546,
+      enableRBF: true,
+    };
+    console.log(`p: `, p);
+    const { psbt, toSignInputs } = await sendRunesWithBTC(p);
+
+    console.log('wallet: ', wallet, psbt, toSignInputs);
+    debugger;
+    const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
+
+    const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
+
+    const rawTx = signedPsbt.extractTransaction().toHex();
+    const txid = await services.unisat.pushTx(rawTx);
+    return txid;
+  }
+
   async function estimateNetworkFee(params: DepositBTCBridge) {
     const { amount, fee } = params;
     const senderAddress = currentAccount.address;
@@ -580,165 +773,10 @@ export const useBridge = () => {
     return { networkFee, walletInputs };
   }
 
-  return { bridge, estimateNetworkFee };
+  return { bridge, bridgeRune, estimateNetworkFee };
 };
 
-export const useRuneBalances = () => {
-  const assets = SIDE_TOKENS;
 
-  const { loading: bridgeLoading } = useBridgeStore();
-
-  const runeAssets = assets.filter((a) => a.name === 'Rune');
-
-  const defaultMap = (runeAssets || []).reduce((acc, cur) => {
-    return {
-      ...acc,
-      [cur.symbol]: '0'
-    };
-  }, {});
-
-  const [loading, setLoading] = useState(true);
-
-  const [bitcoinRunes, setBitcoinRunes] = useState<any[]>([]);
-
-  const currentAccount = useCurrentAccount();
-
-  const networkType = useNetworkType();
-
-  const refetch = async () => {
-    const rawUtxos = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) =>
-      res.json()
-    );
-
-    const allRunes = await fetch(`${SIDE_RUNE_INDEXER}/runes`, {
-      headers: {
-        Accept: 'application/json'
-      }
-    }).then((res) => res.json());
-
-    const runesOutputsData = rawUtxos.map((utxo) => {
-      return `${utxo.txid}:${utxo.vout}`;
-    });
-
-    let runes: { key: string; value: any }[] = [];
-
-    const outputs = await Promise.all(runesOutputsData.map((key: string) => fetchRuneOutput(key)));
-
-    outputs.forEach((output) => {
-      const hasRune = Object.values(output.runes).length > 0 && output.address === currentAccount.address;
-
-      if (hasRune) {
-        const newRunes = Object.entries(output.runes).map((item) => {
-          return {
-            key: item[0],
-            value: item[1]
-          };
-        });
-
-        runes = [...runes, ...newRunes];
-      }
-    });
-
-    const _data = runes.reduce(
-      (pre, cur) => {
-        if (cur.key in pre) {
-          return {
-            ...pre,
-            [cur.key]: BigNumber(pre[cur.key]).plus(cur.value.amount).toNumber()
-          };
-        } else {
-          return {
-            ...pre,
-            [cur.key]: cur.value.amount
-          };
-        }
-      },
-      { ...defaultMap } as Record<string, number>
-    );
-
-    const predata = Object.entries(_data).map((item) => {
-      const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
-
-      const runeid = 'runes/' + `${allRunes.entries.find((entry) => entry[1].spaced_rune === item[0])?.[0] || ''}`;
-      const asset = assets.find((a) => a.base === runeid);
-
-      const balancePrice = priceMap?.[asset?.base || ''] || 0;
-
-      const price = new BigNumber(balancePrice)
-        .multipliedBy(item[1])
-        .dividedBy(10 ** Number(asset?.exponent || 6))
-        .toFixed(2);
-
-      const pendingRunes = getPendingDeposits(`${networkType}:${runeid}`, currentAccount.address);
-      const hasPendingRuns = pendingRunes.length > 0;
-
-      if (!hasPendingRuns) {
-        const balance = toReadableAmount(item[1].toString(), asset?.exponent || 6);
-        setRuneBalanceFromStore(balance, runeid, currentAccount.address);
-        return {
-          ...asset,
-
-          logo: asset?.logo,
-          name: 'Rune',
-          amount: item[1],
-          exponent: asset?.exponent || '6',
-          symbol: item[0],
-          label: '',
-          chain: 'bitcoin',
-          balance: balance,
-          price,
-          denom: runeid,
-          base: runeid,
-          precision: Number(asset?.exponent || 0) || '6'
-        };
-      } else {
-        const pendingAmount = pendingRunes.reduce((acc, cur) => {
-          return acc.plus(cur.amount);
-        }, BigNumber(0));
-
-        const storeBalance = getRuneBalanceFromStore(runeid, currentAccount.address);
-
-        const newBalance = BigNumber(storeBalance || item[1])
-          .minus(BigNumber(pendingAmount))
-          .toFixed();
-
-        return {
-          ...asset,
-
-          logo: asset?.logo,
-          name: 'Rune',
-          amount: item[1],
-          exponent: asset?.exponent || '6',
-          symbol: item[0],
-          label: '',
-          chain: 'bitcoin',
-          balance: newBalance,
-          price,
-          denom: runeid,
-          base: runeid,
-          precision: Number(asset?.exponent || 0) || '6'
-        };
-      }
-    });
-
-    const filteredRunes = predata.filter((d) => (runeAssets || []).find((a) => a.base === d.denom));
-
-    setBitcoinRunes(filteredRunes);
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    refetch().finally(() => {
-      setLoading(false);
-    });
-  }, [bridgeLoading, currentAccount.address]);
-
-  return { data: bitcoinRunes, loading };
-};
-
-export const useRuneBalancesV2 = () => {
-  return { data: {}, loading: false };
-};
 
 // export const useRuneAndBtcBalances = () => {
 //   const { data: assets } = useGetSideTokenList();

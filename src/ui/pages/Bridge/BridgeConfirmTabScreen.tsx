@@ -54,10 +54,11 @@ export default function BridgeTabScreen() {
   const currentKeyring = useCurrentKeyring();
   const wallet = useWallet();
 
-  const { bridge } = useBridge();
+  const { bridge, bridgeRune } = useBridge();
 
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base, accountUtxo, fee } = useBridgeStore();
 
+  console.log(`base: `, base);
   const [networkFee, setNetworkFee] = useState<number>(0);
 
   const [tx, setTx] = useState<CacheUTXO[]>([]);
@@ -93,17 +94,8 @@ export default function BridgeTabScreen() {
     queryAddressUtxo(currentAccount.address);
   }, [currentAccount.address]);
 
-  useEffect(() => {
-    const run = async () => {
-      const res = await getCurrentTab();
-      if (!res) return;
-      const site = await wallet.getCurrentConnectedSite(res.id);
-      if (site) {
-        setConnected(site.isConnected);
-      }
-    };
-    run();
-  }, []);
+  // useEffect(() => {
+  // }, []);
   return (
     <Layout>
       <Header
@@ -386,7 +378,13 @@ export default function BridgeTabScreen() {
                   fontSize: '14px'
                 }}
                 onClick={() => {
-                  bridge();
+                  console.log(`base: `, base);
+                  // if (base?.includes('rune')) {
+                  //   debugger;
+                  //   bridgeRune(base?.split('/')[1]);
+                  // } else {
+                    bridge();
+                  // }
                 }}
               >
                 Confirm

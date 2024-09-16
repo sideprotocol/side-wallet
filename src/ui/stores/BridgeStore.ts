@@ -29,6 +29,7 @@ export interface UTXOAddress {
 
 const initData = {
   base: 'sat',
+  exponent: 8,
   bridgeAmount: '',
   from: ({} as ChainItem),
   to: ({} as ChainItem),

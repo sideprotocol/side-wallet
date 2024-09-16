@@ -1,13 +1,13 @@
 // import { CHAINS_ENUM } from '@/shared/constant';
-import { useState } from 'react';
+import {Fragment, useState} from 'react';
 
 import { runesUtils } from '@/shared/lib/runes-utils';
 import { BitcoinToken, SideToken } from '@/shared/types';
 import { Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
-import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
-import { useAccountBalance } from '@/ui/state/accounts/hooks';
+import {useGetSideBalanceList, useGetSideTokenBalance} from '@/ui/hooks/useGetBalance';
+import {useAccountBalance, useCurrentAccount} from '@/ui/state/accounts/hooks';
 import { useRuneListV2 } from '@/ui/state/bridge/hook';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { getTruncate } from '@/ui/utils';
@@ -106,15 +106,62 @@ const item: BitcoinToken = {
   symbol: 'BTC'
 };
 
+function TokenItem({token, balanceVisible}: { token: SideToken; balanceVisible: boolean }) {
+  return (
+    <Row
+      classname={'bg-item-hover-v2'}
+      justifyBetween
+      style={{
+        cursor: 'pointer',
+        padding: '10px 12px',
+        borderRadius: 10
+      }}>
+      <Row>
+        <ImageIcon
+          url={token?.asset?.logo ? token?.asset?.logo : token?.asset?.runeData?.rune ? `https://api-t2.unisat.io/icon-v1/icon/runes/${token?.asset?.runeData?.rune}` : ''}
+          style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%'
+          }}
+        />
+        <Column
+          style={{
+            gap: '0px'
+          }}>
+          <Text classname={'symbol'} preset="regular" text={token?.asset?.symbol}></Text>
+          <Text preset="sub" text={token?.asset?.name}></Text>
+        </Column>
+      </Row>
+
+      <Column
+        style={{
+          gap: '0px'
+        }}>
+        {/*<Text preset="regular" text={balanceVisible ? formatUnitAmount(balanceAmount, token.exponent) : '**'}*/}
+        <Text preset="regular" text={balanceVisible ? token?.formatAmount : '**'} textEnd/>
+        {/*<Text preset="sub" text={`${'$' + getTruncate(totalPrice)}`} textEnd />*/}
+        {/*<Text preset="sub" text={`${balanceVisible ? '$' + getTruncate(totalPrice) : '**'}`} textEnd/>*/}
+        <Text preset="sub" text={`${balanceVisible ? '$' + token?.totalValue : '**'}`} textEnd/>
+      </Column>
+    </Row>
+  );
+}
+
 export default function Index(props) {
   let { open, onClose } = props;
-
+  const currentAccount = useCurrentAccount();
+  let {balanceList} = useGetSideBalanceList(currentAccount?.address);
   // list, onSearch
   const [searchValue, onSearch] = useState<string>('');
   const [isHover, setIsHover] = useState(false);
-
+  const { from } = useBridgeStore();
   let { tokens } = useRuneListV2();
-
+  const isDeposit = (from?.name || '').includes('Bitcoin');
+  console.log(`balanceList: `, balanceList, tokens);
+  balanceList = balanceList?.filter((item) => {
+    return (item?.denom.includes('rune') || item?.denom.includes('sat'));
+  });
   if (searchValue && tokens?.length) {
     tokens = tokens.filter((item) => {
       return (
@@ -195,23 +242,28 @@ export default function Index(props) {
           style={{
             margin: '0 16px'
           }}>
-          <Row
-            full
-            justifyBetween
-            style={{
-              cursor: 'pointer',
-              height: '44px',
-              padding: '10px 16px'
-            }}
-            classname={'bg-item-hover'}>
-            <BtcItem token={item} />
-          </Row>
-          {tokens?.map((asset) => {
+          {
+            isDeposit ? (
+              <Row
+                full
+                justifyBetween
+                style={{
+                  cursor: 'pointer',
+                  height: '44px',
+                  padding: '10px 16px'
+                }}
+                classname={'bg-item-hover'}>
+                <BtcItem token={item} />
+              </Row>
+            ) : null
+          }
+          {isDeposit ? tokens?.map((asset) => {
             return (
               <Row
                 classname={'bg-item-hover'}
                 onClick={() => {
                   bridgeStore.base = `runes/${asset?.runeid}`;
+                  bridgeStore.exponent = asset?.divisibility;
                   onClose();
                 }}
                 full
@@ -229,6 +281,12 @@ export default function Index(props) {
                   }}
                 />
               </Row>
+            );
+          }) : balanceList.map((item) => {
+            return (
+              <div key={item?.asset?.symbol + item?.asset?.name} className={''}>
+                <TokenItem token={item} balanceVisible={true}/>
+              </div>
             );
           })}
         </Column>
