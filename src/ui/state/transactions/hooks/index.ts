@@ -71,8 +71,6 @@ export function usePrepareSendBTCCallback() {
       }
       let psbtHex = '';
 
-      console.log('_utxos: ', _utxos, feeRate, toAmount);
-
       if (safeBalance === toAmount && !disableAutoAdjust) {
         psbtHex = await wallet.sendAllBTC({
           to: toAddressInfo.address,
