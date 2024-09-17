@@ -365,7 +365,7 @@ export const useBridge = () => {
 
   const networkType = useNetworkType();
   const wallet = useWallet();
-  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, 8)).toNumber();
+  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, exponent)).toNumber();
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
@@ -469,8 +469,10 @@ export const useBridge = () => {
         bridgeStore.loading = false;
       }
     } else {
+      console.log(runeId, 'runeid');
+
       const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
-        amount: `${unitAmount}${runeId}`,
+        amount: `${unitAmount}runes/${runeId}`,
         feeRate: `${fee || 200}`,
         sender: currentAccount?.address
       });
