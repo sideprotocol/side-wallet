@@ -53,7 +53,7 @@ export default function BridgeTabScreen() {
 
   const accountBalance = useAccountBalance();
   const btcBalance = accountBalance?.amount;
-  const lessThanMinSat = isBtcBridge && BigNumber(bridgeAmount).lt(MIN_SAT) && isDeposit;
+  const lessThanMinSat = isBtcBridge && BigNumber(bridgeAmount) && isDeposit;
   const balance = isDeposit ? (isBtcBridge ? btcBalance : runeBalance) : bridgeAsset?.formatAmount || '0';
 
   useEffect(() => {
@@ -70,11 +70,7 @@ export default function BridgeTabScreen() {
   const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
 
   const disabled =
-    !bridgeAmount ||
-    Number(bridgeAmount) === 0 ||
-    BigNumber(bridgeAmount || '0').gt(balance || '0') ||
-    loading ||
-    lessThanMinSat;
+    !bridgeAmount || Number(bridgeAmount) === 0 || BigNumber(bridgeAmount || '0').gt(balance || '0') || loading;
 
   useEffect(() => {
     // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
@@ -370,7 +366,7 @@ export default function BridgeTabScreen() {
                 }}
                 disabled={disabled}
                 full
-                text={lessThanMinSat ? 'Minimum amount is 0.001 BTC' : 'Bridge'}
+                text={'Bridge'}
                 preset="primary"
               />
             </Row>
