@@ -216,7 +216,12 @@ export default function Connect({ params: { session } }: Props) {
           marginTop: '0px'
         }}>
         <Text text="Connect with" preset="large" textCenter mt="zero" color="white" />
-        <img src={SideWallet} height={20} />
+        <img
+          style={{
+            height: '18px'
+          }}
+          src={SideWallet}
+        />
       </Header>
 
       <Content>
