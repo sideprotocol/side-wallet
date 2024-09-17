@@ -60,6 +60,8 @@ export default function AddressTypeScreen() {
   }, []);
 
   const addressTypes = useMemo(() => {
+    console.log('currentKeyring.type: ', currentKeyring.type);
+
     if (currentKeyring.type === KEYRING_TYPE.HdKeyring) {
       return ADDRESS_TYPES.filter((v) => {
         if (v.displayIndex < 0) {
@@ -75,9 +77,11 @@ export default function AddressTypeScreen() {
         return true;
       }).sort((a, b) => a.displayIndex - b.displayIndex);
     } else {
-      return ADDRESS_TYPES.filter((v) => v.displayIndex >= 0 && v.isUnisatLegacy != true).sort(
+      const result = ADDRESS_TYPES.filter((v) => v.displayIndex >= 0 && v.isUnisatLegacy != true).sort(
         (a, b) => a.displayIndex - b.displayIndex
       );
+
+      return result;
     }
   }, [currentKeyring.type, addressAssets, addresses]);
   return (
@@ -91,18 +95,16 @@ export default function AddressTypeScreen() {
       <Content
         style={{
           marginTop: 16
-        }}
-      >
+        }}>
         <Column>
           {addressTypes.map((item, index) => {
-            if (item.displayIndex === 1) return null;
+            if (item.displayIndex === 1 || item.displayIndex === 3) return null;
             const address = addresses?.[item.value];
             const assets = addressAssets?.[address] || {
               total_btc: '--',
               satoshis: 0,
               total_inscription: 0
             };
-            console.log(`addressTypes: `, addressTypes, addresses, currentKeyring.addressType);
             let name = `${item.name} (${item.hdPath}/${account.index})`;
             if (currentKeyring.type === KEYRING_TYPE.SimpleKeyring) {
               name = `${item.name}`;
@@ -118,7 +120,7 @@ export default function AddressTypeScreen() {
                   if (item.value === currentKeyring.addressType) {
                     return;
                   }
-                  console.log(`changeAddressType: `, item.value);
+                  console.log('changeAddressType: ', item.value);
                   await wallet.changeAddressType(item.value);
                   reloadAccounts();
                   navigate('MainScreen');

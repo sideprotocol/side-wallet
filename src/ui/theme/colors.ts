@@ -24,6 +24,8 @@ const palette = {
   yellow: '#e3bb5f',
   yellow_light: '#fcd226',
 
+  warning_yellow: '#F0B622',
+
   red_dark: '#c92b40',
   red: '#ED334B',
   red_light: '#f05266',

@@ -87,7 +87,15 @@ export default function Index(props) {
           style={{
             padding: '0 24px'
           }}>
-          {/*<div className={'flex items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '}></div>*/}
+          <div
+            className={
+              'flex items-center px-[10px] text-xs rounded-[12px] py-3  bg-[#F0B622] text-[#f0b622] bg-opacity-30 relative gap-2'
+            }>
+            <Icon icon="warning2" color="warning_yellow" size={24}></Icon>
+
+            <div>Only support Side Chain asset swaps</div>
+          </div>
+
           <div
             className={
               'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '

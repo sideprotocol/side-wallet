@@ -213,7 +213,8 @@ export default function Connect({ params: { session } }: Props) {
       }}>
       <Header
         style={{
-          marginTop: '0px'
+          marginTop: '0px',
+          borderBottom: '1px solid transparent'
         }}>
         <Text text="Connect with" preset="large" textCenter mt="zero" color="white" />
         <img

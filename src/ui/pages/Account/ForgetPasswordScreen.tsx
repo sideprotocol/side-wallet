@@ -44,20 +44,17 @@ export default function CreateHDWalletScreen() {
           flex: 1,
           paddingBottom: '10px',
           padding: '0 16px 24px'
-        }}
-      >
+        }}>
         <Column
           style={{
             flex: 1,
             overflow: 'auto'
-          }}
-        >
+          }}>
           <Row
             justifyCenter
             style={{
               padding: '34px 0 16px'
-            }}
-          >
+            }}>
             {/*<Image src="./images/icons/wallet.svg" size={90} />*/}
             <Lottie
               options={
@@ -77,8 +74,7 @@ export default function CreateHDWalletScreen() {
               gap: '8px',
               backgroundColor: '#222222',
               borderRadius: '14px'
-            }}
-          >
+            }}>
             <Checkbox
               checked={checked1}
               onChange={(e) => {
@@ -86,7 +82,7 @@ export default function CreateHDWalletScreen() {
               }}
             />
             <Text
-              text="Side Wallet doesn't store your password and can't help you retrieve it."
+              text="Side Wallet does not store your password and cannot assist in recovering it."
               style={{
                 color: '#fff',
                 opacity: 0.5,
@@ -103,8 +99,7 @@ export default function CreateHDWalletScreen() {
               backgroundColor: '#222222',
               borderRadius: '14px',
               marginTop: '10px'
-            }}
-          >
+            }}>
             <Checkbox
               checked={checked2}
               onChange={(e) => {
@@ -112,7 +107,7 @@ export default function CreateHDWalletScreen() {
               }}
             />
             <Text
-              text="If you forget your password, you can reset it by resetting your wallet. You can re-import your wallet with its seed phrase or private key without affecting your assets."
+              text="If you forget your password and have not backed it up, you will permanently lose access to it and your assets. Always ensure that you back up your wallet and keep your seed phrase or private key secure before resetting."
               style={{
                 color: '#fff',
                 opacity: 0.5,
@@ -129,8 +124,7 @@ export default function CreateHDWalletScreen() {
               backgroundColor: '#222222',
               borderRadius: '14px',
               marginTop: '10px'
-            }}
-          >
+            }}>
             <Checkbox
               checked={checked3}
               onChange={(e) => {
@@ -138,7 +132,7 @@ export default function CreateHDWalletScreen() {
               }}
             />
             <Text
-              text="If you reset the wallet without backing it up, you'll permanently lose it and all assets. Be sure to back up all wallets and keep your seed phrase or private key safe before resetting."
+              text="If you forget your password, you can reset the wallet by re-importing it using your seed phrase without losing your assets."
               style={{
                 color: '#fff',
                 opacity: 0.5,

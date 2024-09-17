@@ -1,5 +1,5 @@
 import { Checkbox } from 'antd';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate as useNavigateRouter } from 'react-router-dom';
 
 import { Button, Column, Header, Input, Layout, Row, Text } from '@/ui/components';
@@ -121,23 +121,20 @@ export default function CreatePasswordScreen() {
     <Layout
       style={{
         maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px'
-      }}
-    >
+      }}>
       <Header onBack={() => navigateRouter(-1)} title="Create Password"></Header>
       <Column
         style={{
           minHeight: '530px',
           flex: 1,
           padding: '0 16px 24px'
-        }}
-      >
+        }}>
         <Column
           style={{
             flex: 1
-          }}
-        >
+          }}>
           <Text
-            text="Your password can unlock your wallet only this local device. if you forget your password,you will not be able to access your wallet on this decice."
+            text="Your password only unlocks your wallet on this local device. If you forget your password, you will lose access to your wallet on this device."
             style={{
               opacity: 0.5,
               fontSize: '12px',
@@ -155,7 +152,7 @@ export default function CreatePasswordScreen() {
             }}
           />
           <Input
-            placeholder="Input Password"
+            placeholder="Set your password"
             containerStyle={{
               borderColor: isPwdError ? '#ff0000' : isPwdFocus ? 'white' : ''
             }}
@@ -182,8 +179,7 @@ export default function CreatePasswordScreen() {
               fontSize: '14px',
               opacity: pwdErrorMsg ? 1 : 0
             }}
-            className=""
-          >
+            className="">
             {pwdErrorMsg}
           </div>
           <Text
@@ -202,7 +198,7 @@ export default function CreatePasswordScreen() {
               // borderColor: isConfirmError ? '#ff0000' : 'rgba(255, 255, 255, 0.2)'
             }}
             preset="password"
-            placeholder="Confirm Password"
+            placeholder="Repeat your password"
             onChange={(e) => {
               setIsPwdError(false);
               setPwdErrorMsg('');
@@ -225,8 +221,7 @@ export default function CreatePasswordScreen() {
               fontSize: '14px',
               opacity: confirmErrorMsg ? 1 : 0
             }}
-            className=""
-          >
+            className="">
             {confirmErrorMsg}
           </div>
           <Row
@@ -234,8 +229,7 @@ export default function CreatePasswordScreen() {
               marginTop: '6px',
               alignItems: 'start'
             }}
-            justifyBetween
-          >
+            justifyBetween>
             <Checkbox
               style={{
                 borderRadius: '4px'

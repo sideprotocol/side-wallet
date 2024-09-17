@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react';
+
 import { colors } from '@/ui/theme/colors';
 
 import { Row, RowProps } from '../Row';
@@ -17,10 +19,16 @@ interface IButtonGroupProps {
 
 export function ButtonGroup(props: IButtonGroupProps) {
   const { list, value, onChange, size, rowProps } = props;
-  let height = '26px';
-  if (size === 'big') {
-    height = '34px';
-  }
+  const [activeIndex, setActiveIndex] = useState(0);
+  const buttonRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  let height = size === 'big' ? '34px' : '26px';
+
+  useEffect(() => {
+    const index = list.findIndex((item) => item.key === value);
+    setActiveIndex(index);
+  }, [value, list]);
+
   return (
     <Row {...rowProps}>
       <Row
@@ -29,18 +37,28 @@ export function ButtonGroup(props: IButtonGroupProps) {
           backgroundColor: '#1E1E1F',
           borderRadius: '100px',
           padding: '3px 5px',
-          gap: '0'
-        }}
-      >
+          gap: '0',
+          position: 'relative'
+        }}>
+        <div
+          style={{
+            position: 'absolute',
+            height,
+            backgroundColor: '#404045',
+            borderRadius: '100px',
+            transition: 'all 0.3s ease',
+            left: buttonRefs.current[activeIndex]?.offsetLeft ?? 0,
+            width: buttonRefs.current[activeIndex]?.offsetWidth ?? 0
+          }}
+        />
         {list.map((item, index) => {
           return (
             <div
               key={item.key}
-              // className={value !== item.key ? 'bg-swap-hover' : ''}
+              ref={(el) => (buttonRefs.current[index] = el)}
               style={{
                 height,
                 padding: '0 22px',
-                backgroundColor: value === item.key ? '#404045' : 'transparent',
                 borderRadius: '100px',
                 color: colors.white,
                 fontSize: '12px',
@@ -48,15 +66,13 @@ export function ButtonGroup(props: IButtonGroupProps) {
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                transition: 'background 0.6s ease'
+                position: 'relative',
+                zIndex: 1
               }}
               onClick={() => {
-                if (item.key === value) {
-                  return;
-                }
+                if (item.key === value) return;
                 onChange(item.key, index);
-              }}
-            >
+              }}>
               {item.label}
             </div>
           );
