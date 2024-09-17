@@ -15,7 +15,7 @@ import {
   SIDE_RUNE_VAULT_ADDRESS_TESTNET,
   SIDE_TOKENS
 } from '@/shared/constant';
-import {decodeTxToGetValue, runesUtils} from '@/shared/lib/runes-utils';
+import { decodeTxToGetValue, runesUtils } from '@/shared/lib/runes-utils';
 import { NetworkType, RuneBalance, TickPriceItem } from '@/shared/types';
 import { useTools } from '@/ui/components/ActionComponent';
 import { isProduction, UNISAT_SERVICE_ENDPOINT } from '@/ui/constants/';
@@ -26,14 +26,13 @@ import { useChainType } from '@/ui/state/settings/hooks';
 import { bridgeStore, DepositBTCBridge, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
 import { toReadableAmount } from '@/ui/utils/formatter';
-import { sendAllBTC } from '@/ui/wallet-sdk/tx-helpers';
+import { sendAllBTC, sendRunesWithBTC } from '@/ui/wallet-sdk/tx-helpers';
 import {
   // abstractDepositBTC as depositBTC,
   satoshisToAmount
 } from '@/ui/wallet-sdk/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
-import { sendRunesWithBTC } from '@/ui/wallet-sdk/tx-helpers';
 
 import { useCurrentAccount } from '../accounts/hooks';
 import { useNetworkType } from '../settings/hooks';
@@ -187,7 +186,7 @@ export const useRuneBalanceV2 = (base: string) => {
   const { from } = useBridgeStore();
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
-  let {tokens} = useRuneListV2();
+  let { tokens } = useRuneListV2();
   // const { data: runesBalance, loading: runeLoading } = useRuneBalances();
   //
   // const rune = runesBalance.find((rune) => rune.base === base);
@@ -247,20 +246,17 @@ export const useRuneListV2 = () => {
     total,
     pagination,
     fetchData,
-    priceMap,
+    priceMap
     // token: key
   };
 };
 
 export const useBitcoinRuneBalance = (base: string) => {
   const { tokens: runesBalance } = useRuneListV2();
-  console.log(`runesBalance: `, runesBalance, base);
   if (base === 'sat') return '0';
-  const rune = runesBalance.find((rune) => rune.runeid === `runes/${base}`);
+  const rune = runesBalance.find((rune) => base.includes(rune?.runeid));
   return runesUtils.toDecimalNumber(rune?.amount, rune?.divisibility)?.toString() || '0';
 };
-
-
 
 // export const useBitcoinBtcBalance = () => {
 //   const currentAccount = useCurrentAccount();
@@ -571,10 +567,7 @@ export const useBridge = () => {
     return txid;
   }
 
-  async function abstractDepositRune(
-    params,
-    currentAccount,
-  ) {
+  async function abstractDepositRune(params, currentAccount) {
     const senderAddress = currentAccount?.address;
     const pbk = currentAccount?.pubkey;
 
@@ -585,23 +578,23 @@ export const useBridge = () => {
     const bridgeParams = await services.bridge.getBridgeParams();
 
     const btcVault = bridgeParams.params.vaults
-      .filter((vault) => vault.asset_type === "ASSET_TYPE_BTC")
+      .filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
       .reduce((max, current) => {
         return BigInt(current.version) > BigInt(max.version) ? current : max;
       });
 
     if (!btcVault) {
-      throw new Error("No valid vault address found.");
+      throw new Error('No valid vault address found.');
     }
 
     const runeVault = bridgeParams.params.vaults
-      .filter((vault) => vault.asset_type === "ASSET_TYPE_RUNES")
+      .filter((vault) => vault.asset_type === 'ASSET_TYPE_RUNES')
       .reduce((max, current) => {
         return BigInt(current.version) > BigInt(max.version) ? current : max;
       });
 
     if (!runeVault) {
-      throw new Error("No valid vault address found.");
+      throw new Error('No valid vault address found.');
     }
 
     const btcVaultAddress = btcVault.address;
@@ -613,7 +606,7 @@ export const useBridge = () => {
     const btcUtxos: UnspentOutput[] = _utxos.map((v) => {
       return {
         ...v,
-        pubkey: pbk,
+        pubkey: pbk
       };
     });
 
@@ -629,8 +622,8 @@ export const useBridge = () => {
     });
 
     assetUtxosRunes.sort((a, b) => {
-      const bAmount = b.runes.find((v) => v.runeid == runeid)?.amount || "0";
-      const aAmount = a.runes.find((v) => v.runeid == runeid)?.amount || "0";
+      const bAmount = b.runes.find((v) => v.runeid == runeid)?.amount || '0';
+      const aAmount = a.runes.find((v) => v.runeid == runeid)?.amount || '0';
       return compareAmount(bAmount, aAmount);
     });
 
@@ -694,9 +687,9 @@ export const useBridge = () => {
       runeid: runeid!,
       runeAmount: runeAmount,
       outputValue: 546,
-      enableRBF: true,
+      enableRBF: true
     };
-    console.log(`p: `, p);
+    console.log('p: ', p);
     const { psbt, toSignInputs } = await sendRunesWithBTC(p);
 
     console.log('wallet: ', wallet, psbt, toSignInputs);
@@ -776,8 +769,6 @@ export const useBridge = () => {
   return { bridge, bridgeRune, estimateNetworkFee };
 };
 
-
-
 // export const useRuneAndBtcBalances = () => {
 //   const { data: assets } = useGetSideTokenList();
 //
@@ -814,7 +805,6 @@ export const useBridge = () => {
 //     ...bitcoinRunesBalances
 //   ];
 // };
-
 
 export const useRuneBridge = () => {
   const { from, bridgeAmount, fee, base, loading } = useBridgeStore();

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { SIDE_CHAINID_MAINNET, SIDE_CHAINID_TESTNET } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
@@ -11,20 +11,10 @@ import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import { getCurrentTab } from '@/ui/features/browser/tabs';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-import services from '@/ui/services';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
-import {
-  useBitcoinRuneBalance,
-  useBridge,
-  useBtcBalance,
-  useRuneBalanceV2,
-  useRuneBridge,
-  useRuneListV2
-} from '@/ui/state/bridge/hook';
-
+import { useBitcoinRuneBalance, useBridge, useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { useSafeBalance } from '@/ui/state/transactions/hooks';
@@ -33,12 +23,12 @@ import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+
 // import { utils } from '@/ui/wallet-sdk';
 const MIN_SAT = '0.001';
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
 
-  const [connected, setConnected] = useState(false);
   const currentKeyring = useCurrentKeyring();
   const wallet = useWallet();
 
@@ -47,25 +37,24 @@ export default function BridgeTabScreen() {
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeStore();
   // safe btc balance
   const safeBalance = useSafeBalance();
-  // const { data: assets } = useGetSideTokenList();
-  const bridgeAsset = assets.find((a) => a?.denom === `${base}`);
-  console.log(`assets: `, assets);
   const isBtcBridge = base === 'sat';
 
-  // const runeBalance = useRuneBalance(base);
-  // const runeBalance = useRuneBalanceV2(base);
-  // let {tokens: btcRuneBalanceList} = useRuneListV2();
+  const { tokens: runesBalance } = useRuneListV2();
+
   let runeBalance = useBitcoinRuneBalance(base);
+
+  const isDeposit = (from?.name || '').includes('Bitcoin');
+
+  const bridgeAsset = assets.find((a) => a?.denom === `${base}`);
+
+  const depositRuneAsset = runesBalance.find((a) => base.includes(a.runeid));
+
+  console.log('depositRuneAsset', depositRuneAsset);
 
   const accountBalance = useAccountBalance();
   const btcBalance = accountBalance?.amount;
-  const isDeposit = (to?.name || '').includes('Bitcoin');
-
-  console.log('assets: ', assets, accountBalance);
   const lessThanMinSat = isBtcBridge && BigNumber(bridgeAmount).lt(MIN_SAT) && isDeposit;
-
-  const balance = isBtcBridge ? btcBalance : runeBalance;
-  console.log(`runeBalance: `, runeBalance);
+  const balance = isDeposit ? (isBtcBridge ? btcBalance : runeBalance) : bridgeAsset?.formatAmount || '0';
 
   useEffect(() => {
     bridgeStore.balance = balance;
@@ -91,7 +80,6 @@ export default function BridgeTabScreen() {
     // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
     const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
 
-    // if (networkType === NetworkType.MAINNET) {
     if (networkType === NetworkType.TESTNET) {
       bridgeStore.from = {
         id: 'LIVENET',
@@ -127,7 +115,7 @@ export default function BridgeTabScreen() {
     bridgeStore.to = {
       id: chainId,
       name: 'Side Chain',
-      logo: '/images/logo/wallet-logo-white-v2.png'
+      logo: '/images/logo/side_chain.svg'
     };
   }, []);
 
@@ -269,7 +257,11 @@ export default function BridgeTabScreen() {
                       marginRight: '4px',
                       borderRadius: '20px'
                     }}
-                    url={bridgeAsset?.asset?.logo || bridgeAsset?.asset?.logo}
+                    url={
+                      bridgeAsset?.asset?.logo ||
+                      bridgeAsset?.asset?.logo ||
+                      `https://api-t2.unisat.io/icon-v1/icon/runes/${depositRuneAsset?.spacedRune}`
+                    }
                   />
                   <div
                     style={{
@@ -280,7 +272,11 @@ export default function BridgeTabScreen() {
                       textOverflow: 'ellipsis',
                       overflow: 'hidden'
                     }}>
-                    {bridgeAsset?.asset?.symbol || bridgeAsset?.asset?.symbol || bridgeAsset?.denom || 'Select Token'}
+                    {bridgeAsset?.asset?.symbol ||
+                      bridgeAsset?.asset?.symbol ||
+                      bridgeAsset?.denom ||
+                      depositRuneAsset?.spacedRune ||
+                      'Select Token'}
                   </div>
                   {/*<Icon type="" />*/}
                   <svg
@@ -308,15 +304,7 @@ export default function BridgeTabScreen() {
                 <div className={'flex gap-[5px] items-center'}>
                   <img className={'w-[14px] h-[14px]'} src={WalletIcon} alt="" />
 
-                  <Text
-                    size="sm"
-                    style={
-                      {
-                        // paddingLeft: '3px'
-                      }
-                    }>
-                    {balance}
-                  </Text>
+                  <Text size="sm">{balance}</Text>
                 </div>
               </Row>
 
