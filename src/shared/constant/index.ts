@@ -163,7 +163,7 @@ export const ADDRESS_TYPES: {
     name: 'Taproot (P2TR)',
     hdPath: "m/44'/0'/0'/0",
     displayIndex: 5,
-    isUnisatLegacy: true
+    isUnisatLegacy: false
   }
 ];
 
