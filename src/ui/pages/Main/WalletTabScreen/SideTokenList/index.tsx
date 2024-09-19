@@ -69,9 +69,10 @@ export default function SideTokenList({ balanceVisible }) {
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
   useEffect(() => {
+
     const filteredTokens = balanceList.filter(
-      (item) => hardTokenList.includes(item?.denom.toLowerCase()) && parseFloat(item.formatAmount) > 0
-    );
+      (item) => hardTokenList.includes(item?.denom.toLowerCase()) || parseFloat(item.formatAmount) > 0
+    ).sort((a, b) => parseFloat(b.formatAmount) - parseFloat(a.formatAmount));
     const otherTokens = balanceList.filter(
       (item) => !hardTokenList.includes(item?.denom.toLowerCase()) && parseFloat(item.formatAmount) > 0
     );

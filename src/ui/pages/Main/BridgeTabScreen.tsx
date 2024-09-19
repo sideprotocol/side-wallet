@@ -25,18 +25,11 @@ import { useWallet } from '@/ui/utils';
 import { useNavigate } from '../MainRoute';
 
 // import { utils } from '@/ui/wallet-sdk';
-const MIN_SAT = '0.001';
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
-
-  const currentKeyring = useCurrentKeyring();
-  const wallet = useWallet();
-
   const currentAccount = useCurrentAccount();
   const { balanceList: assets } = useGetSideBalanceList(currentAccount?.address);
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeStore();
-  // safe btc balance
-  const safeBalance = useSafeBalance();
   const isBtcBridge = base === 'sat';
 
   const { tokens: runesBalance } = useRuneListV2();
@@ -53,14 +46,12 @@ export default function BridgeTabScreen() {
 
   const accountBalance = useAccountBalance();
   const btcBalance = accountBalance?.amount;
-  const lessThanMinSat = isBtcBridge && BigNumber(bridgeAmount) && isDeposit;
   const balance = isDeposit ? (isBtcBridge ? btcBalance : runeBalance) : bridgeAsset?.formatAmount || '0';
 
   useEffect(() => {
     bridgeStore.balance = balance;
   }, [balance]);
   const { hoverExchange } = useSwapStore();
-  // const { bridge } = useBridge();
 
   // const { bridge, bridgeRune } = useRuneBridge();
   const { bridgeRune } = useBridge();
@@ -357,12 +348,13 @@ export default function BridgeTabScreen() {
             <Row mt={'xl'} full>
               <Button
                 onClick={() => {
-                  if (base === 'sat') {
-                    navigate('BridgeConfirmTabScreen');
-                  } else {
-                    // navigate('BridgeConfirmTabScreen');
-                    bridgeRune(base?.split('/')[1]);
-                  }
+                  // if (base === 'sat') {
+                  //   navigate('BridgeConfirmTabScreen');
+                  // } else {
+                  //   // navigate('BridgeConfirmTabScreen');
+                  //   bridgeRune(base?.split('/')[1]);
+                  // }
+                  navigate('BridgeConfirmTabScreen');
                 }}
                 disabled={disabled}
                 full

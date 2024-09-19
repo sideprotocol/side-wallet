@@ -446,6 +446,7 @@ export interface BitcoinToken {
   coingecko_id: string;
   base?: string;
   exponent?: string;
+  precision?: string;
 }
 
 export interface SideToken {
