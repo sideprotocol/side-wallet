@@ -78,7 +78,7 @@ export default function BridgeTabScreen() {
   let runeInfo = isDeposit ? balanceList?.find((item) => item?.denom === bridgeStore?.base)?.asset?.runeData : tokens?.find((item) => item?.runeid === bridgeStore?.base?.split('/')[1]);
 
   const yourReceive = toReadableAmount(
-    BigNumber(toUnitAmount(bridgeAmount || '0', isBtcBridge ? 8 : runeInfo?.divisibility))
+    BigNumber(toUnitAmount(bridgeAmount || '0', 8))
       .minus((from?.name || '').includes('Bitcoin') ? networkFee : '0')
       .toFixed(),
     8
@@ -290,7 +290,7 @@ export default function BridgeTabScreen() {
                     text={'You will receive'}
                     value={
                       <div className='flex items-center text-right'>
-                        {yourReceive} {isBtcBridge ? 'BTC' : runeInfo?.spacedRune}{' '}
+                        {isBtcBridge ? yourReceive : bridgeStore?.bridgeAmount} {isBtcBridge ? 'BTC' : runeInfo?.spacedRune}{' '}
                         <img
                           className="ml-1"
                           src={
@@ -331,7 +331,7 @@ export default function BridgeTabScreen() {
                     value={
                       <div className="flex items-center text-right">
                         <span className=''>
-                        {yourReceive} {isBtcBridge ? 'BTC' : runeInfo?.spacedRune}{' '}
+                        {isBtcBridge ? yourReceive : bridgeStore?.bridgeAmount} {isBtcBridge ? 'BTC' : runeInfo?.spacedRune}{' '}
                         </span>
                         <img
                           className="ml-1"
