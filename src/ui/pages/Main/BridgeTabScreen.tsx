@@ -15,20 +15,36 @@ import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBitcoinRuneBalance, useBridge, useRuneListV2 } from '@/ui/state/bridge/hook';
-import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
-import { useSafeBalance } from '@/ui/state/transactions/hooks';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
-import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
+
+const SAT_ITEM = {
+  denom: 'sat',
+  amount: '0',
+  denomPrice: '0',
+  formatAmount: '0',
+  totalValue: '0',
+  asset: {
+    denom: 'sat',
+    symbol: 'BTC',
+    name: 'Bitcoin',
+    exponent: '8',
+    precision: 8,
+    logo: 'https://insider.side.one/static/token/logo/btc.svg',
+    runeData: null,
+    rune: false
+  }
+};
 
 // import { utils } from '@/ui/wallet-sdk';
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
   const currentAccount = useCurrentAccount();
   const { balanceList: assets } = useGetSideBalanceList(currentAccount?.address);
+
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeStore();
   const isBtcBridge = base === 'sat';
 
@@ -38,14 +54,13 @@ export default function BridgeTabScreen() {
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
-  const bridgeAsset = assets.find((a) => a?.denom === `${base}`);
+  const bridgeAsset = assets.find((a) => a?.denom === `${base}`) || SAT_ITEM;
 
   const depositRuneAsset = runesBalance.find((a) => base.includes(a.runeid));
 
-  console.log('depositRuneAsset', depositRuneAsset);
-
   const accountBalance = useAccountBalance();
   const btcBalance = accountBalance?.amount;
+
   const balance = isDeposit ? (isBtcBridge ? btcBalance : runeBalance) : bridgeAsset?.formatAmount || '0';
 
   useEffect(() => {
