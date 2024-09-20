@@ -64,7 +64,7 @@ export default function SideTokenList({ balanceVisible }) {
   const currentAccount = useCurrentAccount();
 
   const [displayTokens, setDisplayTokens] = useState<BalanceItem[]>([]);
-  const hardTokenList = ['uside', 'uusdc', 'uusdt', 'sat'];
+  const hardTokenList = ['sat', 'uside', 'uusdc', 'uusdt'];
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
