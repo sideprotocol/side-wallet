@@ -15,6 +15,7 @@ import {
 import { CosmosTransaction, CosmosTxResponse, NetworkType } from '@/shared/types';
 import services from '@/ui/services';
 import { useWallet } from '@/ui/utils';
+import { errorPatterns } from '@/ui/utils/errorPatterns';
 import { makeSignDoc as makeSignDocAmino } from '@cosmjs/amino';
 import { serializeSignDoc } from '@cosmjs/amino/build/signdoc';
 import { createWasmAminoConverters } from '@cosmjs/cosmwasm-stargate';
@@ -213,7 +214,17 @@ export function useSignAndBroadcastTxRaw() {
 
     const mockTxRaw = await mockSignAmino(tx);
 
-    const gasUsed = await estimateGas(mockTxRaw);
+    const gasUsed = await estimateGas(mockTxRaw).catch((error) => {
+      if (error.message.match(errorPatterns.sideBTCInsufficientFunds.pattern)) {
+        throw new Error(errorPatterns.sideBTCInsufficientFunds.message);
+      }
+
+      if (error.message.match(errorPatterns.sideBTCVaultNoUTXOs.pattern)) {
+        throw new Error(errorPatterns.sideBTCVaultNoUTXOs.message);
+      }
+
+      throw error;
+    });
 
     const validGasUsed = typeof gasUsed === 'string' && BigNumber(gasUsed || '0').gt(0);
 
