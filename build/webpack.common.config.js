@@ -456,7 +456,7 @@ const config = (env) => {
         extensions: ['ts', 'tsx', 'js', 'jsx'],
         emitError: true,
         emitWarning: true,
-        failOnError: false
+        failOnError: true
       }),
       new HtmlWebpackPlugin({
         inject: true,

@@ -288,7 +288,6 @@ export const useBridge = () => {
         )
           .then((res) => {
             console.log('res: ', res);
-            debugger;
             if (res) {
               navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
               // tools.toastSuccess('Deposit Successful! ');
@@ -350,7 +349,6 @@ export const useBridge = () => {
         )
           .then((res) => {
             console.log('res: ', res);
-            debugger;
             if (res) {
               navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
               // tools.toastSuccess('Deposit Successful! ');
@@ -458,7 +456,6 @@ export const useBridge = () => {
             memos: undefined
           });
     console.log('wallet: ', wallet, psbt, toSignInputs);
-    debugger;
     const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
     const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
@@ -594,7 +591,6 @@ export const useBridge = () => {
     const { psbt, toSignInputs } = await sendRunesWithBTC(p);
 
     console.log('wallet: ', wallet, psbt, toSignInputs);
-    debugger;
     const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
     const signedPsbt = bitcoin.Psbt.fromHex(signedTx);

@@ -153,7 +153,6 @@ export async function abstractDepositBTC(params, currentAccount) {
         });
   const wallet = useWallet();
   console.log('wallet: ', wallet);
-  debugger;
   const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
   const signedPsbt = bitcoin.Psbt.fromHex(signedTx);

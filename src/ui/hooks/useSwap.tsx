@@ -8,6 +8,8 @@ import { NetworkType } from '@/shared/types';
 import ToastView from '@/ui/components/ToastView';
 import { DEX_ROUTER_CONTRACT } from '@/ui/constants';
 import { ToastOptions } from '@/ui/constants/toast';
+// import useGetMarketList from '@/ui/hooks/useGetMarketList';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { Pool, SwapRouteResult } from '@/ui/services/dex/type';
@@ -20,8 +22,6 @@ import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { coin } from '@cosmjs/stargate';
 
 import { useNetworkType } from '../state/settings/hooks';
-// import useGetMarketList from '@/ui/hooks/useGetMarketList';
-import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
 
 export default function useSwap() {
   const { slippage, swapPair, swapRouteResult } = useSwapStore();
@@ -89,7 +89,6 @@ export default function useSwap() {
         });
         console.log('result: ', result);
         refreshData(async () => {
-          debugger;
           const resultQuote = await services.dex.getValidRoutes(
             swapPair.native.denom,
             unitAmount,
@@ -104,7 +103,10 @@ export default function useSwap() {
                 swapPair.remote.denom in p.assetsMeta &&
                 p.pair.pair_type?.['custom'] === 'transmuter' &&
                 BigNumber(pAssetOut?.amount || 0).gte(
-                  toUnitAmount(toReadableAmount(unitAmount, assetIn?.asset?.exponent || 6), assetOut?.asset?.exponent || 6)
+                  toUnitAmount(
+                    toReadableAmount(unitAmount, assetIn?.asset?.exponent || 6),
+                    assetOut?.asset?.exponent || 6
+                  )
                 )
               );
             })
