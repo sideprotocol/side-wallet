@@ -3,11 +3,10 @@ import {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
 import {Button, Card, Column, Content, Header, Icon, Layout, Row, Text} from '@/ui/components';
-import {useTools} from '@/ui/components/ActionComponent';
 import ImageIcon from '@/ui/components/ImageIcon';
 import {useAccountAddress, useCurrentAccount} from '@/ui/state/accounts/hooks';
 import {sizes} from '@/ui/theme/spacing';
-import {copyToClipboard, useLocationState, useWallet} from '@/ui/utils';
+import {copyToClipboard, useWallet} from '@/ui/utils';
 
 import './index.less';
 import {AddressRunesTokenSummary} from '@/shared/types';

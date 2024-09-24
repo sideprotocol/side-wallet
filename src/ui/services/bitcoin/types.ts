@@ -4,7 +4,7 @@ export interface AddDepositBitcoinTransactionRequest {
 
 export interface GetBridgeHistoryRequest {
   address: string;
-  direction: "IN" | "OUT";
+  direction: 'IN' | 'OUT';
   pageNumber: number;
   pageSize: number;
 }
@@ -54,6 +54,6 @@ export interface GetBridgeHistoryResponseContent {
   tokenPrecision: number;
   tokenLogo: string;
   runeData: null;
-  status: "Pending" | "Complete" | "Failure";
+  status: 'Pending' | 'Complete' | 'Failure';
   rune: boolean;
 }

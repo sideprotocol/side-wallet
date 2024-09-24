@@ -4,7 +4,7 @@ import {AddressRunesTokenSummary} from '@/shared/types';
 import {runesUtils} from '@/shared/lib/runes-utils';
 import {RawTxInfo} from '@/shared/types';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
-import {Button, Column, Content, Header, Image, Input, Layout, Row, Text} from '@/ui/components';
+import {Button, Column, Content, Header, Input, Layout, Row, Text} from '@/ui/components';
 import {useTools} from '@/ui/components/ActionComponent';
 import {FeeRateBar} from '@/ui/components/FeeRateBar';
 import {OutputValueBar} from '@/ui/components/OutputValueBar';
@@ -123,7 +123,7 @@ export default function CreateSendRune() {
 
   const {tokens: runeList} = useRuneListV2();
 
-  console.log(`runeList: `, runeList, token);
+  console.log('runeList: ', runeList, token);
   const {
     balance: runeBalance,
     runeid,
@@ -153,7 +153,7 @@ export default function CreateSendRune() {
       setDisabled(false);
     }
 
-    console.log(`toInfo: `, toInfo, runeid);
+    console.log('toInfo: ', toInfo, runeid);
     prepareSendRunes({
       toAddressInfo: toInfo,
       runeid: runeid,

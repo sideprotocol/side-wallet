@@ -1,8 +1,8 @@
 //@ts-nocheck
-import { Rpc } from "../../helpers";
-import { BinaryReader } from "../../binary";
-import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryChainTipRequest, QueryChainTipResponse, QueryBlockHeaderByHeightRequest, QueryBlockHeaderByHeightResponse, QueryBlockHeaderByHashRequest, QueryBlockHeaderByHashResponse, QueryWithdrawRequestsRequest, QueryWithdrawRequestsResponse, QueryWithdrawRequestsByAddressRequest, QueryWithdrawRequestsByAddressResponse, QueryWithdrawRequestByTxHashRequest, QueryWithdrawRequestByTxHashResponse, QueryWithdrawNetworkFeeRequest, QueryWithdrawNetworkFeeResponse, QueryUTXOsRequest, QueryUTXOsResponse, QueryUTXOsByAddressRequest, QueryUTXOsByAddressResponse, QueryDKGRequestRequest, QueryDKGRequestResponse, QueryDKGRequestsRequest, QueryDKGRequestsResponse, QueryAllDKGRequestsRequest, QueryAllDKGRequestsResponse, QueryDKGCompletionRequestsRequest, QueryDKGCompletionRequestsResponse } from "./query";
+import { Rpc } from '../../helpers';
+import { BinaryReader } from '../../binary';
+import { QueryClient, createProtobufRpcClient } from '@cosmjs/stargate';
+import { QueryParamsRequest, QueryParamsResponse, QueryChainTipRequest, QueryChainTipResponse, QueryBlockHeaderByHeightRequest, QueryBlockHeaderByHeightResponse, QueryBlockHeaderByHashRequest, QueryBlockHeaderByHashResponse, QueryWithdrawRequestsRequest, QueryWithdrawRequestsResponse, QueryWithdrawRequestsByAddressRequest, QueryWithdrawRequestsByAddressResponse, QueryWithdrawRequestByTxHashRequest, QueryWithdrawRequestByTxHashResponse, QueryWithdrawNetworkFeeRequest, QueryWithdrawNetworkFeeResponse, QueryUTXOsRequest, QueryUTXOsResponse, QueryUTXOsByAddressRequest, QueryUTXOsByAddressResponse, QueryDKGRequestRequest, QueryDKGRequestResponse, QueryDKGRequestsRequest, QueryDKGRequestsResponse, QueryAllDKGRequestsRequest, QueryAllDKGRequestsResponse, QueryDKGCompletionRequestsRequest, QueryDKGCompletionRequestsResponse } from './query';
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -55,72 +55,72 @@ export class QueryClientImpl implements Query {
   }
   queryParams(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryParams", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryParams', data);
     return promise.then(data => QueryParamsResponse.decode(new BinaryReader(data)));
   }
   queryChainTip(request: QueryChainTipRequest = {}): Promise<QueryChainTipResponse> {
     const data = QueryChainTipRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryChainTip", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryChainTip', data);
     return promise.then(data => QueryChainTipResponse.decode(new BinaryReader(data)));
   }
   queryBlockHeaderByHeight(request: QueryBlockHeaderByHeightRequest): Promise<QueryBlockHeaderByHeightResponse> {
     const data = QueryBlockHeaderByHeightRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryBlockHeaderByHeight", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryBlockHeaderByHeight', data);
     return promise.then(data => QueryBlockHeaderByHeightResponse.decode(new BinaryReader(data)));
   }
   queryBlockHeaderByHash(request: QueryBlockHeaderByHashRequest): Promise<QueryBlockHeaderByHashResponse> {
     const data = QueryBlockHeaderByHashRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryBlockHeaderByHash", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryBlockHeaderByHash', data);
     return promise.then(data => QueryBlockHeaderByHashResponse.decode(new BinaryReader(data)));
   }
   queryWithdrawRequests(request: QueryWithdrawRequestsRequest): Promise<QueryWithdrawRequestsResponse> {
     const data = QueryWithdrawRequestsRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryWithdrawRequests", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryWithdrawRequests', data);
     return promise.then(data => QueryWithdrawRequestsResponse.decode(new BinaryReader(data)));
   }
   queryWithdrawRequestsByAddress(request: QueryWithdrawRequestsByAddressRequest): Promise<QueryWithdrawRequestsByAddressResponse> {
     const data = QueryWithdrawRequestsByAddressRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryWithdrawRequestsByAddress", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryWithdrawRequestsByAddress', data);
     return promise.then(data => QueryWithdrawRequestsByAddressResponse.decode(new BinaryReader(data)));
   }
   queryWithdrawRequestByTxHash(request: QueryWithdrawRequestByTxHashRequest): Promise<QueryWithdrawRequestByTxHashResponse> {
     const data = QueryWithdrawRequestByTxHashRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryWithdrawRequestByTxHash", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryWithdrawRequestByTxHash', data);
     return promise.then(data => QueryWithdrawRequestByTxHashResponse.decode(new BinaryReader(data)));
   }
   queryWithdrawNetworkFee(request: QueryWithdrawNetworkFeeRequest): Promise<QueryWithdrawNetworkFeeResponse> {
     const data = QueryWithdrawNetworkFeeRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryWithdrawNetworkFee", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryWithdrawNetworkFee', data);
     return promise.then(data => QueryWithdrawNetworkFeeResponse.decode(new BinaryReader(data)));
   }
   queryUTXOs(request: QueryUTXOsRequest = {}): Promise<QueryUTXOsResponse> {
     const data = QueryUTXOsRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryUTXOs", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryUTXOs', data);
     return promise.then(data => QueryUTXOsResponse.decode(new BinaryReader(data)));
   }
   queryUTXOsByAddress(request: QueryUTXOsByAddressRequest): Promise<QueryUTXOsByAddressResponse> {
     const data = QueryUTXOsByAddressRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryUTXOsByAddress", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryUTXOsByAddress', data);
     return promise.then(data => QueryUTXOsByAddressResponse.decode(new BinaryReader(data)));
   }
   queryDKGRequest(request: QueryDKGRequestRequest): Promise<QueryDKGRequestResponse> {
     const data = QueryDKGRequestRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryDKGRequest", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryDKGRequest', data);
     return promise.then(data => QueryDKGRequestResponse.decode(new BinaryReader(data)));
   }
   queryDKGRequests(request: QueryDKGRequestsRequest): Promise<QueryDKGRequestsResponse> {
     const data = QueryDKGRequestsRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryDKGRequests", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryDKGRequests', data);
     return promise.then(data => QueryDKGRequestsResponse.decode(new BinaryReader(data)));
   }
   queryAllDKGRequests(request: QueryAllDKGRequestsRequest = {}): Promise<QueryAllDKGRequestsResponse> {
     const data = QueryAllDKGRequestsRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryAllDKGRequests", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryAllDKGRequests', data);
     return promise.then(data => QueryAllDKGRequestsResponse.decode(new BinaryReader(data)));
   }
   queryDKGCompletionRequests(request: QueryDKGCompletionRequestsRequest): Promise<QueryDKGCompletionRequestsResponse> {
     const data = QueryDKGCompletionRequestsRequest.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Query", "QueryDKGCompletionRequests", data);
+    const promise = this.rpc.request('side.btcbridge.Query', 'QueryDKGCompletionRequests', data);
     return promise.then(data => QueryDKGCompletionRequestsResponse.decode(new BinaryReader(data)));
   }
 }

@@ -25,7 +25,7 @@ export interface UTXO {
   atomicals: {
     atomicalId: string;
     atomicalNumber: number;
-    type: "NFT" | "FT";
+    type: 'NFT' | 'FT';
     ticker?: string;
   }[];
 

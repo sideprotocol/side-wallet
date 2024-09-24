@@ -4,7 +4,6 @@ import {useNavigate} from 'react-router-dom';
 import {useDebouncedCallback} from 'use-debounce';
 // import { IGetMarketListItem } from '@/ui/services';
 // import { Modal } from 'antd';
-import LoadingIcon from '@/ui/assets/icons/loading.svg';
 import {Column, Content, Footer, Layout, Row} from '@/ui/components';
 import {Button} from '@/ui/components/Button';
 import {CoinInput} from '@/ui/components/CoinInput';

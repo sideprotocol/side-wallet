@@ -13,8 +13,7 @@ import { accountActions } from '@/ui/state/accounts/reducer';
 import { useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import { useBlockstreamUrl, useSkipVersionCallback, useVersionInfo, useWalletConfig } from '@/ui/state/settings/hooks';
-import { useAssetTabKey } from '@/ui/state/ui/hooks';
+import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
 import { fontSizes } from '@/ui/theme/font';
 import { getTruncate, useWallet } from '@/ui/utils';
 

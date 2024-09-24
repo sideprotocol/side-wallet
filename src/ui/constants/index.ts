@@ -10,7 +10,7 @@ import {
   SWAP_ASSETS_MAIN,
   SWAP_ASSETS_TEST
 } from './assets';
-import { CHAINS_DEV, CHAINS_MAIN, CHAINS_TEST } from './chains';
+import { CHAINS_DEV, CHAINS_MAIN } from './chains';
 import {
   AXELAR_DEV_ID,
   AXELAR_MAIN_ID,
@@ -28,8 +28,7 @@ import {
   OSMOSIS_MAIN_ID,
   OSMOSIS_TEST_ID,
   SIDE_DEV_ID,
-  SIDE_MAIN_ID,
-  SIDE_TEST_ID
+  SIDE_MAIN_ID
 } from './chains/chainId';
 import { SIDE_DEV_EXPLORER_LIST, SIDE_MAIN_EXPLORER_LIST, SIDE_TEST_EXPLORER_LIST } from './chains/explorer';
 import {
@@ -105,5 +104,5 @@ export const SIDE_UNISAT_SERVICE_URL = 'https://wallet-api-testnet.unisat.io'
 export const SIDE_UNISAT_RUNE_ICON_URL = 'https://api-t2.unisat.io/icon-v1/icon/runes'
 
 
-export const SIDE_BTC_VAULT_ADDRESS="tb1qc5cafxdlqndn4hjy44nhs9smse207h33rqek7x"
-export const SIDE_RUNES_VAULT_ADDRESS="tb1q244e8laglhdj9tqllnkeq279q6unzgdgtwtvs5"
+export const SIDE_BTC_VAULT_ADDRESS='tb1qc5cafxdlqndn4hjy44nhs9smse207h33rqek7x'
+export const SIDE_RUNES_VAULT_ADDRESS='tb1q244e8laglhdj9tqllnkeq279q6unzgdgtwtvs5'

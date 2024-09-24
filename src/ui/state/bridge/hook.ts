@@ -17,20 +17,15 @@ import {
 import { decodeTxToGetValue, runesUtils } from '@/shared/lib/runes-utils';
 import { NetworkType, RuneBalance, TickPriceItem } from '@/shared/types';
 import { useTools } from '@/ui/components/ActionComponent';
-import { isProduction, UNISAT_SERVICE_ENDPOINT } from '@/ui/constants/';
+import { UNISAT_SERVICE_ENDPOINT, isProduction } from '@/ui/constants/';
 import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { useChainType } from '@/ui/state/settings/hooks';
-import { bridgeStore, DepositBTCBridge, useBridgeStore } from '@/ui/stores/BridgeStore';
+import { DepositBTCBridge, bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
 import { toReadableAmount } from '@/ui/utils/formatter';
-import {
-  // abstractDepositBTC as depositBTC,
-  satoshisToAmount,
-  sendAllBTC,
-  sendRunesWithBTC
-} from '@/ui/wallet-sdk/utils';
+import { satoshisToAmount, sendAllBTC, sendRunesWithBTC } from '@/ui/wallet-sdk/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
 

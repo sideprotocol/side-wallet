@@ -5,7 +5,6 @@ import services from '@/ui/services';
 import { Pool, SwapRouteResult } from '@/ui/services/dex/type';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-import { findAssetIcon } from '@/ui/utils/swap';
 import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
 import {useCurrentAccount} from '@/ui/state/accounts/hooks';
 

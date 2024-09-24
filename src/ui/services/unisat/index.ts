@@ -143,9 +143,9 @@ export default class UnisatService {
     if (ticks.length < 0) {
       return {};
     }
-    const tickLine = ticks.join("");
+    const tickLine = ticks.join('');
     if (!tickLine) return {};
-    console.log(`this.currentRequestRune: `, this.currentRequestRune);
+    console.log('this.currentRequestRune: ', this.currentRequestRune);
     try {
       while (this.currentRequestRune[tickLine]) {
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -177,7 +177,7 @@ export default class UnisatService {
         `${UNISAT_SERVICE_ENDPOINT}/v5/market/runes/price`,
         {
           ticks,
-          nftType: "runes",
+          nftType: 'runes',
         },
         {
           baseURL: this.baseURl,

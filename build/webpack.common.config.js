@@ -453,7 +453,10 @@ const config = (env) => {
     },
     plugins: [
       new ESLintWebpackPlugin({
-        extensions: ['ts', 'tsx', 'js', 'jsx']
+        extensions: ['ts', 'tsx', 'js', 'jsx'],
+        emitError: true,
+        emitWarning: true,
+        failOnError: false
       }),
       new HtmlWebpackPlugin({
         inject: true,

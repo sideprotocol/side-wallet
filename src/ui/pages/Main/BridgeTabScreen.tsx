@@ -39,7 +39,6 @@ const SAT_ITEM = {
   }
 };
 
-// import { utils } from '@/ui/wallet-sdk';
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
   const currentAccount = useCurrentAccount();

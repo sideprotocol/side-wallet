@@ -1,7 +1,6 @@
 import {useBlockstreamUrl} from '@/ui/state/settings/hooks';
-import {copyToClipboard, shortAddress, useWallet} from '@/ui/utils';
+import {copyToClipboard, shortAddress} from '@/ui/utils';
 
-import {useTools} from '../ActionComponent';
 // import {Card} from '../Card';
 import {Column} from '../Column';
 import {Icon} from '../Icon';
@@ -9,7 +8,6 @@ import {Popover} from '../Popover';
 import {Row} from '../Row';
 import {Text} from '../Text';
 import {useState} from 'react';
-import {icon} from '@fortawesome/fontawesome-svg-core';
 
 export const AddressDetailPopover = ({address, onClose}: { address: string; onClose: () => void }) => {
     // const tools = useTools();

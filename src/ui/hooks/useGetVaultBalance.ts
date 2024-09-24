@@ -23,10 +23,10 @@ export default function useGetVaultBalance() {
         }
       });
       const balance = await services.unisat.getAvailableBtcBalance({address: vaultAddress});
-      console.log(`balance: `, balance);
+      console.log('balance: ', balance);
       setData(balance);
     } catch (err) {
-      console.log(`err: `, err);
+      console.log('err: ', err);
     } finally {
       setLoading(false);
     }

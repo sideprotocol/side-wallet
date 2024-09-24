@@ -5,13 +5,12 @@ import {TxType} from '@/shared/types';
 import {Button, Column, Header, Image, Input, Layout, Row, Text} from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import {useCalcPrice} from '@/ui/hooks/useCalcPrice';
-import {useGetSideBalanceList, useGetSideTokenBalance} from '@/ui/hooks/useGetBalance';
-import {useGetSideTokenList} from '@/ui/hooks/useGetTokenList';
+import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
 import {useNavigate} from '@/ui/pages/MainRoute';
 import {useCurrentAccount} from '@/ui/state/accounts/hooks';
 import {useSignAndBroadcastTxRaw} from '@/ui/state/transactions/hooks/cosmos';
 import {useUiTxCreateSendSideScreen, useUpdateUiTxCreateSendSideScreen} from '@/ui/state/ui/hooks';
-import {formatUnitAmount, isValidAddress, parseUnitAmount} from '@/ui/utils';
+import { isValidAddress, parseUnitAmount} from '@/ui/utils';
 import {toReadableAmount} from '@/ui/utils/formatter';
 
 export default function CreateSendSide() {

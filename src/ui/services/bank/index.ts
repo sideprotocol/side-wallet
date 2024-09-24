@@ -33,12 +33,12 @@ export default class BankService {
 
   async getPriceList(ids: string): Promise<GetAllBalancesData> {
     return await this.apiClient.get<GetAllBalancesData>(
-      `/api/v3/simple/price`,
+      '/api/v3/simple/price',
       {
-        baseURL: "https://api.coingecko.com",
+        baseURL: 'https://api.coingecko.com',
         params: {
           ids,
-          vs_currencies: "usd",
+          vs_currencies: 'usd',
         },
       }
     );

@@ -1,9 +1,9 @@
 //@ts-nocheck
-import { GeneratedType, Registry, OfflineSigner } from "@cosmjs/proto-signing";
-import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
-import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
-import * as sideBtcbridgeTxRegistry from "./btcbridge/tx.registry";
-import * as sideBtcbridgeTxAmino from "./btcbridge/tx.amino";
+import { GeneratedType, Registry, OfflineSigner } from '@cosmjs/proto-signing';
+import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from '@cosmjs/stargate';
+import { HttpEndpoint } from '@cosmjs/tendermint-rpc';
+import * as sideBtcbridgeTxRegistry from './btcbridge/tx.registry';
+import * as sideBtcbridgeTxAmino from './btcbridge/tx.amino';
 export const sideAminoConverters = {
   ...sideBtcbridgeTxAmino.AminoConverter
 };

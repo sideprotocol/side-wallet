@@ -1,5 +1,5 @@
-import { Coin } from "@cosmjs/amino";
-import { BaseRequestPage, PaginationResponse } from "../types";
+import { Coin } from '@cosmjs/amino';
+import { BaseRequestPage, PaginationResponse } from '../types';
 
 export type GetAllBalancesRequest = {
   address: string;

@@ -13,7 +13,7 @@ export default class BitcoinService {
 
   async postTxHash(txid: string) {
     const queryParams = getQueryParams({ txid });
-    const result = await this.apiClient.post(`/bitcoin/add-deposit-bitcoin-transaction?${queryParams}`, "", {
+    const result = await this.apiClient.post(`/bitcoin/add-deposit-bitcoin-transaction?${queryParams}`, '', {
       baseURL: SERVICE_BASE_URL,
     });
     return result;

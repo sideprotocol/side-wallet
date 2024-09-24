@@ -7,7 +7,6 @@ import { IPoolItem } from '@/ui/services/dex/type';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { swapStore } from '@/ui/stores/SwapStore';
-import { findAssetIcon } from '@/ui/utils/swap';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
 import useGetAllPairs from './useGetAllPairs';
