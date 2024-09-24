@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
 import { Buffer } from 'buffer';
-import qs from 'qs';
 import { useEffect, useState } from 'react';
 
 import { MessageComposer } from '@/codegen/src/side/btcbridge/tx.registry';
@@ -26,10 +25,11 @@ import { useChainType } from '@/ui/state/settings/hooks';
 import { bridgeStore, DepositBTCBridge, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
 import { toReadableAmount } from '@/ui/utils/formatter';
-import { sendAllBTC, sendRunesWithBTC } from '@/ui/wallet-sdk/tx-helpers';
 import {
   // abstractDepositBTC as depositBTC,
-  satoshisToAmount
+  satoshisToAmount,
+  sendAllBTC,
+  sendRunesWithBTC
 } from '@/ui/wallet-sdk/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
@@ -257,102 +257,6 @@ export const useBitcoinRuneBalance = (base: string) => {
   const rune = runesBalance.find((rune) => base.includes(rune?.runeid));
   return runesUtils.toDecimalNumber(rune?.amount, rune?.divisibility)?.toString() || '0';
 };
-
-// export const useBitcoinBtcBalance = () => {
-//   const currentAccount = useCurrentAccount();
-//
-//   const [btcBalance, setBtcBalance] = useState('0');
-//   const [notBtcBalance, setNotBtcBalance] = useState('0');
-//
-//   const [loading, setLoading] = useState<boolean>(true);
-//
-//   async function getBtcBalance() {
-//     setLoading(true);
-//
-//     const addressInfo = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}`).then((res) => res.json());
-//
-//     const rawUtxos = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) =>
-//       res.json()
-//     );
-//
-//     const runesOutputsData = rawUtxos.map((utxo) => {
-//       return `${utxo.txid}:${utxo.vout}`;
-//     });
-//
-//     const outputs = await Promise.all(runesOutputsData.map((key: string) => fetchRuneOutput(key)));
-//
-//     const txs = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/txs`).then((res) => res.json());
-//
-//     const unconfirmedRunes = txs.filter((tx) => {
-//       return !!decodeTxToGetValue(tx) && !tx.status.confirmed;
-//     });
-//
-//     const allRunes = txs.filter((tx) => {
-//       // return tx.vout.find((out) => Number(out.value) === 546 && out.scriptpubkey_address === currentAccount.address);
-//
-//       return !!decodeTxToGetValue(tx);
-//     });
-//     const unconfirmedBTC = txs.filter((tx) => {
-//       const notRune = !decodeTxToGetValue(tx);
-//       return notRune && !tx.status.confirmed;
-//     });
-//
-//     let balance = BigNumber(addressInfo.mempool_stats.funded_txo_sum)
-//       .minus(addressInfo.mempool_stats.spent_txo_sum)
-//       .plus(addressInfo.chain_stats.funded_txo_sum)
-//       .minus(addressInfo.chain_stats.spent_txo_sum);
-//
-//     let unConfirmBalance = BigNumber(0);
-//     // console.log(`outputs: `, outputs, balance, txs);
-//     outputs.forEach((output) => {
-//       const hasRune = Object.keys(output.runes).length > 0;
-//
-//       if (hasRune) {
-//         balance = balance.minus(output.value);
-//       }
-//     });
-//
-//     unconfirmedRunes.forEach((tx) => {
-//       const value = decodeTxToGetValue(tx);
-//       balance = balance.minus(value);
-//     });
-//
-//     allRunes?.forEach((tx) => {
-//       const value = decodeTxToGetValue(tx);
-//
-//       unConfirmBalance = unConfirmBalance.plus(value);
-//     });
-//     // console.log(`unconfirmedBTC: `, unconfirmedBTC);
-//     unconfirmedBTC?.forEach((tx) => {
-//       const value = decodeTxToGetValue(tx);
-//
-//       unConfirmBalance = unConfirmBalance.plus(value);
-//     });
-//     const ba = toReadableAmount(balance.toFixed(), 8);
-//     const _dataUnConfirmBalance = toReadableAmount(unConfirmBalance.toFixed(), 8);
-//
-//     return { ba, unba: _dataUnConfirmBalance };
-//   }
-//   // load btc balance
-//   useEffect(() => {
-//     setLoading(true);
-//     getBtcBalance()
-//       .then(({ ba, unba }) => {
-//         setBtcBalance(ba);
-//         setNotBtcBalance(unba);
-//       })
-//       .finally(() => setLoading(false));
-//   }, [currentAccount.address]);
-//
-//   // console.log(`btcBalance: `, btcBalance);
-//   return {
-//     data: {
-//       btc: btcBalance,
-//       notBtc: notBtcBalance
-//     },
-//     loading
-//   };
-// };
 
 export const useBridge = () => {
   const { from, bridgeAmount, fee, exponent } = useBridgeStore();
@@ -771,43 +675,6 @@ export const useBridge = () => {
   return { bridge, bridgeRune, estimateNetworkFee };
 };
 
-// export const useRuneAndBtcBalances = () => {
-//   const { data: assets } = useGetSideTokenList();
-//
-//   const satItem = assets.find((a) => a.base === 'sat');
-//
-//   const {
-//     data: { btc: bitcoinBtcBalance, notBtc: bitcoinNotBtcBalance },
-//     loading: btcLoaing
-//   } = useBitcoinBtcBalance();
-//
-//   let balance = BigNumber(bitcoinBtcBalance || '0').plus(bitcoinNotBtcBalance);
-//   const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
-//
-//   const balancePrice = priceMap?.[satItem?.base || ''] || 0;
-//
-//   const price = new BigNumber(balancePrice).multipliedBy(bitcoinBtcBalance || '0').toFixed(2);
-//
-//   const { data: bitcoinRunesBalances, loading: runesLoading } = useRuneBalances();
-//
-//   if (btcLoaing || runesLoading) return [];
-//
-//   return [
-//     {
-//       ...satItem,
-//       balance: bitcoinBtcBalance,
-//       balanceAll: balance?.toString(),
-//       balanceNot: bitcoinNotBtcBalance,
-//       amount: toUnitAmount(bitcoinBtcBalance || '0', 8),
-//       amountNot: toUnitAmount(bitcoinNotBtcBalance || '0', 8),
-//       // amountAll: toUnitAmount(balance || '0', 8),
-//       denom: satItem?.base,
-//       price
-//     },
-//     ...bitcoinRunesBalances
-//   ];
-// };
-
 export const useRuneBridge = () => {
   const { from, bridgeAmount, fee, base, loading } = useBridgeStore();
 
@@ -831,65 +698,10 @@ export const useRuneBridge = () => {
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 
-  const updateProofs = async () => {
-    const params = qs.stringify(
-      {
-        events: [`btcbridge.recipient='${currentAccount.address}'`],
-        order_by: '2'
-      },
-      { arrayFormat: 'repeat' }
-    );
-
-    const proofs = await fetch('/cosmos/tx/v1beta1/txs?' + params).then((res) => res.json());
-
-    const confirmedTxs = proofs.tx_responses.map((res) => {
-      const amount =
-        res.events
-          .filter((e) => e.type === 'transfer')
-          ?.at(-1)
-          ?.attributes?.find((a) => a.key === 'amount')?.value || '';
-
-      const amountValue = new RegExp(base, 'i').test(amount) ? parseInt(amount) : 0;
-
-      return {
-        destinationTx: res.events.find((e) => e.type === 'btcbridge')?.attributes?.find((a) => a.key === 'txid')?.value,
-        tx: res.txhash,
-        amount: amountValue
-      };
-    });
-
-    const id = `${networkType}:${base}`;
-
-    const tempPendingTxs = getPendingDeposits(id, currentAccount.address);
-
-    const filteredPendingTxs = tempPendingTxs
-      .filter(
-        (tx) =>
-          tx.txid &&
-          tx.txid !== null &&
-          tx.txid !== undefined &&
-          !confirmedTxs.find((item) => item.destinationTx === tx.txid)
-      )
-      .sort((a, b) => a.time - b.time);
-
-    updatePendingDeposits(filteredPendingTxs, id, currentAccount.address);
-
-    return filteredPendingTxs;
-  };
-
   const bridge = async () => {
     bridgeStore.loading = true;
 
     if (isDeposit) {
-      // const filteredPendingTxs = await updateProofs();
-
-      // if (filteredPendingTxs.length > 0) {
-      //   tools.toastError(
-      //     'Please wait for the pending Rune bridging transaction to complete before starting a new request.'
-      //   );
-
-      //   return;
-      // }
       try {
         depositRune({
           amount: unitAmount,

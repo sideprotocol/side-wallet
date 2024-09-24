@@ -1,26 +1,24 @@
-import BigNumber from "bignumber.js";
-import { ECPair, bitcoin, ecc } from "./bitcoin-core";
-
 // import { UTXOBridge } from '@/ui/services';
+import bigInt from 'big-integer';
+import BigNumber from 'bignumber.js';
+import { Buffer } from 'buffer';
 
-import { Buffer } from "buffer";
-
-import { SIDE_RUNES_VAULT_ADDRESS } from "@/ui/constants";
-
-import services from "@/ui/services";
-
-import { UnspentOutput } from "./types";
-
-import { isProduction } from "@/ui/constants";
-import { sendAllBTC, sendBTC, sendRunesWithBTC } from "./tx-helpers";
-
+import { SIDE_RUNES_VAULT_ADDRESS, isProduction } from '@/ui/constants';
+import services from '@/ui/services';
 // import { Account, DepositBTCBridge } from '../web3-wallet';
-import {useWallet} from '@/ui/utils';
+import { useWallet } from '@/ui/utils';
+import { ToSignInput, UTXO_DUST, UnspentOutput } from '@unisat/wallet-sdk';
+import { ECPair, bitcoin, ecc } from '@unisat/wallet-sdk/lib/bitcoin-core';
+import { ErrorCodes, WalletUtilsError } from '@unisat/wallet-sdk/lib/error';
+import { NetworkType } from '@unisat/wallet-sdk/lib/network';
+import { varint } from '@unisat/wallet-sdk/lib/runes';
+import { RuneId } from '@unisat/wallet-sdk/lib/runes/rund_id';
+import { Transaction, utxoHelper } from '@unisat/wallet-sdk/lib/transaction';
 
 export const toXOnly = (pubKey: Buffer) => (pubKey.length === 32 ? pubKey : pubKey.slice(1, 33));
 
 function tapTweakHash(pubKey: Buffer, h: Buffer | undefined): Buffer {
-  return bitcoin.crypto.taggedHash("TapTweak", Buffer.concat(h ? [pubKey, h] : [pubKey]));
+  return bitcoin.crypto.taggedHash('TapTweak', Buffer.concat(h ? [pubKey, h] : [pubKey]));
 }
 
 /**
@@ -31,7 +29,7 @@ export function tweakSigner(signer: bitcoin.Signer, opts: any = {}): bitcoin.Sig
   // @ts-ignore
   let privateKey: Uint8Array | undefined = signer.privateKey!;
   if (!privateKey) {
-    throw new Error("Private key is required for tweaking signer!");
+    throw new Error('Private key is required for tweaking signer!');
   }
   if (signer.publicKey[0] === 3) {
     privateKey = ecc.privateNegate(privateKey);
@@ -39,18 +37,19 @@ export function tweakSigner(signer: bitcoin.Signer, opts: any = {}): bitcoin.Sig
 
   const tweakedPrivateKey = ecc.privateAdd(privateKey, tapTweakHash(toXOnly(signer.publicKey), opts.tweakHash));
   if (!tweakedPrivateKey) {
-    throw new Error("Invalid tweaked private key!");
+    throw new Error('Invalid tweaked private key!');
   }
 
   return ECPair.fromPrivateKey(Buffer.from(tweakedPrivateKey), {
-    network: opts.network,
+    network: opts.network
   });
 }
 
 /**
  * ECDSA signature validator
  */
-export const validator = (pubkey: Buffer, msghash: Buffer, signature: Buffer): boolean => ECPair.fromPublicKey(pubkey).verify(msghash, signature);
+export const validator = (pubkey: Buffer, msghash: Buffer, signature: Buffer): boolean =>
+  ECPair.fromPublicKey(pubkey).verify(msghash, signature);
 
 /**
  * Schnorr signature validator
@@ -80,9 +79,9 @@ export const satoshisToBTC = (amount: number) => {
 };
 
 export function shortAddress(address?: string, len = 5) {
-  if (!address) return "";
+  if (!address) return '';
   if (address.length <= len * 2) return address;
-  return address.slice(0, len) + "..." + address.slice(address.length - len);
+  return address.slice(0, len) + '...' + address.slice(address.length - len);
 }
 
 export function decodeTxToGetValue(tx) {
@@ -93,10 +92,7 @@ export function decodeTxToGetValue(tx) {
   return runeOut.value;
 }
 
-export async function abstractDepositBTC(
-  params,
-  currentAccount,
-) {
+export async function abstractDepositBTC(params, currentAccount) {
   const { amount, fee: feeRate } = params;
 
   const senderAddress = currentAccount?.address;
@@ -109,27 +105,29 @@ export async function abstractDepositBTC(
 
   if (safeBalance < amount) {
     throw new Error(
-      `Insufficient balance. Non-Inscription balance(${satoshisToAmount(safeBalance)} BTC) is lower than ${satoshisToAmount(amount)} BTC `
+      `Insufficient balance. Non-Inscription balance(${satoshisToAmount(
+        safeBalance
+      )} BTC) is lower than ${satoshisToAmount(amount)} BTC `
     );
   }
 
   const btcUtxos: UnspentOutput[] = _utxos.map((v) => {
     return {
       ...v,
-      pubkey: pbk,
+      pubkey: pbk
     };
   });
 
   const bridgeParams = await services.bridge.getBridgeParams();
 
   const btcVault = bridgeParams.params.vaults
-    .filter((vault) => vault.asset_type === "ASSET_TYPE_BTC")
+    .filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
     .reduce((max, current) => {
       return BigInt(current.version) > BigInt(max.version) ? current : max;
     });
 
   if (!btcVault) {
-    throw new Error("No valid vault address found.");
+    throw new Error('No valid vault address found.');
   }
 
   const btcVaultAddress = btcVault.address;
@@ -141,7 +139,7 @@ export async function abstractDepositBTC(
           toAddress: btcVaultAddress,
           networkType: isProduction ? 0 : 1,
           feeRate: feeRate,
-          enableRBF: true,
+          enableRBF: true
         })
       : await sendBTC({
           btcUtxos: btcUtxos,
@@ -151,10 +149,10 @@ export async function abstractDepositBTC(
           feeRate: feeRate,
           enableRBF: true,
           memo: undefined,
-          memos: undefined,
+          memos: undefined
         });
   const wallet = useWallet();
-  console.log(`wallet: `, wallet);
+  console.log('wallet: ', wallet);
   debugger;
   const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
@@ -165,153 +163,8 @@ export async function abstractDepositBTC(
   return txid;
 }
 
-export async function abstractDepositRune(
-  params,
-  getAccounts: () => Promise<any[]>,
-  signPsbt: (psbtHex: string, options: any) => Promise<string>
-) {
-  const senderAddress = (await getAccounts())[0].address;
-  const pbk = toHex((await getAccounts())[0].pubkey);
-
-  const { runeId, amount, fee } = params;
-  const runeid = runeId?.substring(6);
-  const runeAmount = BigNumber(amount).toFixed();
-
-  const bridgeParams = await services.bridge.getBridgeParams();
-
-  const btcVault = bridgeParams.params.vaults
-    .filter((vault) => vault.asset_type === "ASSET_TYPE_BTC")
-    .reduce((max, current) => {
-      return BigInt(current.version) > BigInt(max.version) ? current : max;
-    });
-
-  if (!btcVault) {
-    throw new Error("No valid vault address found.");
-  }
-
-  const runeVault = bridgeParams.params.vaults
-    .filter((vault) => vault.asset_type === "ASSET_TYPE_RUNES")
-    .reduce((max, current) => {
-      return BigInt(current.version) > BigInt(max.version) ? current : max;
-    });
-
-  if (!runeVault) {
-    throw new Error("No valid vault address found.");
-  }
-
-  const btcVaultAddress = btcVault.address;
-
-  const runeVaultAddress = runeVault.address;
-
-  const _utxos = await services.unisat.getBTCUtxos({ address: senderAddress });
-
-  const btcUtxos: UnspentOutput[] = _utxos.map((v) => {
-    return {
-      ...v,
-      pubkey: pbk,
-    };
-  });
-
-  const runes_utxos = await services.unisat.getRunesUtxos(senderAddress, runeid!);
-
-  const assetUtxosRunes = runes_utxos.map((v) => {
-    return Object.assign(v, { pubkey: pbk });
-  });
-
-  assetUtxosRunes.forEach((v) => {
-    v.inscriptions = [];
-    v.atomicals = [];
-  });
-
-  assetUtxosRunes.sort((a, b) => {
-    const bAmount = b.runes.find((v) => v.runeid == runeid)?.amount || "0";
-    const aAmount = a.runes.find((v) => v.runeid == runeid)?.amount || "0";
-    return compareAmount(bAmount, aAmount);
-  });
-
-  let assetUtxos = assetUtxosRunes;
-
-  const _assetUtxos: UnspentOutput[] = [];
-
-  // find the utxo that has the exact amount to split
-  for (let i = 0; i < assetUtxos.length; i++) {
-    const v = assetUtxos[i];
-    if (v.runes && v.runes.length > 1) {
-      const balance = v.runes.find((r) => r.runeid == runeid);
-      if (balance && balance.amount == runeAmount) {
-        _assetUtxos.push(v);
-        break;
-      }
-    }
-  }
-
-  if (_assetUtxos.length == 0) {
-    for (let i = 0; i < assetUtxos.length; i++) {
-      const v = assetUtxos[i];
-      if (v.runes) {
-        const balance = v.runes.find((r) => r.runeid == runeid);
-        if (balance && balance.amount == runeAmount) {
-          _assetUtxos.push(v);
-          break;
-        }
-      }
-    }
-  }
-
-  if (_assetUtxos.length == 0) {
-    let total = BigInt(0);
-    for (let i = 0; i < assetUtxos.length; i++) {
-      const v = assetUtxos[i];
-      v.runes?.forEach((r) => {
-        if (r.runeid == runeid) {
-          total = total + BigInt(r.amount);
-        }
-      });
-      _assetUtxos.push(v);
-      if (total >= BigInt(runeAmount)) {
-        break;
-      }
-    }
-  }
-
-  assetUtxos = _assetUtxos;
-
-  const { psbt, toSignInputs } = await sendRunesWithBTC({
-    assetUtxos,
-    btcUtxos: btcUtxos,
-    networkType: isProduction ? 0 : 1,
-    toAddress: runeVaultAddress,
-    btcToAddress: btcVaultAddress,
-    protocolFee: Number(bridgeParams.params.protocol_fees.deposit_fee),
-    assetAddress: senderAddress,
-    btcAddress: senderAddress,
-    feeRate: fee,
-    runeid: runeid!,
-    runeAmount: BigNumber(amount).toFixed(),
-    outputValue: 546,
-    enableRBF: true,
-  });
-
-  const signedTx = await signPsbt(psbt.toHex(), {
-    autoFinalized: true,
-    toSignInputs,
-  });
-
-  const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
-
-  const rawTx = signedPsbt.extractTransaction().toHex();
-
-  const txid = await services.unisat.pushTx(rawTx);
-
-  return txid;
-}
-
-function compareAmount(a: string, b: string) {
-  return new BigNumber(a || "0").comparedTo(new BigNumber(b || "0"));
-}
-
 function toHex(data: Uint8Array): string {
-  return Buffer.from(data).toString("hex");
+  return Buffer.from(data).toString('hex');
 }
 
 export async function estimateNetworkFeeHelper(params, account) {
@@ -327,14 +180,16 @@ export async function estimateNetworkFeeHelper(params, account) {
 
   if (safeBalance < amount) {
     throw new Error(
-      `Insufficient balance. Non-Inscription balance(${satoshisToAmount(safeBalance)} BTC) is lower than ${satoshisToAmount(amount)} BTC `
+      `Insufficient balance. Non-Inscription balance(${satoshisToAmount(
+        safeBalance
+      )} BTC) is lower than ${satoshisToAmount(amount)} BTC `
     );
   }
 
   const btcUtxos: UnspentOutput[] = _utxos.map((v) => {
     return {
       ...v,
-      pubkey: pbk,
+      pubkey: pbk
     };
   });
 
@@ -345,13 +200,13 @@ export async function estimateNetworkFeeHelper(params, account) {
   const protocolLimit = bridgeParams.params.protocol_limits;
 
   const btcVault = bridgeParams.params.vaults
-    .filter((vault) => vault.asset_type === "ASSET_TYPE_BTC")
+    .filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
     .reduce((max, current) => {
       return BigInt(current.version) > BigInt(max.version) ? current : max;
     });
 
   if (!btcVault) {
-    throw new Error("No valid vault address found.");
+    throw new Error('No valid vault address found.');
   }
 
   const btcVaultAddress = btcVault.address;
@@ -363,7 +218,7 @@ export async function estimateNetworkFeeHelper(params, account) {
           toAddress: btcVaultAddress,
           networkType: 1,
           feeRate: feeRate,
-          enableRBF: true,
+          enableRBF: true
         })
       : await sendBTC({
           btcUtxos: btcUtxos,
@@ -373,8 +228,260 @@ export async function estimateNetworkFeeHelper(params, account) {
           feeRate: feeRate,
           enableRBF: true,
           memo: undefined,
-          memos: undefined,
+          memos: undefined
         });
 
   return { networkFee, walletInputs, protocolFee, protocolLimit };
+}
+
+export async function sendAllBTC({
+  btcUtxos,
+  toAddress,
+  networkType,
+  feeRate,
+  enableRBF = true
+}: {
+  btcUtxos: UnspentOutput[];
+  toAddress: string;
+  networkType: NetworkType;
+  feeRate: number;
+  enableRBF?: boolean;
+}) {
+  if (utxoHelper.hasAnyAssets(btcUtxos)) {
+    throw new WalletUtilsError(ErrorCodes.NOT_SAFE_UTXOS);
+  }
+
+  const tx = new Transaction();
+  tx.setNetworkType(networkType);
+  tx.setFeeRate(feeRate);
+  tx.setEnableRBF(enableRBF);
+  tx.addOutput(toAddress, UTXO_DUST);
+
+  const toSignInputs: ToSignInput[] = [];
+  btcUtxos.forEach((v, index) => {
+    tx.addInput(v);
+    toSignInputs.push({ index, publicKey: v.pubkey });
+  });
+
+  const fee = await tx.calNetworkFee();
+  const unspent = tx.getTotalInput() - fee;
+  if (unspent < UTXO_DUST) {
+    throw new WalletUtilsError(ErrorCodes.INSUFFICIENT_BTC_UTXO);
+  }
+  tx.outputs[0].value = unspent;
+
+  const psbt = tx.toPsbt();
+
+  const walletInputs = btcUtxos.filter(
+    (btcutxo) => !!psbt.data.inputs.find((input) => input.witnessUtxo?.value === btcutxo.satoshis)
+  );
+
+  const uniqueArray = walletInputs.reduce((acc, current) => {
+    const x = acc.find((item) => item.txid === current.txid);
+    if (!x) {
+      acc.push(current);
+    }
+    return acc;
+  }, [] as UnspentOutput[]);
+
+  return { psbt, toSignInputs, networkFee: await tx.calNetworkFee(), walletInputs: uniqueArray };
+}
+
+export async function sendBTC({
+  btcUtxos,
+  tos,
+  networkType,
+  changeAddress,
+  feeRate,
+  enableRBF = true,
+  memo,
+  memos
+}: {
+  btcUtxos: UnspentOutput[];
+  tos: {
+    address: string;
+    satoshis: number;
+  }[];
+  networkType: NetworkType;
+  changeAddress: string;
+  feeRate: number;
+  enableRBF?: boolean;
+  memo?: string;
+  memos?: string[];
+}) {
+  if (utxoHelper.hasAnyAssets(btcUtxos)) {
+    throw new WalletUtilsError(ErrorCodes.NOT_SAFE_UTXOS);
+  }
+
+  const tx = new Transaction();
+  tx.setNetworkType(networkType);
+  tx.setFeeRate(feeRate);
+  tx.setEnableRBF(enableRBF);
+  tx.setChangeAddress(changeAddress);
+
+  tos.forEach((v) => {
+    tx.addOutput(v.address, v.satoshis);
+  });
+
+  if (memo) {
+    if (Buffer.from(memo, 'hex').toString('hex') === memo) {
+      tx.addOpreturn([Buffer.from(memo, 'hex')]);
+    } else {
+      tx.addOpreturn([Buffer.from(memo)]);
+    }
+  } else if (memos) {
+    if (Buffer.from(memos[0], 'hex').toString('hex') === memos[0]) {
+      tx.addOpreturn(memos.map((memo) => Buffer.from(memo, 'hex')));
+    } else {
+      tx.addOpreturn(memos.map((memo) => Buffer.from(memo)));
+    }
+  }
+
+  const toSignInputs = await tx.addSufficientUtxosForFee(btcUtxos);
+
+  const psbt = tx.toPsbt();
+
+  const walletInputs = btcUtxos.filter(
+    (btcutxo) => !!psbt.data.inputs.find((input) => input.witnessUtxo?.value === btcutxo.satoshis)
+  );
+
+  const uniqueArray = walletInputs.reduce((acc, current) => {
+    const x = acc.find((item) => item.txid === current.txid);
+    if (!x) {
+      acc.push(current);
+    }
+    return acc;
+  }, [] as UnspentOutput[]);
+
+  return {
+    psbt,
+    toSignInputs,
+    networkFee: await tx.calNetworkFee(),
+    walletInputs: uniqueArray
+  };
+}
+
+export async function sendRunesWithBTC({
+  assetUtxos,
+  btcUtxos,
+  assetAddress,
+  btcAddress,
+  toAddress,
+  btcToAddress,
+  networkType,
+  protocolFee,
+  runeid,
+  runeAmount,
+  outputValue,
+  feeRate,
+  enableRBF = true
+}: {
+  assetUtxos: UnspentOutput[];
+  btcUtxos: UnspentOutput[];
+  assetAddress: string;
+  btcAddress: string;
+  toAddress: string;
+  btcToAddress: string;
+  networkType: NetworkType;
+  protocolFee: number;
+  runeid: string;
+  runeAmount: string;
+  outputValue: number;
+  feeRate: number;
+  enableRBF?: boolean;
+}) {
+  // safe check
+  if (utxoHelper.hasAtomicalsNFT(assetUtxos) || utxoHelper.hasInscription(assetUtxos)) {
+    throw new WalletUtilsError(ErrorCodes.NOT_SAFE_UTXOS);
+  }
+
+  if (utxoHelper.hasAnyAssets(btcUtxos)) {
+    throw new WalletUtilsError(ErrorCodes.NOT_SAFE_UTXOS);
+  }
+
+  const tx = new Transaction();
+  tx.setNetworkType(networkType);
+  tx.setFeeRate(feeRate);
+  tx.setEnableRBF(enableRBF);
+  tx.setChangeAddress(btcAddress);
+
+  const toSignInputs: ToSignInput[] = [];
+
+  // add assets
+  assetUtxos.forEach((v, index) => {
+    tx.addInput(v);
+    toSignInputs.push({ index, publicKey: v.pubkey });
+  });
+
+  let fromRuneAmount = bigInt(0);
+  let hasMultipleRunes = false;
+  let runesMap = {};
+  assetUtxos.forEach((v) => {
+    if (v.runes) {
+      v.runes.forEach((w) => {
+        runesMap[w.runeid] = true;
+        if (w.runeid === runeid) {
+          fromRuneAmount = fromRuneAmount.plus(bigInt(w.amount));
+        }
+      });
+    }
+  });
+
+  if (Object.keys(runesMap).length > 1) {
+    hasMultipleRunes = true;
+  }
+
+  const changedRuneAmount = fromRuneAmount.minus(bigInt(runeAmount));
+
+  if (changedRuneAmount.lt(0)) {
+    throw new WalletUtilsError(ErrorCodes.INSUFFICIENT_ASSET_UTXO);
+  }
+
+  let needChange = false;
+  if (hasMultipleRunes || changedRuneAmount.gt(0)) {
+    needChange = true;
+  }
+
+  let payload = [];
+  let runeId: RuneId = RuneId.fromString(runeid);
+
+  varint.encodeToVec(0, payload);
+
+  // add send data
+  varint.encodeToVec(runeId.block, payload);
+  varint.encodeToVec(runeId.tx, payload);
+  varint.encodeToVec(runeAmount, payload);
+  if (needChange) {
+    // 1 is to change
+    // 2 is to send
+    varint.encodeToVec(2, payload);
+  } else {
+    // 1 is to send
+    varint.encodeToVec(1, payload);
+  }
+
+  // add op_return
+  tx.addScriptOutput(
+    // OUTPUT_0
+    bitcoin.script.compile([bitcoin.opcodes.OP_RETURN, bitcoin.opcodes.OP_13, Buffer.from(new Uint8Array(payload))]),
+    0
+  );
+
+  if (needChange) {
+    // OUTPUT_1
+    // add change
+    tx.addOutput(assetAddress, outputValue);
+  }
+
+  tx.addOutput(toAddress, outputValue);
+
+  tx.addOutput(btcToAddress, protocolFee);
+
+  // add btc
+  const _toSignInputs = await tx.addSufficientUtxosForFee(btcUtxos, true);
+  toSignInputs.push(..._toSignInputs);
+
+  const psbt = tx.toPsbt();
+
+  return { psbt, toSignInputs };
 }

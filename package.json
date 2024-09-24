@@ -10,7 +10,7 @@
     "build:brave": "gulp build --env=pro --browser=brave --manifest=mv2 --channel=github",
     "build:edge": "gulp build --env=pro --browser=edge --manifest=mv2 --channel=github",
     "build:chrome:mv3:dev": "webpack --progress --env browser=chrome manifest=mv3 config=dev channel=github version=0.0.0",
-    "build:chrome:mv3": "gulp build --env=pro --browser=chrome --manifest=mv3 --channel=github",
+    "build:chrome:mv3": "gulp build --env=pro --browser=chrome --manifest=mv3 --channel=github --loglevel=LLLL",
     "build:chrome:mv3-bak": "gulp build --env=pro --browser=chrome --manifest=mv3 --channel=store",
     "translate": "node build/pull_translation",
     "lint": "eslint src --fix --ext .js,.ts,.tsx,.json  && npm run format",
