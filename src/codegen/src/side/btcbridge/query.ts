@@ -1,61 +1,15 @@
 //@ts-nocheck
-import { WithdrawStatus, DKGRequestStatus, BitcoinWithdrawRequest, BitcoinWithdrawRequestAmino, BitcoinWithdrawRequestSDKType, BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType, DKGRequest, DKGRequestAmino, DKGRequestSDKType, DKGCompletionRequest, DKGCompletionRequestAmino, DKGCompletionRequestSDKType } from './btcbridge';
-import { PageResponse, PageResponseAmino, PageResponseSDKType } from '../../cosmos/base/query/v1beta1/pagination';
-import { Params, ParamsAmino, ParamsSDKType } from './params';
-import { BinaryReader, BinaryWriter } from '../../binary';
-/** QueryWithdrawRequestsRequest is request type for the Query/WithdrawRequests RPC method. */
-export interface QueryWithdrawRequestsRequest {
-  status: WithdrawStatus;
-  pagination?: PageResponse;
-}
-export interface QueryWithdrawRequestsRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestsRequest';
-  value: Uint8Array;
-}
-/** QueryWithdrawRequestsRequest is request type for the Query/WithdrawRequests RPC method. */
-export interface QueryWithdrawRequestsRequestAmino {
-  status?: WithdrawStatus;
-  pagination?: PageResponseAmino;
-}
-export interface QueryWithdrawRequestsRequestAminoMsg {
-  type: '/side.btcbridge.QueryWithdrawRequestsRequest';
-  value: QueryWithdrawRequestsRequestAmino;
-}
-/** QueryWithdrawRequestsRequest is request type for the Query/WithdrawRequests RPC method. */
-export interface QueryWithdrawRequestsRequestSDKType {
-  status: WithdrawStatus;
-  pagination?: PageResponseSDKType;
-}
-/** QueryWithdrawRequestsResponse is response type for the Query/WithdrawRequests RPC method. */
-export interface QueryWithdrawRequestsResponse {
-  requests: BitcoinWithdrawRequest[];
-  pagination?: PageResponse;
-}
-export interface QueryWithdrawRequestsResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestsResponse';
-  value: Uint8Array;
-}
-/** QueryWithdrawRequestsResponse is response type for the Query/WithdrawRequests RPC method. */
-export interface QueryWithdrawRequestsResponseAmino {
-  requests?: BitcoinWithdrawRequestAmino[];
-  pagination?: PageResponseAmino;
-}
-export interface QueryWithdrawRequestsResponseAminoMsg {
-  type: '/side.btcbridge.QueryWithdrawRequestsResponse';
-  value: QueryWithdrawRequestsResponseAmino;
-}
-/** QueryWithdrawRequestsResponse is response type for the Query/WithdrawRequests RPC method. */
-export interface QueryWithdrawRequestsResponseSDKType {
-  requests: BitcoinWithdrawRequestSDKType[];
-  pagination?: PageResponseSDKType;
-}
+import { PageResponse, PageResponseAmino, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
+import { SigningStatus, DKGRequestStatus, WithdrawRequest, WithdrawRequestAmino, WithdrawRequestSDKType, SigningRequest, SigningRequestAmino, SigningRequestSDKType, BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType, RuneBalance, RuneBalanceAmino, RuneBalanceSDKType, DKGRequest, DKGRequestAmino, DKGRequestSDKType, DKGCompletionRequest, DKGCompletionRequestAmino, DKGCompletionRequestSDKType } from "./btcbridge";
+import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { BinaryReader, BinaryWriter } from "../../binary";
 /** QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method. */
 export interface QueryWithdrawRequestsByAddressRequest {
   address: string;
   pagination?: PageResponse;
 }
 export interface QueryWithdrawRequestsByAddressRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestsByAddressRequest';
+  typeUrl: "/side.btcbridge.QueryWithdrawRequestsByAddressRequest";
   value: Uint8Array;
 }
 /** QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method. */
@@ -64,7 +18,7 @@ export interface QueryWithdrawRequestsByAddressRequestAmino {
   pagination?: PageResponseAmino;
 }
 export interface QueryWithdrawRequestsByAddressRequestAminoMsg {
-  type: '/side.btcbridge.QueryWithdrawRequestsByAddressRequest';
+  type: "/side.btcbridge.QueryWithdrawRequestsByAddressRequest";
   value: QueryWithdrawRequestsByAddressRequestAmino;
 }
 /** QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method. */
@@ -74,123 +28,286 @@ export interface QueryWithdrawRequestsByAddressRequestSDKType {
 }
 /** QueryWithdrawRequestsByAddressResponse is response type for the Query/WithdrawRequestsByAddress RPC method. */
 export interface QueryWithdrawRequestsByAddressResponse {
-  requests: BitcoinWithdrawRequest[];
+  requests: WithdrawRequest[];
   pagination?: PageResponse;
 }
 export interface QueryWithdrawRequestsByAddressResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestsByAddressResponse';
+  typeUrl: "/side.btcbridge.QueryWithdrawRequestsByAddressResponse";
   value: Uint8Array;
 }
 /** QueryWithdrawRequestsByAddressResponse is response type for the Query/WithdrawRequestsByAddress RPC method. */
 export interface QueryWithdrawRequestsByAddressResponseAmino {
-  requests?: BitcoinWithdrawRequestAmino[];
+  requests?: WithdrawRequestAmino[];
   pagination?: PageResponseAmino;
 }
 export interface QueryWithdrawRequestsByAddressResponseAminoMsg {
-  type: '/side.btcbridge.QueryWithdrawRequestsByAddressResponse';
+  type: "/side.btcbridge.QueryWithdrawRequestsByAddressResponse";
   value: QueryWithdrawRequestsByAddressResponseAmino;
 }
 /** QueryWithdrawRequestsByAddressResponse is response type for the Query/WithdrawRequestsByAddress RPC method. */
 export interface QueryWithdrawRequestsByAddressResponseSDKType {
-  requests: BitcoinWithdrawRequestSDKType[];
+  requests: WithdrawRequestSDKType[];
   pagination?: PageResponseSDKType;
 }
-/** QueryWithdrawRequestByTxHashRequest is request type for the Query/WithdrawRequestByTxHash RPC method. */
-export interface QueryWithdrawRequestByTxHashRequest {
+/** QueryWithdrawRequestsByTxHashRequest is request type for the Query/WithdrawRequestsByTxHash RPC method. */
+export interface QueryWithdrawRequestsByTxHashRequest {
   txid: string;
 }
-export interface QueryWithdrawRequestByTxHashRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestByTxHashRequest';
+export interface QueryWithdrawRequestsByTxHashRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryWithdrawRequestsByTxHashRequest";
   value: Uint8Array;
 }
-/** QueryWithdrawRequestByTxHashRequest is request type for the Query/WithdrawRequestByTxHash RPC method. */
-export interface QueryWithdrawRequestByTxHashRequestAmino {
+/** QueryWithdrawRequestsByTxHashRequest is request type for the Query/WithdrawRequestsByTxHash RPC method. */
+export interface QueryWithdrawRequestsByTxHashRequestAmino {
   txid?: string;
 }
-export interface QueryWithdrawRequestByTxHashRequestAminoMsg {
-  type: '/side.btcbridge.QueryWithdrawRequestByTxHashRequest';
-  value: QueryWithdrawRequestByTxHashRequestAmino;
+export interface QueryWithdrawRequestsByTxHashRequestAminoMsg {
+  type: "/side.btcbridge.QueryWithdrawRequestsByTxHashRequest";
+  value: QueryWithdrawRequestsByTxHashRequestAmino;
 }
-/** QueryWithdrawRequestByTxHashRequest is request type for the Query/WithdrawRequestByTxHash RPC method. */
-export interface QueryWithdrawRequestByTxHashRequestSDKType {
+/** QueryWithdrawRequestsByTxHashRequest is request type for the Query/WithdrawRequestsByTxHash RPC method. */
+export interface QueryWithdrawRequestsByTxHashRequestSDKType {
   txid: string;
 }
-/** QueryWithdrawRequestByTxHashResponse is response type for the Query/WithdrawRequestByTxHash RPC method. */
-export interface QueryWithdrawRequestByTxHashResponse {
-  request?: BitcoinWithdrawRequest;
+/** QueryWithdrawRequestsByTxHashResponse is response type for the Query/WithdrawRequestsByTxHash RPC method. */
+export interface QueryWithdrawRequestsByTxHashResponse {
+  requests: WithdrawRequest[];
 }
-export interface QueryWithdrawRequestByTxHashResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestByTxHashResponse';
+export interface QueryWithdrawRequestsByTxHashResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryWithdrawRequestsByTxHashResponse";
   value: Uint8Array;
 }
-/** QueryWithdrawRequestByTxHashResponse is response type for the Query/WithdrawRequestByTxHash RPC method. */
-export interface QueryWithdrawRequestByTxHashResponseAmino {
-  request?: BitcoinWithdrawRequestAmino;
+/** QueryWithdrawRequestsByTxHashResponse is response type for the Query/WithdrawRequestsByTxHash RPC method. */
+export interface QueryWithdrawRequestsByTxHashResponseAmino {
+  requests?: WithdrawRequestAmino[];
 }
-export interface QueryWithdrawRequestByTxHashResponseAminoMsg {
-  type: '/side.btcbridge.QueryWithdrawRequestByTxHashResponse';
-  value: QueryWithdrawRequestByTxHashResponseAmino;
+export interface QueryWithdrawRequestsByTxHashResponseAminoMsg {
+  type: "/side.btcbridge.QueryWithdrawRequestsByTxHashResponse";
+  value: QueryWithdrawRequestsByTxHashResponseAmino;
 }
-/** QueryWithdrawRequestByTxHashResponse is response type for the Query/WithdrawRequestByTxHash RPC method. */
-export interface QueryWithdrawRequestByTxHashResponseSDKType {
-  request?: BitcoinWithdrawRequestSDKType;
+/** QueryWithdrawRequestsByTxHashResponse is response type for the Query/WithdrawRequestsByTxHash RPC method. */
+export interface QueryWithdrawRequestsByTxHashResponseSDKType {
+  requests: WithdrawRequestSDKType[];
 }
-/** QueryWithdrawNetworkFeeRequest is request type for the Query/WithdrawNetworkFee RPC method. */
-export interface QueryWithdrawNetworkFeeRequest {
-  sender: string;
-  amount: string;
-  feeRate: string;
+/** QueryPendingBtcWithdrawRequestsRequest is request type for the Query/PendingBtcWithdrawRequests RPC method. */
+export interface QueryPendingBtcWithdrawRequestsRequest {
+  pagination?: PageResponse;
 }
-export interface QueryWithdrawNetworkFeeRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryWithdrawNetworkFeeRequest';
+export interface QueryPendingBtcWithdrawRequestsRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryPendingBtcWithdrawRequestsRequest";
   value: Uint8Array;
 }
-/** QueryWithdrawNetworkFeeRequest is request type for the Query/WithdrawNetworkFee RPC method. */
-export interface QueryWithdrawNetworkFeeRequestAmino {
-  sender?: string;
-  amount?: string;
+/** QueryPendingBtcWithdrawRequestsRequest is request type for the Query/PendingBtcWithdrawRequests RPC method. */
+export interface QueryPendingBtcWithdrawRequestsRequestAmino {
+  pagination?: PageResponseAmino;
+}
+export interface QueryPendingBtcWithdrawRequestsRequestAminoMsg {
+  type: "/side.btcbridge.QueryPendingBtcWithdrawRequestsRequest";
+  value: QueryPendingBtcWithdrawRequestsRequestAmino;
+}
+/** QueryPendingBtcWithdrawRequestsRequest is request type for the Query/PendingBtcWithdrawRequests RPC method. */
+export interface QueryPendingBtcWithdrawRequestsRequestSDKType {
+  pagination?: PageResponseSDKType;
+}
+/** QueryPendingBtcWithdrawRequestsResponse is response type for the Query/PendingBtcWithdrawRequests RPC method. */
+export interface QueryPendingBtcWithdrawRequestsResponse {
+  requests: WithdrawRequest[];
+  pagination?: PageResponse;
+}
+export interface QueryPendingBtcWithdrawRequestsResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryPendingBtcWithdrawRequestsResponse";
+  value: Uint8Array;
+}
+/** QueryPendingBtcWithdrawRequestsResponse is response type for the Query/PendingBtcWithdrawRequests RPC method. */
+export interface QueryPendingBtcWithdrawRequestsResponseAmino {
+  requests?: WithdrawRequestAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryPendingBtcWithdrawRequestsResponseAminoMsg {
+  type: "/side.btcbridge.QueryPendingBtcWithdrawRequestsResponse";
+  value: QueryPendingBtcWithdrawRequestsResponseAmino;
+}
+/** QueryPendingBtcWithdrawRequestsResponse is response type for the Query/PendingBtcWithdrawRequests RPC method. */
+export interface QueryPendingBtcWithdrawRequestsResponseSDKType {
+  requests: WithdrawRequestSDKType[];
+  pagination?: PageResponseSDKType;
+}
+/** QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method. */
+export interface QuerySigningRequestsRequest {
+  status: SigningStatus;
+  pagination?: PageResponse;
+}
+export interface QuerySigningRequestsRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QuerySigningRequestsRequest";
+  value: Uint8Array;
+}
+/** QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method. */
+export interface QuerySigningRequestsRequestAmino {
+  status?: SigningStatus;
+  pagination?: PageResponseAmino;
+}
+export interface QuerySigningRequestsRequestAminoMsg {
+  type: "/side.btcbridge.QuerySigningRequestsRequest";
+  value: QuerySigningRequestsRequestAmino;
+}
+/** QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method. */
+export interface QuerySigningRequestsRequestSDKType {
+  status: SigningStatus;
+  pagination?: PageResponseSDKType;
+}
+/** QuerySigningRequestsResponse is response type for the Query/SigningRequests RPC method. */
+export interface QuerySigningRequestsResponse {
+  requests: SigningRequest[];
+  pagination?: PageResponse;
+}
+export interface QuerySigningRequestsResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QuerySigningRequestsResponse";
+  value: Uint8Array;
+}
+/** QuerySigningRequestsResponse is response type for the Query/SigningRequests RPC method. */
+export interface QuerySigningRequestsResponseAmino {
+  requests?: SigningRequestAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QuerySigningRequestsResponseAminoMsg {
+  type: "/side.btcbridge.QuerySigningRequestsResponse";
+  value: QuerySigningRequestsResponseAmino;
+}
+/** QuerySigningRequestsResponse is response type for the Query/SigningRequests RPC method. */
+export interface QuerySigningRequestsResponseSDKType {
+  requests: SigningRequestSDKType[];
+  pagination?: PageResponseSDKType;
+}
+/** QuerySigningRequestsByAddressRequest is request type for the Query/SigningRequestsByAddress RPC method. */
+export interface QuerySigningRequestsByAddressRequest {
+  address: string;
+  pagination?: PageResponse;
+}
+export interface QuerySigningRequestsByAddressRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QuerySigningRequestsByAddressRequest";
+  value: Uint8Array;
+}
+/** QuerySigningRequestsByAddressRequest is request type for the Query/SigningRequestsByAddress RPC method. */
+export interface QuerySigningRequestsByAddressRequestAmino {
+  address?: string;
+  pagination?: PageResponseAmino;
+}
+export interface QuerySigningRequestsByAddressRequestAminoMsg {
+  type: "/side.btcbridge.QuerySigningRequestsByAddressRequest";
+  value: QuerySigningRequestsByAddressRequestAmino;
+}
+/** QuerySigningRequestsByAddressRequest is request type for the Query/SigningRequestsByAddress RPC method. */
+export interface QuerySigningRequestsByAddressRequestSDKType {
+  address: string;
+  pagination?: PageResponseSDKType;
+}
+/** QuerySigningRequestsByAddressResponse is response type for the Query/SigningRequestsByAddress RPC method. */
+export interface QuerySigningRequestsByAddressResponse {
+  requests: SigningRequest[];
+  pagination?: PageResponse;
+}
+export interface QuerySigningRequestsByAddressResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QuerySigningRequestsByAddressResponse";
+  value: Uint8Array;
+}
+/** QuerySigningRequestsByAddressResponse is response type for the Query/SigningRequestsByAddress RPC method. */
+export interface QuerySigningRequestsByAddressResponseAmino {
+  requests?: SigningRequestAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QuerySigningRequestsByAddressResponseAminoMsg {
+  type: "/side.btcbridge.QuerySigningRequestsByAddressResponse";
+  value: QuerySigningRequestsByAddressResponseAmino;
+}
+/** QuerySigningRequestsByAddressResponse is response type for the Query/SigningRequestsByAddress RPC method. */
+export interface QuerySigningRequestsByAddressResponseSDKType {
+  requests: SigningRequestSDKType[];
+  pagination?: PageResponseSDKType;
+}
+/** QuerySigningRequestByTxHashRequest is request type for the Query/SigningRequestByTxHash RPC method. */
+export interface QuerySigningRequestByTxHashRequest {
+  txid: string;
+}
+export interface QuerySigningRequestByTxHashRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QuerySigningRequestByTxHashRequest";
+  value: Uint8Array;
+}
+/** QuerySigningRequestByTxHashRequest is request type for the Query/SigningRequestByTxHash RPC method. */
+export interface QuerySigningRequestByTxHashRequestAmino {
+  txid?: string;
+}
+export interface QuerySigningRequestByTxHashRequestAminoMsg {
+  type: "/side.btcbridge.QuerySigningRequestByTxHashRequest";
+  value: QuerySigningRequestByTxHashRequestAmino;
+}
+/** QuerySigningRequestByTxHashRequest is request type for the Query/SigningRequestByTxHash RPC method. */
+export interface QuerySigningRequestByTxHashRequestSDKType {
+  txid: string;
+}
+/** QuerySigningRequestByTxHashResponse is response type for the Query/SigningRequestByTxHashResponse RPC method. */
+export interface QuerySigningRequestByTxHashResponse {
+  request?: SigningRequest;
+}
+export interface QuerySigningRequestByTxHashResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QuerySigningRequestByTxHashResponse";
+  value: Uint8Array;
+}
+/** QuerySigningRequestByTxHashResponse is response type for the Query/SigningRequestByTxHashResponse RPC method. */
+export interface QuerySigningRequestByTxHashResponseAmino {
+  request?: SigningRequestAmino;
+}
+export interface QuerySigningRequestByTxHashResponseAminoMsg {
+  type: "/side.btcbridge.QuerySigningRequestByTxHashResponse";
+  value: QuerySigningRequestByTxHashResponseAmino;
+}
+/** QuerySigningRequestByTxHashResponse is response type for the Query/SigningRequestByTxHashResponse RPC method. */
+export interface QuerySigningRequestByTxHashResponseSDKType {
+  request?: SigningRequestSDKType;
+}
+/** QueryFeeRateRequest is request type for the Query/FeeRate RPC method. */
+export interface QueryFeeRateRequest {}
+export interface QueryFeeRateRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryFeeRateRequest";
+  value: Uint8Array;
+}
+/** QueryFeeRateRequest is request type for the Query/FeeRate RPC method. */
+export interface QueryFeeRateRequestAmino {}
+export interface QueryFeeRateRequestAminoMsg {
+  type: "/side.btcbridge.QueryFeeRateRequest";
+  value: QueryFeeRateRequestAmino;
+}
+/** QueryFeeRateRequest is request type for the Query/FeeRate RPC method. */
+export interface QueryFeeRateRequestSDKType {}
+/** QueryFeeRateResponse is response type for the Query/FeeRate RPC method. */
+export interface QueryFeeRateResponse {
+  feeRate: bigint;
+}
+export interface QueryFeeRateResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryFeeRateResponse";
+  value: Uint8Array;
+}
+/** QueryFeeRateResponse is response type for the Query/FeeRate RPC method. */
+export interface QueryFeeRateResponseAmino {
   fee_rate?: string;
 }
-export interface QueryWithdrawNetworkFeeRequestAminoMsg {
-  type: '/side.btcbridge.QueryWithdrawNetworkFeeRequest';
-  value: QueryWithdrawNetworkFeeRequestAmino;
+export interface QueryFeeRateResponseAminoMsg {
+  type: "/side.btcbridge.QueryFeeRateResponse";
+  value: QueryFeeRateResponseAmino;
 }
-/** QueryWithdrawNetworkFeeRequest is request type for the Query/WithdrawNetworkFee RPC method. */
-export interface QueryWithdrawNetworkFeeRequestSDKType {
-  sender: string;
-  amount: string;
-  fee_rate: string;
-}
-/** QueryWithdrawNetworkFeeResponse is response type for the Query/WithdrawNetworkFee RPC method. */
-export interface QueryWithdrawNetworkFeeResponse {
-  fee: bigint;
-}
-export interface QueryWithdrawNetworkFeeResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryWithdrawNetworkFeeResponse';
-  value: Uint8Array;
-}
-/** QueryWithdrawNetworkFeeResponse is response type for the Query/WithdrawNetworkFee RPC method. */
-export interface QueryWithdrawNetworkFeeResponseAmino {
-  fee?: string;
-}
-export interface QueryWithdrawNetworkFeeResponseAminoMsg {
-  type: '/side.btcbridge.QueryWithdrawNetworkFeeResponse';
-  value: QueryWithdrawNetworkFeeResponseAmino;
-}
-/** QueryWithdrawNetworkFeeResponse is response type for the Query/WithdrawNetworkFee RPC method. */
-export interface QueryWithdrawNetworkFeeResponseSDKType {
-  fee: bigint;
+/** QueryFeeRateResponse is response type for the Query/FeeRate RPC method. */
+export interface QueryFeeRateResponseSDKType {
+  fee_rate: bigint;
 }
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 export interface QueryParamsRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryParamsRequest';
+  typeUrl: "/side.btcbridge.QueryParamsRequest";
   value: Uint8Array;
 }
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequestAmino {}
 export interface QueryParamsRequestAminoMsg {
-  type: '/side.btcbridge.QueryParamsRequest';
+  type: "/side.btcbridge.QueryParamsRequest";
   value: QueryParamsRequestAmino;
 }
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
@@ -201,7 +318,7 @@ export interface QueryParamsResponse {
   params: Params;
 }
 export interface QueryParamsResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryParamsResponse';
+  typeUrl: "/side.btcbridge.QueryParamsResponse";
   value: Uint8Array;
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
@@ -210,7 +327,7 @@ export interface QueryParamsResponseAmino {
   params?: ParamsAmino;
 }
 export interface QueryParamsResponseAminoMsg {
-  type: '/side.btcbridge.QueryParamsResponse';
+  type: "/side.btcbridge.QueryParamsResponse";
   value: QueryParamsResponseAmino;
 }
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
@@ -220,13 +337,13 @@ export interface QueryParamsResponseSDKType {
 /** QueryChainTipRequest is request type for the Query/ChainTip RPC method. */
 export interface QueryChainTipRequest {}
 export interface QueryChainTipRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryChainTipRequest';
+  typeUrl: "/side.btcbridge.QueryChainTipRequest";
   value: Uint8Array;
 }
 /** QueryChainTipRequest is request type for the Query/ChainTip RPC method. */
 export interface QueryChainTipRequestAmino {}
 export interface QueryChainTipRequestAminoMsg {
-  type: '/side.btcbridge.QueryChainTipRequest';
+  type: "/side.btcbridge.QueryChainTipRequest";
   value: QueryChainTipRequestAmino;
 }
 /** QueryChainTipRequest is request type for the Query/ChainTip RPC method. */
@@ -237,7 +354,7 @@ export interface QueryChainTipResponse {
   height: bigint;
 }
 export interface QueryChainTipResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryChainTipResponse';
+  typeUrl: "/side.btcbridge.QueryChainTipResponse";
   value: Uint8Array;
 }
 /** QueryChainTipResponse is response type for the Query/ChainTip RPC method. */
@@ -246,7 +363,7 @@ export interface QueryChainTipResponseAmino {
   height?: string;
 }
 export interface QueryChainTipResponseAminoMsg {
-  type: '/side.btcbridge.QueryChainTipResponse';
+  type: "/side.btcbridge.QueryChainTipResponse";
   value: QueryChainTipResponseAmino;
 }
 /** QueryChainTipResponse is response type for the Query/ChainTip RPC method. */
@@ -259,7 +376,7 @@ export interface QueryBlockHeaderByHeightRequest {
   height: bigint;
 }
 export interface QueryBlockHeaderByHeightRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightRequest';
+  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightRequest";
   value: Uint8Array;
 }
 /** QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method. */
@@ -267,7 +384,7 @@ export interface QueryBlockHeaderByHeightRequestAmino {
   height?: string;
 }
 export interface QueryBlockHeaderByHeightRequestAminoMsg {
-  type: '/side.btcbridge.QueryBlockHeaderByHeightRequest';
+  type: "/side.btcbridge.QueryBlockHeaderByHeightRequest";
   value: QueryBlockHeaderByHeightRequestAmino;
 }
 /** QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method. */
@@ -279,7 +396,7 @@ export interface QueryBlockHeaderByHeightResponse {
   blockHeader?: BlockHeader;
 }
 export interface QueryBlockHeaderByHeightResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightResponse';
+  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightResponse";
   value: Uint8Array;
 }
 /** QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method. */
@@ -287,7 +404,7 @@ export interface QueryBlockHeaderByHeightResponseAmino {
   block_header?: BlockHeaderAmino;
 }
 export interface QueryBlockHeaderByHeightResponseAminoMsg {
-  type: '/side.btcbridge.QueryBlockHeaderByHeightResponse';
+  type: "/side.btcbridge.QueryBlockHeaderByHeightResponse";
   value: QueryBlockHeaderByHeightResponseAmino;
 }
 /** QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method. */
@@ -299,7 +416,7 @@ export interface QueryBlockHeaderByHashRequest {
   hash: string;
 }
 export interface QueryBlockHeaderByHashRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryBlockHeaderByHashRequest';
+  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashRequest";
   value: Uint8Array;
 }
 /** QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method. */
@@ -307,7 +424,7 @@ export interface QueryBlockHeaderByHashRequestAmino {
   hash?: string;
 }
 export interface QueryBlockHeaderByHashRequestAminoMsg {
-  type: '/side.btcbridge.QueryBlockHeaderByHashRequest';
+  type: "/side.btcbridge.QueryBlockHeaderByHashRequest";
   value: QueryBlockHeaderByHashRequestAmino;
 }
 /** QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method. */
@@ -319,7 +436,7 @@ export interface QueryBlockHeaderByHashResponse {
   blockHeader?: BlockHeader;
 }
 export interface QueryBlockHeaderByHashResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryBlockHeaderByHashResponse';
+  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashResponse";
   value: Uint8Array;
 }
 /** QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method. */
@@ -327,7 +444,7 @@ export interface QueryBlockHeaderByHashResponseAmino {
   block_header?: BlockHeaderAmino;
 }
 export interface QueryBlockHeaderByHashResponseAminoMsg {
-  type: '/side.btcbridge.QueryBlockHeaderByHashResponse';
+  type: "/side.btcbridge.QueryBlockHeaderByHashResponse";
   value: QueryBlockHeaderByHashResponseAmino;
 }
 /** QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method. */
@@ -337,13 +454,13 @@ export interface QueryBlockHeaderByHashResponseSDKType {
 /** QueryUTXOsRequest is the request type for the Query/UTXOs RPC method. */
 export interface QueryUTXOsRequest {}
 export interface QueryUTXOsRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryUTXOsRequest';
+  typeUrl: "/side.btcbridge.QueryUTXOsRequest";
   value: Uint8Array;
 }
 /** QueryUTXOsRequest is the request type for the Query/UTXOs RPC method. */
 export interface QueryUTXOsRequestAmino {}
 export interface QueryUTXOsRequestAminoMsg {
-  type: '/side.btcbridge.QueryUTXOsRequest';
+  type: "/side.btcbridge.QueryUTXOsRequest";
   value: QueryUTXOsRequestAmino;
 }
 /** QueryUTXOsRequest is the request type for the Query/UTXOs RPC method. */
@@ -353,7 +470,7 @@ export interface QueryUTXOsResponse {
   utxos: UTXO[];
 }
 export interface QueryUTXOsResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryUTXOsResponse';
+  typeUrl: "/side.btcbridge.QueryUTXOsResponse";
   value: Uint8Array;
 }
 /** QueryUTXOsResponse is the response type for the Query/UTXOs RPC method. */
@@ -361,7 +478,7 @@ export interface QueryUTXOsResponseAmino {
   utxos?: UTXOAmino[];
 }
 export interface QueryUTXOsResponseAminoMsg {
-  type: '/side.btcbridge.QueryUTXOsResponse';
+  type: "/side.btcbridge.QueryUTXOsResponse";
   value: QueryUTXOsResponseAmino;
 }
 /** QueryUTXOsResponse is the response type for the Query/UTXOs RPC method. */
@@ -373,7 +490,7 @@ export interface QueryUTXOsByAddressRequest {
   address: string;
 }
 export interface QueryUTXOsByAddressRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryUTXOsByAddressRequest';
+  typeUrl: "/side.btcbridge.QueryUTXOsByAddressRequest";
   value: Uint8Array;
 }
 /** QueryUTXOsByAddressRequest is the request type for the Query/UTXOsByAddress RPC method. */
@@ -381,7 +498,7 @@ export interface QueryUTXOsByAddressRequestAmino {
   address?: string;
 }
 export interface QueryUTXOsByAddressRequestAminoMsg {
-  type: '/side.btcbridge.QueryUTXOsByAddressRequest';
+  type: "/side.btcbridge.QueryUTXOsByAddressRequest";
   value: QueryUTXOsByAddressRequestAmino;
 }
 /** QueryUTXOsByAddressRequest is the request type for the Query/UTXOsByAddress RPC method. */
@@ -393,7 +510,7 @@ export interface QueryUTXOsByAddressResponse {
   utxos: UTXO[];
 }
 export interface QueryUTXOsByAddressResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryUTXOsByAddressResponse';
+  typeUrl: "/side.btcbridge.QueryUTXOsByAddressResponse";
   value: Uint8Array;
 }
 /** QueryUTXOsByAddressResponse is the response type for the Query/UTXOsByAddress RPC method. */
@@ -401,19 +518,65 @@ export interface QueryUTXOsByAddressResponseAmino {
   utxos?: UTXOAmino[];
 }
 export interface QueryUTXOsByAddressResponseAminoMsg {
-  type: '/side.btcbridge.QueryUTXOsByAddressResponse';
+  type: "/side.btcbridge.QueryUTXOsByAddressResponse";
   value: QueryUTXOsByAddressResponseAmino;
 }
 /** QueryUTXOsByAddressResponse is the response type for the Query/UTXOsByAddress RPC method. */
 export interface QueryUTXOsByAddressResponseSDKType {
   utxos: UTXOSDKType[];
 }
+/** QueryUTXOCountAndBalancesByAddressRequest is the request type for the Query/UTXOCountAndBalancesByAddress RPC method. */
+export interface QueryUTXOCountAndBalancesByAddressRequest {
+  address: string;
+}
+export interface QueryUTXOCountAndBalancesByAddressRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryUTXOCountAndBalancesByAddressRequest";
+  value: Uint8Array;
+}
+/** QueryUTXOCountAndBalancesByAddressRequest is the request type for the Query/UTXOCountAndBalancesByAddress RPC method. */
+export interface QueryUTXOCountAndBalancesByAddressRequestAmino {
+  address?: string;
+}
+export interface QueryUTXOCountAndBalancesByAddressRequestAminoMsg {
+  type: "/side.btcbridge.QueryUTXOCountAndBalancesByAddressRequest";
+  value: QueryUTXOCountAndBalancesByAddressRequestAmino;
+}
+/** QueryUTXOCountAndBalancesByAddressRequest is the request type for the Query/UTXOCountAndBalancesByAddress RPC method. */
+export interface QueryUTXOCountAndBalancesByAddressRequestSDKType {
+  address: string;
+}
+/** QueryUTXOCountAndBalancesByAddressResponse is the response type for the Query/UTXOCountAndBalancesByAddress RPC method. */
+export interface QueryUTXOCountAndBalancesByAddressResponse {
+  count: number;
+  value: bigint;
+  runeBalances: RuneBalance[];
+}
+export interface QueryUTXOCountAndBalancesByAddressResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryUTXOCountAndBalancesByAddressResponse";
+  value: Uint8Array;
+}
+/** QueryUTXOCountAndBalancesByAddressResponse is the response type for the Query/UTXOCountAndBalancesByAddress RPC method. */
+export interface QueryUTXOCountAndBalancesByAddressResponseAmino {
+  count?: number;
+  value?: string;
+  runeBalances?: RuneBalanceAmino[];
+}
+export interface QueryUTXOCountAndBalancesByAddressResponseAminoMsg {
+  type: "/side.btcbridge.QueryUTXOCountAndBalancesByAddressResponse";
+  value: QueryUTXOCountAndBalancesByAddressResponseAmino;
+}
+/** QueryUTXOCountAndBalancesByAddressResponse is the response type for the Query/UTXOCountAndBalancesByAddress RPC method. */
+export interface QueryUTXOCountAndBalancesByAddressResponseSDKType {
+  count: number;
+  value: bigint;
+  runeBalances: RuneBalanceSDKType[];
+}
 /** QueryDKGRequestRequest is the request type for the Query/DKGRequest RPC method. */
 export interface QueryDKGRequestRequest {
   id: bigint;
 }
 export interface QueryDKGRequestRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryDKGRequestRequest';
+  typeUrl: "/side.btcbridge.QueryDKGRequestRequest";
   value: Uint8Array;
 }
 /** QueryDKGRequestRequest is the request type for the Query/DKGRequest RPC method. */
@@ -421,7 +584,7 @@ export interface QueryDKGRequestRequestAmino {
   id?: string;
 }
 export interface QueryDKGRequestRequestAminoMsg {
-  type: '/side.btcbridge.QueryDKGRequestRequest';
+  type: "/side.btcbridge.QueryDKGRequestRequest";
   value: QueryDKGRequestRequestAmino;
 }
 /** QueryDKGRequestRequest is the request type for the Query/DKGRequest RPC method. */
@@ -433,7 +596,7 @@ export interface QueryDKGRequestResponse {
   request?: DKGRequest;
 }
 export interface QueryDKGRequestResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryDKGRequestResponse';
+  typeUrl: "/side.btcbridge.QueryDKGRequestResponse";
   value: Uint8Array;
 }
 /** QueryDKGRequestResponse is the response type for the Query/DKGRequest RPC method. */
@@ -441,7 +604,7 @@ export interface QueryDKGRequestResponseAmino {
   request?: DKGRequestAmino;
 }
 export interface QueryDKGRequestResponseAminoMsg {
-  type: '/side.btcbridge.QueryDKGRequestResponse';
+  type: "/side.btcbridge.QueryDKGRequestResponse";
   value: QueryDKGRequestResponseAmino;
 }
 /** QueryDKGRequestResponse is the response type for the Query/DKGRequest RPC method. */
@@ -453,7 +616,7 @@ export interface QueryDKGRequestsRequest {
   status: DKGRequestStatus;
 }
 export interface QueryDKGRequestsRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryDKGRequestsRequest';
+  typeUrl: "/side.btcbridge.QueryDKGRequestsRequest";
   value: Uint8Array;
 }
 /** QueryDKGRequestsRequest is the request type for the Query/DKGRequests RPC method. */
@@ -461,7 +624,7 @@ export interface QueryDKGRequestsRequestAmino {
   status?: DKGRequestStatus;
 }
 export interface QueryDKGRequestsRequestAminoMsg {
-  type: '/side.btcbridge.QueryDKGRequestsRequest';
+  type: "/side.btcbridge.QueryDKGRequestsRequest";
   value: QueryDKGRequestsRequestAmino;
 }
 /** QueryDKGRequestsRequest is the request type for the Query/DKGRequests RPC method. */
@@ -473,7 +636,7 @@ export interface QueryDKGRequestsResponse {
   requests: DKGRequest[];
 }
 export interface QueryDKGRequestsResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryDKGRequestsResponse';
+  typeUrl: "/side.btcbridge.QueryDKGRequestsResponse";
   value: Uint8Array;
 }
 /** QueryDKGRequestsResponse is the response type for the Query/DKGRequests RPC method. */
@@ -481,7 +644,7 @@ export interface QueryDKGRequestsResponseAmino {
   requests?: DKGRequestAmino[];
 }
 export interface QueryDKGRequestsResponseAminoMsg {
-  type: '/side.btcbridge.QueryDKGRequestsResponse';
+  type: "/side.btcbridge.QueryDKGRequestsResponse";
   value: QueryDKGRequestsResponseAmino;
 }
 /** QueryDKGRequestsResponse is the response type for the Query/DKGRequests RPC method. */
@@ -491,13 +654,13 @@ export interface QueryDKGRequestsResponseSDKType {
 /** QueryAllDKGRequestsRequest is the request type for the Query/AllDKGRequests RPC method. */
 export interface QueryAllDKGRequestsRequest {}
 export interface QueryAllDKGRequestsRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryAllDKGRequestsRequest';
+  typeUrl: "/side.btcbridge.QueryAllDKGRequestsRequest";
   value: Uint8Array;
 }
 /** QueryAllDKGRequestsRequest is the request type for the Query/AllDKGRequests RPC method. */
 export interface QueryAllDKGRequestsRequestAmino {}
 export interface QueryAllDKGRequestsRequestAminoMsg {
-  type: '/side.btcbridge.QueryAllDKGRequestsRequest';
+  type: "/side.btcbridge.QueryAllDKGRequestsRequest";
   value: QueryAllDKGRequestsRequestAmino;
 }
 /** QueryAllDKGRequestsRequest is the request type for the Query/AllDKGRequests RPC method. */
@@ -507,7 +670,7 @@ export interface QueryAllDKGRequestsResponse {
   requests: DKGRequest[];
 }
 export interface QueryAllDKGRequestsResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryAllDKGRequestsResponse';
+  typeUrl: "/side.btcbridge.QueryAllDKGRequestsResponse";
   value: Uint8Array;
 }
 /** QueryAllDKGRequestsResponse is the response type for the Query/AllDKGRequests RPC method. */
@@ -515,7 +678,7 @@ export interface QueryAllDKGRequestsResponseAmino {
   requests?: DKGRequestAmino[];
 }
 export interface QueryAllDKGRequestsResponseAminoMsg {
-  type: '/side.btcbridge.QueryAllDKGRequestsResponse';
+  type: "/side.btcbridge.QueryAllDKGRequestsResponse";
   value: QueryAllDKGRequestsResponseAmino;
 }
 /** QueryAllDKGRequestsResponse is the response type for the Query/AllDKGRequests RPC method. */
@@ -527,7 +690,7 @@ export interface QueryDKGCompletionRequestsRequest {
   id: bigint;
 }
 export interface QueryDKGCompletionRequestsRequestProtoMsg {
-  typeUrl: '/side.btcbridge.QueryDKGCompletionRequestsRequest';
+  typeUrl: "/side.btcbridge.QueryDKGCompletionRequestsRequest";
   value: Uint8Array;
 }
 /** QueryDKGCompletionRequestsRequest is the request type for the Query/DKGCompletionRequests RPC method. */
@@ -535,7 +698,7 @@ export interface QueryDKGCompletionRequestsRequestAmino {
   id?: string;
 }
 export interface QueryDKGCompletionRequestsRequestAminoMsg {
-  type: '/side.btcbridge.QueryDKGCompletionRequestsRequest';
+  type: "/side.btcbridge.QueryDKGCompletionRequestsRequest";
   value: QueryDKGCompletionRequestsRequestAmino;
 }
 /** QueryDKGCompletionRequestsRequest is the request type for the Query/DKGCompletionRequests RPC method. */
@@ -547,7 +710,7 @@ export interface QueryDKGCompletionRequestsResponse {
   requests: DKGCompletionRequest[];
 }
 export interface QueryDKGCompletionRequestsResponseProtoMsg {
-  typeUrl: '/side.btcbridge.QueryDKGCompletionRequestsResponse';
+  typeUrl: "/side.btcbridge.QueryDKGCompletionRequestsResponse";
   value: Uint8Array;
 }
 /** QueryDKGCompletionRequestsResponse is the response type for the Query/DKGCompletionRequests RPC method. */
@@ -555,175 +718,23 @@ export interface QueryDKGCompletionRequestsResponseAmino {
   requests?: DKGCompletionRequestAmino[];
 }
 export interface QueryDKGCompletionRequestsResponseAminoMsg {
-  type: '/side.btcbridge.QueryDKGCompletionRequestsResponse';
+  type: "/side.btcbridge.QueryDKGCompletionRequestsResponse";
   value: QueryDKGCompletionRequestsResponseAmino;
 }
 /** QueryDKGCompletionRequestsResponse is the response type for the Query/DKGCompletionRequests RPC method. */
 export interface QueryDKGCompletionRequestsResponseSDKType {
   requests: DKGCompletionRequestSDKType[];
 }
-function createBaseQueryWithdrawRequestsRequest(): QueryWithdrawRequestsRequest {
-  return {
-    status: 0,
-    pagination: undefined
-  };
-}
-export const QueryWithdrawRequestsRequest = {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestsRequest',
-  encode(message: QueryWithdrawRequestsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.status !== 0) {
-      writer.uint32(8).int32(message.status);
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryWithdrawRequestsRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryWithdrawRequestsRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.status = reader.int32() as any;
-          break;
-        case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<QueryWithdrawRequestsRequest>): QueryWithdrawRequestsRequest {
-    const message = createBaseQueryWithdrawRequestsRequest();
-    message.status = object.status ?? 0;
-    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
-    return message;
-  },
-  fromAmino(object: QueryWithdrawRequestsRequestAmino): QueryWithdrawRequestsRequest {
-    const message = createBaseQueryWithdrawRequestsRequest();
-    if (object.status !== undefined && object.status !== null) {
-      message.status = object.status;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromAmino(object.pagination);
-    }
-    return message;
-  },
-  toAmino(message: QueryWithdrawRequestsRequest): QueryWithdrawRequestsRequestAmino {
-    const obj: any = {};
-    obj.status = message.status === 0 ? undefined : message.status;
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
-    return obj;
-  },
-  fromAminoMsg(object: QueryWithdrawRequestsRequestAminoMsg): QueryWithdrawRequestsRequest {
-    return QueryWithdrawRequestsRequest.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryWithdrawRequestsRequestProtoMsg): QueryWithdrawRequestsRequest {
-    return QueryWithdrawRequestsRequest.decode(message.value);
-  },
-  toProto(message: QueryWithdrawRequestsRequest): Uint8Array {
-    return QueryWithdrawRequestsRequest.encode(message).finish();
-  },
-  toProtoMsg(message: QueryWithdrawRequestsRequest): QueryWithdrawRequestsRequestProtoMsg {
-    return {
-      typeUrl: '/side.btcbridge.QueryWithdrawRequestsRequest',
-      value: QueryWithdrawRequestsRequest.encode(message).finish()
-    };
-  }
-};
-function createBaseQueryWithdrawRequestsResponse(): QueryWithdrawRequestsResponse {
-  return {
-    requests: [],
-    pagination: undefined
-  };
-}
-export const QueryWithdrawRequestsResponse = {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestsResponse',
-  encode(message: QueryWithdrawRequestsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    for (const v of message.requests) {
-      BitcoinWithdrawRequest.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryWithdrawRequestsResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryWithdrawRequestsResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.requests.push(BitcoinWithdrawRequest.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<QueryWithdrawRequestsResponse>): QueryWithdrawRequestsResponse {
-    const message = createBaseQueryWithdrawRequestsResponse();
-    message.requests = object.requests?.map(e => BitcoinWithdrawRequest.fromPartial(e)) || [];
-    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
-    return message;
-  },
-  fromAmino(object: QueryWithdrawRequestsResponseAmino): QueryWithdrawRequestsResponse {
-    const message = createBaseQueryWithdrawRequestsResponse();
-    message.requests = object.requests?.map(e => BitcoinWithdrawRequest.fromAmino(e)) || [];
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromAmino(object.pagination);
-    }
-    return message;
-  },
-  toAmino(message: QueryWithdrawRequestsResponse): QueryWithdrawRequestsResponseAmino {
-    const obj: any = {};
-    if (message.requests) {
-      obj.requests = message.requests.map(e => e ? BitcoinWithdrawRequest.toAmino(e) : undefined);
-    } else {
-      obj.requests = message.requests;
-    }
-    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
-    return obj;
-  },
-  fromAminoMsg(object: QueryWithdrawRequestsResponseAminoMsg): QueryWithdrawRequestsResponse {
-    return QueryWithdrawRequestsResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryWithdrawRequestsResponseProtoMsg): QueryWithdrawRequestsResponse {
-    return QueryWithdrawRequestsResponse.decode(message.value);
-  },
-  toProto(message: QueryWithdrawRequestsResponse): Uint8Array {
-    return QueryWithdrawRequestsResponse.encode(message).finish();
-  },
-  toProtoMsg(message: QueryWithdrawRequestsResponse): QueryWithdrawRequestsResponseProtoMsg {
-    return {
-      typeUrl: '/side.btcbridge.QueryWithdrawRequestsResponse',
-      value: QueryWithdrawRequestsResponse.encode(message).finish()
-    };
-  }
-};
 function createBaseQueryWithdrawRequestsByAddressRequest(): QueryWithdrawRequestsByAddressRequest {
   return {
-    address: '',
+    address: "",
     pagination: undefined
   };
 }
 export const QueryWithdrawRequestsByAddressRequest = {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestsByAddressRequest',
+  typeUrl: "/side.btcbridge.QueryWithdrawRequestsByAddressRequest",
   encode(message: QueryWithdrawRequestsByAddressRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== '') {
+    if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     if (message.pagination !== undefined) {
@@ -753,7 +764,7 @@ export const QueryWithdrawRequestsByAddressRequest = {
   },
   fromPartial(object: Partial<QueryWithdrawRequestsByAddressRequest>): QueryWithdrawRequestsByAddressRequest {
     const message = createBaseQueryWithdrawRequestsByAddressRequest();
-    message.address = object.address ?? '';
+    message.address = object.address ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   },
@@ -769,7 +780,7 @@ export const QueryWithdrawRequestsByAddressRequest = {
   },
   toAmino(message: QueryWithdrawRequestsByAddressRequest): QueryWithdrawRequestsByAddressRequestAmino {
     const obj: any = {};
-    obj.address = message.address === '' ? undefined : message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
   },
@@ -784,7 +795,7 @@ export const QueryWithdrawRequestsByAddressRequest = {
   },
   toProtoMsg(message: QueryWithdrawRequestsByAddressRequest): QueryWithdrawRequestsByAddressRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryWithdrawRequestsByAddressRequest',
+      typeUrl: "/side.btcbridge.QueryWithdrawRequestsByAddressRequest",
       value: QueryWithdrawRequestsByAddressRequest.encode(message).finish()
     };
   }
@@ -796,10 +807,10 @@ function createBaseQueryWithdrawRequestsByAddressResponse(): QueryWithdrawReques
   };
 }
 export const QueryWithdrawRequestsByAddressResponse = {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestsByAddressResponse',
+  typeUrl: "/side.btcbridge.QueryWithdrawRequestsByAddressResponse",
   encode(message: QueryWithdrawRequestsByAddressResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.requests) {
-      BitcoinWithdrawRequest.encode(v!, writer.uint32(10).fork()).ldelim();
+      WithdrawRequest.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
       PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
@@ -814,7 +825,7 @@ export const QueryWithdrawRequestsByAddressResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.requests.push(BitcoinWithdrawRequest.decode(reader, reader.uint32()));
+          message.requests.push(WithdrawRequest.decode(reader, reader.uint32()));
           break;
         case 2:
           message.pagination = PageResponse.decode(reader, reader.uint32());
@@ -828,13 +839,13 @@ export const QueryWithdrawRequestsByAddressResponse = {
   },
   fromPartial(object: Partial<QueryWithdrawRequestsByAddressResponse>): QueryWithdrawRequestsByAddressResponse {
     const message = createBaseQueryWithdrawRequestsByAddressResponse();
-    message.requests = object.requests?.map(e => BitcoinWithdrawRequest.fromPartial(e)) || [];
+    message.requests = object.requests?.map(e => WithdrawRequest.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   },
   fromAmino(object: QueryWithdrawRequestsByAddressResponseAmino): QueryWithdrawRequestsByAddressResponse {
     const message = createBaseQueryWithdrawRequestsByAddressResponse();
-    message.requests = object.requests?.map(e => BitcoinWithdrawRequest.fromAmino(e)) || [];
+    message.requests = object.requests?.map(e => WithdrawRequest.fromAmino(e)) || [];
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageResponse.fromAmino(object.pagination);
     }
@@ -843,7 +854,7 @@ export const QueryWithdrawRequestsByAddressResponse = {
   toAmino(message: QueryWithdrawRequestsByAddressResponse): QueryWithdrawRequestsByAddressResponseAmino {
     const obj: any = {};
     if (message.requests) {
-      obj.requests = message.requests.map(e => e ? BitcoinWithdrawRequest.toAmino(e) : undefined);
+      obj.requests = message.requests.map(e => e ? WithdrawRequest.toAmino(e) : undefined);
     } else {
       obj.requests = message.requests;
     }
@@ -861,28 +872,28 @@ export const QueryWithdrawRequestsByAddressResponse = {
   },
   toProtoMsg(message: QueryWithdrawRequestsByAddressResponse): QueryWithdrawRequestsByAddressResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryWithdrawRequestsByAddressResponse',
+      typeUrl: "/side.btcbridge.QueryWithdrawRequestsByAddressResponse",
       value: QueryWithdrawRequestsByAddressResponse.encode(message).finish()
     };
   }
 };
-function createBaseQueryWithdrawRequestByTxHashRequest(): QueryWithdrawRequestByTxHashRequest {
+function createBaseQueryWithdrawRequestsByTxHashRequest(): QueryWithdrawRequestsByTxHashRequest {
   return {
-    txid: ''
+    txid: ""
   };
 }
-export const QueryWithdrawRequestByTxHashRequest = {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestByTxHashRequest',
-  encode(message: QueryWithdrawRequestByTxHashRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.txid !== '') {
+export const QueryWithdrawRequestsByTxHashRequest = {
+  typeUrl: "/side.btcbridge.QueryWithdrawRequestsByTxHashRequest",
+  encode(message: QueryWithdrawRequestsByTxHashRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.txid !== "") {
       writer.uint32(10).string(message.txid);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryWithdrawRequestByTxHashRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryWithdrawRequestsByTxHashRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryWithdrawRequestByTxHashRequest();
+    const message = createBaseQueryWithdrawRequestsByTxHashRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -896,61 +907,633 @@ export const QueryWithdrawRequestByTxHashRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryWithdrawRequestByTxHashRequest>): QueryWithdrawRequestByTxHashRequest {
-    const message = createBaseQueryWithdrawRequestByTxHashRequest();
-    message.txid = object.txid ?? '';
+  fromPartial(object: Partial<QueryWithdrawRequestsByTxHashRequest>): QueryWithdrawRequestsByTxHashRequest {
+    const message = createBaseQueryWithdrawRequestsByTxHashRequest();
+    message.txid = object.txid ?? "";
     return message;
   },
-  fromAmino(object: QueryWithdrawRequestByTxHashRequestAmino): QueryWithdrawRequestByTxHashRequest {
-    const message = createBaseQueryWithdrawRequestByTxHashRequest();
+  fromAmino(object: QueryWithdrawRequestsByTxHashRequestAmino): QueryWithdrawRequestsByTxHashRequest {
+    const message = createBaseQueryWithdrawRequestsByTxHashRequest();
     if (object.txid !== undefined && object.txid !== null) {
       message.txid = object.txid;
     }
     return message;
   },
-  toAmino(message: QueryWithdrawRequestByTxHashRequest): QueryWithdrawRequestByTxHashRequestAmino {
+  toAmino(message: QueryWithdrawRequestsByTxHashRequest): QueryWithdrawRequestsByTxHashRequestAmino {
     const obj: any = {};
-    obj.txid = message.txid === '' ? undefined : message.txid;
+    obj.txid = message.txid === "" ? undefined : message.txid;
     return obj;
   },
-  fromAminoMsg(object: QueryWithdrawRequestByTxHashRequestAminoMsg): QueryWithdrawRequestByTxHashRequest {
-    return QueryWithdrawRequestByTxHashRequest.fromAmino(object.value);
+  fromAminoMsg(object: QueryWithdrawRequestsByTxHashRequestAminoMsg): QueryWithdrawRequestsByTxHashRequest {
+    return QueryWithdrawRequestsByTxHashRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryWithdrawRequestByTxHashRequestProtoMsg): QueryWithdrawRequestByTxHashRequest {
-    return QueryWithdrawRequestByTxHashRequest.decode(message.value);
+  fromProtoMsg(message: QueryWithdrawRequestsByTxHashRequestProtoMsg): QueryWithdrawRequestsByTxHashRequest {
+    return QueryWithdrawRequestsByTxHashRequest.decode(message.value);
   },
-  toProto(message: QueryWithdrawRequestByTxHashRequest): Uint8Array {
-    return QueryWithdrawRequestByTxHashRequest.encode(message).finish();
+  toProto(message: QueryWithdrawRequestsByTxHashRequest): Uint8Array {
+    return QueryWithdrawRequestsByTxHashRequest.encode(message).finish();
   },
-  toProtoMsg(message: QueryWithdrawRequestByTxHashRequest): QueryWithdrawRequestByTxHashRequestProtoMsg {
+  toProtoMsg(message: QueryWithdrawRequestsByTxHashRequest): QueryWithdrawRequestsByTxHashRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryWithdrawRequestByTxHashRequest',
-      value: QueryWithdrawRequestByTxHashRequest.encode(message).finish()
+      typeUrl: "/side.btcbridge.QueryWithdrawRequestsByTxHashRequest",
+      value: QueryWithdrawRequestsByTxHashRequest.encode(message).finish()
     };
   }
 };
-function createBaseQueryWithdrawRequestByTxHashResponse(): QueryWithdrawRequestByTxHashResponse {
+function createBaseQueryWithdrawRequestsByTxHashResponse(): QueryWithdrawRequestsByTxHashResponse {
+  return {
+    requests: []
+  };
+}
+export const QueryWithdrawRequestsByTxHashResponse = {
+  typeUrl: "/side.btcbridge.QueryWithdrawRequestsByTxHashResponse",
+  encode(message: QueryWithdrawRequestsByTxHashResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.requests) {
+      WithdrawRequest.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryWithdrawRequestsByTxHashResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryWithdrawRequestsByTxHashResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.requests.push(WithdrawRequest.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryWithdrawRequestsByTxHashResponse>): QueryWithdrawRequestsByTxHashResponse {
+    const message = createBaseQueryWithdrawRequestsByTxHashResponse();
+    message.requests = object.requests?.map(e => WithdrawRequest.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: QueryWithdrawRequestsByTxHashResponseAmino): QueryWithdrawRequestsByTxHashResponse {
+    const message = createBaseQueryWithdrawRequestsByTxHashResponse();
+    message.requests = object.requests?.map(e => WithdrawRequest.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryWithdrawRequestsByTxHashResponse): QueryWithdrawRequestsByTxHashResponseAmino {
+    const obj: any = {};
+    if (message.requests) {
+      obj.requests = message.requests.map(e => e ? WithdrawRequest.toAmino(e) : undefined);
+    } else {
+      obj.requests = message.requests;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryWithdrawRequestsByTxHashResponseAminoMsg): QueryWithdrawRequestsByTxHashResponse {
+    return QueryWithdrawRequestsByTxHashResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryWithdrawRequestsByTxHashResponseProtoMsg): QueryWithdrawRequestsByTxHashResponse {
+    return QueryWithdrawRequestsByTxHashResponse.decode(message.value);
+  },
+  toProto(message: QueryWithdrawRequestsByTxHashResponse): Uint8Array {
+    return QueryWithdrawRequestsByTxHashResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryWithdrawRequestsByTxHashResponse): QueryWithdrawRequestsByTxHashResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryWithdrawRequestsByTxHashResponse",
+      value: QueryWithdrawRequestsByTxHashResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPendingBtcWithdrawRequestsRequest(): QueryPendingBtcWithdrawRequestsRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryPendingBtcWithdrawRequestsRequest = {
+  typeUrl: "/side.btcbridge.QueryPendingBtcWithdrawRequestsRequest",
+  encode(message: QueryPendingBtcWithdrawRequestsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPendingBtcWithdrawRequestsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPendingBtcWithdrawRequestsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPendingBtcWithdrawRequestsRequest>): QueryPendingBtcWithdrawRequestsRequest {
+    const message = createBaseQueryPendingBtcWithdrawRequestsRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryPendingBtcWithdrawRequestsRequestAmino): QueryPendingBtcWithdrawRequestsRequest {
+    const message = createBaseQueryPendingBtcWithdrawRequestsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPendingBtcWithdrawRequestsRequest): QueryPendingBtcWithdrawRequestsRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPendingBtcWithdrawRequestsRequestAminoMsg): QueryPendingBtcWithdrawRequestsRequest {
+    return QueryPendingBtcWithdrawRequestsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPendingBtcWithdrawRequestsRequestProtoMsg): QueryPendingBtcWithdrawRequestsRequest {
+    return QueryPendingBtcWithdrawRequestsRequest.decode(message.value);
+  },
+  toProto(message: QueryPendingBtcWithdrawRequestsRequest): Uint8Array {
+    return QueryPendingBtcWithdrawRequestsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPendingBtcWithdrawRequestsRequest): QueryPendingBtcWithdrawRequestsRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryPendingBtcWithdrawRequestsRequest",
+      value: QueryPendingBtcWithdrawRequestsRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPendingBtcWithdrawRequestsResponse(): QueryPendingBtcWithdrawRequestsResponse {
+  return {
+    requests: [],
+    pagination: undefined
+  };
+}
+export const QueryPendingBtcWithdrawRequestsResponse = {
+  typeUrl: "/side.btcbridge.QueryPendingBtcWithdrawRequestsResponse",
+  encode(message: QueryPendingBtcWithdrawRequestsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.requests) {
+      WithdrawRequest.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPendingBtcWithdrawRequestsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPendingBtcWithdrawRequestsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.requests.push(WithdrawRequest.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPendingBtcWithdrawRequestsResponse>): QueryPendingBtcWithdrawRequestsResponse {
+    const message = createBaseQueryPendingBtcWithdrawRequestsResponse();
+    message.requests = object.requests?.map(e => WithdrawRequest.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryPendingBtcWithdrawRequestsResponseAmino): QueryPendingBtcWithdrawRequestsResponse {
+    const message = createBaseQueryPendingBtcWithdrawRequestsResponse();
+    message.requests = object.requests?.map(e => WithdrawRequest.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPendingBtcWithdrawRequestsResponse): QueryPendingBtcWithdrawRequestsResponseAmino {
+    const obj: any = {};
+    if (message.requests) {
+      obj.requests = message.requests.map(e => e ? WithdrawRequest.toAmino(e) : undefined);
+    } else {
+      obj.requests = message.requests;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPendingBtcWithdrawRequestsResponseAminoMsg): QueryPendingBtcWithdrawRequestsResponse {
+    return QueryPendingBtcWithdrawRequestsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPendingBtcWithdrawRequestsResponseProtoMsg): QueryPendingBtcWithdrawRequestsResponse {
+    return QueryPendingBtcWithdrawRequestsResponse.decode(message.value);
+  },
+  toProto(message: QueryPendingBtcWithdrawRequestsResponse): Uint8Array {
+    return QueryPendingBtcWithdrawRequestsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPendingBtcWithdrawRequestsResponse): QueryPendingBtcWithdrawRequestsResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryPendingBtcWithdrawRequestsResponse",
+      value: QueryPendingBtcWithdrawRequestsResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQuerySigningRequestsRequest(): QuerySigningRequestsRequest {
+  return {
+    status: 0,
+    pagination: undefined
+  };
+}
+export const QuerySigningRequestsRequest = {
+  typeUrl: "/side.btcbridge.QuerySigningRequestsRequest",
+  encode(message: QuerySigningRequestsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.status !== 0) {
+      writer.uint32(8).int32(message.status);
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySigningRequestsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySigningRequestsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.status = reader.int32() as any;
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QuerySigningRequestsRequest>): QuerySigningRequestsRequest {
+    const message = createBaseQuerySigningRequestsRequest();
+    message.status = object.status ?? 0;
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QuerySigningRequestsRequestAmino): QuerySigningRequestsRequest {
+    const message = createBaseQuerySigningRequestsRequest();
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QuerySigningRequestsRequest): QuerySigningRequestsRequestAmino {
+    const obj: any = {};
+    obj.status = message.status === 0 ? undefined : message.status;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySigningRequestsRequestAminoMsg): QuerySigningRequestsRequest {
+    return QuerySigningRequestsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySigningRequestsRequestProtoMsg): QuerySigningRequestsRequest {
+    return QuerySigningRequestsRequest.decode(message.value);
+  },
+  toProto(message: QuerySigningRequestsRequest): Uint8Array {
+    return QuerySigningRequestsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySigningRequestsRequest): QuerySigningRequestsRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QuerySigningRequestsRequest",
+      value: QuerySigningRequestsRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQuerySigningRequestsResponse(): QuerySigningRequestsResponse {
+  return {
+    requests: [],
+    pagination: undefined
+  };
+}
+export const QuerySigningRequestsResponse = {
+  typeUrl: "/side.btcbridge.QuerySigningRequestsResponse",
+  encode(message: QuerySigningRequestsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.requests) {
+      SigningRequest.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySigningRequestsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySigningRequestsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.requests.push(SigningRequest.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QuerySigningRequestsResponse>): QuerySigningRequestsResponse {
+    const message = createBaseQuerySigningRequestsResponse();
+    message.requests = object.requests?.map(e => SigningRequest.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QuerySigningRequestsResponseAmino): QuerySigningRequestsResponse {
+    const message = createBaseQuerySigningRequestsResponse();
+    message.requests = object.requests?.map(e => SigningRequest.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QuerySigningRequestsResponse): QuerySigningRequestsResponseAmino {
+    const obj: any = {};
+    if (message.requests) {
+      obj.requests = message.requests.map(e => e ? SigningRequest.toAmino(e) : undefined);
+    } else {
+      obj.requests = message.requests;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySigningRequestsResponseAminoMsg): QuerySigningRequestsResponse {
+    return QuerySigningRequestsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySigningRequestsResponseProtoMsg): QuerySigningRequestsResponse {
+    return QuerySigningRequestsResponse.decode(message.value);
+  },
+  toProto(message: QuerySigningRequestsResponse): Uint8Array {
+    return QuerySigningRequestsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySigningRequestsResponse): QuerySigningRequestsResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QuerySigningRequestsResponse",
+      value: QuerySigningRequestsResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQuerySigningRequestsByAddressRequest(): QuerySigningRequestsByAddressRequest {
+  return {
+    address: "",
+    pagination: undefined
+  };
+}
+export const QuerySigningRequestsByAddressRequest = {
+  typeUrl: "/side.btcbridge.QuerySigningRequestsByAddressRequest",
+  encode(message: QuerySigningRequestsByAddressRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySigningRequestsByAddressRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySigningRequestsByAddressRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QuerySigningRequestsByAddressRequest>): QuerySigningRequestsByAddressRequest {
+    const message = createBaseQuerySigningRequestsByAddressRequest();
+    message.address = object.address ?? "";
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QuerySigningRequestsByAddressRequestAmino): QuerySigningRequestsByAddressRequest {
+    const message = createBaseQuerySigningRequestsByAddressRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QuerySigningRequestsByAddressRequest): QuerySigningRequestsByAddressRequestAmino {
+    const obj: any = {};
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySigningRequestsByAddressRequestAminoMsg): QuerySigningRequestsByAddressRequest {
+    return QuerySigningRequestsByAddressRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySigningRequestsByAddressRequestProtoMsg): QuerySigningRequestsByAddressRequest {
+    return QuerySigningRequestsByAddressRequest.decode(message.value);
+  },
+  toProto(message: QuerySigningRequestsByAddressRequest): Uint8Array {
+    return QuerySigningRequestsByAddressRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySigningRequestsByAddressRequest): QuerySigningRequestsByAddressRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QuerySigningRequestsByAddressRequest",
+      value: QuerySigningRequestsByAddressRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQuerySigningRequestsByAddressResponse(): QuerySigningRequestsByAddressResponse {
+  return {
+    requests: [],
+    pagination: undefined
+  };
+}
+export const QuerySigningRequestsByAddressResponse = {
+  typeUrl: "/side.btcbridge.QuerySigningRequestsByAddressResponse",
+  encode(message: QuerySigningRequestsByAddressResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.requests) {
+      SigningRequest.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySigningRequestsByAddressResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySigningRequestsByAddressResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.requests.push(SigningRequest.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QuerySigningRequestsByAddressResponse>): QuerySigningRequestsByAddressResponse {
+    const message = createBaseQuerySigningRequestsByAddressResponse();
+    message.requests = object.requests?.map(e => SigningRequest.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QuerySigningRequestsByAddressResponseAmino): QuerySigningRequestsByAddressResponse {
+    const message = createBaseQuerySigningRequestsByAddressResponse();
+    message.requests = object.requests?.map(e => SigningRequest.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QuerySigningRequestsByAddressResponse): QuerySigningRequestsByAddressResponseAmino {
+    const obj: any = {};
+    if (message.requests) {
+      obj.requests = message.requests.map(e => e ? SigningRequest.toAmino(e) : undefined);
+    } else {
+      obj.requests = message.requests;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySigningRequestsByAddressResponseAminoMsg): QuerySigningRequestsByAddressResponse {
+    return QuerySigningRequestsByAddressResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySigningRequestsByAddressResponseProtoMsg): QuerySigningRequestsByAddressResponse {
+    return QuerySigningRequestsByAddressResponse.decode(message.value);
+  },
+  toProto(message: QuerySigningRequestsByAddressResponse): Uint8Array {
+    return QuerySigningRequestsByAddressResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySigningRequestsByAddressResponse): QuerySigningRequestsByAddressResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QuerySigningRequestsByAddressResponse",
+      value: QuerySigningRequestsByAddressResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQuerySigningRequestByTxHashRequest(): QuerySigningRequestByTxHashRequest {
+  return {
+    txid: ""
+  };
+}
+export const QuerySigningRequestByTxHashRequest = {
+  typeUrl: "/side.btcbridge.QuerySigningRequestByTxHashRequest",
+  encode(message: QuerySigningRequestByTxHashRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.txid !== "") {
+      writer.uint32(10).string(message.txid);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySigningRequestByTxHashRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySigningRequestByTxHashRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.txid = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QuerySigningRequestByTxHashRequest>): QuerySigningRequestByTxHashRequest {
+    const message = createBaseQuerySigningRequestByTxHashRequest();
+    message.txid = object.txid ?? "";
+    return message;
+  },
+  fromAmino(object: QuerySigningRequestByTxHashRequestAmino): QuerySigningRequestByTxHashRequest {
+    const message = createBaseQuerySigningRequestByTxHashRequest();
+    if (object.txid !== undefined && object.txid !== null) {
+      message.txid = object.txid;
+    }
+    return message;
+  },
+  toAmino(message: QuerySigningRequestByTxHashRequest): QuerySigningRequestByTxHashRequestAmino {
+    const obj: any = {};
+    obj.txid = message.txid === "" ? undefined : message.txid;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySigningRequestByTxHashRequestAminoMsg): QuerySigningRequestByTxHashRequest {
+    return QuerySigningRequestByTxHashRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySigningRequestByTxHashRequestProtoMsg): QuerySigningRequestByTxHashRequest {
+    return QuerySigningRequestByTxHashRequest.decode(message.value);
+  },
+  toProto(message: QuerySigningRequestByTxHashRequest): Uint8Array {
+    return QuerySigningRequestByTxHashRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySigningRequestByTxHashRequest): QuerySigningRequestByTxHashRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QuerySigningRequestByTxHashRequest",
+      value: QuerySigningRequestByTxHashRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQuerySigningRequestByTxHashResponse(): QuerySigningRequestByTxHashResponse {
   return {
     request: undefined
   };
 }
-export const QueryWithdrawRequestByTxHashResponse = {
-  typeUrl: '/side.btcbridge.QueryWithdrawRequestByTxHashResponse',
-  encode(message: QueryWithdrawRequestByTxHashResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const QuerySigningRequestByTxHashResponse = {
+  typeUrl: "/side.btcbridge.QuerySigningRequestByTxHashResponse",
+  encode(message: QuerySigningRequestByTxHashResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.request !== undefined) {
-      BitcoinWithdrawRequest.encode(message.request, writer.uint32(10).fork()).ldelim();
+      SigningRequest.encode(message.request, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryWithdrawRequestByTxHashResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySigningRequestByTxHashResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryWithdrawRequestByTxHashResponse();
+    const message = createBaseQuerySigningRequestByTxHashResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.request = BitcoinWithdrawRequest.decode(reader, reader.uint32());
+          message.request = SigningRequest.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -959,75 +1542,111 @@ export const QueryWithdrawRequestByTxHashResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryWithdrawRequestByTxHashResponse>): QueryWithdrawRequestByTxHashResponse {
-    const message = createBaseQueryWithdrawRequestByTxHashResponse();
-    message.request = object.request !== undefined && object.request !== null ? BitcoinWithdrawRequest.fromPartial(object.request) : undefined;
+  fromPartial(object: Partial<QuerySigningRequestByTxHashResponse>): QuerySigningRequestByTxHashResponse {
+    const message = createBaseQuerySigningRequestByTxHashResponse();
+    message.request = object.request !== undefined && object.request !== null ? SigningRequest.fromPartial(object.request) : undefined;
     return message;
   },
-  fromAmino(object: QueryWithdrawRequestByTxHashResponseAmino): QueryWithdrawRequestByTxHashResponse {
-    const message = createBaseQueryWithdrawRequestByTxHashResponse();
+  fromAmino(object: QuerySigningRequestByTxHashResponseAmino): QuerySigningRequestByTxHashResponse {
+    const message = createBaseQuerySigningRequestByTxHashResponse();
     if (object.request !== undefined && object.request !== null) {
-      message.request = BitcoinWithdrawRequest.fromAmino(object.request);
+      message.request = SigningRequest.fromAmino(object.request);
     }
     return message;
   },
-  toAmino(message: QueryWithdrawRequestByTxHashResponse): QueryWithdrawRequestByTxHashResponseAmino {
+  toAmino(message: QuerySigningRequestByTxHashResponse): QuerySigningRequestByTxHashResponseAmino {
     const obj: any = {};
-    obj.request = message.request ? BitcoinWithdrawRequest.toAmino(message.request) : undefined;
+    obj.request = message.request ? SigningRequest.toAmino(message.request) : undefined;
     return obj;
   },
-  fromAminoMsg(object: QueryWithdrawRequestByTxHashResponseAminoMsg): QueryWithdrawRequestByTxHashResponse {
-    return QueryWithdrawRequestByTxHashResponse.fromAmino(object.value);
+  fromAminoMsg(object: QuerySigningRequestByTxHashResponseAminoMsg): QuerySigningRequestByTxHashResponse {
+    return QuerySigningRequestByTxHashResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryWithdrawRequestByTxHashResponseProtoMsg): QueryWithdrawRequestByTxHashResponse {
-    return QueryWithdrawRequestByTxHashResponse.decode(message.value);
+  fromProtoMsg(message: QuerySigningRequestByTxHashResponseProtoMsg): QuerySigningRequestByTxHashResponse {
+    return QuerySigningRequestByTxHashResponse.decode(message.value);
   },
-  toProto(message: QueryWithdrawRequestByTxHashResponse): Uint8Array {
-    return QueryWithdrawRequestByTxHashResponse.encode(message).finish();
+  toProto(message: QuerySigningRequestByTxHashResponse): Uint8Array {
+    return QuerySigningRequestByTxHashResponse.encode(message).finish();
   },
-  toProtoMsg(message: QueryWithdrawRequestByTxHashResponse): QueryWithdrawRequestByTxHashResponseProtoMsg {
+  toProtoMsg(message: QuerySigningRequestByTxHashResponse): QuerySigningRequestByTxHashResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryWithdrawRequestByTxHashResponse',
-      value: QueryWithdrawRequestByTxHashResponse.encode(message).finish()
+      typeUrl: "/side.btcbridge.QuerySigningRequestByTxHashResponse",
+      value: QuerySigningRequestByTxHashResponse.encode(message).finish()
     };
   }
 };
-function createBaseQueryWithdrawNetworkFeeRequest(): QueryWithdrawNetworkFeeRequest {
+function createBaseQueryFeeRateRequest(): QueryFeeRateRequest {
+  return {};
+}
+export const QueryFeeRateRequest = {
+  typeUrl: "/side.btcbridge.QueryFeeRateRequest",
+  encode(_: QueryFeeRateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryFeeRateRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryFeeRateRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(_: Partial<QueryFeeRateRequest>): QueryFeeRateRequest {
+    const message = createBaseQueryFeeRateRequest();
+    return message;
+  },
+  fromAmino(_: QueryFeeRateRequestAmino): QueryFeeRateRequest {
+    const message = createBaseQueryFeeRateRequest();
+    return message;
+  },
+  toAmino(_: QueryFeeRateRequest): QueryFeeRateRequestAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: QueryFeeRateRequestAminoMsg): QueryFeeRateRequest {
+    return QueryFeeRateRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryFeeRateRequestProtoMsg): QueryFeeRateRequest {
+    return QueryFeeRateRequest.decode(message.value);
+  },
+  toProto(message: QueryFeeRateRequest): Uint8Array {
+    return QueryFeeRateRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryFeeRateRequest): QueryFeeRateRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryFeeRateRequest",
+      value: QueryFeeRateRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryFeeRateResponse(): QueryFeeRateResponse {
   return {
-    sender: '',
-    amount: '',
-    feeRate: ''
+    feeRate: BigInt(0)
   };
 }
-export const QueryWithdrawNetworkFeeRequest = {
-  typeUrl: '/side.btcbridge.QueryWithdrawNetworkFeeRequest',
-  encode(message: QueryWithdrawNetworkFeeRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.sender !== '') {
-      writer.uint32(10).string(message.sender);
-    }
-    if (message.amount !== '') {
-      writer.uint32(18).string(message.amount);
-    }
-    if (message.feeRate !== '') {
-      writer.uint32(26).string(message.feeRate);
+export const QueryFeeRateResponse = {
+  typeUrl: "/side.btcbridge.QueryFeeRateResponse",
+  encode(message: QueryFeeRateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.feeRate !== BigInt(0)) {
+      writer.uint32(8).int64(message.feeRate);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryWithdrawNetworkFeeRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryFeeRateResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryWithdrawNetworkFeeRequest();
+    const message = createBaseQueryFeeRateResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.sender = reader.string();
-          break;
-        case 2:
-          message.amount = reader.string();
-          break;
-        case 3:
-          message.feeRate = reader.string();
+          message.feeRate = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1036,109 +1655,36 @@ export const QueryWithdrawNetworkFeeRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryWithdrawNetworkFeeRequest>): QueryWithdrawNetworkFeeRequest {
-    const message = createBaseQueryWithdrawNetworkFeeRequest();
-    message.sender = object.sender ?? '';
-    message.amount = object.amount ?? '';
-    message.feeRate = object.feeRate ?? '';
+  fromPartial(object: Partial<QueryFeeRateResponse>): QueryFeeRateResponse {
+    const message = createBaseQueryFeeRateResponse();
+    message.feeRate = object.feeRate !== undefined && object.feeRate !== null ? BigInt(object.feeRate.toString()) : BigInt(0);
     return message;
   },
-  fromAmino(object: QueryWithdrawNetworkFeeRequestAmino): QueryWithdrawNetworkFeeRequest {
-    const message = createBaseQueryWithdrawNetworkFeeRequest();
-    if (object.sender !== undefined && object.sender !== null) {
-      message.sender = object.sender;
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = object.amount;
-    }
+  fromAmino(object: QueryFeeRateResponseAmino): QueryFeeRateResponse {
+    const message = createBaseQueryFeeRateResponse();
     if (object.fee_rate !== undefined && object.fee_rate !== null) {
-      message.feeRate = object.fee_rate;
+      message.feeRate = BigInt(object.fee_rate);
     }
     return message;
   },
-  toAmino(message: QueryWithdrawNetworkFeeRequest): QueryWithdrawNetworkFeeRequestAmino {
+  toAmino(message: QueryFeeRateResponse): QueryFeeRateResponseAmino {
     const obj: any = {};
-    obj.sender = message.sender === '' ? undefined : message.sender;
-    obj.amount = message.amount === '' ? undefined : message.amount;
-    obj.fee_rate = message.feeRate === '' ? undefined : message.feeRate;
+    obj.fee_rate = message.feeRate !== BigInt(0) ? message.feeRate.toString() : undefined;
     return obj;
   },
-  fromAminoMsg(object: QueryWithdrawNetworkFeeRequestAminoMsg): QueryWithdrawNetworkFeeRequest {
-    return QueryWithdrawNetworkFeeRequest.fromAmino(object.value);
+  fromAminoMsg(object: QueryFeeRateResponseAminoMsg): QueryFeeRateResponse {
+    return QueryFeeRateResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryWithdrawNetworkFeeRequestProtoMsg): QueryWithdrawNetworkFeeRequest {
-    return QueryWithdrawNetworkFeeRequest.decode(message.value);
+  fromProtoMsg(message: QueryFeeRateResponseProtoMsg): QueryFeeRateResponse {
+    return QueryFeeRateResponse.decode(message.value);
   },
-  toProto(message: QueryWithdrawNetworkFeeRequest): Uint8Array {
-    return QueryWithdrawNetworkFeeRequest.encode(message).finish();
+  toProto(message: QueryFeeRateResponse): Uint8Array {
+    return QueryFeeRateResponse.encode(message).finish();
   },
-  toProtoMsg(message: QueryWithdrawNetworkFeeRequest): QueryWithdrawNetworkFeeRequestProtoMsg {
+  toProtoMsg(message: QueryFeeRateResponse): QueryFeeRateResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryWithdrawNetworkFeeRequest',
-      value: QueryWithdrawNetworkFeeRequest.encode(message).finish()
-    };
-  }
-};
-function createBaseQueryWithdrawNetworkFeeResponse(): QueryWithdrawNetworkFeeResponse {
-  return {
-    fee: BigInt(0)
-  };
-}
-export const QueryWithdrawNetworkFeeResponse = {
-  typeUrl: '/side.btcbridge.QueryWithdrawNetworkFeeResponse',
-  encode(message: QueryWithdrawNetworkFeeResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.fee !== BigInt(0)) {
-      writer.uint32(8).int64(message.fee);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryWithdrawNetworkFeeResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryWithdrawNetworkFeeResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.fee = reader.int64();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<QueryWithdrawNetworkFeeResponse>): QueryWithdrawNetworkFeeResponse {
-    const message = createBaseQueryWithdrawNetworkFeeResponse();
-    message.fee = object.fee !== undefined && object.fee !== null ? BigInt(object.fee.toString()) : BigInt(0);
-    return message;
-  },
-  fromAmino(object: QueryWithdrawNetworkFeeResponseAmino): QueryWithdrawNetworkFeeResponse {
-    const message = createBaseQueryWithdrawNetworkFeeResponse();
-    if (object.fee !== undefined && object.fee !== null) {
-      message.fee = BigInt(object.fee);
-    }
-    return message;
-  },
-  toAmino(message: QueryWithdrawNetworkFeeResponse): QueryWithdrawNetworkFeeResponseAmino {
-    const obj: any = {};
-    obj.fee = message.fee !== BigInt(0) ? message.fee.toString() : undefined;
-    return obj;
-  },
-  fromAminoMsg(object: QueryWithdrawNetworkFeeResponseAminoMsg): QueryWithdrawNetworkFeeResponse {
-    return QueryWithdrawNetworkFeeResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryWithdrawNetworkFeeResponseProtoMsg): QueryWithdrawNetworkFeeResponse {
-    return QueryWithdrawNetworkFeeResponse.decode(message.value);
-  },
-  toProto(message: QueryWithdrawNetworkFeeResponse): Uint8Array {
-    return QueryWithdrawNetworkFeeResponse.encode(message).finish();
-  },
-  toProtoMsg(message: QueryWithdrawNetworkFeeResponse): QueryWithdrawNetworkFeeResponseProtoMsg {
-    return {
-      typeUrl: '/side.btcbridge.QueryWithdrawNetworkFeeResponse',
-      value: QueryWithdrawNetworkFeeResponse.encode(message).finish()
+      typeUrl: "/side.btcbridge.QueryFeeRateResponse",
+      value: QueryFeeRateResponse.encode(message).finish()
     };
   }
 };
@@ -1146,7 +1692,7 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
   return {};
 }
 export const QueryParamsRequest = {
-  typeUrl: '/side.btcbridge.QueryParamsRequest',
+  typeUrl: "/side.btcbridge.QueryParamsRequest",
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -1187,7 +1733,7 @@ export const QueryParamsRequest = {
   },
   toProtoMsg(message: QueryParamsRequest): QueryParamsRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryParamsRequest',
+      typeUrl: "/side.btcbridge.QueryParamsRequest",
       value: QueryParamsRequest.encode(message).finish()
     };
   }
@@ -1198,7 +1744,7 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
   };
 }
 export const QueryParamsResponse = {
-  typeUrl: '/side.btcbridge.QueryParamsResponse',
+  typeUrl: "/side.btcbridge.QueryParamsResponse",
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -1250,7 +1796,7 @@ export const QueryParamsResponse = {
   },
   toProtoMsg(message: QueryParamsResponse): QueryParamsResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryParamsResponse',
+      typeUrl: "/side.btcbridge.QueryParamsResponse",
       value: QueryParamsResponse.encode(message).finish()
     };
   }
@@ -1259,7 +1805,7 @@ function createBaseQueryChainTipRequest(): QueryChainTipRequest {
   return {};
 }
 export const QueryChainTipRequest = {
-  typeUrl: '/side.btcbridge.QueryChainTipRequest',
+  typeUrl: "/side.btcbridge.QueryChainTipRequest",
   encode(_: QueryChainTipRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -1300,21 +1846,21 @@ export const QueryChainTipRequest = {
   },
   toProtoMsg(message: QueryChainTipRequest): QueryChainTipRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryChainTipRequest',
+      typeUrl: "/side.btcbridge.QueryChainTipRequest",
       value: QueryChainTipRequest.encode(message).finish()
     };
   }
 };
 function createBaseQueryChainTipResponse(): QueryChainTipResponse {
   return {
-    hash: '',
+    hash: "",
     height: BigInt(0)
   };
 }
 export const QueryChainTipResponse = {
-  typeUrl: '/side.btcbridge.QueryChainTipResponse',
+  typeUrl: "/side.btcbridge.QueryChainTipResponse",
   encode(message: QueryChainTipResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.hash !== '') {
+    if (message.hash !== "") {
       writer.uint32(10).string(message.hash);
     }
     if (message.height !== BigInt(0)) {
@@ -1344,7 +1890,7 @@ export const QueryChainTipResponse = {
   },
   fromPartial(object: Partial<QueryChainTipResponse>): QueryChainTipResponse {
     const message = createBaseQueryChainTipResponse();
-    message.hash = object.hash ?? '';
+    message.hash = object.hash ?? "";
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     return message;
   },
@@ -1360,7 +1906,7 @@ export const QueryChainTipResponse = {
   },
   toAmino(message: QueryChainTipResponse): QueryChainTipResponseAmino {
     const obj: any = {};
-    obj.hash = message.hash === '' ? undefined : message.hash;
+    obj.hash = message.hash === "" ? undefined : message.hash;
     obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
     return obj;
   },
@@ -1375,7 +1921,7 @@ export const QueryChainTipResponse = {
   },
   toProtoMsg(message: QueryChainTipResponse): QueryChainTipResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryChainTipResponse',
+      typeUrl: "/side.btcbridge.QueryChainTipResponse",
       value: QueryChainTipResponse.encode(message).finish()
     };
   }
@@ -1386,7 +1932,7 @@ function createBaseQueryBlockHeaderByHeightRequest(): QueryBlockHeaderByHeightRe
   };
 }
 export const QueryBlockHeaderByHeightRequest = {
-  typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightRequest',
+  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightRequest",
   encode(message: QueryBlockHeaderByHeightRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.height !== BigInt(0)) {
       writer.uint32(8).uint64(message.height);
@@ -1438,7 +1984,7 @@ export const QueryBlockHeaderByHeightRequest = {
   },
   toProtoMsg(message: QueryBlockHeaderByHeightRequest): QueryBlockHeaderByHeightRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightRequest',
+      typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightRequest",
       value: QueryBlockHeaderByHeightRequest.encode(message).finish()
     };
   }
@@ -1449,7 +1995,7 @@ function createBaseQueryBlockHeaderByHeightResponse(): QueryBlockHeaderByHeightR
   };
 }
 export const QueryBlockHeaderByHeightResponse = {
-  typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightResponse',
+  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightResponse",
   encode(message: QueryBlockHeaderByHeightResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeader !== undefined) {
       BlockHeader.encode(message.blockHeader, writer.uint32(10).fork()).ldelim();
@@ -1501,20 +2047,20 @@ export const QueryBlockHeaderByHeightResponse = {
   },
   toProtoMsg(message: QueryBlockHeaderByHeightResponse): QueryBlockHeaderByHeightResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryBlockHeaderByHeightResponse',
+      typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightResponse",
       value: QueryBlockHeaderByHeightResponse.encode(message).finish()
     };
   }
 };
 function createBaseQueryBlockHeaderByHashRequest(): QueryBlockHeaderByHashRequest {
   return {
-    hash: ''
+    hash: ""
   };
 }
 export const QueryBlockHeaderByHashRequest = {
-  typeUrl: '/side.btcbridge.QueryBlockHeaderByHashRequest',
+  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashRequest",
   encode(message: QueryBlockHeaderByHashRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.hash !== '') {
+    if (message.hash !== "") {
       writer.uint32(10).string(message.hash);
     }
     return writer;
@@ -1538,7 +2084,7 @@ export const QueryBlockHeaderByHashRequest = {
   },
   fromPartial(object: Partial<QueryBlockHeaderByHashRequest>): QueryBlockHeaderByHashRequest {
     const message = createBaseQueryBlockHeaderByHashRequest();
-    message.hash = object.hash ?? '';
+    message.hash = object.hash ?? "";
     return message;
   },
   fromAmino(object: QueryBlockHeaderByHashRequestAmino): QueryBlockHeaderByHashRequest {
@@ -1550,7 +2096,7 @@ export const QueryBlockHeaderByHashRequest = {
   },
   toAmino(message: QueryBlockHeaderByHashRequest): QueryBlockHeaderByHashRequestAmino {
     const obj: any = {};
-    obj.hash = message.hash === '' ? undefined : message.hash;
+    obj.hash = message.hash === "" ? undefined : message.hash;
     return obj;
   },
   fromAminoMsg(object: QueryBlockHeaderByHashRequestAminoMsg): QueryBlockHeaderByHashRequest {
@@ -1564,7 +2110,7 @@ export const QueryBlockHeaderByHashRequest = {
   },
   toProtoMsg(message: QueryBlockHeaderByHashRequest): QueryBlockHeaderByHashRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryBlockHeaderByHashRequest',
+      typeUrl: "/side.btcbridge.QueryBlockHeaderByHashRequest",
       value: QueryBlockHeaderByHashRequest.encode(message).finish()
     };
   }
@@ -1575,7 +2121,7 @@ function createBaseQueryBlockHeaderByHashResponse(): QueryBlockHeaderByHashRespo
   };
 }
 export const QueryBlockHeaderByHashResponse = {
-  typeUrl: '/side.btcbridge.QueryBlockHeaderByHashResponse',
+  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashResponse",
   encode(message: QueryBlockHeaderByHashResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockHeader !== undefined) {
       BlockHeader.encode(message.blockHeader, writer.uint32(10).fork()).ldelim();
@@ -1627,7 +2173,7 @@ export const QueryBlockHeaderByHashResponse = {
   },
   toProtoMsg(message: QueryBlockHeaderByHashResponse): QueryBlockHeaderByHashResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryBlockHeaderByHashResponse',
+      typeUrl: "/side.btcbridge.QueryBlockHeaderByHashResponse",
       value: QueryBlockHeaderByHashResponse.encode(message).finish()
     };
   }
@@ -1636,7 +2182,7 @@ function createBaseQueryUTXOsRequest(): QueryUTXOsRequest {
   return {};
 }
 export const QueryUTXOsRequest = {
-  typeUrl: '/side.btcbridge.QueryUTXOsRequest',
+  typeUrl: "/side.btcbridge.QueryUTXOsRequest",
   encode(_: QueryUTXOsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -1677,7 +2223,7 @@ export const QueryUTXOsRequest = {
   },
   toProtoMsg(message: QueryUTXOsRequest): QueryUTXOsRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryUTXOsRequest',
+      typeUrl: "/side.btcbridge.QueryUTXOsRequest",
       value: QueryUTXOsRequest.encode(message).finish()
     };
   }
@@ -1688,7 +2234,7 @@ function createBaseQueryUTXOsResponse(): QueryUTXOsResponse {
   };
 }
 export const QueryUTXOsResponse = {
-  typeUrl: '/side.btcbridge.QueryUTXOsResponse',
+  typeUrl: "/side.btcbridge.QueryUTXOsResponse",
   encode(message: QueryUTXOsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.utxos) {
       UTXO.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1742,20 +2288,20 @@ export const QueryUTXOsResponse = {
   },
   toProtoMsg(message: QueryUTXOsResponse): QueryUTXOsResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryUTXOsResponse',
+      typeUrl: "/side.btcbridge.QueryUTXOsResponse",
       value: QueryUTXOsResponse.encode(message).finish()
     };
   }
 };
 function createBaseQueryUTXOsByAddressRequest(): QueryUTXOsByAddressRequest {
   return {
-    address: ''
+    address: ""
   };
 }
 export const QueryUTXOsByAddressRequest = {
-  typeUrl: '/side.btcbridge.QueryUTXOsByAddressRequest',
+  typeUrl: "/side.btcbridge.QueryUTXOsByAddressRequest",
   encode(message: QueryUTXOsByAddressRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== '') {
+    if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     return writer;
@@ -1779,7 +2325,7 @@ export const QueryUTXOsByAddressRequest = {
   },
   fromPartial(object: Partial<QueryUTXOsByAddressRequest>): QueryUTXOsByAddressRequest {
     const message = createBaseQueryUTXOsByAddressRequest();
-    message.address = object.address ?? '';
+    message.address = object.address ?? "";
     return message;
   },
   fromAmino(object: QueryUTXOsByAddressRequestAmino): QueryUTXOsByAddressRequest {
@@ -1791,7 +2337,7 @@ export const QueryUTXOsByAddressRequest = {
   },
   toAmino(message: QueryUTXOsByAddressRequest): QueryUTXOsByAddressRequestAmino {
     const obj: any = {};
-    obj.address = message.address === '' ? undefined : message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     return obj;
   },
   fromAminoMsg(object: QueryUTXOsByAddressRequestAminoMsg): QueryUTXOsByAddressRequest {
@@ -1805,7 +2351,7 @@ export const QueryUTXOsByAddressRequest = {
   },
   toProtoMsg(message: QueryUTXOsByAddressRequest): QueryUTXOsByAddressRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryUTXOsByAddressRequest',
+      typeUrl: "/side.btcbridge.QueryUTXOsByAddressRequest",
       value: QueryUTXOsByAddressRequest.encode(message).finish()
     };
   }
@@ -1816,7 +2362,7 @@ function createBaseQueryUTXOsByAddressResponse(): QueryUTXOsByAddressResponse {
   };
 }
 export const QueryUTXOsByAddressResponse = {
-  typeUrl: '/side.btcbridge.QueryUTXOsByAddressResponse',
+  typeUrl: "/side.btcbridge.QueryUTXOsByAddressResponse",
   encode(message: QueryUTXOsByAddressResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.utxos) {
       UTXO.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1870,8 +2416,160 @@ export const QueryUTXOsByAddressResponse = {
   },
   toProtoMsg(message: QueryUTXOsByAddressResponse): QueryUTXOsByAddressResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryUTXOsByAddressResponse',
+      typeUrl: "/side.btcbridge.QueryUTXOsByAddressResponse",
       value: QueryUTXOsByAddressResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryUTXOCountAndBalancesByAddressRequest(): QueryUTXOCountAndBalancesByAddressRequest {
+  return {
+    address: ""
+  };
+}
+export const QueryUTXOCountAndBalancesByAddressRequest = {
+  typeUrl: "/side.btcbridge.QueryUTXOCountAndBalancesByAddressRequest",
+  encode(message: QueryUTXOCountAndBalancesByAddressRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryUTXOCountAndBalancesByAddressRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryUTXOCountAndBalancesByAddressRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryUTXOCountAndBalancesByAddressRequest>): QueryUTXOCountAndBalancesByAddressRequest {
+    const message = createBaseQueryUTXOCountAndBalancesByAddressRequest();
+    message.address = object.address ?? "";
+    return message;
+  },
+  fromAmino(object: QueryUTXOCountAndBalancesByAddressRequestAmino): QueryUTXOCountAndBalancesByAddressRequest {
+    const message = createBaseQueryUTXOCountAndBalancesByAddressRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
+  },
+  toAmino(message: QueryUTXOCountAndBalancesByAddressRequest): QueryUTXOCountAndBalancesByAddressRequestAmino {
+    const obj: any = {};
+    obj.address = message.address === "" ? undefined : message.address;
+    return obj;
+  },
+  fromAminoMsg(object: QueryUTXOCountAndBalancesByAddressRequestAminoMsg): QueryUTXOCountAndBalancesByAddressRequest {
+    return QueryUTXOCountAndBalancesByAddressRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryUTXOCountAndBalancesByAddressRequestProtoMsg): QueryUTXOCountAndBalancesByAddressRequest {
+    return QueryUTXOCountAndBalancesByAddressRequest.decode(message.value);
+  },
+  toProto(message: QueryUTXOCountAndBalancesByAddressRequest): Uint8Array {
+    return QueryUTXOCountAndBalancesByAddressRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryUTXOCountAndBalancesByAddressRequest): QueryUTXOCountAndBalancesByAddressRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryUTXOCountAndBalancesByAddressRequest",
+      value: QueryUTXOCountAndBalancesByAddressRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryUTXOCountAndBalancesByAddressResponse(): QueryUTXOCountAndBalancesByAddressResponse {
+  return {
+    count: 0,
+    value: BigInt(0),
+    runeBalances: []
+  };
+}
+export const QueryUTXOCountAndBalancesByAddressResponse = {
+  typeUrl: "/side.btcbridge.QueryUTXOCountAndBalancesByAddressResponse",
+  encode(message: QueryUTXOCountAndBalancesByAddressResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.count !== 0) {
+      writer.uint32(8).uint32(message.count);
+    }
+    if (message.value !== BigInt(0)) {
+      writer.uint32(16).int64(message.value);
+    }
+    for (const v of message.runeBalances) {
+      RuneBalance.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryUTXOCountAndBalancesByAddressResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryUTXOCountAndBalancesByAddressResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.count = reader.uint32();
+          break;
+        case 2:
+          message.value = reader.int64();
+          break;
+        case 3:
+          message.runeBalances.push(RuneBalance.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryUTXOCountAndBalancesByAddressResponse>): QueryUTXOCountAndBalancesByAddressResponse {
+    const message = createBaseQueryUTXOCountAndBalancesByAddressResponse();
+    message.count = object.count ?? 0;
+    message.value = object.value !== undefined && object.value !== null ? BigInt(object.value.toString()) : BigInt(0);
+    message.runeBalances = object.runeBalances?.map(e => RuneBalance.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: QueryUTXOCountAndBalancesByAddressResponseAmino): QueryUTXOCountAndBalancesByAddressResponse {
+    const message = createBaseQueryUTXOCountAndBalancesByAddressResponse();
+    if (object.count !== undefined && object.count !== null) {
+      message.count = object.count;
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = BigInt(object.value);
+    }
+    message.runeBalances = object.runeBalances?.map(e => RuneBalance.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryUTXOCountAndBalancesByAddressResponse): QueryUTXOCountAndBalancesByAddressResponseAmino {
+    const obj: any = {};
+    obj.count = message.count === 0 ? undefined : message.count;
+    obj.value = message.value !== BigInt(0) ? message.value.toString() : undefined;
+    if (message.runeBalances) {
+      obj.runeBalances = message.runeBalances.map(e => e ? RuneBalance.toAmino(e) : undefined);
+    } else {
+      obj.runeBalances = message.runeBalances;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryUTXOCountAndBalancesByAddressResponseAminoMsg): QueryUTXOCountAndBalancesByAddressResponse {
+    return QueryUTXOCountAndBalancesByAddressResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryUTXOCountAndBalancesByAddressResponseProtoMsg): QueryUTXOCountAndBalancesByAddressResponse {
+    return QueryUTXOCountAndBalancesByAddressResponse.decode(message.value);
+  },
+  toProto(message: QueryUTXOCountAndBalancesByAddressResponse): Uint8Array {
+    return QueryUTXOCountAndBalancesByAddressResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryUTXOCountAndBalancesByAddressResponse): QueryUTXOCountAndBalancesByAddressResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryUTXOCountAndBalancesByAddressResponse",
+      value: QueryUTXOCountAndBalancesByAddressResponse.encode(message).finish()
     };
   }
 };
@@ -1881,7 +2579,7 @@ function createBaseQueryDKGRequestRequest(): QueryDKGRequestRequest {
   };
 }
 export const QueryDKGRequestRequest = {
-  typeUrl: '/side.btcbridge.QueryDKGRequestRequest',
+  typeUrl: "/side.btcbridge.QueryDKGRequestRequest",
   encode(message: QueryDKGRequestRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -1933,7 +2631,7 @@ export const QueryDKGRequestRequest = {
   },
   toProtoMsg(message: QueryDKGRequestRequest): QueryDKGRequestRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryDKGRequestRequest',
+      typeUrl: "/side.btcbridge.QueryDKGRequestRequest",
       value: QueryDKGRequestRequest.encode(message).finish()
     };
   }
@@ -1944,7 +2642,7 @@ function createBaseQueryDKGRequestResponse(): QueryDKGRequestResponse {
   };
 }
 export const QueryDKGRequestResponse = {
-  typeUrl: '/side.btcbridge.QueryDKGRequestResponse',
+  typeUrl: "/side.btcbridge.QueryDKGRequestResponse",
   encode(message: QueryDKGRequestResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.request !== undefined) {
       DKGRequest.encode(message.request, writer.uint32(10).fork()).ldelim();
@@ -1996,7 +2694,7 @@ export const QueryDKGRequestResponse = {
   },
   toProtoMsg(message: QueryDKGRequestResponse): QueryDKGRequestResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryDKGRequestResponse',
+      typeUrl: "/side.btcbridge.QueryDKGRequestResponse",
       value: QueryDKGRequestResponse.encode(message).finish()
     };
   }
@@ -2007,7 +2705,7 @@ function createBaseQueryDKGRequestsRequest(): QueryDKGRequestsRequest {
   };
 }
 export const QueryDKGRequestsRequest = {
-  typeUrl: '/side.btcbridge.QueryDKGRequestsRequest',
+  typeUrl: "/side.btcbridge.QueryDKGRequestsRequest",
   encode(message: QueryDKGRequestsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.status !== 0) {
       writer.uint32(8).int32(message.status);
@@ -2059,7 +2757,7 @@ export const QueryDKGRequestsRequest = {
   },
   toProtoMsg(message: QueryDKGRequestsRequest): QueryDKGRequestsRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryDKGRequestsRequest',
+      typeUrl: "/side.btcbridge.QueryDKGRequestsRequest",
       value: QueryDKGRequestsRequest.encode(message).finish()
     };
   }
@@ -2070,7 +2768,7 @@ function createBaseQueryDKGRequestsResponse(): QueryDKGRequestsResponse {
   };
 }
 export const QueryDKGRequestsResponse = {
-  typeUrl: '/side.btcbridge.QueryDKGRequestsResponse',
+  typeUrl: "/side.btcbridge.QueryDKGRequestsResponse",
   encode(message: QueryDKGRequestsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.requests) {
       DKGRequest.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -2124,7 +2822,7 @@ export const QueryDKGRequestsResponse = {
   },
   toProtoMsg(message: QueryDKGRequestsResponse): QueryDKGRequestsResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryDKGRequestsResponse',
+      typeUrl: "/side.btcbridge.QueryDKGRequestsResponse",
       value: QueryDKGRequestsResponse.encode(message).finish()
     };
   }
@@ -2133,7 +2831,7 @@ function createBaseQueryAllDKGRequestsRequest(): QueryAllDKGRequestsRequest {
   return {};
 }
 export const QueryAllDKGRequestsRequest = {
-  typeUrl: '/side.btcbridge.QueryAllDKGRequestsRequest',
+  typeUrl: "/side.btcbridge.QueryAllDKGRequestsRequest",
   encode(_: QueryAllDKGRequestsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -2174,7 +2872,7 @@ export const QueryAllDKGRequestsRequest = {
   },
   toProtoMsg(message: QueryAllDKGRequestsRequest): QueryAllDKGRequestsRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryAllDKGRequestsRequest',
+      typeUrl: "/side.btcbridge.QueryAllDKGRequestsRequest",
       value: QueryAllDKGRequestsRequest.encode(message).finish()
     };
   }
@@ -2185,7 +2883,7 @@ function createBaseQueryAllDKGRequestsResponse(): QueryAllDKGRequestsResponse {
   };
 }
 export const QueryAllDKGRequestsResponse = {
-  typeUrl: '/side.btcbridge.QueryAllDKGRequestsResponse',
+  typeUrl: "/side.btcbridge.QueryAllDKGRequestsResponse",
   encode(message: QueryAllDKGRequestsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.requests) {
       DKGRequest.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -2239,7 +2937,7 @@ export const QueryAllDKGRequestsResponse = {
   },
   toProtoMsg(message: QueryAllDKGRequestsResponse): QueryAllDKGRequestsResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryAllDKGRequestsResponse',
+      typeUrl: "/side.btcbridge.QueryAllDKGRequestsResponse",
       value: QueryAllDKGRequestsResponse.encode(message).finish()
     };
   }
@@ -2250,7 +2948,7 @@ function createBaseQueryDKGCompletionRequestsRequest(): QueryDKGCompletionReques
   };
 }
 export const QueryDKGCompletionRequestsRequest = {
-  typeUrl: '/side.btcbridge.QueryDKGCompletionRequestsRequest',
+  typeUrl: "/side.btcbridge.QueryDKGCompletionRequestsRequest",
   encode(message: QueryDKGCompletionRequestsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -2302,7 +3000,7 @@ export const QueryDKGCompletionRequestsRequest = {
   },
   toProtoMsg(message: QueryDKGCompletionRequestsRequest): QueryDKGCompletionRequestsRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryDKGCompletionRequestsRequest',
+      typeUrl: "/side.btcbridge.QueryDKGCompletionRequestsRequest",
       value: QueryDKGCompletionRequestsRequest.encode(message).finish()
     };
   }
@@ -2313,7 +3011,7 @@ function createBaseQueryDKGCompletionRequestsResponse(): QueryDKGCompletionReque
   };
 }
 export const QueryDKGCompletionRequestsResponse = {
-  typeUrl: '/side.btcbridge.QueryDKGCompletionRequestsResponse',
+  typeUrl: "/side.btcbridge.QueryDKGCompletionRequestsResponse",
   encode(message: QueryDKGCompletionRequestsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.requests) {
       DKGCompletionRequest.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -2367,7 +3065,7 @@ export const QueryDKGCompletionRequestsResponse = {
   },
   toProtoMsg(message: QueryDKGCompletionRequestsResponse): QueryDKGCompletionRequestsResponseProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.QueryDKGCompletionRequestsResponse',
+      typeUrl: "/side.btcbridge.QueryDKGCompletionRequestsResponse",
       value: QueryDKGCompletionRequestsResponse.encode(message).finish()
     };
   }

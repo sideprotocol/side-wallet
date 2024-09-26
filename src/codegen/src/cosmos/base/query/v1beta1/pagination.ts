@@ -1,10 +1,10 @@
 //@ts-nocheck
-import { BinaryReader, BinaryWriter } from '../../../../binary';
-import { bytesFromBase64, base64FromBytes } from '../../../../helpers';
+import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { bytesFromBase64, base64FromBytes } from "../../../../helpers";
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
- *
+ * 
  *  message SomeRequest {
  *          Foo some_parameter = 1;
  *          PageRequest pagination = 2;
@@ -37,19 +37,19 @@ export interface PageRequest {
   countTotal: boolean;
   /**
    * reverse is set to true if results are to be returned in the descending order.
-   *
+   * 
    * Since: cosmos-sdk 0.43
    */
   reverse: boolean;
 }
 export interface PageRequestProtoMsg {
-  typeUrl: '/cosmos.base.query.v1beta1.PageRequest';
+  typeUrl: "/cosmos.base.query.v1beta1.PageRequest";
   value: Uint8Array;
 }
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
- *
+ * 
  *  message SomeRequest {
  *          Foo some_parameter = 1;
  *          PageRequest pagination = 2;
@@ -82,19 +82,19 @@ export interface PageRequestAmino {
   count_total?: boolean;
   /**
    * reverse is set to true if results are to be returned in the descending order.
-   *
+   * 
    * Since: cosmos-sdk 0.43
    */
   reverse?: boolean;
 }
 export interface PageRequestAminoMsg {
-  type: 'cosmos-sdk/PageRequest';
+  type: "cosmos-sdk/PageRequest";
   value: PageRequestAmino;
 }
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
- *
+ * 
  *  message SomeRequest {
  *          Foo some_parameter = 1;
  *          PageRequest pagination = 2;
@@ -110,7 +110,7 @@ export interface PageRequestSDKType {
 /**
  * PageResponse is to be embedded in gRPC response messages where the
  * corresponding request message has used PageRequest.
- *
+ * 
  *  message SomeResponse {
  *          repeated Bar results = 1;
  *          PageResponse page = 2;
@@ -129,13 +129,13 @@ export interface PageResponse {
   total: bigint;
 }
 export interface PageResponseProtoMsg {
-  typeUrl: '/cosmos.base.query.v1beta1.PageResponse';
+  typeUrl: "/cosmos.base.query.v1beta1.PageResponse";
   value: Uint8Array;
 }
 /**
  * PageResponse is to be embedded in gRPC response messages where the
  * corresponding request message has used PageRequest.
- *
+ * 
  *  message SomeResponse {
  *          repeated Bar results = 1;
  *          PageResponse page = 2;
@@ -154,13 +154,13 @@ export interface PageResponseAmino {
   total?: string;
 }
 export interface PageResponseAminoMsg {
-  type: 'cosmos-sdk/PageResponse';
+  type: "cosmos-sdk/PageResponse";
   value: PageResponseAmino;
 }
 /**
  * PageResponse is to be embedded in gRPC response messages where the
  * corresponding request message has used PageRequest.
- *
+ * 
  *  message SomeResponse {
  *          repeated Bar results = 1;
  *          PageResponse page = 2;
@@ -180,7 +180,7 @@ function createBasePageRequest(): PageRequest {
   };
 }
 export const PageRequest = {
-  typeUrl: '/cosmos.base.query.v1beta1.PageRequest',
+  typeUrl: "/cosmos.base.query.v1beta1.PageRequest",
   encode(message: PageRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
@@ -270,7 +270,7 @@ export const PageRequest = {
   },
   toAminoMsg(message: PageRequest): PageRequestAminoMsg {
     return {
-      type: 'cosmos-sdk/PageRequest',
+      type: "cosmos-sdk/PageRequest",
       value: PageRequest.toAmino(message)
     };
   },
@@ -282,7 +282,7 @@ export const PageRequest = {
   },
   toProtoMsg(message: PageRequest): PageRequestProtoMsg {
     return {
-      typeUrl: '/cosmos.base.query.v1beta1.PageRequest',
+      typeUrl: "/cosmos.base.query.v1beta1.PageRequest",
       value: PageRequest.encode(message).finish()
     };
   }
@@ -294,7 +294,7 @@ function createBasePageResponse(): PageResponse {
   };
 }
 export const PageResponse = {
-  typeUrl: '/cosmos.base.query.v1beta1.PageResponse',
+  typeUrl: "/cosmos.base.query.v1beta1.PageResponse",
   encode(message: PageResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.nextKey.length !== 0) {
       writer.uint32(10).bytes(message.nextKey);
@@ -351,7 +351,7 @@ export const PageResponse = {
   },
   toAminoMsg(message: PageResponse): PageResponseAminoMsg {
     return {
-      type: 'cosmos-sdk/PageResponse',
+      type: "cosmos-sdk/PageResponse",
       value: PageResponse.toAmino(message)
     };
   },
@@ -363,7 +363,7 @@ export const PageResponse = {
   },
   toProtoMsg(message: PageResponse): PageResponseProtoMsg {
     return {
-      typeUrl: '/cosmos.base.query.v1beta1.PageResponse',
+      typeUrl: "/cosmos.base.query.v1beta1.PageResponse",
       value: PageResponse.encode(message).finish()
     };
   }

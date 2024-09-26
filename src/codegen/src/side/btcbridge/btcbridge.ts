@@ -1,62 +1,62 @@
 //@ts-nocheck
-import { AssetType } from './params';
-import { Timestamp } from '../../google/protobuf/timestamp';
-import { BinaryReader, BinaryWriter } from '../../binary';
-import { bytesFromBase64, base64FromBytes, toTimestamp, fromTimestamp } from '../../helpers';
-/** Bitcoin Withdrawal Status */
-export enum WithdrawStatus {
-  /** WITHDRAW_STATUS_UNSPECIFIED - WITHDRAW_STATUS_UNSPECIFIED - Default value, should not be used */
-  WITHDRAW_STATUS_UNSPECIFIED = 0,
-  /** WITHDRAW_STATUS_CREATED - WITHDRAW_STATUS_CREATED - The withdrawal tx is created */
-  WITHDRAW_STATUS_CREATED = 1,
-  /** WITHDRAW_STATUS_BROADCASTED - WITHDRAW_STATUS_BROADCASTED - The withdrawal tx is broadcasted */
-  WITHDRAW_STATUS_BROADCASTED = 2,
-  /** WITHDRAW_STATUS_CONFIRMED - WITHDRAW_STATUS_CONFIRMED - The withdrawal tx is confirmed */
-  WITHDRAW_STATUS_CONFIRMED = 3,
-  /** WITHDRAW_STATUS_FAILED - WITHDRAW_STATUS_FAILED - The withdrawal tx failed to broadcast due to invalid inputs or non-standardness */
-  WITHDRAW_STATUS_FAILED = 4,
+import { AssetType } from "./params";
+import { Timestamp } from "../../google/protobuf/timestamp";
+import { BinaryReader, BinaryWriter } from "../../binary";
+import { bytesFromBase64, base64FromBytes, toTimestamp, fromTimestamp } from "../../helpers";
+/** Bitcoin Signing Status */
+export enum SigningStatus {
+  /** SIGNING_STATUS_UNSPECIFIED - SIGNING_STATUS_UNSPECIFIED - Default value, should not be used */
+  SIGNING_STATUS_UNSPECIFIED = 0,
+  /** SIGNING_STATUS_PENDING - SIGNING_STATUS_PENDING - The signing request is pending */
+  SIGNING_STATUS_PENDING = 1,
+  /** SIGNING_STATUS_BROADCASTED - SIGNING_STATUS_BROADCASTED - The signing request is broadcasted */
+  SIGNING_STATUS_BROADCASTED = 2,
+  /** SIGNING_STATUS_CONFIRMED - SIGNING_STATUS_CONFIRMED - The signing request is confirmed */
+  SIGNING_STATUS_CONFIRMED = 3,
+  /** SIGNING_STATUS_FAILED - SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness */
+  SIGNING_STATUS_FAILED = 4,
   UNRECOGNIZED = -1,
 }
-export const WithdrawStatusSDKType = WithdrawStatus;
-export const WithdrawStatusAmino = WithdrawStatus;
-export function withdrawStatusFromJSON(object: any): WithdrawStatus {
+export const SigningStatusSDKType = SigningStatus;
+export const SigningStatusAmino = SigningStatus;
+export function signingStatusFromJSON(object: any): SigningStatus {
   switch (object) {
     case 0:
-    case 'WITHDRAW_STATUS_UNSPECIFIED':
-      return WithdrawStatus.WITHDRAW_STATUS_UNSPECIFIED;
+    case "SIGNING_STATUS_UNSPECIFIED":
+      return SigningStatus.SIGNING_STATUS_UNSPECIFIED;
     case 1:
-    case 'WITHDRAW_STATUS_CREATED':
-      return WithdrawStatus.WITHDRAW_STATUS_CREATED;
+    case "SIGNING_STATUS_PENDING":
+      return SigningStatus.SIGNING_STATUS_PENDING;
     case 2:
-    case 'WITHDRAW_STATUS_BROADCASTED':
-      return WithdrawStatus.WITHDRAW_STATUS_BROADCASTED;
+    case "SIGNING_STATUS_BROADCASTED":
+      return SigningStatus.SIGNING_STATUS_BROADCASTED;
     case 3:
-    case 'WITHDRAW_STATUS_CONFIRMED':
-      return WithdrawStatus.WITHDRAW_STATUS_CONFIRMED;
+    case "SIGNING_STATUS_CONFIRMED":
+      return SigningStatus.SIGNING_STATUS_CONFIRMED;
     case 4:
-    case 'WITHDRAW_STATUS_FAILED':
-      return WithdrawStatus.WITHDRAW_STATUS_FAILED;
+    case "SIGNING_STATUS_FAILED":
+      return SigningStatus.SIGNING_STATUS_FAILED;
     case -1:
-    case 'UNRECOGNIZED':
+    case "UNRECOGNIZED":
     default:
-      return WithdrawStatus.UNRECOGNIZED;
+      return SigningStatus.UNRECOGNIZED;
   }
 }
-export function withdrawStatusToJSON(object: WithdrawStatus): string {
+export function signingStatusToJSON(object: SigningStatus): string {
   switch (object) {
-    case WithdrawStatus.WITHDRAW_STATUS_UNSPECIFIED:
-      return 'WITHDRAW_STATUS_UNSPECIFIED';
-    case WithdrawStatus.WITHDRAW_STATUS_CREATED:
-      return 'WITHDRAW_STATUS_CREATED';
-    case WithdrawStatus.WITHDRAW_STATUS_BROADCASTED:
-      return 'WITHDRAW_STATUS_BROADCASTED';
-    case WithdrawStatus.WITHDRAW_STATUS_CONFIRMED:
-      return 'WITHDRAW_STATUS_CONFIRMED';
-    case WithdrawStatus.WITHDRAW_STATUS_FAILED:
-      return 'WITHDRAW_STATUS_FAILED';
-    case WithdrawStatus.UNRECOGNIZED:
+    case SigningStatus.SIGNING_STATUS_UNSPECIFIED:
+      return "SIGNING_STATUS_UNSPECIFIED";
+    case SigningStatus.SIGNING_STATUS_PENDING:
+      return "SIGNING_STATUS_PENDING";
+    case SigningStatus.SIGNING_STATUS_BROADCASTED:
+      return "SIGNING_STATUS_BROADCASTED";
+    case SigningStatus.SIGNING_STATUS_CONFIRMED:
+      return "SIGNING_STATUS_CONFIRMED";
+    case SigningStatus.SIGNING_STATUS_FAILED:
+      return "SIGNING_STATUS_FAILED";
+    case SigningStatus.UNRECOGNIZED:
     default:
-      return 'UNRECOGNIZED';
+      return "UNRECOGNIZED";
   }
 }
 export enum DKGRequestStatus {
@@ -77,22 +77,22 @@ export const DKGRequestStatusAmino = DKGRequestStatus;
 export function dKGRequestStatusFromJSON(object: any): DKGRequestStatus {
   switch (object) {
     case 0:
-    case 'DKG_REQUEST_STATUS_UNSPECIFIED':
+    case "DKG_REQUEST_STATUS_UNSPECIFIED":
       return DKGRequestStatus.DKG_REQUEST_STATUS_UNSPECIFIED;
     case 1:
-    case 'DKG_REQUEST_STATUS_PENDING':
+    case "DKG_REQUEST_STATUS_PENDING":
       return DKGRequestStatus.DKG_REQUEST_STATUS_PENDING;
     case 2:
-    case 'DKG_REQUEST_STATUS_COMPLETED':
+    case "DKG_REQUEST_STATUS_COMPLETED":
       return DKGRequestStatus.DKG_REQUEST_STATUS_COMPLETED;
     case 3:
-    case 'DKG_REQUEST_STATUS_FAILED':
+    case "DKG_REQUEST_STATUS_FAILED":
       return DKGRequestStatus.DKG_REQUEST_STATUS_FAILED;
     case 4:
-    case 'DKG_REQUEST_STATUS_TIMEDOUT':
+    case "DKG_REQUEST_STATUS_TIMEDOUT":
       return DKGRequestStatus.DKG_REQUEST_STATUS_TIMEDOUT;
     case -1:
-    case 'UNRECOGNIZED':
+    case "UNRECOGNIZED":
     default:
       return DKGRequestStatus.UNRECOGNIZED;
   }
@@ -100,18 +100,18 @@ export function dKGRequestStatusFromJSON(object: any): DKGRequestStatus {
 export function dKGRequestStatusToJSON(object: DKGRequestStatus): string {
   switch (object) {
     case DKGRequestStatus.DKG_REQUEST_STATUS_UNSPECIFIED:
-      return 'DKG_REQUEST_STATUS_UNSPECIFIED';
+      return "DKG_REQUEST_STATUS_UNSPECIFIED";
     case DKGRequestStatus.DKG_REQUEST_STATUS_PENDING:
-      return 'DKG_REQUEST_STATUS_PENDING';
+      return "DKG_REQUEST_STATUS_PENDING";
     case DKGRequestStatus.DKG_REQUEST_STATUS_COMPLETED:
-      return 'DKG_REQUEST_STATUS_COMPLETED';
+      return "DKG_REQUEST_STATUS_COMPLETED";
     case DKGRequestStatus.DKG_REQUEST_STATUS_FAILED:
-      return 'DKG_REQUEST_STATUS_FAILED';
+      return "DKG_REQUEST_STATUS_FAILED";
     case DKGRequestStatus.DKG_REQUEST_STATUS_TIMEDOUT:
-      return 'DKG_REQUEST_STATUS_TIMEDOUT';
+      return "DKG_REQUEST_STATUS_TIMEDOUT";
     case DKGRequestStatus.UNRECOGNIZED:
     default:
-      return 'UNRECOGNIZED';
+      return "UNRECOGNIZED";
   }
 }
 /** Bitcoin Block Header */
@@ -127,7 +127,7 @@ export interface BlockHeader {
   ntx: bigint;
 }
 export interface BlockHeaderProtoMsg {
-  typeUrl: '/side.btcbridge.BlockHeader';
+  typeUrl: "/side.btcbridge.BlockHeader";
   value: Uint8Array;
 }
 /** Bitcoin Block Header */
@@ -143,7 +143,7 @@ export interface BlockHeaderAmino {
   ntx?: string;
 }
 export interface BlockHeaderAminoMsg {
-  type: '/side.btcbridge.BlockHeader';
+  type: "/side.btcbridge.BlockHeader";
   value: BlockHeaderAmino;
 }
 /** Bitcoin Block Header */
@@ -158,37 +158,66 @@ export interface BlockHeaderSDKType {
   time: bigint;
   ntx: bigint;
 }
-/** Bitcoin Withdrawal Request */
-export interface BitcoinWithdrawRequest {
+/** Bitcoin Signing Request */
+export interface SigningRequest {
   address: string;
   sequence: bigint;
   txid: string;
   psbt: string;
-  status: WithdrawStatus;
+  status: SigningStatus;
 }
-export interface BitcoinWithdrawRequestProtoMsg {
-  typeUrl: '/side.btcbridge.BitcoinWithdrawRequest';
+export interface SigningRequestProtoMsg {
+  typeUrl: "/side.btcbridge.SigningRequest";
   value: Uint8Array;
 }
-/** Bitcoin Withdrawal Request */
-export interface BitcoinWithdrawRequestAmino {
+/** Bitcoin Signing Request */
+export interface SigningRequestAmino {
   address?: string;
   sequence?: string;
   txid?: string;
   psbt?: string;
-  status?: WithdrawStatus;
+  status?: SigningStatus;
 }
-export interface BitcoinWithdrawRequestAminoMsg {
-  type: '/side.btcbridge.BitcoinWithdrawRequest';
-  value: BitcoinWithdrawRequestAmino;
+export interface SigningRequestAminoMsg {
+  type: "/side.btcbridge.SigningRequest";
+  value: SigningRequestAmino;
 }
-/** Bitcoin Withdrawal Request */
-export interface BitcoinWithdrawRequestSDKType {
+/** Bitcoin Signing Request */
+export interface SigningRequestSDKType {
   address: string;
   sequence: bigint;
   txid: string;
   psbt: string;
-  status: WithdrawStatus;
+  status: SigningStatus;
+}
+/** Withdrawal Request */
+export interface WithdrawRequest {
+  address: string;
+  amount: string;
+  sequence: bigint;
+  txid: string;
+}
+export interface WithdrawRequestProtoMsg {
+  typeUrl: "/side.btcbridge.WithdrawRequest";
+  value: Uint8Array;
+}
+/** Withdrawal Request */
+export interface WithdrawRequestAmino {
+  address?: string;
+  amount?: string;
+  sequence?: string;
+  txid?: string;
+}
+export interface WithdrawRequestAminoMsg {
+  type: "/side.btcbridge.WithdrawRequest";
+  value: WithdrawRequestAmino;
+}
+/** Withdrawal Request */
+export interface WithdrawRequestSDKType {
+  address: string;
+  amount: string;
+  sequence: bigint;
+  txid: string;
 }
 /** Bitcoin UTXO */
 export interface UTXO {
@@ -203,7 +232,7 @@ export interface UTXO {
   runes: RuneBalance[];
 }
 export interface UTXOProtoMsg {
-  typeUrl: '/side.btcbridge.UTXO';
+  typeUrl: "/side.btcbridge.UTXO";
   value: Uint8Array;
 }
 /** Bitcoin UTXO */
@@ -219,7 +248,7 @@ export interface UTXOAmino {
   runes?: RuneBalanceAmino[];
 }
 export interface UTXOAminoMsg {
-  type: '/side.btcbridge.UTXO';
+  type: "/side.btcbridge.UTXO";
   value: UTXOAmino;
 }
 /** Bitcoin UTXO */
@@ -241,7 +270,7 @@ export interface RuneBalance {
   amount: string;
 }
 export interface RuneBalanceProtoMsg {
-  typeUrl: '/side.btcbridge.RuneBalance';
+  typeUrl: "/side.btcbridge.RuneBalance";
   value: Uint8Array;
 }
 /** Rune Balance */
@@ -252,7 +281,7 @@ export interface RuneBalanceAmino {
   amount?: string;
 }
 export interface RuneBalanceAminoMsg {
-  type: '/side.btcbridge.RuneBalance';
+  type: "/side.btcbridge.RuneBalance";
   value: RuneBalanceAmino;
 }
 /** Rune Balance */
@@ -268,7 +297,7 @@ export interface RuneId {
   tx: number;
 }
 export interface RuneIdProtoMsg {
-  typeUrl: '/side.btcbridge.RuneId';
+  typeUrl: "/side.btcbridge.RuneId";
   value: Uint8Array;
 }
 /** Rune ID */
@@ -279,7 +308,7 @@ export interface RuneIdAmino {
   tx?: number;
 }
 export interface RuneIdAminoMsg {
-  type: '/side.btcbridge.RuneId';
+  type: "/side.btcbridge.RuneId";
   value: RuneIdAmino;
 }
 /** Rune ID */
@@ -294,7 +323,7 @@ export interface Edict {
   output: number;
 }
 export interface EdictProtoMsg {
-  typeUrl: '/side.btcbridge.Edict';
+  typeUrl: "/side.btcbridge.Edict";
   value: Uint8Array;
 }
 /** Rune Edict */
@@ -304,7 +333,7 @@ export interface EdictAmino {
   output?: number;
 }
 export interface EdictAminoMsg {
-  type: '/side.btcbridge.Edict';
+  type: "/side.btcbridge.Edict";
   value: EdictAmino;
 }
 /** Rune Edict */
@@ -312,6 +341,65 @@ export interface EdictSDKType {
   id?: RuneIdSDKType;
   amount: string;
   output: number;
+}
+/** BTC UTXO Consolidation */
+export interface BtcConsolidation {
+  /** maximum threshold of the btc value */
+  targetThreshold: bigint;
+  /** maximum number of the utxos to be consolidated; 0 means all */
+  maxNum: number;
+}
+export interface BtcConsolidationProtoMsg {
+  typeUrl: "/side.btcbridge.BtcConsolidation";
+  value: Uint8Array;
+}
+/** BTC UTXO Consolidation */
+export interface BtcConsolidationAmino {
+  /** maximum threshold of the btc value */
+  target_threshold?: string;
+  /** maximum number of the utxos to be consolidated; 0 means all */
+  max_num?: number;
+}
+export interface BtcConsolidationAminoMsg {
+  type: "/side.btcbridge.BtcConsolidation";
+  value: BtcConsolidationAmino;
+}
+/** BTC UTXO Consolidation */
+export interface BtcConsolidationSDKType {
+  target_threshold: bigint;
+  max_num: number;
+}
+/** Runes UTXO Consolidation */
+export interface RunesConsolidation {
+  /** rune id */
+  runeId: string;
+  /** maximum threshold of the corresponding rune balance */
+  targetThreshold: string;
+  /** maximum number of the utxos to be consolidated; 0 means all */
+  maxNum: number;
+}
+export interface RunesConsolidationProtoMsg {
+  typeUrl: "/side.btcbridge.RunesConsolidation";
+  value: Uint8Array;
+}
+/** Runes UTXO Consolidation */
+export interface RunesConsolidationAmino {
+  /** rune id */
+  rune_id?: string;
+  /** maximum threshold of the corresponding rune balance */
+  target_threshold?: string;
+  /** maximum number of the utxos to be consolidated; 0 means all */
+  max_num?: number;
+}
+export interface RunesConsolidationAminoMsg {
+  type: "/side.btcbridge.RunesConsolidation";
+  value: RunesConsolidationAmino;
+}
+/** Runes UTXO Consolidation */
+export interface RunesConsolidationSDKType {
+  rune_id: string;
+  target_threshold: string;
+  max_num: number;
 }
 /** DKG Participant */
 export interface DKGParticipant {
@@ -323,7 +411,7 @@ export interface DKGParticipant {
   consensusAddress: string;
 }
 export interface DKGParticipantProtoMsg {
-  typeUrl: '/side.btcbridge.DKGParticipant';
+  typeUrl: "/side.btcbridge.DKGParticipant";
   value: Uint8Array;
 }
 /** DKG Participant */
@@ -336,7 +424,7 @@ export interface DKGParticipantAmino {
   consensus_address?: string;
 }
 export interface DKGParticipantAminoMsg {
-  type: '/side.btcbridge.DKGParticipant';
+  type: "/side.btcbridge.DKGParticipant";
   value: DKGParticipantAmino;
 }
 /** DKG Participant */
@@ -355,13 +443,21 @@ export interface DKGRequest {
   threshold: number;
   /** asset types of vaults to be generated */
   vaultTypes: AssetType[];
+  /** indicates if disabling bridge deposit and withdrawal */
+  disableBridge: boolean;
+  /** indicates if transferring assets to the newly generated vaults when the DKG request is completed */
+  enableTransfer: boolean;
+  /** target number of the UTXOs to be transferred each time */
+  targetUtxoNum: number;
+  /** fee rate for vault transfer */
+  feeRate: string;
   /** expiration time */
   expiration?: Date;
   /** status */
   status: DKGRequestStatus;
 }
 export interface DKGRequestProtoMsg {
-  typeUrl: '/side.btcbridge.DKGRequest';
+  typeUrl: "/side.btcbridge.DKGRequest";
   value: Uint8Array;
 }
 /** DKG Request */
@@ -374,13 +470,21 @@ export interface DKGRequestAmino {
   threshold?: number;
   /** asset types of vaults to be generated */
   vault_types?: AssetType[];
+  /** indicates if disabling bridge deposit and withdrawal */
+  disable_bridge?: boolean;
+  /** indicates if transferring assets to the newly generated vaults when the DKG request is completed */
+  enable_transfer?: boolean;
+  /** target number of the UTXOs to be transferred each time */
+  target_utxo_num?: number;
+  /** fee rate for vault transfer */
+  fee_rate?: string;
   /** expiration time */
   expiration?: string;
   /** status */
   status?: DKGRequestStatus;
 }
 export interface DKGRequestAminoMsg {
-  type: '/side.btcbridge.DKGRequest';
+  type: "/side.btcbridge.DKGRequest";
   value: DKGRequestAmino;
 }
 /** DKG Request */
@@ -389,6 +493,10 @@ export interface DKGRequestSDKType {
   participants: DKGParticipantSDKType[];
   threshold: number;
   vault_types: AssetType[];
+  disable_bridge: boolean;
+  enable_transfer: boolean;
+  target_utxo_num: number;
+  fee_rate: string;
   expiration?: Date;
   status: DKGRequestStatus;
 }
@@ -406,7 +514,7 @@ export interface DKGCompletionRequest {
   signature: string;
 }
 export interface DKGCompletionRequestProtoMsg {
-  typeUrl: '/side.btcbridge.DKGCompletionRequest';
+  typeUrl: "/side.btcbridge.DKGCompletionRequest";
   value: Uint8Array;
 }
 /** DKG Completion Request */
@@ -423,7 +531,7 @@ export interface DKGCompletionRequestAmino {
   signature?: string;
 }
 export interface DKGCompletionRequestAminoMsg {
-  type: '/side.btcbridge.DKGCompletionRequest';
+  type: "/side.btcbridge.DKGCompletionRequest";
   value: DKGCompletionRequestAmino;
 }
 /** DKG Completion Request */
@@ -437,38 +545,38 @@ export interface DKGCompletionRequestSDKType {
 function createBaseBlockHeader(): BlockHeader {
   return {
     version: BigInt(0),
-    hash: '',
+    hash: "",
     height: BigInt(0),
-    previousBlockHash: '',
-    merkleRoot: '',
+    previousBlockHash: "",
+    merkleRoot: "",
     nonce: BigInt(0),
-    bits: '',
+    bits: "",
     time: BigInt(0),
     ntx: BigInt(0)
   };
 }
 export const BlockHeader = {
-  typeUrl: '/side.btcbridge.BlockHeader',
+  typeUrl: "/side.btcbridge.BlockHeader",
   encode(message: BlockHeader, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.version !== BigInt(0)) {
       writer.uint32(8).uint64(message.version);
     }
-    if (message.hash !== '') {
+    if (message.hash !== "") {
       writer.uint32(18).string(message.hash);
     }
     if (message.height !== BigInt(0)) {
       writer.uint32(24).uint64(message.height);
     }
-    if (message.previousBlockHash !== '') {
+    if (message.previousBlockHash !== "") {
       writer.uint32(34).string(message.previousBlockHash);
     }
-    if (message.merkleRoot !== '') {
+    if (message.merkleRoot !== "") {
       writer.uint32(42).string(message.merkleRoot);
     }
     if (message.nonce !== BigInt(0)) {
       writer.uint32(48).uint64(message.nonce);
     }
-    if (message.bits !== '') {
+    if (message.bits !== "") {
       writer.uint32(58).string(message.bits);
     }
     if (message.time !== BigInt(0)) {
@@ -523,12 +631,12 @@ export const BlockHeader = {
   fromPartial(object: Partial<BlockHeader>): BlockHeader {
     const message = createBaseBlockHeader();
     message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
-    message.hash = object.hash ?? '';
+    message.hash = object.hash ?? "";
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
-    message.previousBlockHash = object.previousBlockHash ?? '';
-    message.merkleRoot = object.merkleRoot ?? '';
+    message.previousBlockHash = object.previousBlockHash ?? "";
+    message.merkleRoot = object.merkleRoot ?? "";
     message.nonce = object.nonce !== undefined && object.nonce !== null ? BigInt(object.nonce.toString()) : BigInt(0);
-    message.bits = object.bits ?? '';
+    message.bits = object.bits ?? "";
     message.time = object.time !== undefined && object.time !== null ? BigInt(object.time.toString()) : BigInt(0);
     message.ntx = object.ntx !== undefined && object.ntx !== null ? BigInt(object.ntx.toString()) : BigInt(0);
     return message;
@@ -567,12 +675,12 @@ export const BlockHeader = {
   toAmino(message: BlockHeader): BlockHeaderAmino {
     const obj: any = {};
     obj.version = message.version !== BigInt(0) ? message.version.toString() : undefined;
-    obj.hash = message.hash === '' ? undefined : message.hash;
+    obj.hash = message.hash === "" ? undefined : message.hash;
     obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
-    obj.previous_block_hash = message.previousBlockHash === '' ? undefined : message.previousBlockHash;
-    obj.merkle_root = message.merkleRoot === '' ? undefined : message.merkleRoot;
+    obj.previous_block_hash = message.previousBlockHash === "" ? undefined : message.previousBlockHash;
+    obj.merkle_root = message.merkleRoot === "" ? undefined : message.merkleRoot;
     obj.nonce = message.nonce !== BigInt(0) ? message.nonce.toString() : undefined;
-    obj.bits = message.bits === '' ? undefined : message.bits;
+    obj.bits = message.bits === "" ? undefined : message.bits;
     obj.time = message.time !== BigInt(0) ? message.time.toString() : undefined;
     obj.ntx = message.ntx !== BigInt(0) ? message.ntx.toString() : undefined;
     return obj;
@@ -588,33 +696,33 @@ export const BlockHeader = {
   },
   toProtoMsg(message: BlockHeader): BlockHeaderProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.BlockHeader',
+      typeUrl: "/side.btcbridge.BlockHeader",
       value: BlockHeader.encode(message).finish()
     };
   }
 };
-function createBaseBitcoinWithdrawRequest(): BitcoinWithdrawRequest {
+function createBaseSigningRequest(): SigningRequest {
   return {
-    address: '',
+    address: "",
     sequence: BigInt(0),
-    txid: '',
-    psbt: '',
+    txid: "",
+    psbt: "",
     status: 0
   };
 }
-export const BitcoinWithdrawRequest = {
-  typeUrl: '/side.btcbridge.BitcoinWithdrawRequest',
-  encode(message: BitcoinWithdrawRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== '') {
+export const SigningRequest = {
+  typeUrl: "/side.btcbridge.SigningRequest",
+  encode(message: SigningRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     if (message.sequence !== BigInt(0)) {
       writer.uint32(16).uint64(message.sequence);
     }
-    if (message.txid !== '') {
+    if (message.txid !== "") {
       writer.uint32(26).string(message.txid);
     }
-    if (message.psbt !== '') {
+    if (message.psbt !== "") {
       writer.uint32(34).string(message.psbt);
     }
     if (message.status !== 0) {
@@ -622,10 +730,10 @@ export const BitcoinWithdrawRequest = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BitcoinWithdrawRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): SigningRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseBitcoinWithdrawRequest();
+    const message = createBaseSigningRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -651,17 +759,17 @@ export const BitcoinWithdrawRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<BitcoinWithdrawRequest>): BitcoinWithdrawRequest {
-    const message = createBaseBitcoinWithdrawRequest();
-    message.address = object.address ?? '';
+  fromPartial(object: Partial<SigningRequest>): SigningRequest {
+    const message = createBaseSigningRequest();
+    message.address = object.address ?? "";
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
-    message.txid = object.txid ?? '';
-    message.psbt = object.psbt ?? '';
+    message.txid = object.txid ?? "";
+    message.psbt = object.psbt ?? "";
     message.status = object.status ?? 0;
     return message;
   },
-  fromAmino(object: BitcoinWithdrawRequestAmino): BitcoinWithdrawRequest {
-    const message = createBaseBitcoinWithdrawRequest();
+  fromAmino(object: SigningRequestAmino): SigningRequest {
+    const message = createBaseSigningRequest();
     if (object.address !== undefined && object.address !== null) {
       message.address = object.address;
     }
@@ -679,36 +787,135 @@ export const BitcoinWithdrawRequest = {
     }
     return message;
   },
-  toAmino(message: BitcoinWithdrawRequest): BitcoinWithdrawRequestAmino {
+  toAmino(message: SigningRequest): SigningRequestAmino {
     const obj: any = {};
-    obj.address = message.address === '' ? undefined : message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
-    obj.txid = message.txid === '' ? undefined : message.txid;
-    obj.psbt = message.psbt === '' ? undefined : message.psbt;
+    obj.txid = message.txid === "" ? undefined : message.txid;
+    obj.psbt = message.psbt === "" ? undefined : message.psbt;
     obj.status = message.status === 0 ? undefined : message.status;
     return obj;
   },
-  fromAminoMsg(object: BitcoinWithdrawRequestAminoMsg): BitcoinWithdrawRequest {
-    return BitcoinWithdrawRequest.fromAmino(object.value);
+  fromAminoMsg(object: SigningRequestAminoMsg): SigningRequest {
+    return SigningRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: BitcoinWithdrawRequestProtoMsg): BitcoinWithdrawRequest {
-    return BitcoinWithdrawRequest.decode(message.value);
+  fromProtoMsg(message: SigningRequestProtoMsg): SigningRequest {
+    return SigningRequest.decode(message.value);
   },
-  toProto(message: BitcoinWithdrawRequest): Uint8Array {
-    return BitcoinWithdrawRequest.encode(message).finish();
+  toProto(message: SigningRequest): Uint8Array {
+    return SigningRequest.encode(message).finish();
   },
-  toProtoMsg(message: BitcoinWithdrawRequest): BitcoinWithdrawRequestProtoMsg {
+  toProtoMsg(message: SigningRequest): SigningRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.BitcoinWithdrawRequest',
-      value: BitcoinWithdrawRequest.encode(message).finish()
+      typeUrl: "/side.btcbridge.SigningRequest",
+      value: SigningRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseWithdrawRequest(): WithdrawRequest {
+  return {
+    address: "",
+    amount: "",
+    sequence: BigInt(0),
+    txid: ""
+  };
+}
+export const WithdrawRequest = {
+  typeUrl: "/side.btcbridge.WithdrawRequest",
+  encode(message: WithdrawRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    if (message.amount !== "") {
+      writer.uint32(18).string(message.amount);
+    }
+    if (message.sequence !== BigInt(0)) {
+      writer.uint32(24).uint64(message.sequence);
+    }
+    if (message.txid !== "") {
+      writer.uint32(34).string(message.txid);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): WithdrawRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseWithdrawRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.amount = reader.string();
+          break;
+        case 3:
+          message.sequence = reader.uint64();
+          break;
+        case 4:
+          message.txid = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<WithdrawRequest>): WithdrawRequest {
+    const message = createBaseWithdrawRequest();
+    message.address = object.address ?? "";
+    message.amount = object.amount ?? "";
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
+    message.txid = object.txid ?? "";
+    return message;
+  },
+  fromAmino(object: WithdrawRequestAmino): WithdrawRequest {
+    const message = createBaseWithdrawRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = BigInt(object.sequence);
+    }
+    if (object.txid !== undefined && object.txid !== null) {
+      message.txid = object.txid;
+    }
+    return message;
+  },
+  toAmino(message: WithdrawRequest): WithdrawRequestAmino {
+    const obj: any = {};
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.amount = message.amount === "" ? undefined : message.amount;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.txid = message.txid === "" ? undefined : message.txid;
+    return obj;
+  },
+  fromAminoMsg(object: WithdrawRequestAminoMsg): WithdrawRequest {
+    return WithdrawRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: WithdrawRequestProtoMsg): WithdrawRequest {
+    return WithdrawRequest.decode(message.value);
+  },
+  toProto(message: WithdrawRequest): Uint8Array {
+    return WithdrawRequest.encode(message).finish();
+  },
+  toProtoMsg(message: WithdrawRequest): WithdrawRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.WithdrawRequest",
+      value: WithdrawRequest.encode(message).finish()
     };
   }
 };
 function createBaseUTXO(): UTXO {
   return {
-    txid: '',
+    txid: "",
     vout: BigInt(0),
-    address: '',
+    address: "",
     amount: BigInt(0),
     height: BigInt(0),
     pubKeyScript: new Uint8Array(),
@@ -717,15 +924,15 @@ function createBaseUTXO(): UTXO {
   };
 }
 export const UTXO = {
-  typeUrl: '/side.btcbridge.UTXO',
+  typeUrl: "/side.btcbridge.UTXO",
   encode(message: UTXO, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.txid !== '') {
+    if (message.txid !== "") {
       writer.uint32(10).string(message.txid);
     }
     if (message.vout !== BigInt(0)) {
       writer.uint32(16).uint64(message.vout);
     }
-    if (message.address !== '') {
+    if (message.address !== "") {
       writer.uint32(26).string(message.address);
     }
     if (message.amount !== BigInt(0)) {
@@ -785,9 +992,9 @@ export const UTXO = {
   },
   fromPartial(object: Partial<UTXO>): UTXO {
     const message = createBaseUTXO();
-    message.txid = object.txid ?? '';
+    message.txid = object.txid ?? "";
     message.vout = object.vout !== undefined && object.vout !== null ? BigInt(object.vout.toString()) : BigInt(0);
-    message.address = object.address ?? '';
+    message.address = object.address ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? BigInt(object.amount.toString()) : BigInt(0);
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.pubKeyScript = object.pubKeyScript ?? new Uint8Array();
@@ -823,9 +1030,9 @@ export const UTXO = {
   },
   toAmino(message: UTXO): UTXOAmino {
     const obj: any = {};
-    obj.txid = message.txid === '' ? undefined : message.txid;
+    obj.txid = message.txid === "" ? undefined : message.txid;
     obj.vout = message.vout !== BigInt(0) ? message.vout.toString() : undefined;
-    obj.address = message.address === '' ? undefined : message.address;
+    obj.address = message.address === "" ? undefined : message.address;
     obj.amount = message.amount !== BigInt(0) ? message.amount.toString() : undefined;
     obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
     obj.pub_key_script = message.pubKeyScript ? base64FromBytes(message.pubKeyScript) : undefined;
@@ -848,24 +1055,24 @@ export const UTXO = {
   },
   toProtoMsg(message: UTXO): UTXOProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.UTXO',
+      typeUrl: "/side.btcbridge.UTXO",
       value: UTXO.encode(message).finish()
     };
   }
 };
 function createBaseRuneBalance(): RuneBalance {
   return {
-    id: '',
-    amount: ''
+    id: "",
+    amount: ""
   };
 }
 export const RuneBalance = {
-  typeUrl: '/side.btcbridge.RuneBalance',
+  typeUrl: "/side.btcbridge.RuneBalance",
   encode(message: RuneBalance, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.id !== '') {
+    if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.amount !== '') {
+    if (message.amount !== "") {
       writer.uint32(18).string(message.amount);
     }
     return writer;
@@ -892,8 +1099,8 @@ export const RuneBalance = {
   },
   fromPartial(object: Partial<RuneBalance>): RuneBalance {
     const message = createBaseRuneBalance();
-    message.id = object.id ?? '';
-    message.amount = object.amount ?? '';
+    message.id = object.id ?? "";
+    message.amount = object.amount ?? "";
     return message;
   },
   fromAmino(object: RuneBalanceAmino): RuneBalance {
@@ -908,8 +1115,8 @@ export const RuneBalance = {
   },
   toAmino(message: RuneBalance): RuneBalanceAmino {
     const obj: any = {};
-    obj.id = message.id === '' ? undefined : message.id;
-    obj.amount = message.amount === '' ? undefined : message.amount;
+    obj.id = message.id === "" ? undefined : message.id;
+    obj.amount = message.amount === "" ? undefined : message.amount;
     return obj;
   },
   fromAminoMsg(object: RuneBalanceAminoMsg): RuneBalance {
@@ -923,7 +1130,7 @@ export const RuneBalance = {
   },
   toProtoMsg(message: RuneBalance): RuneBalanceProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.RuneBalance',
+      typeUrl: "/side.btcbridge.RuneBalance",
       value: RuneBalance.encode(message).finish()
     };
   }
@@ -935,7 +1142,7 @@ function createBaseRuneId(): RuneId {
   };
 }
 export const RuneId = {
-  typeUrl: '/side.btcbridge.RuneId',
+  typeUrl: "/side.btcbridge.RuneId",
   encode(message: RuneId, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.block !== BigInt(0)) {
       writer.uint32(8).uint64(message.block);
@@ -998,7 +1205,7 @@ export const RuneId = {
   },
   toProtoMsg(message: RuneId): RuneIdProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.RuneId',
+      typeUrl: "/side.btcbridge.RuneId",
       value: RuneId.encode(message).finish()
     };
   }
@@ -1006,17 +1213,17 @@ export const RuneId = {
 function createBaseEdict(): Edict {
   return {
     id: undefined,
-    amount: '',
+    amount: "",
     output: 0
   };
 }
 export const Edict = {
-  typeUrl: '/side.btcbridge.Edict',
+  typeUrl: "/side.btcbridge.Edict",
   encode(message: Edict, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== undefined) {
       RuneId.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
-    if (message.amount !== '') {
+    if (message.amount !== "") {
       writer.uint32(18).string(message.amount);
     }
     if (message.output !== 0) {
@@ -1050,7 +1257,7 @@ export const Edict = {
   fromPartial(object: Partial<Edict>): Edict {
     const message = createBaseEdict();
     message.id = object.id !== undefined && object.id !== null ? RuneId.fromPartial(object.id) : undefined;
-    message.amount = object.amount ?? '';
+    message.amount = object.amount ?? "";
     message.output = object.output ?? 0;
     return message;
   },
@@ -1070,7 +1277,7 @@ export const Edict = {
   toAmino(message: Edict): EdictAmino {
     const obj: any = {};
     obj.id = message.id ? RuneId.toAmino(message.id) : undefined;
-    obj.amount = message.amount === '' ? undefined : message.amount;
+    obj.amount = message.amount === "" ? undefined : message.amount;
     obj.output = message.output === 0 ? undefined : message.output;
     return obj;
   },
@@ -1085,28 +1292,190 @@ export const Edict = {
   },
   toProtoMsg(message: Edict): EdictProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.Edict',
+      typeUrl: "/side.btcbridge.Edict",
       value: Edict.encode(message).finish()
+    };
+  }
+};
+function createBaseBtcConsolidation(): BtcConsolidation {
+  return {
+    targetThreshold: BigInt(0),
+    maxNum: 0
+  };
+}
+export const BtcConsolidation = {
+  typeUrl: "/side.btcbridge.BtcConsolidation",
+  encode(message: BtcConsolidation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.targetThreshold !== BigInt(0)) {
+      writer.uint32(8).int64(message.targetThreshold);
+    }
+    if (message.maxNum !== 0) {
+      writer.uint32(16).uint32(message.maxNum);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): BtcConsolidation {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseBtcConsolidation();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.targetThreshold = reader.int64();
+          break;
+        case 2:
+          message.maxNum = reader.uint32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<BtcConsolidation>): BtcConsolidation {
+    const message = createBaseBtcConsolidation();
+    message.targetThreshold = object.targetThreshold !== undefined && object.targetThreshold !== null ? BigInt(object.targetThreshold.toString()) : BigInt(0);
+    message.maxNum = object.maxNum ?? 0;
+    return message;
+  },
+  fromAmino(object: BtcConsolidationAmino): BtcConsolidation {
+    const message = createBaseBtcConsolidation();
+    if (object.target_threshold !== undefined && object.target_threshold !== null) {
+      message.targetThreshold = BigInt(object.target_threshold);
+    }
+    if (object.max_num !== undefined && object.max_num !== null) {
+      message.maxNum = object.max_num;
+    }
+    return message;
+  },
+  toAmino(message: BtcConsolidation): BtcConsolidationAmino {
+    const obj: any = {};
+    obj.target_threshold = message.targetThreshold !== BigInt(0) ? message.targetThreshold.toString() : undefined;
+    obj.max_num = message.maxNum === 0 ? undefined : message.maxNum;
+    return obj;
+  },
+  fromAminoMsg(object: BtcConsolidationAminoMsg): BtcConsolidation {
+    return BtcConsolidation.fromAmino(object.value);
+  },
+  fromProtoMsg(message: BtcConsolidationProtoMsg): BtcConsolidation {
+    return BtcConsolidation.decode(message.value);
+  },
+  toProto(message: BtcConsolidation): Uint8Array {
+    return BtcConsolidation.encode(message).finish();
+  },
+  toProtoMsg(message: BtcConsolidation): BtcConsolidationProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.BtcConsolidation",
+      value: BtcConsolidation.encode(message).finish()
+    };
+  }
+};
+function createBaseRunesConsolidation(): RunesConsolidation {
+  return {
+    runeId: "",
+    targetThreshold: "",
+    maxNum: 0
+  };
+}
+export const RunesConsolidation = {
+  typeUrl: "/side.btcbridge.RunesConsolidation",
+  encode(message: RunesConsolidation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.runeId !== "") {
+      writer.uint32(10).string(message.runeId);
+    }
+    if (message.targetThreshold !== "") {
+      writer.uint32(18).string(message.targetThreshold);
+    }
+    if (message.maxNum !== 0) {
+      writer.uint32(24).uint32(message.maxNum);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RunesConsolidation {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRunesConsolidation();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.runeId = reader.string();
+          break;
+        case 2:
+          message.targetThreshold = reader.string();
+          break;
+        case 3:
+          message.maxNum = reader.uint32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<RunesConsolidation>): RunesConsolidation {
+    const message = createBaseRunesConsolidation();
+    message.runeId = object.runeId ?? "";
+    message.targetThreshold = object.targetThreshold ?? "";
+    message.maxNum = object.maxNum ?? 0;
+    return message;
+  },
+  fromAmino(object: RunesConsolidationAmino): RunesConsolidation {
+    const message = createBaseRunesConsolidation();
+    if (object.rune_id !== undefined && object.rune_id !== null) {
+      message.runeId = object.rune_id;
+    }
+    if (object.target_threshold !== undefined && object.target_threshold !== null) {
+      message.targetThreshold = object.target_threshold;
+    }
+    if (object.max_num !== undefined && object.max_num !== null) {
+      message.maxNum = object.max_num;
+    }
+    return message;
+  },
+  toAmino(message: RunesConsolidation): RunesConsolidationAmino {
+    const obj: any = {};
+    obj.rune_id = message.runeId === "" ? undefined : message.runeId;
+    obj.target_threshold = message.targetThreshold === "" ? undefined : message.targetThreshold;
+    obj.max_num = message.maxNum === 0 ? undefined : message.maxNum;
+    return obj;
+  },
+  fromAminoMsg(object: RunesConsolidationAminoMsg): RunesConsolidation {
+    return RunesConsolidation.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RunesConsolidationProtoMsg): RunesConsolidation {
+    return RunesConsolidation.decode(message.value);
+  },
+  toProto(message: RunesConsolidation): Uint8Array {
+    return RunesConsolidation.encode(message).finish();
+  },
+  toProtoMsg(message: RunesConsolidation): RunesConsolidationProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.RunesConsolidation",
+      value: RunesConsolidation.encode(message).finish()
     };
   }
 };
 function createBaseDKGParticipant(): DKGParticipant {
   return {
-    moniker: '',
-    operatorAddress: '',
-    consensusAddress: ''
+    moniker: "",
+    operatorAddress: "",
+    consensusAddress: ""
   };
 }
 export const DKGParticipant = {
-  typeUrl: '/side.btcbridge.DKGParticipant',
+  typeUrl: "/side.btcbridge.DKGParticipant",
   encode(message: DKGParticipant, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.moniker !== '') {
+    if (message.moniker !== "") {
       writer.uint32(10).string(message.moniker);
     }
-    if (message.operatorAddress !== '') {
+    if (message.operatorAddress !== "") {
       writer.uint32(18).string(message.operatorAddress);
     }
-    if (message.consensusAddress !== '') {
+    if (message.consensusAddress !== "") {
       writer.uint32(26).string(message.consensusAddress);
     }
     return writer;
@@ -1136,9 +1505,9 @@ export const DKGParticipant = {
   },
   fromPartial(object: Partial<DKGParticipant>): DKGParticipant {
     const message = createBaseDKGParticipant();
-    message.moniker = object.moniker ?? '';
-    message.operatorAddress = object.operatorAddress ?? '';
-    message.consensusAddress = object.consensusAddress ?? '';
+    message.moniker = object.moniker ?? "";
+    message.operatorAddress = object.operatorAddress ?? "";
+    message.consensusAddress = object.consensusAddress ?? "";
     return message;
   },
   fromAmino(object: DKGParticipantAmino): DKGParticipant {
@@ -1156,9 +1525,9 @@ export const DKGParticipant = {
   },
   toAmino(message: DKGParticipant): DKGParticipantAmino {
     const obj: any = {};
-    obj.moniker = message.moniker === '' ? undefined : message.moniker;
-    obj.operator_address = message.operatorAddress === '' ? undefined : message.operatorAddress;
-    obj.consensus_address = message.consensusAddress === '' ? undefined : message.consensusAddress;
+    obj.moniker = message.moniker === "" ? undefined : message.moniker;
+    obj.operator_address = message.operatorAddress === "" ? undefined : message.operatorAddress;
+    obj.consensus_address = message.consensusAddress === "" ? undefined : message.consensusAddress;
     return obj;
   },
   fromAminoMsg(object: DKGParticipantAminoMsg): DKGParticipant {
@@ -1172,7 +1541,7 @@ export const DKGParticipant = {
   },
   toProtoMsg(message: DKGParticipant): DKGParticipantProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.DKGParticipant',
+      typeUrl: "/side.btcbridge.DKGParticipant",
       value: DKGParticipant.encode(message).finish()
     };
   }
@@ -1183,12 +1552,16 @@ function createBaseDKGRequest(): DKGRequest {
     participants: [],
     threshold: 0,
     vaultTypes: [],
+    disableBridge: false,
+    enableTransfer: false,
+    targetUtxoNum: 0,
+    feeRate: "",
     expiration: undefined,
     status: 0
   };
 }
 export const DKGRequest = {
-  typeUrl: '/side.btcbridge.DKGRequest',
+  typeUrl: "/side.btcbridge.DKGRequest",
   encode(message: DKGRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
@@ -1204,11 +1577,23 @@ export const DKGRequest = {
       writer.int32(v);
     }
     writer.ldelim();
+    if (message.disableBridge === true) {
+      writer.uint32(40).bool(message.disableBridge);
+    }
+    if (message.enableTransfer === true) {
+      writer.uint32(48).bool(message.enableTransfer);
+    }
+    if (message.targetUtxoNum !== 0) {
+      writer.uint32(56).uint32(message.targetUtxoNum);
+    }
+    if (message.feeRate !== "") {
+      writer.uint32(66).string(message.feeRate);
+    }
     if (message.expiration !== undefined) {
-      Timestamp.encode(toTimestamp(message.expiration), writer.uint32(42).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.expiration), writer.uint32(74).fork()).ldelim();
     }
     if (message.status !== 0) {
-      writer.uint32(48).int32(message.status);
+      writer.uint32(80).int32(message.status);
     }
     return writer;
   },
@@ -1239,9 +1624,21 @@ export const DKGRequest = {
           }
           break;
         case 5:
-          message.expiration = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.disableBridge = reader.bool();
           break;
         case 6:
+          message.enableTransfer = reader.bool();
+          break;
+        case 7:
+          message.targetUtxoNum = reader.uint32();
+          break;
+        case 8:
+          message.feeRate = reader.string();
+          break;
+        case 9:
+          message.expiration = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 10:
           message.status = reader.int32() as any;
           break;
         default:
@@ -1257,6 +1654,10 @@ export const DKGRequest = {
     message.participants = object.participants?.map(e => DKGParticipant.fromPartial(e)) || [];
     message.threshold = object.threshold ?? 0;
     message.vaultTypes = object.vaultTypes?.map(e => e) || [];
+    message.disableBridge = object.disableBridge ?? false;
+    message.enableTransfer = object.enableTransfer ?? false;
+    message.targetUtxoNum = object.targetUtxoNum ?? 0;
+    message.feeRate = object.feeRate ?? "";
     message.expiration = object.expiration ?? undefined;
     message.status = object.status ?? 0;
     return message;
@@ -1271,6 +1672,18 @@ export const DKGRequest = {
       message.threshold = object.threshold;
     }
     message.vaultTypes = object.vault_types?.map(e => e) || [];
+    if (object.disable_bridge !== undefined && object.disable_bridge !== null) {
+      message.disableBridge = object.disable_bridge;
+    }
+    if (object.enable_transfer !== undefined && object.enable_transfer !== null) {
+      message.enableTransfer = object.enable_transfer;
+    }
+    if (object.target_utxo_num !== undefined && object.target_utxo_num !== null) {
+      message.targetUtxoNum = object.target_utxo_num;
+    }
+    if (object.fee_rate !== undefined && object.fee_rate !== null) {
+      message.feeRate = object.fee_rate;
+    }
     if (object.expiration !== undefined && object.expiration !== null) {
       message.expiration = fromTimestamp(Timestamp.fromAmino(object.expiration));
     }
@@ -1293,6 +1706,10 @@ export const DKGRequest = {
     } else {
       obj.vault_types = message.vaultTypes;
     }
+    obj.disable_bridge = message.disableBridge === false ? undefined : message.disableBridge;
+    obj.enable_transfer = message.enableTransfer === false ? undefined : message.enableTransfer;
+    obj.target_utxo_num = message.targetUtxoNum === 0 ? undefined : message.targetUtxoNum;
+    obj.fee_rate = message.feeRate === "" ? undefined : message.feeRate;
     obj.expiration = message.expiration ? Timestamp.toAmino(toTimestamp(message.expiration)) : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
     return obj;
@@ -1308,7 +1725,7 @@ export const DKGRequest = {
   },
   toProtoMsg(message: DKGRequest): DKGRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.DKGRequest',
+      typeUrl: "/side.btcbridge.DKGRequest",
       value: DKGRequest.encode(message).finish()
     };
   }
@@ -1316,28 +1733,28 @@ export const DKGRequest = {
 function createBaseDKGCompletionRequest(): DKGCompletionRequest {
   return {
     id: BigInt(0),
-    sender: '',
+    sender: "",
     vaults: [],
-    consensusAddress: '',
-    signature: ''
+    consensusAddress: "",
+    signature: ""
   };
 }
 export const DKGCompletionRequest = {
-  typeUrl: '/side.btcbridge.DKGCompletionRequest',
+  typeUrl: "/side.btcbridge.DKGCompletionRequest",
   encode(message: DKGCompletionRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== BigInt(0)) {
       writer.uint32(8).uint64(message.id);
     }
-    if (message.sender !== '') {
+    if (message.sender !== "") {
       writer.uint32(18).string(message.sender);
     }
     for (const v of message.vaults) {
       writer.uint32(26).string(v!);
     }
-    if (message.consensusAddress !== '') {
+    if (message.consensusAddress !== "") {
       writer.uint32(34).string(message.consensusAddress);
     }
-    if (message.signature !== '') {
+    if (message.signature !== "") {
       writer.uint32(42).string(message.signature);
     }
     return writer;
@@ -1374,10 +1791,10 @@ export const DKGCompletionRequest = {
   fromPartial(object: Partial<DKGCompletionRequest>): DKGCompletionRequest {
     const message = createBaseDKGCompletionRequest();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
-    message.sender = object.sender ?? '';
+    message.sender = object.sender ?? "";
     message.vaults = object.vaults?.map(e => e) || [];
-    message.consensusAddress = object.consensusAddress ?? '';
-    message.signature = object.signature ?? '';
+    message.consensusAddress = object.consensusAddress ?? "";
+    message.signature = object.signature ?? "";
     return message;
   },
   fromAmino(object: DKGCompletionRequestAmino): DKGCompletionRequest {
@@ -1400,14 +1817,14 @@ export const DKGCompletionRequest = {
   toAmino(message: DKGCompletionRequest): DKGCompletionRequestAmino {
     const obj: any = {};
     obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
-    obj.sender = message.sender === '' ? undefined : message.sender;
+    obj.sender = message.sender === "" ? undefined : message.sender;
     if (message.vaults) {
       obj.vaults = message.vaults.map(e => e);
     } else {
       obj.vaults = message.vaults;
     }
-    obj.consensus_address = message.consensusAddress === '' ? undefined : message.consensusAddress;
-    obj.signature = message.signature === '' ? undefined : message.signature;
+    obj.consensus_address = message.consensusAddress === "" ? undefined : message.consensusAddress;
+    obj.signature = message.signature === "" ? undefined : message.signature;
     return obj;
   },
   fromAminoMsg(object: DKGCompletionRequestAminoMsg): DKGCompletionRequest {
@@ -1421,7 +1838,7 @@ export const DKGCompletionRequest = {
   },
   toProtoMsg(message: DKGCompletionRequest): DKGCompletionRequestProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.DKGCompletionRequest',
+      typeUrl: "/side.btcbridge.DKGCompletionRequest",
       value: DKGCompletionRequest.encode(message).finish()
     };
   }

@@ -87,7 +87,7 @@ export function varint64read(this: ReaderLike): [number, number] {
     }
   }
 
-  throw new Error('invalid varint');
+  throw new Error("invalid varint");
 }
 
 /**
@@ -141,7 +141,7 @@ const TWO_PWR_32_DBL = 0x100000000;
  */
 export function int64FromString(dec: string): { lo: number; hi: number } {
   // Check for minus sign.
-  const minus = dec[0] === '-';
+  const minus = dec[0] === "-";
   if (minus) {
     dec = dec.slice(1);
   }
@@ -189,7 +189,7 @@ export function int64ToString(lo: number, hi: number): string {
     bits = negate(bits.lo, bits.hi);
   }
   const result = uInt64ToString(bits.lo, bits.hi);
-  return negative ? '-' + result : result;
+  return negative ? "-" + result : result;
 }
 
 /**
@@ -286,7 +286,7 @@ function negate(lowBits: number, highBits: number) {
  */
 const decimalFrom1e7WithLeadingZeros = (digit1e7: number) => {
   const partial = String(digit1e7);
-  return '0000000'.slice(partial.length) + partial;
+  return "0000000".slice(partial.length) + partial;
 };
 
 /**
@@ -354,7 +354,7 @@ export function varint32read(this: ReaderLike): number {
   for (let readBytes = 5; (b & 0x80) !== 0 && readBytes < 10; readBytes++)
     b = this.buf[this.pos++];
 
-  if ((b & 0x80) != 0) throw new Error('invalid varint');
+  if ((b & 0x80) != 0) throw new Error("invalid varint");
 
   this.assertBounds();
 

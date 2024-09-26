@@ -1,6 +1,6 @@
 //@ts-nocheck
-import { Duration, DurationAmino, DurationSDKType } from '../../google/protobuf/duration';
-import { BinaryReader, BinaryWriter } from '../../binary';
+import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/duration";
+import { BinaryReader, BinaryWriter } from "../../binary";
 /** AssetType defines the type of asset */
 export enum AssetType {
   /** ASSET_TYPE_UNSPECIFIED - Unspecified asset type */
@@ -18,19 +18,19 @@ export const AssetTypeAmino = AssetType;
 export function assetTypeFromJSON(object: any): AssetType {
   switch (object) {
     case 0:
-    case 'ASSET_TYPE_UNSPECIFIED':
+    case "ASSET_TYPE_UNSPECIFIED":
       return AssetType.ASSET_TYPE_UNSPECIFIED;
     case 1:
-    case 'ASSET_TYPE_BTC':
+    case "ASSET_TYPE_BTC":
       return AssetType.ASSET_TYPE_BTC;
     case 2:
-    case 'ASSET_TYPE_BRC20':
+    case "ASSET_TYPE_BRC20":
       return AssetType.ASSET_TYPE_BRC20;
     case 3:
-    case 'ASSET_TYPE_RUNES':
+    case "ASSET_TYPE_RUNES":
       return AssetType.ASSET_TYPE_RUNES;
     case -1:
-    case 'UNRECOGNIZED':
+    case "UNRECOGNIZED":
     default:
       return AssetType.UNRECOGNIZED;
   }
@@ -38,16 +38,16 @@ export function assetTypeFromJSON(object: any): AssetType {
 export function assetTypeToJSON(object: AssetType): string {
   switch (object) {
     case AssetType.ASSET_TYPE_UNSPECIFIED:
-      return 'ASSET_TYPE_UNSPECIFIED';
+      return "ASSET_TYPE_UNSPECIFIED";
     case AssetType.ASSET_TYPE_BTC:
-      return 'ASSET_TYPE_BTC';
+      return "ASSET_TYPE_BTC";
     case AssetType.ASSET_TYPE_BRC20:
-      return 'ASSET_TYPE_BRC20';
+      return "ASSET_TYPE_BRC20";
     case AssetType.ASSET_TYPE_RUNES:
-      return 'ASSET_TYPE_RUNES';
+      return "ASSET_TYPE_RUNES";
     case AssetType.UNRECOGNIZED:
     default:
-      return 'UNRECOGNIZED';
+      return "UNRECOGNIZED";
   }
 }
 /** Params defines the parameters for the module. */
@@ -62,10 +62,14 @@ export interface Params {
   depositEnabled: boolean;
   /** Indicates if withdrawal is enabled */
   withdrawEnabled: boolean;
-  /** Authorized relayers for non-btc asset deposit */
-  nonBtcRelayers: string[];
+  /** Trusted relayers for non-btc asset deposit */
+  trustedNonBtcRelayers: string[];
+  /** Trusted oracles for providing offchain data, e.g. bitcoin fee rate */
+  trustedOracles: string[];
   /** Asset vaults */
   vaults: Vault[];
+  /** Withdrawal params */
+  withdrawParams: WithdrawParams;
   /** Protocol limitations */
   protocolLimits: ProtocolLimits;
   /** Protocol fees */
@@ -74,7 +78,7 @@ export interface Params {
   tssParams: TSSParams;
 }
 export interface ParamsProtoMsg {
-  typeUrl: '/side.btcbridge.Params';
+  typeUrl: "/side.btcbridge.Params";
   value: Uint8Array;
 }
 /** Params defines the parameters for the module. */
@@ -89,10 +93,14 @@ export interface ParamsAmino {
   deposit_enabled?: boolean;
   /** Indicates if withdrawal is enabled */
   withdraw_enabled?: boolean;
-  /** Authorized relayers for non-btc asset deposit */
-  non_btc_relayers?: string[];
+  /** Trusted relayers for non-btc asset deposit */
+  trusted_non_btc_relayers?: string[];
+  /** Trusted oracles for providing offchain data, e.g. bitcoin fee rate */
+  trusted_oracles?: string[];
   /** Asset vaults */
   vaults?: VaultAmino[];
+  /** Withdrawal params */
+  withdraw_params?: WithdrawParamsAmino;
   /** Protocol limitations */
   protocol_limits?: ProtocolLimitsAmino;
   /** Protocol fees */
@@ -101,7 +109,7 @@ export interface ParamsAmino {
   tss_params?: TSSParamsAmino;
 }
 export interface ParamsAminoMsg {
-  type: '/side.btcbridge.Params';
+  type: "/side.btcbridge.Params";
   value: ParamsAmino;
 }
 /** Params defines the parameters for the module. */
@@ -111,8 +119,10 @@ export interface ParamsSDKType {
   btc_voucher_denom: string;
   deposit_enabled: boolean;
   withdraw_enabled: boolean;
-  non_btc_relayers: string[];
+  trusted_non_btc_relayers: string[];
+  trusted_oracles: string[];
   vaults: VaultSDKType[];
+  withdraw_params: WithdrawParamsSDKType;
   protocol_limits: ProtocolLimitsSDKType;
   protocol_fees: ProtocolFeesSDKType;
   tss_params: TSSParamsSDKType;
@@ -129,7 +139,7 @@ export interface Vault {
   version: bigint;
 }
 export interface VaultProtoMsg {
-  typeUrl: '/side.btcbridge.Vault';
+  typeUrl: "/side.btcbridge.Vault";
   value: Uint8Array;
 }
 /** Vault defines the asset vault */
@@ -144,7 +154,7 @@ export interface VaultAmino {
   version?: string;
 }
 export interface VaultAminoMsg {
-  type: '/side.btcbridge.Vault';
+  type: "/side.btcbridge.Vault";
   value: VaultAmino;
 }
 /** Vault defines the asset vault */
@@ -153,6 +163,35 @@ export interface VaultSDKType {
   pub_key: string;
   asset_type: AssetType;
   version: bigint;
+}
+export interface WithdrawParams {
+  /** Maximum number of utxos used to build the signing request; O means unlimited */
+  maxUtxoNum: number;
+  /** Period for handling btc withdrawal requests */
+  btcBatchWithdrawPeriod: bigint;
+  /** Maximum number of btc withdrawal requests to be handled per batch */
+  maxBtcBatchWithdrawNum: number;
+}
+export interface WithdrawParamsProtoMsg {
+  typeUrl: "/side.btcbridge.WithdrawParams";
+  value: Uint8Array;
+}
+export interface WithdrawParamsAmino {
+  /** Maximum number of utxos used to build the signing request; O means unlimited */
+  max_utxo_num?: number;
+  /** Period for handling btc withdrawal requests */
+  btc_batch_withdraw_period?: string;
+  /** Maximum number of btc withdrawal requests to be handled per batch */
+  max_btc_batch_withdraw_num?: number;
+}
+export interface WithdrawParamsAminoMsg {
+  type: "/side.btcbridge.WithdrawParams";
+  value: WithdrawParamsAmino;
+}
+export interface WithdrawParamsSDKType {
+  max_utxo_num: number;
+  btc_batch_withdraw_period: bigint;
+  max_btc_batch_withdraw_num: number;
 }
 /** ProtocolLimits defines the params related to the the protocol limitations */
 export interface ProtocolLimits {
@@ -164,7 +203,7 @@ export interface ProtocolLimits {
   btcMaxWithdraw: bigint;
 }
 export interface ProtocolLimitsProtoMsg {
-  typeUrl: '/side.btcbridge.ProtocolLimits';
+  typeUrl: "/side.btcbridge.ProtocolLimits";
   value: Uint8Array;
 }
 /** ProtocolLimits defines the params related to the the protocol limitations */
@@ -177,7 +216,7 @@ export interface ProtocolLimitsAmino {
   btc_max_withdraw?: string;
 }
 export interface ProtocolLimitsAminoMsg {
-  type: '/side.btcbridge.ProtocolLimits';
+  type: "/side.btcbridge.ProtocolLimits";
   value: ProtocolLimitsAmino;
 }
 /** ProtocolLimits defines the params related to the the protocol limitations */
@@ -196,7 +235,7 @@ export interface ProtocolFees {
   collector: string;
 }
 export interface ProtocolFeesProtoMsg {
-  typeUrl: '/side.btcbridge.ProtocolFees';
+  typeUrl: "/side.btcbridge.ProtocolFees";
   value: Uint8Array;
 }
 /** ProtocolFees defines the params related to the protocol fees */
@@ -209,7 +248,7 @@ export interface ProtocolFeesAmino {
   collector?: string;
 }
 export interface ProtocolFeesAminoMsg {
-  type: '/side.btcbridge.ProtocolFees';
+  type: "/side.btcbridge.ProtocolFees";
   value: ProtocolFeesAmino;
 }
 /** ProtocolFees defines the params related to the protocol fees */
@@ -226,7 +265,7 @@ export interface TSSParams {
   participantUpdateTransitionPeriod: Duration;
 }
 export interface TSSParamsProtoMsg {
-  typeUrl: '/side.btcbridge.TSSParams';
+  typeUrl: "/side.btcbridge.TSSParams";
   value: Uint8Array;
 }
 /** TSSParams defines the params related to TSS */
@@ -237,7 +276,7 @@ export interface TSSParamsAmino {
   participant_update_transition_period?: DurationAmino;
 }
 export interface TSSParamsAminoMsg {
-  type: '/side.btcbridge.TSSParams';
+  type: "/side.btcbridge.TSSParams";
   value: TSSParamsAmino;
 }
 /** TSSParams defines the params related to TSS */
@@ -249,18 +288,20 @@ function createBaseParams(): Params {
   return {
     confirmations: 0,
     maxAcceptableBlockDepth: BigInt(0),
-    btcVoucherDenom: '',
+    btcVoucherDenom: "",
     depositEnabled: false,
     withdrawEnabled: false,
-    nonBtcRelayers: [],
+    trustedNonBtcRelayers: [],
+    trustedOracles: [],
     vaults: [],
+    withdrawParams: WithdrawParams.fromPartial({}),
     protocolLimits: ProtocolLimits.fromPartial({}),
     protocolFees: ProtocolFees.fromPartial({}),
     tssParams: TSSParams.fromPartial({})
   };
 }
 export const Params = {
-  typeUrl: '/side.btcbridge.Params',
+  typeUrl: "/side.btcbridge.Params",
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.confirmations !== 0) {
       writer.uint32(8).int32(message.confirmations);
@@ -268,7 +309,7 @@ export const Params = {
     if (message.maxAcceptableBlockDepth !== BigInt(0)) {
       writer.uint32(16).uint64(message.maxAcceptableBlockDepth);
     }
-    if (message.btcVoucherDenom !== '') {
+    if (message.btcVoucherDenom !== "") {
       writer.uint32(26).string(message.btcVoucherDenom);
     }
     if (message.depositEnabled === true) {
@@ -277,20 +318,26 @@ export const Params = {
     if (message.withdrawEnabled === true) {
       writer.uint32(40).bool(message.withdrawEnabled);
     }
-    for (const v of message.nonBtcRelayers) {
+    for (const v of message.trustedNonBtcRelayers) {
       writer.uint32(50).string(v!);
     }
+    for (const v of message.trustedOracles) {
+      writer.uint32(58).string(v!);
+    }
     for (const v of message.vaults) {
-      Vault.encode(v!, writer.uint32(58).fork()).ldelim();
+      Vault.encode(v!, writer.uint32(66).fork()).ldelim();
+    }
+    if (message.withdrawParams !== undefined) {
+      WithdrawParams.encode(message.withdrawParams, writer.uint32(74).fork()).ldelim();
     }
     if (message.protocolLimits !== undefined) {
-      ProtocolLimits.encode(message.protocolLimits, writer.uint32(66).fork()).ldelim();
+      ProtocolLimits.encode(message.protocolLimits, writer.uint32(82).fork()).ldelim();
     }
     if (message.protocolFees !== undefined) {
-      ProtocolFees.encode(message.protocolFees, writer.uint32(74).fork()).ldelim();
+      ProtocolFees.encode(message.protocolFees, writer.uint32(90).fork()).ldelim();
     }
     if (message.tssParams !== undefined) {
-      TSSParams.encode(message.tssParams, writer.uint32(82).fork()).ldelim();
+      TSSParams.encode(message.tssParams, writer.uint32(98).fork()).ldelim();
     }
     return writer;
   },
@@ -317,18 +364,24 @@ export const Params = {
           message.withdrawEnabled = reader.bool();
           break;
         case 6:
-          message.nonBtcRelayers.push(reader.string());
+          message.trustedNonBtcRelayers.push(reader.string());
           break;
         case 7:
-          message.vaults.push(Vault.decode(reader, reader.uint32()));
+          message.trustedOracles.push(reader.string());
           break;
         case 8:
-          message.protocolLimits = ProtocolLimits.decode(reader, reader.uint32());
+          message.vaults.push(Vault.decode(reader, reader.uint32()));
           break;
         case 9:
-          message.protocolFees = ProtocolFees.decode(reader, reader.uint32());
+          message.withdrawParams = WithdrawParams.decode(reader, reader.uint32());
           break;
         case 10:
+          message.protocolLimits = ProtocolLimits.decode(reader, reader.uint32());
+          break;
+        case 11:
+          message.protocolFees = ProtocolFees.decode(reader, reader.uint32());
+          break;
+        case 12:
           message.tssParams = TSSParams.decode(reader, reader.uint32());
           break;
         default:
@@ -342,11 +395,13 @@ export const Params = {
     const message = createBaseParams();
     message.confirmations = object.confirmations ?? 0;
     message.maxAcceptableBlockDepth = object.maxAcceptableBlockDepth !== undefined && object.maxAcceptableBlockDepth !== null ? BigInt(object.maxAcceptableBlockDepth.toString()) : BigInt(0);
-    message.btcVoucherDenom = object.btcVoucherDenom ?? '';
+    message.btcVoucherDenom = object.btcVoucherDenom ?? "";
     message.depositEnabled = object.depositEnabled ?? false;
     message.withdrawEnabled = object.withdrawEnabled ?? false;
-    message.nonBtcRelayers = object.nonBtcRelayers?.map(e => e) || [];
+    message.trustedNonBtcRelayers = object.trustedNonBtcRelayers?.map(e => e) || [];
+    message.trustedOracles = object.trustedOracles?.map(e => e) || [];
     message.vaults = object.vaults?.map(e => Vault.fromPartial(e)) || [];
+    message.withdrawParams = object.withdrawParams !== undefined && object.withdrawParams !== null ? WithdrawParams.fromPartial(object.withdrawParams) : undefined;
     message.protocolLimits = object.protocolLimits !== undefined && object.protocolLimits !== null ? ProtocolLimits.fromPartial(object.protocolLimits) : undefined;
     message.protocolFees = object.protocolFees !== undefined && object.protocolFees !== null ? ProtocolFees.fromPartial(object.protocolFees) : undefined;
     message.tssParams = object.tssParams !== undefined && object.tssParams !== null ? TSSParams.fromPartial(object.tssParams) : undefined;
@@ -369,8 +424,12 @@ export const Params = {
     if (object.withdraw_enabled !== undefined && object.withdraw_enabled !== null) {
       message.withdrawEnabled = object.withdraw_enabled;
     }
-    message.nonBtcRelayers = object.non_btc_relayers?.map(e => e) || [];
+    message.trustedNonBtcRelayers = object.trusted_non_btc_relayers?.map(e => e) || [];
+    message.trustedOracles = object.trusted_oracles?.map(e => e) || [];
     message.vaults = object.vaults?.map(e => Vault.fromAmino(e)) || [];
+    if (object.withdraw_params !== undefined && object.withdraw_params !== null) {
+      message.withdrawParams = WithdrawParams.fromAmino(object.withdraw_params);
+    }
     if (object.protocol_limits !== undefined && object.protocol_limits !== null) {
       message.protocolLimits = ProtocolLimits.fromAmino(object.protocol_limits);
     }
@@ -386,19 +445,25 @@ export const Params = {
     const obj: any = {};
     obj.confirmations = message.confirmations === 0 ? undefined : message.confirmations;
     obj.max_acceptable_block_depth = message.maxAcceptableBlockDepth !== BigInt(0) ? message.maxAcceptableBlockDepth.toString() : undefined;
-    obj.btc_voucher_denom = message.btcVoucherDenom === '' ? undefined : message.btcVoucherDenom;
+    obj.btc_voucher_denom = message.btcVoucherDenom === "" ? undefined : message.btcVoucherDenom;
     obj.deposit_enabled = message.depositEnabled === false ? undefined : message.depositEnabled;
     obj.withdraw_enabled = message.withdrawEnabled === false ? undefined : message.withdrawEnabled;
-    if (message.nonBtcRelayers) {
-      obj.non_btc_relayers = message.nonBtcRelayers.map(e => e);
+    if (message.trustedNonBtcRelayers) {
+      obj.trusted_non_btc_relayers = message.trustedNonBtcRelayers.map(e => e);
     } else {
-      obj.non_btc_relayers = message.nonBtcRelayers;
+      obj.trusted_non_btc_relayers = message.trustedNonBtcRelayers;
+    }
+    if (message.trustedOracles) {
+      obj.trusted_oracles = message.trustedOracles.map(e => e);
+    } else {
+      obj.trusted_oracles = message.trustedOracles;
     }
     if (message.vaults) {
       obj.vaults = message.vaults.map(e => e ? Vault.toAmino(e) : undefined);
     } else {
       obj.vaults = message.vaults;
     }
+    obj.withdraw_params = message.withdrawParams ? WithdrawParams.toAmino(message.withdrawParams) : undefined;
     obj.protocol_limits = message.protocolLimits ? ProtocolLimits.toAmino(message.protocolLimits) : undefined;
     obj.protocol_fees = message.protocolFees ? ProtocolFees.toAmino(message.protocolFees) : undefined;
     obj.tss_params = message.tssParams ? TSSParams.toAmino(message.tssParams) : undefined;
@@ -415,26 +480,26 @@ export const Params = {
   },
   toProtoMsg(message: Params): ParamsProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.Params',
+      typeUrl: "/side.btcbridge.Params",
       value: Params.encode(message).finish()
     };
   }
 };
 function createBaseVault(): Vault {
   return {
-    address: '',
-    pubKey: '',
+    address: "",
+    pubKey: "",
     assetType: 0,
     version: BigInt(0)
   };
 }
 export const Vault = {
-  typeUrl: '/side.btcbridge.Vault',
+  typeUrl: "/side.btcbridge.Vault",
   encode(message: Vault, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== '') {
+    if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
-    if (message.pubKey !== '') {
+    if (message.pubKey !== "") {
       writer.uint32(18).string(message.pubKey);
     }
     if (message.assetType !== 0) {
@@ -473,8 +538,8 @@ export const Vault = {
   },
   fromPartial(object: Partial<Vault>): Vault {
     const message = createBaseVault();
-    message.address = object.address ?? '';
-    message.pubKey = object.pubKey ?? '';
+    message.address = object.address ?? "";
+    message.pubKey = object.pubKey ?? "";
     message.assetType = object.assetType ?? 0;
     message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
     return message;
@@ -497,8 +562,8 @@ export const Vault = {
   },
   toAmino(message: Vault): VaultAmino {
     const obj: any = {};
-    obj.address = message.address === '' ? undefined : message.address;
-    obj.pub_key = message.pubKey === '' ? undefined : message.pubKey;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.pub_key = message.pubKey === "" ? undefined : message.pubKey;
     obj.asset_type = message.assetType === 0 ? undefined : message.assetType;
     obj.version = message.version !== BigInt(0) ? message.version.toString() : undefined;
     return obj;
@@ -514,8 +579,95 @@ export const Vault = {
   },
   toProtoMsg(message: Vault): VaultProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.Vault',
+      typeUrl: "/side.btcbridge.Vault",
       value: Vault.encode(message).finish()
+    };
+  }
+};
+function createBaseWithdrawParams(): WithdrawParams {
+  return {
+    maxUtxoNum: 0,
+    btcBatchWithdrawPeriod: BigInt(0),
+    maxBtcBatchWithdrawNum: 0
+  };
+}
+export const WithdrawParams = {
+  typeUrl: "/side.btcbridge.WithdrawParams",
+  encode(message: WithdrawParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.maxUtxoNum !== 0) {
+      writer.uint32(8).uint32(message.maxUtxoNum);
+    }
+    if (message.btcBatchWithdrawPeriod !== BigInt(0)) {
+      writer.uint32(16).int64(message.btcBatchWithdrawPeriod);
+    }
+    if (message.maxBtcBatchWithdrawNum !== 0) {
+      writer.uint32(24).uint32(message.maxBtcBatchWithdrawNum);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): WithdrawParams {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseWithdrawParams();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.maxUtxoNum = reader.uint32();
+          break;
+        case 2:
+          message.btcBatchWithdrawPeriod = reader.int64();
+          break;
+        case 3:
+          message.maxBtcBatchWithdrawNum = reader.uint32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<WithdrawParams>): WithdrawParams {
+    const message = createBaseWithdrawParams();
+    message.maxUtxoNum = object.maxUtxoNum ?? 0;
+    message.btcBatchWithdrawPeriod = object.btcBatchWithdrawPeriod !== undefined && object.btcBatchWithdrawPeriod !== null ? BigInt(object.btcBatchWithdrawPeriod.toString()) : BigInt(0);
+    message.maxBtcBatchWithdrawNum = object.maxBtcBatchWithdrawNum ?? 0;
+    return message;
+  },
+  fromAmino(object: WithdrawParamsAmino): WithdrawParams {
+    const message = createBaseWithdrawParams();
+    if (object.max_utxo_num !== undefined && object.max_utxo_num !== null) {
+      message.maxUtxoNum = object.max_utxo_num;
+    }
+    if (object.btc_batch_withdraw_period !== undefined && object.btc_batch_withdraw_period !== null) {
+      message.btcBatchWithdrawPeriod = BigInt(object.btc_batch_withdraw_period);
+    }
+    if (object.max_btc_batch_withdraw_num !== undefined && object.max_btc_batch_withdraw_num !== null) {
+      message.maxBtcBatchWithdrawNum = object.max_btc_batch_withdraw_num;
+    }
+    return message;
+  },
+  toAmino(message: WithdrawParams): WithdrawParamsAmino {
+    const obj: any = {};
+    obj.max_utxo_num = message.maxUtxoNum === 0 ? undefined : message.maxUtxoNum;
+    obj.btc_batch_withdraw_period = message.btcBatchWithdrawPeriod !== BigInt(0) ? message.btcBatchWithdrawPeriod.toString() : undefined;
+    obj.max_btc_batch_withdraw_num = message.maxBtcBatchWithdrawNum === 0 ? undefined : message.maxBtcBatchWithdrawNum;
+    return obj;
+  },
+  fromAminoMsg(object: WithdrawParamsAminoMsg): WithdrawParams {
+    return WithdrawParams.fromAmino(object.value);
+  },
+  fromProtoMsg(message: WithdrawParamsProtoMsg): WithdrawParams {
+    return WithdrawParams.decode(message.value);
+  },
+  toProto(message: WithdrawParams): Uint8Array {
+    return WithdrawParams.encode(message).finish();
+  },
+  toProtoMsg(message: WithdrawParams): WithdrawParamsProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.WithdrawParams",
+      value: WithdrawParams.encode(message).finish()
     };
   }
 };
@@ -527,7 +679,7 @@ function createBaseProtocolLimits(): ProtocolLimits {
   };
 }
 export const ProtocolLimits = {
-  typeUrl: '/side.btcbridge.ProtocolLimits',
+  typeUrl: "/side.btcbridge.ProtocolLimits",
   encode(message: ProtocolLimits, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.btcMinDeposit !== BigInt(0)) {
       writer.uint32(8).int64(message.btcMinDeposit);
@@ -601,7 +753,7 @@ export const ProtocolLimits = {
   },
   toProtoMsg(message: ProtocolLimits): ProtocolLimitsProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.ProtocolLimits',
+      typeUrl: "/side.btcbridge.ProtocolLimits",
       value: ProtocolLimits.encode(message).finish()
     };
   }
@@ -610,11 +762,11 @@ function createBaseProtocolFees(): ProtocolFees {
   return {
     depositFee: BigInt(0),
     withdrawFee: BigInt(0),
-    collector: ''
+    collector: ""
   };
 }
 export const ProtocolFees = {
-  typeUrl: '/side.btcbridge.ProtocolFees',
+  typeUrl: "/side.btcbridge.ProtocolFees",
   encode(message: ProtocolFees, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.depositFee !== BigInt(0)) {
       writer.uint32(8).int64(message.depositFee);
@@ -622,7 +774,7 @@ export const ProtocolFees = {
     if (message.withdrawFee !== BigInt(0)) {
       writer.uint32(16).int64(message.withdrawFee);
     }
-    if (message.collector !== '') {
+    if (message.collector !== "") {
       writer.uint32(26).string(message.collector);
     }
     return writer;
@@ -654,7 +806,7 @@ export const ProtocolFees = {
     const message = createBaseProtocolFees();
     message.depositFee = object.depositFee !== undefined && object.depositFee !== null ? BigInt(object.depositFee.toString()) : BigInt(0);
     message.withdrawFee = object.withdrawFee !== undefined && object.withdrawFee !== null ? BigInt(object.withdrawFee.toString()) : BigInt(0);
-    message.collector = object.collector ?? '';
+    message.collector = object.collector ?? "";
     return message;
   },
   fromAmino(object: ProtocolFeesAmino): ProtocolFees {
@@ -674,7 +826,7 @@ export const ProtocolFees = {
     const obj: any = {};
     obj.deposit_fee = message.depositFee !== BigInt(0) ? message.depositFee.toString() : undefined;
     obj.withdraw_fee = message.withdrawFee !== BigInt(0) ? message.withdrawFee.toString() : undefined;
-    obj.collector = message.collector === '' ? undefined : message.collector;
+    obj.collector = message.collector === "" ? undefined : message.collector;
     return obj;
   },
   fromAminoMsg(object: ProtocolFeesAminoMsg): ProtocolFees {
@@ -688,7 +840,7 @@ export const ProtocolFees = {
   },
   toProtoMsg(message: ProtocolFees): ProtocolFeesProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.ProtocolFees',
+      typeUrl: "/side.btcbridge.ProtocolFees",
       value: ProtocolFees.encode(message).finish()
     };
   }
@@ -700,7 +852,7 @@ function createBaseTSSParams(): TSSParams {
   };
 }
 export const TSSParams = {
-  typeUrl: '/side.btcbridge.TSSParams',
+  typeUrl: "/side.btcbridge.TSSParams",
   encode(message: TSSParams, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.dkgTimeoutPeriod !== undefined) {
       Duration.encode(message.dkgTimeoutPeriod, writer.uint32(10).fork()).ldelim();
@@ -763,7 +915,7 @@ export const TSSParams = {
   },
   toProtoMsg(message: TSSParams): TSSParamsProtoMsg {
     return {
-      typeUrl: '/side.btcbridge.TSSParams',
+      typeUrl: "/side.btcbridge.TSSParams",
       value: TSSParams.encode(message).finish()
     };
   }

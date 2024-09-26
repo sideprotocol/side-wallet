@@ -307,7 +307,6 @@ export const useBridge = () => {
     } else {
       const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
         amount: `${unitAmount}sat`,
-        feeRate: `${fee || 200}`,
         sender: currentAccount?.address
       });
 
@@ -370,7 +369,6 @@ export const useBridge = () => {
 
       const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
         amount: `${unitAmount}runes/${runeId}`,
-        feeRate: `${fee || 200}`,
         sender: currentAccount?.address
       });
 
@@ -728,7 +726,6 @@ export const useRuneBridge = () => {
     } else {
       const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
         amount: `${unitAmount}${base}`,
-        feeRate: `${fee || 200}`,
         sender: currentAccount?.address
       });
 

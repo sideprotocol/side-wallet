@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { BinaryReader, BinaryWriter } from '../binary';
+import { BinaryReader, BinaryWriter } from "../binary";
 export enum ScalarType {
   SCALAR_TYPE_UNSPECIFIED = 0,
   SCALAR_TYPE_STRING = 1,
@@ -11,16 +11,16 @@ export const ScalarTypeAmino = ScalarType;
 export function scalarTypeFromJSON(object: any): ScalarType {
   switch (object) {
     case 0:
-    case 'SCALAR_TYPE_UNSPECIFIED':
+    case "SCALAR_TYPE_UNSPECIFIED":
       return ScalarType.SCALAR_TYPE_UNSPECIFIED;
     case 1:
-    case 'SCALAR_TYPE_STRING':
+    case "SCALAR_TYPE_STRING":
       return ScalarType.SCALAR_TYPE_STRING;
     case 2:
-    case 'SCALAR_TYPE_BYTES':
+    case "SCALAR_TYPE_BYTES":
       return ScalarType.SCALAR_TYPE_BYTES;
     case -1:
-    case 'UNRECOGNIZED':
+    case "UNRECOGNIZED":
     default:
       return ScalarType.UNRECOGNIZED;
   }
@@ -28,14 +28,14 @@ export function scalarTypeFromJSON(object: any): ScalarType {
 export function scalarTypeToJSON(object: ScalarType): string {
   switch (object) {
     case ScalarType.SCALAR_TYPE_UNSPECIFIED:
-      return 'SCALAR_TYPE_UNSPECIFIED';
+      return "SCALAR_TYPE_UNSPECIFIED";
     case ScalarType.SCALAR_TYPE_STRING:
-      return 'SCALAR_TYPE_STRING';
+      return "SCALAR_TYPE_STRING";
     case ScalarType.SCALAR_TYPE_BYTES:
-      return 'SCALAR_TYPE_BYTES';
+      return "SCALAR_TYPE_BYTES";
     case ScalarType.UNRECOGNIZED:
     default:
-      return 'UNRECOGNIZED';
+      return "UNRECOGNIZED";
   }
 }
 /**
@@ -57,7 +57,7 @@ export interface InterfaceDescriptor {
   description: string;
 }
 export interface InterfaceDescriptorProtoMsg {
-  typeUrl: '/cosmos_proto.InterfaceDescriptor';
+  typeUrl: "/cosmos_proto.InterfaceDescriptor";
   value: Uint8Array;
 }
 /**
@@ -79,7 +79,7 @@ export interface InterfaceDescriptorAmino {
   description?: string;
 }
 export interface InterfaceDescriptorAminoMsg {
-  type: '/cosmos_proto.InterfaceDescriptor';
+  type: "/cosmos_proto.InterfaceDescriptor";
   value: InterfaceDescriptorAmino;
 }
 /**
@@ -122,7 +122,7 @@ export interface ScalarDescriptor {
   fieldType: ScalarType[];
 }
 export interface ScalarDescriptorProtoMsg {
-  typeUrl: '/cosmos_proto.ScalarDescriptor';
+  typeUrl: "/cosmos_proto.ScalarDescriptor";
   value: Uint8Array;
 }
 /**
@@ -157,7 +157,7 @@ export interface ScalarDescriptorAmino {
   field_type?: ScalarType[];
 }
 export interface ScalarDescriptorAminoMsg {
-  type: '/cosmos_proto.ScalarDescriptor';
+  type: "/cosmos_proto.ScalarDescriptor";
   value: ScalarDescriptorAmino;
 }
 /**
@@ -176,17 +176,17 @@ export interface ScalarDescriptorSDKType {
 }
 function createBaseInterfaceDescriptor(): InterfaceDescriptor {
   return {
-    name: '',
-    description: ''
+    name: "",
+    description: ""
   };
 }
 export const InterfaceDescriptor = {
-  typeUrl: '/cosmos_proto.InterfaceDescriptor',
+  typeUrl: "/cosmos_proto.InterfaceDescriptor",
   encode(message: InterfaceDescriptor, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.name !== '') {
+    if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
-    if (message.description !== '') {
+    if (message.description !== "") {
       writer.uint32(18).string(message.description);
     }
     return writer;
@@ -213,8 +213,8 @@ export const InterfaceDescriptor = {
   },
   fromPartial(object: Partial<InterfaceDescriptor>): InterfaceDescriptor {
     const message = createBaseInterfaceDescriptor();
-    message.name = object.name ?? '';
-    message.description = object.description ?? '';
+    message.name = object.name ?? "";
+    message.description = object.description ?? "";
     return message;
   },
   fromAmino(object: InterfaceDescriptorAmino): InterfaceDescriptor {
@@ -229,8 +229,8 @@ export const InterfaceDescriptor = {
   },
   toAmino(message: InterfaceDescriptor): InterfaceDescriptorAmino {
     const obj: any = {};
-    obj.name = message.name === '' ? undefined : message.name;
-    obj.description = message.description === '' ? undefined : message.description;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.description = message.description === "" ? undefined : message.description;
     return obj;
   },
   fromAminoMsg(object: InterfaceDescriptorAminoMsg): InterfaceDescriptor {
@@ -244,25 +244,25 @@ export const InterfaceDescriptor = {
   },
   toProtoMsg(message: InterfaceDescriptor): InterfaceDescriptorProtoMsg {
     return {
-      typeUrl: '/cosmos_proto.InterfaceDescriptor',
+      typeUrl: "/cosmos_proto.InterfaceDescriptor",
       value: InterfaceDescriptor.encode(message).finish()
     };
   }
 };
 function createBaseScalarDescriptor(): ScalarDescriptor {
   return {
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     fieldType: []
   };
 }
 export const ScalarDescriptor = {
-  typeUrl: '/cosmos_proto.ScalarDescriptor',
+  typeUrl: "/cosmos_proto.ScalarDescriptor",
   encode(message: ScalarDescriptor, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.name !== '') {
+    if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
-    if (message.description !== '') {
+    if (message.description !== "") {
       writer.uint32(18).string(message.description);
     }
     writer.uint32(26).fork();
@@ -304,8 +304,8 @@ export const ScalarDescriptor = {
   },
   fromPartial(object: Partial<ScalarDescriptor>): ScalarDescriptor {
     const message = createBaseScalarDescriptor();
-    message.name = object.name ?? '';
-    message.description = object.description ?? '';
+    message.name = object.name ?? "";
+    message.description = object.description ?? "";
     message.fieldType = object.fieldType?.map(e => e) || [];
     return message;
   },
@@ -322,8 +322,8 @@ export const ScalarDescriptor = {
   },
   toAmino(message: ScalarDescriptor): ScalarDescriptorAmino {
     const obj: any = {};
-    obj.name = message.name === '' ? undefined : message.name;
-    obj.description = message.description === '' ? undefined : message.description;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.description = message.description === "" ? undefined : message.description;
     if (message.fieldType) {
       obj.field_type = message.fieldType.map(e => e);
     } else {
@@ -342,7 +342,7 @@ export const ScalarDescriptor = {
   },
   toProtoMsg(message: ScalarDescriptor): ScalarDescriptorProtoMsg {
     return {
-      typeUrl: '/cosmos_proto.ScalarDescriptor',
+      typeUrl: "/cosmos_proto.ScalarDescriptor",
       value: ScalarDescriptor.encode(message).finish()
     };
   }
