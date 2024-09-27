@@ -126,3 +126,44 @@ interface Chainstats {
   spent_txo_sum: number;
   tx_count: number;
 }
+
+export interface SideBridgeParams {
+  params: Params;
+}
+
+interface Params {
+  confirmations: number;
+  max_acceptable_block_depth: string;
+  btc_voucher_denom: string;
+  deposit_enabled: boolean;
+  withdraw_enabled: boolean;
+  non_btc_relayers: string[];
+  vaults: Vault[];
+  protocol_limits: Protocollimits;
+  protocol_fees: Protocolfees;
+  tss_params: Tssparams;
+}
+
+interface Tssparams {
+  dkg_timeout_period: string;
+  participant_update_transition_period: string;
+}
+
+export interface Protocolfees {
+  deposit_fee: string;
+  withdraw_fee: string;
+  collector: string;
+}
+
+export interface Protocollimits {
+  btc_min_deposit: string;
+  btc_min_withdraw: string;
+  btc_max_withdraw: string;
+}
+
+interface Vault {
+  address: string;
+  pub_key: string;
+  asset_type: 'ASSET_TYPE_RUNES' | 'ASSET_TYPE_BTC';
+  version: string;
+}

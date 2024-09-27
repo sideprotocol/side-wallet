@@ -14,10 +14,11 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useBitcoinRuneBalance, useBridge, useRuneListV2 } from '@/ui/state/bridge/hook';
+import { useBitcoinRuneBalance, useBridgeParams, useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
+import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
 import { useNavigate } from '../MainRoute';
 
@@ -48,12 +49,25 @@ export default function BridgeTabScreen() {
   const isBtcBridge = base === 'sat';
 
   const { tokens: runesBalance } = useRuneListV2();
+  const isDeposit = (from?.name || '').includes('Bitcoin');
+
+  const { params } = useBridgeParams();
+
+  const protocolLimit = params?.params?.protocol_limits;
+
+  const protocolFee = params?.params?.protocol_fees;
+
+  const depositEnabled = params?.params?.deposit_enabled;
+
+  const withdrawEnabled = params?.params?.withdraw_enabled;
+
+  const bridgeEnabled = isDeposit ? depositEnabled : withdrawEnabled;
 
   let runeBalance = useBitcoinRuneBalance(base);
 
-  const isDeposit = (from?.name || '').includes('Bitcoin');
-
   const bridgeAsset = assets.find((a) => a?.denom === `${base}`) || SAT_ITEM;
+
+  const satAsset = assets.find((a) => a?.denom === 'sat');
 
   const depositRuneAsset = runesBalance.find((a) => base.includes(a.runeid));
 
@@ -62,20 +76,53 @@ export default function BridgeTabScreen() {
 
   const balance = isDeposit ? (isBtcBridge ? btcBalance : runeBalance) : bridgeAsset?.formatAmount || '0';
 
+  const btcBalanceOnFromChain = isDeposit ? btcBalance : satAsset?.formatAmount || '0';
+
+  const isBTCEnoughPayingFee = BigNumber(btcBalanceOnFromChain).gte(
+    isDeposit ? protocolFee?.deposit_fee || 0 : protocolFee?.withdraw_fee || 0
+  );
+
+  const lessThanMinSatWithdraw =
+    base == 'sat' &&
+    BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(
+      BigNumber(protocolLimit?.btc_min_withdraw || 0).plus(protocolFee?.withdraw_fee || 0)
+    ) &&
+    !isDeposit;
+
+  const lessThanMinSatDeposit =
+    base == 'sat' &&
+    BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(
+      BigNumber(protocolLimit?.btc_min_deposit || 0).plus(protocolFee?.deposit_fee || 0)
+    ) &&
+    isDeposit;
+
+  const isGreaterThanMaxWithdraw =
+    base == 'sat' &&
+    BigNumber(toUnitAmount(bridgeAmount || '0', 8)).gt(
+      protocolLimit?.btc_max_withdraw || toUnitAmount(bridgeAmount || '0', 8)
+    ) &&
+    !isDeposit;
+
   useEffect(() => {
     bridgeStore.balance = balance;
   }, [balance]);
   const { hoverExchange } = useSwapStore();
 
   // const { bridge, bridgeRune } = useRuneBridge();
-  const { bridgeRune } = useBridge();
   const networkType = useNetworkType();
 
   // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
   const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
+  const isGreaterThanBalance = BigNumber(bridgeAmount || '0').gt(balance);
 
   const disabled =
-    !bridgeAmount || Number(bridgeAmount) === 0 || BigNumber(bridgeAmount || '0').gt(balance || '0') || loading;
+    BigNumber(bridgeAmount || 0).lte(0) ||
+    isGreaterThanBalance ||
+    lessThanMinSatWithdraw ||
+    isGreaterThanMaxWithdraw ||
+    lessThanMinSatDeposit ||
+    !bridgeEnabled ||
+    !isBTCEnoughPayingFee;
 
   useEffect(() => {
     // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
@@ -372,7 +419,29 @@ export default function BridgeTabScreen() {
                 }}
                 disabled={disabled}
                 full
-                text={'Bridge'}
+                text={
+                  !isBTCEnoughPayingFee
+                    ? 'Insufficient BTC balance'
+                    : lessThanMinSatDeposit || lessThanMinSatWithdraw
+                    ? `Minimum amount is ${
+                        isDeposit
+                          ? toReadableAmount(
+                              BigNumber(protocolLimit?.btc_min_deposit || '10000')
+                                .plus(protocolFee?.deposit_fee || '0')
+                                .toFixed(),
+                              8
+                            )
+                          : toReadableAmount(
+                              BigNumber(protocolLimit?.btc_min_withdraw || '20000')
+                                .plus(protocolFee?.withdraw_fee || '0')
+                                .toFixed(),
+                              8
+                            )
+                      } BTC`
+                    : isGreaterThanBalance
+                    ? 'Insufficient Balance'
+                    : 'Bridge'
+                }
                 preset="primary"
               />
             </Row>
