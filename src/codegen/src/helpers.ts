@@ -165,7 +165,6 @@ export const setPaginationParams = (
 
 type Builtin =
   | Date
-  | Function
   | Uint8Array
   | string
   | number
