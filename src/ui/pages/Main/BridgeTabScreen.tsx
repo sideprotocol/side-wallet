@@ -78,7 +78,7 @@ export default function BridgeTabScreen() {
 
   const btcBalanceOnFromChain = isDeposit ? btcBalance : satAsset?.formatAmount || '0';
 
-  const isBTCEnoughPayingFee = BigNumber(btcBalanceOnFromChain).gte(
+  const isBTCEnoughPayingFee = BigNumber(toUnitAmount(btcBalanceOnFromChain, satAsset?.asset.precision || 8)).gte(
     isDeposit ? protocolFee?.deposit_fee || 0 : protocolFee?.withdraw_fee || 0
   );
 
@@ -114,6 +114,8 @@ export default function BridgeTabScreen() {
   // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
   const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
   const isGreaterThanBalance = BigNumber(bridgeAmount || '0').gt(balance);
+
+  console.log('bridgeAmount', bridgeAmount, balance, isGreaterThanBalance, btcBalanceOnFromChain);
 
   const disabled =
     BigNumber(bridgeAmount || 0).lte(0) ||
