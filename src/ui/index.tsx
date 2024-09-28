@@ -183,8 +183,7 @@ function Updaters() {
   const lock = async () => {
     const val = await _wallet.hasVault();
     if (val) {
-      const isUnlocked = await _wallet.isUnlocked();
-      if (!isUnlocked && !location.hash.includes('/account/unlock')) {
+      if (!location.hash.includes('/account/unlock')) {
         await _wallet.lockWallet();
         _wallet.isUnlocked().then((isUnlocked) => {
           if (!isUnlocked) {
