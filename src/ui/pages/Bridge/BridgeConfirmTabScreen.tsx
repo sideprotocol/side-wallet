@@ -18,6 +18,7 @@ import { formatAddress } from '@/ui/utils/format';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { estimateNetworkFeeHelper as estimateNetworkFee } from '@/ui/wallet-sdk/utils';
 import { Input } from '@mui/material';
+import services from '@/ui/services';
 
 import { useNavigate } from '../MainRoute';
 
@@ -90,9 +91,17 @@ export default function BridgeTabScreen() {
     const getFee = async () => {
       const networkFee = await estimateNetworkFee({ amount: unitAmount, fee }, currentAccount);
       console.log('networkFee: ', networkFee);
+      // const rcFee = res.list[1].feeRate;
+      // SideBtcBridgeStore.setFee(rcFee || 20);
       setTx(networkFee?.walletInputs || []);
     };
     getFee();
+
+    services.unisat.getFeeSummary().then(res => {
+      const rcFee = res.list[2].feeRate;
+      setNetworkFee(rcFee || 20);
+      bridgeStore.fee = Number(rcFee);
+    });
   }, [fee]);
 
   const isDisabled = BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(networkFee) || loading || Number(fee) === 0;
@@ -205,7 +214,7 @@ export default function BridgeTabScreen() {
                     text={'Fee Rate'}
                     value={
                       <>
-                        {fee} sats/vB
+                        {networkFee ? networkFee : fee } sats/vB
                         <div
                           className="cursor-pointer "
                           onClick={() => {
