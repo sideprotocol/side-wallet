@@ -57,7 +57,7 @@ export default function BridgeTabScreen() {
 
   const { bridge, bridgeRune } = useBridge();
 
-  const { bridgeAmount, from, to, loading, selectTokenModalShow, base, accountUtxo, fee } = useBridgeStore();
+  const { bridgeAmount, from, to, loading, selectTokenModalShow, base, accountUtxo, fee, feeSummary } = useBridgeStore();
 
   const [networkFee, setNetworkFee] = useState<number>(0);
 
@@ -90,10 +90,7 @@ export default function BridgeTabScreen() {
     // console.log(`currentAccount: `, currentAccount);
     const getFee = async () => {
       const networkFee = await estimateNetworkFee({ amount: unitAmount, fee }, currentAccount);
-      console.log('networkFee: ', networkFee);
-      // const rcFee = res.list[1].feeRate;
-      // SideBtcBridgeStore.setFee(rcFee || 20);
-      setTx(networkFee?.walletInputs || []);
+      setTx(networkFee?.walletInputs || []);    
     };
     getFee();
 
@@ -101,6 +98,7 @@ export default function BridgeTabScreen() {
       const rcFee = res.list[2].feeRate;
       setNetworkFee(rcFee || 20);
       bridgeStore.fee = Number(rcFee);
+      bridgeStore.feeSummary = res.list;
     });
   }, [fee]);
 
@@ -282,7 +280,7 @@ export default function BridgeTabScreen() {
                       id="edit_sat"></DetailRow>
                   )}
 
-                  <DetailRow text={'Est. Bridge Time'} value={'30 mins'}></DetailRow>
+                  <DetailRow text={'Est. Bridge Time'} value={feeSummary?.find(item => item.feeRate === fee)?.desc || "-"}></DetailRow>
 
                   <DetailRow text={'Bridge Fee'} value={isDeposit ? '0.0001 BTC' : '0.00002 BTC'}></DetailRow>
 

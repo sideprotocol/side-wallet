@@ -35,6 +35,7 @@ const initData = {
   to: ({} as ChainItem),
   balance: '',
   fee: 20,
+  feeSummary: [],
   loading: false,
   selectTokenModalShow: false,
   accountUtxo: null as UTXOAddress | null
