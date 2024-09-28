@@ -455,7 +455,7 @@ const Main = () => {
     if (val) {
       const isUnlocked = await wallet.isUnlocked();
       dispatch(globalActions.update({ isUnlocked }));
-      if (!isUnlocked && location.href.includes(routes.UnlockScreen.path) === false) {
+      if (!isUnlocked && !location.hash.includes(routes.UnlockScreen.path)) {
         const basePath = location.href.split('#')[0];
         location.href = `${basePath}#${routes.UnlockScreen.path}`;
         // navigate(`${basePath}#${routes.UnlockScreen.path}`);

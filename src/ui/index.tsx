@@ -18,6 +18,8 @@ import { ActionComponentProvider } from './components/ActionComponent';
 import { AppDimensions, AppSideDimensions } from './components/Responsive';
 import AsyncMainRoute from './pages/MainRoute';
 import store from './state';
+import { globalActions } from './state/global/reducer';
+import { useAppDispatch } from './state/hooks';
 import { WalletProvider, useWallet } from './utils';
 
 // disabled sentry
@@ -138,6 +140,7 @@ eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
 function Updaters() {
   const timer = useRef<NodeJS.Timeout | null>(null);
   const _wallet = useWallet();
+  const dispatch = useAppDispatch();
 
   const unLockTimeLimitInit = '5';
 
@@ -178,19 +181,19 @@ function Updaters() {
   }, []);
 
   const lock = async () => {
-    if (
-      !location.href.includes('/account/unlock') &&
-      !location.href.includes('/account/forget-password') &&
-      !location.href.includes('/account/create-password') &&
-      !location.href.includes('/welcome')
-    ) {
-      await _wallet.lockWallet();
-      _wallet.isUnlocked().then((isUnlocked) => {
-        if (!isUnlocked) {
-          const basePath = location.href.split('#')[0];
-          location.href = `${basePath}#/account/unlock`;
-        }
-      });
+    const val = await _wallet.hasVault();
+    if (val) {
+      const isUnlocked = await _wallet.isUnlocked();
+      if (!isUnlocked && !location.hash.includes('/account/unlock')) {
+        await _wallet.lockWallet();
+        _wallet.isUnlocked().then((isUnlocked) => {
+          if (!isUnlocked) {
+            dispatch(globalActions.update({ isUnlocked }));
+            const basePath = location.href.split('#')[0];
+            location.href = `${basePath}#/account/unlock`;
+          }
+        });
+      }
     }
   };
 
