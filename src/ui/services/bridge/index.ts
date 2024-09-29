@@ -1,7 +1,16 @@
-import {SIDE_BTC_INDEXER, SIDE_RUNE_INDEXER, UNISAT_IO_API} from '@/ui/constants';
+import { SIDE_BTC_INDEXER, SIDE_RUNE_INDEXER, UNISAT_IO_API, UNISAT_SERVICE_ENDPOINT } from '@/ui/constants';
 import ApiClient from '@/ui/services/network/ApiClient';
-import { UNISAT_SERVICE_ENDPOINT } from '@/ui/constants';
-import { AddressInfo, RuneOutput, Runes, UTXO, UTXOAddress, WithdrawRequest } from './types';
+
+import { getQueryParams } from '../getQueryParams';
+import {
+  AddressInfo,
+  GetBridgeWithdrawFeeReponse,
+  RuneOutput,
+  Runes,
+  UTXO,
+  UTXOAddress,
+  WithdrawRequest
+} from './types';
 
 interface Params {
   confirmations: number;
@@ -54,7 +63,7 @@ export default class BridgeService {
 
   async getBridgeParams(): Promise<SideBridgeParams> {
     return this.apiClient.get(`${UNISAT_IO_API}/params`, {
-      baseURL: SIDE_BTC_INDEXER,
+      baseURL: SIDE_BTC_INDEXER
     });
   }
 
@@ -128,6 +137,21 @@ export default class BridgeService {
     return this.apiClient.get<WithdrawRequest>(`/side/btcbridge/signing/request/address/${address}`, {
       baseURL: client.restUrl
     });
+  }
+
+  async getBridgeWithdrawFee(address: string, amount: string, restUrl: string): Promise<string> {
+    const queryParams = getQueryParams({ address, amount: amount, fee_rate: 0 });
+    const result = await this.apiClient.get<GetBridgeWithdrawFeeReponse>(
+      `/side/btcbridge/withdrawal/fee/estimation?${queryParams}`,
+      {
+        baseURL: restUrl
+      }
+    );
+
+    if (typeof result.code === 'number' && result.code !== 0) {
+      return '-';
+    }
+    return parseFloat(result.fee).toFixed(0);
   }
 
   async getAllRunes(): Promise<Runes> {

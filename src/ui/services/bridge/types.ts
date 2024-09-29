@@ -167,3 +167,11 @@ interface Vault {
   asset_type: 'ASSET_TYPE_RUNES' | 'ASSET_TYPE_BTC';
   version: string;
 }
+
+export interface GetBridgeWithdrawFeeReponse {
+  fee_rate: string;
+  fee: string;
+  code?: number;
+  message?: string;
+  details?: any;
+}
