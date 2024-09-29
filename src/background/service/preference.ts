@@ -2,7 +2,7 @@ import compareVersions from 'compare-versions';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { createPersistStore } from '@/background/utils';
-import { AddressFlagType, CHAINS, CHAINS_ENUM, ChainType, DEFAULT_LOCKTIME_ID, EVENTS } from '@/shared/constant';
+import { AddressFlagType, CHAINS, CHAINS_ENUM, ChainType, DEFAULT_LOCKTIME, EVENTS } from '@/shared/constant';
 import eventBus from '@/shared/eventBus';
 import {
   Account,
@@ -87,7 +87,7 @@ export interface PreferenceStore {
   showSafeNotice: boolean;
   addressFlags: { [key: string]: number };
   enableSignData: boolean;
-  autoLockTimeId: number;
+  autoLockTime: number;
 }
 
 const SUPPORT_LOCALES = ['en'];
@@ -132,7 +132,7 @@ class PreferenceService {
         showSafeNotice: true,
         addressFlags: {},
         enableSignData: false,
-        autoLockTimeId: DEFAULT_LOCKTIME_ID
+        autoLockTime: DEFAULT_LOCKTIME
       }
     });
     if (!this.store.locale || this.store.locale !== defaultLang) {
@@ -221,8 +221,8 @@ class PreferenceService {
       }
     }
 
-    if (typeof this.store.autoLockTimeId !== 'number') {
-      this.store.autoLockTimeId = DEFAULT_LOCKTIME_ID;
+    if (typeof this.store.autoLockTime !== 'number') {
+      this.store.autoLockTime = DEFAULT_LOCKTIME;
     }
   };
 
@@ -529,12 +529,15 @@ class PreferenceService {
     this.store.enableSignData = enableSignData;
   };
 
-  getAutoLockTimeId = () => {
-    return this.store.autoLockTimeId;
+  getAutoLockTime = () => {
+    return this.store.autoLockTime;
   };
 
-  setAutoLockTimeId = (id: number) => {
-    this.store.autoLockTimeId = id;
+  setAutoLockTime = (minutes: number) => {
+    if (typeof minutes !== 'number') {
+      minutes = DEFAULT_LOCKTIME;
+    }
+    this.store.autoLockTime = minutes;
   };
 
   reset = () => {

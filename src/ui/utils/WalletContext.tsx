@@ -24,6 +24,7 @@ import {
   RuneBalance,
   SideToken,
   SignPsbtOptions,
+  TickPriceItem,
   TokenBalance,
   TokenTransfer,
   TxHistoryItem,
@@ -31,8 +32,7 @@ import {
   UTXO_Detail,
   VersionDetail,
   WalletConfig,
-  WalletKeyring,
-  TickPriceItem
+  WalletKeyring
 } from '@/shared/types';
 import { AddressType, UnspentOutput } from '@unisat/wallet-sdk';
 import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
@@ -393,6 +393,11 @@ export interface WalletController {
   getAccountSideTokenBalanceList(account: string): Promise<{ base: string; amount: string }[]>;
 
   reset(): Promise<void>;
+
+  setAutoLockTime(minutes: number): Promise<void>;
+  getAutoLockTime(): Promise<number>;
+
+  setLastActiveTime(): Promise<void>;
 }
 
 const WalletContext = createContext<{

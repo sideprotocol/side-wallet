@@ -91,3 +91,8 @@ export function useImportAccountsFromKeystoneCallback() {
     [dispatch, wallet]
   );
 }
+
+export function useBooted() {
+  const globalState = useGlobalState();
+  return globalState.isBooted;
+}

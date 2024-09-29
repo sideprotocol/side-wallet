@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 import {
   assetService,
   contactBookService,
@@ -19,10 +21,12 @@ import {
   COIN_NAME,
   COIN_SYMBOL,
   ChainType,
+  EVENTS,
   KEYRING_TYPE,
   NETWORK_TYPES,
   UNCONFIRMED_HEIGHT
 } from '@/shared/constant';
+import eventBus from '@/shared/eventBus';
 import { runesUtils } from '@/shared/lib/runes-utils';
 import {
   Account,
@@ -65,6 +69,8 @@ export type AccountAsset = {
 
 export class WalletController extends BaseController {
   openapi: OpenApiService = openapiService;
+
+  timer: NodeJS.Timeout | null = null;
 
   /* wallet */
   boot = (password: string) => keyringService.boot(password);
@@ -115,6 +121,8 @@ export class WalletController extends BaseController {
     if (!alianNameInited && alianNames.length === 0) {
       this.initAlianNames();
     }
+
+    this._resetTimeout();
   };
   isUnlocked = () => {
     return keyringService.memStore.getState().isUnlocked;
@@ -124,6 +132,11 @@ export class WalletController extends BaseController {
     await keyringService.setLocked();
     sessionService.broadcastEvent('accountsChanged', []);
     sessionService.broadcastEvent('lock');
+
+    eventBus.emit(EVENTS.broadcastToUI, {
+      method: 'lock',
+      params: {}
+    });
   };
 
   setPopupOpen = (isOpen: boolean) => {
@@ -2001,6 +2014,32 @@ export class WalletController extends BaseController {
   reset = async () => {
     await keyringService.reset();
     await preferenceService.reset();
+  };
+
+  getAutoLockTime = () => {
+    return preferenceService.getAutoLockTime();
+  };
+
+  setAutoLockTime = (minutes: number) => {
+    preferenceService.setAutoLockTime(minutes);
+    this._resetTimeout();
+  };
+
+  setLastActiveTime = () => {
+    this._resetTimeout();
+  };
+
+  _resetTimeout = async () => {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    const minutes = preferenceService.getAutoLockTime();
+    const timeoutNum = new BigNumber(minutes).multipliedBy(60000).toNumber();
+
+    this.timer = setTimeout(() => {
+      this.lockWallet();
+    }, timeoutNum);
   };
 }
 

@@ -6,13 +6,17 @@ import { Button, Column, Content, Header, Input, Layout, Text } from '@/ui/compo
 import { useTools } from '@/ui/components/ActionComponent';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useAppDispatch } from '@/ui/state/hooks';
+import { useAutoLockTime } from '@/ui/state/settings/hooks';
 import { settingsActions } from '@/ui/state/settings/reducer';
+import { useWallet } from '@/ui/utils';
 
 export default function AutoLockScreen() {
   const [time, setTime] = useState('0');
   const dispatch = useAppDispatch();
   const tools = useTools();
   const navigate = useNavigate();
+  const wallet = useWallet();
+  const autoLockTime = useAutoLockTime();
   return (
     <Layout>
       <Header
@@ -27,8 +31,7 @@ export default function AutoLockScreen() {
           style={{
             paddingTop: '70px',
             paddingBottom: '25px'
-          }}
-        >
+          }}>
           {/*<Image*/}
           {/*  style={{*/}
           {/*    margin: 'auto'*/}
@@ -57,8 +60,7 @@ export default function AutoLockScreen() {
               width: '200px',
               margin: 'auto'
             }}
-            text="Set the duration for the wallet to automatically lock."
-          ></Text>
+            text="Set the duration for the wallet to automatically lock."></Text>
         </Column>
 
         <Column>
@@ -66,9 +68,8 @@ export default function AutoLockScreen() {
 
           <Input
             preset={'amount'}
-            placeholder={localStorage.getItem('unLockTimeLimit') ? localStorage.getItem('unLockTimeLimit') : '5'}
-            onAmountInputChange={async (e) => setTime(e)}
-          ></Input>
+            placeholder={`${autoLockTime}`}
+            onAmountInputChange={async (e) => setTime(e)}></Input>
 
           <Button
             preset="primary"
@@ -77,22 +78,17 @@ export default function AutoLockScreen() {
               marginTop: '16px'
             }}
             onClick={(e) => {
-              // preferenceService.setAutoLockDuration(10);
               e.stopPropagation();
-              if (isNaN(Number(time)) || Number(time) <= 0) return false;
+              if (isNaN(+time) || +time <= 0) return false;
+              wallet.setAutoLockTime(+time);
               dispatch(
                 settingsActions.updateSettings({
-                  unLockTimeLimit: Number(time)
+                  autoLockTime: +time
                 })
               );
               tools.toastSuccess('Your settings have been saved.');
-              localStorage.setItem('unLockTimeLimit', time);
               navigate('MainScreen');
-              chrome.storage.local.set({ unLockTimeLimit: Number(time) }, function () {
-                console.log('锁屏时间限制已保存为 ' + Number(time) + ' 分钟。');
-              });
-            }}
-          ></Button>
+            }}></Button>
         </Column>
       </Content>
     </Layout>

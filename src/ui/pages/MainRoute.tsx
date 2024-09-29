@@ -4,7 +4,7 @@ import { HashRouter, Route, Routes, useNavigate as useNavigateOrigin } from 'rea
 // import IdleTimer, { useIdleTimer } from 'react-idle-timer';
 import { LoadingOutlined } from '@ant-design/icons';
 
-import { Content, Icon, Layout } from '../components';
+import { Content, Icon } from '../components';
 import useGetTokenPrice from '../hooks/useGetTokenPrice';
 import { accountActions } from '../state/accounts/reducer';
 import { useIsReady, useIsUnlocked } from '../state/global/hooks';
@@ -77,7 +77,7 @@ import TxSuccessScreen from './Wallet/TxSuccessScreen';
 import UnavailableUtxoScreen from './Wallet/UnavailableUtxoScreen';
 import './index.module.less';
 
-const routes = {
+export const routes = {
   BoostScreen: {
     path: '/',
     element: <BoostScreen />
@@ -440,6 +440,10 @@ const Main = () => {
         wallet.getSkippedVersion().then((data) => {
           dispatch(settingsActions.updateSettings({ skippedVersion: data }));
         });
+
+        wallet.getAutoLockTime().then((data) => {
+          dispatch(settingsActions.updateSettings({ autoLockTime: data }));
+        });
       }
 
       dispatch(globalActions.update({ isReady: true }));
@@ -448,37 +452,15 @@ const Main = () => {
     }
   }, [wallet, dispatch, isReady, isUnlocked]);
 
-  const timer = useRef<NodeJS.Timeout | null>(null);
-
-  const hasVault = async () => {
-    const val = await wallet.hasVault();
-    if (val) {
-      const isUnlocked = await wallet.isUnlocked();
-      dispatch(globalActions.update({ isUnlocked }));
-      if (!isUnlocked && !location.hash.includes(routes.UnlockScreen.path)) {
-        const basePath = location.href.split('#')[0];
-        location.href = `${basePath}#${routes.UnlockScreen.path}`;
-        // navigate(`${basePath}#${routes.UnlockScreen.path}`);
-      }
-    }
-  };
-
   useEffect(() => {
-    hasVault();
-    // wallet.hasVault().then((val) => {
-    //   if (val) {
-    //     wallet.isUnlocked().then((isUnlocked) => {
-    //       console.log(1111);
-    //       console.log('isLocked: ', !isUnlocked);
-    //       dispatch(globalActions.update({ isUnlocked }));
-    //       if (!isUnlocked && location.href.includes(routes.UnlockScreen.path) === false) {
-    //         const basePath = location.href.split('#')[0];
-    //         location.href = `${basePath}#${routes.UnlockScreen.path}`;
-    //         // navigate(`${basePath}#${routes.UnlockScreen.path}`);
-    //       }
-    //     });
-    //   }
-    // });
+    wallet.hasVault().then((val) => {
+      if (val) {
+        dispatch(globalActions.update({ isBooted: true }));
+        wallet.isUnlocked().then((isUnlocked) => {
+          dispatch(globalActions.update({ isUnlocked }));
+        });
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -487,13 +469,21 @@ const Main = () => {
 
   if (!isReady) {
     return (
-      <Layout>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100vw',
+          height: '100vh',
+          overflowY: 'auto',
+          overflowX: 'hidden'
+        }}>
         <Content justifyCenter itemsCenter>
           <Icon color={'primary'}>
             <LoadingOutlined />
           </Icon>
         </Content>
-      </Layout>
+      </div>
     );
   }
 

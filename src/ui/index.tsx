@@ -1,8 +1,7 @@
 import en from 'antd/es/locale/en_US';
 import message from 'antd/lib/message';
-import { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
-// import { useIdleTimer } from 'react-idle-timer';
+import { IdleTimerProvider } from 'react-idle-timer';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 
@@ -18,9 +17,7 @@ import { ActionComponentProvider } from './components/ActionComponent';
 import { AppDimensions, AppSideDimensions } from './components/Responsive';
 import AsyncMainRoute from './pages/MainRoute';
 import store from './state';
-import { globalActions } from './state/global/reducer';
-import { useAppDispatch } from './state/hooks';
-import { WalletProvider, useWallet } from './utils';
+import { WalletProvider } from './utils';
 
 // disabled sentry
 // Sentry.init({
@@ -138,65 +135,6 @@ eventBus.addEventListener(EVENTS.broadcastToBackground, (data) => {
 });
 
 function Updaters() {
-  const timer = useRef<NodeJS.Timeout | null>(null);
-  const _wallet = useWallet();
-  const dispatch = useAppDispatch();
-
-  const unLockTimeLimitInit = '5';
-
-  useEffect(() => {
-    chrome.storage.local.get(['unLockTimeLimit', 'lastActiveTimestamp'], async function (result) {
-      const curTimestamp = new Date().getTime();
-      if (!result.lastActiveTimestamp) {
-        chrome.storage.local.set({ lastActiveTimestamp: curTimestamp });
-      }
-      if (
-        result.lastActiveTimestamp &&
-        curTimestamp - result.lastActiveTimestamp > +(result.unLockTimeLimit || unLockTimeLimitInit) * 60000
-      ) {
-        await lock();
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    const handler = () => {
-      chrome.storage.local.set({ lastActiveTimestamp: new Date().getTime() });
-      chrome.storage.local.get(['unLockTimeLimit'], function (result) {
-        if (timer.current) {
-          clearTimeout(timer.current);
-        }
-        timer.current = setTimeout(async () => {
-          await lock();
-        }, +(result.unLockTimeLimit || unLockTimeLimitInit) * 60000);
-      });
-    };
-
-    document.body.querySelector('#root')?.addEventListener('mousemove', handler, true);
-    return () => {
-      if (timer.current) {
-        clearTimeout(timer.current);
-      }
-    };
-  }, []);
-
-  const lock = async () => {
-    const val = await _wallet.hasVault();
-    if (val) {
-      const isUnlocked = await _wallet.isUnlocked();
-      if (isUnlocked && !location.hash.includes('/account/unlock')) {
-        await _wallet.lockWallet();
-        _wallet.isUnlocked().then((isUnlocked) => {
-          if (!isUnlocked) {
-            dispatch(globalActions.update({ isUnlocked }));
-            const basePath = location.href.split('#')[0];
-            location.href = `${basePath}#/account/unlock`;
-          }
-        });
-      }
-    }
-  };
-
   return <AccountUpdater />;
 }
 
@@ -208,8 +146,13 @@ if (root) {
         <WalletProvider {...antdConfig} wallet={wallet as any}>
           <ActionComponentProvider>
             <AppDimensions>
-              <Updaters />
-              <AsyncMainRoute />
+              <IdleTimerProvider
+                onAction={() => {
+                  wallet.setLastActiveTime();
+                }}>
+                <Updaters />
+                <AsyncMainRoute />
+              </IdleTimerProvider>
             </AppDimensions>
           </ActionComponentProvider>
         </WalletProvider>
@@ -226,8 +169,13 @@ if (root2) {
         <WalletProvider {...antdConfig} wallet={wallet as any}>
           <ActionComponentProvider>
             <AppSideDimensions>
-              <Updaters />
-              <AsyncMainRoute />
+              <IdleTimerProvider
+                onAction={() => {
+                  wallet.setLastActiveTime();
+                }}>
+                <Updaters />
+                <AsyncMainRoute />
+              </IdleTimerProvider>
             </AppSideDimensions>
           </ActionComponentProvider>
         </WalletProvider>

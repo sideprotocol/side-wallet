@@ -481,3 +481,5 @@ export const CHAINS_MAP: { [key: string]: TypeChain } = {
 };
 
 export const CHAINS = Object.values(CHAINS_MAP);
+
+export const DEFAULT_LOCKTIME = 5;

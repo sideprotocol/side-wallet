@@ -1,7 +1,7 @@
 import compareVersions from 'compare-versions';
 import { useCallback } from 'react';
 
-import { CHAINS_ENUM, CHAINS_MAP, VERSION, ChainType } from '@/shared/constant';
+import { CHAINS_ENUM, CHAINS_MAP, ChainType, VERSION } from '@/shared/constant';
 // import { CHAINS_ENUM, VERSION } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { useWallet } from '@/ui/utils';
@@ -209,4 +209,9 @@ export function useChangeChainTypeCallback() {
     },
     [dispatch]
   );
+}
+
+export function useAutoLockTime() {
+  const state = useSettingsState();
+  return state.autoLockTime;
 }

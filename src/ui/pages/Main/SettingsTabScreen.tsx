@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ADDRESS_TYPES, KEYRING_TYPE, NETWORK_TYPES } from '@/shared/constant';
 import { Card, Column, Content, Header, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { Button } from '@/ui/components/Button';
-import { Icon as ImageIcon, IconTypes } from '@/ui/components/Icon';
+import { IconTypes, Icon as ImageIcon } from '@/ui/components/Icon';
 import { Icon } from '@/ui/components/TokenCurrent/';
 import { getCurrentTab, useExtensionIsInTab, useOpenExtensionInTab } from '@/ui/features/browser/tabs';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -232,8 +232,7 @@ export default function SettingsTabScreen() {
                     backgroundColor: 'transparent',
                     paddingLeft: '6px',
                     paddingRight: '6px'
-                  }}
-                >
+                  }}>
                   <Row full justifyBetween>
                     <Row itemsCenter>
                       <ImageIcon size={24} icon={item.icon}></ImageIcon>
