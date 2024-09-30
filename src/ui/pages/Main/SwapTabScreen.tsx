@@ -454,6 +454,8 @@ export default function SwapTabScreen() {
     setIsModalOpen(false);
   };
 
+  console.log(swapPair);
+
   return (
     <>
       <Layout

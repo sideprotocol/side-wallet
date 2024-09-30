@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 import { BITCOIN_CHAINS_MAP, CHAINS_ENUM, ChainType, VERSION } from '@/shared/constant';
 // import { CHAINS_ENUM, VERSION } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
+import { useCurChain } from '@/ui/hooks/useEnv';
 import { useWallet } from '@/ui/utils';
 import i18n, { addResourceBundle } from '@/ui/utils/i18n';
 
@@ -76,23 +77,10 @@ export function useChangeNetworkTypeCallback() {
 }
 
 export function useBlockstreamUrl(chain?: CHAINS_ENUM) {
-  const networkType = useNetworkType();
+  const sideChain = useCurChain();
   if (chain === CHAINS_ENUM.SIDE) {
-    // if (networkType === NetworkType.MAINNET) {
-    //   return 'https://testnet.ping.pub/side';
-    // } else {
-    //   return 'https://explorer.side.exchange/testnet';
-    // }
-    return 'https://explorer.side.exchange/testnet';
-  } else if (chain === CHAINS_ENUM.SIDE_SIGNET) {
-    return 'https://signet.side.one';
+    return sideChain.explorerUrl;
   }
-
-  // if (networkType === NetworkType.MAINNET) {
-  //   return 'https://mempool.space';
-  // } else {
-  //   return 'https://mempool.space/testnet';
-  // }
   return 'https://mempool.space/testnet';
 }
 

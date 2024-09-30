@@ -4,7 +4,7 @@ import { colors } from '@/ui/theme/colors';
 import { useLocationState } from '@/ui/utils';
 
 export default function TxFailScreen() {
-  const { error } = useLocationState<{ error: string }>();
+  const { error } = useLocationState<{ error: any }>();
   const navigate = useNavigate();
   return (
     <Layout>
@@ -21,7 +21,14 @@ export default function TxFailScreen() {
           </Row>
 
           <Text preset="title" text="Payment Failed" textCenter />
-          <Text preset="sub" style={{ color: colors.red }} text={error} textCenter />
+          {
+            <Text
+              preset="sub"
+              style={{ color: colors.red }}
+              text={error instanceof Error ? JSON.stringify(error) : error}
+              textCenter
+            />
+          }
         </Column>
       </Content>
     </Layout>
