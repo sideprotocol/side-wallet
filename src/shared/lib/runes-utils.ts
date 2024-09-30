@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { SIDE_RUNE_VAULT_ADDRESS_TESTNET } from '../constant';
+import { RUNE_BRIDGE_VAULT } from '../constant';
 
 interface Status {
   confirmed: boolean;
@@ -72,7 +72,7 @@ function compareAmount(a: string, b: string) {
 }
 
 export function decodeTxToGetValue(tx: UTXO) {
-  const runeOut = tx.vout.find((vout) => vout.scriptpubkey_address === SIDE_RUNE_VAULT_ADDRESS_TESTNET);
+  const runeOut = tx.vout.find((vout) => vout.scriptpubkey_address === RUNE_BRIDGE_VAULT);
 
   if (!runeOut) return 0;
 

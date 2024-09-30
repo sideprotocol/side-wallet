@@ -1,4 +1,4 @@
-import { SIDE_BTC_INDEXER, SIDE_RUNE_INDEXER, UNISAT_IO_API, UNISAT_SERVICE_ENDPOINT } from '@/ui/constants';
+import { SIDE_BTC_INDEXER, SIDE_RUNE_INDEXER, UNISAT_IO_API, UNISAT_SERVICE_ENDPOINT } from '@/shared/constant';
 import ApiClient from '@/ui/services/network/ApiClient';
 
 import { getQueryParams } from '../getQueryParams';

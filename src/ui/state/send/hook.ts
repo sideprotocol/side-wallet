@@ -1,14 +1,9 @@
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
 
-import {
-  SIDE_BTC_INDEXER,
-  SIDE_RUNE_INDEXER,
-  SIDE_RUNE_VAULT_ADDRESS_MAINNET,
-  SIDE_RUNE_VAULT_ADDRESS_TESTNET
-} from '@/shared/constant';
+import { RUNE_BRIDGE_VAULT, SIDE_BTC_INDEXER, SIDE_RUNE_INDEXER } from '@/shared/constant';
 import { decodeTxToGetValue } from '@/shared/lib/runes-utils';
-import { NetworkType, RawTxInfo } from '@/shared/types';
+import { RawTxInfo } from '@/shared/types';
 import { DepositBTCBridge } from '@/ui/stores/BridgeStore';
 import { useWallet } from '@/ui/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
@@ -33,10 +28,6 @@ export const useSendRune = () => {
   const currentAccount = useCurrentAccount();
 
   const networkType = useNetworkType();
-
-  const RUNE_BRIDGE_VAULT =
-    // networkType === NetworkType.MAINNET ? SIDE_RUNE_VAULT_ADDRESS_MAINNET : SIDE_RUNE_VAULT_ADDRESS_TESTNET;
-    networkType === NetworkType.TESTNET ? SIDE_RUNE_VAULT_ADDRESS_TESTNET : SIDE_RUNE_VAULT_ADDRESS_MAINNET;
 
   const wallet = useWallet();
 
@@ -167,8 +158,7 @@ export const useSendRune = () => {
     const { psbt, toSignInputs } = await sendRunes({
       assetUtxos,
       btcUtxos: btcUtxos.sort((a, b) => b.satoshis - a.satoshis),
-      // networkType: networkType === NetworkType.MAINNET ? 0 : 1,
-      networkType: networkType === NetworkType.TESTNET ? 1 : 0,
+      networkType: networkType,
       toAddress: to || RUNE_BRIDGE_VAULT,
       assetAddress: senderAddress,
       btcAddress: senderAddress,

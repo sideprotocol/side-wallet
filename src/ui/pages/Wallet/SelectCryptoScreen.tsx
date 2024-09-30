@@ -65,8 +65,10 @@ function BitAndRuneCrypto({ searchTerm }) {
               if (type === 'receive') {
                 navigate('SelectAddressScreen', { ...state, token });
               } else {
-                resetUiTxCreateScreen();
-                navigate('TxCreateScreen', { ...state, token });
+                if (!token.asset.rune) {
+                  resetUiTxCreateScreen();
+                  navigate('TxCreateScreen', { ...state, token });
+                }
               }
             }}
             full

@@ -1,10 +1,8 @@
 import compareVersions from 'compare-versions';
 import { useCallback } from 'react';
 
-import { BITCOIN_CHAINS_MAP, CHAINS_ENUM, ChainType, VERSION } from '@/shared/constant';
-// import { CHAINS_ENUM, VERSION } from '@/shared/constant';
+import { BITCOIN_CHAINS_MAP, CHAINS_ENUM, ChainType, VERSION, sideChain } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
-import { useCurChain } from '@/ui/hooks/useEnv';
 import { useWallet } from '@/ui/utils';
 import i18n, { addResourceBundle } from '@/ui/utils/i18n';
 
@@ -77,7 +75,6 @@ export function useChangeNetworkTypeCallback() {
 }
 
 export function useBlockstreamUrl(chain?: CHAINS_ENUM) {
-  const sideChain = useCurChain();
   if (chain === CHAINS_ENUM.SIDE) {
     return sideChain.explorerUrl;
   }
