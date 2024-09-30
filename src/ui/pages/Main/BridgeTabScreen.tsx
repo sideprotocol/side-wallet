@@ -1,8 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 
-import { SIDE_CHAINID_MAINNET, SIDE_CHAINID_TESTNET } from '@/shared/constant';
-import { NetworkType } from '@/shared/types';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import BridgeSelectToken from '@/ui/components/Bridge/BridgeSelectToken';
@@ -11,11 +9,11 @@ import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
+import { useCurChain, useIsTestNet } from '@/ui/hooks/useEnv';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBitcoinRuneBalance, useBridgeParams, useRuneListV2 } from '@/ui/state/bridge/hook';
-import { useNetworkType } from '@/ui/state/settings/hooks';
 import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
@@ -108,13 +106,10 @@ export default function BridgeTabScreen() {
   }, [balance]);
   const { hoverExchange } = useSwapStore();
 
-  // const { bridge, bridgeRune } = useRuneBridge();
-  const networkType = useNetworkType();
+  const sideChain = useCurChain();
+  const isTestNet = useIsTestNet();
 
-  // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
-  const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
   const isGreaterThanBalance = BigNumber(bridgeAmount || '0').gt(balance);
-
   const disabled =
     BigNumber(bridgeAmount || 0).lte(0) ||
     isGreaterThanBalance ||
@@ -125,24 +120,20 @@ export default function BridgeTabScreen() {
     !isBTCEnoughPayingFee;
 
   useEffect(() => {
-    // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
-    const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
-
-    if (networkType === NetworkType.TESTNET) {
+    if (isTestNet) {
       bridgeStore.from = {
         id: 'LIVENET',
         name: 'Bitcoin Signet',
         logo: '/images/icons/btc.svg'
       };
       bridgeStore.to = {
-        id: chainId,
+        id: sideChain.chainID,
         name: 'Side Chain',
-        // logo: '/images/icons/btc.svg'
         logo: '/images/logo/wallet-logo-white-v2.png'
       };
     } else {
       bridgeStore.from = {
-        id: chainId,
+        id: sideChain.chainID,
         name: 'SIDE devnet',
         logo: '/images/logo/wallet-logo-white-v2.svg'
       };
@@ -152,19 +143,6 @@ export default function BridgeTabScreen() {
         logo: '/images/icons/btc.svg'
       };
     }
-  }, [networkType, chainId]);
-
-  useEffect(() => {
-    bridgeStore.from = {
-      id: 'LIVENET',
-      name: 'Bitcoin Signet',
-      logo: '/images/icons/btc.svg'
-    };
-    bridgeStore.to = {
-      id: chainId,
-      name: 'Side Chain',
-      logo: '/images/logo/side_chain.svg'
-    };
   }, []);
 
   return (
@@ -295,7 +273,6 @@ export default function BridgeTabScreen() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    // setShow(true);
                     bridgeStore.selectTokenModalShow = true;
                   }}>
                   <ImageIcon
@@ -305,11 +282,7 @@ export default function BridgeTabScreen() {
                       marginRight: '4px',
                       borderRadius: '20px'
                     }}
-                    url={
-                      bridgeAsset?.asset?.logo ||
-                      bridgeAsset?.asset?.logo ||
-                      `https://api-t2.unisat.io/icon-v1/icon/runes/${depositRuneAsset?.spacedRune}`
-                    }
+                    url={bridgeAsset?.asset?.logo}
                   />
                   <div
                     style={{
@@ -320,11 +293,7 @@ export default function BridgeTabScreen() {
                       textOverflow: 'ellipsis',
                       overflow: 'hidden'
                     }}>
-                    {bridgeAsset?.asset?.symbol ||
-                      bridgeAsset?.asset?.symbol ||
-                      bridgeAsset?.denom ||
-                      depositRuneAsset?.spacedRune ||
-                      'Select Token'}
+                    {bridgeAsset?.asset?.symbol || 'Select Token'}
                   </div>
                   {/*<Icon type="" />*/}
                   <svg
@@ -376,7 +345,7 @@ export default function BridgeTabScreen() {
                     size={14}
                     coin={{
                       amount: bridgeAmount,
-                      denom: ''
+                      denom: bridgeAsset.denom
                     }}
                     onChange={(value) => {
                       bridgeStore.bridgeAmount = value;

@@ -1,7 +1,17 @@
-import { SIDE_CHAINID_TESTNET, SIDE_CHAINS } from '@/shared/constant';
+import { SIDE_CHAINID_MAINNET, SIDE_CHAINID_TESTNET, SIDE_CHAINS } from '@/shared/constant';
+import { NetworkType } from '@/shared/types';
+
+import { useNetworkType } from '../state/settings/hooks';
+
+export function useIsTestNet() {
+  const networkType = useNetworkType();
+  return networkType === NetworkType.TESTNET;
+}
 
 export function useCurChain() {
-  return SIDE_CHAINS.find((item) => item.chainID === SIDE_CHAINID_TESTNET)!;
+  const isTestNet = useIsTestNet();
+  const chainId = isTestNet ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
+  return SIDE_CHAINS.find((item) => item.chainID === chainId)!;
 }
 
 export function useGetUrlList() {

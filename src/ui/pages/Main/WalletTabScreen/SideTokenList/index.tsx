@@ -63,6 +63,9 @@ export default function SideTokenList({ balanceVisible }) {
   return (
     <Column>
       {balanceList.map((item) => {
+        if (!+item.amount) {
+          return null;
+        }
         return (
           <Fragment key={item?.asset?.symbol + item?.asset?.name}>
             <TokenItem token={item} balanceVisible={balanceVisible} />

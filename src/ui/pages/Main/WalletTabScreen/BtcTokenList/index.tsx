@@ -16,18 +16,14 @@ export default function BtcTokenList({ balanceVisible }) {
         minHeight: '132px'
       }}>
       {balanceList.map((item) => {
+        if (!+item.amount) {
+          return null;
+        }
         return (
           <Row
             key={item.denom}
             classname={'bg-item-hover-v2'}
             justifyBetween
-            onClick={() => {
-              if (item.asset.rune) {
-                navigate('RunesTokenScreen', {
-                  runeid: item.asset.runeData?.runeid
-                });
-              }
-            }}
             style={{
               cursor: 'pointer',
               backgroundColor: '#1D1D1F',
@@ -41,8 +37,8 @@ export default function BtcTokenList({ balanceVisible }) {
                   gap: '0px'
                 }}>
                 <div>
-                  <Text preset="regular" text={item?.asset?.runeData?.spacedRune}></Text>
-                  <Text preset="sub" text={item?.asset?.runeData?.symbol}></Text>
+                  <Text preset="regular" text={item?.asset.symbol}></Text>
+                  <Text preset="sub" text={item?.asset?.name}></Text>
                 </div>
               </Column>
             </Row>
