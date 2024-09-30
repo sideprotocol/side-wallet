@@ -1,17 +1,21 @@
 // import { Box, ListItem } from "@mui/material";
 import BigNumber from 'bignumber.js';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import { Icon } from '@/ui/components/TokenCurrent/';
+import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
+
 // import Collapse from "@mui/material/Collapse";
-import { findAssetIcon } from '@/ui/utils/swap';
 
 // import SwapRoutes from "./SwapRoutes";
 
 function SwapDetail() {
   const { swapPair, slippage, detailOpen, swapRouteResult } = useSwapStore();
   const [isCollapse, setIsCollapse] = useState(false);
+  const currentAccount = useCurrentAccount();
+
+  const { balanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
   const priceImpact = BigNumber(swapRouteResult.priceImpact || '0').toFixed(2);
 
@@ -19,7 +23,7 @@ function SwapDetail() {
 
   const fee = swapRouteResult.feeRate + '%';
 
-  const assetOut = findAssetIcon(swapPair.remote);
+  const assetOut = balanceList.find((item) => item.denom === swapPair.remote.denom);
 
   const feePrice = swapRouteResult.feeShowAmount;
 
@@ -33,7 +37,7 @@ function SwapDetail() {
 
   const minReceived0 = BigNumber(swapRouteResult?.returnToken?.showAmount || '')
     .times(BigNumber(1).minus(BigNumber(slippage).div(100)))
-    .toFixed(assetOut?.precision || 6, BigNumber.ROUND_DOWN)
+    .toFixed(assetOut?.asset.precision || 6, BigNumber.ROUND_DOWN)
     .replace(/\.?0*$/, '');
 
   const minReceived =
@@ -41,8 +45,6 @@ function SwapDetail() {
       ? swapPair.remote.amount
       : minReceived0;
 
-  console.log('priceImpact: ', priceImpact);
-  console.log('priceImpact: minReceived: ', minReceived);
   const itemData: {
     id: string;
     text: string;
@@ -57,13 +59,13 @@ function SwapDetail() {
     {
       id: 'min_received',
       text: 'Minimum Received',
-      value: `${minReceived} ${assetOut?.emoji || assetOut?.symbol}`
+      value: `${minReceived} ${assetOut?.asset.symbol}`
     },
 
     {
       id: 'fee',
       text: `Fee (${fee})`,
-      value: `${feePrice} ${assetOut?.emoji || assetOut?.symbol}`
+      value: `${feePrice} ${assetOut?.asset.symbol}`
     }
 
     // {
@@ -83,48 +85,45 @@ function SwapDetail() {
           alignItems: 'center',
           justifyContent: 'space-between',
           fontSize: '14px'
-        }}
-      >
+        }}>
         <div
           style={{
             color: '#7D7D7D'
-          }}
-        >
+          }}>
           {text}
         </div>
 
         <div
           style={{
             color: text !== 'Price impact' ? 'white' : 'rgb(246, 70, 93)'
-          }}
-        >
+          }}>
           {value}
         </div>
       </div>
     );
   }
 
+  const assetIn = balanceList.find((item) => item.denom === swapPair.native.denom);
+
   return (
     <>
       <div
         className={`flex justify-between items-center ${
           isCollapse ? 'pb-[0px]' : 'pb-[10px] border-b-[1px] border-b-solid border-b-[#8E8E8F]/20'
-        }`}
-      >
+        }`}>
         <div className="text-[14px]">
-          1 {findAssetIcon(swapPair.native)?.symbol || swapPair.native?.denom || '-'} = {swapRate}{' '}
-          {findAssetIcon(swapPair.remote)?.symbol || swapPair.remote?.denom || '-'} (${ratePrice})
+          1 {assetIn?.asset?.symbol || swapPair.native?.denom || '-'} = {swapRate}{' '}
+          {assetOut?.asset.symbol || swapPair.remote?.denom || '-'} (${ratePrice})
         </div>
         <div
           className="cursor-pointer"
           onClick={() => {
             setIsCollapse(!isCollapse);
-          }}
-        >
-          <Icon
+          }}>
+          {/* <Icon
             style={{ fontSize: '14px', transform: isCollapse ? 'rotate(180deg)' : 'rotate(0deg)', transition: '.4s' }}
             type="side-down"
-          />
+          /> */}
         </div>
       </div>
       <div
@@ -132,8 +131,7 @@ function SwapDetail() {
           height: isCollapse ? '0px' : 'max-content',
           overflow: 'hidden',
           transition: '.4s'
-        }}
-      >
+        }}>
         {itemData?.map((item) => {
           return RenderItem({
             text: item.text,

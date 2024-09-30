@@ -7,7 +7,7 @@ import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPo
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
-import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
+import useGetAccountBalanceByUSD from '@/ui/hooks/useGetAccountBalanceByUSD';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useRuneListV2 } from '@/ui/state/bridge/hook';
@@ -36,7 +36,7 @@ export default function WalletTabScreen() {
   // const skipVersion = useSkipVersionCallback();
   // const walletConfig = useWalletConfig();
   // const versionInfo = useVersionInfo();
-  const { totalValue: accountBalanceByUSD } = useGetSideBalanceList(currentAccount?.address);
+  const accountBalanceByUSD = useGetAccountBalanceByUSD();
 
   const [showSafeNotice, setShowSafeNotice] = useState(false);
   const [showDisableUnconfirmedUtxoNotice, setShowDisableUnconfirmedUtxoNotice] = useState(false);
@@ -96,8 +96,7 @@ export default function WalletTabScreen() {
       style={{
         minHeight: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
         height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px'
-      }}
-    >
+      }}>
       <MainHeader title={''} />
       <Column
         classname={'smooth-scroll'}
@@ -106,8 +105,7 @@ export default function WalletTabScreen() {
           gap: '0px',
           overflow: 'auto',
           cursor: 'pointer'
-        }}
-      >
+        }}>
         <Row
           onMouseOver={handleMouseOver}
           onMouseLeave={handleMouseLeave}
@@ -116,16 +114,14 @@ export default function WalletTabScreen() {
             marginTop: '36px',
             gap: '12px',
             alignItems: 'center'
-          }}
-        >
+          }}>
           {balanceVisible ? (
             <Row
               justifyCenter
               style={{
                 gap: 0
                 // alignItems: 'flex-end'
-              }}
-            >
+              }}>
               <Text
                 text="$"
                 style={{
@@ -172,8 +168,7 @@ export default function WalletTabScreen() {
               opacity: isHoveredMoney ? 1 : 0,
               transition: 'all 0.2s ease-in'
             }}
-            onClick={() => setBalanceVisible(!balanceVisible)}
-          >
+            onClick={() => setBalanceVisible(!balanceVisible)}>
             <Image src={balanceVisible ? '/images/icons/eye-off-2.svg' : '/images/icons/eye-white.svg'} size={20} />
           </span>
         </Row>
@@ -183,14 +178,12 @@ export default function WalletTabScreen() {
             justifyContent: 'center',
             gap: '50px',
             marginTop: '20px'
-          }}
-        >
+          }}>
           <div
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
               navigate('SelectNetworkScreen', { type: 'receive' });
-            }}
-          >
+            }}>
             {/*<Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.xxxl} />*/}
             <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045] transition">
               <Image
@@ -210,8 +203,7 @@ export default function WalletTabScreen() {
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
               navigate('SelectNetworkScreen', { type: 'send' });
-            }}
-          >
+            }}>
             <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045] transition">
               <Image
                 src={
@@ -230,8 +222,7 @@ export default function WalletTabScreen() {
             marginTop: '20px',
             marginBottom: '20px'
           }}
-          justifyCenter
-        >
+          justifyCenter>
           <ButtonGroup
             size="big"
             rowProps={{
@@ -262,12 +253,11 @@ export default function WalletTabScreen() {
             padding: '0 16px',
             marginBottom: '20px',
             gap: '0px'
-          }}
-        >
+          }}>
           {currentTab === CHAINS_ENUM.SIDE ? (
             <SideTokenList balanceVisible={balanceVisible} />
           ) : (
-            <BtcTokenList balanceVisible={balanceVisible} runeAndBtcTokens={runeList} />
+            <BtcTokenList balanceVisible={balanceVisible} />
           )}
         </Column>
       </Column>

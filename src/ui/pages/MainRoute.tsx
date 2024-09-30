@@ -5,7 +5,6 @@ import { HashRouter, Route, Routes, useNavigate as useNavigateOrigin } from 'rea
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { Content, Icon } from '../components';
-import useGetTokenPrice from '../hooks/useGetTokenPrice';
 import { accountActions } from '../state/accounts/reducer';
 import { useIsReady, useIsUnlocked } from '../state/global/hooks';
 import { globalActions } from '../state/global/reducer';
@@ -380,11 +379,8 @@ export function useNavigate() {
 const Main = () => {
   const wallet = useWallet();
   const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
   const isReady = useIsReady();
   const isUnlocked = useIsUnlocked();
-  // console.log(`isUnlocked: `, isUnlocked);
-  useGetTokenPrice();
 
   const selfRef = useRef({
     settingsLoaded: false,

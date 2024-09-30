@@ -1,7 +1,7 @@
 import randomstring from 'randomstring';
 
 import { createPersistStore } from '@/background/utils';
-import { CHAINS_MAP, CHANNEL, VERSION } from '@/shared/constant';
+import { BITCOIN_CHAINS_MAP, CHANNEL, VERSION } from '@/shared/constant';
 import {
   AddressRunesTokenSummary,
   AddressSummary,
@@ -61,7 +61,7 @@ export class OpenApiService {
     });
 
     const chainType = preferenceService.getChainType();
-    const chain = CHAINS_MAP[chainType];
+    const chain = BITCOIN_CHAINS_MAP[chainType];
     this.endpoint = chain.endpoints[0];
 
     if (!this.store.deviceId) {

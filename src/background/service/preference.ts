@@ -2,7 +2,7 @@ import compareVersions from 'compare-versions';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { createPersistStore } from '@/background/utils';
-import { AddressFlagType, CHAINS, CHAINS_ENUM, ChainType, DEFAULT_LOCKTIME, EVENTS } from '@/shared/constant';
+import { AddressFlagType, BITCOIN_CHAINS, ChainType, DEFAULT_LOCKTIME, EVENTS } from '@/shared/constant';
 import eventBus from '@/shared/eventBus';
 import {
   Account,
@@ -377,8 +377,8 @@ class PreferenceService {
 
   // chain type
   getChainType = () => {
-    if (!CHAINS.find((chain) => chain.enum === this.store.chainType)) {
-      this.store.chainType = CHAINS_ENUM.BTC;
+    if (!BITCOIN_CHAINS.find((chain) => chain.enum === this.store.chainType)) {
+      this.store.chainType = ChainType.BITCOIN_MAINNET;
     }
     return this.store.chainType;
   };

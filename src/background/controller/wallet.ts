@@ -15,9 +15,9 @@ import { DisplayedKeyring, Keyring } from '@/background/service/keyring';
 import {
   ADDRESS_TYPES,
   AddressFlagType,
+  BITCOIN_CHAINS_MAP,
   BRAND_ALIAN_TYPE_TEXT,
   CHAINS_ENUM,
-  CHAINS_MAP,
   COIN_NAME,
   COIN_SYMBOL,
   ChainType,
@@ -760,7 +760,7 @@ export class WalletController extends BaseController {
   getNetworkType = () => {
     const chainType = this.getChainType();
     // console.log(`chainType: `, chainType);
-    return CHAINS_MAP[chainType]?.networkType ?? '';
+    return BITCOIN_CHAINS_MAP[chainType]?.networkType ?? '';
   };
 
   setNetworkType = async (networkType: NetworkType) => {
@@ -788,7 +788,7 @@ export class WalletController extends BaseController {
 
   setChainType = async (chainType: ChainType) => {
     preferenceService.setChainType(chainType);
-    this.openapi.setEndpoints(CHAINS_MAP[chainType].endpoints);
+    this.openapi.setEndpoints(BITCOIN_CHAINS_MAP[chainType].endpoints);
 
     const currentAccount = await this.getCurrentAccount();
     const keyring = await this.getCurrentKeyring();
@@ -811,7 +811,7 @@ export class WalletController extends BaseController {
       chainType === ChainType.BITCOIN_TESTNET ||
       chainType === ChainType.BITCOIN_TESTNET4
     ) {
-      return NETWORK_TYPES[CHAINS_MAP[chainType].networkType].name;
+      return NETWORK_TYPES[BITCOIN_CHAINS_MAP[chainType].networkType].name;
     } else {
       return 'unknown';
     }
@@ -1998,18 +1998,10 @@ export class WalletController extends BaseController {
     return openapiService.getBuyBtcChannelList();
   };
 
-  setBitcoinTokens = assetService.setBitcoinTokens;
-  setSideTokens = assetService.setSideTokens;
-  getBitcoinTokens = assetService.getBitcoinTokens;
-  getSideTokens = assetService.getSideTokens;
-  setAssetPriceMap = assetService.setAssetPriceMap;
-  getAssetPriceMap = assetService.getAssetPriceMap;
-  setAccountBitcoinTokenBalance = assetService.setAccountBitcoinTokenBalance;
-  getAccountBitcoinTokenBalance = assetService.getAccountBitcoinTokenBalance;
-  setAccountSideTokenBalance = assetService.setAccountSideTokenBalance;
-  getAccountSideTokenBalance = assetService.getAccountSideTokenBalance;
-  getAccountBitcoinTokenBalanceList = assetService.getAccountBitcoinTokenBalanceList;
-  getAccountSideTokenBalanceList = assetService.getAccountSideTokenBalanceList;
+  setBtcBalanceList = assetService.setBtcBalanceList;
+  setSideBalanceList = assetService.setSideBalanceList;
+  getBtcBalanceList = assetService.getBtcBalanceList;
+  getSideBalanceList = assetService.getSideBalanceList;
 
   reset = async () => {
     await keyringService.reset();

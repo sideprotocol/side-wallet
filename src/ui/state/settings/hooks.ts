@@ -1,7 +1,7 @@
 import compareVersions from 'compare-versions';
 import { useCallback } from 'react';
 
-import { CHAINS_ENUM, CHAINS_MAP, ChainType, VERSION } from '@/shared/constant';
+import { BITCOIN_CHAINS_MAP, CHAINS_ENUM, ChainType, VERSION } from '@/shared/constant';
 // import { CHAINS_ENUM, VERSION } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { useWallet } from '@/ui/utils';
@@ -187,12 +187,12 @@ export function useChainType() {
 
 export function useChain() {
   const accountsState = useSettingsState();
-  return CHAINS_MAP[accountsState?.chainType];
+  return BITCOIN_CHAINS_MAP[accountsState?.chainType];
 }
 
 export function useBTCUnit() {
   const chainType = useChainType();
-  return CHAINS_MAP[chainType]?.unit;
+  return BITCOIN_CHAINS_MAP[chainType]?.unit;
 }
 
 export function useChangeChainTypeCallback() {

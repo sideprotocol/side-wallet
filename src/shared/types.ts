@@ -439,28 +439,6 @@ export interface AddressRunesTokenSummary {
   runeLogo?: Inscription;
 }
 
-export interface BitcoinToken {
-  logo: string;
-  name: string;
-  symbol: string;
-  coingecko_id: string;
-  base?: string;
-  exponent?: string;
-  precision?: string;
-}
-
-export interface SideToken {
-  base: string;
-  symbol: string;
-  name: string;
-  exponent: string;
-  coingecko_id: string;
-  logo: string;
-  logo_black?: string;
-  precision: number;
-  isRune?: boolean;
-}
-
 export interface SideSendTxInfo {
   toAddress: string;
   amount: string;
@@ -551,4 +529,60 @@ export type TickPriceItem = {
 export interface BtcPrice {
   price: number;
   updateTime: number;
+}
+
+export interface IAsset {
+  denom: string;
+  exponent: string;
+  logo: string;
+  name: string;
+  precision: number;
+  rune: boolean;
+  symbol: string;
+  runeData?: {
+    runeid: string;
+    rune: string;
+    spacedRune: string;
+    number: number;
+    height: number;
+    txidx: number;
+    timestamp: number;
+    divisibility: number;
+    symbol: string;
+    etching: string;
+    premine: string;
+    terms: {
+      amount: string;
+      cap: string;
+    };
+    mints: string;
+    burned: string;
+    holders: number;
+    transactions: number;
+    supply: string;
+    mintable: boolean;
+    remaining: string;
+  };
+}
+
+export interface BalanceItem {
+  denom: string; // denom,
+  amount: string; // user balance: unit amount
+  denomPrice: string; // denom single price
+  formatAmount: string; // user balance: format amount
+  totalValue: string; // user balance: USD
+  asset: IAsset; // asset info
+}
+
+export interface CosmosChain {
+  chainID: string;
+  name: string;
+  prefix: string;
+  rpcUrl: string;
+  restUrl: string;
+  denom: string;
+  hdPath: string;
+  logo: string;
+  faucetUrl: string;
+  explorerUrl: string;
 }

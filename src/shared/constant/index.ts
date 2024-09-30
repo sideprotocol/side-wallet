@@ -1,10 +1,7 @@
 /* eslint-disable quotes */
 
 /* constants pool */
-import GrimoriaRune from '@/ui/assets/icons/grimoria-rune.png';
-import USDT from '@/ui/assets/icons/usdt.svg';
-
-import { AddressType, BitcoinToken, NetworkType, RestoreWalletType, SideToken } from '../types';
+import { AddressType, CosmosChain, NetworkType, RestoreWalletType } from '../types';
 
 export enum CHAINS_ENUM {
   BTC = 'BTC',
@@ -242,28 +239,6 @@ export const INTERNAL_REQUEST_SESSION = {
 
 export const OPENAPI_URL_MAINNET = 'https://wallet-api.unisat.io/v5';
 export const OPENAPI_URL_TESTNET = 'https://wallet-api-testnet.unisat.io/v5';
-export const SIDEREST_URL_MAINNET = 'https://testnet-rest.side.one';
-export const SIDEREST_URL_TESTNET = 'https://devnet-rest.side.one';
-// export const SIDEREST_URL_TESTNET = 'https://testnet-rest.side.one';
-export const SIDERPC_URL_MAINNET = 'https://devnet-rpc.side.one';
-export const SIDERPC_URL_TESTNET = 'https://devnet-rpc.side.one';
-// export const SIDERPC_URL_TESTNET = 'https://testnet-rpc.side.one';
-// export const SIDE_CHAINID_MAINNET = 'grimoria-testnet-1';
-export const SIDE_CHAINID_MAINNET = 'devnet';
-// export const SIDE_CHAINID_TESTNET = 'grimoria-testnet-1';
-export const SIDE_CHAINID_TESTNET = 'devnet';
-
-export const SIDE_BTC_INDEXER = 'https://index.side.one';
-
-export const SIDE_RUNE_INDEXER = 'https://signet-rune.side.one';
-
-export const SIDE_BTC_VAULT_ADDRESS_TESTNET = 'tb1q3q776wlrg6wljqyv4e52ls84zcw38yat2ym55t';
-
-export const SIDE_BTC_VAULT_ADDRESS_MAINNET = '';
-
-export const SIDE_RUNE_VAULT_ADDRESS_TESTNET = 'tb1qmu8nt6wye4vd644dm4tluurewa3yjdj76jnypw';
-
-export const SIDE_RUNE_VAULT_ADDRESS_MAINNET = '';
 
 export const EVENTS = {
   broadcastToUI: 'broadcastToUI',
@@ -360,68 +335,6 @@ export const HARDWARE_WALLETS = {
   }
 };
 
-// logo_black: '/images/logo/wallet-logo.png',
-export const SIDE_TOKENS: SideToken[] = [
-  {
-    base: 'uside',
-    symbol: 'SIDE',
-    name: 'SIDE',
-    exponent: '6',
-    coingecko_id: 'usd-coin',
-    logo: 'side-SIDE',
-    precision: 6,
-    logo_black: '/images/logo/wallet-logo.png'
-  },
-  {
-    base: 'sat', // smallest unit -> uatom -> ATOM
-    symbol: 'BTC', // currency name
-    name: 'Bitcoin',
-    exponent: '8', // The conversion ratio between the smallest unit and the display unit 10^18
-    coingecko_id: 'bitcoin', // Get the ID of the currency market price from cg
-    logo: 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4KPCEtLSBDcmVhdG9yOiBDb3JlbERSQVcgMjAxOSAoNjQtQml0KSAtLT4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHZlcnNpb249IjEuMSIgc2hhcGUtcmVuZGVyaW5nPSJnZW9tZXRyaWNQcmVjaXNpb24iIHRleHQtcmVuZGVyaW5nPSJnZW9tZXRyaWNQcmVjaXNpb24iIGltYWdlLXJlbmRlcmluZz0ib3B0aW1pemVRdWFsaXR5IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIKdmlld0JveD0iMCAwIDQwOTEuMjcgNDA5MS43MyIKIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIgogeG1sbnM6eG9kbT0iaHR0cDovL3d3dy5jb3JlbC5jb20vY29yZWxkcmF3L29kbS8yMDAzIj4KIDxnIGlkPSJMYXllcl94MDAyMF8xIj4KICA8bWV0YWRhdGEgaWQ9IkNvcmVsQ29ycElEXzBDb3JlbC1MYXllciIvPgogIDxnIGlkPSJfMTQyMTM0NDAyMzMyOCI+CiAgIDxwYXRoIGZpbGw9IiNGNzkzMUEiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTQwMzAuMDYgMjU0MC43N2MtMjczLjI0LDEwOTYuMDEgLTEzODMuMzIsMTc2My4wMiAtMjQ3OS40NiwxNDg5LjcxIC0xMDk1LjY4LC0yNzMuMjQgLTE3NjIuNjksLTEzODMuMzkgLTE0ODkuMzMsLTI0NzkuMzEgMjczLjEyLC0xMDk2LjEzIDEzODMuMiwtMTc2My4xOSAyNDc5LC0xNDg5Ljk1IDEwOTYuMDYsMjczLjI0IDE3NjMuMDMsMTM4My41MSAxNDg5Ljc2LDI0NzkuNTdsMC4wMiAtMC4wMnoiLz4KICAgPHBhdGggZmlsbD0id2hpdGUiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTI5NDcuNzcgMTc1NC4zOGM0MC43MiwtMjcyLjI2IC0xNjYuNTYsLTQxOC42MSAtNDUwLC01MTYuMjRsOTEuOTUgLTM2OC44IC0yMjQuNSAtNTUuOTQgLTg5LjUxIDM1OS4wOWMtNTkuMDIsLTE0LjcyIC0xMTkuNjMsLTI4LjU5IC0xNzkuODcsLTQyLjM0bDkwLjE2IC0zNjEuNDYgLTIyNC4zNiAtNTUuOTQgLTkyIDM2OC42OGMtNDguODQsLTExLjEyIC05Ni44MSwtMjIuMTEgLTE0My4zNSwtMzMuNjlsMC4yNiAtMS4xNiAtMzA5LjU5IC03Ny4zMSAtNTkuNzIgMjM5Ljc4YzAsMCAxNjYuNTYsMzguMTggMTYzLjA1LDQwLjUzIDkwLjkxLDIyLjY5IDEwNy4zNSw4Mi44NyAxMDQuNjIsMTMwLjU3bC0xMDQuNzQgNDIwLjE1YzYuMjYsMS41OSAxNC4zOCwzLjg5IDIzLjM0LDcuNDkgLTcuNDksLTEuODYgLTE1LjQ2LC0zLjg5IC0yMy43MywtNS44N2wtMTQ2LjgxIDU4OC41N2MtMTEuMTEsMjcuNjIgLTM5LjMxLDY5LjA3IC0xMDIuODcsNTMuMzMgMi4yNSwzLjI2IC0xNjMuMTcsLTQwLjcyIC0xNjMuMTcsLTQwLjcybC0xMTEuNDYgMjU2Ljk4IDI5Mi4xNSA3Mi44M2M1NC4zNSwxMy42MyAxMDcuNjEsMjcuODkgMTYwLjA2LDQxLjNsLTkyLjkgMzczLjAzIDIyNC4yNCA1NS45NCA5MiAtMzY5LjA3YzYxLjI2LDE2LjYzIDEyMC43MSwzMS45NyAxNzguOTEsNDYuNDNsLTkxLjY5IDM2Ny4zMyAyMjQuNTEgNTUuOTQgOTIuODkgLTM3Mi4zM2MzODIuODIsNzIuNDUgNjcwLjY3LDQzLjI0IDc5MS44MywtMzAzLjAyIDk3LjYzLC0yNzguNzggLTQuODYsLTQzOS41OCAtMjA2LjI2LC01NDQuNDQgMTQ2LjY5LC0zMy44MyAyNTcuMTgsLTEzMC4zMSAyODYuNjQsLTMyOS42MWwtMC4wNyAtMC4wNXptLTUxMi45MyA3MTkuMjZjLTY5LjM4LDI3OC43OCAtNTM4Ljc2LDEyOC4wOCAtNjkwLjk0LDkwLjI5bDEyMy4yOCAtNDk0LjJjMTUyLjE3LDM3Ljk5IDY0MC4xNywxMTMuMTcgNTY3LjY3LDQwMy45MXptNjkuNDMgLTcyMy4zYy02My4yOSwyNTMuNTggLTQ1My45NiwxMjQuNzUgLTU4MC42OSw5My4xNmwxMTEuNzcgLTQ0OC4yMWMxMjYuNzMsMzEuNTkgNTM0Ljg1LDkwLjU1IDQ2OC45NCwzNTUuMDVsLTAuMDIgMHoiLz4KICA8L2c+CiA8L2c+Cjwvc3ZnPgo=',
-    precision: 8
-  },
-  {
-    base: 'uusdc',
-    symbol: 'USDC',
-    name: 'USD Coin',
-    exponent: '6',
-    coingecko_id: 'usd-coin',
-    logo: 'side-USDC',
-    precision: 6
-  },
-  {
-    base: 'uusdt',
-    symbol: 'USDT',
-    name: 'Tether USD',
-    exponent: '6',
-    coingecko_id: 'usd-coin',
-    logo: USDT,
-    precision: 6
-  }
-];
-
-export const BITCOIN_TOKENS: BitcoinToken[] = [
-  {
-    logo: '/images/img/btc.png',
-    name: 'Bitcoin',
-    symbol: 'BTC',
-    coingecko_id: 'bitcoin',
-    base: 'sat'
-  },
-  {
-    base: 'runes/9110:1',
-    symbol: 'GRIMORIA•X•RUNE',
-    name: 'Rune',
-    exponent: '6',
-    coingecko_id: 'usd-coin',
-    logo: GrimoriaRune,
-    precision: 6,
-    emoji: '🔮',
-    isRune: true
-  }
-];
-
 export enum ChainType {
   BITCOIN_MAINNET = 'BITCOIN_MAINNET',
   BITCOIN_TESTNET = 'BITCOIN_TESTNET',
@@ -449,7 +362,7 @@ type TypeChain = {
   showPrice: boolean;
 };
 
-export const CHAINS_MAP: { [key: string]: TypeChain } = {
+export const BITCOIN_CHAINS_MAP: { [key: string]: TypeChain } = {
   [ChainType.BITCOIN_TESTNET]: {
     enum: ChainType.BITCOIN_TESTNET,
     label: 'Bitcoin Testnet',
@@ -480,6 +393,46 @@ export const CHAINS_MAP: { [key: string]: TypeChain } = {
   }
 };
 
-export const CHAINS = Object.values(CHAINS_MAP);
+export const BITCOIN_CHAINS = Object.values(BITCOIN_CHAINS_MAP);
 
 export const DEFAULT_LOCKTIME = 5;
+
+export const SIDE_CHAINID_MAINNET = 'devnet';
+export const SIDE_CHAINID_TESTNET = 'devnet';
+export const SIDERPC_URL_MAINNET = 'https://devnet-rpc.side.one';
+export const SIDERPC_URL_TESTNET = 'https://devnet-rpc.side.one';
+export const SIDEREST_URL_MAINNET = 'https://devnet-rest.side.one';
+export const SIDEREST_URL_TESTNET = 'https://devnet-rest.side.one';
+export const SIDE_BTC_INDEXER = 'https://index.side.one';
+export const SIDE_RUNE_INDEXER = 'https://signet-rune.side.one';
+export const SIDE_BTC_VAULT_ADDRESS_TESTNET = 'tb1q3q776wlrg6wljqyv4e52ls84zcw38yat2ym55t';
+export const SIDE_BTC_VAULT_ADDRESS_MAINNET = '';
+export const SIDE_RUNE_VAULT_ADDRESS_TESTNET = 'tb1qmu8nt6wye4vd644dm4tluurewa3yjdj76jnypw';
+export const SIDE_RUNE_VAULT_ADDRESS_MAINNET = '';
+
+export const SIDE_CHAINS: CosmosChain[] = [
+  {
+    chainID: SIDE_CHAINID_MAINNET,
+    name: 'Side Chain',
+    prefix: 'tb',
+    rpcUrl: 'https://devnet-rpc.side.one',
+    restUrl: 'https://devnet-rest.side.one',
+    denom: 'uside',
+    hdPath: "m/44'/118/0'/0/0",
+    logo: '',
+    faucetUrl: 'https://faucet.side.exchange',
+    explorerUrl: 'https://station-dev.side.one/explorer'
+  },
+  {
+    chainID: SIDE_CHAINID_TESTNET,
+    name: 'Side Chain',
+    prefix: 'tb',
+    rpcUrl: 'https://devnet-rpc.side.one',
+    restUrl: 'https://devnet-rest.side.one',
+    denom: 'uside',
+    hdPath: "m/44'/118/0'/0/0",
+    logo: '',
+    faucetUrl: 'https://faucet.side.exchange',
+    explorerUrl: 'https://station-dev.side.one/explorer'
+  }
+];

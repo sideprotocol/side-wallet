@@ -7,7 +7,7 @@ import { NetworkType } from '@/shared/types';
 import { Button, Column, Content, Footer, Header, Image, Layout, Row } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { SIDE_BTC_EXPLORER } from '@/ui/constants';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';

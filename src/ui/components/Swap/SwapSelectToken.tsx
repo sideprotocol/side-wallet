@@ -1,22 +1,15 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-// import { CHAINS_ENUM } from '@/shared/constant';
-import { SideToken } from '@/shared/types';
-import { Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
-import ImageIcon from '@/ui/components/ImageIcon';
-import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
-import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
 // import { useGetBitcoinTokenList, useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
 // import { useAccountBalance } from '@/ui/state/accounts/hooks';
 // import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
-import { formatUnitAmount } from '@/ui/utils';
+import { BalanceItem } from '@/shared/types';
+// import { CHAINS_ENUM } from '@/shared/constant';
+import { Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
+import ImageIcon from '@/ui/components/ImageIcon';
 
-function SideCryptoItem({ token }: { token: SideToken }) {
-  // console.log(`token: `, token);
-  const { balanceAmount } = useGetSideTokenBalance(token?.denom);
-  const { data: totalPrice } = useCalcPrice(balanceAmount, token.denom, token?.asset?.exponent);
-
+function SideCryptoItem({ token }: { token: BalanceItem }) {
   return (
     <>
       <Row>
@@ -41,8 +34,8 @@ function SideCryptoItem({ token }: { token: SideToken }) {
         style={{
           gap: '0px'
         }}>
-        <Text preset="regular" textEnd text={formatUnitAmount(balanceAmount, token?.asset?.exponent)}></Text>
-        <Text preset="sub" textEnd text={`$${token?.totalValue}`}></Text>
+        <Text preset="regular" textEnd text={token.formatAmount}></Text>
+        <Text preset="sub" textEnd text={`$${token.totalValue}`}></Text>
       </Column>
     </>
   );

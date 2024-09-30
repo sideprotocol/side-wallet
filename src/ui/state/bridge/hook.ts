@@ -11,14 +11,13 @@ import {
   SIDE_BTC_VAULT_ADDRESS_TESTNET,
   SIDE_RUNE_INDEXER,
   SIDE_RUNE_VAULT_ADDRESS_MAINNET,
-  SIDE_RUNE_VAULT_ADDRESS_TESTNET,
-  SIDE_TOKENS
+  SIDE_RUNE_VAULT_ADDRESS_TESTNET
 } from '@/shared/constant';
 import { decodeTxToGetValue, runesUtils } from '@/shared/lib/runes-utils';
 import { NetworkType, RuneBalance, TickPriceItem } from '@/shared/types';
 import { useTools } from '@/ui/components/ActionComponent';
 import { UNISAT_SERVICE_ENDPOINT, isProduction } from '@/ui/constants/';
-import { useGetSideTokenBalance } from '@/ui/hooks/useGetBalance';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { SideBridgeParams } from '@/ui/services/bridge';
@@ -91,6 +90,7 @@ export const useBtcBalance = () => {
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
   const currentAccount = useCurrentAccount();
+  const { balanceList } = useGetSideBalanceList(currentAccount.address);
 
   const [btcBalance, setBtcBalance] = useState('0');
 
@@ -139,7 +139,9 @@ export const useBtcBalance = () => {
     return _data;
   }
 
-  const { balanceAmount: balanceSideSat } = useGetSideTokenBalance('sat', loading);
+  const balanceSideSat = balanceList.find((item) => item.denom === 'sat')?.amount || '0';
+
+  // const { balanceAmount: balanceSideSat } = useGetSideTokenBalance('sat', loading);
 
   // load btc balance
   useEffect(() => {
@@ -675,10 +677,11 @@ export const useRuneBridge = () => {
   const tools = useTools();
 
   const networkType = useNetworkType();
+  const { balanceList } = useGetSideBalanceList(currentAccount.address);
 
-  const asset = SIDE_TOKENS.find((a) => a.base === base);
+  const asset = balanceList.find((a) => a.denom === base);
 
-  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, asset?.exponent || 6)).toNumber();
+  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, asset?.asset.exponent || 6)).toNumber();
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
@@ -965,7 +968,7 @@ const DEFAULT = {
   }
 } as SideBridgeParams;
 
-export  function useBridgeParams() {
+export function useBridgeParams() {
   const [params, setParams] = useState<SideBridgeParams>(DEFAULT);
 
   const [loading, setLoading] = useState(false);

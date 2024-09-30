@@ -1,16 +1,12 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 
-import { SideToken } from '@/shared/types';
+import { BalanceItem } from '@/shared/types';
 import { Column, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
-// import {useCalcPrice} from '@/ui/hooks/useCalcPrice';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
-// import {useGetSideTokenList} from '@/ui/hooks/useGetTokenList';
-// import {formatUnitAmount, getTruncate} from '@/ui/utils';
-import { BalanceItem } from '@/ui/hooks/useGetBalanceList';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 
-function TokenItem({ token, balanceVisible }: { token: SideToken; balanceVisible: boolean }) {
+function TokenItem({ token, balanceVisible }: { token: BalanceItem; balanceVisible: boolean }) {
   return (
     <Row
       classname={'bg-item-hover-v2'}
@@ -60,29 +56,13 @@ function TokenItem({ token, balanceVisible }: { token: SideToken; balanceVisible
 }
 
 export default function SideTokenList({ balanceVisible }) {
-  // const { data: assets } = useGetSideTokenList();
   const currentAccount = useCurrentAccount();
-
-  const [displayTokens, setDisplayTokens] = useState<BalanceItem[]>([]);
-  const hardTokenList = ['sat', 'uside', 'uusdc', 'uusdt'];
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
-  useEffect(() => {
-
-    const filteredTokens = balanceList.filter(
-      (item) => hardTokenList.includes(item?.denom.toLowerCase()) || parseFloat(item.formatAmount) > 0
-    ).sort((a, b) => parseFloat(b.formatAmount) - parseFloat(a.formatAmount));
-    const otherTokens = balanceList.filter(
-      (item) => !hardTokenList.includes(item?.denom.toLowerCase()) && parseFloat(item.formatAmount) > 0
-    );
-
-    setDisplayTokens([...filteredTokens, ...otherTokens]);
-  }, [balanceList]);
-
   return (
     <Column>
-      {displayTokens.map((item) => {
+      {balanceList.map((item) => {
         return (
           <Fragment key={item?.asset?.symbol + item?.asset?.name}>
             <TokenItem token={item} balanceVisible={balanceVisible} />

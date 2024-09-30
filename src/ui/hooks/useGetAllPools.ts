@@ -10,7 +10,7 @@ import { swapStore } from '@/ui/stores/SwapStore';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
 import useGetAllPairs from './useGetAllPairs';
-import {useGetSideBalanceList} from '@/ui/hooks/useGetBalance';
+import { useGetSideBalanceList } from './useGetSideBalanceList';
 
 export default function useGetAllPools() {
   const currentAccount = useCurrentAccount();
@@ -37,15 +37,8 @@ export default function useGetAllPools() {
             pool: {}
           };
           const pool = await cosmWasmClient.queryContractSmart(address, msg);
-
-          // const assetsMeta = pool?.assets?.map((a: any) => {
-          //   return findAssetIcon({
-          //     denom: a.info.native_token.denom,
-          //     amount: ''
-          //   });
-          // });
           const assetsMeta = pool.assets.map((a: any) => {
-            return balanceList.find(item => item.denom === a.info.native_token.denom);
+            return balanceList.find((item) => item.denom === a.info.native_token.denom);
           });
 
           // debugger;

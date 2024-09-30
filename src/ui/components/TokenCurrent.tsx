@@ -1,9 +1,10 @@
 // import { Typography, Stack } from "@mui/material";
 import React from 'react';
 
-import { SWAP_ASSETS } from '@/ui/constants';
 import { Coin } from '@cosmjs/stargate';
 
+import useGetBitcoinBalanceList from '../hooks/useGetBitcoinBalanceList';
+import { useCurrentAccount } from '../state/accounts/hooks';
 import ImageIcon from './ImageIcon';
 
 function Icon({ type, style, className }: { type: string; style?: React.CSSProperties; className?: string }) {
@@ -15,8 +16,7 @@ function Icon({ type, style, className }: { type: string; style?: React.CSSPrope
         height: '16px',
         flexShrink: '0',
         ...style
-      }}
-    >
+      }}>
       <use xlinkHref={`#${type}`} />
     </svg>
   );
@@ -24,11 +24,14 @@ function Icon({ type, style, className }: { type: string; style?: React.CSSPrope
 export { Icon };
 
 export default function TokenCurrent({ value, setShow }: { value: Coin; setShow: any }) {
-  const newValue = SWAP_ASSETS.assets.find((asset) => asset.base === value?.denom);
+  const currentAccount = useCurrentAccount();
 
-  const unSelected = !newValue?.base;
+  const { balanceList } = useGetBitcoinBalanceList(currentAccount?.address);
+  const newValue = balanceList.find((asset) => asset.denom === value?.denom);
 
-  let limitWidth = newValue?.logo
+  const unSelected = !newValue?.denom;
+
+  let limitWidth = newValue?.asset.logo
     ? {
         maxWidth: '72px',
         textOverflow: 'ellipsis',
@@ -55,9 +58,8 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
         e.preventDefault();
         e.stopPropagation();
         setShow(true);
-      }}
-    >
-      {newValue?.logo && (
+      }}>
+      {newValue?.asset.logo && (
         <ImageIcon
           style={{
             width: '20px',
@@ -65,11 +67,11 @@ export default function TokenCurrent({ value, setShow }: { value: Coin; setShow:
             marginRight: '4px',
             borderRadius: '20px'
           }}
-          url={newValue?.logo || newValue?.logo}
+          url={newValue?.asset.logo}
         />
       )}
       <div style={{ fontSize: '14px', paddingRight: '6px', whiteSpace: 'nowrap', ...limitWidth }}>
-        {newValue?.symbol || newValue?.symbol || newValue?.base || 'Select Token'}
+        {newValue?.asset.symbol || 'Select Token'}
       </div>
       <Icon type="side-down" />
     </div>

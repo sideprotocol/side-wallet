@@ -3,11 +3,10 @@ import { useLocation } from 'react-router-dom';
 
 import { CHAINS_ENUM } from '@/shared/constant';
 import { runesUtils } from '@/shared/lib/runes-utils';
-import { BitcoinToken, SideToken } from '@/shared/types';
+import { BalanceItem } from '@/shared/types';
 import { Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
-import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useSafeBalance } from '@/ui/state/transactions/hooks';
@@ -102,7 +101,7 @@ function BitcoinItem({ token }: { token }) {
 }
 
 function BitCrypto() {
-  const item: BitcoinToken = {
+  const item = {
     base: 'btc',
     coingecko_id: 'bitcoin',
     exponent: '8',
@@ -163,7 +162,7 @@ function BitAndRuneCrypto({ searchTerm }) {
   return (
     <>
       <BitCrypto />
-      {runeList.map((token) => {
+      {runeList.map((token, index) => {
         return (
           <Row
             classname={'bg-item-hover'}
@@ -176,7 +175,7 @@ function BitAndRuneCrypto({ searchTerm }) {
               }
             }}
             full
-            key={token?.symbol + token?.name}
+            key={token?.symbol + index}
             justifyBetween
             style={{
               cursor: 'pointer',
@@ -192,9 +191,7 @@ function BitAndRuneCrypto({ searchTerm }) {
   );
 }
 
-function SideCryptoItem({ token }: { token: SideToken }) {
-  // const { balanceAmount } = useGetSideTokenBalance(token.base);
-  // const { data: totalPrice } = useCalcPrice(balanceAmount, token.base, token.exponent);
+function SideCryptoItem({ token }: { token: BalanceItem }) {
   return (
     <>
       <Row classname={'bg-item-hover'}>

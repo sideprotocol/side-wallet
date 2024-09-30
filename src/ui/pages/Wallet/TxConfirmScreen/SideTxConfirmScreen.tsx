@@ -1,15 +1,15 @@
+import BigNumber from 'bignumber.js';
 import { useMemo, useState } from 'react';
 
 import { CHAINS_ENUM } from '@/shared/constant';
 import { Button, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
-import { useCalcPrice } from '@/ui/hooks/useCalcPrice';
-import { useGetSideTokenList } from '@/ui/hooks/useGetTokenList';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { useUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { parseUnitAmount } from '@/ui/utils';
+import { formatUnitAmount, parseUnitAmount } from '@/ui/utils';
 import { toReadableAmount } from '@/ui/utils/formatter';
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -21,7 +21,7 @@ export default function SideTxConfirmScreen() {
   const currentAccount = useCurrentAccount();
   const uiState = useUiTxCreateSendSideScreen();
   const [loading, setLoading] = useState(false);
-  const { data: sideTokenList } = useGetSideTokenList();
+  const { balanceList: sideTokenList } = useGetSideBalanceList();
   const toInfo = uiState.toInfo;
   const denom = uiState.base;
   const inputAmount = uiState.inputAmount;
@@ -30,15 +30,20 @@ export default function SideTxConfirmScreen() {
   const memo = uiState.memo;
 
   const { curToken, feeToken } = useMemo(() => {
-    const curToken = sideTokenList.find((item) => item.base === denom)!;
-    const feeToken = sideTokenList.find((item) => item.base === feeDenom)!;
+    const curToken = sideTokenList.find((item) => item.denom === denom)!;
+    const feeToken = sideTokenList.find((item) => item.denom === feeDenom)!;
     return {
       curToken,
       feeToken
     };
   }, [sideTokenList.length, denom, feeDenom]);
 
-  const { data: feeByUSD } = useCalcPrice(uiState.fee || '0', feeToken?.base, feeToken?.exponent || 6);
+  const feeTokenInfo = sideTokenList.find((item) => item.denom === feeToken.asset.denom);
+
+  const feeByUSD = new BigNumber(formatUnitAmount(uiState.fee || '0', feeTokenInfo?.asset.exponent || 6))
+    .multipliedBy(feeTokenInfo?.denomPrice || '0')
+    .toFixed(2);
+
   if (!curToken) {
     return <Layout />;
   }
@@ -53,8 +58,8 @@ export default function SideTxConfirmScreen() {
           toAddress: toInfo.address,
           amount: [
             {
-              amount: parseUnitAmount(inputAmount, curToken.exponent),
-              denom: curToken.base
+              amount: parseUnitAmount(inputAmount, curToken.asset.exponent),
+              denom: curToken.denom
             }
           ]
         }
@@ -96,14 +101,12 @@ export default function SideTxConfirmScreen() {
         style={{
           flex: 1,
           padding: '40px 16px 24px'
-        }}
-      >
+        }}>
         <Column
           style={{
             flex: 1,
             gap: '10px'
-          }}
-        >
+          }}>
           <Row
             justifyBetween
             style={{
@@ -111,15 +114,13 @@ export default function SideTxConfirmScreen() {
               padding: '11px 16px',
               backgroundColor: '#1E1E1F',
               borderRadius: '14px'
-            }}
-          >
+            }}>
             <Row
               style={{
                 alignItems: 'center'
-              }}
-            >
+              }}>
               <ImageIcon
-                url={curToken.logo}
+                url={curToken.asset.logo}
                 style={{
                   width: '42px',
                   height: '42px',
@@ -127,7 +128,7 @@ export default function SideTxConfirmScreen() {
                 }}
               />
               <Text
-                text={curToken.symbol}
+                text={curToken.asset.symbol}
                 style={{
                   fontSize: '14px',
                   fontWeight: 600,
@@ -151,8 +152,7 @@ export default function SideTxConfirmScreen() {
               backgroundColor: '#1E1E1F',
               borderRadius: '14px',
               overflow: 'hidden'
-            }}
-          >
+            }}>
             <Text
               text="Recipient"
               color="white_muted"
@@ -178,8 +178,7 @@ export default function SideTxConfirmScreen() {
               backgroundColor: '#1E1E1F',
               borderRadius: '14px',
               overflow: 'hidden'
-            }}
-          >
+            }}>
             <Text
               text="Memo"
               color="white_muted"
@@ -203,8 +202,7 @@ export default function SideTxConfirmScreen() {
             padding: '14px 12px',
             borderRadius: '10px',
             backgroundColor: '#1E1E1F'
-          }}
-        >
+          }}>
           <Text
             text="Tx Fee:"
             style={{
@@ -215,7 +213,7 @@ export default function SideTxConfirmScreen() {
           />
           <Row>
             <Text
-              text={`${toReadableAmount(uiState.fee, feeToken.exponent)} ${feeToken.symbol}`}
+              text={`${toReadableAmount(uiState.fee, feeToken.asset.exponent)} ${feeToken.asset.symbol}`}
               style={{
                 fontSize: '16px',
                 fontWeight: 600,

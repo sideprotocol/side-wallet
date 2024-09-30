@@ -8,8 +8,6 @@ import { NetworkType } from '@/shared/types';
 import ToastView from '@/ui/components/ToastView';
 import { DEX_ROUTER_CONTRACT } from '@/ui/constants';
 import { ToastOptions } from '@/ui/constants/toast';
-// import useGetMarketList from '@/ui/hooks/useGetMarketList';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { Pool, SwapRouteResult } from '@/ui/services/dex/type';
@@ -18,10 +16,10 @@ import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { refreshData, swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import createExecuteMessage from '@/ui/utils/createExecuteMessage';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-// import { findAssetIcon } from '@/ui/utils/swap';
 import { coin } from '@cosmjs/stargate';
 
 import { useNetworkType } from '../state/settings/hooks';
+import { useGetSideBalanceList } from './useGetSideBalanceList';
 
 export default function useSwap() {
   const { slippage, swapPair, swapRouteResult } = useSwapStore();
@@ -190,7 +188,7 @@ export default function useSwap() {
               denom: swapPair.remote.denom,
               amount:
                 BigNumber(resultQuote[0]?.returnToken?.showAmount || '0')
-                  .toFixed(assetOut?.precision || 6, BigNumber.ROUND_DOWN)
+                  .toFixed(assetOut?.asset.precision || 6, BigNumber.ROUND_DOWN)
                   .replace(/\.?0+$/, '') || '0'
             };
           } else {

@@ -1,14 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import { SWAP_ASSETS } from '@/ui/constants';
 import { LimitOrderConfig } from '@/ui/services/dex/type';
-import { Coin } from '@cosmjs/stargate';
 
 import { toReadableAmount } from './formatter';
-
-export function findAssetIcon(coin: Coin) {
-  return SWAP_ASSETS.assets.find((asset) => asset.base === coin.denom);
-}
 
 export function compute_swap(
   offer_pool: string,
@@ -72,28 +66,3 @@ function get_maintainance_fee(dd: number, config: LimitOrderConfig) {
 
   return y1;
 }
-
-// export async function get_limit_order_fees(config: LimitOrderConfig, dd: number, client) {
-//   const cosmWasmClient = await CosmWasmClient.connect(client?.rpcUrl);
-//
-//   const result: QueueStateType = await cosmWasmClient.queryContractSmart(DEX_LIMIR_ORDER_CONTRACT, {
-//     query_state: {},
-//   });
-//
-//   const queue_size = result.state.q || "";
-//
-//   const creation_fee = get_creation_fee(queue_size, config);
-//
-//   const maintenance_fee = get_maintainance_fee(dd, config);
-//
-//   const calculated_fee = BigNumber(config.minimum_reward).times(config.burn_fee_rate).div(100);
-//
-//   const burn_fee = BigNumber.max(calculated_fee, config.burn_fee_min).toFixed();
-//
-//   return {
-//     creation_fee,
-//     maintenance_fee,
-//     burn_fee,
-//     minimum_reward: config.minimum_reward,
-//   };
-// }

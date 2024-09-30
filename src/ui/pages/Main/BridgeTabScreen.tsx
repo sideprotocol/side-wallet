@@ -11,7 +11,7 @@ import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetBalance';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBitcoinRuneBalance, useBridgeParams, useRuneListV2 } from '@/ui/state/bridge/hook';
@@ -114,8 +114,6 @@ export default function BridgeTabScreen() {
   // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
   const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
   const isGreaterThanBalance = BigNumber(bridgeAmount || '0').gt(balance);
-
-  console.log('bridgeAmount', bridgeAmount, balance, isGreaterThanBalance, btcBalanceOnFromChain);
 
   const disabled =
     BigNumber(bridgeAmount || 0).lte(0) ||

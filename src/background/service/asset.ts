@@ -1,16 +1,13 @@
 import { createPersistStore } from '@/background/utils';
-import { BitcoinToken, SideToken } from '@/shared/types';
+import { BalanceItem } from '@/shared/types';
 
 export type AssetPriceType = {
   [key: string]: string;
 };
 
 export type AssetStore = {
-  bitcoinTokens: BitcoinToken[];
-  sideTokens: SideToken[];
-  assetPriceMap: AssetPriceType;
-  bitcoinTokenBalanceList: { [key: string]: Array<{ amount: string } & Pick<BitcoinToken, 'symbol'>> };
-  sideTokenBalanceList: { [key: string]: Array<{ amount: string } & Pick<SideToken, 'base'>> };
+  sideBalanceList: BalanceItem[];
+  btcBalanceList: BalanceItem[];
 };
 
 class AssetService {
@@ -20,80 +17,26 @@ class AssetService {
     this.store = await createPersistStore<AssetStore>({
       name: 'asset',
       template: {
-        bitcoinTokens: [],
-        sideTokens: [],
-        assetPriceMap: {},
-        bitcoinTokenBalanceList: {},
-        sideTokenBalanceList: {}
+        sideBalanceList: [],
+        btcBalanceList: []
       }
     });
   };
 
-  setBitcoinTokens = (data: BitcoinToken[]) => {
-    this.store.bitcoinTokens = data;
+  setSideBalanceList = (data: BalanceItem[]) => {
+    this.store.sideBalanceList = data;
   };
 
-  getBitcoinTokens = () => {
-    return this.store.bitcoinTokens;
-  };
-  setSideTokens = (data: SideToken[]) => {
-    this.store.sideTokens = data;
+  getSideBalanceList = () => {
+    return this.store.sideBalanceList;
   };
 
-  getSideTokens = () => {
-    return this.store.sideTokens;
+  setBtcBalanceList = (data: BalanceItem[]) => {
+    this.store.btcBalanceList = data;
   };
 
-  setAssetPriceMap = (data: AssetPriceType) => {
-    this.store.assetPriceMap = data;
-  };
-
-  getAssetPriceMap = () => {
-    return this.store.assetPriceMap;
-  };
-
-  getAccountBitcoinTokenBalanceList = (account: string) => {
-    return this.store.bitcoinTokenBalanceList[account] || [];
-  };
-
-  setAccountBitcoinTokenBalance = async (account: string, symbol: string, amount: string) => {
-    const accountBitcoinTokenBalanceList = await this.getAccountBitcoinTokenBalanceList(account);
-    const index = accountBitcoinTokenBalanceList.findIndex((item) => item.symbol === symbol);
-    if (index !== -1) {
-      accountBitcoinTokenBalanceList.splice(index, 1);
-    }
-    this.store.bitcoinTokenBalanceList[account] = [...accountBitcoinTokenBalanceList, { symbol, amount }];
-  };
-
-  getAccountBitcoinTokenBalance = async (account: string, symbol: string) => {
-    const accountBitcoinTokenBalanceList = await this.getAccountBitcoinTokenBalanceList(account);
-    const hasBalance = accountBitcoinTokenBalanceList.find((item) => item.symbol === symbol);
-    if (hasBalance) {
-      return hasBalance.amount;
-    }
-    return '0';
-  };
-
-  getAccountSideTokenBalanceList = (account: string) => {
-    return this.store.sideTokenBalanceList[account] || [];
-  };
-
-  setAccountSideTokenBalance = async (account: string, base: string, amount: string) => {
-    const accountSideTokenBalanceList = await this.getAccountSideTokenBalanceList(account);
-    const index = accountSideTokenBalanceList.findIndex((item) => item.base === base);
-    if (index !== -1) {
-      accountSideTokenBalanceList.splice(index, 1);
-    }
-    this.store.sideTokenBalanceList[account] = [...accountSideTokenBalanceList, { base, amount }];
-  };
-
-  getAccountSideTokenBalance = async (account: string, base: string) => {
-    const accountSideTokenBalanceList = await this.getAccountSideTokenBalanceList(account);
-    const hasBalance = accountSideTokenBalanceList.find((item) => item.base === base);
-    if (hasBalance) {
-      return hasBalance.amount;
-    }
-    return '0';
+  getBtcBalanceList = () => {
+    return this.store.btcBalanceList;
   };
 }
 
