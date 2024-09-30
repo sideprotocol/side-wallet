@@ -342,7 +342,7 @@ export default function BridgeTabScreen() {
                           className=""></img>
                       </>
                     }></DetailRow>
-                  <DetailRow text={'Est. Bridge Time'} value={'3 mins'}></DetailRow>
+                  <DetailRow text={'Est. Bridge Time'} value={'About 10 minutes'}></DetailRow>
 
                   <DetailRow text={'Bridge Fee'} value={isDeposit ? '0.0001 BTC' : '0.00002 BTC'}></DetailRow>
 

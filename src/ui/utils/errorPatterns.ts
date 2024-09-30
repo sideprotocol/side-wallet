@@ -1,6 +1,6 @@
 export const errorPatterns = {
   sideBTCInsufficientFunds: {
-    pattern: new RegExp('insufficient funds.*sat', 'i'),
+    pattern: new RegExp('sat.*insufficient funds|insufficient funds.*sat', 'i'),
     message: 'Insufficient BTC balance on the Side Chain to cover transaction fees'
   },
 
