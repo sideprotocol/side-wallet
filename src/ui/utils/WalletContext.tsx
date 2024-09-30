@@ -372,11 +372,11 @@ export interface WalletController {
 
   getBuyBtcChannelList(): Promise<{ channel: string }[]>;
 
-  setBTCBalanceList(data: BalanceItem[]): Promise<void>;
+  setBtcBalanceList(data: BalanceItem[]): Promise<void>;
   setSideBalanceList(data: BalanceItem[]): Promise<void>;
 
   getSideBalanceList(): Promise<BalanceItem[]>;
-  getBTCBalanceList(): Promise<BalanceItem[]>;
+  getBtcBalanceList(): Promise<BalanceItem[]>;
 
   reset(): Promise<void>;
 

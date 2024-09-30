@@ -10,12 +10,10 @@ import { getCurrentTab } from '@/ui/features/browser/tabs';
 import useGetAccountBalanceByUSD from '@/ui/hooks/useGetAccountBalanceByUSD';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
-import { useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { getTruncate, useWallet } from '@/ui/utils';
+import { useWallet } from '@/ui/utils';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
@@ -32,10 +30,6 @@ export default function WalletTabScreen() {
   const wallet = useWallet();
   const [connected, setConnected] = useState(false);
   const dispatch = useAppDispatch();
-  // const assetTabKey = useAssetTabKey();
-  // const skipVersion = useSkipVersionCallback();
-  // const walletConfig = useWalletConfig();
-  // const versionInfo = useVersionInfo();
   const accountBalanceByUSD = useGetAccountBalanceByUSD();
 
   const [showSafeNotice, setShowSafeNotice] = useState(false);
@@ -75,11 +69,9 @@ export default function WalletTabScreen() {
   }, []);
 
   const [currentTab, setCurrentTab] = useState<CHAINS_ENUM>(CHAINS_ENUM.SIDE);
-  const blockstreamUrl = useBlockstreamUrl();
 
   const [buyBtcModalVisible, setBuyBtcModalVisible] = useState(false);
   const [isHoveredMoney, setIsHoveredMoney] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const handleMouseOver = () => {
     setIsHoveredMoney(true);
   };
@@ -88,9 +80,6 @@ export default function WalletTabScreen() {
     setIsHoveredMoney(false);
   };
 
-  // const runeAndBtcTokens = useRuneAndBtcBalances();
-  const { tokens: runeList } = useRuneListV2();
-  // console.log(`runeList: `, runeList);
   return (
     <Layout
       style={{
@@ -131,7 +120,7 @@ export default function WalletTabScreen() {
                 }}
               />
               <Text
-                text={String(getTruncate(accountBalanceByUSD, 2)).split('.')[0]}
+                text={accountBalanceByUSD.split('.')[0]}
                 style={{
                   fontSize: '38px',
                   fontWeight: 500,
@@ -140,7 +129,7 @@ export default function WalletTabScreen() {
               />
               <Text
                 color={'white_muted'}
-                text={`.${String(getTruncate(accountBalanceByUSD, 2)).split('.')[1]}`}
+                text={`.${accountBalanceByUSD.split('.')[1]}`}
                 style={{
                   fontSize: '38px',
                   fontWeight: 500,

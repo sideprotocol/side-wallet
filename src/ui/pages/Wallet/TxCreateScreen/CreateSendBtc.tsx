@@ -2,7 +2,7 @@ import { Tooltip } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 
 import { COIN_DUST } from '@/shared/constant';
-import { RawTxInfo } from '@/shared/types';
+import { BalanceItem, RawTxInfo } from '@/shared/types';
 import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
@@ -10,10 +10,10 @@ import { RBFBar } from '@/ui/components/RBFBar';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useAccountBalance } from '@/ui/state/accounts/hooks';
 // import { useSendRune } from '@/ui/state/send/hook';
-import { useBTCUnit, useChain } from '@/ui/state/settings/hooks';
+import { useBTCUnit } from '@/ui/state/settings/hooks';
 import {
   useBitcoinTx,
-  useFetchUtxosCallback, // usePrepareSendBTCCallback,
+  useFetchUtxosCallback,
   usePrepareSendBTCCallback,
   useSafeBalance,
   useSpendUnavailableUtxos
@@ -26,7 +26,7 @@ import { amountToSatoshis, isValidAddress, satoshisToAmount, useLocationState } 
 
 interface LocationState {
   base: string;
-  token: any;
+  token: BalanceItem;
 }
 
 export default function CreateSendBtc() {
@@ -36,7 +36,7 @@ export default function CreateSendBtc() {
   const bitcoinTx = useBitcoinTx();
   const btcUnit = useBTCUnit();
 
-  const { base, token } = useLocationState<LocationState>();
+  const { token } = useLocationState<LocationState>();
   const [disabled, setDisabled] = useState(true);
 
   const setUiState = useUpdateUiTxCreateScreen();
@@ -48,7 +48,6 @@ export default function CreateSendBtc() {
   const feeRate = uiState.feeRate;
 
   const [error, setError] = useState('');
-  console.log('accountBalance: ', accountBalance);
   const [autoAdjust, setAutoAdjust] = useState(false);
   const fetchUtxos = useFetchUtxosCallback();
 
@@ -95,13 +94,6 @@ export default function CreateSendBtc() {
 
   const unspendUnavailableAmount = satoshisToAmount(unavailableSatoshis - spendUnavailableSatoshis);
 
-  console.log('totalAvailableSatoshis: ', totalAvailableSatoshis);
-  console.log('totalAvailableSatoshis: totalAvailableAmount', totalAvailableAmount);
-  console.log('totalAvailableSatoshis: totalSatoshis', totalSatoshis);
-  console.log('totalAvailableSatoshis: avaiableAmount', avaiableAmount);
-  console.log('totalAvailableSatoshis: totalAmount', totalAmount);
-  console.log('totalAvailableSatoshis: unavailableAmount', unavailableAmount);
-  const chain = useChain();
   useEffect(() => {
     setError('');
     setDisabled(true);
@@ -156,13 +148,12 @@ export default function CreateSendBtc() {
     <Layout
       style={{
         position: 'relative'
-      }}
-    >
+      }}>
       <Header
         onBack={() => {
           window.history.go(-1);
         }}
-        title={`Send ${token?.symbol}`}
+        title={`Send ${token?.asset.symbol}`}
       />
 
       <Row
@@ -179,14 +170,12 @@ export default function CreateSendBtc() {
           borderTop: '1px solid #404045',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
         }}
-        justifyCenter
-      >
+        justifyCenter>
         <Row
           style={{
             marginTop: '6px'
-          }}
-        >
-          <Image src={token?.logo} size={50}></Image>
+          }}>
+          <Image src={token?.asset.logo} size={50}></Image>
           {/* <Icon icon={token.logo || 'btc'} size={50} /> */}
         </Row>
       </Row>
@@ -200,8 +189,7 @@ export default function CreateSendBtc() {
           padding: '16px 16px 64px 16px',
           marginTop: '66px',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
-        }}
-      >
+        }}>
         <Column mt="xxl">
           <Text text="Recipient" preset="regular" color="white" />
           <Input
@@ -242,24 +230,25 @@ export default function CreateSendBtc() {
             {spendUnavailableSatoshis > 0 && (
               <Row>
                 <Text text={`${spendUnavailableAmount}`} size="sm" style={{ color: '#65D5F0' }} />
-                <Text text={'BTC'} size="sm" color="textDim" />
+                <Text text={token.asset.symbol} size="sm" color="textDim" />
                 <Text text={'+'} size="sm" color="textDim" />
               </Row>
             )}
 
             <Row>
               <Text text={`${avaiableAmount}`} size="sm" color="primary" />
-              <Text text={'BTC'} size="sm" color="textDim" />
+              <Text text={token.asset.symbol} size="sm" color="textDim" />
             </Row>
           </Row>
 
           <Row justifyBetween>
             <Tooltip
-              title={'Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.'}
+              title={
+                'Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.'
+              }
               overlayStyle={{
                 fontSize: fontSizes.xs
-              }}
-            >
+              }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Row itemsCenter>
                   <Text
@@ -278,12 +267,12 @@ export default function CreateSendBtc() {
             {spendUnavailableSatoshis > 0 ? (
               <Row>
                 <Text text={`${unspendUnavailableAmount}`} size="sm" color="white" />
-                <Text text={'BTC'} size="sm" color="textDim" />
+                <Text text={''} size="sm" color="textDim" />
               </Row>
             ) : (
               <Row>
                 <Text text={`${unavailableAmount}`} size="sm" color="white" />
-                <Text text={btcUnit} size="sm" color="textDim" />
+                <Text text={token.asset.symbol} size="sm" color="textDim" />
               </Row>
             )}
           </Row>
@@ -292,7 +281,7 @@ export default function CreateSendBtc() {
             <Text text="Total" color="textDim" />
             <Row>
               <Text text={`${totalAmount}`} size="sm" color="white" />
-              <Text text={btcUnit} size="sm" color="textDim" />
+              <Text text={token.asset.symbol} size="sm" color="textDim" />
             </Row>
           </Row>
         </Column>
@@ -324,8 +313,7 @@ export default function CreateSendBtc() {
             text="Next"
             onClick={async (e) => {
               navigate('TxConfirmScreen', { rawTxInfo });
-            }}
-          ></Button>
+            }}></Button>
         </Column>
       </Content>
     </Layout>

@@ -1,30 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 
 import { IAsset } from '@/shared/types';
 import services from '@/ui/services';
 
-import { useWallet } from '../utils';
 import { useCurChain, useGetUrlList } from './useEnv';
 import { useGetBalanceList } from './useGetBalanceList';
 
 export function useGetSideBalanceList(address?: string) {
-  const wallet = useWallet();
-  const [sideAssets, setSideAssets] = useState<IAsset[]>([]);
   const sideChain = useCurChain();
   const { UNISAT_RUNE_URL } = useGetUrlList();
 
-  useEffect(() => {
-    getSideAssets();
-  }, []);
-
-  const getSideAssets = async () => {
-    try {
+  const { data: sideAssets } = useQuery({
+    queryKey: ['getSideAssets'],
+    queryFn: async () => {
       const result = await services.dex.getSideAssets();
-      setSideAssets(formateTokenList(result));
-    } catch (err) {
-      console.log(err);
+      return formateTokenList(result);
     }
-  };
+  });
 
   function formateTokenList(tokens: IAsset[]) {
     return tokens.map((token) => {
@@ -39,14 +31,10 @@ export function useGetSideBalanceList(address?: string) {
   }
 
   const { balanceList, refetchBalances } = useGetBalanceList({
-    assets: sideAssets,
+    assets: sideAssets || [],
     restUrl: sideChain.restUrl,
     address
   });
-
-  useEffect(() => {
-    wallet.setSideBalanceList(balanceList);
-  }, [balanceList]);
 
   return {
     balanceList,

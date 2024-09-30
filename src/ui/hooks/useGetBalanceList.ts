@@ -1,6 +1,7 @@
 /** @format */
 import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useQuery } from 'react-query';
 
 // import { useListener } from "./useListener";
 import { BalanceItem, IAsset } from '@/shared/types';
@@ -19,34 +20,26 @@ export const useGetBalanceList = ({
   address?: string;
 }) => {
   const [priceMap, setPriceMap] = useState<{ [key: string]: string }>({});
-  const [balances, setBalances] = useState<Coin[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    getAllBalances();
-  }, [address]);
+  const { data: result, refetch } = useQuery({
+    queryKey: ['getAllBalances', { address }],
+    queryFn: async () => {
+      if (address) {
+        return services.bank.getAllBalances(
+          { address },
+          {
+            baseURL: restUrl
+          }
+        );
+      }
+    }
+  });
+  const balances = result?.balances || ([] as Coin[]);
 
   useEffect(() => {
     getAssetPrice();
   }, [assets]);
-
-  const getAllBalances = async () => {
-    if (!address) {
-      return;
-    }
-    try {
-      const result = await services.bank.getAllBalances(
-        { address },
-        {
-          baseURL: restUrl
-        }
-      );
-
-      setBalances(result.balances);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const getAssetPrice = async () => {
     if (!assets.length) return;
@@ -88,6 +81,6 @@ export const useGetBalanceList = ({
 
   return {
     balanceList,
-    refetchBalances: getAllBalances
+    refetchBalances: refetch
   };
 };
