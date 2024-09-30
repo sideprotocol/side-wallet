@@ -71,7 +71,9 @@ export default function SideTxConfirmScreen() {
       });
       navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
     } catch (err) {
-      navigate('TxFailScreen', { error: err });
+      const errorString = err instanceof Error ? err.message : typeof err == 'string' ? err : '';
+
+      navigate('TxFailScreen', { error: errorString });
     } finally {
       setLoading(false);
     }

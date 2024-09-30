@@ -1,15 +1,14 @@
 import { Column, Image, Row, Text } from '@/ui/components';
-import { useGetUrlList } from '@/ui/hooks/useEnv';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
-import { useNavigate } from '@/ui/pages/MainRoute';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 
 export default function BtcTokenList({ balanceVisible }) {
-  const navigate = useNavigate();
   const currentAccount = useCurrentAccount();
 
   const { balanceList } = useGetBitcoinBalanceList(currentAccount?.address);
-  const { UNISAT_RUNE_URL } = useGetUrlList();
+
+  console.log(balanceList, 'balanceList');
+
   return (
     <Column
       style={{

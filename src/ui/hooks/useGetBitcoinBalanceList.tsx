@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { BalanceItem } from '@/shared/types';
 import services from '@/ui/services';
 
+import { useAccountBalance } from '../state/accounts/hooks';
 import { toReadableAmount, toUnitAmount } from '../utils/formatter';
 import { useGetUrlList } from './useEnv';
 
@@ -36,6 +37,9 @@ function useGetBtcBalance(address?: string, flag?: boolean) {
 
   const [loading, setLoading] = useState(true);
 
+  const accountBalance = useAccountBalance();
+  const btcBalance = accountBalance?.amount;
+
   const fetchBitcoinItemPrice = async () => {
     const result = await services.dex.getAssetPrice('sat');
 
@@ -51,11 +55,7 @@ function useGetBtcBalance(address?: string, flag?: boolean) {
         return;
       }
 
-      const balance = await services.unisat.getAvailableBtcBalance({
-        address: address
-      });
-
-      const item = formatBitcoinItem(balance, denomPrice);
+      const item = formatBitcoinItem(btcBalance, denomPrice);
 
       setData([item]);
     } catch (err) {
