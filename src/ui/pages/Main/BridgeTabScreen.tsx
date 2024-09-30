@@ -125,14 +125,14 @@ export default function BridgeTabScreen() {
       };
       bridgeStore.to = {
         id: sideChain.chainID,
-        name: 'Side Chain',
-        logo: '/images/logo/wallet-logo-white-v2.png'
+        name: sideChain.name,
+        logo: sideChain.logo
       };
     } else {
       bridgeStore.from = {
         id: sideChain.chainID,
-        name: 'SIDE devnet',
-        logo: '/images/logo/wallet-logo-white-v2.svg'
+        name: sideChain.name,
+        logo: sideChain.logo
       };
       bridgeStore.to = {
         id: 'mainnet',

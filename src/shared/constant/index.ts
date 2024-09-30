@@ -417,13 +417,13 @@ const SIDE_EXPLORER_URL_MAINNET = 'https://station-dev.side.one/explorer';
 const SIDE_BRIDGEEXPLORER_URL_MAINNET = 'https://station-dev.side.one/bridgeExplorer';
 const SIDE_CHAIN_MAINNET = {
   chainID: 'devnet',
-  name: 'Side Chain',
+  name: 'Side Chain Devnet',
   prefix: 'tb',
   rpcUrl: 'https://devnet-rpc.side.one',
   restUrl: 'https://devnet-rest.side.one',
   denom: 'uside',
   hdPath: "m/44'/118/0'/0/0",
-  logo: '',
+  logo: '/images/logo/wallet-logo-white-v2.png',
   faucetUrl: 'https://faucet.side.exchange',
   explorerUrl: SIDE_EXPLORER_URL_MAINNET
 };
@@ -446,13 +446,13 @@ const SIDE_EXPLORER_URL_TESTNET = 'https://station-dev.side.one/explorer';
 const SIDE_BRIDGEEXPLORER_URL_TESTNET = 'https://station-dev.side.one/bridgeExplorer';
 const SIDE_CHAIN_TESTNET = {
   chainID: 'devnet',
-  name: 'Side Chain',
+  name: 'Side Chain Testnet',
   prefix: 'tb',
   rpcUrl: 'https://devnet-rpc.side.one',
   restUrl: 'https://devnet-rest.side.one',
   denom: 'uside',
   hdPath: "m/44'/118/0'/0/0",
-  logo: '',
+  logo: '/images/logo/wallet-logo-white-v2.png',
   faucetUrl: 'https://faucet.side.exchange',
   explorerUrl: SIDE_EXPLORER_URL_TESTNET
 };
