@@ -1,3 +1,4 @@
+import { sideChain } from '@/shared/constant';
 import { Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useReloadAccounts } from '@/ui/state/accounts/hooks';
@@ -24,8 +25,7 @@ export default function NetworkTypeScreen() {
         style={{
           padding: '0 16px',
           marginTop: 16
-        }}
-      >
+        }}>
         <Column gap={'md'}>
           <Row
             rounded
@@ -47,10 +47,9 @@ export default function NetworkTypeScreen() {
             full
             justifyBetween
             itemsCenter
-            classname={'hover:bg-[#1e1e1f] '}
-          >
+            classname={'hover:bg-[#1e1e1f] '}>
             <Row itemsCenter>
-              <Text text={'Side Chain Devnet & Bitcoin Testnet 3'} />
+              <Text text={`${sideChain.name} & Bitcoin Testnet 3`} />
             </Row>
             <Column>
               <Icon color={'green'} contain={'contain'} icon="check-circle" />

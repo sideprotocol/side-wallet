@@ -3,9 +3,10 @@ import bigInt from 'big-integer';
 import BigNumber from 'bignumber.js';
 import { Buffer } from 'buffer';
 
-import { SIDE_RUNES_VAULT_ADDRESS, isProduction } from '@/ui/constants';
-import services from '@/ui/services';
 // import { Account, DepositBTCBridge } from '../web3-wallet';
+import { RUNE_BRIDGE_VAULT, isProduction } from '@/shared/constant';
+import { UTXO } from '@/shared/lib/runes-utils';
+import services from '@/ui/services';
 import { useWallet } from '@/ui/utils';
 import { ToSignInput, UTXO_DUST, UnspentOutput } from '@unisat/wallet-sdk';
 import { ECPair, bitcoin, ecc } from '@unisat/wallet-sdk/lib/bitcoin-core';
@@ -84,8 +85,8 @@ export function shortAddress(address?: string, len = 5) {
   return address.slice(0, len) + '...' + address.slice(address.length - len);
 }
 
-export function decodeTxToGetValue(tx) {
-  const runeOut = tx.vout.find((vout) => vout.scriptpubkey_address === SIDE_RUNES_VAULT_ADDRESS);
+export function decodeTxToGetValue(tx: UTXO) {
+  const runeOut = tx.vout.find((vout) => vout.scriptpubkey_address === RUNE_BRIDGE_VAULT);
 
   if (!runeOut) return 0;
 

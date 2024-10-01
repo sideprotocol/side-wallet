@@ -2,12 +2,8 @@ import BigNumber from 'bignumber.js';
 import { useRef } from 'react';
 import toast from 'react-hot-toast';
 
-// import signAndBroadcastTxRaw from '@/ui/utils/createTxRaw';
-import { CHAINS_ENUM, SIDEREST_URL_MAINNET, SIDEREST_URL_TESTNET } from '@/shared/constant';
-import { NetworkType } from '@/shared/types';
+import { CHAINS_ENUM, DEX_ROUTER_CONTRACT, sideChain } from '@/shared/constant';
 import ToastView from '@/ui/components/ToastView';
-import { DEX_ROUTER_CONTRACT } from '@/ui/constants';
-import { ToastOptions } from '@/ui/constants/toast';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { Pool, SwapRouteResult } from '@/ui/services/dex/type';
@@ -18,12 +14,10 @@ import createExecuteMessage from '@/ui/utils/createExecuteMessage';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { coin } from '@cosmjs/stargate';
 
-import { useNetworkType } from '../state/settings/hooks';
 import { useGetSideBalanceList } from './useGetSideBalanceList';
 
 export default function useSwap() {
   const { slippage, swapPair, swapRouteResult } = useSwapStore();
-  const netWorkType = useNetworkType();
 
   const navigate = useNavigate();
   const currentAccount = useCurrentAccount();
@@ -82,8 +76,7 @@ export default function useSwap() {
     timer.current = setTimeout(async () => {
       try {
         const result = await services.tx.getTxByHash(txHash, {
-          // baseURL: netWorkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET
-          baseURL: netWorkType === NetworkType.TESTNET ? SIDEREST_URL_TESTNET : SIDEREST_URL_MAINNET
+          baseURL: sideChain.restUrl
         });
         console.log('result: ', result);
         refreshData(async () => {
@@ -259,7 +252,7 @@ export default function useSwap() {
             </div>
           </ToastView>
         ),
-        ToastOptions
+        { duration: 5000 }
       );
 
       swapStore.swapLoading = false;

@@ -5,18 +5,17 @@ import { useEffect, useState } from 'react';
 
 import { MessageComposer } from '@/codegen/src/side/btcbridge/tx.registry';
 import {
+  BTC_BRIDGE_VAULT,
   CHAINS_ENUM,
+  RUNE_BRIDGE_VAULT,
   SIDE_BTC_INDEXER,
-  SIDE_BTC_VAULT_ADDRESS_MAINNET,
-  SIDE_BTC_VAULT_ADDRESS_TESTNET,
   SIDE_RUNE_INDEXER,
-  SIDE_RUNE_VAULT_ADDRESS_MAINNET,
-  SIDE_RUNE_VAULT_ADDRESS_TESTNET
+  UNISAT_SERVICE_ENDPOINT,
+  isProduction
 } from '@/shared/constant';
 import { decodeTxToGetValue, runesUtils } from '@/shared/lib/runes-utils';
 import { NetworkType, RuneBalance, TickPriceItem } from '@/shared/types';
 import { useTools } from '@/ui/components/ActionComponent';
-import { UNISAT_SERVICE_ENDPOINT, isProduction } from '@/ui/constants/';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
@@ -33,7 +32,7 @@ import { useCurrentAccount } from '../accounts/hooks';
 import { useNetworkType } from '../settings/hooks';
 import { useSignAndBroadcastTxRaw } from '../transactions/hooks/cosmos';
 
-async function fetchRuneOutput(key: string) {
+async function fetchRuneOutput(key: string, SIDE_RUNE_INDEXER: string) {
   return fetch(`${SIDE_RUNE_INDEXER}/output/${key}`, {
     headers: {
       Accept: 'application/json'
@@ -107,7 +106,7 @@ export const useBtcBalance = () => {
       return `${utxo.txid}:${utxo.vout}`;
     });
 
-    const outputs = await Promise.all(runesOutputsData.map((key: string) => fetchRuneOutput(key)));
+    const outputs = await Promise.all(runesOutputsData.map((key: string) => fetchRuneOutput(key, SIDE_RUNE_INDEXER)));
 
     const txs = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/txs`).then((res) => res.json());
 
@@ -270,10 +269,6 @@ export const useBridge = () => {
   const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, exponent)).toNumber();
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
-
-  const BTC_BRIDGE_VAULT =
-    // networkType === NetworkType.MAINNET ? SIDE_BTC_VAULT_ADDRESS_MAINNET : SIDE_BTC_VAULT_ADDRESS_TESTNET;
-    networkType === NetworkType.TESTNET ? SIDE_BTC_VAULT_ADDRESS_TESTNET : SIDE_BTC_VAULT_ADDRESS_MAINNET;
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 
@@ -652,8 +647,7 @@ export const useBridge = () => {
       btcUtxos: btcUtxos.sort((a, b) => b.satoshis - a.satoshis),
 
       tos: [{ address: BTC_BRIDGE_VAULT, satoshis: amount }],
-      // networkType: networkType === NetworkType.MAINNET ? 0 : 1,
-      networkType: networkType === NetworkType.TESTNET ? 1 : 0,
+      networkType: networkType,
       changeAddress: senderAddress,
       feeRate: fee,
       enableRBF: false,
@@ -685,10 +679,6 @@ export const useRuneBridge = () => {
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
-  const RUNE_BRIDGE_VAULT =
-    // networkType === NetworkType.MAINNET ? SIDE_RUNE_VAULT_ADDRESS_MAINNET : SIDE_RUNE_VAULT_ADDRESS_TESTNET;
-    networkType === NetworkType.TESTNET ? SIDE_RUNE_VAULT_ADDRESS_TESTNET : SIDE_RUNE_VAULT_ADDRESS_MAINNET;
-
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 
   const bridge = async () => {
@@ -696,10 +686,14 @@ export const useRuneBridge = () => {
 
     if (isDeposit) {
       try {
-        depositRune({
-          amount: unitAmount,
-          fee: Number(fee || '200')
-        })
+        depositRune(
+          {
+            amount: unitAmount,
+            fee: Number(fee || '200')
+          },
+          SIDE_BTC_INDEXER,
+          SIDE_RUNE_INDEXER
+        )
           .then((res) => {
             return res.text();
           })
@@ -755,7 +749,7 @@ export const useRuneBridge = () => {
 
   const wallet = useWallet();
 
-  const depositRune = async (params: DepositBTCBridge) => {
+  const depositRune = async (params: DepositBTCBridge, SIDE_BTC_INDEXER: string, SIDE_RUNE_INDEXER: string) => {
     const { amount, fee, to } = params;
     const senderAddress = currentAccount.address;
 
@@ -805,7 +799,7 @@ export const useRuneBridge = () => {
       }
     }).then((res) => res.json());
 
-    const outputs = await Promise.all(runesOutputsData.map((key) => fetchRuneOutput(key)));
+    const outputs = await Promise.all(runesOutputsData.map((key) => fetchRuneOutput(key, SIDE_RUNE_INDEXER)));
 
     outputs.forEach((output, index) => {
       assetUtxos.push({
@@ -912,7 +906,7 @@ export const useRuneBridge = () => {
   return { bridge };
 };
 
-export const queryAddressUtxo = async (address: string) => {
+export const queryAddressUtxo = async (address: string, UNISAT_SERVICE_ENDPOINT: string) => {
   if (!address) return;
   const utxos = await fetch(`${UNISAT_SERVICE_ENDPOINT}/v5/address/btc-utxo?address=${address}`).then((res) =>
     res.json()

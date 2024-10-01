@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 
+import { UNISAT_RUNE_URL } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import services from '@/ui/services';
 
 import { useAccountBalance } from '../state/accounts/hooks';
 import { toReadableAmount, toUnitAmount } from '../utils/formatter';
-import { useGetUrlList } from './useEnv';
 
 function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
   const price = new BigNumber(denomPrice || '0').multipliedBy(balance).toFixed(2);
@@ -82,7 +82,6 @@ function useGetBtcBalance(address?: string, flag?: boolean) {
 
 function useGetAllRunesBalance(address?: string, flag?: boolean) {
   // runes balance
-  const { UNISAT_RUNE_URL } = useGetUrlList();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<BalanceItem[]>([]);
 

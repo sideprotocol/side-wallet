@@ -6,13 +6,8 @@ import { Any } from 'cosmjs-types/google/protobuf/any';
 
 import { AminoConverter } from '@/codegen/src/side/btcbridge/tx.amino';
 import * as sideBTCBridgeRegistry from '@/codegen/src/side/btcbridge/tx.registry';
-import {
-  SIDEREST_URL_MAINNET,
-  SIDEREST_URL_TESTNET,
-  SIDE_CHAINID_MAINNET,
-  SIDE_CHAINID_TESTNET
-} from '@/shared/constant';
-import { CosmosTransaction, CosmosTxResponse, NetworkType } from '@/shared/types';
+import { sideChain } from '@/shared/constant';
+import { CosmosTransaction, CosmosTxResponse } from '@/shared/types';
 import services from '@/ui/services';
 import { useWallet } from '@/ui/utils';
 import { errorPatterns } from '@/ui/utils/errorPatterns';
@@ -30,7 +25,6 @@ import {
 } from '@cosmjs/stargate';
 
 import { useCurrentAccount } from '../../accounts/hooks';
-import { useNetworkType } from '../../settings/hooks';
 
 export function getAddressTypeUrl(address: string) {
   if (address.startsWith('bc1')) {
@@ -82,11 +76,6 @@ enum BroadcastMode {
 export function useSignAndBroadcastTxRaw() {
   const wallet = useWallet();
   const currentAccount = useCurrentAccount();
-  const networkType = useNetworkType();
-  // const restUrl = networkType === NetworkType.MAINNET ? SIDEREST_URL_MAINNET : SIDEREST_URL_TESTNET;
-  const restUrl = networkType === NetworkType.TESTNET ? SIDEREST_URL_TESTNET : SIDEREST_URL_MAINNET;
-  // const chainId = networkType === NetworkType.MAINNET ? SIDE_CHAINID_MAINNET : SIDE_CHAINID_TESTNET;
-  const chainId = networkType === NetworkType.TESTNET ? SIDE_CHAINID_TESTNET : SIDE_CHAINID_MAINNET;
 
   const mockSignAmino = async (tx: CosmosTransaction): Promise<TxRaw> => {
     const accountFromSigner = currentAccount;
@@ -165,7 +154,7 @@ export function useSignAndBroadcastTxRaw() {
     };
 
     // get string
-    return await fetch(`${restUrl}/cosmos/tx/v1beta1/simulate`, {
+    return await fetch(`${sideChain.restUrl}/cosmos/tx/v1beta1/simulate`, {
       method: 'POST',
       body: JSON.stringify(txRaw)
     })
@@ -192,12 +181,14 @@ export function useSignAndBroadcastTxRaw() {
     feeAmount?: string;
     feeDenom?: string;
   }): Promise<{ tx: CosmosTransaction }> => {
-    const acc = await fetch(`${restUrl}/cosmos/auth/v1beta1/accounts/${currentAccount.address}`).then(async (res) => {
-      const json = await res.json();
-      return json.account;
-    });
+    const acc = await fetch(`${sideChain.restUrl}/cosmos/auth/v1beta1/accounts/${currentAccount.address}`).then(
+      async (res) => {
+        const json = await res.json();
+        return json.account;
+      }
+    );
     let tx: CosmosTransaction = {
-      chainId,
+      chainId: sideChain.chainID,
       signerAddress: currentAccount.address,
       messages,
       fee: {
@@ -208,7 +199,7 @@ export function useSignAndBroadcastTxRaw() {
       signerData: {
         accountNumber: acc.account_number,
         sequence: acc.sequence,
-        chainId
+        chainId: sideChain.chainID
       }
     };
 
@@ -229,7 +220,7 @@ export function useSignAndBroadcastTxRaw() {
     const validGasUsed = typeof gasUsed === 'string' && BigNumber(gasUsed || '0').gt(0);
 
     const gasPrice = await services.node.getGasPrice({
-      baseURL: restUrl
+      baseURL: sideChain.restUrl
     });
 
     const feeEstimate = BigNumber(gasPrice.minimum_gas_price || '0.0001')
@@ -368,7 +359,7 @@ export function useSignAndBroadcastTxRaw() {
       tx_bytes: txString,
       mode
     };
-    const result = await fetch(`${restUrl}/cosmos/tx/v1beta1/txs`, {
+    const result = await fetch(`${sideChain.restUrl}/cosmos/tx/v1beta1/txs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'text/plain',

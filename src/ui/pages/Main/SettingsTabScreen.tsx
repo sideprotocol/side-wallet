@@ -6,7 +6,7 @@ import { Card, Column, Content, Header, Layout, Row, Text } from '@/ui/component
 import { useTools } from '@/ui/components/ActionComponent';
 import { Button } from '@/ui/components/Button';
 import { IconTypes, Icon as ImageIcon } from '@/ui/components/Icon';
-import { Icon } from '@/ui/components/TokenCurrent/';
+import { Icon } from '@/ui/components/TokenCurrent';
 import { getCurrentTab, useExtensionIsInTab, useOpenExtensionInTab } from '@/ui/features/browser/tabs';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';

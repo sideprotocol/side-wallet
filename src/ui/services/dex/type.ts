@@ -1,4 +1,4 @@
-import { IAsset } from '@/constants/assets';
+import { IAsset } from '@/shared/types';
 import { Coin } from '@cosmjs/stargate';
 
 // import { SxProps } from "@mui/material";

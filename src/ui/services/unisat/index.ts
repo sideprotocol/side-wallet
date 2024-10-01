@@ -1,5 +1,8 @@
-import ApiClient from '../network/ApiClient';
+import { UNISAT_IO_API, UNISAT_SERVICE_ENDPOINT } from '@/shared/constant';
+import services from '@/ui/services';
 
+import { getQueryParams } from '../getQueryParams';
+import ApiClient from '../network/ApiClient';
 import {
   AddressSummary,
   FeeSummary,
@@ -8,11 +11,8 @@ import {
   getRunesListData,
   RuneBalance,
   TickPriceItem,
-  UTXO,
+  UTXO
 } from './types';
-import { getQueryParams } from '../getQueryParams';
-import { UNISAT_IO_API, UNISAT_SERVICE_ENDPOINT } from '@/ui/constants';
-import services from '@/ui/services';
 
 export default class UnisatService {
   private apiClient: ApiClient;
@@ -40,10 +40,10 @@ export default class UnisatService {
       data: UTXO[];
       msg: string;
     } = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/v5/address/btc-utxo?${queryParams}`, {
-      baseURL: this.baseURl,
+      baseURL: this.baseURl
     });
 
-    const btcUtxos = utxos.data.map(v => {
+    const btcUtxos = utxos.data.map((v) => {
       return {
         txid: v.txid,
         vout: v.vout,
@@ -52,7 +52,7 @@ export default class UnisatService {
         addressType: v.addressType,
         // pubkey: account.pubkey,
         inscriptions: v.inscriptions,
-        atomicals: v.atomicals,
+        atomicals: v.atomicals
       };
     });
 
@@ -61,7 +61,7 @@ export default class UnisatService {
 
   async getAddressSummary(address: string): Promise<AddressSummary> {
     const queryParams = getQueryParams({
-      address,
+      address
     });
 
     const result: {
@@ -69,7 +69,7 @@ export default class UnisatService {
       data: AddressSummary;
       msg: string;
     } = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/v5/address/summary?${queryParams}`, {
-      baseURL: this.baseURl,
+      baseURL: this.baseURl
     });
 
     return result.data;
@@ -82,7 +82,7 @@ export default class UnisatService {
       data: UTXO[];
       msg: string;
     } = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/v5/address/btc-utxo?${queryParams}`, {
-      baseURL: this.baseURl,
+      baseURL: this.baseURl
     });
 
     const UNCONFIRMED_HEIGHT = 4194303;
@@ -91,9 +91,9 @@ export default class UnisatService {
 
     const hasRunesOrArc20 = addressSummary.runesCount > 0 || addressSummary.arc20Count > 0;
 
-    const utxos = hasRunesOrArc20 ? _utxos.data.filter(v => (v as any).height !== UNCONFIRMED_HEIGHT) : _utxos.data;
+    const utxos = hasRunesOrArc20 ? _utxos.data.filter((v) => (v as any).height !== UNCONFIRMED_HEIGHT) : _utxos.data;
 
-    const btcUtxos = utxos.map(v => {
+    const btcUtxos = utxos.map((v) => {
       return {
         txid: v.txid,
         vout: v.vout,
@@ -102,11 +102,11 @@ export default class UnisatService {
         addressType: v.addressType,
         // pubkey: account.pubkey,
         inscriptions: v.inscriptions,
-        atomicals: v.atomicals,
+        atomicals: v.atomicals
       };
     });
 
-    const satoshis = btcUtxos.filter(v => v.inscriptions.length === 0).reduce((pre, cur) => pre + cur.satoshis, 0);
+    const satoshis = btcUtxos.filter((v) => v.inscriptions.length === 0).reduce((pre, cur) => pre + cur.satoshis, 0);
 
     return (satoshis / 100000000).toString();
   }
@@ -119,14 +119,14 @@ export default class UnisatService {
     const queryParams = getQueryParams({
       address,
       cursor,
-      size,
+      size
     });
 
     const result: { data: { list: RuneBalance[]; total: number } } = await this.apiClient.get(
       `${UNISAT_SERVICE_ENDPOINT}/v5/runes/list?${queryParams}`,
       {
-        baseURL: this.baseURl,
-      },
+        baseURL: this.baseURl
+      }
     );
 
     const { total, list } = result.data;
@@ -135,7 +135,7 @@ export default class UnisatService {
       currentPage,
       pageSize,
       total,
-      list,
+      list
     };
   }
 
@@ -148,7 +148,7 @@ export default class UnisatService {
     console.log('this.currentRequestRune: ', this.currentRequestRune);
     try {
       while (this.currentRequestRune[tickLine]) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
       this.currentRequestRune[tickLine] = true;
 
@@ -177,11 +177,11 @@ export default class UnisatService {
         `${UNISAT_SERVICE_ENDPOINT}/v5/market/runes/price`,
         {
           ticks,
-          nftType: 'runes',
+          nftType: 'runes'
         },
         {
-          baseURL: this.baseURl,
-        },
+          baseURL: this.baseURl
+        }
       );
 
       const { data: resp } = respRaw;
@@ -197,9 +197,12 @@ export default class UnisatService {
   }
 
   async getRunesInfoList() {
-    const result: getRunesInfoListResponse = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/query-v4/runes/info-list`, {
-      baseURL: this.unisatIoApi,
-    });
+    const result: getRunesInfoListResponse = await this.apiClient.get(
+      `${UNISAT_SERVICE_ENDPOINT}/query-v4/runes/info-list`,
+      {
+        baseURL: this.unisatIoApi
+      }
+    );
     return result.data.detail;
   }
 
@@ -211,11 +214,11 @@ export default class UnisatService {
     } = await this.apiClient.post(
       `${UNISAT_SERVICE_ENDPOINT}/v5/tx/broadcast`,
       {
-        rawtx,
+        rawtx
       },
       {
-        baseURL: this.baseURl,
-      },
+        baseURL: this.baseURl
+      }
     );
 
     const txid = result.data;
@@ -231,7 +234,7 @@ export default class UnisatService {
       data: FeeSummary;
       msg: string;
     } = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/v5/default/fee-summary`, {
-      baseURL: this.baseURl,
+      baseURL: this.baseURl
     });
     return result.data;
   }
@@ -239,14 +242,14 @@ export default class UnisatService {
   async getRunesUtxos(address: string, runeid: string): Promise<UTXO[]> {
     const queryParams = getQueryParams({
       address,
-      runeid,
+      runeid
     });
     const result: {
       code: number;
       data: UTXO[];
       msg: string;
     } = await this.apiClient.get(`${UNISAT_SERVICE_ENDPOINT}/v5/runes/utxos?${queryParams}`, {
-      baseURL: this.baseURl,
+      baseURL: this.baseURl
     });
 
     return result.data;

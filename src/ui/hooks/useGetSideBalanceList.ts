@@ -1,15 +1,12 @@
 import { useQuery } from 'react-query';
 
+import { UNISAT_RUNE_URL, sideChain } from '@/shared/constant';
 import { IAsset } from '@/shared/types';
 import services from '@/ui/services';
 
-import { useCurChain, useGetUrlList } from './useEnv';
 import { useGetBalanceList } from './useGetBalanceList';
 
 export function useGetSideBalanceList(address?: string) {
-  const sideChain = useCurChain();
-  const { UNISAT_RUNE_URL } = useGetUrlList();
-
   const { data: sideAssets } = useQuery({
     queryKey: ['getSideAssets'],
     queryFn: async () => {

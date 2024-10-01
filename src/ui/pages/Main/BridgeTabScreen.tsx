@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 
+import { isDev, sideChain } from '@/shared/constant';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import BridgeSelectToken from '@/ui/components/Bridge/BridgeSelectToken';
@@ -9,7 +10,6 @@ import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import { useCurChain, useIsTestNet } from '@/ui/hooks/useEnv';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -118,9 +118,6 @@ export default function BridgeTabScreen() {
   }, [balance]);
   const { hoverExchange } = useSwapStore();
 
-  const sideChain = useCurChain();
-  const isTestNet = useIsTestNet();
-
   const isGreaterThanBalance = BigNumber(bridgeAmount || '0').gt(balance);
   const disabled =
     BigNumber(bridgeAmount || 0).lte(0) ||
@@ -134,7 +131,7 @@ export default function BridgeTabScreen() {
     !runeVault;
 
   useEffect(() => {
-    if (isTestNet) {
+    if (isDev) {
       bridgeStore.from = {
         id: 'LIVENET',
         name: 'Bitcoin Signet',
@@ -142,14 +139,14 @@ export default function BridgeTabScreen() {
       };
       bridgeStore.to = {
         id: sideChain.chainID,
-        name: 'Side Chain',
-        logo: '/images/logo/wallet-logo-white-v2.png'
+        name: sideChain.name,
+        logo: sideChain.logo
       };
     } else {
       bridgeStore.from = {
         id: sideChain.chainID,
-        name: 'SIDE devnet',
-        logo: '/images/logo/wallet-logo-white-v2.svg'
+        name: sideChain.name,
+        logo: sideChain.logo
       };
       bridgeStore.to = {
         id: 'mainnet',

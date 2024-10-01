@@ -19,13 +19,7 @@ function TokenItem({ token, balanceVisible }: { token: BalanceItem; balanceVisib
       }}>
       <Row>
         <ImageIcon
-          url={
-            token?.asset?.logo
-              ? token?.asset?.logo
-              : token?.asset?.runeData?.rune
-              ? `https://api-t2.unisat.io/icon-v1/icon/runes/${token?.asset?.runeData?.rune}`
-              : ''
-          }
+          url={token.asset.logo}
           style={{
             width: '38px',
             height: '38px',

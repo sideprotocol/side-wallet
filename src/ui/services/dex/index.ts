@@ -1,10 +1,11 @@
-import { SERVICE_BASE_URL } from '@/ui/constants';
+import { SERVICE_BASE_URL } from '@/shared/constant';
 import ApiClient from '@/ui/services/network/ApiClient';
 
 import { getQueryParams } from '../getQueryParams';
 import {
   IGetChartDataRequest,
   IGetChartDataResponse,
+  IGetMarketListItem,
   IGetOverviewDataResponse,
   IGetPoolDetailRequest,
   IGetPoolDetailResponse,
@@ -14,8 +15,7 @@ import {
   IPoolTranscationRequest,
   IPoolTranscationSwapsResponse,
   IPoolTranscationWithdrawsResponse,
-  SwapRouteResult,
-  IGetMarketListItem,
+  SwapRouteResult
 } from './type';
 
 export interface IAsset {
@@ -50,8 +50,8 @@ export default class DexService {
     return this.apiClient.get<SwapRouteResult[]>(
       `/pool/getValidRoutes?offerDenom=${offerDenom}&offerAmount=${offerAmount}&askDenom=${askDenom}`,
       {
-        baseURL: SERVICE_BASE_URL,
-      },
+        baseURL: SERVICE_BASE_URL
+      }
     );
   }
 
@@ -115,19 +115,19 @@ export default class DexService {
 
   async getAssetsPrice(denomList: string[]): Promise<{ [key: string]: string }> {
     return this.apiClient.get<{ [key: string]: string }>(`/asset/getAssetsPrice?denoms=${denomList.join(',')}`, {
-      baseURL: SERVICE_BASE_URL,
+      baseURL: SERVICE_BASE_URL
     });
   }
 
   async getMarketList(): Promise<IGetMarketListItem[]> {
     return this.apiClient.get<IGetMarketListItem[]>('/market/list', {
-      baseURL: SERVICE_BASE_URL,
+      baseURL: SERVICE_BASE_URL
     });
   }
 
   async getSideAssets(): Promise<IAsset[]> {
     return this.apiClient.get<IAsset[]>('/asset/assets', {
-      baseURL: SERVICE_BASE_URL,
+      baseURL: SERVICE_BASE_URL
     });
   }
 }

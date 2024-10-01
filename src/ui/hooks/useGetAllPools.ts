@@ -1,11 +1,9 @@
 import { useQuery } from 'react-query';
 
-import { SIDERPC_URL_TESTNET } from '@/shared/constant';
-import { NetworkType } from '@/shared/types';
+import { sideChain } from '@/shared/constant';
 // import { useWalletContext } from "@/ui/components/WalletContext";
 import { IPoolItem } from '@/ui/services/dex/type';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useNetworkType } from '@/ui/state/settings/hooks';
 import { swapStore } from '@/ui/stores/SwapStore';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
@@ -15,10 +13,7 @@ import { useGetSideBalanceList } from './useGetSideBalanceList';
 export default function useGetAllPools() {
   const currentAccount = useCurrentAccount();
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
-  const networkType = useNetworkType();
   const { data: pairs } = useGetAllPairs();
-  // const restUrl = networkType === NetworkType.MAINNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
-  const restUrl = networkType === NetworkType.TESTNET ? SIDERPC_URL_TESTNET : SIDERPC_URL_TESTNET;
 
   const { data, isLoading: loading } = useQuery({
     queryKey: ['getAllPools'],
@@ -27,7 +22,7 @@ export default function useGetAllPools() {
       // debugger;
       if (!currentAccount?.address) return;
       // debugger;
-      const cosmWasmClient = await CosmWasmClient.connect(restUrl);
+      const cosmWasmClient = await CosmWasmClient.connect(sideChain.restUrl);
 
       // debugger;
       const pools = await Promise.all(

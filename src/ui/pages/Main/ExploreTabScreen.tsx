@@ -3,6 +3,7 @@ import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { SIDE_BRIDGEEXPLORER_URL, SIDE_HUB_URL, SIDE_STATION_URL } from '@/shared/constant';
 import { Content, Footer, Icon, Input, Layout } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import MainHeader from '@/ui/pages/Main/MainHeader';
@@ -25,8 +26,7 @@ export default function SettingsTabScreen() {
         <div
           className={`mt-[16px] w-full border-[1px] border-solid px-[10px] flex items-center rounded-[10px] bg-[#1E1E1F] relative gap-[8px] !min-h-[40px] ${
             isFocus ? 'border-white' : ' border-[#ffffff20] hover:border-[#ffffff50]'
-          }`}
-        >
+          }`}>
           <Icon icon="search" color={'search_icon'} size={20}></Icon>
           <Input
             value={searchTerm}
@@ -60,8 +60,7 @@ export default function SettingsTabScreen() {
               transform: 'translateY(-50%)',
               cursor: 'pointer',
               display: searchTerm ? 'block' : 'none'
-            }}
-          >
+            }}>
             <Icon icon="clear" color={isHover ? 'white' : 'search_icon'} size={20}></Icon>
           </div>
         </div>
@@ -98,8 +97,7 @@ export default function SettingsTabScreen() {
               delay: 2000, // 自动播放延迟时间，单位为毫秒
               disableOnInteraction: false // 用户交互后仍然继续自动播放
             }}
-            className="mySwiper"
-          >
+            className="mySwiper">
             <SwiperSlide>
               <img className={'w-full h-[98px] mt-[6px]'} src={'/images/img/explore-banner.png'} alt={'banner'} />
             </SwiperSlide>
@@ -112,8 +110,7 @@ export default function SettingsTabScreen() {
             <div className="flex gap-[16px] ">
               <div
                 className="flex flex-col items-center gap-[6px] group cursor-pointer"
-                onClick={() => window.open('https://testnet.side.one/')}
-              >
+                onClick={() => window.open(SIDE_STATION_URL)}>
                 <div className="w-[56px] h-[56px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 ">
                   <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-station.png" alt="station" />
                 </div>
@@ -122,8 +119,7 @@ export default function SettingsTabScreen() {
 
               <div
                 className="flex flex-col items-center gap-[6px] group cursor-pointer"
-                onClick={() => window.open('https://testnet.side.one/')}
-              >
+                onClick={() => window.open(SIDE_HUB_URL)}>
                 <div className="w-[56px] h-[56px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 ">
                   <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
                 </div>
@@ -139,8 +135,7 @@ export default function SettingsTabScreen() {
             <div className="flex flex-col gap-[16px] ">
               <div
                 className="flex  gap-[16px] group cursor-pointer"
-                onClick={() => window.open('https://testnet.side.one/')}
-              >
+                onClick={() => window.open(SIDE_BRIDGEEXPLORER_URL)}>
                 <div className="w-[60px] h-[60px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 cursor-pointer">
                   <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-station.png" alt="station" />
                 </div>
@@ -152,8 +147,7 @@ export default function SettingsTabScreen() {
 
               <div
                 className="flex  gap-[16px] group cursor-pointer"
-                onClick={() => window.open('https://testnet.side.one/')}
-              >
+                onClick={() => window.open(SIDE_BRIDGEEXPLORER_URL)}>
                 <div className="w-[60px] h-[60px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 cursor-pointer">
                   <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
                 </div>

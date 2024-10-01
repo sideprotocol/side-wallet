@@ -4,8 +4,6 @@
 import React, { useEffect, useState } from 'react';
 import toast, { Toast } from 'react-hot-toast';
 
-import { ToastOptions } from '@/ui/constants/toast';
-
 interface IToastView {
   children: React.ReactNode;
   type?: 'success' | 'fail';
@@ -18,7 +16,7 @@ export default function ToastView({ children, type, toaster, txHashUrl }: IToast
 
   const [isHovered, setIsHovered] = useState(false);
 
-  const duration = ToastOptions.duration;
+  const duration = 5000;
 
   const timePerPro = (duration || 5000) / 100;
 
@@ -58,8 +56,7 @@ export default function ToastView({ children, type, toaster, txHashUrl }: IToast
         bottom: '50px'
       }}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+      onMouseLeave={() => setIsHovered(false)}>
       <div>
         {/* {type === 'success' && <SuccessSVG />}
         {type === 'fail' && <FailSVG />} */}
@@ -69,8 +66,7 @@ export default function ToastView({ children, type, toaster, txHashUrl }: IToast
           width: '100%',
           paddingRight: '50px',
           overflowWrap: 'break-word'
-        }}
-      >
+        }}>
         {children}
 
         {txHashUrl && (
@@ -85,8 +81,7 @@ export default function ToastView({ children, type, toaster, txHashUrl }: IToast
                 textTransform: 'capitalize'
               }}
               rel="noreferrer"
-              target="_blank"
-            >
+              target="_blank">
               View Transaction
             </a>
           </div>
@@ -95,8 +90,7 @@ export default function ToastView({ children, type, toaster, txHashUrl }: IToast
         <div className="absolute bottom-2 w-3/5    h-0.5 bg-gray-200">
           <div
             className={'absolute top-0 h-full'}
-            style={{ width: `${progress}%`, background: type == 'success' ? '#0DD4C3' : '#F6465D' }}
-          ></div>
+            style={{ width: `${progress}%`, background: type == 'success' ? '#0DD4C3' : '#F6465D' }}></div>
         </div>
       </div>
       {/*<IconButton*/}
