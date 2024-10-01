@@ -10,7 +10,6 @@ import { Icon } from '@/ui/components/TokenCurrent';
 import { getCurrentTab, useExtensionIsInTab, useOpenExtensionInTab } from '@/ui/features/browser/tabs';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import { useNetworkType } from '@/ui/state/settings/hooks';
 import { spacing } from '@/ui/theme/spacing';
 import { useWallet } from '@/ui/utils';
 
@@ -133,8 +132,6 @@ const SettingList: Setting[] = [
 export default function SettingsTabScreen() {
   const navigate = useNavigate();
 
-  const networkType = useNetworkType();
-
   const isInTab = useExtensionIsInTab();
 
   const [connected, setConnected] = useState(false);
@@ -169,7 +166,6 @@ export default function SettingsTabScreen() {
     }
 
     if (v.action == 'networkType') {
-      console.log('networkType: ', networkType);
       v.value = NETWORK_TYPES[0].label;
     }
 

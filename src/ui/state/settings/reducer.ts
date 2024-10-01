@@ -17,7 +17,6 @@ export interface SettingsState {
 export const initialState: SettingsState = {
   locale: 'English',
   addressType: AddressType.P2TR,
-  // networkType: NetworkType.MAINNET,
   networkType: NetworkType.TESTNET,
   chainType: ChainType.BITCOIN_MAINNET,
   walletConfig: {

@@ -6,7 +6,6 @@ import {
   Atomical,
   DecodedPsbt,
   Inscription,
-  NetworkType,
   RawTxInfo,
   RuneBalance,
   SignPsbtOptions,
@@ -26,7 +25,6 @@ import { SignPsbtWithRisksPopover } from '@/ui/components/SignPsbtWithRisksPopov
 import KeystoneSignScreen from '@/ui/pages/Wallet/KeystoneSignScreen';
 import { useAccountAddress, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import { useNetworkType } from '@/ui/state/settings/hooks';
 import {
   usePrepareSendAtomicalsNFTCallback,
   usePrepareSendBTCCallback,
@@ -525,10 +523,6 @@ export default function SignPsbt({
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
-
-  const networkType = useNetworkType();
-
-  const isMainnet = networkType !== NetworkType.TESTNET;
 
   const init = async () => {
     let txError = '';

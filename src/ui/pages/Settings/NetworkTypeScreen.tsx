@@ -2,13 +2,12 @@ import { sideChain } from '@/shared/constant';
 import { Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useReloadAccounts } from '@/ui/state/accounts/hooks';
-import { useChangeNetworkTypeCallback, useNetworkType } from '@/ui/state/settings/hooks';
+import { useChangeNetworkTypeCallback } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
 
 import { useNavigate } from '../MainRoute';
 
 export default function NetworkTypeScreen() {
-  const networkType = useNetworkType();
   const changeNetworkType = useChangeNetworkTypeCallback();
   const reloadAccounts = useReloadAccounts();
   const tools = useTools();
