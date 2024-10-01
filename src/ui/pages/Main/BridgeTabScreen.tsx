@@ -59,6 +59,18 @@ export default function BridgeTabScreen() {
 
   const withdrawEnabled = params?.params?.withdraw_enabled;
 
+  const btcVault = params?.params?.vaults
+    .filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
+    .reduce((max, current) => {
+      return BigInt(current.version) > BigInt(max.version) ? current : max;
+    })?.address;
+
+  const runeVault = params?.params?.vaults
+    .filter((vault) => vault.asset_type === 'ASSET_TYPE_RUNES')
+    .reduce((max, current) => {
+      return BigInt(current.version) > BigInt(max.version) ? current : max;
+    })?.address;
+
   const bridgeEnabled = isDeposit ? depositEnabled : withdrawEnabled;
 
   let runeBalance = useBitcoinRuneBalance(base);
@@ -117,7 +129,9 @@ export default function BridgeTabScreen() {
     isGreaterThanMaxWithdraw ||
     lessThanMinSatDeposit ||
     !bridgeEnabled ||
-    !isBTCEnoughPayingFee;
+    !isBTCEnoughPayingFee ||
+    !btcVault ||
+    !runeVault;
 
   useEffect(() => {
     if (isTestNet) {
