@@ -4,7 +4,8 @@ import Lottie from 'react-lottie';
 import { useNavigate as useNavigateRouter } from 'react-router-dom';
 
 import * as animationData from '@/ui/assets/lottie/forget-pwd.json';
-import { Button, Column, Header, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Header, Row, Text } from '@/ui/components';
+import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { keyringsActions } from '@/ui/state/keyrings/reducer';
 import { useWallet } from '@/ui/utils';
@@ -19,6 +20,7 @@ export default function CreateHDWalletScreen() {
   const [checked3, setChecked3] = useState(false);
   const wallet = useWallet();
   const dispatch = useAppDispatch();
+  const isInTab = useExtensionIsInTab();
 
   // const strongText = useMemo(() => {
   //   if (!password) {
@@ -37,7 +39,19 @@ export default function CreateHDWalletScreen() {
   // }, [password]);
 
   return (
-    <Layout style={{}}>
+    <div
+      style={{
+        backgroundColor: '#09090A',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
+        minHeight: '600px',
+        height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        border: !isInTab ? '1px solid rgba(255, 255, 255, 0.1)' : 'none'
+      }}>
       <Header onBack={() => navigateRouter(-1)} title="Forgot Password"></Header>
       <Column
         style={{
@@ -156,6 +170,6 @@ export default function CreateHDWalletScreen() {
           }}
         />
       </Column>
-    </Layout>
+    </div>
   );
 }

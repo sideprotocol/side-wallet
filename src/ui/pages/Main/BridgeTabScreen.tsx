@@ -10,6 +10,7 @@ import { CoinInput } from '@/ui/components/CoinInput';
 import { Icon } from '@/ui/components/Icon';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
+import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -41,13 +42,15 @@ const SAT_ITEM = {
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
   const currentAccount = useCurrentAccount();
-  const { balanceList: assets } = useGetSideBalanceList(currentAccount?.address);
+  const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
+  const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeStore();
   const isBtcBridge = base === 'sat';
 
   const { tokens: runesBalance } = useRuneListV2();
   const isDeposit = (from?.name || '').includes('Bitcoin');
+  const assets = isDeposit ? btcBalanceList : sideBalanceList;
 
   const { params } = useBridgeParams();
 
