@@ -5,10 +5,9 @@
 - Install [Node.js](https://nodejs.org) version 16
 - Install [Yarn](https://yarnpkg.com/en/docs/install)
 - Install dependencies: `yarn`
-- Build the project to the `./dist/` folder with `yarn build:firefox` for Firefox
-- Build the project to the `./dist/` folder with `yarn build:chrome` for Chrome
-- Develop: `yarn build:chrome:dev`
+- Build the project to the `./dist/` folder with `yarn build:chrome:mv3` for Chrome
+- Develop: `yarn build:chrome:mv3:dev`
 
 ## Special Thanks
 
-Thanks to the MetaMask team for their contributions to the browser extension wallet community, UniSat Wallet relies heavily on their contributions.
+Special thanks to the Unisat team for their contribution. Side Wallet is a fork of Unisat, with modifications made to ensure compatibility with Side Chain and to integrate seamlessly with our other products.

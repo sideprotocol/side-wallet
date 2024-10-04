@@ -14,7 +14,6 @@ import { OutputValueBar } from '@/ui/components/OutputValueBar';
 import { RBFBar } from '@/ui/components/RBFBar';
 import WebsiteBar from '@/ui/components/WebsiteBar';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useNetworkType } from '@/ui/state/settings/hooks';
 import {
   useFetchUtxosCallback,
   usePrepareSendBTCCallback,
@@ -134,7 +133,6 @@ interface StepProps {
 }
 
 function InscribeTransferStep({ contextData, updateContextData }: StepProps) {
-  const networkType = useNetworkType();
   const [getApproval, resolveApproval, rejectApproval] = useApproval();
 
   const handleCancel = () => {
@@ -300,8 +298,7 @@ function InscribeTransferStep({ contextData, updateContextData }: StepProps) {
                           title={`${tokenBalance.availableBalanceUnSafe} ${tokenBalance.ticker} is unconfirmed, please wait for confirmation `}
                           overlayStyle={{
                             fontSize: fontSizes.xs
-                          }}
-                        >
+                          }}>
                           <div>
                             <Row>
                               <Text
@@ -322,8 +319,7 @@ function InscribeTransferStep({ contextData, updateContextData }: StepProps) {
                         itemsCenter
                         onClick={() => {
                           setInputAmount(tokenBalance.availableBalanceSafe);
-                        }}
-                      >
+                        }}>
                         <Text text={`${tokenBalance.availableBalanceSafe}`} textCenter size="xs" />
 
                         <BRC20Ticker tick={tokenBalance.ticker} preset="sm" />

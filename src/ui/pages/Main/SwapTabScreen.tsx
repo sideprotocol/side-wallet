@@ -409,7 +409,6 @@ export default function SwapTabScreen() {
   const balanceListFilter = findIntersection(marketList, balanceList);
   useSwapSimulation();
   useGetAllPools();
-  // const networkType = useNetworkType();
   // const isInTab = useExtensionIsInTab();
   const validResult =
     swapPair?.native?.denom &&

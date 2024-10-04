@@ -118,7 +118,7 @@ class PreferenceService {
         firstOpen: false,
         currency: 'USD',
         addressType: AddressType.P2WPKH,
-        networkType: NetworkType.MAINNET,
+        networkType: NetworkType.TESTNET,
         chainType: ChainType.BITCOIN_MAINNET,
         keyringAlianNames: {},
         accountAlianNames: {},
@@ -168,7 +168,7 @@ class PreferenceService {
     }
 
     if (!this.store.networkType) {
-      this.store.networkType = NetworkType.MAINNET;
+      this.store.networkType = NetworkType.TESTNET;
     }
 
     if (this.store.currentAccount) {
@@ -367,13 +367,13 @@ class PreferenceService {
   };
 
   // // network type
-  // getNetworkType = () => {
-  //   return this.store.networkType;
-  // };
+  getNetworkType = () => {
+    return this.store.networkType;
+  };
 
-  // setNetworkType = (networkType: NetworkType) => {
-  //   this.store.networkType = networkType;
-  // };
+  setNetworkType = (networkType: NetworkType) => {
+    this.store.networkType = networkType;
+  };
 
   // chain type
   getChainType = () => {

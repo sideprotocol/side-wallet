@@ -1,31 +1,26 @@
 import BigNumber from 'bignumber.js';
-import {useEffect, useMemo, useState} from 'react';
-import {AddressRunesTokenSummary} from '@/shared/types';
-import {runesUtils} from '@/shared/lib/runes-utils';
-import {RawTxInfo} from '@/shared/types';
+import { useEffect, useMemo, useState } from 'react';
+
+import { runesUtils } from '@/shared/lib/runes-utils';
+import { AddressRunesTokenSummary, BalanceItem, RawTxInfo } from '@/shared/types';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
-import {Button, Column, Content, Header, Input, Layout, Row, Text} from '@/ui/components';
-import {useTools} from '@/ui/components/ActionComponent';
-import {FeeRateBar} from '@/ui/components/FeeRateBar';
-import {OutputValueBar} from '@/ui/components/OutputValueBar';
-import {RBFBar} from '@/ui/components/RBFBar';
-import {useNavigate} from '@/ui/pages/MainRoute';
-import {useRuneListV2} from '@/ui/state/bridge/hook';
-import {useLocationState, useWallet} from '@/ui/utils';
+import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/components';
+import { useTools } from '@/ui/components/ActionComponent';
+import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import InscriptionPreview from '@/ui/components/InscriptionPreview';
-import {
-  useBitcoinTx,
-  useFetchUtxosCallback,
-  usePrepareSendRunesCallback,
-  useSafeBalance
-} from '@/ui/state/transactions/hooks';
-import {useUiTxCreateScreen, useUpdateUiTxCreateScreen} from '@/ui/state/ui/hooks';
-import {getAddressUtxoDust} from '@unisat/wallet-sdk/lib/transaction';
-import {useCurrentAccount} from '@/ui/state/accounts/hooks';
+import { OutputValueBar } from '@/ui/components/OutputValueBar';
+import { RBFBar } from '@/ui/components/RBFBar';
+import { useNavigate } from '@/ui/pages/MainRoute';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useRuneListV2 } from '@/ui/state/bridge/hook';
+import { useFetchUtxosCallback, usePrepareSendRunesCallback } from '@/ui/state/transactions/hooks';
+import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
+import { useLocationState, useWallet } from '@/ui/utils';
+import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
 
 interface LocationState {
   base: string;
-  token: any;
+  token: BalanceItem;
 }
 
 export default function CreateSendRune() {
@@ -72,11 +67,10 @@ export default function CreateSendRune() {
       parent: ''
     }
   });
-  const safeBalance = useSafeBalance();
   const navigate = useNavigate();
-  const bitcoinTx = useBitcoinTx();
 
-  const {base, token} = useLocationState<LocationState>();
+  const { token } = useLocationState<LocationState>();
+  const runeId = token.denom.split('runes/')[1];
 
   const [disabled, setDisabled] = useState(true);
 
@@ -105,8 +99,7 @@ export default function CreateSendRune() {
   }, []);
 
   useEffect(() => {
-    wallet.getAddressRunesTokenSummary(account.address, token.runeid).then((tokenSummary) => {
-      console.log('tokenSummary: ', tokenSummary)
+    wallet.getAddressRunesTokenSummary(account.address, runeId).then((tokenSummary) => {
       setTokenSummary(tokenSummary);
     });
   }, []);
@@ -121,15 +114,14 @@ export default function CreateSendRune() {
   const prepareSendRunes = usePrepareSendRunesCallback();
   const [rawTxInfo, setRawTxInfo] = useState<RawTxInfo>();
 
-  const {tokens: runeList} = useRuneListV2();
+  const { tokens: runeList } = useRuneListV2();
 
-  console.log('runeList: ', runeList, token);
   const {
     balance: runeBalance,
     runeid,
     runeAmount
   } = useMemo(() => {
-    const rune = runeList.find((r) => r.runeid === token.runeid);
+    const rune = runeList.find((r) => r.runeid === runeId);
 
     return {
       rune,
@@ -176,8 +168,7 @@ export default function CreateSendRune() {
     <Layout
       style={{
         position: 'relative'
-      }}
-    >
+      }}>
       <Header
         onBack={() => {
           window.history.go(-1);
@@ -199,19 +190,13 @@ export default function CreateSendRune() {
           borderTop: '1px solid #404045',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
         }}
-        justifyCenter
-      >
+        justifyCenter>
         <Row
           style={{
             marginTop: '6px'
-          }}
-        >
+          }}>
           {/* <Image src={token.logo} size={50}></Image> */}
-          {tokenSummary.runeLogo ? (
-            <InscriptionPreview data={tokenSummary?.runeLogo} preset="small" asLogo/>
-          ) : (
-            ''
-          )}
+          {tokenSummary.runeLogo ? <InscriptionPreview data={tokenSummary?.runeLogo} preset="small" asLogo /> : ''}
         </Row>
       </Row>
 
@@ -224,8 +209,7 @@ export default function CreateSendRune() {
           padding: '16px 16px 64px 16px',
           marginTop: '30px',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
-        }}
-      >
+        }}>
         <Column mt="xxl">
           <Row
             itemsCenter
@@ -234,17 +218,16 @@ export default function CreateSendRune() {
             style={{
               fontSize: '16px',
               color: '#0DD4C3'
-            }}
-          >
-            {token.symbol}
+            }}>
+            {token.asset.symbol}
           </Row>
 
-          <Text text="Recipient" preset="regular" color="white"/>
+          <Text text="Recipient" preset="regular" color="white" />
           <Input
             preset="address"
             addressInputData={toInfo}
             onAddressInputChange={(val) => {
-              setUiState({toInfo: val});
+              setUiState({ toInfo: val });
             }}
             autoFocus={true}
           />
@@ -252,19 +235,18 @@ export default function CreateSendRune() {
 
         <Column mt="lg">
           <Row full justifyBetween>
-            <Text text="Balance" preset="regular" color="white"/>
+            <Text text="Balance" preset="regular" color="white" />
 
             <Row
               gap="sm"
               style={{
                 fontSize: '14px'
-              }}
-            >
-              <img src={WalletIcon} alt={'WalletIcon'}/>
+              }}>
+              <img src={WalletIcon} alt={'WalletIcon'} />
 
               <div>{runeBalance?.toString()}</div>
 
-              {token.emoji}
+              {token.asset.symbol}
             </Row>
           </Row>
           <Input
@@ -276,18 +258,18 @@ export default function CreateSendRune() {
               if (autoAdjust) {
                 setAutoAdjust(false);
               }
-              setUiState({inputAmount: amount});
+              setUiState({ inputAmount: amount });
             }}
             enableMax={true}
             onMaxClick={() => {
               setAutoAdjust(true);
-              setUiState({inputAmount: runeBalance.toString()});
+              setUiState({ inputAmount: runeBalance.toString() });
             }}
           />
         </Column>
 
         <Column mt="lg">
-          <Text text="OutputValue" color="white" mb="sm"/>
+          <Text text="OutputValue" color="white" mb="sm" />
 
           <OutputValueBar
             onChange={(val) => {
@@ -298,14 +280,14 @@ export default function CreateSendRune() {
           />
         </Column>
 
-        {error && <Text text={error} color="error"/>}
+        {error && <Text text={error} color="error" />}
 
         <Column mt="lg">
-          <Text text="Fee" color="white" mb="sm"/>
+          <Text text="Fee" color="white" mb="sm" />
 
           <FeeRateBar
             onChange={(val) => {
-              setUiState({feeRate: val});
+              setUiState({ feeRate: val });
             }}
           />
         </Column>
@@ -314,7 +296,7 @@ export default function CreateSendRune() {
           <RBFBar
             defaultValue={enableRBF}
             onChange={(val) => {
-              setUiState({enableRBF: val});
+              setUiState({ enableRBF: val });
             }}
           />
         </Column>
@@ -325,10 +307,9 @@ export default function CreateSendRune() {
             preset="primary"
             text="Next"
             onClick={(e) => {
-              console.log({rawTxInfo});
-              navigate('TxConfirmScreen', {rawTxInfo});
-            }}
-          ></Button>
+              console.log({ rawTxInfo });
+              navigate('TxConfirmScreen', { rawTxInfo });
+            }}></Button>
         </Column>
       </Content>
     </Layout>
