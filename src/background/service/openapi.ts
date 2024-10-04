@@ -347,7 +347,6 @@ export class OpenApiService {
     }
     const tickLine = ticks.join('');
     if (!tickLine) return {};
-    console.log('this.currentRequestRune: ', this.currentRequestRune);
     try {
       while (this.currentRequestRune[tickLine]) {
         await new Promise((resolve) => setTimeout(resolve, 100));

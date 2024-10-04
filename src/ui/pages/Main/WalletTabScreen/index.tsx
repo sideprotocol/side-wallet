@@ -13,7 +13,7 @@ import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { useWallet } from '@/ui/utils';
+import { getTruncate, useWallet } from '@/ui/utils';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
@@ -120,7 +120,7 @@ export default function WalletTabScreen() {
                 }}
               />
               <Text
-                text={accountBalanceByUSD.split('.')[0]}
+                text={getTruncate(accountBalanceByUSD.split('.')[0])}
                 style={{
                   fontSize: '38px',
                   fontWeight: 500,

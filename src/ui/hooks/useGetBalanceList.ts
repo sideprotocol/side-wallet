@@ -64,7 +64,7 @@ export const useGetBalanceList = ({
           denom: ''
         };
 
-        const formatAmount = formatUnitAmount(balance.amount, item.exponent || 2);
+        const formatAmount = formatUnitAmount(balance.amount, +item.exponent || 6);
         const totalValue = new BigNumber(denomPrice).multipliedBy(formatAmount).toString();
         return {
           denom: item.denom,
