@@ -30,14 +30,12 @@ import { Coin } from '@cosmjs/stargate';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
-  // const { client: curClient, curChain } = useWalletContext();
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
-  const { data: marketList } = useGetMarketList();
   const { reloadDataTrigger } = useSwapStore();
 
   const getBalancesAll = async () => {
+    if (!balanceList.length) return;
     const balancesObject = balanceList.reduce((acc, cur, index) => {
-      // console.log('cur: ', cur, index, balanceList);
       return {
         ...acc,
         [balanceList[index].denom]: {
