@@ -10,9 +10,10 @@ import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { queryAddressUtxo, useBridge, useRuneListV2 } from '@/ui/state/bridge/hook';
+import { useBridge, useBridgeState, useQueryAddressUtxo } from '@/ui/state/bridge/hook';
+import { BridgeActions } from '@/ui/state/bridge/reducer';
+import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { fontSizes } from '@/ui/theme/font';
 import { parseUnitAmount } from '@/ui/utils';
 import { formatAddress } from '@/ui/utils/format';
@@ -56,7 +57,8 @@ export default function BridgeTabScreen() {
   const { bridge, bridgeRune } = useBridge();
 
   const { bridgeAmount, from, to, loading, selectTokenModalShow, base, accountUtxo, fee, feeSummary } =
-    useBridgeStore();
+    useBridgeState();
+  const dispatch = useAppDispatch();
 
   const [networkFee, setNetworkFee] = useState<number>(0);
 
@@ -67,14 +69,13 @@ export default function BridgeTabScreen() {
   const currentAccount = useCurrentAccount();
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
-  let { tokens } = useRuneListV2();
   const isDeposit = (from?.name || '').includes('Bitcoin');
   const assets = isDeposit ? btcBalanceList : sideBalanceList;
   const balanceList = assets?.filter((item) => {
     return item?.denom.includes('rune') || item?.denom.includes('sat');
   });
-  const isBtcBridge = bridgeStore?.base === 'sat';
-  const bridgeAsset = balanceList.find((item) => item.denom === bridgeStore.base);
+  const isBtcBridge = base === 'sat';
+  const bridgeAsset = balanceList.find((item) => item.denom === base);
   const runeId = bridgeAsset?.denom.split('/')[1];
 
   const yourReceive = toReadableAmount(
@@ -94,8 +95,7 @@ export default function BridgeTabScreen() {
     services.unisat.getFeeSummary().then((res) => {
       const rcFee = res.list[2].feeRate;
       setNetworkFee(rcFee || 20);
-      bridgeStore.fee = Number(rcFee);
-      bridgeStore.feeSummary = res.list;
+      dispatch(BridgeActions.update({ fee: +rcFee, feeSummary: res.list }));
     });
   }, [fee]);
 
@@ -117,6 +117,7 @@ export default function BridgeTabScreen() {
   const isDisabled = BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(networkFee) || loading || Number(fee) === 0;
 
   const [openEditId, setOpenEditId] = useState('');
+  const queryAddressUtxo = useQueryAddressUtxo();
 
   useEffect(() => {
     queryAddressUtxo(currentAccount.address, UNISAT_SERVICE_ENDPOINT);
@@ -272,8 +273,7 @@ export default function BridgeTabScreen() {
                                   return;
                                 }
                                 const amount = targetValue.replace(/^0+/, '0'); // remove prefix zeros
-
-                                bridgeStore.fee = Number(amount);
+                                dispatch(BridgeActions.update({ fee: +amount }));
                               }}
                               sx={{
                                 padding: 0,
@@ -302,7 +302,7 @@ export default function BridgeTabScreen() {
                     text={'You will receive'}
                     value={
                       <div className="flex items-center text-right">
-                        {isBtcBridge ? yourReceive : bridgeStore?.bridgeAmount} {bridgeAsset?.asset.symbol}
+                        {isBtcBridge ? yourReceive : bridgeAmount} {bridgeAsset?.asset.symbol}
                         <img className="ml-1" src={bridgeAsset?.asset.logo} width={20} height={20}></img>
                       </div>
                     }></DetailRow>
@@ -332,7 +332,7 @@ export default function BridgeTabScreen() {
                     value={
                       <div className="flex items-center text-right">
                         <span className="">
-                          {isBtcBridge ? yourReceive : bridgeStore?.bridgeAmount} {bridgeAsset?.asset.symbol}
+                          {isBtcBridge ? yourReceive : bridgeAmount} {bridgeAsset?.asset.symbol}
                         </span>
                         <img
                           className="ml-1"

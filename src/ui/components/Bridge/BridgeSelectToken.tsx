@@ -6,7 +6,9 @@ import ImageIcon from '@/ui/components/ImageIcon';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
+import { useBridgeState } from '@/ui/state/bridge/hook';
+import { BridgeActions } from '@/ui/state/bridge/reducer';
+import { useAppDispatch } from '@/ui/state/hooks';
 
 export default function Index(props) {
   let { open, onClose } = props;
@@ -17,8 +19,8 @@ export default function Index(props) {
   // list, onSearch
   const [searchValue, onSearch] = useState<string>('');
   const [isHover, setIsHover] = useState(false);
-  const { from } = useBridgeStore();
-  // let { tokens } = useRuneListV2();
+  const { from } = useBridgeState();
+  const dispatch = useAppDispatch();
   const isDeposit = (from?.name || '').includes('Bitcoin');
   sideBalanceList = sideBalanceList?.filter((item) => {
     return item?.denom.includes('rune') || item?.denom.includes('sat');
@@ -115,8 +117,7 @@ export default function Index(props) {
                   <Row
                     classname={'bg-item-hover'}
                     onClick={() => {
-                      bridgeStore.base = asset.denom;
-                      bridgeStore.exponent = +asset.asset.exponent;
+                      dispatch(BridgeActions.update({ base: asset.denom, exponent: +asset.asset.exponent }));
                       onClose();
                     }}
                     full
@@ -161,8 +162,7 @@ export default function Index(props) {
                     key={item?.asset?.symbol + item?.asset?.name}
                     className={''}
                     onClick={() => {
-                      bridgeStore.base = item?.denom;
-                      bridgeStore.exponent = Number(item?.asset.exponent);
+                      dispatch(BridgeActions.update({ base: item.denom, exponent: +item.asset.exponent }));
                       onClose();
                     }}>
                     <Row

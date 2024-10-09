@@ -4,12 +4,12 @@ import * as bitcoin from 'bitcoinjs-lib';
 import { RUNE_BRIDGE_VAULT, SIDE_BTC_INDEXER, SIDE_RUNE_INDEXER } from '@/shared/constant';
 import { decodeTxToGetValue } from '@/shared/lib/runes-utils';
 import { RawTxInfo } from '@/shared/types';
-import { DepositBTCBridge } from '@/ui/stores/BridgeStore';
 import { useWallet } from '@/ui/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 import { sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
 
 import { useCurrentAccount } from '../accounts/hooks';
+import { DepositBTCBridge } from '../bridge/reducer';
 import { useNetworkType } from '../settings/hooks';
 
 function compareAmount(a: string, b: string) {

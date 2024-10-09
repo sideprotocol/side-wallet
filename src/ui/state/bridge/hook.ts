@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
-import { Buffer } from 'buffer';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { MessageComposer } from '@/codegen/src/side/btcbridge/tx.registry';
 import {
@@ -20,16 +19,18 @@ import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { SideBridgeParams } from '@/ui/services/bridge';
 import { useChainType } from '@/ui/state/settings/hooks';
-import { DepositBTCBridge, bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
 import { formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
 import { toReadableAmount } from '@/ui/utils/formatter';
 import { satoshisToAmount, sendAllBTC, sendRunesWithBTC } from '@/ui/wallet-sdk/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
 
+import { AppState } from '..';
 import { useCurrentAccount } from '../accounts/hooks';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import { useNetworkType } from '../settings/hooks';
 import { useSignAndBroadcastTxRaw } from '../transactions/hooks/cosmos';
+import { BridgeActions, DepositBTCBridge } from './reducer';
 
 async function fetchRuneOutput(key: string, SIDE_RUNE_INDEXER: string) {
   return fetch(`${SIDE_RUNE_INDEXER}/output/${key}`, {
@@ -82,8 +83,13 @@ export const setRuneBalanceFromStore = (balance: string, runeId: string, address
   return localStorage.setItem(RUNE_BALANCE_KEY_PREFIX + runeId + ':' + address, balance);
 };
 
+export function useBridgeState(): AppState['bridge'] {
+  return useAppSelector((state) => state.bridge);
+}
+
 export const useBtcBalance = () => {
-  const { from, loading } = useBridgeStore();
+  const { from, loading } = useBridgeState();
+  const dispatch = useAppDispatch();
 
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
@@ -148,13 +154,13 @@ export const useBtcBalance = () => {
 
   useEffect(() => {
     if (isDeposit) {
-      bridgeStore.balance = btcBalance;
+      dispatch(BridgeActions.update({ balance: btcBalance }));
 
       setBalance(btcBalance);
     } else {
       const parsedBalance = formatWithDP(formatUnitAmount(balanceSideSat, 8), 8);
 
-      bridgeStore.balance = parsedBalance;
+      dispatch(BridgeActions.update({ balance: parsedBalance }));
 
       setBalance(parsedBalance);
     }
@@ -163,40 +169,9 @@ export const useBtcBalance = () => {
   return balance;
 };
 
-// export const useRuneBalance = (base: string) => {
-//   const { from } = useBridgeStore();
-//
-//   const isDeposit = (from?.name || '').includes('Bitcoin');
-//   const { data: runesBalance, loading: runeLoading } = useRuneBalances();
-//
-//   const rune = runesBalance.find((rune) => rune.base === base);
-//
-//   const { balanceAmount } = useGetSideTokenBalance(base);
-//
-//   if (!rune || runeLoading) return '0';
-//
-//   return isDeposit ? rune.balance || '0' : toReadableAmount(balanceAmount, rune.exponent || '6');
-// };
-
 export const useRuneBalanceV2 = (base: string) => {
-  const { from } = useBridgeStore();
-
-  const isDeposit = (from?.name || '').includes('Bitcoin');
-  let { tokens } = useRuneListV2();
-  // const { data: runesBalance, loading: runeLoading } = useRuneBalances();
-  //
-  // const rune = runesBalance.find((rune) => rune.base === base);
-  //
-  // const { balanceAmount } = useGetSideTokenBalance(base);
-  //
-  // if (!rune || runeLoading) return '0';
-
   return 0;
 };
-
-function toHex(data: Uint8Array): string {
-  return Buffer.from(data).toString('hex');
-}
 
 export const useRuneListV2 = () => {
   const wallet = useWallet();
@@ -255,7 +230,8 @@ export const useBitcoinRuneBalance = (base: string) => {
 };
 
 export const useBridge = () => {
-  const { from, bridgeAmount, fee, exponent } = useBridgeStore();
+  const { from, bridgeAmount, fee, exponent } = useBridgeState();
+  const dispatch = useAppDispatch();
 
   const currentAccount = useCurrentAccount();
 
@@ -270,10 +246,9 @@ export const useBridge = () => {
   const isDeposit = (from?.name || '').includes('Bitcoin');
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
-  console.log('networkType', networkType);
 
   const bridge = async () => {
-    bridgeStore.loading = true;
+    dispatch(BridgeActions.update({ loading: true }));
 
     if (isDeposit) {
       try {
@@ -296,11 +271,11 @@ export const useBridge = () => {
             tools.toastError(err.message);
           })
           .finally(() => {
-            bridgeStore.loading = false;
+            dispatch(BridgeActions.update({ loading: false }));
           });
       } catch (error) {
         tools.toastError('Deposit Failed! ');
-        bridgeStore.loading = false;
+        dispatch(BridgeActions.update({ loading: false }));
       }
     } else {
       const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
@@ -322,17 +297,17 @@ export const useBridge = () => {
             tools.toastError(err.message);
           })
           .finally(() => {
-            bridgeStore.loading = false;
+            dispatch(BridgeActions.update({ loading: false }));
           });
       } catch (error) {
         tools.toastError('Deposit Failed! ');
-        bridgeStore.loading = false;
+        dispatch(BridgeActions.update({ loading: false }));
       }
     }
   };
 
   const bridgeRune = async (runeId) => {
-    bridgeStore.loading = true;
+    dispatch(BridgeActions.update({ loading: true }));
 
     if (isDeposit) {
       try {
@@ -356,11 +331,11 @@ export const useBridge = () => {
             tools.toastError(err.message);
           })
           .finally(() => {
-            bridgeStore.loading = false;
+            dispatch(BridgeActions.update({ loading: false }));
           });
       } catch (error) {
         tools.toastError('Deposit Failed! ');
-        bridgeStore.loading = false;
+        dispatch(BridgeActions.update({ loading: false }));
       }
     } else {
       console.log(runeId, 'runeid');
@@ -384,11 +359,11 @@ export const useBridge = () => {
             tools.toastError(err.message);
           })
           .finally(() => {
-            bridgeStore.loading = false;
+            dispatch(BridgeActions.update({ loading: false }));
           });
       } catch (error) {
         tools.toastError('Deposit Failed! ');
-        bridgeStore.loading = false;
+        dispatch(BridgeActions.update({ loading: false }));
       }
     }
   };
@@ -662,7 +637,8 @@ export const useBridge = () => {
 };
 
 export const useRuneBridge = () => {
-  const { from, bridgeAmount, fee, base, loading } = useBridgeStore();
+  const { from, bridgeAmount, fee, base, loading } = useBridgeState();
+  const dispatch = useAppDispatch();
 
   const currentAccount = useCurrentAccount();
 
@@ -682,7 +658,7 @@ export const useRuneBridge = () => {
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 
   const bridge = async () => {
-    bridgeStore.loading = true;
+    dispatch(BridgeActions.update({ loading: true }));
 
     if (isDeposit) {
       try {
@@ -744,7 +720,7 @@ export const useRuneBridge = () => {
         tools.toastError('Deposit Failed! ');
       }
     }
-    bridgeStore.loading = false;
+    dispatch(BridgeActions.update({ loading: false }));
   };
 
   const wallet = useWallet();
@@ -905,22 +881,28 @@ export const useRuneBridge = () => {
   return { bridge };
 };
 
-export const queryAddressUtxo = async (address: string, UNISAT_SERVICE_ENDPOINT: string) => {
-  if (!address) return;
-  const utxos = await fetch(`${UNISAT_SERVICE_ENDPOINT}/v5/address/btc-utxo?address=${address}`).then((res) =>
-    res.json()
+export function useQueryAddressUtxo() {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    async (address: string, UNISAT_SERVICE_ENDPOINT: string) => {
+      if (!address) return;
+      const utxos = await fetch(`${UNISAT_SERVICE_ENDPOINT}/v5/address/btc-utxo?address=${address}`).then((res) =>
+        res.json()
+      );
+
+      if (utxos.length === 1) {
+        dispatch(BridgeActions.update({ accountUtxo: utxos[0] }));
+        return;
+      }
+
+      const vout1 = utxos?.data?.find((utxo) => utxo.vout === 1);
+      if (vout1) {
+        dispatch(BridgeActions.update({ accountUtxo: vout1 }));
+      }
+    },
+    [dispatch]
   );
-
-  if (utxos.length === 1) {
-    bridgeStore.accountUtxo = utxos[0];
-    return;
-  }
-
-  const vout1 = utxos?.data?.find((utxo) => utxo.vout === 1);
-  if (vout1) {
-    bridgeStore.accountUtxo = vout1;
-  }
-};
+}
 
 const DEFAULT = {
   params: {

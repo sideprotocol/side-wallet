@@ -22,8 +22,6 @@ import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/ho
 import { fontSizes } from '@/ui/theme/font';
 import { amountToSatoshis, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
 
-// import { bridgeStore } from '@/ui/stores/BridgeStore';
-
 interface LocationState {
   base: string;
   token: BalanceItem;

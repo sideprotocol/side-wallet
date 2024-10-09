@@ -14,8 +14,9 @@ import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useBitcoinRuneBalance, useBridgeParams, useRuneListV2 } from '@/ui/state/bridge/hook';
-import { bridgeStore, useBridgeStore } from '@/ui/stores/BridgeStore';
+import { useBitcoinRuneBalance, useBridgeParams, useBridgeState, useRuneListV2 } from '@/ui/state/bridge/hook';
+import { BridgeActions } from '@/ui/state/bridge/reducer';
+import { useAppDispatch } from '@/ui/state/hooks';
 import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
@@ -45,7 +46,8 @@ export default function BridgeTabScreen() {
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
-  const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeStore();
+  const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeState();
+  const dispatch = useAppDispatch();
   const isBtcBridge = base === 'sat';
 
   const { tokens: runesBalance } = useRuneListV2();
@@ -117,8 +119,9 @@ export default function BridgeTabScreen() {
     !isDeposit;
 
   useEffect(() => {
-    bridgeStore.balance = balance;
+    dispatch(BridgeActions.update({ balance: balance }));
   }, [balance]);
+
   const { hoverExchange } = useSwapStore();
 
   const isGreaterThanBalance = BigNumber(bridgeAmount || '0').gt(balance);
@@ -135,27 +138,35 @@ export default function BridgeTabScreen() {
 
   useEffect(() => {
     if (isDev) {
-      bridgeStore.from = {
-        id: 'LIVENET',
-        name: 'Bitcoin Signet',
-        logo: '/images/icons/btc.svg'
-      };
-      bridgeStore.to = {
-        id: sideChain.chainID,
-        name: sideChain.name,
-        logo: sideChain.logo
-      };
+      dispatch(
+        BridgeActions.update({
+          from: {
+            id: 'LIVENET',
+            name: 'Bitcoin Signet',
+            logo: '/images/icons/btc.svg'
+          },
+          to: {
+            id: sideChain.chainID,
+            name: sideChain.name,
+            logo: sideChain.logo
+          }
+        })
+      );
     } else {
-      bridgeStore.from = {
-        id: sideChain.chainID,
-        name: sideChain.name,
-        logo: sideChain.logo
-      };
-      bridgeStore.to = {
-        id: 'mainnet',
-        name: 'Bitcoin',
-        logo: '/images/icons/btc.svg'
-      };
+      dispatch(
+        BridgeActions.update({
+          from: {
+            id: sideChain.chainID,
+            name: sideChain.name,
+            logo: sideChain.logo
+          },
+          to: {
+            id: 'mainnet',
+            name: 'Bitcoin',
+            logo: '/images/icons/btc.svg'
+          }
+        })
+      );
     }
   }, []);
 
@@ -224,9 +235,12 @@ export default function BridgeTabScreen() {
                   swapStore.hoverExchange = false;
                 }}
                 onClick={() => {
-                  const from = bridgeStore.from;
-                  bridgeStore.from = to;
-                  bridgeStore.to = from;
+                  dispatch(
+                    BridgeActions.update({
+                      from: to,
+                      to: from
+                    })
+                  );
                 }}>
                 {/*<Icon icon={'swap-down-icon'}></Icon>*/}
                 <Icon size={hoverExchange ? 22 : 11} icon={hoverExchange ? 'swap-down-hover' : 'swap-down-icon'}></Icon>
@@ -287,7 +301,7 @@ export default function BridgeTabScreen() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    bridgeStore.selectTokenModalShow = true;
+                    dispatch(BridgeActions.update({ selectTokenModalShow: true }));
                   }}>
                   <ImageIcon
                     style={{
@@ -362,7 +376,7 @@ export default function BridgeTabScreen() {
                       denom: bridgeAsset.denom
                     }}
                     onChange={(value) => {
-                      bridgeStore.bridgeAmount = value;
+                      dispatch(BridgeActions.update({ bridgeAmount: value }));
                     }}
                   />
                   <div
@@ -380,7 +394,7 @@ export default function BridgeTabScreen() {
                       borderRadius: '8px'
                     }}
                     onClick={() => {
-                      bridgeStore.bridgeAmount = balance;
+                      dispatch(BridgeActions.update({ bridgeAmount: balance }));
                     }}>
                     Max
                   </div>
@@ -434,7 +448,7 @@ export default function BridgeTabScreen() {
         <BridgeSelectToken
           open={selectTokenModalShow}
           onClose={() => {
-            bridgeStore.selectTokenModalShow = false;
+            dispatch(BridgeActions.update({ selectTokenModalShow: false }));
           }}
         />
       </Content>
