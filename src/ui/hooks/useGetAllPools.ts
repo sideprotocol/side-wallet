@@ -4,9 +4,10 @@ import { sideChain } from '@/shared/constant';
 // import { useWalletContext } from "@/ui/components/WalletContext";
 import { IPoolItem } from '@/ui/services/dex/type';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { swapStore } from '@/ui/stores/SwapStore';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
+import { useAppDispatch } from '../state/hooks';
+import { SwapActions } from '../state/swap/reducer';
 import useGetAllPairs from './useGetAllPairs';
 import { useGetSideBalanceList } from './useGetSideBalanceList';
 
@@ -14,6 +15,7 @@ export default function useGetAllPools() {
   const currentAccount = useCurrentAccount();
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
   const { data: pairs } = useGetAllPairs();
+  const dispatch = useAppDispatch();
 
   const { data, isLoading: loading } = useQuery({
     queryKey: ['getAllPools'],
@@ -51,8 +53,7 @@ export default function useGetAllPools() {
         })
       );
 
-      swapStore.allPools = pools;
-      console.log('pools: ', pools);
+      dispatch(SwapActions.update({ allPools: pools }));
 
       return pools as IPoolItem[];
     }

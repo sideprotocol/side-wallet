@@ -4,14 +4,14 @@ import { useState } from 'react';
 
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
+import { useSwapState } from '@/ui/state/swap/hook';
 
 // import Collapse from "@mui/material/Collapse";
 
 // import SwapRoutes from "./SwapRoutes";
 
 function SwapDetail() {
-  const { swapPair, slippage, detailOpen, swapRouteResult } = useSwapStore();
+  const { swapPair, slippage, swapRouteResult } = useSwapState();
   const [isCollapse, setIsCollapse] = useState(false);
   const currentAccount = useCurrentAccount();
 
@@ -26,10 +26,6 @@ function SwapDetail() {
   const assetOut = balanceList.find((item) => item.denom === swapPair.remote.denom);
 
   const feePrice = swapRouteResult.feeShowAmount;
-
-  const handleClick = () => {
-    swapStore.detailOpen = !swapStore.detailOpen;
-  };
 
   const swapRate = swapRouteResult.exchangeRate;
 

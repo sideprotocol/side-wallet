@@ -41,6 +41,7 @@ export interface BridgeState {
   loading: boolean;
   selectTokenModalShow: boolean;
   accountUtxo: UTXOAddress | null;
+  hoverExchange: boolean;
 }
 
 export const initialState: BridgeState = {
@@ -54,7 +55,8 @@ export const initialState: BridgeState = {
   feeSummary: [],
   loading: false,
   selectTokenModalShow: false,
-  accountUtxo: null
+  accountUtxo: null,
+  hoverExchange: false
 };
 
 const slice = createSlice({
@@ -79,6 +81,7 @@ const slice = createSlice({
           loading?: boolean;
           selectTokenModalShow?: boolean;
           accountUtxo?: UTXOAddress | null;
+          hoverExchange?: boolean;
         };
       }
     ) {

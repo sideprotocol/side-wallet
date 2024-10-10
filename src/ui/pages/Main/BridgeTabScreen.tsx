@@ -14,10 +14,9 @@ import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useBitcoinRuneBalance, useBridgeParams, useBridgeState, useRuneListV2 } from '@/ui/state/bridge/hook';
+import { useBitcoinRuneBalance, useBridgeParams, useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
-import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
 import { useNavigate } from '../MainRoute';
@@ -46,11 +45,10 @@ export default function BridgeTabScreen() {
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
-  const { bridgeAmount, from, to, loading, selectTokenModalShow, base } = useBridgeState();
+  const { bridgeAmount, from, to, selectTokenModalShow, base, hoverExchange } = useBridgeState();
   const dispatch = useAppDispatch();
   const isBtcBridge = base === 'sat';
 
-  const { tokens: runesBalance } = useRuneListV2();
   const isDeposit = (from?.name || '').includes('Bitcoin');
   const assets = isDeposit ? btcBalanceList : sideBalanceList;
 
@@ -83,8 +81,6 @@ export default function BridgeTabScreen() {
   const bridgeAsset = assets.find((a) => a?.denom === `${base}`) || SAT_ITEM;
 
   const satAsset = assets.find((a) => a?.denom === 'sat');
-
-  const depositRuneAsset = runesBalance.find((a) => base.includes(a.runeid));
 
   const accountBalance = useAccountBalance();
   const btcBalance = accountBalance?.amount;
@@ -121,8 +117,6 @@ export default function BridgeTabScreen() {
   useEffect(() => {
     dispatch(BridgeActions.update({ balance: balance }));
   }, [balance]);
-
-  const { hoverExchange } = useSwapStore();
 
   const isGreaterThanBalance = BigNumber(bridgeAmount || '0').gt(balance);
   const disabled =
@@ -229,10 +223,10 @@ export default function BridgeTabScreen() {
                   alignItems: 'center'
                 }}
                 onMouseEnter={() => {
-                  swapStore.hoverExchange = true;
+                  dispatch(BridgeActions.update({ hoverExchange: true }));
                 }}
                 onMouseLeave={() => {
-                  swapStore.hoverExchange = false;
+                  dispatch(BridgeActions.update({ hoverExchange: false }));
                 }}
                 onClick={() => {
                   dispatch(
@@ -242,7 +236,6 @@ export default function BridgeTabScreen() {
                     })
                   );
                 }}>
-                {/*<Icon icon={'swap-down-icon'}></Icon>*/}
                 <Icon size={hoverExchange ? 22 : 11} icon={hoverExchange ? 'swap-down-hover' : 'swap-down-icon'}></Icon>
               </div>
             </Row>

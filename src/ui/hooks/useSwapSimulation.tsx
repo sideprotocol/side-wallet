@@ -4,33 +4,40 @@ import { useEffect } from 'react';
 import services from '@/ui/services';
 import { Pool, SwapRouteResult } from '@/ui/services/dex/type';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
+import { useAppDispatch } from '../state/hooks';
+import { useSwapState } from '../state/swap/hook';
+import { SwapActions } from '../state/swap/reducer';
 import { useGetSideBalanceList } from './useGetSideBalanceList';
 
 export default function useSwapSimulation() {
-  const { swapPair, mode, limitRate, rateModified, isRateExchanged, marketPrice } = useSwapStore();
+  const { swapPair, mode, limitRate, rateModified, isRateExchanged, marketPrice, allPools } = useSwapState();
   const currentAccount = useCurrentAccount();
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const assetIn = balanceList.find((item) => item.denom === swapPair.native.denom);
 
     if (!rateModified) {
-      swapStore.limitRate = isRateExchanged
-        ? BigNumber(1)
-            .div(marketPrice || '1')
-            .toFixed(Number(assetIn?.asset.exponent || '6'), BigNumber.ROUND_DOWN)
-            .replace(/\.?0+$/, '')
-        : marketPrice;
+      dispatch(
+        SwapActions.update({
+          limitRate: isRateExchanged
+            ? BigNumber(1)
+                .div(marketPrice || '1')
+                .toFixed(Number(assetIn?.asset.exponent || '6'), BigNumber.ROUND_DOWN)
+                .replace(/\.?0+$/, '')
+            : marketPrice
+        })
+      );
     }
   }, [marketPrice]);
 
   const setData = (data: SwapRouteResult) => {
     const assetOut = balanceList.find((item) => item.denom === swapPair.remote.denom);
 
-    const curRemoteAmount = swapStore.swapPair.remote.amount;
+    const curRemoteAmount = swapPair.remote.amount;
 
     const outputAmount =
       mode === 'limit' && curRemoteAmount
@@ -49,11 +56,20 @@ export default function useSwapSimulation() {
         : BigNumber(data?.returnToken?.showAmount || '0')
             .toFixed(assetOut?.asset.precision || 6, BigNumber.ROUND_DOWN)
             .replace(/\.?0+$/, '') || '0';
-
-    swapStore.swapPair['remote'] = {
-      denom: swapPair.remote.denom,
-      amount: outputAmount
-    };
+    dispatch(
+      SwapActions.update({
+        swapPair: {
+          native: {
+            denom: swapPair.native.denom,
+            amount: swapPair.native.amount
+          },
+          remote: {
+            denom: swapPair.remote.denom,
+            amount: outputAmount
+          }
+        }
+      })
+    );
 
     if (data.returnToken) {
       data.returnToken.showAmount =
@@ -61,12 +77,15 @@ export default function useSwapSimulation() {
           .toFixed(assetOut?.asset.precision || 6, BigNumber.ROUND_DOWN)
           .replace(/\.?0+$/, '') || '0';
     }
-
-    swapStore.swapRouteResult = data;
+    dispatch(
+      SwapActions.update({
+        swapRouteResult: data
+      })
+    );
   };
 
   const setLoading = (loading: boolean) => {
-    swapStore.responseLoading = loading;
+    dispatch(SwapActions.update({ responseLoading: loading }));
   };
 
   const emptyResponse = {} as SwapRouteResult;
@@ -76,11 +95,6 @@ export default function useSwapSimulation() {
     !!swapPair.remote.denom &&
     BigNumber(swapPair.native?.amount || '0').gt(0) &&
     swapPair?.native.denom !== swapPair?.remote.denom;
-
-  // &&
-  // allPools.length > 0;
-
-  // console.log({ allPools });
 
   useEffect(() => {
     if (!validPair) {
@@ -106,7 +120,7 @@ export default function useSwapSimulation() {
 
       // const resultQuote = [];
 
-      const transmuterPools = swapStore.allPools
+      const transmuterPools = allPools
         .filter((p) => {
           const pAssetOut = p.assets.find((a) => a.info.native_token.denom === swapPair.remote.denom);
           return (

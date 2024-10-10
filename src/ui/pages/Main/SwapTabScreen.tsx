@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDebouncedCallback } from 'use-debounce';
 
 // import { IGetMarketListItem } from '@/ui/services';
@@ -14,7 +13,6 @@ import SlippageControl from '@/ui/components/SlippageControl';
 import SwapSelectToken from '@/ui/components/Swap/SwapSelectToken';
 import SwapDetail from '@/ui/components/Swap/detail';
 import TokenCurrent from '@/ui/components/TokenCurrent';
-import { getCurrentTab } from '@/ui/features/browser/tabs';
 import useGetAllPools from '@/ui/hooks/useGetAllPools';
 import useGetMarketList from '@/ui/hooks/useGetMarketList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
@@ -22,16 +20,17 @@ import useSwap from '@/ui/hooks/useSwap';
 import useSwapSimulation from '@/ui/hooks/useSwapSimulation';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import { swapStore, useSwapStore } from '@/ui/stores/SwapStore';
-import { useWallet } from '@/ui/utils';
+import { useAppDispatch } from '@/ui/state/hooks';
+import { useSwapState } from '@/ui/state/swap/hook';
+import { SwapActions } from '@/ui/state/swap/reducer';
 import { removeStartZero } from '@/ui/utils/format';
 import { Coin } from '@cosmjs/stargate';
 
 const InitBalance = () => {
   const currentAccount = useCurrentAccount();
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
-  const { reloadDataTrigger } = useSwapStore();
+  const { reloadDataTrigger } = useSwapState();
+  const dispatch = useAppDispatch();
 
   const getBalancesAll = async () => {
     if (!balanceList.length) return;
@@ -45,12 +44,12 @@ const InitBalance = () => {
       };
     }, {});
 
-    swapStore.balances = balancesObject;
+    dispatch(SwapActions.update({ balances: balancesObject }));
   };
 
   useEffect(() => {
     if (!currentAccount?.address) {
-      swapStore.balances = {};
+      dispatch(SwapActions.update({ balances: {} }));
       return;
     }
     getBalancesAll();
@@ -60,7 +59,8 @@ const InitBalance = () => {
 };
 
 const NativeBalance = () => {
-  const { swapLoading, swapPair, balances, swapRouteResult } = useSwapStore();
+  const { swapLoading, swapPair, balances, swapRouteResult } = useSwapState();
+  const dispatch = useAppDispatch();
   const currentAccount = useCurrentAccount();
   const connected = !!currentAccount?.address && swapPair?.native.denom;
 
@@ -79,10 +79,10 @@ const NativeBalance = () => {
   const isDisabled = () => {
     return (
       insufficientBalance() ||
-      !swapStore.swapPair.native?.amount ||
-      !swapStore.swapPair.remote?.amount ||
-      parseFloat(swapStore.swapPair.native?.amount) <= 0 ||
-      parseFloat(swapStore.swapPair.remote?.amount) <= 0 ||
+      !swapPair.native?.amount ||
+      !swapPair.remote?.amount ||
+      parseFloat(swapPair.native?.amount) <= 0 ||
+      parseFloat(swapPair.remote?.amount) <= 0 ||
       swapLoading ||
       BigNumber(priceImpactRaw || '0').gt(0.5)
     );
@@ -125,10 +125,20 @@ const NativeBalance = () => {
             <div
               className={'text-[#0DD4C3] text-[14px] hover:text-[#0DD4C3]/80'}
               onClick={() => {
-                swapStore.swapPair['native'] = {
-                  ...swapPair['native'],
-                  amount: nativeBalance
-                };
+                dispatch(
+                  SwapActions.update({
+                    swapPair: {
+                      native: {
+                        denom: swapPair.native.denom,
+                        amount: nativeBalance
+                      },
+                      remote: {
+                        denom: swapPair.remote.denom,
+                        amount: swapPair.remote.amount
+                      }
+                    }
+                  })
+                );
               }}>
               Max
             </div>
@@ -142,7 +152,7 @@ const NativeBalance = () => {
 const NativePrice = () => {
   // const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
-  const { swapPair, balances } = useSwapStore();
+  const { swapPair } = useSwapState();
   const currentAccount = useCurrentAccount();
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
@@ -178,7 +188,7 @@ const NativePrice = () => {
 };
 
 const RemoteBalance = () => {
-  const { swapPair, balances } = useSwapStore();
+  const { swapPair, balances } = useSwapState();
   const currentAccount = useCurrentAccount();
 
   const connected = !!currentAccount?.address && swapPair?.remote.denom;
@@ -241,7 +251,7 @@ const RemoteBalance = () => {
 const RemotePrice = () => {
   // const priceMap = JSON.parse(localStorage.getItem('priceMap') || '{}');
 
-  const { swapPair, balances } = useSwapStore();
+  const { swapPair, balances } = useSwapState();
   const currentAccount = useCurrentAccount();
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
@@ -278,16 +288,25 @@ const RemotePrice = () => {
 };
 
 const NativeInput = () => {
-  const { swapPair } = useSwapStore();
+  const { swapPair } = useSwapState();
+  const dispatch = useAppDispatch();
   const currentAccount = useCurrentAccount();
-  // const { curChain } = useWalletContext();
   if (!currentAccount?.address) return;
   const debouncedChange = useDebouncedCallback((value) => {
-    swapStore.swapPair['native'] = {
-      amount: value,
-      denom: swapStore.swapPair['native'].denom
-    };
-    console.log('swapStore.swapPair: ', swapStore.swapPair);
+    dispatch(
+      SwapActions.update({
+        swapPair: {
+          native: {
+            denom: swapPair.native.denom,
+            amount: value
+          },
+          remote: {
+            denom: swapPair.remote.denom,
+            amount: swapPair.remote.amount
+          }
+        }
+      })
+    );
   }, 500);
 
   return (
@@ -302,20 +321,31 @@ const NativeInput = () => {
 };
 
 const RemoteInput = () => {
-  const { swapPair } = useSwapStore();
+  const { swapPair } = useSwapState();
+  const dispatch = useAppDispatch();
   const currentAccount = useCurrentAccount();
   return (
     <CoinInput
       size={36}
       coin={swapPair?.remote}
       readOnly
-      color={swapStore.swapPair['remote'].denom ? 'white' : 'rgb(125, 125, 125)'}
+      color={swapPair['remote'].denom ? 'white' : 'rgb(125, 125, 125)'}
       onChange={(value) => {
         if (!currentAccount?.address) return;
-        swapStore.swapPair['remote'] = {
-          amount: removeStartZero(value),
-          denom: swapStore.swapPair['remote'].denom
-        };
+        dispatch(
+          SwapActions.update({
+            swapPair: {
+              native: {
+                denom: swapPair.native.denom,
+                amount: swapPair.native.amount
+              },
+              remote: {
+                denom: swapPair.remote.denom,
+                amount: removeStartZero(value)
+              }
+            }
+          })
+        );
       }}
     />
   );
@@ -324,7 +354,7 @@ const RemoteInput = () => {
 const ConfirmButton = () => {
   const { swap } = useSwap();
 
-  const { swapLoading, swapPair, balances, swapRouteResult } = useSwapStore();
+  const { swapLoading, swapPair, balances, swapRouteResult } = useSwapState();
 
   const priceImpact = swapRouteResult.priceImpact;
 
@@ -339,10 +369,10 @@ const ConfirmButton = () => {
   const isDisabled = () => {
     return (
       insufficientBalance() ||
-      !swapStore.swapPair.native?.amount ||
-      !swapStore.swapPair.remote?.amount ||
-      parseFloat(swapStore.swapPair.native?.amount) <= 0 ||
-      parseFloat(swapStore.swapPair.remote?.amount) <= 0 ||
+      !swapPair.native?.amount ||
+      !swapPair.remote?.amount ||
+      parseFloat(swapPair.native?.amount) <= 0 ||
+      parseFloat(swapPair.remote?.amount) <= 0 ||
       swapLoading ||
       BigNumber(priceImpactRaw || '0').gt(0.5)
     );
@@ -384,7 +414,6 @@ function findIntersection(data1, data2) {
 }
 
 export default function SwapTabScreen() {
-  // const { swapPair, balances } = useSwapStore();
   const {
     slippageIsAuto,
     slippage,
@@ -397,17 +426,14 @@ export default function SwapTabScreen() {
     modalTokenType,
     searchTokenValue,
     showValidDetail
-  } = useSwapStore();
+  } = useSwapState();
+  const dispatch = useAppDispatch();
   const currentAccount = useCurrentAccount();
-  const navigate = useNavigate();
-  const [connected, setConnected] = useState(false);
-  const currentKeyring = useCurrentKeyring();
   const { data: marketList } = useGetMarketList();
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
   const balanceListFilter = findIntersection(marketList, balanceList);
   useSwapSimulation();
   useGetAllPools();
-  // const isInTab = useExtensionIsInTab();
   const validResult =
     swapPair?.native?.denom &&
     swapPair?.remote?.denom &&
@@ -418,40 +444,14 @@ export default function SwapTabScreen() {
     swapRouteResult?.pools?.length &&
     swapRouteResult?.pools?.length > 0;
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    swapStore.showValidDetail = validResult;
+    dispatch(SwapActions.update({ showValidDetail: !!validResult }));
   }, [validResult]);
-
-  // const currentAccount = useCurrentAccount();
-  const wallet = useWallet();
-  useEffect(() => {
-    const run = async () => {
-      const res = await getCurrentTab();
-      if (!res) return;
-      const site = await wallet.getCurrentConnectedSite(res.id);
-      if (site) {
-        setConnected(site.isConnected);
-      }
-    };
-    run();
-  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
   };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  console.log(swapPair);
 
   return (
     <>
@@ -506,8 +506,7 @@ export default function SwapTabScreen() {
                 <TokenCurrent
                   value={swapPair.native}
                   setShow={() => {
-                    swapStore.tokenModalShow = true;
-                    swapStore.modalTokenType = 'native';
+                    dispatch(SwapActions.update({ tokenModalShow: true, modalTokenType: 'native' }));
                   }}
                 />
               </Row>
@@ -536,25 +535,34 @@ export default function SwapTabScreen() {
                   alignItems: 'center'
                 }}
                 onMouseEnter={() => {
-                  swapStore.hoverExchange = true;
+                  dispatch(
+                    SwapActions.update({
+                      hoverExchange: true
+                    })
+                  );
                 }}
                 onMouseLeave={() => {
-                  swapStore.hoverExchange = false;
+                  dispatch(
+                    SwapActions.update({
+                      hoverExchange: false
+                    })
+                  );
                 }}
                 onClick={() => {
-                  const nativePair = swapStore.swapPair.native;
-
-                  const remotePair = swapStore.swapPair.remote;
-
-                  swapStore.swapPair.native = {
-                    ...remotePair,
-                    amount: '1'
-                  };
-
-                  swapStore.swapPair.remote = {
-                    ...nativePair,
-                    amount: ''
-                  };
+                  dispatch(
+                    SwapActions.update({
+                      swapPair: {
+                        native: {
+                          denom: swapPair.remote.denom,
+                          amount: '1'
+                        },
+                        remote: {
+                          denom: swapPair.native.denom,
+                          amount: ''
+                        }
+                      }
+                    })
+                  );
                 }}>
                 <Icon size={hoverExchange ? 22 : 11} icon={hoverExchange ? 'swap-down-hover' : 'swap-down-icon'}></Icon>
                 {/*{!hoverExchange ? <ExchangeDefaultSVG color="black" /> : <ExchangeSVG />}*/}
@@ -587,8 +595,12 @@ export default function SwapTabScreen() {
                 <TokenCurrent
                   value={swapPair.remote}
                   setShow={() => {
-                    swapStore.modalTokenType = 'remote';
-                    swapStore.tokenModalShow = true;
+                    dispatch(
+                      SwapActions.update({
+                        modalTokenType: 'remote',
+                        tokenModalShow: true
+                      })
+                    );
                   }}
                 />
               </Row>
@@ -618,41 +630,88 @@ export default function SwapTabScreen() {
       </Layout>
       <SwapSelectToken
         open={tokenModalShow}
-        onClose={() => (swapStore.tokenModalShow = false)}
+        onClose={() => {
+          dispatch(SwapActions.update({ tokenModalShow: false }));
+        }}
         onSelect={(token: Coin) => {
-          if (modalTokenType === 'native' && token.denom === swapPair.remote.denom) {
-            swapStore.swapPair['remote'] = {
-              denom: swapPair.native.denom,
-              amount: ''
-            };
+          if (modalTokenType === 'native') {
+            if (token.denom === swapPair.remote.denom) {
+              dispatch(
+                SwapActions.update({
+                  swapPair: {
+                    native: {
+                      denom: token.denom,
+                      amount: '1'
+                    },
+                    remote: {
+                      denom: swapPair.native.denom,
+                      amount: ''
+                    }
+                  },
+                  tokenModalShow: false
+                })
+              );
+              return;
+            }
+            dispatch(
+              SwapActions.update({
+                swapPair: {
+                  native: {
+                    denom: token.denom,
+                    amount: '1'
+                  },
+                  remote: {
+                    denom: swapPair.remote.denom,
+                    amount: ''
+                  }
+                },
+                tokenModalShow: false
+              })
+            );
+          } else {
+            if (token.denom === swapPair.native.denom) {
+              dispatch(
+                SwapActions.update({
+                  swapPair: {
+                    native: {
+                      denom: swapPair.remote.denom,
+                      amount: swapPair.native.amount
+                    },
+                    remote: {
+                      denom: token.denom,
+                      amount: ''
+                    }
+                  },
+                  tokenModalShow: false
+                })
+              );
+              return;
+            }
+            dispatch(
+              SwapActions.update({
+                swapPair: {
+                  native: {
+                    denom: swapPair.native.denom,
+                    amount: swapPair.native.amount
+                  },
+                  remote: {
+                    denom: token.denom,
+                    amount: ''
+                  }
+                },
+                tokenModalShow: false
+              })
+            );
           }
-
-          if (modalTokenType === 'remote' && token.denom === swapPair.native.denom) {
-            swapStore.swapPair['native'] = {
-              denom: swapPair.remote.denom,
-              amount: swapPair.native.amount
-            };
-          }
-
-          swapStore.swapPair[modalTokenType as 'native' | 'remote'] = {
-            ...token,
-            amount: modalTokenType === 'remote' ? '' : '1'
-          };
-          swapStore.tokenModalShow = false;
         }}
         assetsList={balanceListFilter}
         popularList={balanceListFilter}
         onSearch={(value: string) => {
-          swapStore.searchTokenValue = value;
+          dispatch(SwapActions.update({ searchTokenValue: value }));
         }}
         searchValue={searchTokenValue}
         curTokenDenom={swapPair[modalTokenType as 'native' | 'remote']?.denom}
       />
-      {/*<Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>*/}
-      {/*  <p>Some contents...</p>*/}
-      {/*  <p>Some contents...</p>*/}
-      {/*  <p>Some contents...</p>*/}
-      {/*</Modal>*/}
       <SlippageControl
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -660,7 +719,7 @@ export default function SwapTabScreen() {
         onBack={() => setIsModalOpen(false)}
         slippageIsAuto={slippageIsAuto}
         onInputSlippage={(targetValue: string) => {
-          swapStore.slippageIsAuto = false;
+          dispatch(SwapActions.update({ slippageIsAuto: false }));
 
           if (targetValue.startsWith('.')) {
             return;
@@ -670,11 +729,10 @@ export default function SwapTabScreen() {
           }
           const newSlippage = targetValue.replace(/^0+/, '0'); // remove prefix zeros
 
-          swapStore.slippage = newSlippage;
+          dispatch(SwapActions.update({ slippage: newSlippage }));
         }}
         onQuickSet={(value: string) => {
-          swapStore.slippageIsAuto = false;
-          swapStore.slippage = value;
+          dispatch(SwapActions.update({ slippageIsAuto: false, slippage: value }));
         }}
       />
     </>
