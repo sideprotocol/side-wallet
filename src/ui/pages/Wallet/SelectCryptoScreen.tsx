@@ -146,12 +146,10 @@ function SideCrypto({ searchTerm }) {
             classname={'bg-item-hover'}
             onClick={() => {
               if (type === 'receive') {
-                // navigate('SelectAddressScreen', { ...state, base: token.base, token });
-                navigate('SelectAddressScreen', { ...state, denom: token.denom, token });
+                navigate('SelectAddressScreen', { chain, token });
               } else {
                 resetUiTxCreateScreen();
-                // navigate('TxCreateScreen', { ...state, base: token.base });
-                navigate('TxCreateScreen', { ...state, denom: token.denom });
+                navigate('TxCreateScreen', { chain, token });
               }
             }}
             full

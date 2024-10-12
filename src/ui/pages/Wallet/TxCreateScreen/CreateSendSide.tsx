@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { TxType } from '@/shared/types';
+import { BalanceItem, TxType } from '@/shared/types';
 import { Button, Column, Header, Image, Input, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
@@ -17,9 +17,9 @@ export default function CreateSendSide() {
   const navigate = useNavigate();
   const { state } = useLocation();
   // const { base } = state as {
-  const { denom } = state as {
+  const { token } = state as {
     // base: string;
-    denom: string;
+    token: BalanceItem;
   };
   const uiState = useUiTxCreateSendSideScreen();
   const setUiState = useUpdateUiTxCreateSendSideScreen();
@@ -37,7 +37,7 @@ export default function CreateSendSide() {
   const feeDenom = uiState.feeDenom;
   const memo = uiState.memo;
   const { curToken, feeToken } = useMemo(() => {
-    const curToken = sideTokenList.find((item) => item.denom === denom)!;
+    const curToken = sideTokenList.find((item) => item.denom === token.denom)!;
     const feeToken = sideTokenList.find((item) => item.denom === feeDenom)!;
     return {
       curToken,
@@ -76,13 +76,13 @@ export default function CreateSendSide() {
   }
 
   useEffect(() => {
-    if (!denom) return;
+    if (!token) return;
     estimateFee();
-  }, [denom]);
+  }, [token]);
 
   useEffect(() => {
-    setUiState({ base: denom });
-  }, [denom]);
+    setUiState({ base: token.denom });
+  }, [token.denom]);
 
   const feeTokenInfo = sideTokenList.find((item) => item.denom === feeToken.asset.denom);
 
@@ -90,7 +90,6 @@ export default function CreateSendSide() {
     .multipliedBy(feeTokenInfo?.denomPrice || '0')
     .toFixed(2);
 
-  // const available = formatUnitAmount(balanceAmount, curToken?.asset?.exponent || 6);
   const available = curToken?.formatAmount || '0';
 
   const disabled = useMemo(() => {

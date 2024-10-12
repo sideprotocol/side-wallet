@@ -10,13 +10,6 @@ import { satoshisToAmount, shortAddress, useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
 
-interface Address {
-  type: string;
-  address: string;
-  balance: string;
-  value: string;
-}
-
 export default function SelecAddressScreen() {
   // TODO: set select network
 
@@ -38,13 +31,6 @@ export default function SelecAddressScreen() {
     addressAssets: {}
   });
   const self = selfRef.current;
-
-  // let NEWADDRESS_TYPES;
-  // if (state.chain === 'SIDE') {
-  //   NEWADDRESS_TYPES = ADDRESS_TYPES.filter((v) => v.label !== 'P2PKH' || v.label !== 'P2WPKH');
-  // } else {
-  //   NEWADDRESS_TYPES = ADDRESS_TYPES;
-  // }
 
   const loadAddresses = async () => {
     tools.showLoading(true);
@@ -93,14 +79,6 @@ export default function SelecAddressScreen() {
     }
   }, [currentKeyring.type, addressAssets, addresses]);
 
-  // const addresses: Address[] = [
-  //   {
-  //     type: 'Taproot',
-  //     address: address,
-  //     balance: '',
-  //     value: ''
-  //   }
-  // ];
   return (
     <Layout>
       <Header
@@ -112,30 +90,19 @@ export default function SelecAddressScreen() {
       <Content
         style={{
           padding: 0
-        }}
-      >
+        }}>
         <Column
           style={{
             margin: '16px 0'
-          }}
-        >
+          }}>
           {addressTypes.map((item) => {
             if (item.displayIndex === 1) return null;
             const address = addresses[item.value];
-            const assets = addressAssets[address] || {
-              total_btc: '--',
-              satoshis: 0,
-              total_inscription: 0
-            };
-            // console.log(`assets: `, assets);
-            // debugger;
             return (
               <Row
                 classname={'bg-item-hover'}
                 style={{
-                  // backgroundColor: '#21232F',
                   cursor: 'pointer',
-                  // height: '71px',
                   margin: '0 16px',
                   padding: '8px 16px',
                   borderRadius: '8px'
@@ -148,21 +115,11 @@ export default function SelecAddressScreen() {
                     addressType: item.name
                   });
                 }}
-                key={address}
-                justifyBetween
-              >
+                key={item.value}
+                justifyBetween>
                 <Column gap={'zero'}>
                   <Text preset="regular" text={item.name}></Text>
                   <Text preset="sub" text={shortAddress(address)}></Text>
-                </Column>
-
-                <Column
-                  style={{
-                    display: 'none'
-                  }}
-                >
-                  <Text preset="regular" text={item?.balance}></Text>
-                  <Text preset="sub" text={item?.value}></Text>
                 </Column>
               </Row>
             );
