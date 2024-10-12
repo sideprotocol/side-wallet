@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { ADDRESS_TYPES, KEYRING_TYPE } from '@/shared/constant';
 import { Column, Content, Header, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
-import { useAccountAddress, useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { satoshisToAmount, shortAddress, useWallet } from '@/ui/utils';
 
@@ -16,8 +16,6 @@ export default function SelecAddressScreen() {
   const wallet = useWallet();
   const currentKeyring = useCurrentKeyring();
   const account = useCurrentAccount();
-  const currentAccount = useCurrentAccount();
-  const address = useAccountAddress();
   const { state } = useLocation();
   const navigate = useNavigate();
   const tools = useTools();

@@ -6,16 +6,14 @@ import { CHAINS_ENUM } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import { Button, Card, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
-import { useAccountAddress } from '@/ui/state/accounts/hooks';
 import { sizes } from '@/ui/theme/spacing';
 import { copyToClipboard } from '@/ui/utils';
 
 import './index.less';
 
 export default function ReceiveScreen() {
-  const address = useAccountAddress();
   const { state } = useLocation();
-  const { chain, token, addressType } = state as {
+  const { chain, token, addressType, address } = state as {
     chain: CHAINS_ENUM;
     token: BalanceItem;
     addressType: string;
