@@ -368,6 +368,7 @@ export default function BridgeTabScreen() {
                       amount: bridgeAmount,
                       denom: bridgeAsset.denom
                     }}
+                    decimalScale={+bridgeAsset.asset.exponent}
                     onChange={(value) => {
                       dispatch(BridgeActions.update({ bridgeAmount: value }));
                     }}

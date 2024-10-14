@@ -9,8 +9,9 @@ export type CoinInputProps = {
   size?: number;
   color?: string;
   onInput?: () => void;
+  decimalScale?: number;
 };
-export function CoinInput({ coin, onChange, readOnly, onInput, size, color }: CoinInputProps) {
+export function CoinInput({ coin, onChange, readOnly, onInput, size, color, decimalScale }: CoinInputProps) {
   return (
     <NumericFormat
       type="text"
@@ -27,6 +28,7 @@ export function CoinInput({ coin, onChange, readOnly, onInput, size, color }: Co
         outline: 'none',
         color: color
       }}
+      decimalScale={decimalScale || 6}
       onInput={() => onInput?.()}
       valueIsNumericString
       thousandSeparator
