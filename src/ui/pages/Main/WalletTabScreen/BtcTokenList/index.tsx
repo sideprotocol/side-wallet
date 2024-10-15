@@ -7,8 +7,6 @@ export default function BtcTokenList({ balanceVisible }) {
 
   const { balanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
-  console.log(balanceList, 'balanceList');
-
   return (
     <Column
       style={{
