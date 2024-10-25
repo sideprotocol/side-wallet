@@ -769,177 +769,294 @@ export default function SignPsbt({
         minHeight: '580px'
       }}>
       {header}
-      <Content>
-        <Column gap="xl">
-          {session && (
-            <Row
-              itemsCenter
-              justifyBetween
-              mt="md"
-              style={{
-                background: '#1E1E1F',
-                border: '1px solid #FFFFFF1A',
-                padding: '16px 10px 16px 10px',
-                borderRadius: '8px',
-                position: 'relative'
-              }}>
-              <Column
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          marginBottom: '100px'
+        }}>
+        <Content>
+          <div></div>
+          <Column gap="xl">
+            {session && (
+              <Row
+                itemsCenter
+                justifyBetween
+                mt="md"
                 style={{
-                  width: '90%'
+                  background: '#1E1E1F',
+                  border: '1px solid #FFFFFF1A',
+                  padding: '16px 10px 16px 10px',
+                  borderRadius: '8px',
+                  position: 'relative'
                 }}>
-                <Text
+                <Column
                   style={{
-                    fontWeight: '500',
-                    fontSize: '16px'
-                  }}>
-                  Account connected
-                </Text>
-
-                <Text
-                  size="sm"
-                  style={{
-                    color: 'white',
-                    opacity: '0.5',
-                    wordBreak: 'break-word'
-                  }}>
-                  {currentAccount.address}
-                </Text>
-
-                <Row
-                  itemsCenter
-                  style={{
-                    gap: '4px',
-                    borderRadius: '10px',
-                    backgroundColor: '#0DD4C3',
-                    padding: '4px 10px',
-                    fontSize: '12px',
-                    width: 'max-content',
-                    color: 'black'
+                    width: '90%'
                   }}>
                   <Text
                     style={{
-                      fontWeight: '600',
-                      color: 'black'
+                      fontWeight: '500',
+                      fontSize: '16px'
                     }}>
-                    {currentKeyring.alianName}
+                    Account connected
                   </Text>
 
                   <Text
+                    size="sm"
                     style={{
-                      fontWeight: '600',
-                      color: 'black'
+                      color: 'white',
+                      opacity: '0.5',
+                      wordBreak: 'break-word'
                     }}>
-                    /
+                    {currentAccount.address}
                   </Text>
 
+                  <Row
+                    itemsCenter
+                    style={{
+                      gap: '4px',
+                      borderRadius: '10px',
+                      backgroundColor: '#0DD4C3',
+                      padding: '4px 10px',
+                      fontSize: '12px',
+                      width: 'max-content',
+                      color: 'black'
+                    }}>
+                    <Text
+                      style={{
+                        fontWeight: '600',
+                        color: 'black'
+                      }}>
+                      {currentKeyring.alianName}
+                    </Text>
+
+                    <Text
+                      style={{
+                        fontWeight: '600',
+                        color: 'black'
+                      }}>
+                      /
+                    </Text>
+
+                    <Text
+                      style={{
+                        color: 'black'
+                      }}>
+                      {currentAccount.alianName}
+                    </Text>
+                  </Row>
+                </Column>
+              </Row>
+            )}
+
+            {detailsComponent}
+            {canChanged == false && (
+              <Section title="Network Fee:">
+                <Text text={networkFee} />
+                <Text text="BTC" color="textDim" />
+              </Section>
+            )}
+
+            {canChanged == false && (
+              <Section title="Network Fee Rate:">
+                {txInfo.decodedPsbt.shouldWarnFeeRate ? (
+                  <Tooltip
+                    title={
+                      txInfo.decodedPsbt.recommendedFeeRate > txInfo.decodedPsbt.feeRate
+                        ? `The fee rate is much lower than recommended fee rate (${txInfo.decodedPsbt.recommendedFeeRate} sat/vB)`
+                        : `The fee rate is much higher than recommended fee rate (${txInfo.decodedPsbt.recommendedFeeRate} sat/vB)`
+                    }
+                    overlayStyle={{
+                      fontSize: fontSizes.xs
+                    }}>
+                    <div>
+                      <Row itemsCenter>
+                        <Text text={txInfo.decodedPsbt.feeRate.toString()} />
+                        <Icon icon="alert" color="warning" />
+                      </Row>
+                    </div>
+                  </Tooltip>
+                ) : (
+                  <Text text={txInfo.decodedPsbt.feeRate.toString()} />
+                )}
+
+                <Text text="sat/vB" color="textDim" />
+              </Section>
+            )}
+
+            <Section title="Features:">
+              <Row>
+                {txInfo.decodedPsbt.features.rbf ? (
+                  <Text text="RBF" color="white" style={{ backgroundColor: 'green', padding: 5, borderRadius: 5 }} />
+                ) : (
                   <Text
-                    style={{
-                      color: 'black'
-                    }}>
-                    {currentAccount.alianName}
-                  </Text>
-                </Row>
-              </Column>
-            </Row>
-          )}
-
-          {detailsComponent}
-          {canChanged == false && (
-            <Section title="Network Fee:">
-              <Text text={networkFee} />
-              <Text text="BTC" color="textDim" />
+                    text="RBF"
+                    color="white"
+                    style={{ backgroundColor: 'red', padding: 5, borderRadius: 5, textDecoration: 'line-through' }}
+                  />
+                )}
+              </Row>
             </Section>
-          )}
 
-          {canChanged == false && (
-            <Section title="Network Fee Rate:">
-              {txInfo.decodedPsbt.shouldWarnFeeRate ? (
-                <Tooltip
-                  title={
-                    txInfo.decodedPsbt.recommendedFeeRate > txInfo.decodedPsbt.feeRate
-                      ? `The fee rate is much lower than recommended fee rate (${txInfo.decodedPsbt.recommendedFeeRate} sat/vB)`
-                      : `The fee rate is much higher than recommended fee rate (${txInfo.decodedPsbt.recommendedFeeRate} sat/vB)`
-                  }
-                  overlayStyle={{
-                    fontSize: fontSizes.xs
-                  }}>
-                  <div>
-                    <Row itemsCenter>
-                      <Text text={txInfo.decodedPsbt.feeRate.toString()} />
-                      <Icon icon="alert" color="warning" />
-                    </Row>
-                  </div>
-                </Tooltip>
-              ) : (
-                <Text text={txInfo.decodedPsbt.feeRate.toString()} />
-              )}
-
-              <Text text="sat/vB" color="textDim" />
-            </Section>
-          )}
-
-          <Section title="Features:">
-            <Row>
-              {txInfo.decodedPsbt.features.rbf ? (
-                <Text text="RBF" color="white" style={{ backgroundColor: 'green', padding: 5, borderRadius: 5 }} />
-              ) : (
-                <Text
-                  text="RBF"
-                  color="white"
-                  style={{ backgroundColor: 'red', padding: 5, borderRadius: 5, textDecoration: 'line-through' }}
-                />
-              )}
-            </Row>
-          </Section>
-
-          {isValidData && (
-            <Column gap="xl">
-              <Column>
-                <Text text={`Inputs: (${txInfo.decodedPsbt.inputInfos.length})`} preset="bold" />
-                <Card>
-                  <Column full justifyCenter>
-                    {txInfo.decodedPsbt.inputInfos.map((v, index) => {
-                      const isToSign = !!txInfo.toSignInputs.find((v) => v.index === index);
-                      const inscriptions = v.inscriptions;
-                      const atomicals_nft = v.atomicals.filter((v) => v.type === 'NFT');
-                      const atomicals_ft = v.atomicals.filter((v) => v.type === 'FT');
-                      const runes = v.runes || [];
-                      return (
-                        <Row
-                          key={'output_' + index}
-                          style={index === 0 ? {} : { borderColor: colors.border, borderTopWidth: 1, paddingTop: 10 }}
-                          itemsCenter>
-                          <Column fullX>
-                            <Row fullX justifyBetween>
-                              <Column>
+            {isValidData && (
+              <Column gap="xl">
+                <Column>
+                  <Text text={`Inputs: (${txInfo.decodedPsbt.inputInfos.length})`} preset="bold" />
+                  <Card>
+                    <Column full justifyCenter>
+                      {txInfo.decodedPsbt.inputInfos.map((v, index) => {
+                        const isToSign = !!txInfo.toSignInputs.find((v) => v.index === index);
+                        const inscriptions = v.inscriptions;
+                        const atomicals_nft = v.atomicals.filter((v) => v.type === 'NFT');
+                        const atomicals_ft = v.atomicals.filter((v) => v.type === 'FT');
+                        const runes = v.runes || [];
+                        return (
+                          <Row
+                            key={'output_' + index}
+                            style={index === 0 ? {} : { borderColor: colors.border, borderTopWidth: 1, paddingTop: 10 }}
+                            itemsCenter>
+                            <Column fullX>
+                              <Row fullX justifyBetween>
+                                <Column>
+                                  <Row>
+                                    <AddressText address={v.address} color={isToSign ? 'white' : 'textDim'} />
+                                    {isToSign && (
+                                      <Row
+                                        style={{
+                                          // borderWidth: 1,
+                                          // borderColor: 'rgb(13, 212, 195)',
+                                          borderRadius: 5,
+                                          padding: 2,
+                                          background: '#0DD4C31A'
+                                        }}>
+                                        <Text text="to sign" color="primary" size="xs" />
+                                      </Row>
+                                    )}
+                                  </Row>
+                                </Column>
                                 <Row>
-                                  <AddressText address={v.address} color={isToSign ? 'white' : 'textDim'} />
-                                  {isToSign && (
-                                    <Row
-                                      style={{
-                                        // borderWidth: 1,
-                                        // borderColor: 'rgb(13, 212, 195)',
-                                        borderRadius: 5,
-                                        padding: 2,
-                                        background: '#0DD4C31A'
-                                      }}>
-                                      <Text text="to sign" color="primary" size="xs" />
-                                    </Row>
-                                  )}
+                                  <Text text={`${satoshisToAmount(v.value)}`} color={isToSign ? 'white' : 'textDim'} />
+                                  <Text text="BTC" color="textDim" />
                                 </Row>
-                              </Column>
-                              <Row>
-                                <Text text={`${satoshisToAmount(v.value)}`} color={isToSign ? 'white' : 'textDim'} />
-                                <Text text="BTC" color="textDim" />
                               </Row>
-                            </Row>
 
-                            {inscriptions.length > 0 && (
+                              {inscriptions.length > 0 && (
+                                <Row>
+                                  <Column justifyCenter>
+                                    <Text
+                                      text={`Inscriptions (${inscriptions.length})`}
+                                      color={isToSign ? 'white' : 'textDim'}
+                                    />
+                                    <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
+                                      {inscriptions.map((w) => (
+                                        <InscriptionPreview
+                                          key={w.inscriptionId}
+                                          data={txInfo.decodedPsbt.inscriptions[w.inscriptionId]}
+                                          preset="small"
+                                          onClick={() => {
+                                            window.open(w.preview);
+                                          }}
+                                        />
+                                      ))}
+                                    </Row>
+                                  </Column>
+                                </Row>
+                              )}
+
+                              {atomicals_nft.length > 0 && (
+                                <Row>
+                                  <Column justifyCenter>
+                                    <Text
+                                      text={`Atomicals NFT (${inscriptions.length})`}
+                                      color={isToSign ? 'white' : 'textDim'}
+                                    />
+                                    <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
+                                      {atomicals_nft.map((w) => (
+                                        <AtomicalsNFTPreview
+                                          key={w.atomicalId}
+                                          data={w as any}
+                                          preset="small"
+                                          onClick={() => {
+                                            window.open(w.preview);
+                                          }}
+                                        />
+                                      ))}
+                                    </Row>
+                                  </Column>
+                                </Row>
+                              )}
+
+                              {atomicals_ft.length > 0 && (
+                                <Row>
+                                  <Column justifyCenter>
+                                    <Text text={'ARC20'} color={isToSign ? 'white' : 'textDim'} />
+                                    <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
+                                      {atomicals_ft.map((w) => (
+                                        <Arc20PreviewCard key={w.ticker} ticker={w.ticker || ''} amt={v.value} />
+                                      ))}
+                                    </Row>
+                                  </Column>
+                                </Row>
+                              )}
+
+                              {runes.length > 0 && (
+                                <Row>
+                                  <Column justifyCenter>
+                                    <Text text={'RUNES'} color={isToSign ? 'white' : 'textDim'} />
+                                    <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
+                                      {runes.map((w) => (
+                                        <RunesPreviewCard key={w.runeid} balance={w} />
+                                      ))}
+                                    </Row>
+                                  </Column>
+                                </Row>
+                              )}
+                            </Column>
+                          </Row>
+                        );
+                      })}
+                    </Column>
+                  </Card>
+                </Column>
+
+                <Column>
+                  <Text text={`Outputs: (${txInfo.decodedPsbt.outputInfos.length})`} preset="bold" />
+                  <Card>
+                    <Column full justifyCenter gap="lg">
+                      {txInfo.decodedPsbt.outputInfos.map((v, index) => {
+                        const isMyAddress = v.address == currentAccount.address;
+                        const inscriptions = v.inscriptions;
+                        const atomicals_nft = v.atomicals.filter((v) => v.type === 'NFT');
+                        const atomicals_ft = v.atomicals.filter((v) => v.type === 'FT');
+                        const runes = v.runes || [];
+                        return (
+                          <Column
+                            key={'output_' + index}
+                            style={
+                              index === 0 ? {} : { borderColor: colors.border, borderTopWidth: 1, paddingTop: 10 }
+                            }>
+                            <Column>
+                              <Row justifyBetween>
+                                <AddressText address={v.address} color={isMyAddress ? 'white' : 'textDim'} />
+                                <Row>
+                                  <Text
+                                    text={`${satoshisToAmount(v.value)}`}
+                                    color={isMyAddress ? 'white' : 'textDim'}
+                                  />
+                                  <Text text="BTC" color="textDim" />
+                                </Row>
+                              </Row>
+                            </Column>
+
+                            {canChanged === false && inscriptions.length > 0 && (
                               <Row>
                                 <Column justifyCenter>
                                   <Text
                                     text={`Inscriptions (${inscriptions.length})`}
-                                    color={isToSign ? 'white' : 'textDim'}
+                                    color={isMyAddress ? 'white' : 'textDim'}
                                   />
                                   <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
                                     {inscriptions.map((w) => (
@@ -953,7 +1070,7 @@ export default function SignPsbt({
                                       />
                                     ))}
                                   </Row>
-                                </Column>
+                                </Column>{' '}
                               </Row>
                             )}
 
@@ -962,28 +1079,28 @@ export default function SignPsbt({
                                 <Column justifyCenter>
                                   <Text
                                     text={`Atomicals NFT (${inscriptions.length})`}
-                                    color={isToSign ? 'white' : 'textDim'}
+                                    color={isMyAddress ? 'white' : 'textDim'}
                                   />
                                   <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
-                                    {atomicals_nft.map((w) => (
+                                    {atomicals_nft.map((v) => (
                                       <AtomicalsNFTPreview
-                                        key={w.atomicalId}
-                                        data={w as any}
+                                        key={v.atomicalId}
+                                        data={v as any}
                                         preset="small"
                                         onClick={() => {
-                                          window.open(w.preview);
+                                          window.open(v.preview);
                                         }}
                                       />
                                     ))}
                                   </Row>
-                                </Column>
+                                </Column>{' '}
                               </Row>
                             )}
 
                             {atomicals_ft.length > 0 && (
                               <Row>
                                 <Column justifyCenter>
-                                  <Text text={'ARC20'} color={isToSign ? 'white' : 'textDim'} />
+                                  <Text text={'ARC20'} color={isMyAddress ? 'white' : 'textDim'} />
                                   <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
                                     {atomicals_ft.map((w) => (
                                       <Arc20PreviewCard key={w.ticker} ticker={w.ticker || ''} amt={v.value} />
@@ -996,7 +1113,7 @@ export default function SignPsbt({
                             {runes.length > 0 && (
                               <Row>
                                 <Column justifyCenter>
-                                  <Text text={'RUNES'} color={isToSign ? 'white' : 'textDim'} />
+                                  <Text text={'RUNES'} color={isMyAddress ? 'white' : 'textDim'} />
                                   <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
                                     {runes.map((w) => (
                                       <RunesPreviewCard key={w.runeid} balance={w} />
@@ -1006,146 +1123,52 @@ export default function SignPsbt({
                               </Row>
                             )}
                           </Column>
-                        </Row>
-                      );
-                    })}
-                  </Column>
-                </Card>
+                        );
+                      })}
+                    </Column>
+                  </Card>
+                </Column>
               </Column>
+            )}
 
-              <Column>
-                <Text text={`Outputs: (${txInfo.decodedPsbt.outputInfos.length})`} preset="bold" />
-                <Card>
-                  <Column full justifyCenter gap="lg">
-                    {txInfo.decodedPsbt.outputInfos.map((v, index) => {
-                      const isMyAddress = v.address == currentAccount.address;
-                      const inscriptions = v.inscriptions;
-                      const atomicals_nft = v.atomicals.filter((v) => v.type === 'NFT');
-                      const atomicals_ft = v.atomicals.filter((v) => v.type === 'FT');
-                      const runes = v.runes || [];
-                      return (
-                        <Column
-                          key={'output_' + index}
-                          style={index === 0 ? {} : { borderColor: colors.border, borderTopWidth: 1, paddingTop: 10 }}>
-                          <Column>
-                            <Row justifyBetween>
-                              <AddressText address={v.address} color={isMyAddress ? 'white' : 'textDim'} />
-                              <Row>
-                                <Text text={`${satoshisToAmount(v.value)}`} color={isMyAddress ? 'white' : 'textDim'} />
-                                <Text text="BTC" color="textDim" />
-                              </Row>
-                            </Row>
-                          </Column>
-
-                          {canChanged === false && inscriptions.length > 0 && (
-                            <Row>
-                              <Column justifyCenter>
-                                <Text
-                                  text={`Inscriptions (${inscriptions.length})`}
-                                  color={isMyAddress ? 'white' : 'textDim'}
-                                />
-                                <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
-                                  {inscriptions.map((w) => (
-                                    <InscriptionPreview
-                                      key={w.inscriptionId}
-                                      data={txInfo.decodedPsbt.inscriptions[w.inscriptionId]}
-                                      preset="small"
-                                      onClick={() => {
-                                        window.open(w.preview);
-                                      }}
-                                    />
-                                  ))}
-                                </Row>
-                              </Column>{' '}
-                            </Row>
-                          )}
-
-                          {atomicals_nft.length > 0 && (
-                            <Row>
-                              <Column justifyCenter>
-                                <Text
-                                  text={`Atomicals NFT (${inscriptions.length})`}
-                                  color={isMyAddress ? 'white' : 'textDim'}
-                                />
-                                <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
-                                  {atomicals_nft.map((v) => (
-                                    <AtomicalsNFTPreview
-                                      key={v.atomicalId}
-                                      data={v as any}
-                                      preset="small"
-                                      onClick={() => {
-                                        window.open(v.preview);
-                                      }}
-                                    />
-                                  ))}
-                                </Row>
-                              </Column>{' '}
-                            </Row>
-                          )}
-
-                          {atomicals_ft.length > 0 && (
-                            <Row>
-                              <Column justifyCenter>
-                                <Text text={'ARC20'} color={isMyAddress ? 'white' : 'textDim'} />
-                                <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
-                                  {atomicals_ft.map((w) => (
-                                    <Arc20PreviewCard key={w.ticker} ticker={w.ticker || ''} amt={v.value} />
-                                  ))}
-                                </Row>
-                              </Column>
-                            </Row>
-                          )}
-
-                          {runes.length > 0 && (
-                            <Row>
-                              <Column justifyCenter>
-                                <Text text={'RUNES'} color={isMyAddress ? 'white' : 'textDim'} />
-                                <Row overflowX gap="lg" style={{ width: 280 }} pb="lg">
-                                  {runes.map((w) => (
-                                    <RunesPreviewCard key={w.runeid} balance={w} />
-                                  ))}
-                                </Row>
-                              </Column>
-                            </Row>
-                          )}
-                        </Column>
-                      );
-                    })}
-                  </Column>
-                </Card>
-              </Column>
-            </Column>
-          )}
-
-          <Section title="PSBT Data:">
-            <Text text={shortAddress(txInfo.psbtHex, 10)} />
-            <Row
-              onMouseOver={handleMouseOver}
-              onMouseLeave={handleMouseLeave}
-              itemsCenter
-              onClick={(e) => {
-                setIsClickCopy(true);
-                copyToClipboard(txInfo.psbtHex).then(() => {
-                  setTimeout(() => {
-                    setIsClickCopy(false);
-                  }, 3000);
-                });
-              }}>
-              <Text text={`${txInfo.psbtHex.length / 2} bytes`} color="textDim" />
-              {/*<Icon icon="copy" color="textDim" />*/}
-              <Icon
-                icon={isClickCopy ? 'check-circle-broken' : 'copy3'}
-                color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
-                height={isClickCopy ? 20 : 16}
-                width={20}
-              />
-              <Text text={isClickCopy ? '' : ''} color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'} />
-            </Row>
-          </Section>
-        </Column>
-      </Content>
-
-      <Footer>
+            <Section title="PSBT Data:">
+              <Text text={shortAddress(txInfo.psbtHex, 10)} />
+              <Row
+                onMouseOver={handleMouseOver}
+                onMouseLeave={handleMouseLeave}
+                itemsCenter
+                onClick={(e) => {
+                  setIsClickCopy(true);
+                  copyToClipboard(txInfo.psbtHex).then(() => {
+                    setTimeout(() => {
+                      setIsClickCopy(false);
+                    }, 3000);
+                  });
+                }}>
+                <Text text={`${txInfo.psbtHex.length / 2} bytes`} color="textDim" />
+                {/*<Icon icon="copy" color="textDim" />*/}
+                <Icon
+                  icon={isClickCopy ? 'check-circle-broken' : 'copy3'}
+                  color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                  height={isClickCopy ? 20 : 16}
+                  width={20}
+                />
+                <Text
+                  text={isClickCopy ? '' : ''}
+                  color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                />
+              </Row>
+            </Section>
+          </Column>
+        </Content>
+      </div>
+      <Footer
+        style={{
+          position: 'fixed',
+          left: '0',
+          right: '0',
+          bottom: '0'
+        }}>
         <Row full>
           <Button preset="default" text="Reject" onClick={handleCancel} full />
           <Button

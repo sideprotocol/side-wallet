@@ -138,9 +138,6 @@ function SideCrypto({ searchTerm }) {
   return (
     <>
       {balanceList.map((token) => {
-        if (!+token.amount) {
-          return null;
-        }
         return (
           <Row
             classname={'bg-item-hover'}

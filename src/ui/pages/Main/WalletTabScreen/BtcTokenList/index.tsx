@@ -13,7 +13,7 @@ export default function BtcTokenList({ balanceVisible }) {
         minHeight: '132px'
       }}>
       {balanceList.map((item) => {
-        if (!+item.amount) {
+        if (!+item.amount && item.denom !== 'sat') {
           return null;
         }
         return (

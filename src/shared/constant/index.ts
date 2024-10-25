@@ -417,7 +417,7 @@ const SIDE_EXPLORER_URL_MAINNET = 'https://station-test.side.one/explorer';
 const SIDE_BRIDGEEXPLORER_URL_MAINNET = 'https://station-test.side.one/bridgeExplorer';
 const SIDE_CHAIN_MAINNET = {
   chainID: 'sidechain-testnet-4',
-  name: 'Side Testnet 4',
+  name: 'Side Chain',
   prefix: 'tb',
   rpcUrl: 'https://testnet-rpc.side.one',
   restUrl: 'https://testnet-rest.side.one',

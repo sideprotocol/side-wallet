@@ -57,7 +57,7 @@ export default function SideTokenList({ balanceVisible }) {
   return (
     <Column>
       {balanceList.map((item) => {
-        if (!+item.amount) {
+        if (!+item.amount && item.denom !== 'uside') {
           return null;
         }
         return (
