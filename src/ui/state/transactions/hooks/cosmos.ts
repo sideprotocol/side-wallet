@@ -208,12 +208,11 @@ export function useSignAndBroadcastTxRaw() {
     const gasUsed = await estimateGas(mockTxRaw).catch((error) => {
       if (error.message.match(errorPatterns.sideBTCInsufficientFunds.pattern)) {
         throw new Error(errorPatterns.sideBTCInsufficientFunds.message);
-      }
-
-      if (error.message.match(errorPatterns.sideBTCVaultNoUTXOs.pattern)) {
+      } else if (error.message.match(errorPatterns.sideBTCVaultNoUTXOs.pattern)) {
         throw new Error(errorPatterns.sideBTCVaultNoUTXOs.message);
+      } else if (error.message.match(errorPatterns.sideVaultUTXONumberLimit.pattern)) {
+        throw new Error(errorPatterns.sideVaultUTXONumberLimit.message);
       }
-
       throw error;
     });
 
