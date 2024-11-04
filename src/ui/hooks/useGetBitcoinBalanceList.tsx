@@ -72,7 +72,7 @@ function useGetBtcBalance(address?: string, flag?: boolean) {
 
   useEffect(() => {
     fetchBitcoinItem();
-  }, [flag, address, denomPrice]);
+  }, [flag, address, denomPrice, btcBalance]);
 
   return {
     data,

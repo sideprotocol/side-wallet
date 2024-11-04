@@ -29,6 +29,7 @@ export default function WalletTabScreen() {
 
   const wallet = useWallet();
   const [connected, setConnected] = useState(false);
+  const [currentTab, setCurrentTab] = useState<CHAINS_ENUM>(CHAINS_ENUM.SIDE);
   const dispatch = useAppDispatch();
   const accountBalanceByUSD = useGetAccountBalanceByUSD();
 
@@ -67,8 +68,6 @@ export default function WalletTabScreen() {
     };
     run();
   }, []);
-
-  const [currentTab, setCurrentTab] = useState<CHAINS_ENUM>(CHAINS_ENUM.SIDE);
 
   const [buyBtcModalVisible, setBuyBtcModalVisible] = useState(false);
   const [isHoveredMoney, setIsHoveredMoney] = useState(false);
@@ -120,7 +119,7 @@ export default function WalletTabScreen() {
                 }}
               />
               <Text
-                text={getTruncate(accountBalanceByUSD.split('.')[0])}
+                text={getTruncate(accountBalanceByUSD.split('.')[0], 0)}
                 style={{
                   fontSize: '38px',
                   fontWeight: 500,
