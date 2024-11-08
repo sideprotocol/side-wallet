@@ -2,8 +2,9 @@ import { Checkbox } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate as useNavigateRouter } from 'react-router-dom';
 
-import { Button, Column, Header, Input, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Header, Input, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
+import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 import { useWallet, useWalletRequest } from '@/ui/utils';
 import { getPasswordStrengthWord } from '@/ui/utils/password-utils';
 
@@ -14,6 +15,7 @@ type Status = '' | 'error' | 'warning' | undefined;
 export default function CreatePasswordScreen() {
   const navigate = useNavigate();
   const navigateRouter = useNavigateRouter();
+  const isInTab = useExtensionIsInTab();
   const wallet = useWallet();
   const loc = useLocation();
   const params = new URLSearchParams(loc.search);
@@ -118,9 +120,19 @@ export default function CreatePasswordScreen() {
   };
 
   return (
-    <Layout
+    <div
       style={{
-        maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px'
+        backgroundColor: '#09090A',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
+        minHeight: '600px',
+        height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        border: !isInTab ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
+        justifyContent: 'center'
       }}>
       <Header onBack={() => navigateRouter(-1)} title="Create Password"></Header>
       <Column
@@ -252,6 +264,6 @@ export default function CreatePasswordScreen() {
         </Column>
         <Button disabled={disabled} text="Next" preset="primary" onClick={btnClick} />
       </Column>
-    </Layout>
+    </div>
   );
 }

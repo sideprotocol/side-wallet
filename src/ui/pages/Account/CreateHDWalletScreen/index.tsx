@@ -2,7 +2,8 @@ import { useCallback, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { AddressType, RestoreWalletType } from '@/shared/types';
-import { Column, Header, Layout, StepBar } from '@/ui/components';
+import { Column, Header, StepBar } from '@/ui/components';
+import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 
 import { useNavigate } from '../../MainRoute';
 import Step1_Create from './Step1_Create';
@@ -13,6 +14,7 @@ import { ContextData, TabType, UpdateContextDataParams, WordsType } from './type
 
 export default function CreateHDWalletScreen() {
   const navigate = useNavigate();
+  const isInTab = useExtensionIsInTab();
 
   const { state } = useLocation();
   const { isImport, fromUnlock } = state as {
@@ -90,13 +92,20 @@ export default function CreateHDWalletScreen() {
   }, [items, contextData.tabType]);
 
   return (
-    <Layout
+    <div
       style={{
+        backgroundColor: '#09090A',
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
         maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
+        minHeight: '600px',
         height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
-        overflowY: 'hidden'
-      }}
-    >
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        border: !isInTab ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
+        justifyContent: 'center'
+      }}>
       <Header
         onBack={() => {
           if (fromUnlock) {
@@ -112,8 +121,7 @@ export default function CreateHDWalletScreen() {
           padding: '0 16px 0',
           marginTop: '10px',
           marginBottom: '10px'
-        }}
-      >
+        }}>
         <StepBar
           activeKey={contextData.tabType}
           items={items.map((v) => ({
@@ -123,6 +131,6 @@ export default function CreateHDWalletScreen() {
         />
       </Column>
       {currentChildren}
-    </Layout>
+    </div>
   );
 }
