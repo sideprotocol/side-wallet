@@ -249,7 +249,7 @@ export function Button(props: ButtonProps) {
         preset === 'ghostDanger'
           ? 'hover:bg-[#ed334b]/10 !border-[#ed334b]'
           : preset === 'ghost'
-          ? 'hover:bg-[#0DD4C3] group'
+          ? 'hover:bg-[#F7931A] group'
           : ''
       } `}
       onClick={disabled ? undefined : onClick}

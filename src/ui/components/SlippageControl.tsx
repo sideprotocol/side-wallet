@@ -33,16 +33,7 @@ export default function SlippageControl(props) {
         style={{
           padding: '12px 10px 16px'
         }}>
-        <div
-          style={{
-            fontWeight: '500',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            fontSize: '13px',
-            margin: '20px 0px 10px',
-            color: 'white'
-          }}>
+        <div className="flex items-center justify-between text-[13px] font-medium text-white my-[20px] mx-0">
           <span className="font-normal pl-[10px]">Slippage tolerance</span>
           <div className="pr-[10px]">
             <span>{slippage}% </span>
@@ -58,36 +49,13 @@ export default function SlippageControl(props) {
             marginBottom: '12px'
           }}>
           <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              color: 'white',
-              fontWeight: 700,
-              padding: '5px',
-              borderRadius: '16px',
-              fontSize: '14px',
-              border: '1px solid #ffffff/10',
-              height: '50px',
-              backgroundColor: '#000'
-            }}>
+            className="flex-1 flex items-center justify-between text-white font-bold p-[5px] rounded-[16px] text-[14px] border border-solid border-[#ffffff1a] h-[50px] bg-black">
             {['0.25', '0.5', '1', ''].map((item, index) => {
               if (!item && index === 3) {
                 return (
                   <div
-                    className={'focus-within:!border-[#0DD4C3] transition-colors duration-300'}
-                    key={index}
-                    style={{
-                      width: '80px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      border: '1px solid #848E9C',
-                      borderRadius: '100px',
-                      padding: '0px 12px',
-                      fontWeight: 600,
-                      background: '#000'
-                    }}>
+                    className="w-[80px] flex items-center border border-solid border-[#848E9C] rounded-[100px] px-3 font-semibold bg-black focus-within:!border-[#0DD4C3] transition-colors duration-300"
+                    key={index}>
                     <input
                       className=" w-[40px] h-[33px] py-0.5 text-center focus:outline-none bg-transparent border-side-secondary rounded-[100px]   "
                       type="text"
@@ -112,7 +80,7 @@ export default function SlippageControl(props) {
                     cursor: 'pointer',
                     borderRadius: '100px',
                     fontWeight: 600,
-                    background: item === slippage ? 'rgb(13, 212, 195)' : '#1E1E1F',
+                    background: item === slippage ? '#F7771A' : '#1E1E1F',
                     color: item === slippage ? '#000' : '#fff',
                     marginRight: '4px'
                   }}

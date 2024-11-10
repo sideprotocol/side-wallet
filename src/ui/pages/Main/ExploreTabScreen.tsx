@@ -111,7 +111,7 @@ export default function SettingsTabScreen() {
               <div
                 className="flex flex-col items-center gap-[6px] group cursor-pointer"
                 onClick={() => window.open(SIDE_STATION_URL)}>
-                <div className="w-[56px] h-[56px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 ">
+                <div className="w-[56px] h-[56px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#F7771A] border-[0.5px] group-hover:border-[#F7931A] ">
                   <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-station.png" alt="station" />
                 </div>
                 <div className="text-[12px] font-[300] group-hover:text-[#ffffff]/80">Side Station</div>
@@ -120,7 +120,7 @@ export default function SettingsTabScreen() {
               <div
                 className="flex flex-col items-center gap-[6px] group cursor-pointer"
                 onClick={() => window.open(SIDE_HUB_URL)}>
-                <div className="w-[56px] h-[56px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 ">
+                <div className="w-[56px] h-[56px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#F7771A] border-[0.5px] group-hover:border-[#F7931A] ">
                   <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
                 </div>
                 <div className="text-[12px] font-[300] group-hover:text-[#ffffff]/80">Side Hub</div>
@@ -136,7 +136,7 @@ export default function SettingsTabScreen() {
               <div
                 className="flex  gap-[16px] group cursor-pointer"
                 onClick={() => window.open(SIDE_BRIDGEEXPLORER_URL)}>
-                <div className="w-[60px] h-[60px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 cursor-pointer">
+                <div className="w-[60px] h-[60px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#F7771A] border-[0.5px] group-hover:border-[#F7931A] cursor-pointer">
                   <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-station.png" alt="station" />
                 </div>
                 <div className="   flex flex-col justify-center gap-[6px]">
@@ -148,7 +148,7 @@ export default function SettingsTabScreen() {
               <div
                 className="flex  gap-[16px] group cursor-pointer"
                 onClick={() => window.open(SIDE_BRIDGEEXPLORER_URL)}>
-                <div className="w-[60px] h-[60px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#0DD4C3] border-[0.5px] group-hover:border-[#0DD4C3]/50 cursor-pointer">
+                <div className="w-[60px] h-[60px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#F7771A] border-[0.5px] group-hover:border-[#F7931A] cursor-pointer">
                   <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
                 </div>
                 <div className="  flex flex-col justify-center gap-[6px]">

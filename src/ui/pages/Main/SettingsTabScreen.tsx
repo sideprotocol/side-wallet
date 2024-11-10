@@ -24,22 +24,6 @@ interface Setting {
   right: boolean;
 }
 
-// function Icon({ type, style, className }: { type: string; style?: React.CSSProperties; className?: string }) {
-//   return (
-//     <svg
-//       className={className ?? className}
-//       style={{
-//         width: '16px',
-//         height: '16px',
-//         flexShrink: '0',
-//         ...style
-//       }}
-//     >
-//       <use xlinkHref={`#${type}`} />
-//     </svg>
-//   );
-// }
-
 const SettingList: Setting[] = [
   // {
   //   label: 'Manage Wallet',

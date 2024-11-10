@@ -123,7 +123,7 @@ const NativeBalance = () => {
               .replace(/\.?0+$/, '')}
             &nbsp;
             <div
-              className={'text-[#0DD4C3] text-[14px] hover:text-[#0DD4C3]/80'}
+              className={'text-[#F7771A] text-[14px] hover:text-[#F7931A]'}
               onClick={() => {
                 dispatch(
                   SwapActions.update({
@@ -470,7 +470,7 @@ export default function SwapTabScreen() {
             <div className="flex justify-between mt-[16px]">
               <div className="pl-[10px]"></div>
               <div
-                className="w-[108px] flex items-center justify-center rounded-[24px] border-[1px] border-[#14a89b1a]  bg-[#0dd4c31a] h-[30px] cursor-pointer"
+                className="w-[108px] flex items-center justify-center rounded-[24px] border-[1px] border-[#14a89b1a] bg-[#0dd4c31a] h-[30px] cursor-pointer"
                 onClick={showModal}>
                 <span className={'font-medium text-sm whitespace-nowrap mr-3 text-teal-400'}>{slippage}%</span>
                 <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">

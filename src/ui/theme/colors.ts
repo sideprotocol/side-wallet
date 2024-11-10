@@ -41,8 +41,8 @@ const palette = {
   gold: '#eac249',
 
   // side theme color
-  blue_dark: '#0DD4C3',
-  blue_dark2: '#01BEAE',
+  blue_dark: '#F7771A',
+  blue_dark2: '#F7931A',
 
   grey_dark: '#404045',
   search_icon: '#828282'
@@ -61,7 +61,7 @@ export const colors = Object.assign({}, palette, {
 
   card: 'rgb(217 217 217 / 10%)',
   warning: palette.orange,
-  primary: '#0DD4C3',
+  primary: '#F7771A',
 
   bg2: '#09090A',
   bg3: '#434242',

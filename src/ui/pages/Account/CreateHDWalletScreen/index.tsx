@@ -93,19 +93,13 @@ export default function CreateHDWalletScreen() {
 
   return (
     <div
-      style={{
-        backgroundColor: '#09090A',
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
-        minHeight: '600px',
-        height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        border: !isInTab ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
-        justifyContent: 'center'
-      }}>
+      className={`bg-[#09090A] flex flex-col w-full ${
+        window.location.pathname === '/sidePanel.html' ? 'max-w-[100vw]' : 'max-w-[375px]'
+      } min-h-[600px] ${
+        window.location.pathname === '/sidePanel.html' ? 'h-screen' : 'h-[600px]'
+      } overflow-y-auto overflow-x-hidden ${
+        !isInTab ? 'border border-solid border-white/10' : 'border-none'
+      } justify-center`}>
       <Header
         onBack={() => {
           if (fromUnlock) {
