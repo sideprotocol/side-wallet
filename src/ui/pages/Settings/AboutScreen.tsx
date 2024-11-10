@@ -109,10 +109,10 @@ export default function AboutScreen() {
                       setIsClickCopy(true);
                     }}
                     icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
-                    color={isClickCopy ? 'green' : 'white'}
+                    color={isClickCopy ? 'primary' : 'white'}
                     size={20}
                   />
-                  {isClickCopy ? <Text text={'Copied'} color={isClickCopy ? 'green' : 'white'} /> : null}
+                  {isClickCopy ? <Text text={'Copied'} color={isClickCopy ? 'primary' : 'white'} /> : null}
                 </Row>
               </Row>
             </Card>

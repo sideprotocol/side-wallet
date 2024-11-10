@@ -281,16 +281,7 @@ export default function BridgeTabScreen() {
 
               <div className={'flex flex-col gap-[8px]'}>
                 <div
-                  className={'hover:bg-[#000]/70 bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 bg-[#000]'}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '8px 8px',
-                    cursor: 'pointer',
-                    borderRadius: '24px',
-                    minWidth: 'max-content'
-                  }}
+                  className={'hover:bg-[#000]/70 bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 bg-[#000] flex justify-between items-center p-2 cursor-pointer rounded-[24px] min-w-max'}
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -306,14 +297,7 @@ export default function BridgeTabScreen() {
                     url={bridgeAsset?.asset?.logo}
                   />
                   <div
-                    style={{
-                      fontSize: '14px',
-                      paddingRight: '6px',
-                      whiteSpace: 'nowrap',
-                      maxWidth: '72px',
-                      textOverflow: 'ellipsis',
-                      overflow: 'hidden'
-                    }}>
+                    className="text-[14px] pr-[6px] whitespace-nowrap max-w-[72px] text-ellipsis overflow-hidden">
                     {bridgeAsset?.asset?.symbol || 'Select Token'}
                   </div>
                   {/*<Icon type="" />*/}
@@ -374,19 +358,7 @@ export default function BridgeTabScreen() {
                     }}
                   />
                   <div
-                    className={'hover:bg-[#0dd4c3]/10'}
-                    style={{
-                      padding: '8px',
-                      position: 'absolute',
-                      right: '10px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      color: '#0DD4C3',
-                      fontSize: '14px',
-                      background: '#0DD4C31A',
-                      cursor: 'pointer',
-                      borderRadius: '8px'
-                    }}
+                    className={'absolute right-[10px] top-1/2 -translate-y-1/2 p-2 text-[#F7771A] text-sm bg-[#F7771A33] cursor-pointer rounded-lg hover:bg-[#F7771A1A]'}
                     onClick={() => {
                       dispatch(BridgeActions.update({ bridgeAmount: balance }));
                     }}>

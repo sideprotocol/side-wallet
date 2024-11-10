@@ -52,8 +52,8 @@ const $viewPresets = {
     paddingLeft: spacingGap.lg,
     paddingRight: spacingGap.lg,
     minHeight: 50,
-    backgroundColor: colors.green_light,
-    border: `1px solid ${colors.green_light}`,
+    backgroundColor: colors.backgroundChoose,
+    border: `1px solid ${colors.backgroundChoose}`,
     borderRadius: 8
   }) as CSSProperties,
   styleNotCheck: Object.assign({}, $baseViewStyle, {

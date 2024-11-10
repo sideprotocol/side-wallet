@@ -187,13 +187,13 @@ export default function ExportPrivateKeyScreen() {
                     <Icon
                       className={'inline-block relative top-[5px] ml-[5px] mr-[2px]'}
                       icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
-                      color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                      color={isClickCopy ? 'primary' : isHovered ? 'white' : 'search_icon'}
                       size={20}
                     />
                     <Text
                       classname={'inline-block'}
                       text={isClickCopy ? 'Copied' : ''}
-                      color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                      color={isClickCopy ? 'primary' : isHovered ? 'white' : 'search_icon'}
                     />
                   </div>
                 </div>

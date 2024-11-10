@@ -35,8 +35,8 @@ export default function CurrencyTypeScreen() {
             rounded
             style={{
               padding: '16px 10px',
-              backgroundColor: colors.green_light,
-              border: `1px solid ${colors.green_light}`
+              backgroundColor: colors.backgroundChoose,
+              border: `1px solid ${colors.backgroundChoose}`
             }}
             full
             justifyBetween
@@ -47,7 +47,7 @@ export default function CurrencyTypeScreen() {
               <Text text={'USD'} />
             </Row>
             <Column>
-              <Icon color={'green'} contain={'contain'} icon="check-circle" />
+              <Icon color={'primary'} contain={'contain'} icon="check-circle" />
             </Column>
           </Row>
         </Column>

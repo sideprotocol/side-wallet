@@ -201,12 +201,12 @@ export default function ExportMnemonicsScreen() {
                 >
                   <Icon
                     icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
-                    color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                    color={isClickCopy ? 'primary' : isHovered ? 'white' : 'search_icon'}
                     size={20}
                   />
                   <Text
                     text={isClickCopy ? 'Copied' : 'Copy to clipboard'}
-                    color={isClickCopy ? 'green' : isHovered ? 'white' : 'search_icon'}
+                    color={isClickCopy ? 'primary' : isHovered ? 'white' : 'search_icon'}
                   />
                 </Row>
               </Column>

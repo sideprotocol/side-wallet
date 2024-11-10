@@ -212,7 +212,7 @@ function AmountInput(props: InputProps) {
           style={{
             padding: '8px',
             borderRadius: '8px',
-            backgroundColor: '#0DD4C31A'
+            backgroundColor: '#F7771A1A'
           }}
         />
       ) : null}

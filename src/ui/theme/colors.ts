@@ -65,7 +65,7 @@ export const colors = Object.assign({}, palette, {
 
   bg2: '#09090A',
   bg3: '#434242',
-  bg4: '#383535',
+  bg4: '#F7771A33',
 
   green_light: '#0dd4c31a',
   border: 'rgba(255,255,255,0.1)',
@@ -87,7 +87,10 @@ export const colors = Object.assign({}, palette, {
 
   // side theme color
   background: '#09090A',
-  swapBg: '#1D1D1F'
+  swapBg: '#1D1D1F',
+
+  // choose color
+  backgroundChoose: '#F7771A33',
   // copyColor: 'rgba(13, 212, 195, 0.10)'
   // border: '#1E1E1F',
 });

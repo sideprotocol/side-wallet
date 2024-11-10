@@ -28,7 +28,7 @@ export function AddressTypeCard(props: AddressTypeCardProps) {
       py="zero"
       gap="zero"
       onClick={onClick}
-      classname={!checked ? 'hover:!bg-[#0dd4c31a] hover:border-[#0dd4c31a]' : ''}
+      classname={!checked ? 'hover:!bg-[#F7771A33] hover:border-[#F7771A1A]' : ''}
     >
       <Column full gap={'zero'}>
         <Row
@@ -51,7 +51,7 @@ export function AddressTypeCard(props: AddressTypeCardProps) {
             }}
             justifyCenter
           >
-            {checked && <Icon color={'green'} contain={'contain'} icon="check-circle" />}
+            {checked && <Icon color={'primary'} contain={'contain'} icon="check-circle" />}
           </Column>
         </Row>
         {hasVault && (

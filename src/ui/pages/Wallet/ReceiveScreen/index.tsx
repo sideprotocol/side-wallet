@@ -10,6 +10,7 @@ import { sizes } from '@/ui/theme/spacing';
 import { copyToClipboard } from '@/ui/utils';
 
 import './index.less';
+import { colors } from '@/ui/theme/colors';
 
 export default function ReceiveScreen() {
   const { state } = useLocation();
@@ -122,7 +123,7 @@ export default function ReceiveScreen() {
                     onMouseOver={handleMouseOver}
                     onMouseLeave={handleMouseLeave}
                     icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
-                    color={isClickCopy ? 'green' : isHovered ? 'black' : 'search_icon'}
+                    color={isClickCopy ? 'primary' : isHovered ? 'black' : 'search_icon'}
                     containerStyle={{
                       display: 'inline-block',
                       marginLeft: '8px',
@@ -132,7 +133,7 @@ export default function ReceiveScreen() {
                   <span
                     style={{
                       display: isClickCopy ? 'inline-block' : 'none',
-                      color: '#41B530',
+                      color: colors.primary,
                       fontSize: '12px',
                       marginLeft: '4px'
                     }}>
