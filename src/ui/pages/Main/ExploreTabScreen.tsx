@@ -68,7 +68,7 @@ export default function SettingsTabScreen() {
         <div className={`${searchTerm ? '' : '!hidden'} flex flex-col gap-[16px] mt-[16px]`}>
           <div className="flex  gap-[16px] mb-[10px] items-center">
             <div className="w-[36px] h-[36px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
-              <img className={'w-[36px] h-[5px]'} src="/images/icons/search/icon-station.png" alt="station" />
+              <img className={'w-[36px] h-[36px]'} src="/images/icons/search/icon-station.png" alt="station" />
             </div>
             <div className=" relative  flex flex-col justify-center gap-[2px] flex-1">
               <div className={'text-[14px] font-[600]'}>Side Station</div>
@@ -79,7 +79,7 @@ export default function SettingsTabScreen() {
 
           <div className="flex  gap-[16px]">
             <div className="w-[36px] h-[36px] bg-[#6DE5DA] rounded-[16px] flex items-center justify-center ">
-              <img className={'w-[36px] h-[9.5px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
+              <img className={'w-[36px] h-[36px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
             </div>
             <div className=" relative flex flex-col justify-center gap-[2px] flex-1">
               <div className={'text-[14px] font-[600]'}>Side Hub</div>

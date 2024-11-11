@@ -48,7 +48,7 @@ export default function LanguageTypeScreen() {
               <Text text={'Black'} />
             </Row>
             <Column>
-              <Icon color={'green'} icon="check-circle" />
+              <Icon color={'primary'} icon="check-circle" />
             </Column>
           </Row>
         </Column>
