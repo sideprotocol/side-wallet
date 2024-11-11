@@ -13,7 +13,7 @@
 <rect x="0.5" y="0.5" width="339" height="206" rx="23.5" stroke="#91FFF5"/>
 <defs>
 <linearGradient id="paint0_linear_3800_916" x1="170" y1="0" x2="170" y2="380.291" gradientUnits="userSpaceOnUse">
-<stop stop-color="#0DD4C3"/>
+<stop stop-color="#F7771A"/>
 <stop offset="1" stop-color="#00513B"/>
 </linearGradient>
 <clipPath id="clip0_3800_916">

@@ -47,7 +47,7 @@ export function MyItem({ account, selected, onClick }: MyItemProps, ref) {
           {selected && (
             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
               <g filter="url(#filter0_i_863_3849)">
-                <rect x="0.171875" width="20" height="20" rx="10" fill="#0DD4C3" />
+                <rect x="0.171875" width="20" height="20" rx="10" fill="#F7771A" />
               </g>
               <path
                 d="M5.17188 10.5L8.44308 13.3623C8.84931 13.7178 9.46433 13.6867 9.83264 13.292L16.1719 6.5"

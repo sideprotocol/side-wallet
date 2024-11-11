@@ -356,7 +356,7 @@ function SignTxDetails({ txInfo, type, rawTxInfo }: { txInfo: TxInfo; rawTxInfo?
                         // color={receivingSatoshis > sendingSatoshis ? 'white' : 'white'}
 
                         style={{
-                          color: '#0DD4C3'
+                          color: '#F7771A'
                         }}
                         preset="bold"
                         textCenter
@@ -819,7 +819,7 @@ export default function SignPsbt({
                     style={{
                       gap: '4px',
                       borderRadius: '10px',
-                      backgroundColor: '#0DD4C3',
+                      backgroundColor: '#F7771A',
                       padding: '4px 10px',
                       fontSize: '12px',
                       width: 'max-content',
@@ -930,7 +930,7 @@ export default function SignPsbt({
                                           // borderColor: 'rgb(13, 212, 195)',
                                           borderRadius: 5,
                                           padding: 2,
-                                          background: '#0DD4C31A'
+                                          background: '#F7771A33'
                                         }}>
                                         <Text text="to sign" color="primary" size="xs" />
                                       </Row>

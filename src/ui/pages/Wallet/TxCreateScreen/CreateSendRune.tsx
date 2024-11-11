@@ -217,7 +217,7 @@ export default function CreateSendRune() {
             pt="lg"
             style={{
               fontSize: '16px',
-              color: '#0DD4C3'
+              color: '#F7771A'
             }}>
             {token.asset.symbol}
           </Row>

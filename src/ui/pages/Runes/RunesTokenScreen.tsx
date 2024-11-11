@@ -161,7 +161,7 @@ export default function RunesTokenScreen() {
                 </Row>
               </Row>
 
-              <div className="text-[#0DD4C3] text-center mt-[16px] text-[16px]">
+              <div className="text-[#F7771A] text-center mt-[16px] text-[16px]">
                 {tokenSummary?.runeInfo?.spacedRune}
               </div>
 
@@ -221,7 +221,7 @@ export default function RunesTokenScreen() {
               <div className="flex flex-col w-full justify-between text-[14px] px-[10px] overflow-hidden">
                 <span className={'text-[#828282]'}>etching</span>
                 <a
-                  className={'text-[#0DD4C3] text-[12px] hover:underline hover:!text-[#0DD4C3]'}
+                  className={'text-[#F7771A] text-[12px] hover:underline hover:!text-[#F7771A]'}
                   href={`${mempoolWebsite}/tx/${tokenSummary.runeInfo.etching}`}
                   target={'_blank'}
                   rel="noreferrer"
@@ -233,7 +233,7 @@ export default function RunesTokenScreen() {
               <div className="flex flex-col w-full justify-between text-[14px] px-[10px] overflow-hidden ">
                 <span className={'text-[#828282]'}>parent</span>
                 <a
-                  className={'text-[#0DD4C3] text-[12px] hover:underline hover:!text-[#0DD4C3]'}
+                  className={'text-[#F7771A] text-[12px] hover:underline hover:!text-[#F7771A]'}
                   href={`${ordinalsWebsite}/inscription/${tokenSummary.runeInfo.parent}`}
                   target={'_blank'}
                   rel="noreferrer"

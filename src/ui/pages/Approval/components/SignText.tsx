@@ -137,7 +137,7 @@ export default function SignText({ params: { data, session } }: Props) {
               style={{
                 gap: '4px',
                 borderRadius: '10px',
-                backgroundColor: '#0DD4C3',
+                backgroundColor: '#F7771A',
                 padding: '4px 10px',
                 fontSize: '12px',
                 width: 'max-content',

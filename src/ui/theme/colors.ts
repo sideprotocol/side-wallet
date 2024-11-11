@@ -17,7 +17,7 @@ const palette = {
   green_dark2: '#2D7E24',
   green_dark: '#379a29',
   green: '#41B530',
-  green_light: '#5ec04f',
+  green_light: '#F7771A',
   green_check: '#22AB38',
 
   yellow_dark: '#d5ac00',
@@ -67,7 +67,7 @@ export const colors = Object.assign({}, palette, {
   bg3: '#434242',
   bg4: '#F7771A33',
 
-  green_light: '#0dd4c31a',
+  green_light: '#F7771A',
   border: 'rgba(255,255,255,0.1)',
   icon_yellow: '#FFBA33',
   brc20_deploy: '#233933',

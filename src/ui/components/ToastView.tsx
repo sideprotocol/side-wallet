@@ -90,7 +90,7 @@ export default function ToastView({ children, type, toaster, txHashUrl }: IToast
         <div className="absolute bottom-2 w-3/5    h-0.5 bg-gray-200">
           <div
             className={'absolute top-0 h-full'}
-            style={{ width: `${progress}%`, background: type == 'success' ? '#0DD4C3' : '#F6465D' }}></div>
+            style={{ width: `${progress}%`, background: type == 'success' ? '#F7771A' : '#F6465D' }}></div>
         </div>
       </div>
       {/*<IconButton*/}

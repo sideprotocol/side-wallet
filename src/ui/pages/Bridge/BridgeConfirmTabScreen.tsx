@@ -262,7 +262,7 @@ export default function BridgeTabScreen() {
                         openEditId !== 'edit_sat' ? (
                           <></>
                         ) : (
-                          <div className={`w-full rounded-lg border ${'border-[#0DD4C3] '} px-3 py-1 h-[42px]`}>
+                          <div className={`w-full rounded-lg border ${'border-[#F7771A] '} px-3 py-1 h-[42px]`}>
                             <Input
                               onChange={(e) => {
                                 const targetValue = e.target.value;

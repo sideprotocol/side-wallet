@@ -54,7 +54,7 @@ export default function SlippageControl(props) {
               if (!item && index === 3) {
                 return (
                   <div
-                    className="w-[80px] flex items-center border border-solid border-[#848E9C] rounded-[100px] px-3 font-semibold bg-black focus-within:!border-[#0DD4C3] transition-colors duration-300"
+                    className="w-[80px] flex items-center border border-solid border-[#848E9C] rounded-[100px] px-3 font-semibold bg-black focus-within:!border-[#F7771A] transition-colors duration-300"
                     key={index}>
                     <input
                       className=" w-[40px] h-[33px] py-0.5 text-center focus:outline-none bg-transparent border-side-secondary rounded-[100px]   "
