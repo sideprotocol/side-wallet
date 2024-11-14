@@ -74,7 +74,8 @@ module.exports = {
           '{}': false
         }
       }
-    ]
+    ],
+    '@typescript-eslint/no-namespace': 'off'
   },
   settings: {
     'import/resolver': {
