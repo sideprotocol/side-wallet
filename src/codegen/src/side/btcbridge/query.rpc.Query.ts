@@ -2,7 +2,7 @@
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryChainTipRequest, QueryChainTipResponse, QueryBlockHeaderByHeightRequest, QueryBlockHeaderByHeightResponse, QueryBlockHeaderByHashRequest, QueryBlockHeaderByHashResponse, QueryFeeRateRequest, QueryFeeRateResponse, QueryWithdrawRequestsByAddressRequest, QueryWithdrawRequestsByAddressResponse, QueryWithdrawRequestsByTxHashRequest, QueryWithdrawRequestsByTxHashResponse, QueryPendingBtcWithdrawRequestsRequest, QueryPendingBtcWithdrawRequestsResponse, QuerySigningRequestsRequest, QuerySigningRequestsResponse, QuerySigningRequestsByAddressRequest, QuerySigningRequestsByAddressResponse, QuerySigningRequestByTxHashRequest, QuerySigningRequestByTxHashResponse, QueryUTXOsRequest, QueryUTXOsResponse, QueryUTXOsByAddressRequest, QueryUTXOsByAddressResponse, QueryUTXOCountAndBalancesByAddressRequest, QueryUTXOCountAndBalancesByAddressResponse, QueryDKGRequestRequest, QueryDKGRequestResponse, QueryDKGRequestsRequest, QueryDKGRequestsResponse, QueryAllDKGRequestsRequest, QueryAllDKGRequestsResponse, QueryDKGCompletionRequestsRequest, QueryDKGCompletionRequestsResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryChainTipRequest, QueryChainTipResponse, QueryBlockHeaderByHeightRequest, QueryBlockHeaderByHeightResponse, QueryBlockHeaderByHashRequest, QueryBlockHeaderByHashResponse, QueryFeeRateRequest, QueryFeeRateResponse, QueryWithdrawalNetworkFeeRequest, QueryWithdrawalNetworkFeeResponse, QueryWithdrawRequestsByAddressRequest, QueryWithdrawRequestsByAddressResponse, QueryWithdrawRequestsByTxHashRequest, QueryWithdrawRequestsByTxHashResponse, QueryPendingBtcWithdrawRequestsRequest, QueryPendingBtcWithdrawRequestsResponse, QuerySigningRequestsRequest, QuerySigningRequestsResponse, QuerySigningRequestsByAddressRequest, QuerySigningRequestsByAddressResponse, QuerySigningRequestByTxHashRequest, QuerySigningRequestByTxHashResponse, QueryUTXOsRequest, QueryUTXOsResponse, QueryUTXOsByAddressRequest, QueryUTXOsByAddressResponse, QueryUTXOCountAndBalancesByAddressRequest, QueryUTXOCountAndBalancesByAddressResponse, QueryDKGRequestRequest, QueryDKGRequestResponse, QueryDKGRequestsRequest, QueryDKGRequestsResponse, QueryAllDKGRequestsRequest, QueryAllDKGRequestsResponse, QueryDKGCompletionRequestsRequest, QueryDKGCompletionRequestsResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
@@ -15,6 +15,8 @@ export interface Query {
   queryBlockHeaderByHash(request: QueryBlockHeaderByHashRequest): Promise<QueryBlockHeaderByHashResponse>;
   /** QueryFeeRate queries the current bitcoin network fee rate on the side chain. */
   queryFeeRate(request?: QueryFeeRateRequest): Promise<QueryFeeRateResponse>;
+  /** QueryWithdrawalNetworkFee queries the estimated btc network fee for the given withdrawal. */
+  queryWithdrawalNetworkFee(request: QueryWithdrawalNetworkFeeRequest): Promise<QueryWithdrawalNetworkFeeResponse>;
   /** QueryWithdrawRequestsByAddress queries the withdrawal requests by the given address. */
   queryWithdrawRequestsByAddress(request: QueryWithdrawRequestsByAddressRequest): Promise<QueryWithdrawRequestsByAddressResponse>;
   /** QueryWithdrawRequestsByTxHash queries the withdrawal requests by the given tx hash. */
@@ -51,6 +53,7 @@ export class QueryClientImpl implements Query {
     this.queryBlockHeaderByHeight = this.queryBlockHeaderByHeight.bind(this);
     this.queryBlockHeaderByHash = this.queryBlockHeaderByHash.bind(this);
     this.queryFeeRate = this.queryFeeRate.bind(this);
+    this.queryWithdrawalNetworkFee = this.queryWithdrawalNetworkFee.bind(this);
     this.queryWithdrawRequestsByAddress = this.queryWithdrawRequestsByAddress.bind(this);
     this.queryWithdrawRequestsByTxHash = this.queryWithdrawRequestsByTxHash.bind(this);
     this.queryPendingBtcWithdrawRequests = this.queryPendingBtcWithdrawRequests.bind(this);
@@ -89,6 +92,11 @@ export class QueryClientImpl implements Query {
     const data = QueryFeeRateRequest.encode(request).finish();
     const promise = this.rpc.request("side.btcbridge.Query", "QueryFeeRate", data);
     return promise.then(data => QueryFeeRateResponse.decode(new BinaryReader(data)));
+  }
+  queryWithdrawalNetworkFee(request: QueryWithdrawalNetworkFeeRequest): Promise<QueryWithdrawalNetworkFeeResponse> {
+    const data = QueryWithdrawalNetworkFeeRequest.encode(request).finish();
+    const promise = this.rpc.request("side.btcbridge.Query", "QueryWithdrawalNetworkFee", data);
+    return promise.then(data => QueryWithdrawalNetworkFeeResponse.decode(new BinaryReader(data)));
   }
   queryWithdrawRequestsByAddress(request: QueryWithdrawRequestsByAddressRequest): Promise<QueryWithdrawRequestsByAddressResponse> {
     const data = QueryWithdrawRequestsByAddressRequest.encode(request).finish();
@@ -176,6 +184,9 @@ export const createRpcQueryExtension = (base: QueryClient) => {
     },
     queryFeeRate(request?: QueryFeeRateRequest): Promise<QueryFeeRateResponse> {
       return queryService.queryFeeRate(request);
+    },
+    queryWithdrawalNetworkFee(request: QueryWithdrawalNetworkFeeRequest): Promise<QueryWithdrawalNetworkFeeResponse> {
+      return queryService.queryWithdrawalNetworkFee(request);
     },
     queryWithdrawRequestsByAddress(request: QueryWithdrawRequestsByAddressRequest): Promise<QueryWithdrawRequestsByAddressResponse> {
       return queryService.queryWithdrawRequestsByAddress(request);

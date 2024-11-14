@@ -25,6 +25,10 @@ import { BinaryReader, BinaryWriter } from "../../binary";
  *     if (any.is(Foo.class)) {
  *       foo = any.unpack(Foo.class);
  *     }
+ *     // or ...
+ *     if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+ *       foo = any.unpack(Foo.getDefaultInstance());
+ *     }
  * 
  *  Example 3: Pack and unpack a message in Python.
  * 
@@ -39,10 +43,13 @@ import { BinaryReader, BinaryWriter } from "../../binary";
  *  Example 4: Pack and unpack a message in Go
  * 
  *      foo := &pb.Foo{...}
- *      any, err := ptypes.MarshalAny(foo)
+ *      any, err := anypb.New(foo)
+ *      if err != nil {
+ *        ...
+ *      }
  *      ...
  *      foo := &pb.Foo{}
- *      if err := ptypes.UnmarshalAny(any, foo); err != nil {
+ *      if err := any.UnmarshalTo(foo); err != nil {
  *        ...
  *      }
  * 
@@ -51,7 +58,6 @@ import { BinaryReader, BinaryWriter } from "../../binary";
  * methods only use the fully qualified type name after the last '/'
  * in the type URL, for example "foo.bar.com/x/y.z" will yield type
  * name "y.z".
- * 
  * 
  * JSON
  * ====
@@ -107,7 +113,8 @@ export interface Any {
    * 
    * Note: this functionality is not currently available in the official
    * protobuf release, and it is not used for type URLs beginning with
-   * type.googleapis.com.
+   * type.googleapis.com. As of May 2023, there are no widely used type server
+   * implementations and no plans to implement one.
    * 
    * Schemes other than `http`, `https` (or the empty scheme) might be
    * used with implementation specific semantics.
@@ -145,6 +152,10 @@ export interface AnyProtoMsg {
  *     if (any.is(Foo.class)) {
  *       foo = any.unpack(Foo.class);
  *     }
+ *     // or ...
+ *     if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+ *       foo = any.unpack(Foo.getDefaultInstance());
+ *     }
  * 
  *  Example 3: Pack and unpack a message in Python.
  * 
@@ -159,10 +170,13 @@ export interface AnyProtoMsg {
  *  Example 4: Pack and unpack a message in Go
  * 
  *      foo := &pb.Foo{...}
- *      any, err := ptypes.MarshalAny(foo)
+ *      any, err := anypb.New(foo)
+ *      if err != nil {
+ *        ...
+ *      }
  *      ...
  *      foo := &pb.Foo{}
- *      if err := ptypes.UnmarshalAny(any, foo); err != nil {
+ *      if err := any.UnmarshalTo(foo); err != nil {
  *        ...
  *      }
  * 
@@ -171,7 +185,6 @@ export interface AnyProtoMsg {
  * methods only use the fully qualified type name after the last '/'
  * in the type URL, for example "foo.bar.com/x/y.z" will yield type
  * name "y.z".
- * 
  * 
  * JSON
  * ====
@@ -226,7 +239,8 @@ export interface AnyAmino {
    * 
    * Note: this functionality is not currently available in the official
    * protobuf release, and it is not used for type URLs beginning with
-   * type.googleapis.com.
+   * type.googleapis.com. As of May 2023, there are no widely used type server
+   * implementations and no plans to implement one.
    * 
    * Schemes other than `http`, `https` (or the empty scheme) might be
    * used with implementation specific semantics.
@@ -264,6 +278,10 @@ export interface AnyAminoMsg {
  *     if (any.is(Foo.class)) {
  *       foo = any.unpack(Foo.class);
  *     }
+ *     // or ...
+ *     if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+ *       foo = any.unpack(Foo.getDefaultInstance());
+ *     }
  * 
  *  Example 3: Pack and unpack a message in Python.
  * 
@@ -278,10 +296,13 @@ export interface AnyAminoMsg {
  *  Example 4: Pack and unpack a message in Go
  * 
  *      foo := &pb.Foo{...}
- *      any, err := ptypes.MarshalAny(foo)
+ *      any, err := anypb.New(foo)
+ *      if err != nil {
+ *        ...
+ *      }
  *      ...
  *      foo := &pb.Foo{}
- *      if err := ptypes.UnmarshalAny(any, foo); err != nil {
+ *      if err := any.UnmarshalTo(foo); err != nil {
  *        ...
  *      }
  * 
@@ -290,7 +311,6 @@ export interface AnyAminoMsg {
  * methods only use the fully qualified type name after the last '/'
  * in the type URL, for example "foo.bar.com/x/y.z" will yield type
  * name "y.z".
- * 
  * 
  * JSON
  * ====

@@ -93,13 +93,7 @@ export function useSignAndBroadcastTxRaw() {
 
     const isBitcoinWithdraw = tx.messages.some((msg) => msg.typeUrl.startsWith('/side.btcbridge.'));
 
-    const msgs = isBitcoinWithdraw
-      ? tx.messages.map((msg) => ({
-          amount: msg.value.amount,
-          fee_rate: msg.value.feeRate,
-          sender: msg.value.sender
-        }))
-      : tx.messages.map((msg) => aminoTypes.toAmino(msg));
+    const msgs = tx.messages.map((msg) => aminoTypes.toAmino(msg));
 
     const signDoc = makeSignDocAmino(
       msgs,
@@ -292,13 +286,7 @@ export function useSignAndBroadcastTxRaw() {
 
     const isBitcoinWithdraw = tx.messages.some((msg) => msg.typeUrl.startsWith('/side.btcbridge.'));
 
-    const msgs = isBitcoinWithdraw
-      ? tx.messages.map((msg) => ({
-          amount: msg.value.amount,
-          fee_rate: msg.value.feeRate,
-          sender: msg.value.sender
-        }))
-      : tx.messages.map((msg) => aminoTypes.toAmino(msg));
+    const msgs = tx.messages.map((msg) => aminoTypes.toAmino(msg));
 
     const signDoc = makeSignDocAmino(
       msgs,

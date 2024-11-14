@@ -1,6 +1,6 @@
 {
   "name": "side-wallet",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "scripts": {
     "clean": "mkdir -p dist && rm -rf dist/* && cp -r build/_raw/* dist",
@@ -23,9 +23,12 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@babel/core": "^7.16.0",
-    "@cosmjs/amino": "^0.31.1",
-    "@cosmjs/cosmwasm-stargate": "^0.31.1",
-    "@cosmjs/proto-signing": "^0.31.1",
+    "@cosmjs/amino": "^0.32.4",
+    "@cosmjs/cosmwasm-stargate": "^0.32.4",
+    "@cosmjs/encoding": "^0.32.4",
+    "@cosmjs/launchpad": "^0.27.1",
+    "@cosmjs/ledger-amino": "^0.32.4",
+    "@cosmjs/proto-signing": "^0.32.4",
     "@cosmjs/stargate": "^0.32.4",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",

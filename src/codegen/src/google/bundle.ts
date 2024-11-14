@@ -1,13 +1,13 @@
 //@ts-nocheck
-import * as _9 from "./protobuf/descriptor";
-import * as _10 from "./protobuf/any";
-import * as _11 from "./protobuf/timestamp";
-import * as _12 from "./protobuf/duration";
+import * as _4 from "./protobuf/any";
+import * as _5 from "./protobuf/duration";
+import * as _6 from "./protobuf/timestamp";
+import * as _7 from "./protobuf/descriptor";
 export namespace google {
   export const protobuf = {
-    ..._9,
-    ..._10,
-    ..._11,
-    ..._12
+    ..._4,
+    ..._5,
+    ..._6,
+    ..._7
   };
 }

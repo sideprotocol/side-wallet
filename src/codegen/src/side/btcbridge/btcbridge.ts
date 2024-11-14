@@ -1,8 +1,8 @@
 //@ts-nocheck
-import { AssetType } from "./params";
 import { Timestamp } from "../../google/protobuf/timestamp";
+import { AssetType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { bytesFromBase64, base64FromBytes, toTimestamp, fromTimestamp } from "../../helpers";
+import { toTimestamp, fromTimestamp, bytesFromBase64, base64FromBytes } from "../../helpers";
 /** Bitcoin Signing Status */
 export enum SigningStatus {
   /** SIGNING_STATUS_UNSPECIFIED - SIGNING_STATUS_UNSPECIFIED - Default value, should not be used */
@@ -13,7 +13,7 @@ export enum SigningStatus {
   SIGNING_STATUS_BROADCASTED = 2,
   /** SIGNING_STATUS_CONFIRMED - SIGNING_STATUS_CONFIRMED - The signing request is confirmed */
   SIGNING_STATUS_CONFIRMED = 3,
-  /** SIGNING_STATUS_FAILED - SIGNING_STATUS_FAILED - The signing request failed to broadcast due to invalid inputs or non-standardness */
+  /** SIGNING_STATUS_FAILED - SIGNING_STATUS_FAILED - The signing request failed to be signed or broadcast due to unexpected exceptions */
   SIGNING_STATUS_FAILED = 4,
   UNRECOGNIZED = -1,
 }
@@ -164,6 +164,7 @@ export interface SigningRequest {
   sequence: bigint;
   txid: string;
   psbt: string;
+  creationTime: Date;
   status: SigningStatus;
 }
 export interface SigningRequestProtoMsg {
@@ -176,6 +177,7 @@ export interface SigningRequestAmino {
   sequence?: string;
   txid?: string;
   psbt?: string;
+  creation_time?: string;
   status?: SigningStatus;
 }
 export interface SigningRequestAminoMsg {
@@ -188,6 +190,7 @@ export interface SigningRequestSDKType {
   sequence: bigint;
   txid: string;
   psbt: string;
+  creation_time: Date;
   status: SigningStatus;
 }
 /** Withdrawal Request */
@@ -707,6 +710,7 @@ function createBaseSigningRequest(): SigningRequest {
     sequence: BigInt(0),
     txid: "",
     psbt: "",
+    creationTime: new Date(),
     status: 0
   };
 }
@@ -725,8 +729,11 @@ export const SigningRequest = {
     if (message.psbt !== "") {
       writer.uint32(34).string(message.psbt);
     }
+    if (message.creationTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.creationTime), writer.uint32(42).fork()).ldelim();
+    }
     if (message.status !== 0) {
-      writer.uint32(40).int32(message.status);
+      writer.uint32(48).int32(message.status);
     }
     return writer;
   },
@@ -750,6 +757,9 @@ export const SigningRequest = {
           message.psbt = reader.string();
           break;
         case 5:
+          message.creationTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 6:
           message.status = reader.int32() as any;
           break;
         default:
@@ -765,6 +775,7 @@ export const SigningRequest = {
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
     message.txid = object.txid ?? "";
     message.psbt = object.psbt ?? "";
+    message.creationTime = object.creationTime ?? undefined;
     message.status = object.status ?? 0;
     return message;
   },
@@ -782,6 +793,9 @@ export const SigningRequest = {
     if (object.psbt !== undefined && object.psbt !== null) {
       message.psbt = object.psbt;
     }
+    if (object.creation_time !== undefined && object.creation_time !== null) {
+      message.creationTime = fromTimestamp(Timestamp.fromAmino(object.creation_time));
+    }
     if (object.status !== undefined && object.status !== null) {
       message.status = object.status;
     }
@@ -793,6 +807,7 @@ export const SigningRequest = {
     obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
     obj.txid = message.txid === "" ? undefined : message.txid;
     obj.psbt = message.psbt === "" ? undefined : message.psbt;
+    obj.creation_time = message.creationTime ? Timestamp.toAmino(toTimestamp(message.creationTime)) : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
     return obj;
   },

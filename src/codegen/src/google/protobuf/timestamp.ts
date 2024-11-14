@@ -52,8 +52,15 @@ import { fromJsonTimestamp, fromTimestamp } from "../../helpers";
  *     Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
  *         .setNanos((int) ((millis % 1000) * 1000000)).build();
  * 
+ * Example 5: Compute Timestamp from Java `Instant.now()`.
  * 
- * Example 5: Compute Timestamp from current time in Python.
+ *     Instant now = Instant.now();
+ * 
+ *     Timestamp timestamp =
+ *         Timestamp.newBuilder().setSeconds(now.getEpochSecond())
+ *             .setNanos(now.getNano()).build();
+ * 
+ * Example 6: Compute Timestamp from current time in Python.
  * 
  *     timestamp = Timestamp()
  *     timestamp.GetCurrentTime()
@@ -82,7 +89,7 @@ import { fromJsonTimestamp, fromTimestamp } from "../../helpers";
  * [`strftime`](https://docs.python.org/2/library/time.html#time.strftime) with
  * the time format spec '%Y-%m-%dT%H:%M:%S.%fZ'. Likewise, in Java, one can use
  * the Joda Time's [`ISODateTimeFormat.dateTime()`](
- * http://www.joda.org/joda-time/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime%2D%2D
+ * http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()
  * ) to obtain a formatter capable of generating timestamps in this format.
  */
 export interface Timestamp {
@@ -155,8 +162,15 @@ export interface TimestampProtoMsg {
  *     Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
  *         .setNanos((int) ((millis % 1000) * 1000000)).build();
  * 
+ * Example 5: Compute Timestamp from Java `Instant.now()`.
  * 
- * Example 5: Compute Timestamp from current time in Python.
+ *     Instant now = Instant.now();
+ * 
+ *     Timestamp timestamp =
+ *         Timestamp.newBuilder().setSeconds(now.getEpochSecond())
+ *             .setNanos(now.getNano()).build();
+ * 
+ * Example 6: Compute Timestamp from current time in Python.
  * 
  *     timestamp = Timestamp()
  *     timestamp.GetCurrentTime()
@@ -185,7 +199,7 @@ export interface TimestampProtoMsg {
  * [`strftime`](https://docs.python.org/2/library/time.html#time.strftime) with
  * the time format spec '%Y-%m-%dT%H:%M:%S.%fZ'. Likewise, in Java, one can use
  * the Joda Time's [`ISODateTimeFormat.dateTime()`](
- * http://www.joda.org/joda-time/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime%2D%2D
+ * http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()
  * ) to obtain a formatter capable of generating timestamps in this format.
  */
 export type TimestampAmino = string;
@@ -244,8 +258,15 @@ export interface TimestampAminoMsg {
  *     Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)
  *         .setNanos((int) ((millis % 1000) * 1000000)).build();
  * 
+ * Example 5: Compute Timestamp from Java `Instant.now()`.
  * 
- * Example 5: Compute Timestamp from current time in Python.
+ *     Instant now = Instant.now();
+ * 
+ *     Timestamp timestamp =
+ *         Timestamp.newBuilder().setSeconds(now.getEpochSecond())
+ *             .setNanos(now.getNano()).build();
+ * 
+ * Example 6: Compute Timestamp from current time in Python.
  * 
  *     timestamp = Timestamp()
  *     timestamp.GetCurrentTime()
@@ -274,7 +295,7 @@ export interface TimestampAminoMsg {
  * [`strftime`](https://docs.python.org/2/library/time.html#time.strftime) with
  * the time format spec '%Y-%m-%dT%H:%M:%S.%fZ'. Likewise, in Java, one can use
  * the Joda Time's [`ISODateTimeFormat.dateTime()`](
- * http://www.joda.org/joda-time/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime%2D%2D
+ * http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()
  * ) to obtain a formatter capable of generating timestamps in this format.
  */
 export interface TimestampSDKType {

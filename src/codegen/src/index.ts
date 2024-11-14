@@ -8,13 +8,12 @@
 export * from "./cosmos_proto/bundle";
 export * from "./cosmos/bundle";
 export * from "./gogoproto/bundle";
+export * from "./google/bundle";
 export * from "./side/bundle";
 export * from "./side/client";
-export * from "./google/bundle";
 export * from "./varint";
 export * from "./utf8";
 export * from "./binary";
-
 export * as sideBTCBridgeRegistry from "./side/btcbridge/tx.registry";
 export { AminoConverter } from "./side/btcbridge/tx.amino";
 export { MessageComposer } from "./side/btcbridge/tx.registry";
