@@ -1,12 +1,28 @@
 import BigNumber from 'bignumber.js';
-import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 
 import { UNISAT_RUNE_URL } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import services from '@/ui/services';
 
-import { useAccountBalance } from '../state/accounts/hooks';
 import { toReadableAmount, toUnitAmount } from '../utils/formatter';
+
+const defaultBtcBalance: BalanceItem = {
+  denom: 'sat',
+  denomPrice: '0',
+  formatAmount: '0',
+  totalValue: '0',
+  amount: '0',
+  asset: {
+    denom: 'sat',
+    exponent: '8',
+    logo: `https://api.side.one/static/token/logo/btc.svg`,
+    name: 'Bitcoin',
+    symbol: 'BTC',
+    precision: 8,
+    rune: false
+  }
+};
 
 function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
   const price = new BigNumber(denomPrice || '0').multipliedBy(balance).toFixed(2);
@@ -30,133 +46,70 @@ function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
   } as BalanceItem;
 }
 
-function useGetBtcBalance(address?: string, flag?: boolean) {
-  const [data, setData] = useState<BalanceItem[]>([]);
-
-  const [denomPrice, setDenomPrice] = useState<string>('');
-
-  const [loading, setLoading] = useState(true);
-
-  const accountBalance = useAccountBalance();
-  const btcBalance = accountBalance?.amount;
-
-  const fetchBitcoinItemPrice = async () => {
-    const result = await services.dex.getAssetPrice('sat');
-
-    setDenomPrice(`${result}`);
-  };
-
-  const fetchBitcoinItem = async () => {
-    try {
-      setLoading(true);
-
-      if (!address || !denomPrice) {
-        setData([]);
-        return;
-      }
-
-      const item = formatBitcoinItem(btcBalance, denomPrice);
-
-      setData([item]);
-    } catch (err) {
-      console.log(err);
-      setData([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchBitcoinItemPrice();
-  }, []);
-
-  useEffect(() => {
-    fetchBitcoinItem();
-  }, [flag, address, denomPrice, btcBalance]);
-
-  return {
-    data,
-    loading
-  };
-}
-
-function useGetAllRunesBalance(address?: string, flag?: boolean) {
-  // runes balance
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<BalanceItem[]>([]);
-
-  const refetch = async () => {
-    try {
-      setLoading(true);
-
-      if (!address) {
-        setData([]);
-        return;
-      }
-
-      const { list } = await services.unisat.getRunesList({
-        address: address,
-        currentPage: 1,
-        pageSize: 100
-      });
-
-      const combinedList = [...list];
-
-      const runesPrice = await services.unisat.getRunesPrice(combinedList.map((item) => `${item.spacedRune}`));
-
-      const _data = list.map((item) => {
-        return {
-          denom: `runes/${item.runeid}`,
-          amount: item.amount,
-          denomPrice: runesPrice[`${item.spacedRune}`]?.curPrice?.toString() || '0',
-          formatAmount: toReadableAmount(item.amount, item.divisibility),
-          totalValue: BigNumber(toReadableAmount(item.amount, item.divisibility))
-            .multipliedBy(runesPrice[`${item.spacedRune}`]?.curPrice || '0')
-            .toFixed(2),
-          asset: {
-            denom: `runes/${item.runeid}`,
-            chain: 'bitcoin',
-            precision: item.divisibility,
-            logo: `${UNISAT_RUNE_URL}/${item.spacedRune}`,
-            name: 'Rune',
-            symbol: item.spacedRune,
-            rune: true,
-            emoji: item.symbol,
-            exponent: item.divisibility.toString()
-          }
-        } as BalanceItem;
-      });
-
-      setData([..._data]);
-    } catch (err) {
-      setData([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!flag && data.length > 0) return;
-    refetch();
-  }, [flag, address]);
-
-  return {
-    loading,
-    data
-  };
-}
-
 export default function useGetBitcoinBalanceList(address?: string, flag?: boolean) {
-  const { data: btcBalance, loading: btcLoading } = useGetBtcBalance(address, flag);
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      'getBitcoinBalanceList',
+      {
+        address,
+        flag
+      }
+    ],
+    queryFn: async () => {
+      try {
+        // btc 资产
+        const btcAmount = await services.unisat.getAvailableBtcBalance({
+          address: address!
+        });
 
-  const { data: runesBalance, loading: runesLoading } = useGetAllRunesBalance(address, flag);
+        // rune 资产
+        const { list } = await services.unisat.getRunesList({
+          address: address!,
+          currentPage: 1,
+          pageSize: 100
+        });
+        const priceMap = await services.dex.getAssetsPrice({
+          chain: 'bitcoin',
+          denomList: ['sat', ...list.map((item) => `runes/${item.runeid}`)]
+        });
 
-  const loading = btcLoading || runesLoading;
+        const runeBalanceList = list.map((item) => {
+          const runeDenom = `runes/${item.runeid}`;
+          const denomPrice = priceMap[runeDenom] || '0';
+          return {
+            denom: runeDenom,
+            amount: item.amount,
+            denomPrice,
+            formatAmount: toReadableAmount(item.amount, item.divisibility),
+            totalValue: BigNumber(toReadableAmount(item.amount, item.divisibility)).multipliedBy(denomPrice).toFixed(2),
+            asset: {
+              denom: `runes/${item.runeid}`,
+              chain: 'bitcoin',
+              precision: item.divisibility,
+              logo: `${UNISAT_RUNE_URL}/${item.spacedRune}`,
+              name: 'Rune',
+              symbol: item.spacedRune,
+              rune: true,
+              emoji: item.symbol,
+              exponent: item.divisibility.toString()
+            }
+          } as BalanceItem;
+        });
+        const btcBalance = formatBitcoinItem(btcAmount, priceMap['sat']);
 
-  const balanceList = loading ? [] : [...btcBalance, ...runesBalance];
+        return [btcBalance, ...runeBalanceList];
+      } catch (err) {
+        console.log(err);
+      }
+      return [defaultBtcBalance];
+    },
+    enabled: !!address || !!flag,
+    refetchInterval: 600000,
+    refetchIntervalInBackground: true
+  });
 
   return {
-    balanceList,
-    loading
+    balanceList: data || [defaultBtcBalance],
+    loading: isLoading
   };
 }

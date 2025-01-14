@@ -1,14 +1,32 @@
 /** @format */
 import BigNumber from 'bignumber.js';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import { useQuery } from 'react-query';
 
-// import { useListener } from "./useListener";
 import { BalanceItem, IAsset } from '@/shared/types';
 import services from '@/ui/services';
-import { Coin } from '@cosmjs/amino';
 
 import { formatUnitAmount } from '../utils';
+
+// 指定的排序规则
+const customOrder = ['sBTC', 'SIDE', 'USDC', 'n.USDC'];
+
+function customSort(data: BalanceItem[]) {
+  data.sort((x, y) => {
+    const indexX = customOrder.indexOf(x.asset.symbol);
+    const indexY = customOrder.indexOf(y.asset.symbol);
+
+    if (indexX !== -1 && indexY !== -1) {
+      return indexX - indexY;
+    }
+
+    if (indexX !== -1) return -1;
+    if (indexY !== -1) return 1;
+
+    return x.asset.symbol.localeCompare(y.asset.symbol);
+  });
+  return data;
+}
 
 export const useGetBalanceList = ({
   assets,
@@ -19,53 +37,43 @@ export const useGetBalanceList = ({
   restUrl: string;
   address?: string;
 }) => {
-  const [priceMap, setPriceMap] = useState<{ [key: string]: string }>({});
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const { data: result, refetch } = useQuery({
-    queryKey: ['getAllBalances', { address }],
+  const { data: allCoinBalances, refetch: refetchBalances } = useQuery({
+    queryKey: ['getAllCoinBalances', { address }],
     queryFn: async () => {
-      if (address) {
-        return services.bank.getAllBalances(
-          { address },
-          {
-            baseURL: restUrl
-          }
-        );
-      }
-    }
+      const result = await services.bank.getAllBalances(
+        { address: address! },
+        {
+          baseURL: restUrl
+        }
+      );
+      return result.balances;
+    },
+    enabled: !!address
   });
-  const balances = result?.balances || ([] as Coin[]);
 
-  useEffect(() => {
-    getAssetPrice();
-  }, [assets]);
-
-  const getAssetPrice = async () => {
-    if (!assets.length) return;
-    const result = await services.dex.getAssetsPrice(assets.map((item) => item.denom));
-    setPriceMap(result);
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-    timerRef.current = setTimeout(() => {
-      getAssetPrice();
-    }, 500000);
-  };
+  const { data: priceMap } = useQuery({
+    queryKey: ['getSideAssetsPrice'],
+    queryFn: () => {
+      return services.dex.getAssetsPrice({ chain: 'side', denomList: assets.map((item) => item.denom) });
+    },
+    enabled: !!assets.length,
+    refetchInterval: 600000,
+    refetchIntervalInBackground: true
+  });
 
   const balanceList = useMemo(() => {
     let _balanceList: BalanceItem[] = [];
-    if (assets.length) {
+    if (assets.length && priceMap && allCoinBalances) {
       _balanceList = assets.map((item) => {
         const denomPrice = priceMap[item.denom] || '0';
 
-        const balance = balances.find((o) => o.denom === item.denom) || {
+        const balance = allCoinBalances.find((o) => o.denom === item.denom) || {
           amount: '0',
           denom: ''
         };
 
         const formatAmount = formatUnitAmount(balance.amount, +item.exponent || 6);
-        const totalValue = new BigNumber(denomPrice).multipliedBy(formatAmount).toString();
+        const totalValue = new BigNumber(denomPrice).multipliedBy(formatAmount || '0').toFixed(2, BigNumber.ROUND_CEIL);
         return {
           denom: item.denom,
           amount: balance.amount || '0',
@@ -76,11 +84,13 @@ export const useGetBalanceList = ({
         };
       });
     }
-    return _balanceList;
-  }, [balances, assets, priceMap]);
+    return customSort(_balanceList);
+  }, [allCoinBalances, priceMap, address]);
 
   return {
     balanceList,
-    refetchBalances: refetch
+    refetchBalances,
+    allCoinBalances,
+    priceMap: priceMap || {}
   };
 };

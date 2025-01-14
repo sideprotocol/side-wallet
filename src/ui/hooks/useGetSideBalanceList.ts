@@ -6,35 +6,39 @@ import services from '@/ui/services';
 
 import { useGetBalanceList } from './useGetBalanceList';
 
+function formateTokenList(tokens: IAsset[]) {
+  return tokens.map((token) => {
+    if (token.rune) {
+      return {
+        ...token,
+        logo: `${UNISAT_RUNE_URL}/${token.symbol}`
+      };
+    }
+    return token;
+  });
+}
+
 export function useGetSideBalanceList(address?: string) {
-  const { data: sideAssets } = useQuery({
+  const { data } = useQuery({
     queryKey: ['getSideAssets'],
     queryFn: async () => {
-      const result = await services.dex.getSideAssets();
-      return formateTokenList(result);
-    }
+      return services.dex.getSideAssets();
+    },
+    refetchInterval: 600000,
+    refetchIntervalInBackground: true
   });
 
-  function formateTokenList(tokens: IAsset[]) {
-    return tokens.map((token) => {
-      if (token.rune) {
-        return {
-          ...token,
-          logo: `${UNISAT_RUNE_URL}/${token.symbol}`
-        };
-      }
-      return token;
-    });
-  }
-
-  const { balanceList, refetchBalances } = useGetBalanceList({
-    assets: sideAssets || [],
+  const { balanceList, refetchBalances, allCoinBalances, priceMap } = useGetBalanceList({
+    assets: data ? formateTokenList(data) : [],
     restUrl: sideChain.restUrl,
     address
   });
 
   return {
     balanceList,
-    refetchBalances
+    refetchBalances,
+    allCoinBalances,
+    priceMap,
+    sideAssets: data || []
   };
 }
