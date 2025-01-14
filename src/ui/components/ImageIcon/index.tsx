@@ -5,7 +5,7 @@ import { Stack } from '@mui/material';
 import Icon from './Icon';
 
 export default function ImageIcon({ style, url }: { style?: React.CSSProperties; url: string | undefined }) {
-  const unknownUrl = 'https://insider.side.one/static/token/logo/unknown.svg';
+  const unknownUrl = 'https://api.side.one/static/token/logo/unknown.svg';
   const [isError, setError] = useState<boolean>(false);
   const handleOnError = () => {
     setError(true);

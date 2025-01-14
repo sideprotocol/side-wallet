@@ -21,7 +21,7 @@ function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
       denom: 'sat',
       chain: 'bitcoin',
       exponent: '8',
-      logo: 'https://insider.side.one/static/token/logo/btc.svg',
+      logo: 'https://api.side.one/static/token/logo/btc.svg',
       name: 'Bitcoin',
       symbol: 'BTC',
       precision: 8,

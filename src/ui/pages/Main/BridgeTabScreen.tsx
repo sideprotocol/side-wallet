@@ -33,7 +33,7 @@ const SAT_ITEM = {
     name: 'Bitcoin',
     exponent: '8',
     precision: 8,
-    logo: 'https://insider.side.one/static/token/logo/btc.svg',
+    logo: 'https://api.side.one/static/token/logo/btc.svg',
     runeData: null,
     rune: false
   }
@@ -281,7 +281,9 @@ export default function BridgeTabScreen() {
 
               <div className={'flex flex-col gap-[8px]'}>
                 <div
-                  className={'hover:bg-[#000]/70 bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 bg-[#000] flex justify-between items-center p-2 cursor-pointer rounded-[24px] min-w-max'}
+                  className={
+                    'hover:bg-[#000]/70 bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 bg-[#000] flex justify-between items-center p-2 cursor-pointer rounded-[24px] min-w-max'
+                  }
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -296,8 +298,7 @@ export default function BridgeTabScreen() {
                     }}
                     url={bridgeAsset?.asset?.logo}
                   />
-                  <div
-                    className="text-[14px] pr-[6px] whitespace-nowrap max-w-[72px] text-ellipsis overflow-hidden">
+                  <div className="text-[14px] pr-[6px] whitespace-nowrap max-w-[72px] text-ellipsis overflow-hidden">
                     {bridgeAsset?.asset?.symbol || 'Select Token'}
                   </div>
                   {/*<Icon type="" />*/}
@@ -358,7 +359,9 @@ export default function BridgeTabScreen() {
                     }}
                   />
                   <div
-                    className={'absolute right-[10px] top-1/2 -translate-y-1/2 p-2 text-[#F7771A] text-sm bg-[#F7771A33] cursor-pointer rounded-lg hover:bg-[#F7771A1A]'}
+                    className={
+                      'absolute right-[10px] top-1/2 -translate-y-1/2 p-2 text-[#F7771A] text-sm bg-[#F7771A33] cursor-pointer rounded-lg hover:bg-[#F7771A1A]'
+                    }
                     onClick={() => {
                       dispatch(BridgeActions.update({ bridgeAmount: balance }));
                     }}>
