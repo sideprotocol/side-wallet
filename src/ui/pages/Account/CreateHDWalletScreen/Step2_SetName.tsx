@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 
-import { ADDRESS_TYPES, RESTORE_WALLETS } from '@/shared/constant';
+import { ADDRESS_TYPES, isProduction, RESTORE_WALLETS } from '@/shared/constant';
+import { NetworkType } from '@/shared/types';
 import { Button, Column, Image, Input, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useReloadAccounts } from '@/ui/state/accounts/hooks';
@@ -60,7 +61,7 @@ export default function Step2_SetName({
       const option = hdPathOptions[contextData.addressTypeIndex];
       const hdPath = contextData.customHdPath || option.hdPath;
       await createAccount(contextData.mnemonics, hdPath, contextData.passphrase, contextData.addressType, 1, alianName);
-      changeNetworkType(1);
+      changeNetworkType(isProduction ? NetworkType.MAINNET : NetworkType.TESTNET);
       reloadAccounts();
       navigate('MainScreen');
     } catch (e) {
@@ -73,16 +74,14 @@ export default function Step2_SetName({
         flex: 1,
         overflow: 'hidden',
         padding: '0 16px 24px'
-      }}
-    >
+      }}>
       <Column
         style={{
           flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'auto'
-        }}
-      >
+        }}>
         <Column
           style={{
             border: '1px solid #404045',
@@ -91,8 +90,7 @@ export default function Step2_SetName({
             borderRadius: '14px',
             padding: '32px 16px 24px',
             width: '100%'
-          }}
-        >
+          }}>
           <Row justifyCenter>
             <Image src="/images/icons/wallet.svg" size={78} />
           </Row>

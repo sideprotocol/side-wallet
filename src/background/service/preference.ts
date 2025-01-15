@@ -118,7 +118,7 @@ class PreferenceService {
         firstOpen: false,
         currency: 'USD',
         addressType: AddressType.P2WPKH,
-        networkType: NetworkType.TESTNET,
+        networkType: NetworkType.MAINNET,
         chainType: ChainType.BITCOIN_MAINNET,
         keyringAlianNames: {},
         accountAlianNames: {},
