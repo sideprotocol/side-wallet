@@ -60,8 +60,6 @@ export default function AddressTypeScreen() {
   }, []);
 
   const addressTypes = useMemo(() => {
-    console.log('currentKeyring.type: ', currentKeyring.type);
-
     if (currentKeyring.type === KEYRING_TYPE.HdKeyring) {
       return ADDRESS_TYPES.filter((v) => {
         if (v.displayIndex < 0) {
@@ -98,7 +96,6 @@ export default function AddressTypeScreen() {
         }}>
         <Column>
           {addressTypes.map((item, index) => {
-            if (item.displayIndex === 1 || item.displayIndex === 2 || item.displayIndex === 3) return null;
             const address = addresses?.[item.value];
             const assets = addressAssets?.[address] || {
               total_btc: '--',

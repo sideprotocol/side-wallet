@@ -94,7 +94,6 @@ export default function SelecAddressScreen() {
             margin: '16px 0'
           }}>
           {addressTypes.map((item) => {
-            if (item.displayIndex === 1 || item.displayIndex === 2 || item.displayIndex === 3) return null;
             const address = addresses[item.value];
             return (
               <Row
