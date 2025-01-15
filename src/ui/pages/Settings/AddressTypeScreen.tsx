@@ -96,6 +96,13 @@ export default function AddressTypeScreen() {
         }}>
         <Column>
           {addressTypes.map((item, index) => {
+            if (
+              item.displayIndex === 1 ||
+              item.displayIndex === 3 ||
+              item.displayIndex === 4 ||
+              item.displayIndex === 5
+            )
+              return null;
             const address = addresses?.[item.value];
             const assets = addressAssets?.[address] || {
               total_btc: '--',

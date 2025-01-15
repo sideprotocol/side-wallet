@@ -119,7 +119,7 @@ export const ADDRESS_TYPES: {
     label: 'P2PKH',
     name: 'Legacy (P2PKH)',
     hdPath: "m/44'/0'/0'/0",
-    displayIndex: -3,
+    displayIndex: 3,
     isUnisatLegacy: false
   },
   {
@@ -143,7 +143,7 @@ export const ADDRESS_TYPES: {
     label: 'P2SH-P2WPKH',
     name: 'Nested Segwit (P2SH-P2WPKH)',
     hdPath: "m/49'/0'/0'/0",
-    displayIndex: -1,
+    displayIndex: 1,
     isUnisatLegacy: false
   },
   {
@@ -159,8 +159,8 @@ export const ADDRESS_TYPES: {
     label: 'P2TR',
     name: 'Taproot (P2TR)',
     hdPath: "m/44'/0'/0'/0",
-    displayIndex: -5,
-    isUnisatLegacy: false
+    displayIndex: 5,
+    isUnisatLegacy: true
   }
 ];
 
