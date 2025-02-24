@@ -401,8 +401,6 @@ export const OPENAPI_URL_TESTNET = 'https://wallet-api-testnet.unisat.io/v5';
 
 // TESTNET
 const UNISAT_RUNE_URL_TESTNET = 'https://api-t2.unisat.io/icon-v1/icon/runes';
-const SIDE_BTC_INDEXER_TESTNET = 'https://index.side.one';
-const SIDE_RUNE_INDEXER_TESTNET = 'https://signet-rune.side.one';
 const DEX_CONTRACT_TESTNET = 'tb1pwkwy0xh89ksdgj9hr347dyd2dw7zesmtrue6kfzyml4vdtz6e5ws93fqnh';
 const DEX_ROUTER_CONTRACT_TESTNET = 'tb1p7p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgscc4xdz';
 const SERVICE_BASE_URL_TESTNET = 'https://api.side.one/indexer-station-testnet';
@@ -430,36 +428,34 @@ const SIDE_CHAIN_TESTNET = {
 
 // MAINNET
 const UNISAT_RUNE_URL_MAINNET = 'https://icon.unisat.io/icon/runes';
-const SIDE_BTC_INDEXER_MAINNET = '';
-const SIDE_RUNE_INDEXER_MAINNET = '';
 const DEX_CONTRACT_MAINNET = 'bc1pwkwy0xh89ksdgj9hr347dyd2dw7zesmtrue6kfzyml4vdtz6e5wsjel0fc';
 const DEX_ROUTER_CONTRACT_MAINNET = 'bc1p7p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgs0srfhd';
-const SERVICE_BASE_URL_MAINNET = 'https://api.side.one/indexer-station-devnet';
+const SERVICE_BASE_URL_MAINNET = 'https://api.side.one/indexer-station-mainnet';
 const SIDE_BTC_EXPLORER_MAINNET = 'https://mempool.space';
 const UNISAT_SERVICE_ENDPOINT_MAINNET = 'https://wallet-api.unisat.io';
-const UNISAT_IO_API_MAINNET = 'https://devnet-rest.side.one/side/btcbridge';
+const UNISAT_IO_API_MAINNET = 'https://rest.side.one/side/btcbridge';
 const SIDE_BTC_VAULT_ADDRESS_MAINNET = '';
 const SIDE_RUNE_VAULT_ADDRESS_MAINNET = '';
-const SIDE_STATION_URL_MAINNET = 'https://station-dev.side.one';
-const SIDE_HUB_URL_MAINNET = 'https://hub-dev.side.one';
-const SIDE_EXPLORER_URL_MAINNET = 'https://station-dev.side.one/explorer';
-const SIDE_BRIDGEEXPLORER_URL_MAINNET = 'https://station-dev.side.one/bridgeExplorer';
+const SIDE_STATION_URL_MAINNET = 'https://station.side.one';
+const SIDE_HUB_URL_MAINNET = 'https://hub.side.one';
+const SIDE_EXPLORER_URL_MAINNET = 'https://station.side.one/explorer';
+const SIDE_BRIDGEEXPLORER_URL_MAINNET = 'https://station.side.one/bridge/explorer';
 const SIDE_CHAIN_MAINNET = {
-  chainID: 'devnet',
-  name: 'Side Devnet',
+  chainID: 'sidechain-1',
+  name: 'Side Chain',
   prefix: 'bc',
-  rpcUrl: 'https://devnet-rpc.side.one',
-  restUrl: 'https://devnet-rest.side.one',
+  rpcUrl: 'https://rpc.side.one',
+  restUrl: 'https://rest.side.one',
   denom: 'uside',
   hdPath: "m/44'/118/0'/0/0",
-  logo: '/images/logo/wallet-logo-white-v2.png',
+  logo: 'https://api.side.one/static/token/logo/side.png',
   faucetUrl: '',
   explorerUrl: SIDE_EXPLORER_URL_MAINNET
 };
 
 export const UNISAT_RUNE_URL = isProduction ? UNISAT_RUNE_URL_MAINNET : UNISAT_RUNE_URL_TESTNET;
-export const SIDE_BTC_INDEXER = isProduction ? SIDE_BTC_INDEXER_MAINNET : SIDE_BTC_INDEXER_TESTNET;
-export const SIDE_RUNE_INDEXER = isProduction ? SIDE_RUNE_INDEXER_MAINNET : SIDE_RUNE_INDEXER_TESTNET;
+export const SIDE_BTC_INDEXER = '';
+export const SIDE_RUNE_INDEXER = '';
 export const DEX_CONTRACT = isProduction ? DEX_CONTRACT_MAINNET : DEX_CONTRACT_TESTNET;
 export const DEX_ROUTER_CONTRACT = isProduction ? DEX_ROUTER_CONTRACT_MAINNET : DEX_ROUTER_CONTRACT_TESTNET;
 export const SERVICE_BASE_URL = isProduction ? SERVICE_BASE_URL_MAINNET : SERVICE_BASE_URL_TESTNET;
