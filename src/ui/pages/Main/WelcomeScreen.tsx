@@ -14,7 +14,8 @@ export default function WelcomeScreen() {
   const isInTab = useExtensionIsInTab();
 
   return (
-    <div className={`
+    <div
+      className={`
       bg-[#09090A]
       flex
       flex-col
@@ -44,7 +45,7 @@ export default function WelcomeScreen() {
               flex: 1,
               alignItems: 'center'
             }}>
-            <Image src="/images/img/welcome.gif" size={330} />
+            <Image src="/images/img/welcome.png" width={184} height={220} />
           </Row>
           <Button
             text="Create new wallet"
