@@ -64,23 +64,21 @@ export default function UnlockScreen() {
         fullY
         style={{
           padding: '0 16px 24px'
-        }}
-      >
+        }}>
         <Column
           justifyCenter
           style={{
             flex: 1,
             alignItems: 'center',
             gap: '16px'
-          }}
-        >
-          <Image src="/images/img/welcome.gif" size={220} />
+          }}>
+          <Image src="/images/logo/wallet-logo-black.png" size={90} />
           <Text
-            text="🎉 Welcome Back"
+            text="Welcome Back !"
             textCenter
             style={{
-              fontSize: '24px',
-              fontWeight: 600
+              fontSize: '18px',
+              fontWeight: 500
             }}
           />
         </Column>
@@ -121,8 +119,7 @@ export default function UnlockScreen() {
             fontSize: '14px',
             opacity: errorMsg ? 1 : 0
           }}
-          className=""
-        >
+          className="">
           {errorMsg}
         </div>
         {/*<Button disabled={disabled} text="Unlock" preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />*/}

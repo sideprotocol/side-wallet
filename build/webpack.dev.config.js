@@ -5,13 +5,17 @@ const config = {
   mode: 'development',
   devtool: 'inline-cheap-module-source-map',
   watch: true,
-  watchOptions: {
-    ignored: ['**/public', '**/node_modules'],
-    followSymlinks: false
+  // watchOptions: {
+  //   ignored: ['**/public', '**/node_modules'],
+  //   followSymlinks: false
+  // },
+  performance: {
+    maxEntrypointSize: 2500000,
+    maxAssetSize: 2500000
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.BUILD_ENV': JSON.stringify('DEV'),
+      'process.env.BUILD_ENV': JSON.stringify('PRO'),
       'process.env.DEBUG': true,
       'process.env.TAILWIND_MODE': 'watch'
     })

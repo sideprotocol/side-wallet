@@ -173,7 +173,7 @@ export default function WalletTabScreen() {
               navigate('SelectNetworkScreen', { type: 'receive' });
             }}>
             {/*<Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.xxxl} />*/}
-            <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045] transition">
+            <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <Image
                 src={
                   '/images/icons/main/recevie-icon.svg' // Default image source
@@ -192,7 +192,7 @@ export default function WalletTabScreen() {
             onClick={() => {
               navigate('SelectNetworkScreen', { type: 'send' });
             }}>
-            <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#1E1E1F] group-hover:bg-[#404045] transition">
+            <div className="w-[48px] h-[48px] rounded-full flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <Image
                 src={
                   '/images/icons/main/send-icon.svg' // Default image source

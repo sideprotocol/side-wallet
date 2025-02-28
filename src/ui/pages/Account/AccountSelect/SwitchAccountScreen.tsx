@@ -81,8 +81,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
             dispatch(accountActions.setCurrent(_currentAccount));
           }
           if (autoNav) navigate('MainScreen');
-        }}
-      >
+        }}>
         <div>
           <Text
             text={account.alianName}
@@ -102,8 +101,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
               gap: 0,
               alignItems: 'center',
               height: 19
-            }}
-          >
+            }}>
             <Text
               text={shortAddress(account.address)}
               color="search_icon"
@@ -158,8 +156,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
             onClick={(e) => {
               e.stopPropagation();
               setOptionsVisible(!optionsVisible);
-            }}
-          >
+            }}>
             <Image src="./images/icons/dots-vertical.svg" size={24} />
           </div>
 
@@ -174,8 +171,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                 zIndex: 10,
                 gap: '8px',
                 borderRadius: '8px'
-              }}
-            >
+              }}>
               <Row
                 classname="bg-item-hover"
                 style={{
@@ -187,8 +183,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                 onClick={(e) => {
                   e.stopPropagation();
                   navigate('EditAccountNameScreen', { account });
-                }}
-              >
+                }}>
                 <Image src="./images/icons/edit-03.svg" size={20} />
                 <Text
                   text="Edit Account Name"
@@ -212,8 +207,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate('ExportPrivateKeyScreen', { account });
-                  }}
-                >
+                  }}>
                   <Image src="./images/icons/key-02.svg" size={20} />
                   <Text
                     text="Show Private Key"
@@ -293,14 +287,12 @@ export default function SwitchAccountScreen() {
       <div
         style={{
           flexGrow: 0
-        }}
-      >
+        }}>
         <div
-          className="flex items-center gap-[5px] bg-[#1E1E1F] rounded-[12px] px-[10px] hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20]"
+          className="flex items-center gap-[5px] bg-[#17171C] rounded-[12px] px-[10px] hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20]"
           style={{
             borderColor: isFocus ? 'white' : ''
-          }}
-        >
+          }}>
           <Icon icon="search" color={'search_icon'} size={20}></Icon>
 
           <Input
@@ -325,8 +317,7 @@ export default function SwitchAccountScreen() {
         data-id="list"
         itemHeight={20}
         itemKey={(item) => item.key}
-        style={{ flex: 1, overflow: 'auto', marginBottom: '16px' }}
-      >
+        style={{ flex: 1, overflow: 'auto', marginBottom: '16px' }}>
         {(item, index) => <ForwardMyItem account={item.account} autoNav={true} />}
       </VirtualList>
       <Button text="Add Account" preset="ghost" icon={'plus'} onClick={add} />

@@ -30,15 +30,13 @@ const AccountSelect = () => {
         style={{
           padding: '5px 16px',
           borderRadius: '20px'
-        }}
-      >
+        }}>
         <Row
           itemsCenter
           justifyCenter
           style={{
             gap: '0'
-          }}
-        >
+          }}>
           <Text
             color="text"
             text={currentKeyring.alianName}
@@ -50,11 +48,10 @@ const AccountSelect = () => {
           />
           <span
             style={{
-              color: 'rgb(130 130 130 / 50%)',
+              color: '#6C7080',
               fontWeight: 400,
               fontSize: '12px'
-            }}
-          >
+            }}>
             &nbsp;/&nbsp;
           </span>
           <Text
@@ -79,11 +76,10 @@ const AccountSelect = () => {
           display: 'none'
         }}
         bodyStyle={{
-          backgroundColor: '#1E1E1F',
+          backgroundColor: '#17171C',
           borderRadius: '10px 10px 0 0',
           border: '1px solid #2D2D2D'
-        }}
-      >
+        }}>
         <Header
           title={<KeyringSelect />}
           RightComponent={
@@ -95,8 +91,7 @@ const AccountSelect = () => {
                 right: '-25px',
                 padding: '6px'
               }}
-              onClick={() => setOpen(false)}
-            >
+              onClick={() => setOpen(false)}>
               <Image src="./images/icons/x.svg" size={24} />
             </span>
           }

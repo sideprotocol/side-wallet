@@ -46,7 +46,7 @@ export default function NetworkTypeScreen() {
             full
             justifyBetween
             itemsCenter
-            classname={'hover:bg-[#1e1e1f] '}>
+            classname={'hover:bg-[#17171C] '}>
             <Row itemsCenter>
               <Text text={`${sideChain.name} & Bitcoin`} />
             </Row>
@@ -77,7 +77,7 @@ export default function NetworkTypeScreen() {
           {/*      full*/}
           {/*      justifyBetween*/}
           {/*      itemsCenter*/}
-          {/*      classname={item.value != networkType ? 'hover:bg-[#1e1e1f] ' : ''}>*/}
+          {/*      classname={item.value != networkType ? 'hover:bg-[#17171C] ' : ''}>*/}
           {/*      <Row itemsCenter>*/}
           {/*        <Text text={item.label === 'DEVNET' ? 'grimoria-testnet-1' : item.label} />*/}
           {/*      </Row>*/}

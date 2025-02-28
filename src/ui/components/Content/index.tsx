@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react';
 
+import { colors } from '@/ui/theme/colors';
 import { spacing, spacingGap } from '@/ui/theme/spacing';
 
 import { BaseView, BaseViewProps } from '../BaseView';
@@ -10,7 +11,7 @@ export interface ContentProps extends BaseViewProps {
   preset?: Presets;
 }
 const $contentStyle = {
-  backgroundColor: '#09090A',
+  backgroundColor: colors.black,
   display: 'flex',
   flex: 1,
   flexDirection: 'column',

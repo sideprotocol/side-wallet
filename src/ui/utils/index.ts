@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 import { useLocation } from 'react-router-dom';
 
-export * from './WalletContext';
 export * from './hooks';
+export * from './WalletContext';
 const UI_TYPE = {
   Tab: 'index',
   Pop: 'popup',
@@ -169,12 +169,14 @@ export function useLocationState<T>() {
   return state as T;
 }
 
-export function formatUnitAmount(tokenAmount: string, exponent: string | number) {
-  const exp = BigNumber(10).exponentiatedBy(exponent);
-
-  const amount = BigNumber(tokenAmount).div(exp).toFixed(Number(exponent));
-
-  return parseFloat(amount.replace(/\.?0+$/, '')).toString();
+export function formatUnitAmount(amount: string, exp: string | number) {
+  if (BigNumber(amount).isZero()) {
+    return '0';
+  }
+  return BigNumber(amount)
+    .div(BigNumber(10).pow(exp))
+    .toFixed(Number(exp), BigNumber.ROUND_DOWN)
+    .replace(/\.?0*$/, '');
 }
 
 export function parseUnitAmount(tokenAmount: string, exponent: string | number) {

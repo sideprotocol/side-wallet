@@ -8,6 +8,7 @@ import { Button, Column, Header, Row, Text } from '@/ui/components';
 import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { keyringsActions } from '@/ui/state/keyrings/reducer';
+import { colors } from '@/ui/theme/colors';
 import { useWallet } from '@/ui/utils';
 
 import { useNavigate } from '../MainRoute';
@@ -41,7 +42,7 @@ export default function CreateHDWalletScreen() {
   return (
     <div
       style={{
-        backgroundColor: '#09090A',
+        backgroundColor: colors.black,
         display: 'flex',
         flexDirection: 'column',
         width: '100%',

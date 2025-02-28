@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import { CHAINS_ENUM } from '@/shared/constant';
 import { Column, Content, Header, Image, Layout } from '@/ui/components';
+import { colors } from '@/ui/theme/colors';
 
 import { useNavigate } from '../MainRoute';
 
@@ -27,10 +28,9 @@ export default function SelectNetworkScreen() {
       />
       <Content
         style={{
-          backgroundColor: '#09090A',
+          backgroundColor: colors.black,
           marginTop: '32px'
-        }}
-      >
+        }}>
         <Column
           onClick={() => {
             navigate('SelectCryptoScreen', {
@@ -39,8 +39,7 @@ export default function SelectNetworkScreen() {
             });
             setNumber(0);
             setIsCheck(true);
-          }}
-        >
+          }}>
           <Image
             onMouseEnter={() => {
               setNumber(0);
@@ -64,8 +63,7 @@ export default function SelectNetworkScreen() {
             });
             setNumber(1);
             setIsCheck(true);
-          }}
-        >
+          }}>
           <Image
             onMouseEnter={() => {
               setNumber(1);

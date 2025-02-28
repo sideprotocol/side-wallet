@@ -34,7 +34,7 @@ export function ButtonGroup(props: IButtonGroupProps) {
       <Row
         justifyCenter
         style={{
-          backgroundColor: '#1E1E1F',
+          backgroundColor: colors.card_bgColor,
           borderRadius: '100px',
           padding: '3px 5px',
           gap: '0',

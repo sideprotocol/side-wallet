@@ -5,15 +5,17 @@ import { Column, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { colors } from '@/ui/theme/colors';
+import { Skeleton } from '@mui/material';
 
-function TokenItem({ token, balanceVisible }: { token: BalanceItem; balanceVisible: boolean }) {
+export function TokenItem({ token, balanceVisible }: { token: BalanceItem; balanceVisible: boolean }) {
   return (
     <Row
       classname={'bg-item-hover-v2'}
       justifyBetween
       style={{
         cursor: 'pointer',
-        backgroundColor: '#1A1A1A',
+        backgroundColor: colors.card_bgColor,
         padding: '10px 16px',
         borderRadius: 10
       }}>
@@ -53,19 +55,40 @@ export default function SideTokenList({ balanceVisible }) {
   const currentAccount = useCurrentAccount();
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+  const filterList = balanceList.filter((item) => !(!+item.amount && item.denom !== 'uside'));
 
   return (
     <Column>
-      {balanceList.map((item) => {
-        if (!+item.amount && item.denom !== 'uside') {
-          return null;
-        }
-        return (
-          <Fragment key={item?.asset?.symbol + item?.asset?.name}>
-            <TokenItem token={item} balanceVisible={balanceVisible} />
-          </Fragment>
-        );
-      })}
+      {!filterList.length ? (
+        <>
+          <Skeleton
+            sx={{
+              bgcolor: colors.card_bgColor,
+              transform: 'scale(1)',
+              width: '100%',
+              borderRadius: '10px'
+            }}
+            height={60}
+          />
+          <Skeleton
+            sx={{
+              bgcolor: colors.card_bgColor,
+              transform: 'scale(1)',
+              width: '100%',
+              borderRadius: '10px'
+            }}
+            height={60}
+          />
+        </>
+      ) : (
+        filterList.map((item) => {
+          return (
+            <Fragment key={item?.asset?.symbol + item?.asset?.name}>
+              <TokenItem token={item} balanceVisible={balanceVisible} />
+            </Fragment>
+          );
+        })
+      )}
     </Column>
   );
 }

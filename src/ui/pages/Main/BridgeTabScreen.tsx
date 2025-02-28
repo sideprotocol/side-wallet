@@ -17,6 +17,7 @@ import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks'
 import { useBitcoinRuneBalance, useBridgeParams, useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
+import { colors } from '@/ui/theme/colors';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
 import { useNavigate } from '../MainRoute';
@@ -175,7 +176,7 @@ export default function BridgeTabScreen() {
             style={{
               gap: '5px'
             }}>
-            <Column mt={'medium'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <Column mt={'medium'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'card_bgColor'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
@@ -240,7 +241,7 @@ export default function BridgeTabScreen() {
               </div>
             </Row>
 
-            <Column px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <Column px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'card_bgColor'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
@@ -270,7 +271,15 @@ export default function BridgeTabScreen() {
               </Row>
             </Column>
 
-            <Row justifyBetween itemsCenter mt={'smm'} px={'xl'} py={'medium'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <Row
+              justifyBetween
+              itemsCenter
+              mt={'smm'}
+              px={'xl'}
+              py={'medium'}
+              rounded={true}
+              gap={'md'}
+              bg={'card_bgColor'}>
               <div
                 style={{
                   fontSize: '12px',
@@ -314,7 +323,7 @@ export default function BridgeTabScreen() {
               </div>
             </Row>
 
-            <Column mt={'smm'} px={'xl'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <Column mt={'smm'} px={'xl'} py={'md'} rounded={true} gap={'md'} bg={'card_bgColor'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
@@ -337,7 +346,7 @@ export default function BridgeTabScreen() {
                 rounded={true}
                 style={{
                   height: '50px',
-                  background: '#09090A'
+                  background: colors.black
                 }}>
                 <Row
                   itemsCenter

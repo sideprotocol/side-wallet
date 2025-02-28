@@ -12,10 +12,22 @@ interface ImageProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+  height?: string | number;
+  width?: string | number;
 }
 
 export function Image(props: ImageProps) {
-  const { className, src, size, style: $imageStyleOverride, onClick, onMouseEnter, onMouseLeave } = props;
+  const {
+    className,
+    src,
+    size,
+    style: $imageStyleOverride,
+    onClick,
+    onMouseEnter,
+    onMouseLeave,
+    width,
+    height
+  } = props;
   const unknownUrl = 'https://api.side.one/static/token/logo/unknown.svg';
   const [isError, setError] = useState<boolean>(false);
   const handleOnError = () => {
@@ -83,8 +95,8 @@ export function Image(props: ImageProps) {
       onError={handleOnError}
       alt=""
       style={Object.assign({}, $imageStyleOverride, {
-        width: size || fontSizes.icon,
-        height: size || fontSizes.icon
+        width: size || width || fontSizes.icon,
+        height: size || height || fontSizes.icon
       })}
     />
   );

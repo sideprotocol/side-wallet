@@ -9,6 +9,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
+import { colors } from '@/ui/theme/colors';
 
 export default function Index(props) {
   let { open, onClose } = props;
@@ -60,7 +61,7 @@ export default function Index(props) {
       />
       <Content
         style={{
-          backgroundColor: '#09090A',
+          backgroundColor: colors.black,
           padding: 0,
           marginTop: 16
         }}>
@@ -70,7 +71,7 @@ export default function Index(props) {
           }}>
           <div
             className={
-              'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#1E1E1F] relative '
+              'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#17171C] relative '
             }>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>
 

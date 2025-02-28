@@ -10,6 +10,7 @@ import { useNavigate } from '@/ui/pages/MainRoute';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { useUiTxCreateSendSideScreen, useUpdateUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
+import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, isValidAddress, parseUnitAmount } from '@/ui/utils';
 import { toReadableAmount } from '@/ui/utils/formatter';
 
@@ -33,7 +34,6 @@ export default function CreateSendSide() {
   let { balanceList: sideTokenList } = useGetSideBalanceList(currentAccount?.address);
   const toInfo = uiState.toInfo;
   const inputAmount = uiState.inputAmount;
-  // const fee = uiState.fee;
   const feeDenom = uiState.feeDenom;
   const memo = uiState.memo;
   const { curToken, feeToken } = useMemo(() => {
@@ -120,7 +120,7 @@ export default function CreateSendSide() {
           flex: 1,
           borderTop: '1px solid #404045',
           borderRadius: '10px',
-          background: '#222',
+          background: colors.card_bgColor,
           padding: '0 16px',
           paddingBottom: '14px',
           marginTop: '66px',
@@ -138,7 +138,7 @@ export default function CreateSendSide() {
             }}>
             <Row
               style={{
-                background: '#1E1E1F',
+                background: colors.card_bgColor,
                 width: '74px',
                 height: '74px',
                 borderRadius: '50%',

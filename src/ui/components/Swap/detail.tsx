@@ -91,7 +91,8 @@ function SwapDetail() {
 
         <div
           style={{
-            color: text !== 'Price impact' ? 'white' : 'rgb(246, 70, 93)'
+            color: text !== 'Price impact' ? 'white' : 'rgb(246, 70, 93)',
+            textAlign: 'right'
           }}>
           {value}
         </div>
