@@ -1,56 +1,51 @@
-import { Column, Image, Row, Text } from '@/ui/components';
+import { Fragment } from 'react';
+
+import { Column } from '@/ui/components';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
+import { Skeleton } from '@mui/material';
+
+import { TokenItem } from '../SideTokenList';
 
 export default function BtcTokenList({ balanceVisible }) {
   const currentAccount = useCurrentAccount();
 
   const { balanceList } = useGetBitcoinBalanceList(currentAccount?.address);
+  const filterList = balanceList.filter((item) => !(!+item.amount && item.denom !== 'sat'));
 
   return (
-    <Column
-      style={{
-        minHeight: '132px'
-      }}>
-      {balanceList.map((item) => {
-        if (!+item.amount && item.denom !== 'sat') {
-          return null;
-        }
-        return (
-          <Row
-            key={item.denom}
-            classname={'bg-item-hover-v2'}
-            justifyBetween
-            style={{
-              cursor: 'pointer',
-              backgroundColor: colors.card_bgColor,
-              padding: '10px 16px',
-              borderRadius: 10
-            }}>
-            <Row>
-              <Image className={'rounded-full'} src={item.asset.logo} size={38}></Image>
-              <Column
-                style={{
-                  gap: '0px'
-                }}>
-                <div>
-                  <Text preset="regular" text={item?.asset.symbol}></Text>
-                  <Text preset="sub" text={item?.asset?.name}></Text>
-                </div>
-              </Column>
-            </Row>
-
-            <Column
-              style={{
-                gap: '0px'
-              }}>
-              <Text preset="regular" text={balanceVisible ? item.formatAmount : '**'} textEnd />
-              <Text preset="sub" text={balanceVisible ? `$${item.totalValue}` : '**'} textEnd />
-            </Column>
-          </Row>
-        );
-      })}
+    <Column>
+      {!filterList.length ? (
+        <>
+          <Skeleton
+            sx={{
+              bgcolor: colors.card_bgColor,
+              transform: 'scale(1)',
+              width: '100%',
+              borderRadius: '10px'
+            }}
+            height={60}
+          />
+          <Skeleton
+            sx={{
+              bgcolor: colors.card_bgColor,
+              transform: 'scale(1)',
+              width: '100%',
+              borderRadius: '10px'
+            }}
+            height={60}
+          />
+        </>
+      ) : (
+        filterList.map((item) => {
+          return (
+            <Fragment key={item?.asset?.symbol + item?.asset?.name}>
+              <TokenItem token={item} balanceVisible={balanceVisible} />
+            </Fragment>
+          );
+        })
+      )}
     </Column>
   );
 }

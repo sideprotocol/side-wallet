@@ -609,7 +609,7 @@ export default function SwapTabScreen() {
               <ConfirmButton />
             </Row>
             {showValidDetail && (
-              <div className={'mt-[10px] mb-[32px] rounded-[8px] bg-[#1E1E1F]'}>
+              <div className={'mt-[10px] mb-[32px] rounded-[8px] bg-[#17171C]'}>
                 <div className="px-[16px] py-[14px]">
                   <SwapDetail />
                 </div>

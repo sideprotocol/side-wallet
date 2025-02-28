@@ -43,7 +43,7 @@ export default function LanguageTypeScreen() {
             full
             justifyBetween
             itemsCenter
-            classname={'hover:bg-[#1e1e1f]'}>
+            classname={'hover:bg-[#17171C]'}>
             <Row itemsCenter>
               <Text text={'English'} />
             </Row>
