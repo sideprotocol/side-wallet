@@ -3,6 +3,7 @@ import React, { CSSProperties, useEffect } from 'react';
 import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 import { routes } from '@/ui/pages/MainRoute';
 import { useBooted, useIsUnlocked } from '@/ui/state/global/hooks';
+import { colors } from '@/ui/theme/colors';
 
 import './index.less';
 
@@ -30,7 +31,7 @@ export function Layout(props: LayoutProps) {
       className="layout"
       style={Object.assign(
         {
-          backgroundColor: '#09090A',
+          backgroundColor: colors.black,
           display: 'flex',
           flexDirection: 'column',
           width: '100%',

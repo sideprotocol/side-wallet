@@ -1,6 +1,7 @@
 import { Column, Image, Row, Text } from '@/ui/components';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { colors } from '@/ui/theme/colors';
 
 export default function BtcTokenList({ balanceVisible }) {
   const currentAccount = useCurrentAccount();
@@ -23,7 +24,7 @@ export default function BtcTokenList({ balanceVisible }) {
             justifyBetween
             style={{
               cursor: 'pointer',
-              backgroundColor: '#1D1D1F',
+              backgroundColor: colors.card_bgColor,
               padding: '10px 16px',
               borderRadius: 10
             }}>

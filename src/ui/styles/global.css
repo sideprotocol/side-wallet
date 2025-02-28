@@ -56,7 +56,7 @@ iframe {
 }
 
 .ant-checkbox-checked {
-  background-color: #F7771A !important;
+  background-color: #f7771a !important;
 }
 
 .ant-switch {
@@ -65,7 +65,7 @@ iframe {
 
 .ant-switch {
   &.ant-switch-checked {
-    background-color: #F7771A !important;
+    background-color: #f7771a !important;
 
     .ant-switch-handle::before {
       background-color: #000;
@@ -171,11 +171,11 @@ div {
 }
 
 .bg-item1e {
-  background-color: #1e1e1f !important;
+  background-color: #17171c !important;
 }
 
 .bg-item-hover:hover {
-  background-color: #1e1e1f !important;
+  background-color: #17171c !important;
   border-radius: 8px;
 }
 
@@ -260,6 +260,6 @@ div {
 }
 
 .slippageControlModal .ant-modal-content {
-  background-color: #1e1e1f;
+  background-color: #17171c;
 }
 /* modal end */

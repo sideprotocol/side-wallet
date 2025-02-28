@@ -96,13 +96,6 @@ const NativeBalance = () => {
         alignItems: 'center',
         width: '100%'
       }}>
-      {/*{validNativeInput ? (*/}
-      {/*  <div>*/}
-      {/*    ${nativePrice == 'NaN' ? '0' : BigNumber(nativePrice).toFormat()}*/}
-      {/*  </div>*/}
-      {/*) : (*/}
-      {/*  <div></div>*/}
-      {/*)}*/}
       <div />
 
       {connected && (
@@ -480,7 +473,7 @@ export default function SwapTabScreen() {
                 </svg>
               </div>
             </div>
-            <Column mt={'smm'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <Column mt={'smm'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'card_bgColor'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
@@ -569,7 +562,7 @@ export default function SwapTabScreen() {
               </div>
             </Row>
 
-            <Column mt={'zero'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'swapBg'}>
+            <Column mt={'zero'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'card_bgColor'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{

@@ -14,8 +14,7 @@ export default function LanguageTypeScreen() {
         style={{
           padding: '0 16px',
           marginTop: '16px'
-        }}
-      >
+        }}>
         <Column gap={'md'}>
           <Row
             rounded
@@ -27,8 +26,7 @@ export default function LanguageTypeScreen() {
             full
             justifyBetween
             itemsCenter
-            classname={''}
-          >
+            classname={'bg-item-hover'}>
             <Row itemsCenter>
               <Text text={'Automatic (Browser default)'} />
             </Row>
@@ -45,8 +43,7 @@ export default function LanguageTypeScreen() {
             full
             justifyBetween
             itemsCenter
-            classname={'hover:bg-[#1e1e1f]'}
-          >
+            classname={'hover:bg-[#1e1e1f]'}>
             <Row itemsCenter>
               <Text text={'English'} />
             </Row>

@@ -9,6 +9,7 @@ import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
+import { colors } from '@/ui/theme/colors';
 
 import { useNavigate } from '../MainRoute';
 
@@ -184,7 +185,7 @@ export default function SelecCryptoScreen() {
       />
       <Content
         style={{
-          backgroundColor: '#09090A',
+          backgroundColor: colors.black,
           padding: 0,
           marginTop: '16px'
         }}>
@@ -194,7 +195,7 @@ export default function SelecCryptoScreen() {
             // margin: '0 16px'
           }}>
           <div
-            className={`border-[1px] border-solid px-[10px] flex items-center rounded-[10px] bg-[#1E1E1F] relative gap-[8px] ${
+            className={`border-[1px] border-solid px-[10px] flex items-center rounded-[10px] bg-[#17171C] relative gap-[8px] ${
               isFocus ? 'border-white' : ' border-[#ffffff20] hover:border-[#ffffff50]'
             }`}>
             <Icon icon="search" color={'search_icon'} size={20}></Icon>

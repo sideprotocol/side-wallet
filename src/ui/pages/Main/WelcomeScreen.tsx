@@ -16,7 +16,7 @@ export default function WelcomeScreen() {
   return (
     <div
       className={`
-      bg-[#09090A]
+      bg-[#000000]
       flex
       flex-col
       w-full

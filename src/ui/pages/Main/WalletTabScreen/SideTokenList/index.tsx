@@ -5,6 +5,7 @@ import { Column, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { colors } from '@/ui/theme/colors';
 
 function TokenItem({ token, balanceVisible }: { token: BalanceItem; balanceVisible: boolean }) {
   return (
@@ -13,7 +14,7 @@ function TokenItem({ token, balanceVisible }: { token: BalanceItem; balanceVisib
       justifyBetween
       style={{
         cursor: 'pointer',
-        backgroundColor: '#1A1A1A',
+        backgroundColor: colors.card_bgColor,
         padding: '10px 16px',
         borderRadius: 10
       }}>

@@ -21,7 +21,7 @@ export default function SideTxConfirmScreen() {
   const currentAccount = useCurrentAccount();
   const uiState = useUiTxCreateSendSideScreen();
   const [loading, setLoading] = useState(false);
-  const { balanceList: sideTokenList } = useGetSideBalanceList();
+  const { balanceList: sideTokenList } = useGetSideBalanceList(currentAccount.address);
   const toInfo = uiState.toInfo;
   const denom = uiState.base;
   const inputAmount = uiState.inputAmount;
@@ -39,6 +39,7 @@ export default function SideTxConfirmScreen() {
   }, [sideTokenList.length, denom, feeDenom]);
 
   const feeTokenInfo = sideTokenList.find((item) => item.denom === feeToken.asset.denom);
+  console.log(uiState.fee);
 
   const feeByUSD = new BigNumber(formatUnitAmount(uiState.fee || '0', feeTokenInfo?.asset.exponent || 6))
     .multipliedBy(feeTokenInfo?.denomPrice || '0')

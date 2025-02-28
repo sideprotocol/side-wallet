@@ -19,6 +19,7 @@ import {
   useSpendUnavailableUtxos
 } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
+import { colors } from '@/ui/theme/colors';
 import { fontSizes } from '@/ui/theme/font';
 import { amountToSatoshis, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
 
@@ -156,7 +157,7 @@ export default function CreateSendBtc() {
 
       <Row
         style={{
-          background: '#222',
+          background: colors.card_bgColor,
           width: '74px',
           height: '74px',
           position: 'absolute',
@@ -171,7 +172,7 @@ export default function CreateSendBtc() {
         justifyCenter>
         <Row
           style={{
-            marginTop: '6px'
+            marginTop: '10px'
           }}>
           <Image src={token?.asset.logo} size={50}></Image>
           {/* <Icon icon={token.logo || 'btc'} size={50} /> */}
@@ -183,7 +184,6 @@ export default function CreateSendBtc() {
           position: 'relative',
           borderTop: '1px solid #404045',
           borderRadius: '10px',
-          background: '#222',
           padding: '16px 16px 64px 16px',
           marginTop: '66px',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'

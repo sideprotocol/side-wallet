@@ -5,6 +5,7 @@ import { useLocation, useNavigate as useNavigateRouter } from 'react-router-dom'
 import { Button, Column, Header, Input, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
+import { colors } from '@/ui/theme/colors';
 import { useWallet, useWalletRequest } from '@/ui/utils';
 import { getPasswordStrengthWord } from '@/ui/utils/password-utils';
 
@@ -122,7 +123,7 @@ export default function CreatePasswordScreen() {
   return (
     <div
       style={{
-        backgroundColor: '#09090A',
+        backgroundColor: colors.black,
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
