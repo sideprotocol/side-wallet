@@ -224,6 +224,16 @@ export class SideProvider extends EventEmitter {
     });
   };
 
+  signAdaptor = async (message: string, adaptorPoint: string) => {
+    return this._request({
+      method: 'signAdaptor',
+      params: {
+        message,
+        adaptorPoint
+      }
+    });
+  };
+
   verifyMessageOfBIP322Simple = async (address: string, message: string, signature: string, network?: number) => {
     return this._request({
       method: 'verifyMessageOfBIP322Simple',
@@ -276,18 +286,6 @@ export class SideProvider extends EventEmitter {
     });
   };
 
-  // signTx = async (rawtx: string) => {
-  //   return this._request({
-  //     method: 'signTx',
-  //     params: {
-  //       rawtx
-  //     }
-  //   });
-  // };
-
-  /**
-   * push transaction
-   */
   pushTx = async (rawtx: string) => {
     return this._request({
       method: 'pushTx',

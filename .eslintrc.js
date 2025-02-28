@@ -24,6 +24,7 @@ module.exports = {
     // "no-console": process.env.NODE_ENV === 'production' ? 2 : 0, // do not disable the console
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0, // disable debugger
     semi: 0,
+    '@typescript-eslint/no-this-alias': 'off',
     'no-control-regex': 2,
     'linebreak-style': [0, 'error', 'windows'],
     // indent: ['error', 2, { SwitchCase: 1 }],

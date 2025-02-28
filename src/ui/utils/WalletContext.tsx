@@ -146,6 +146,8 @@ export interface WalletController {
   signPsbtWithHex(psbtHex: string, toSignInputs: ToSignInput[], autoFinalized: boolean): Promise<string>;
   signMessage(message: string): Promise<string>;
 
+  signAdaptor(message: string, adaptorPoint: string): Promise<string>;
+
   sendBTC(data: {
     to: string;
     amount: number;

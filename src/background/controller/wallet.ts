@@ -614,8 +614,16 @@ export class WalletController extends BaseController {
 
   signMessage = async (text: string) => {
     const account = preferenceService.getCurrentAccount();
+
     if (!account) throw new Error('no current account');
     return keyringService.signMessage(account.pubkey, account.type, text);
+  };
+
+  signAdaptor = async (message: string, adaptorPoint: string) => {
+    const account = preferenceService.getCurrentAccount();
+    if (!account) throw new Error('no current account');
+
+    return keyringService.signAdaptor(account.pubkey, account.type, message, adaptorPoint);
   };
 
   signBIP322Simple = async (text: string) => {

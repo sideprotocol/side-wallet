@@ -7,9 +7,10 @@ import log from 'loglevel';
 import { storage } from '@/background/webapi';
 import { ADDRESS_TYPES, KEYRING_TYPE } from '@/shared/constant';
 import { AddressType } from '@/shared/types';
+import { schnorrAdaptor } from '@/ui/wallet-sdk/adaptor-signature';
 import { ObservableStore } from '@metamask/obs-store';
 import { keyring } from '@unisat/wallet-sdk';
-import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
+import { bitcoin, ECPairInterface } from '@unisat/wallet-sdk/lib/bitcoin-core';
 
 import i18n from '../i18n';
 import preference from '../preference';
@@ -59,12 +60,14 @@ export interface ToSignInput {
 export interface Keyring {
   type: string;
   mfp?: string;
+  wallets: ECPairInterface[];
   serialize(): Promise<any>;
   deserialize(opts: any): Promise<void>;
   addAccounts(n: number): Promise<string[]>;
   getAccounts(): Promise<string[]>;
   signTransaction(psbt: bitcoin.Psbt, inputs: ToSignInput[]): Promise<bitcoin.Psbt>;
   signMessage(address: string, message: string): Promise<string>;
+  signAdaptor(address: string, message: string, adaptorPoint: string): Promise<string>;
   signData(address: string, data: string, type: string): Promise<string>;
   verifyMessage(address: string, message: string, sig: string): Promise<boolean>;
   exportAccount(address: string): Promise<string>;
@@ -94,6 +97,7 @@ export interface Keyring {
 
 class EmptyKeyring implements Keyring {
   type = KEYRING_TYPE.Empty;
+  wallets: ECPairInterface[] = [];
   constructor() {
     // todo
   }
@@ -108,6 +112,9 @@ class EmptyKeyring implements Keyring {
     throw new Error('Method not implemented.');
   }
   signMessage(address: string, message: string): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+  signAdaptor(address: string, message: string, adaptorPoint: string): Promise<string> {
     throw new Error('Method not implemented.');
   }
   verifyMessage(address: string, message: string, sig: string): Promise<boolean> {
@@ -618,8 +625,21 @@ class KeyringService extends EventEmitter {
    */
   signMessage = async (address: string, keyringType: string, data: string) => {
     const keyring = await this.getKeyringForAccount(address, keyringType);
+
     const sig = await keyring.signMessage(address, data);
     return sig;
+  };
+
+  signAdaptor = async (address: string, keyringType: string, message: string, adaptorPoint: string) => {
+    const keyring = await this.getKeyringForAccount(address, keyringType);
+
+    const wallet = keyring.wallets.find((wallet) => wallet.publicKey.toString('hex') == address);
+
+    if (!wallet) throw new Error('no wallet found');
+
+    const sig = schnorrAdaptor.sign(Buffer.from(message), wallet.privateKey?.toString('hex') || '', adaptorPoint);
+
+    return Buffer.from(sig).toString('hex');
   };
 
   /**
