@@ -54,7 +54,7 @@ function TabButton({
         } else if (tabName === 'bridge') {
           navigate('BridgeTabScreen');
         } else if (tabName === 'loans') {
-          navigate('ExploreTabScreen');
+          navigate('LoansTabScreen');
         }
       }}>
       <Column

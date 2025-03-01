@@ -74,7 +74,7 @@ export default function UnlockScreen() {
           }}>
           <Image src="/images/logo/wallet-logo-black.png" size={90} />
           <Text
-            text="Welcome Back !"
+            text="Welcome Back!"
             textCenter
             style={{
               fontSize: '18px',
@@ -125,7 +125,7 @@ export default function UnlockScreen() {
         {/*<Button disabled={disabled} text="Unlock" preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />*/}
         <Button disabled={disabled} text={btnText} preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />
         <Text
-          text="Forget Password"
+          text={<span className="hover:text-white">Forget Password</span>}
           style={{
             marginTop: '16px',
             color: '#828282',

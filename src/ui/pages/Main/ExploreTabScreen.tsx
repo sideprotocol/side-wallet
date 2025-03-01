@@ -10,7 +10,7 @@ import MainHeader from '@/ui/pages/Main/MainHeader';
 
 // import { Image } from '@/ui/components';
 
-export default function SettingsTabScreen() {
+export default function ExploreTabScreen() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const [isHover, setIsHover] = useState(false);

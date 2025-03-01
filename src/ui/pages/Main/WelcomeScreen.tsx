@@ -16,36 +16,61 @@ export default function WelcomeScreen() {
   return (
     <div
       className={`
-      bg-[#000000]
       flex
       flex-col
+      ${isInTab ? 'bg-transparent ' : 'bg-black min-h-[600px]'}
+
       w-full
-      ${window.location.pathname === '/sidePanel.html' ? 'max-w-[100vw]' : 'max-w-[375px]'}
-      min-h-[600px]
-      ${window.location.pathname === '/sidePanel.html' ? 'h-screen' : 'h-[600px]'}
+      ${window.location.pathname === '/sidePanel.html' ? 'max-w-[100vw]' : 'max-w-[500px]'}
+      min-h-[450px]
+      ${window.location.pathname === '/sidePanel.html' ? 'h-screen' : isInTab ? 'h-[450px]' : 'h-[600px]'}
       overflow-y-auto
       overflow-x-hidden
+      
       ${!isInTab ? 'border border-white/10' : 'border-none'}
     `}>
       {state?.addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}
+      {isInTab ? (
+        <Row justifyCenter itemsCenter gap="xs" mb="lg">
+          <Image src="/images/logo/wallet-logo.png" width={50} height={50} />
+          <Image src="/images/icons/side_wallet.svg" width={186} height={20} />
+        </Row>
+      ) : null}
+
       <Column
         fullX
         fullY
         style={{
           gap: '0',
-          padding: '0 16px 24px'
+          padding: isInTab ? '0 40px 24px' : '0 16px 24px',
+          backgroundColor: isInTab ? '#17171c' : 'transparent'
         }}>
         <Column
           style={{
             flex: 1
-          }}>
+          }}
+          gap={'lg'}>
           <Row
             justifyCenter
             style={{
               flex: 1,
               alignItems: 'center'
             }}>
-            <Image src="/images/img/welcome.png" width={184} height={220} />
+            <Row
+              justifyCenter
+              itemsCenter
+              style={{
+                borderRadius: '20px',
+                width: 120,
+                height: 120,
+                border: isInTab ? '1px solid #6C7080' : 'none'
+              }}>
+              {isInTab ? (
+                <Image src="/images/logo/wallet-logo.png" width={80} height={80} />
+              ) : (
+                <Image src="/images/img/welcome.png" width={113} height={137} />
+              )}
+            </Row>
           </Row>
           <Button
             text="Create new wallet"
