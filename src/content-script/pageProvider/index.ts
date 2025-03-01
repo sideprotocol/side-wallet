@@ -228,7 +228,7 @@ export class SideProvider extends EventEmitter {
     return this._request({
       method: 'signAdaptor',
       params: {
-        message,
+        text: message,
         adaptorPoint
       }
     });
