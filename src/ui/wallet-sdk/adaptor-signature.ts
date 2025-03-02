@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 /*! noble-secp256k1 - MIT License (c) 2019 Paul Miller (paulmillr.com) */
 /**
  * 4KB JS implementation of secp256k1 signatures & ECDH. Compliant with RFC6979.
@@ -812,7 +810,7 @@ function extractKWithAdaptorPoint(rand, AP) {
   let d_ = toPriv(k_); // same method executed in fromPrivateKey
   let r = Point.fromPrivateKey(d_); // P = d'⋅G; 0 < d' < n check is done inside
   const scalar = hasEvenY(r.add(AP)) ? d_ : modN(-d_); // negate k if not hasEvenY(R+AP)
-  return { rx: pointToBytes(r.add(AP)), k: scalar }; // rx = bytes(R+AP)
+  return { rx: pointToBytes(r), arx: pointToBytes(r.add(AP)), k: scalar }; // arx = bytes(R+AP)
 }
 /**
  * Creates Schnorr adaptor signature. Verifies itself before returning anything.
@@ -824,10 +822,10 @@ function signSchAdaptor(message, privateKey, adaptorPoint, auxRand = etc_schnorr
   const t = n2b(d ^ b2n(aux)); // Let t be the byte-wise xor of bytes(d) and hash/aux(a)
   const rand = taggedHash(TG.nonce, t, px, m); // Let rand = hash/nonce(t || bytes(P) || m)
   const AP = Point.fromHex(adaptorPoint);
-  const { rx, k } = extractKWithAdaptorPoint(rand, AP);
-  const e = challenge(rx, px, m); // Let e = int(hash/challenge(bytes(R+AP) || bytes(P) || m)) mod n.
+  const { rx, arx, k } = extractKWithAdaptorPoint(rand, AP);
+  const e = challenge(arx, px, m); // Let e = int(hash/challenge(bytes(R+AP) || bytes(P) || m)) mod n.
   const sig = createSchnorrSignature(k, rx, e, d);
-  if (!verifySch(sig, m, px)) err('invalid signature produced');
+  if (!verifySchAdaptor(sig, m, px, adaptorPoint)) err('invalid signature produced');
   return sig;
 }
 async function signAsyncSchAdaptor(message, privateKey, adaptorPoint, auxRand = etc_schnorr.randomBytes(32)) {
@@ -836,11 +834,11 @@ async function signAsyncSchAdaptor(message, privateKey, adaptorPoint, auxRand = 
   const t = n2b(d ^ b2n(aux)); // Let t be the byte-wise xor of bytes(d) and hash/aux(a)
   const rand = await taggedHashAsync(TG.nonce, t, px, m); // Let rand = hash/nonce(t || bytes(P) || m)
   const AP = Point.fromHex(adaptorPoint);
-  const { rx, k } = extractKWithAdaptorPoint(rand, AP);
-  const e = await challengeAsync(rx, px, m); // Let e = int(hash/challenge(bytes(R+AP) || bytes(P) || m)) mod n.
+  const { rx, arx, k } = extractKWithAdaptorPoint(rand, AP);
+  const e = await challengeAsync(arx, px, m); // Let e = int(hash/challenge(bytes(R+AP) || bytes(P) || m)) mod n.
   const sig = createSchnorrSignature(k, rx, e, d);
   // If Verify(bytes(P), m, sig) (see below) returns failure, abort
-  if (!(await verifyAsyncSch(sig, m, px))) err('invalid signature produced');
+  if (!(await verifyAsyncSchAdaptor(sig, m, px, adaptorPoint))) err('invalid signature produced');
   return sig;
 }
 function prepVerifAdaptor(signature, message, publicKey, adaptorPoint) {

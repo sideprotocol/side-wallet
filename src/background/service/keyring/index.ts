@@ -637,7 +637,11 @@ class KeyringService extends EventEmitter {
 
     if (!wallet) throw new Error('no wallet found');
 
-    const sig = schnorrAdaptor.sign(Buffer.from(message), wallet.privateKey?.toString('hex') || '', adaptorPoint);
+    const sig = await schnorrAdaptor.signAsync(
+      Buffer.from(message),
+      wallet.privateKey?.toString('hex') || '',
+      adaptorPoint
+    );
 
     return Buffer.from(sig).toString('hex');
   };
