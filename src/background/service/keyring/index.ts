@@ -632,18 +632,27 @@ class KeyringService extends EventEmitter {
 
   signAdaptor = async (address: string, keyringType: string, message: string, adaptorPoint: string) => {
     const keyring = await this.getKeyringForAccount(address, keyringType);
-
     const wallet = keyring.wallets.find((wallet) => wallet.publicKey.toString('hex') == address);
 
     if (!wallet) throw new Error('no wallet found');
 
-    const sig = await schnorrAdaptor.signAsync(
-      Buffer.from(message),
-      wallet.privateKey?.toString('hex') || '',
-      adaptorPoint
-    );
+    const maxRetries = 100; // 最大重试次数
 
-    return Buffer.from(sig).toString('hex');
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        const sig = await schnorrAdaptor.signAsync(
+          Buffer.from(message),
+          wallet.privateKey?.toString('hex') || '',
+          adaptorPoint
+        );
+        return Buffer.from(sig).toString('hex');
+      } catch (error) {
+        if (attempt === maxRetries - 1) {
+          throw error;
+        }
+        continue;
+      }
+    }
   };
 
   /**
