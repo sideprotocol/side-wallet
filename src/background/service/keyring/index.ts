@@ -641,7 +641,7 @@ class KeyringService extends EventEmitter {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
         const sig = await schnorrAdaptor.signAsync(
-          Buffer.from(message),
+          Buffer.from(message, 'hex'),
           wallet.privateKey?.toString('hex') || '',
           adaptorPoint
         );
