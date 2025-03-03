@@ -88,6 +88,7 @@ export function Text(props: TextProps) {
     disableTranslate,
     style: $styleOverride,
     children,
+    classname,
     ...rest
   } = props;
   const preset: Presets = props.preset || 'regular';
@@ -103,7 +104,13 @@ export function Text(props: TextProps) {
   const $style = Object.assign({}, $textStyle, $styleOverride);
   return (
     <BaseView style={$style} {...rest}>
-      {disableTranslate ? <span translate="no">{text}</span> : text}
+      {disableTranslate ? (
+        <span className={classname} translate="no">
+          {text}
+        </span>
+      ) : (
+        text
+      )}
 
       {children}
     </BaseView>

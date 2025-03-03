@@ -17,8 +17,8 @@ export function NavTabBar({ tab }: { tab: TabOption }) {
       <TabButton tabName="swap" icon="main-swap" isActive={tab === 'swap'} />
       {/*<TabButton tabName="app" name="activity" icon="main-activity" isActive={tab === 'app'} />*/}
       <TabButton tabName="bridge" icon="main-bridge" isActive={tab === 'bridge'} />
-      <TabButton tabName="explore" icon="main-summon" isActive={tab === 'explore'} />
-      {/*<TabButton tabName="settings" icon="main-setting" isActive={tab === 'settings'} />*/}
+
+      <TabButton tabName="loans" icon="main-loans" isActive={tab === 'loans'} />
     </Grid>
   );
 }
@@ -53,8 +53,8 @@ function TabButton({
           navigate('SwapTabScreen');
         } else if (tabName === 'bridge') {
           navigate('BridgeTabScreen');
-        } else if (tabName === 'explore') {
-          navigate('ExploreTabScreen');
+        } else if (tabName === 'loans') {
+          navigate('LoansTabScreen');
         }
       }}>
       <Column

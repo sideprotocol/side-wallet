@@ -81,6 +81,7 @@ export const svgRegistry = {
   'main-bridge': '/images/icons/main/bridge-icon.svg',
   'main-bridge-ac': '/images/icons/main/bridge-ac-icon.svg',
   'main-summon': '/images/icons/main/summon-ac-icon.svg',
+  'main-loans': '/images/icons/main/loans-icon.svg',
   'main-summon-ac': '/images/icons/main/summon-ac-icon.svg',
   'swap-down-icon': '/images/icons/swap/bottom-icon.svg',
   'swap-down-hover': '/images/icons/swap/bottom-hover.svg',
@@ -174,8 +175,7 @@ export function Icon(props: IconProps) {
           $containerStyleOverride,
           $imageStyleOverride || {},
           onClick ? { cursor: 'pointer' } : {}
-        )}
-      >
+        )}>
         {children}
       </div>
     );

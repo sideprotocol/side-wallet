@@ -2,7 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { updateVersion } from '../global/actions';
 
-export type TabOption = 'home' | 'mint' | 'app' | 'settings' | 'swap' | 'activity' | 'bridge' | 'summon' | 'explore';
+export type TabOption =
+  | 'home'
+  | 'mint'
+  | 'app'
+  | 'settings'
+  | 'swap'
+  | 'activity'
+  | 'bridge'
+  | 'summon'
+  | 'explore'
+  | 'loans';
 
 export interface GlobalState {
   tab: TabOption;
