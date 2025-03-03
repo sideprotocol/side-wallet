@@ -9,8 +9,10 @@ import { BalanceItem } from '@/shared/types';
 import { Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { colors } from '@/ui/theme/colors';
+import { Box } from '@mui/material';
 
 function SideCryptoItem({ token }: { token: BalanceItem }) {
+  const isIbc = token.asset.denom.includes('ibc/');
   return (
     <>
       <Row>
@@ -27,7 +29,26 @@ function SideCryptoItem({ token }: { token: BalanceItem }) {
             gap: '0px'
           }}>
           <Text preset="regular" text={token?.asset?.symbol}></Text>
-          <Text preset="sub" text={token?.asset?.name}></Text>
+          <Row itemsCenter>
+            <Text preset="sub" text={token?.asset?.name}></Text>
+            {isIbc && (
+              <Box
+                sx={{
+                  borderRadius: '4px',
+                  color: '#F7771A',
+                  bgcolor: '#F7771A33',
+                  fontSize: '10px',
+                  fontWeight: 500,
+                  height: '16px',
+                  px: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                IBC
+              </Box>
+            )}
+          </Row>
         </Column>
       </Row>
 
