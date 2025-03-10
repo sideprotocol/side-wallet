@@ -148,6 +148,15 @@ export interface WalletController {
 
   signAdaptor(message: string, adaptorPoint: string): Promise<string>;
 
+  signAdaptorAndMessage(
+    message: string,
+    sigHash: string,
+    adaptorPoint: string
+  ): Promise<{
+    liquidation_adaptor_signature: string;
+    message_signature: string;
+  }>;
+
   sendBTC(data: {
     to: string;
     amount: number;

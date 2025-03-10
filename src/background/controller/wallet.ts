@@ -626,6 +626,38 @@ export class WalletController extends BaseController {
     return keyringService.signAdaptor(account.pubkey, account.type, message, adaptorPoint);
   };
 
+  signAdaptorAndMessage = async (text: string, sigHash: string, adaptorPoint: string) => {
+    const account = preferenceService.getCurrentAccount();
+    if (!account) throw new Error('no current account');
+
+    const adaptorSignature = await this.signAdaptor(sigHash, adaptorPoint);
+
+    try {
+      const parsedText = JSON.parse(text);
+
+      const newMessage = JSON.stringify({
+        ...parsedText,
+        msgs: [
+          {
+            ...parsedText.msgs[0],
+            value: {
+              ...parsedText.msgs[0].value,
+              liquidation_adaptor_signature: adaptorSignature
+            }
+          }
+        ]
+      });
+
+      const messageSignature = await this.signMessage(newMessage);
+      return {
+        liquidation_adaptor_signature: adaptorSignature,
+        message_signature: messageSignature
+      };
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   signBIP322Simple = async (text: string) => {
     const account = preferenceService.getCurrentAccount();
     if (!account) throw new Error('no current account');
