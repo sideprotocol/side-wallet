@@ -642,7 +642,7 @@ export class WalletController extends BaseController {
             ...parsedText.msgs[0],
             value: {
               ...parsedText.msgs[0].value,
-              liquidation_adaptor_signature: adaptorSignature
+              liquidation_adaptor_signatures: [adaptorSignature]
             }
           }
         ]
