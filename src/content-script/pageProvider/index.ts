@@ -234,13 +234,21 @@ export class SideProvider extends EventEmitter {
     });
   };
 
-  signAdaptorAndMessage = async (message: string, sigHash: string, adaptorPoint: string) => {
+  signAdaptorAndMessage = async (
+    message: string,
+    sigHash: string,
+    adaptorPoint: string,
+    defaultAdaptorPoint: string,
+    repaymentPsbtBase64: string
+  ) => {
     return this._request({
       method: 'signAdaptorAndMessage',
       params: {
         text: message,
         sigHash,
-        adaptorPoint
+        adaptorPoint,
+        defaultAdaptorPoint,
+        repaymentPsbtBase64
       }
     });
   };

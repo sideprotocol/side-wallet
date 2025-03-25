@@ -626,11 +626,32 @@ export class WalletController extends BaseController {
     return keyringService.signAdaptor(account.pubkey, account.type, message, adaptorPoint);
   };
 
-  signAdaptorAndMessage = async (text: string, sigHash: string, adaptorPoint: string) => {
+  signAdaptorAndMessage = async (
+    text: string,
+    sigHash: string,
+    adaptorPoint: string,
+    defaultAdaptorPoint: string,
+    repaymentPsbtBase64: string
+  ) => {
     const account = preferenceService.getCurrentAccount();
     if (!account) throw new Error('no current account');
 
     const adaptorSignature = await this.signAdaptor(sigHash, adaptorPoint);
+    const defaultAdaptorSignature = await this.signAdaptor(sigHash, defaultAdaptorPoint);
+
+    const repaymentPsbt = bitcoin.Psbt.fromBase64(repaymentPsbtBase64);
+
+    repaymentPsbt.data.inputs.forEach((_, index) => {
+      repaymentPsbt.data.inputs[index].tapInternalKey = toXOnly(Buffer.from(account.pubkey));
+    });
+    const inputsToSign = repaymentPsbt.data.inputs.map((_, index) => ({
+      index,
+      publicKey: Buffer.from(account.pubkey).toString('hex'),
+      disableTweakSigner: true,
+      sighashType: bitcoin.Transaction.SIGHASH_DEFAULT
+    }));
+
+    const repaymentSignature = await this.signPsbt(repaymentPsbt, inputsToSign, false);
 
     try {
       const parsedText = JSON.parse(text);
@@ -642,7 +663,9 @@ export class WalletController extends BaseController {
             ...parsedText.msgs[0],
             value: {
               ...parsedText.msgs[0].value,
-              liquidation_adaptor_signatures: [adaptorSignature]
+              liquidation_adaptor_signatures: [adaptorSignature],
+              default_liquidation_adaptor_signatures: [defaultAdaptorSignature],
+              repayment_signatures: [repaymentSignature]
             }
           }
         ]
@@ -651,6 +674,8 @@ export class WalletController extends BaseController {
       const messageSignature = await this.signMessage(newMessage);
       return {
         liquidation_adaptor_signature: adaptorSignature,
+        default_adaptor_signature: defaultAdaptorSignature,
+        repayment_signature: repaymentSignature,
         message_signature: messageSignature
       };
     } catch (error) {

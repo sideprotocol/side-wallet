@@ -151,9 +151,13 @@ export interface WalletController {
   signAdaptorAndMessage(
     message: string,
     sigHash: string,
-    adaptorPoint: string
+    adaptorPoint: string,
+    defaultAdaptorPoint: string,
+    repaymentPsbtBase64: string
   ): Promise<{
     liquidation_adaptor_signature: string;
+    default_adaptor_signature: string;
+    repayment_signature: string;
     message_signature: string;
   }>;
 
