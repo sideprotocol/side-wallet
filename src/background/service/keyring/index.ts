@@ -7,7 +7,7 @@ import log from 'loglevel';
 import { storage } from '@/background/webapi';
 import { ADDRESS_TYPES, KEYRING_TYPE } from '@/shared/constant';
 import { AddressType } from '@/shared/types';
-import { schnorrAdaptor } from '@/ui/wallet-sdk/adaptor-signature';
+import { schnorr, schnorrAdaptor } from '@/ui/wallet-sdk/adaptor-signature';
 import { ObservableStore } from '@metamask/obs-store';
 import { keyring } from '@unisat/wallet-sdk';
 import { bitcoin, ECPairInterface } from '@unisat/wallet-sdk/lib/bitcoin-core';
@@ -653,6 +653,16 @@ class KeyringService extends EventEmitter {
         continue;
       }
     }
+  };
+
+  signSnorr = async (address: string, keyringType: string, message: string) => {
+    const keyring = await this.getKeyringForAccount(address, keyringType);
+    const wallet = keyring.wallets.find((wallet) => wallet.publicKey.toString('hex') == address);
+
+    if (!wallet) throw new Error('no wallet found');
+
+    const sig = await schnorr.signAsync(Buffer.from(message, 'hex'), wallet.privateKey?.toString('hex') || '');
+    return Buffer.from(sig).toString('hex');
   };
 
   /**

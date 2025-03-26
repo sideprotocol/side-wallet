@@ -153,7 +153,7 @@ export interface WalletController {
     sigHash: string,
     adaptorPoint: string,
     defaultAdaptorPoint: string,
-    repaymentPsbtBase64: string
+    repaymentSigHashHex: string
   ): Promise<{
     liquidation_adaptor_signature: string;
     default_adaptor_signature: string;

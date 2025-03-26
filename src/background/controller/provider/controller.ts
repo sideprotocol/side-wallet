@@ -170,8 +170,8 @@ class ProviderController extends BaseController {
   @Reflect.metadata('APPROVAL', ['SignText', () => {
     // todo check text
   }])
-  signAdaptorAndMessage = async ({ data: { params: { text,sigHash, adaptorPoint, defaultAdaptorPoint, repaymentPsbtBase64 } } }) => {
-     return wallet.signAdaptorAndMessage(text, sigHash, adaptorPoint, defaultAdaptorPoint, repaymentPsbtBase64)
+  signAdaptorAndMessage = async ({ data: { params: { text,sigHash, adaptorPoint, defaultAdaptorPoint, repaymentSigHashHex } } }) => {
+     return wallet.signAdaptorAndMessage(text, sigHash, adaptorPoint, defaultAdaptorPoint, repaymentSigHashHex)
   }
 
   @Reflect.metadata('APPROVAL', ['SignData', () => {

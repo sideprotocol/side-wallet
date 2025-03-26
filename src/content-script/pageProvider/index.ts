@@ -239,7 +239,7 @@ export class SideProvider extends EventEmitter {
     sigHash: string,
     adaptorPoint: string,
     defaultAdaptorPoint: string,
-    repaymentPsbtBase64: string
+    repaymentSigHashHex: string
   ) => {
     return this._request({
       method: 'signAdaptorAndMessage',
@@ -248,7 +248,7 @@ export class SideProvider extends EventEmitter {
         sigHash,
         adaptorPoint,
         defaultAdaptorPoint,
-        repaymentPsbtBase64
+        repaymentSigHashHex
       }
     });
   };

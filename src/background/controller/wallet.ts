@@ -626,32 +626,25 @@ export class WalletController extends BaseController {
     return keyringService.signAdaptor(account.pubkey, account.type, message, adaptorPoint);
   };
 
+  signSnorr = async (message: string) => {
+    const account = preferenceService.getCurrentAccount();
+    if (!account) throw new Error('no current account');
+    return keyringService.signSnorr(account.pubkey, account.type, message);
+  };
+
   signAdaptorAndMessage = async (
     text: string,
     sigHash: string,
     adaptorPoint: string,
     defaultAdaptorPoint: string,
-    repaymentPsbtBase64: string
+    repaymentSigHashHex: string
   ) => {
     const account = preferenceService.getCurrentAccount();
     if (!account) throw new Error('no current account');
 
     const adaptorSignature = await this.signAdaptor(sigHash, adaptorPoint);
     const defaultAdaptorSignature = await this.signAdaptor(sigHash, defaultAdaptorPoint);
-
-    const repaymentPsbt = bitcoin.Psbt.fromBase64(repaymentPsbtBase64);
-
-    repaymentPsbt.data.inputs.forEach((_, index) => {
-      repaymentPsbt.data.inputs[index].tapInternalKey = toXOnly(Buffer.from(account.pubkey));
-    });
-    const inputsToSign = repaymentPsbt.data.inputs.map((_, index) => ({
-      index,
-      publicKey: Buffer.from(account.pubkey).toString('hex'),
-      disableTweakSigner: true,
-      sighashType: bitcoin.Transaction.SIGHASH_DEFAULT
-    }));
-
-    const repaymentSignature = await this.signPsbt(repaymentPsbt, inputsToSign, false);
+    const repaymentSignature = await this.signSnorr(repaymentSigHashHex);
 
     try {
       const parsedText = JSON.parse(text);
