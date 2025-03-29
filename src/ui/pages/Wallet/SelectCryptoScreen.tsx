@@ -10,6 +10,7 @@ import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { colors } from '@/ui/theme/colors';
+import { Box } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -88,6 +89,8 @@ function BitAndRuneCrypto({ searchTerm }) {
 }
 
 function SideCryptoItem({ token }: { token: BalanceItem }) {
+  const isIbc = token.asset.denom.includes('ibc/');
+
   return (
     <>
       <Row classname={'bg-item-hover'}>
@@ -103,7 +106,25 @@ function SideCryptoItem({ token }: { token: BalanceItem }) {
           style={{
             gap: '0px'
           }}>
-          <Text preset="regular" text={token?.asset?.symbol}></Text>
+          <Row itemsCenter>
+            <Text preset="regular" text={token?.asset?.symbol}></Text>
+            {isIbc && (
+              <Box
+                sx={{
+                  borderRadius: '4px',
+                  background: '#FFFFFF1A',
+                  fontSize: '8px',
+                  fontWeight: 500,
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: '16px',
+                  p: '4px 6px',
+                  color: '#B8BFBD'
+                }}>
+                IBC
+              </Box>
+            )}
+          </Row>
           <Text preset="sub" text={token?.asset?.name}></Text>
         </Column>
       </Row>

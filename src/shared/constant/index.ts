@@ -421,7 +421,7 @@ const SIDE_CHAIN_TESTNET = {
   restUrl: 'https://devnet-rest.side.one',
   denom: 'uside',
   hdPath: "m/44'/118/0'/0/0",
-  logo: '/images/logo/wallet-logo.png',
+  logo: 'https://api.side.one/static/token/logo/side.png',
   faucetUrl: 'https://faucet.side.exchange',
   explorerUrl: SIDE_EXPLORER_URL_TESTNET
 };

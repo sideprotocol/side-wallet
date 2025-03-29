@@ -19,8 +19,7 @@ import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { SideBridgeParams } from '@/ui/services/bridge';
 import { useChainType } from '@/ui/state/settings/hooks';
-import { formatUnitAmount, formatWithDP, parseUnitAmount, useWallet } from '@/ui/utils';
-import { toReadableAmount } from '@/ui/utils/formatter';
+import { parseUnitAmount, useWallet } from '@/ui/utils';
 import { satoshisToAmount, sendAllBTC, sendRunesWithBTC } from '@/ui/wallet-sdk/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
@@ -52,126 +51,9 @@ export interface BridgeTxItem {
   url: string;
 }
 
-const PENDING_RUNES_KEY = 'PENIDNG:RUNES';
-
-const RUNE_BALANCE_KEY_PREFIX = 'RUNE_BALANCE_KEY_';
-
-export const getPendingDeposits = (id: string, address: string) => {
-  if (!id || !address) return [];
-  const curStore = localStorage.getItem(PENDING_RUNES_KEY + `:${id}` + `:${address}`);
-
-  return JSON.parse(curStore || '[]') as BridgeTxItem[];
-};
-
-export const unshiftPendingDeposits = (pending: BridgeTxItem, id: string, address: string) => {
-  const curStores = getPendingDeposits(id, address);
-  const newStores = [pending, ...curStores] as BridgeTxItem[];
-
-  return localStorage.setItem(PENDING_RUNES_KEY + ':' + id + `:${address}`, JSON.stringify(newStores));
-};
-
-export const updatePendingDeposits = (pending: BridgeTxItem[], id: string, address: string) => {
-  const newStores = [...pending];
-  return localStorage.setItem(PENDING_RUNES_KEY + ':' + id + `:${address}`, JSON.stringify(newStores));
-};
-
-export const getRuneBalanceFromStore = (runeId: string, address: string) => {
-  return localStorage.getItem(RUNE_BALANCE_KEY_PREFIX + runeId + ':' + address);
-};
-
-export const setRuneBalanceFromStore = (balance: string, runeId: string, address: string) => {
-  return localStorage.setItem(RUNE_BALANCE_KEY_PREFIX + runeId + ':' + address, balance);
-};
-
 export function useBridgeState(): AppState['bridge'] {
   return useAppSelector((state) => state.bridge);
 }
-
-export const useBtcBalance = () => {
-  const { from, loading } = useBridgeState();
-  const dispatch = useAppDispatch();
-
-  const isDeposit = (from?.name || '').includes('Bitcoin');
-
-  const currentAccount = useCurrentAccount();
-  const { balanceList } = useGetSideBalanceList(currentAccount.address);
-
-  const [btcBalance, setBtcBalance] = useState('0');
-
-  const [balance, setBalance] = useState('0');
-
-  async function getBtcBalance() {
-    const addressInfo = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}`).then((res) => res.json());
-
-    const rawUtxos = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) =>
-      res.json()
-    );
-
-    const runesOutputsData = rawUtxos.map((utxo) => {
-      return `${utxo.txid}:${utxo.vout}`;
-    });
-
-    const outputs = await Promise.all(runesOutputsData.map((key: string) => fetchRuneOutput(key, SIDE_RUNE_INDEXER)));
-
-    const txs = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/txs`).then((res) => res.json());
-
-    const unconfirmedRunes = txs.filter((tx) => {
-      return !!decodeTxToGetValue(tx) && !tx.status.confirmed;
-    });
-
-    let balance = BigNumber(addressInfo.mempool_stats.funded_txo_sum)
-      .minus(addressInfo.mempool_stats.spent_txo_sum)
-      .plus(addressInfo.chain_stats.funded_txo_sum)
-      .minus(addressInfo.chain_stats.spent_txo_sum);
-
-    outputs.forEach((output) => {
-      const hasRune = Object.keys(output.runes).length > 0;
-
-      if (hasRune) {
-        balance = balance.minus(output.value);
-      }
-    });
-
-    unconfirmedRunes.forEach((tx) => {
-      const value = decodeTxToGetValue(tx);
-      balance = balance.minus(value);
-    });
-    console.log('unconfirmedRunes: ', unconfirmedRunes);
-
-    const _data = toReadableAmount(balance.toFixed(), 8);
-
-    return _data;
-  }
-
-  const balanceSideSat = balanceList.find((item) => item.denom === 'sat')?.amount || '0';
-
-  // const { balanceAmount: balanceSideSat } = useGetSideTokenBalance('sat', loading);
-
-  // load btc balance
-  useEffect(() => {
-    getBtcBalance().then(setBtcBalance);
-  }, [loading]);
-
-  useEffect(() => {
-    if (isDeposit) {
-      dispatch(BridgeActions.update({ balance: btcBalance }));
-
-      setBalance(btcBalance);
-    } else {
-      const parsedBalance = formatWithDP(formatUnitAmount(balanceSideSat, 8), 8);
-
-      dispatch(BridgeActions.update({ balance: parsedBalance }));
-
-      setBalance(parsedBalance);
-    }
-  }, [isDeposit, currentAccount.address, balanceSideSat, btcBalance, loading]);
-
-  return balance;
-};
-
-export const useRuneBalanceV2 = (base: string) => {
-  return 0;
-};
 
 export const useRuneListV2 = () => {
   const wallet = useWallet();
@@ -426,7 +308,6 @@ export const useBridge = () => {
             memo: undefined,
             memos: undefined
           });
-    console.log('wallet: ', wallet, psbt, toSignInputs);
     const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
     const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
@@ -675,18 +556,6 @@ export const useRuneBridge = () => {
           })
           .then((res) => {
             if (res) {
-              const item: BridgeTxItem = {
-                amount: bridgeAmount,
-                time: Date.now() / 1000,
-                url: '',
-                txid: res,
-                status: 'pending'
-              };
-
-              const id = `${networkType}:${base}`;
-
-              unshiftPendingDeposits(item, id, currentAccount.address || '');
-
               navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
             }
           })

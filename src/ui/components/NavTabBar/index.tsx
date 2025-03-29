@@ -14,11 +14,10 @@ export function NavTabBar({ tab }: { tab: TabOption }) {
   return (
     <Grid columns={4} style={{ width: '100%', height: '66px', backgroundColor: colors.bg2 }}>
       <TabButton tabName="home" icon="main-home" isActive={tab === 'home'} />
-      <TabButton tabName="swap" icon="main-swap" isActive={tab === 'swap'} />
-      {/*<TabButton tabName="app" name="activity" icon="main-activity" isActive={tab === 'app'} />*/}
-      <TabButton tabName="bridge" icon="main-bridge" isActive={tab === 'bridge'} />
-
       <TabButton tabName="loans" icon="main-loans" isActive={tab === 'loans'} />
+
+      <TabButton tabName="earn" icon="main-earn" isActive={tab === 'earn'} />
+      <TabButton tabName="bridge" icon="main-bridge" isActive={tab === 'bridge'} />
     </Grid>
   );
 }

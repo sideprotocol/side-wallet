@@ -12,7 +12,8 @@ export type TabOption =
   | 'bridge'
   | 'summon'
   | 'explore'
-  | 'loans';
+  | 'loans'
+  | 'earn';
 
 export interface GlobalState {
   tab: TabOption;

@@ -1,13 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 
-import { isDev, sideChain } from '@/shared/constant';
+import { isDev, SIDE_STATION_URL, sideChain } from '@/shared/constant';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import BridgeSelectToken from '@/ui/components/Bridge/BridgeSelectToken';
 import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
-import { Icon } from '@/ui/components/Icon';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
@@ -64,16 +63,22 @@ export default function BridgeTabScreen() {
   const withdrawEnabled = params?.params?.withdraw_enabled;
 
   const btcVault = params?.params?.vaults
-    .filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
-    .reduce((max, current) => {
-      return BigInt(current.version) > BigInt(max.version) ? current : max;
-    })?.address;
+    ?.filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
+    ?.reduce(
+      (max, current) => {
+        return BigInt(current.version) > BigInt(max.version) ? current : max;
+      },
+      { version: '0', address: '' }
+    )?.address;
 
   const runeVault = params?.params?.vaults
-    .filter((vault) => vault.asset_type === 'ASSET_TYPE_RUNES')
-    .reduce((max, current) => {
-      return BigInt(current.version) > BigInt(max.version) ? current : max;
-    })?.address;
+    ?.filter((vault) => vault.asset_type === 'ASSET_TYPE_RUNES')
+    ?.reduce(
+      (max, current) => {
+        return BigInt(current.version) > BigInt(max.version) ? current : max;
+      },
+      { version: '0', address: '' }
+    )?.address;
 
   const bridgeEnabled = isDeposit ? depositEnabled : withdrawEnabled;
 
@@ -137,7 +142,7 @@ export default function BridgeTabScreen() {
         BridgeActions.update({
           from: {
             id: 'LIVENET',
-            name: 'Bitcoin Signet',
+            name: 'Bitcoin',
             logo: '/images/icons/btc.svg'
           },
           to: {
@@ -176,114 +181,121 @@ export default function BridgeTabScreen() {
             style={{
               gap: '5px'
             }}>
-            <Column mt={'medium'} px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'card_bgColor'}>
-              <Row justifyBetween itemsCenter>
-                <div
-                  style={{
-                    fontSize: '12px',
-                    color: '#7D7D7D'
-                  }}>
-                  From
-                </div>
-              </Row>
-
-              <Row
-                itemsCenter
-                gap={'zero'}
-                style={{
-                  height: '32px',
-                  borderRadius: '100px',
-                  padding: '10px 0px'
-                }}>
-                <Image size={28} src={from.logo} />
-                <span
-                  style={{
-                    fontSize: '14px',
-                    paddingLeft: '5px'
-                  }}>
-                  {from.name}
-                </span>
-              </Row>
-            </Column>
-
-            <Row relative>
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  background: '#1D1D1F',
-                  width: '38px',
-                  height: '38px',
-                  borderRadius: '10px',
-                  cursor: 'pointer',
-                  border: '4px solid #414142',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-                onMouseEnter={() => {
-                  dispatch(BridgeActions.update({ hoverExchange: true }));
-                }}
-                onMouseLeave={() => {
-                  dispatch(BridgeActions.update({ hoverExchange: false }));
-                }}
-                onClick={() => {
-                  dispatch(
-                    BridgeActions.update({
-                      from: to,
-                      to: from
-                    })
-                  );
-                }}>
-                <Icon size={hoverExchange ? 22 : 11} icon={hoverExchange ? 'swap-down-hover' : 'swap-down-icon'}></Icon>
-              </div>
-            </Row>
-
-            <Column px={'medium'} py={'md'} rounded={true} gap={'md'} bg={'card_bgColor'}>
-              <Row justifyBetween itemsCenter>
-                <div
-                  style={{
-                    fontSize: '12px',
-                    color: '#7D7D7D'
-                  }}>
-                  To
-                </div>
-              </Row>
-
-              <Row
-                itemsCenter
-                gap={'zero'}
-                style={{
-                  height: '32px',
-                  borderRadius: '100px',
-                  padding: '10px 0px'
-                }}>
-                <Image size={28} src={to.logo} />
-                <span
-                  style={{
-                    fontSize: '14px',
-                    paddingLeft: '5px'
-                  }}>
-                  {to.name}
-                </span>
-              </Row>
-            </Column>
-
             <Row
+              mt={'medium'}
               justifyBetween
               itemsCenter
-              mt={'smm'}
-              px={'xl'}
+              px={'lg'}
               py={'medium'}
               rounded={true}
               gap={'md'}
               bg={'card_bgColor'}>
+              <Column
+                gap="sm"
+                style={{
+                  width: '42%'
+                }}>
+                <Row justifyBetween itemsCenter>
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      color: '#fff'
+                    }}>
+                    From
+                  </div>
+                </Row>
+
+                <Row
+                  itemsCenter
+                  gap={'zero'}
+                  style={{
+                    borderRadius: '10px',
+                    padding: '10px',
+                    backgroundColor: '#000'
+                  }}>
+                  <Image size={28} src={from.logo} />
+                  <span
+                    style={{
+                      fontSize: '14px',
+                      paddingLeft: '5px'
+                    }}>
+                    {from.name}
+                  </span>
+                </Row>
+              </Column>
+
+              <Row
+                relative
+                style={{
+                  top: '12px'
+                }}>
+                <div
+                  onMouseEnter={() => {
+                    dispatch(BridgeActions.update({ hoverExchange: true }));
+                  }}
+                  onMouseLeave={() => {
+                    dispatch(BridgeActions.update({ hoverExchange: false }));
+                  }}
+                  onClick={() => {
+                    dispatch(
+                      BridgeActions.update({
+                        from: to,
+                        to: from
+                      })
+                    );
+                  }}>
+                  <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M17 15L0.999999 15M0.999999 15L5 11M0.999999 15L5 19M1 5L17 5M17 5L13 1M17 5L13 9"
+                      stroke={hoverExchange ? '#F7771A' : 'white'}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </Row>
+
+              <Column
+                style={{
+                  width: '42%'
+                }}
+                gap="sm">
+                <Row justifyBetween itemsCenter>
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      color: '#fff'
+                    }}>
+                    To
+                  </div>
+                </Row>
+
+                <Row
+                  itemsCenter
+                  gap={'zero'}
+                  style={{
+                    borderRadius: '10px',
+                    padding: '10px',
+                    backgroundColor: '#000'
+                  }}>
+                  <Image size={28} src={to.logo} />
+                  <span
+                    style={{
+                      fontSize: '14px',
+                      paddingLeft: '5px'
+                    }}>
+                    {to.name}
+                  </span>
+                </Row>
+              </Column>
+            </Row>
+
+            <Column mt={'smm'} px={'lg'} py={'medium'} rounded={true} gap={'md'} bg={'card_bgColor'}>
               <div
                 style={{
                   fontSize: '12px',
-                  color: '#7D7D7D'
+                  color: '#fff'
                 }}>
                 Transfer
               </div>
@@ -291,26 +303,29 @@ export default function BridgeTabScreen() {
               <div className={'flex flex-col gap-[8px]'}>
                 <div
                   className={
-                    'hover:bg-[#000]/70 bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 bg-[#000] flex justify-between items-center p-2 cursor-pointer rounded-[24px] min-w-max'
+                    'bg-[#000]/70 hover:bg-[#292828]/50 border-[1px] border-solid border-[#fff]/10 bg-[#000] flex justify-between items-center p-2 cursor-pointer rounded-[10px] min-w-max'
                   }
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     dispatch(BridgeActions.update({ selectTokenModalShow: true }));
                   }}>
-                  <ImageIcon
-                    style={{
-                      width: '20px',
-                      height: '20px',
-                      marginRight: '4px',
-                      borderRadius: '20px'
-                    }}
-                    url={bridgeAsset?.asset?.logo}
-                  />
-                  <div className="text-[14px] pr-[6px] whitespace-nowrap max-w-[72px] text-ellipsis overflow-hidden">
-                    {bridgeAsset?.asset?.symbol || 'Select Token'}
-                  </div>
-                  {/*<Icon type="" />*/}
+                  <Row itemsCenter>
+                    {' '}
+                    <ImageIcon
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        marginRight: '4px',
+                        borderRadius: '20px'
+                      }}
+                      url={bridgeAsset?.asset?.logo}
+                    />
+                    <div className="text-[14px] pr-[6px] whitespace-nowrap max-w-[72px] text-ellipsis overflow-hidden">
+                      {bridgeAsset?.asset?.symbol || 'Select Token'}
+                    </div>
+                  </Row>
+
                   <svg
                     style={{
                       width: '16px',
@@ -321,14 +336,14 @@ export default function BridgeTabScreen() {
                   </svg>
                 </div>
               </div>
-            </Row>
+            </Column>
 
-            <Column mt={'smm'} px={'xl'} py={'md'} rounded={true} gap={'md'} bg={'card_bgColor'}>
+            <Column mt={'smm'} px={'lg'} py={'medium'} rounded={true} gap={'md'} bg={'card_bgColor'}>
               <Row justifyBetween itemsCenter>
                 <div
                   style={{
                     fontSize: '12px',
-                    color: '#7D7D7D'
+                    color: '#fff'
                   }}>
                   Amount
                 </div>
@@ -369,7 +384,7 @@ export default function BridgeTabScreen() {
                   />
                   <div
                     className={
-                      'absolute right-[10px] top-1/2 -translate-y-1/2 p-2 text-[#F7771A] text-sm bg-[#F7771A33] cursor-pointer rounded-lg hover:bg-[#F7771A1A]'
+                      'absolute right-[10px] top-1/2 -translate-y-1/2 p-2 text-[#F7771A] text-sm  cursor-pointer rounded-lg hover:bg-[#F7771A1A]'
                     }
                     onClick={() => {
                       dispatch(BridgeActions.update({ bridgeAmount: balance }));
@@ -380,16 +395,9 @@ export default function BridgeTabScreen() {
               </Row>
             </Column>
 
-            {/*<ConfirmButton />*/}
-            <Row mt={'xl'} full>
+            <Row mt={'xl'}>
               <Button
                 onClick={() => {
-                  // if (base === 'sat') {
-                  //   navigate('BridgeConfirmTabScreen');
-                  // } else {
-                  //   // navigate('BridgeConfirmTabScreen');
-                  //   bridgeRune(base?.split('/')[1]);
-                  // }
                   navigate('BridgeConfirmTabScreen');
                 }}
                 disabled={disabled}
@@ -419,6 +427,46 @@ export default function BridgeTabScreen() {
                 }
                 preset="primary"
               />
+            </Row>
+
+            <Row justifyBetween itemsCenter mt={'sm'}>
+              <Row itemsCenter>
+                <Text color="white_muted" size="xs">
+                  Powrered by
+                </Text>
+                <Image height={15} width={70} src="./images/img/side-bridge.png"></Image>
+              </Row>
+
+              <Row itemsCenter>
+                <Text
+                  color="white"
+                  style={{
+                    textDecoration: 'underline',
+                    cursor: 'pointer'
+                  }}
+                  size="xs"
+                  onClick={() => {
+                    window.open(`${SIDE_STATION_URL}/bridge`, '_blank');
+                  }}>
+                  Bridge USDC
+                </Text>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clipPath="url(#clip0_21577_17883)">
+                    <path
+                      d="M10.5 4.5L10.5 1.5M10.5 1.5H7.49999M10.5 1.5L6 6M5 1.5H3.9C3.05992 1.5 2.63988 1.5 2.31901 1.66349C2.03677 1.8073 1.8073 2.03677 1.66349 2.31901C1.5 2.63988 1.5 3.05992 1.5 3.9V8.1C1.5 8.94008 1.5 9.36012 1.66349 9.68099C1.8073 9.96323 2.03677 10.1927 2.31901 10.3365C2.63988 10.5 3.05992 10.5 3.9 10.5H8.1C8.94008 10.5 9.36012 10.5 9.68099 10.3365C9.96323 10.1927 10.1927 9.96323 10.3365 9.68099C10.5 9.36012 10.5 8.94008 10.5 8.1V7"
+                      stroke="#6C7080"
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_21577_17883">
+                      <rect width="12" height="12" fill="white" />
+                    </clipPath>
+                  </defs>
+                </svg>
+              </Row>
             </Row>
           </Column>
         </Row>

@@ -73,6 +73,7 @@ export const svgRegistry = {
   'main-home': '/images/icons/main/home-icon.svg',
   'main-home-ac': '/images/icons/main/home-ac-icon.svg',
   'main-swap': '/images/icons/main/swap-icon.svg',
+  'main-earn': '/images/icons/main/earn-icon.svg',
   'main-swap-ac': '/images/icons/main/swap-ac-icon.svg',
   'main-activity': '/images/icons/main/activity-icon.svg',
   'main-activity-ac': '/images/icons/main/activity-ac-icon.svg',

@@ -6,9 +6,11 @@ import ImageIcon from '@/ui/components/ImageIcon';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
-import { Skeleton } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 
 export function TokenItem({ token, balanceVisible }: { token: BalanceItem; balanceVisible: boolean }) {
+  const isIbc = token.asset.denom.includes('ibc/');
+
   return (
     <Row
       classname={'bg-item-hover-v2'}
@@ -32,7 +34,25 @@ export function TokenItem({ token, balanceVisible }: { token: BalanceItem; balan
           style={{
             gap: '0px'
           }}>
-          <Text classname={'symbol'} preset="regular" text={token?.asset?.symbol}></Text>
+          <Row itemsCenter>
+            <Text classname={'symbol'} preset="regular" text={token?.asset?.symbol}></Text>
+            {isIbc && (
+              <Box
+                sx={{
+                  borderRadius: '4px',
+                  background: '#FFFFFF1A',
+                  fontSize: '8px',
+                  fontWeight: 500,
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: '16px',
+                  p: '4px 6px',
+                  color: '#B8BFBD'
+                }}>
+                IBC
+              </Box>
+            )}
+          </Row>
           <Text preset="sub" text={token?.asset?.name}></Text>
         </Column>
       </Row>
