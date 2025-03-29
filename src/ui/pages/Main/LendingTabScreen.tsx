@@ -1,11 +1,14 @@
 import BigNumber from 'bignumber.js';
+import dayjs from 'dayjs';
 import { Fragment, useMemo, useState } from 'react';
 import 'swiper/css';
 
 import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { NavTabBar } from '@/ui/components/NavTabBar';
+import useCreateLoan from '@/ui/hooks/useCreateLoan';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
+import useGetDlcEventById from '@/ui/hooks/useGetDlcEventById';
 import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
 import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
@@ -13,7 +16,7 @@ import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate } from '@/ui/utils';
-import { toReadableAmount } from '@/ui/utils/formatter';
+import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { Box, Stack, Typography } from '@mui/material';
 
 export default function LendingTanScreen() {
@@ -95,6 +98,10 @@ export default function LendingTanScreen() {
 
     return { borrowMaxAmount };
   }, [collateralAmount, borrowAmount, poolData, satBalance, usdcBalance]);
+
+  const maturityTime = useMemo(() => {
+    return new BigNumber(dayjs().unix()).plus(new BigNumber(deadline).multipliedBy(24).multipliedBy(3600)).toString();
+  }, [deadline]);
 
   const data = [
     {
@@ -230,6 +237,23 @@ export default function LendingTanScreen() {
       )
     }
   ];
+
+  const { loading, createLoan, visible, setVisible } = useCreateLoan();
+
+  const { dlcEvent } = useGetDlcEventById(liquidationEvent?.event_id);
+
+  const isDisabled = useMemo(() => {
+    return (
+      loading ||
+      !+collateralAmount ||
+      !+borrowAmount ||
+      !liquidationEvent ||
+      (healthFactor !== '-' && +healthFactor < 1.2) ||
+      +borrowAmount <
+        +toReadableAmount(poolData?.baseData.config.origination_fee || '0', poolData?.token.asset.exponent || '6') ||
+      dlcEvent?.event.has_triggered
+    );
+  }, [loading, poolData, collateralAmount, borrowAmount, liquidationEvent, healthFactor, dlcEvent]);
 
   return (
     <Layout>
@@ -483,7 +507,24 @@ export default function LendingTanScreen() {
             ))}
           </Column>
           <Row mt="lg" mb="lg">
-            <Button preset="primary" text="Next" full></Button>
+            <Button
+              onClick={() => {
+                if (!liquidationEvent || !poolData) {
+                  return;
+                }
+                createLoan({
+                  borrowAmount: {
+                    denom: poolData.token.denom,
+                    amount: toUnitAmount(borrowAmount, poolData.token.asset.exponent)
+                  },
+                  maturityTime,
+                  poolId: poolData.baseData.id
+                });
+              }}
+              disabled={isDisabled}
+              preset="primary"
+              text="Next"
+              full></Button>
           </Row>
         </Column>
       </Content>

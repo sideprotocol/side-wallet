@@ -82,3 +82,8 @@ export interface ITxsResponseData {
 }
 
 export type GetTxsResponse = Awaited<ITxsResponseData>;
+
+export interface GetTxByHashResponse {
+  tx: Tx;
+  tx_response: TxResponse;
+}
