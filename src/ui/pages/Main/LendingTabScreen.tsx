@@ -518,7 +518,8 @@ export default function LendingTanScreen() {
                     amount: toUnitAmount(borrowAmount, poolData.token.asset.exponent)
                   },
                   maturityTime,
-                  poolId: poolData.baseData.id
+                  poolId: poolData.baseData.id,
+                  btcUnitAmount: toUnitAmount(collateralAmount, satBalance?.asset.exponent || 8)
                 });
               }}
               disabled={isDisabled}

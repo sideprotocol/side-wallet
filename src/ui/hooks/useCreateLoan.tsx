@@ -28,11 +28,13 @@ export default function useCreateLoan() {
   const createLoan = async ({
     borrowAmount,
     maturityTime,
-    poolId
+    poolId,
+    btcUnitAmount
   }: {
     borrowAmount: Coin;
     maturityTime: string;
     poolId: string;
+    btcUnitAmount: string;
   }) => {
     try {
       if (!currentAccount.address) return;
@@ -41,6 +43,18 @@ export default function useCreateLoan() {
       const activeAgencies = await services.lending.getDlcDcms({ status: 3 }, { baseURL: sideChain.restUrl });
 
       const dcm = activeAgencies?.dcms?.[0];
+
+      const borrowerPubkey = Buffer.from(currentAccount.pubkey).toString('hex');
+      const pbk = toXOnly(Buffer.from(borrowerPubkey, 'hex')).toString('hex');
+
+      const { address } = await services.lending.getCollateralAddress(
+        {
+          borrower_pubkey: pbk,
+          dcm_pubkey: dcm.pubkey,
+          maturity_time: maturityTime
+        },
+        { baseURL: sideChain.restUrl }
+      );
 
       // 缓存 hashLoanSecret btcAmount
 
@@ -68,9 +82,15 @@ export default function useCreateLoan() {
         }
       }
 
-      console.log(hashResponse, 'hashresponse', result);
-
       if (hashResponse.tx_response.code === 0) {
+        services.lending.saveLoanExpectedCollateralAmount(
+          {
+            vaultAddress: address,
+            expectedCollateralAmount: +btcUnitAmount
+          },
+          { baseURL: sideChain.restUrl }
+        );
+
         toast.custom((t) => (
           <ToastView
             toaster={t}

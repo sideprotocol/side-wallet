@@ -52,7 +52,8 @@ import {
   GetLoansRequest,
   GetLoansResponse,
   GetOverviewDataResponse,
-  LiquidationEvent
+  LiquidationEvent,
+  PostLoanExpectedCollateralAmountData
 } from './types';
 
 export default class LendingService {
@@ -186,6 +187,10 @@ export default class LendingService {
       loan_id: id
     });
     return this.apiClient.get<GetLoanInterestResponse>(`/side/lending/loan/current_interest?${queryParams}`, config);
+  }
+
+  async saveLoanExpectedCollateralAmount(data: PostLoanExpectedCollateralAmountData, config: AxiosRequestConfig) {
+    return this.apiClient.post('/lending/loan/save', data, config);
   }
 
   async getLeadingParams(config: AxiosRequestConfig) {

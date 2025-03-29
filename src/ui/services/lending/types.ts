@@ -1,5 +1,6 @@
-import { Coin } from "@cosmjs/amino";
-import { BaseRequestOffChainApi, BaseRequestPage, BaseResponse } from "../types";
+import { Coin } from '@cosmjs/amino';
+
+import { BaseRequestOffChainApi, BaseRequestPage, BaseResponse } from '../types';
 
 interface LendingBaseResponse {
   pagination: {
@@ -46,11 +47,11 @@ export interface DlcNonce {
 }
 
 export type DlcOracleStatus =
-  | "Oracle_Status_Pending"
-  | "Oracle_Status_Failed"
-  | "Oracle_Status_Timedout"
-  | "Oracle_status_Enable"
-  | "Oracle_status_Disable";
+  | 'Oracle_Status_Pending'
+  | 'Oracle_Status_Failed'
+  | 'Oracle_Status_Timedout'
+  | 'Oracle_status_Enable'
+  | 'Oracle_status_Disable';
 
 export interface DlcOracle {
   desc: string;
@@ -80,7 +81,7 @@ export enum LoanStatusEnum {
   Repaid,
   Defaulted,
   Liquidated,
-  Closed,
+  Closed
 }
 
 export enum LiquidationStatusEnum {
@@ -88,7 +89,7 @@ export enum LiquidationStatusEnum {
   LIQUIDATION_STATUS_LIQUIDATING,
   LIQUIDATION_STATUS_LIQUIDATED,
   LIQUIDATION_STATUS_SETTLING,
-  LIQUIDATION_STATUS_SETTLED,
+  LIQUIDATION_STATUS_SETTLED
 }
 
 export type LoanStatus = keyof typeof LoanStatusEnum;
@@ -427,11 +428,11 @@ export interface GetLiquidationDlcMetaResponse {
           {
             amount: string;
             id: string;
-          },
+          }
         ];
         txid: string;
         vout: string;
-      },
+      }
     ];
   };
 }
@@ -692,4 +693,9 @@ export interface GetLoanInterestResponse {
     amount: string;
     denom: string;
   };
+}
+
+export interface PostLoanExpectedCollateralAmountData {
+  vaultAddress: string;
+  expectedCollateralAmount: number;
 }
