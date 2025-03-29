@@ -10,7 +10,10 @@ export const createRPCQueryClient = async ({
   const client = new QueryClient(tmClient);
   return {
     side: {
-      btcbridge: (await import("./btcbridge/query.rpc.Query")).createRpcQueryExtension(client)
+      btcbridge: (await import("./btcbridge/query.rpc.Query")).createRpcQueryExtension(client),
+      dlc: (await import("./dlc/query.rpc.Query")).createRpcQueryExtension(client),
+      lending: (await import("./lending/query.rpc.Query")).createRpcQueryExtension(client),
+      liquidation: (await import("./liquidation/query.rpc.Query")).createRpcQueryExtension(client)
     }
   };
 };

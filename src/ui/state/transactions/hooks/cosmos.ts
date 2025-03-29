@@ -4,8 +4,16 @@ import { SignMode } from 'cosmjs-types/cosmos/tx/signing/v1beta1/signing';
 import { TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { Any } from 'cosmjs-types/google/protobuf/any';
 
-import { AminoConverter } from '@/codegen/src/side/btcbridge/tx.amino';
-import * as sideBTCBridgeRegistry from '@/codegen/src/side/btcbridge/tx.registry';
+import {
+  sideBTCBridgeRegistry,
+  sideBridgeAminoConverter,
+  sideDlcAminoConverter,
+  sideDlcRegistry,
+  sideLendingAminoConverter,
+  sideLendingRegistry,
+  sideLiquidationAminoConverter,
+  sideLiquidationRegistry
+} from '@/codegen/src';
 import { sideChain } from '@/shared/constant';
 import { CosmosTransaction, CosmosTxResponse } from '@/shared/types';
 import services from '@/ui/services';
@@ -60,10 +68,18 @@ const aminoTypes = new AminoTypes({
   ...createDefaultAminoConverters(),
   ...createIbcAminoConverters(),
   ...createWasmAminoConverters(),
-  ...AminoConverter
+  ...sideBridgeAminoConverter,
+  ...sideLiquidationAminoConverter,
+  ...sideDlcAminoConverter,
+  ...sideLendingAminoConverter
 });
 
-const sideProtoRegistry: Iterable<[string, GeneratedType]> = [...sideBTCBridgeRegistry.registry];
+const sideProtoRegistry: Iterable<[string, GeneratedType]> = [
+  ...sideBTCBridgeRegistry.registry,
+  ...sideDlcRegistry.registry,
+  ...sideLendingRegistry.registry,
+  ...sideLiquidationRegistry.registry
+];
 
 const registry = new Registry([...defaultRegistryTypes, ...wasmTypes, ...sideProtoRegistry]);
 

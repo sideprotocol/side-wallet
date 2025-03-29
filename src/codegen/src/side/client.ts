@@ -3,11 +3,20 @@ import { GeneratedType, Registry, OfflineSigner } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
 import * as sideBtcbridgeTxRegistry from "./btcbridge/tx.registry";
+import * as sideDlcTxRegistry from "./dlc/tx.registry";
+import * as sideLendingTxRegistry from "./lending/tx.registry";
+import * as sideLiquidationTxRegistry from "./liquidation/tx.registry";
 import * as sideBtcbridgeTxAmino from "./btcbridge/tx.amino";
+import * as sideDlcTxAmino from "./dlc/tx.amino";
+import * as sideLendingTxAmino from "./lending/tx.amino";
+import * as sideLiquidationTxAmino from "./liquidation/tx.amino";
 export const sideAminoConverters = {
-  ...sideBtcbridgeTxAmino.AminoConverter
+  ...sideBtcbridgeTxAmino.AminoConverter,
+  ...sideDlcTxAmino.AminoConverter,
+  ...sideLendingTxAmino.AminoConverter,
+  ...sideLiquidationTxAmino.AminoConverter
 };
-export const sideProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...sideBtcbridgeTxRegistry.registry];
+export const sideProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...sideBtcbridgeTxRegistry.registry, ...sideDlcTxRegistry.registry, ...sideLendingTxRegistry.registry, ...sideLiquidationTxRegistry.registry];
 export const getSigningSideClientOptions = ({
   defaultTypes = defaultRegistryTypes
 } = {}): {

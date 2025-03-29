@@ -1,15 +1,16 @@
+import BitcoinService from '@/ui/services/bitcoin';
 import ApiClient from '@/ui/services/network/ApiClient';
 import { ApiConfiguration } from '@/ui/services/network/ApiConfiguration';
 
+import BankService from './bank';
 import BaseService from './base';
 import BridgeService from './bridge';
 import DexService from './dex';
+import LendingService from './lending';
 import NodeService from './node';
 import SignetService from './signet-index';
 import TxService from './tx';
-import BankService from './bank';
 import UnisatService from './unisat';
-import BitcoinService from '@/ui/services/bitcoin';
 
 class Services {
   tx: TxService;
@@ -21,6 +22,7 @@ class Services {
   unisat: UnisatService;
   bank: BankService;
   bitcoin: BitcoinService;
+  lending: LendingService;
 
   constructor() {
     const apiClient = new ApiConfiguration({ baseURL: '' });
@@ -33,6 +35,8 @@ class Services {
     this.unisat = new UnisatService(new ApiClient(apiClient));
     this.bitcoin = new BitcoinService(new ApiClient(apiClient));
     this.signet = new SignetService(new ApiClient(apiClient));
+
+    this.lending = new LendingService(new ApiClient(apiClient));
   }
 }
 

@@ -5,15 +5,30 @@
  * and run the transpile command or npm scripts command that is used to regenerate this bundle.
  */
 
-export * from "./cosmos_proto/bundle";
-export * from "./cosmos/bundle";
-export * from "./gogoproto/bundle";
-export * from "./google/bundle";
-export * from "./side/bundle";
-export * from "./side/client";
-export * from "./varint";
-export * from "./utf8";
-export * from "./binary";
-export * as sideBTCBridgeRegistry from "./side/btcbridge/tx.registry";
-export { AminoConverter } from "./side/btcbridge/tx.amino";
-export { MessageComposer } from "./side/btcbridge/tx.registry";
+export * from './binary';
+export * from './cosmos/bundle';
+export * from './cosmos_proto/bundle';
+export * from './generated/tx';
+export * from './gogoproto/bundle';
+export * from './google/bundle';
+export * from './side/bundle';
+export * from './side/client';
+export * from './utf8';
+export * from './varint';
+
+export * as sideBTCBridgeRegistry from './side/btcbridge/tx.registry';
+export * as sideDlcRegistry from './side/dlc/tx.registry';
+export * as sideLendingRegistry from './side/lending/tx.registry';
+export * as sideLiquidationRegistry from './side/liquidation/tx.registry';
+
+export { AminoConverter as sideBridgeAminoConverter } from './side/btcbridge/tx.amino';
+export { MessageComposer as sideBridgeMessageComposer } from './side/btcbridge/tx.registry';
+
+export { AminoConverter as sideLiquidationAminoConverter } from './side/liquidation/tx.amino';
+export { MessageComposer as sideLiquidationMessageComposer } from './side/liquidation/tx.registry';
+
+export { AminoConverter as sideDlcAminoConverter } from './side/dlc/tx.amino';
+export { MessageComposer as sideDlcMessageComposer } from './side/dlc/tx.registry';
+
+export { AminoConverter as sideLendingAminoConverter } from './side/lending/tx.amino';
+export { MessageComposer as sideLendingMessageComposer } from './side/lending/tx.registry';

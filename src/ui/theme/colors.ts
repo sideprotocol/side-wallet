@@ -1,5 +1,7 @@
 export const colors = {
   white: '#ffffff',
+  white1: '#FFFFFF1A',
+  white2: '#b8bfbd',
   white_4: 'rgb(255 255 255 / 50%)',
   white_muted: '#6C7080',
   black: '#000000',
@@ -7,6 +9,7 @@ export const colors = {
   black_muted2: 'rgba(0, 0, 0, 0.1)',
   grey: '#7D7D7D',
   grey2: '#6C7080',
+  main: '#F7771A',
   black_dark: '#1E1E1F',
   green_dark2: '#2D7E24',
   green_dark: '#379a29',
@@ -14,6 +17,7 @@ export const colors = {
   green_light: '#F7771A',
   green_check: '#22AB38',
   yellow_dark: '#d5ac00',
+  grey12: '#6C7080',
   yellow: '#e3bb5f',
   yellow_light: '#fcd226',
   warning_yellow: '#F0B622',
