@@ -2,7 +2,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
-import { CHAINS_ENUM, sideChain } from '@/shared/constant';
+import { CHAINS_ENUM, SERVICE_BASE_URL, sideChain } from '@/shared/constant';
 import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
@@ -88,7 +88,7 @@ export default function useCreateLoan() {
             vaultAddress: address,
             expectedCollateralAmount: +btcUnitAmount
           },
-          { baseURL: sideChain.restUrl }
+          { baseURL: SERVICE_BASE_URL }
         );
 
         toast.custom((t) => (
