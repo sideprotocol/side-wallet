@@ -19,14 +19,12 @@ export default function WelcomeScreen() {
       flex
       flex-col
       ${isInTab ? 'bg-transparent ' : 'bg-black min-h-[600px]'}
-
       w-full
       ${window.location.pathname === '/sidePanel.html' ? 'max-w-[100vw]' : 'max-w-[500px]'}
       min-h-[450px]
       ${window.location.pathname === '/sidePanel.html' ? 'h-screen' : isInTab ? 'h-[450px]' : 'h-[600px]'}
       overflow-y-auto
       overflow-x-hidden
-      
       ${!isInTab ? 'border border-white/10' : 'border-none'}
     `}>
       {state?.addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}
@@ -43,7 +41,7 @@ export default function WelcomeScreen() {
         style={{
           gap: '0',
           padding: isInTab ? '0 40px 24px' : '0 16px 24px',
-          backgroundColor: isInTab ? '#17171c' : 'transparent'
+          backgroundColor: isInTab ? '#17171C' : 'transparent'
         }}>
         <Column
           style={{
@@ -63,13 +61,9 @@ export default function WelcomeScreen() {
                 borderRadius: '20px',
                 width: 120,
                 height: 120,
-                border: isInTab ? '1px solid #6C7080' : 'none'
+                border: '1px solid #6C7080'
               }}>
-              {isInTab ? (
-                <Image src="/images/logo/wallet-logo.png" width={80} height={80} />
-              ) : (
-                <Image src="/images/img/welcome.png" width={113} height={137} />
-              )}
+              <Image src="/images/logo/wallet-logo.png" width={isInTab ? 80 : 120} height={isInTab ? 80 : 120} />
             </Row>
           </Row>
           <Button

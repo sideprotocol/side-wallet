@@ -89,7 +89,7 @@ export default function UnlockScreen() {
             color: '#828282',
             fontSize: '14px',
             lineHeight: '24px',
-            marginTop: '50px'
+            marginTop: '24px'
           }}
         />
         <Input
@@ -123,7 +123,7 @@ export default function UnlockScreen() {
           {errorMsg}
         </div>
         {/*<Button disabled={disabled} text="Unlock" preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />*/}
-        <Button disabled={disabled} text={btnText} preset="primary" onClick={btnClick} style={{ marginTop: '24px' }} />
+        <Button disabled={disabled} text={btnText} preset="primary" onClick={btnClick} style={{ marginTop: '8px' }} />
         <Text
           text={<span className="hover:text-white">Forget Password</span>}
           style={{

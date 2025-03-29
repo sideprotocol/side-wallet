@@ -60,8 +60,7 @@ function MyItem({ keyring, autoNav }: MyItemProps, ref) {
             dispatch(accountActions.setCurrent(_currentAccount));
           }
           if (autoNav) navigate('MainScreen');
-        }}
-      >
+        }}>
         <Text
           text={keyring.alianName}
           color="text"
@@ -75,8 +74,7 @@ function MyItem({ keyring, autoNav }: MyItemProps, ref) {
           onClick={(e) => {
             e.stopPropagation();
             navigate('KeyringSettingScreen', { index: keyring.index });
-          }}
-        >
+          }}>
           <Image src="./images/icons/settings-02.svg" size={20} />
         </div>
       </Row>
@@ -117,8 +115,7 @@ export default function WalletSelect() {
         style={{
           padding: '5px 16px',
           gap: '10px'
-        }}
-      >
+        }}>
         <Text
           color="text"
           text={currentKeyring.alianName}
@@ -138,13 +135,11 @@ export default function WalletSelect() {
         open={isModalOpen}
         footer={null}
         width={314}
-        onCancel={() => setIsModalOpen(false)}
-      >
+        onCancel={() => setIsModalOpen(false)}>
         <div
           style={{
             padding: '12px 10px 16px'
-          }}
-        >
+          }}>
           <VirtualList
             data={items}
             data-id="list"
@@ -161,7 +156,7 @@ export default function WalletSelect() {
           </VirtualList>
           <Button
             text="Add Wallet"
-            preset="ghost"
+            preset="primary"
             icon={'plus'}
             onClick={() => {
               navigate('WelcomeScreen', { addWallet: true });

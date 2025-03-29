@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { DISCORD_URL, TELEGRAM_URL, TWITTER_URL } from '@/shared/constant';
-import aboutIcon from '@/ui/assets/icons/about.svg';
 import { Card, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { copyToClipboard } from '@/ui/utils';
 
@@ -30,15 +29,12 @@ export default function AboutScreen() {
             style={{
               paddingTop: '30px',
               paddingBottom: '25px'
-            }}>
-            <Image
-              src={aboutIcon}
-              size={167}
-              style={{
-                borderRadius: '40px',
-                margin: 'auto'
-              }}
-            />
+            }}
+            justifyCenter
+            itemsCenter>
+            <Image src={'/images/logo/wallet-logo.png'} height={78} width={78} />
+
+            <Image src={'/images/icons/side_wallet.svg'} height={20} width={186} />
           </Column>
 
           <Column

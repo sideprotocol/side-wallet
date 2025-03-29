@@ -320,7 +320,7 @@ export default function SwitchAccountScreen() {
         style={{ flex: 1, overflow: 'auto', marginBottom: '16px' }}>
         {(item, index) => <ForwardMyItem account={item.account} autoNav={true} />}
       </VirtualList>
-      <Button text="Add Account" preset="ghost" icon={'plus'} onClick={add} />
+      <Button text="Add Account" preset="primary" icon={'plus'} onClick={add} />
     </>
   );
 }

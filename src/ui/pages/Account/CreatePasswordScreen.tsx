@@ -127,7 +127,7 @@ export default function CreatePasswordScreen() {
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
+        maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '360px',
         minHeight: '600px',
         height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
         overflowY: 'auto',

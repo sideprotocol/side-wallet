@@ -94,7 +94,7 @@ export default function CreateHDWalletScreen() {
   return (
     <div
       className={`bg-[#000000] flex flex-col w-full ${
-        window.location.pathname === '/sidePanel.html' ? 'max-w-[100vw]' : 'max-w-[375px]'
+        window.location.pathname === '/sidePanel.html' ? 'max-w-[100vw]' : 'max-w-[360px]'
       } min-h-[600px] ${
         window.location.pathname === '/sidePanel.html' ? 'h-screen' : 'h-[600px]'
       } overflow-y-auto overflow-x-hidden ${

@@ -35,7 +35,7 @@ export function Layout(props: LayoutProps) {
           display: 'flex',
           flexDirection: 'column',
           width: '100%',
-          maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '375px',
+          maxWidth: window.location.pathname === '/sidePanel.html' ? '100vw' : '360px',
           minHeight: $styleBase?.minHeight || '600px',
           height:
             window.location.pathname === '/sidePanel.html'
