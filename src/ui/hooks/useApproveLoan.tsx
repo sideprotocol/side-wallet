@@ -17,7 +17,8 @@ import { useSignAndBroadcastTxRaw } from '../state/transactions/hooks/cosmos';
 import { useWallet } from '../utils';
 import { prepareApply } from '../utils/lending';
 
-function buildPsbtFromTxHex(txHex: string) {
+async function buildPsbtFromTxHex(txid: string) {
+  const txHex = await services.bridge.getTxHex(txid);
   const tx = bitcoin.Transaction.fromHex(txHex);
   const psbt = new bitcoin.Psbt({ network: isProduction ? bitcoin.networks.bitcoin : bitcoin.networks.testnet });
 
@@ -108,11 +109,6 @@ export default function useApproveLoan(loan_id: string) {
           senderAddress: currentAccount.address
         });
 
-      console.log({
-        liquidationCet,
-        repaymentCet
-      });
-
       if (!liquidationEvent?.event_id) {
         throw new Error('No liquidation event found.');
       }
@@ -124,6 +120,8 @@ export default function useApproveLoan(loan_id: string) {
       // cetInfos.liquidation_cet_info.signature_point
       // cetInfos.default_liquidation_cet_info.signature_point
       const { sigHashHex } = getLiquidationAdaptorSignatureParams();
+
+      console.log({ cetInfos });
 
       const liquidationAdaptorSignature = await wallet.signAdaptor(
         sigHashHex,
@@ -150,7 +148,7 @@ export default function useApproveLoan(loan_id: string) {
       const msg = sideLendingMessageComposer.withTypeUrl.submitCets({
         borrower: currentAccount.address,
         loanId: loan_id,
-        depositTx: buildPsbtFromTxHex(depositTxId).toBase64(),
+        depositTx: (await buildPsbtFromTxHex(depositTxId)).toBase64(),
         liquidationCet: liquidationCet,
         liquidationAdaptorSignatures: [liquidationAdaptorSignature],
         defaultLiquidationAdaptorSignatures: [defaultLiquidationAdaptorSignature], //

@@ -1,4 +1,10 @@
-import { SIDE_BTC_INDEXER, SIDE_RUNE_INDEXER, UNISAT_IO_API, UNISAT_SERVICE_ENDPOINT } from '@/shared/constant';
+import {
+  SIDE_BTC_EXPLORER,
+  SIDE_BTC_INDEXER,
+  SIDE_RUNE_INDEXER,
+  UNISAT_IO_API,
+  UNISAT_SERVICE_ENDPOINT
+} from '@/shared/constant';
 import ApiClient from '@/ui/services/network/ApiClient';
 
 import { getQueryParams } from '../getQueryParams';
@@ -154,6 +160,15 @@ export default class BridgeService {
     return parseFloat(result.fee).toFixed(0);
   }
 
+  async getTxHex(txid: string): Promise<string> {
+    return this.apiClient
+      .get<string>(`/api/tx/${txid}/hex`, {
+        baseURL: SIDE_BTC_EXPLORER
+      })
+      .catch(() => {
+        return '';
+      });
+  }
   async getAllRunes(): Promise<Runes> {
     return this.apiClient.get<Runes>('/runes', {
       baseURL: SIDE_RUNE_INDEXER,
