@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ADDRESS_TYPES, KEYRING_TYPE, NETWORK_TYPES } from '@/shared/constant';
@@ -25,14 +25,15 @@ interface Setting {
 }
 
 const SettingList: Setting[] = [
-  // {
-  //   label: 'Manage Wallet',
-  //   value: '',
-  //   desc: '',
-  //   action: 'manage-wallet',
-  //   route: '/settings/manage-wallet',
-  //   right: true
-  // },
+  {
+    label: 'Address Type',
+    value: 'Taproot',
+    icon: 'setting-address',
+    desc: '',
+    action: 'addressType',
+    route: '/settings/address-type',
+    right: true
+  },
 
   {
     label: 'General',
@@ -75,15 +76,6 @@ const SettingList: Setting[] = [
     right: true
   },
 
-  {
-    label: 'Address Type',
-    value: 'Taproot',
-    icon: 'setting-address',
-    desc: '',
-    action: 'addressType',
-    route: '/settings/address-type',
-    right: true
-  },
   {
     label: 'Network',
     value: 'TESTNET',
@@ -135,11 +127,6 @@ export default function SettingsTabScreen() {
     run();
   }, []);
 
-  const isCustomHdPath = useMemo(() => {
-    const item = ADDRESS_TYPES[currentKeyring.addressType];
-    return currentKeyring.hdPath !== '' && item.hdPath !== currentKeyring.hdPath;
-  }, [currentKeyring]);
-
   const toRenderSettings = SettingList.filter((v) => {
     if (v.action == 'manage-wallet') {
       v.value = currentKeyring.alianName;
@@ -155,6 +142,7 @@ export default function SettingsTabScreen() {
 
     if (v.action == 'addressType') {
       const item = ADDRESS_TYPES[currentKeyring.addressType];
+
       const hdPath = currentKeyring.hdPath || item.hdPath;
       if (currentKeyring.type === KEYRING_TYPE.SimpleKeyring) {
         v.value = `${item.name}`;

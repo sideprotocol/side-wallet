@@ -1,5 +1,6 @@
 import 'swiper/css';
 
+import { SIDE_HUB_URL } from '@/shared/constant';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
 import { NavTabBar } from '@/ui/components/NavTabBar';
@@ -121,8 +122,16 @@ export default function LoansTabScreen() {
             text="Start Borrowing"></Button>
         </Row>
         <Row itemsCenter justifyCenter full>
-          <Text size="md" color="blue_dark">
-            Learn More
+          <Text
+            size="xs"
+            color="white"
+            style={{
+              cursor: 'pointer'
+            }}
+            onClick={() => {
+              window.open(SIDE_HUB_URL, '_blank');
+            }}>
+            Open Web App
           </Text>
         </Row>
       </Content>

@@ -463,7 +463,7 @@ export default function SwapTabScreen() {
             <div className="flex justify-between mt-[16px]">
               <div className="pl-[10px]"></div>
               <div
-                className="w-[108px] flex items-center justify-center rounded-[24px] border-[1px] border-[#F7771A1A] bg-[#F7771A33] hover:bg-[#F7771A1A] h-[30px] cursor-pointer"
+                className="w-[108px] flex items-center justify-center rounded-[24px] border-[1px] border-[#F7771A1A] bg-[#F7771A4D] hover:bg-[#F7771A1A] h-[30px] cursor-pointer"
                 onClick={showModal}>
                 <span className={'font-medium text-sm whitespace-nowrap mr-3 text-white'}>{slippage}%</span>
                 <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">

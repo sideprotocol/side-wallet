@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode, useState } from 'react';
 
 import { colors, ColorTypes } from '@/ui/theme/colors';
 import { typography } from '@/ui/theme/typography';
@@ -73,6 +73,7 @@ export interface TextProps extends BaseViewProps {
   wrap?: boolean;
   selectText?: boolean;
   disableTranslate?: boolean;
+  hoverStyle?: CSSProperties;
 }
 
 export const $textPresets = $presets;
@@ -87,10 +88,14 @@ export function Text(props: TextProps) {
     selectText,
     disableTranslate,
     style: $styleOverride,
+    hoverStyle,
     children,
     classname,
     ...rest
   } = props;
+
+  const [hover, setHover] = useState(false);
+
   const preset: Presets = props.preset || 'regular';
   const $textStyle = Object.assign(
     {},
@@ -101,9 +106,11 @@ export function Text(props: TextProps) {
     wrap ? { overflowWrap: 'anywhere' } : {},
     selectText ? { userSelect: 'text' } : {}
   );
-  const $style = Object.assign({}, $textStyle, $styleOverride);
+
+  const $style = Object.assign({}, $textStyle, $styleOverride, hover && hoverStyle ? hoverStyle : {});
+
   return (
-    <BaseView style={$style} {...rest}>
+    <BaseView style={$style} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} {...rest}>
       {disableTranslate ? (
         <span className={classname} translate="no">
           {text}
@@ -111,7 +118,6 @@ export function Text(props: TextProps) {
       ) : (
         text
       )}
-
       {children}
     </BaseView>
   );

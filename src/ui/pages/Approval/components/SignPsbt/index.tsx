@@ -930,7 +930,7 @@ export default function SignPsbt({
                                           // borderColor: 'rgb(13, 212, 195)',
                                           borderRadius: 5,
                                           padding: 2,
-                                          background: '#F7771A33'
+                                          background: '#F7771A4D'
                                         }}>
                                         <Text text="to sign" color="primary" size="xs" />
                                       </Row>

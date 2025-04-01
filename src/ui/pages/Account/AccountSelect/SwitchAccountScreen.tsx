@@ -70,7 +70,7 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
           padding: '0 6px 0 14px',
           borderRadius: '10px',
           marginTop: '16px',
-          background: selected ? '#F7771A33' : '#2E2E2F!important',
+          background: selected ? '#F7771A4D' : '#2E2E2F!important',
           border: `1px solid ${selected ? 'rgba(34, 171, 56, 0.1)' : '#2E2E2F!important'}`,
           cursor: 'pointer'
         }}

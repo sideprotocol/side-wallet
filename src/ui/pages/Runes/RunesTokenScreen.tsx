@@ -117,8 +117,7 @@ export default function RunesTokenScreen() {
           style={{
             padding: 0
             // marginBottom: '40px'
-          }}
-        >
+          }}>
           <Column
             style={{
               flex: 1,
@@ -128,20 +127,17 @@ export default function RunesTokenScreen() {
               padding: '0 16px',
               paddingBottom: '44px',
               marginTop: '52px'
-            }}
-          >
+            }}>
             <Column
               style={{
                 flex: '1',
                 gap: '10px'
-              }}
-            >
+              }}>
               <Row
                 justifyCenter
                 style={{
                   marginTop: '-35px'
-                }}
-              >
+                }}>
                 <Row
                   style={{
                     background: '#1E1E1F',
@@ -150,8 +146,7 @@ export default function RunesTokenScreen() {
                     borderRadius: '50%',
                     alignItems: 'center'
                   }}
-                  justifyCenter
-                >
+                  justifyCenter>
                   {/*<Image src={curToken.logo} size={62} />*/}
                   {tokenSummary.runeLogo ? (
                     <InscriptionPreview data={tokenSummary?.runeLogo} preset="small" asLogo />
@@ -165,7 +160,7 @@ export default function RunesTokenScreen() {
                 {tokenSummary?.runeInfo?.spacedRune}
               </div>
 
-              <div className="w-ull flex text-[14px] items-center justify-center gap-[6px]">
+              <div className="w-ull flex text-[12px] items-center justify-center gap-[6px]">
                 <Icon icon={'wallet-icon'} size={14} color={'search_icon'}></Icon>
                 {runesUtils.toDecimalAmount(tokenSummary.runeBalance.amount, tokenSummary.runeBalance.divisibility)}
               </div>
@@ -224,8 +219,7 @@ export default function RunesTokenScreen() {
                   className={'text-[#F7771A] text-[12px] hover:underline hover:!text-[#F7771A]'}
                   href={`${mempoolWebsite}/tx/${tokenSummary.runeInfo.etching}`}
                   target={'_blank'}
-                  rel="noreferrer"
-                >
+                  rel="noreferrer">
                   {tokenSummary.runeInfo.etching}
                 </a>
               </div>
@@ -236,8 +230,7 @@ export default function RunesTokenScreen() {
                   className={'text-[#F7771A] text-[12px] hover:underline hover:!text-[#F7771A]'}
                   href={`${ordinalsWebsite}/inscription/${tokenSummary.runeInfo.parent}`}
                   target={'_blank'}
-                  rel="noreferrer"
-                >
+                  rel="noreferrer">
                   {tokenSummary.runeInfo.parent}
                 </a>
               </div>

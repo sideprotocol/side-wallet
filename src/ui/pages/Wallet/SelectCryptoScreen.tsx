@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -33,7 +34,7 @@ function BtcItem({ token }: { token: BalanceItem }) {
           gap: '0px'
         }}>
         <Text preset="regular" textEnd text={token.formatAmount}></Text>
-        <Text preset="sub" textEnd text={`$${token.totalValue}`}></Text>
+        <Text preset="sub" textEnd text={`$${BigNumber(token.totalValue || '0').toFormat(2)}`}></Text>
       </Column>
     </>
   );
@@ -134,7 +135,7 @@ function SideCryptoItem({ token }: { token: BalanceItem }) {
           gap: '0px'
         }}>
         <Text preset="regular" textEnd text={token?.formatAmount}></Text>
-        <Text preset="sub" textEnd text={`$${token?.totalValue}`}></Text>
+        <Text preset="sub" textEnd text={`$${BigNumber(token?.totalValue || '0').toFormat(2)}`}></Text>
       </Column>
     </>
   );

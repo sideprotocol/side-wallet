@@ -240,7 +240,7 @@ export default function CreateSendRune() {
             <Row
               gap="sm"
               style={{
-                fontSize: '14px'
+                fontSize: '12px'
               }}>
               <img src={WalletIcon} alt={'WalletIcon'} />
 

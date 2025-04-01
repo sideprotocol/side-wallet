@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 
-import { isDev, SIDE_STATION_URL, sideChain } from '@/shared/constant';
+import { isDev, sideChain } from '@/shared/constant';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import BridgeSelectToken from '@/ui/components/Bridge/BridgeSelectToken';
@@ -55,6 +55,8 @@ export default function BridgeTabScreen() {
   const { params } = useBridgeParams();
 
   const protocolLimit = params?.params?.protocol_limits;
+
+  console.log({ params });
 
   const protocolFee = params?.params?.protocol_fees;
 
@@ -351,7 +353,7 @@ export default function BridgeTabScreen() {
                 <div className={'flex gap-[5px] items-center'}>
                   <img className={'w-[14px] h-[14px]'} src={WalletIcon} alt="" />
 
-                  <Text size="sm">{balance}</Text>
+                  <Text size="xs">{balance}</Text>
                 </div>
               </Row>
 
@@ -395,7 +397,7 @@ export default function BridgeTabScreen() {
               </Row>
             </Column>
 
-            <Row mt={'xl'}>
+            <Row mt={'md'}>
               <Button
                 onClick={() => {
                   navigate('BridgeConfirmTabScreen');
@@ -429,7 +431,7 @@ export default function BridgeTabScreen() {
               />
             </Row>
 
-            <Row justifyBetween itemsCenter mt={'sm'}>
+            {/* <Row justifyBetween itemsCenter mt={'sm'}>
               <Row itemsCenter>
                 <Text color="white_muted" size="xs">
                   Powrered by
@@ -467,7 +469,7 @@ export default function BridgeTabScreen() {
                   </defs>
                 </svg>
               </Row>
-            </Row>
+            </Row> */}
           </Column>
         </Row>
 

@@ -173,9 +173,8 @@ export default function WalletTabScreen() {
           <div
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
-              navigate('SelectNetworkScreen', { type: 'receive' });
+              navigate('SelectAddressScreen');
             }}>
-            {/*<Image src="/images/icons/main/recevie-icon.svg" size={fontSizes.xxxl} />*/}
             <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <Image
                 src={

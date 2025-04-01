@@ -16,6 +16,7 @@ export interface BaseViewProps {
   gap?: Gap;
   onClick?: ReactEventHandler<HTMLDivElement>;
   onMouseLeave?: ReactEventHandler<HTMLDivElement>;
+  onMouseEnter?: ReactEventHandler<HTMLDivElement>;
   onMouseOver?: ReactEventHandler<HTMLDivElement>;
   px?: Gap;
   py?: Gap;

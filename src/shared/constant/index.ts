@@ -125,7 +125,7 @@ export const ADDRESS_TYPES: {
   {
     value: AddressType.P2WPKH,
     label: 'P2WPKH',
-    name: 'Native Segwit (P2WPKH)',
+    name: 'Native Segwit',
     hdPath: "m/84'/0'/0'/0",
     displayIndex: 0,
     isUnisatLegacy: false
@@ -133,7 +133,7 @@ export const ADDRESS_TYPES: {
   {
     value: AddressType.P2TR,
     label: 'P2TR',
-    name: 'Taproot (P2TR)',
+    name: 'Taproot',
     hdPath: "m/86'/0'/0'/0",
     displayIndex: 2,
     isUnisatLegacy: false
@@ -152,14 +152,6 @@ export const ADDRESS_TYPES: {
     name: 'Native SegWit (P2WPKH)',
     hdPath: "m/44'/0'/0'/0",
     displayIndex: 4,
-    isUnisatLegacy: true
-  },
-  {
-    value: AddressType.M44_P2TR,
-    label: 'P2TR',
-    name: 'Taproot (P2TR)',
-    hdPath: "m/44'/0'/0'/0",
-    displayIndex: 5,
     isUnisatLegacy: true
   }
 ];

@@ -1,4 +1,5 @@
 // import { CHAINS_ENUM } from '@/shared/constant';
+import BigNumber from 'bignumber.js';
 import { useState } from 'react';
 
 import { Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
@@ -152,7 +153,7 @@ export default function Index(props) {
                         gap: '0px'
                       }}>
                       <Text preset="regular" textEnd text={asset.formatAmount}></Text>
-                      <Text preset="sub" textEnd text={`$${asset.totalValue}`}></Text>
+                      <Text preset="sub" textEnd text={`$${BigNumber(asset.totalValue).toFormat(2)}`}></Text>
                     </Column>
                   </Row>
                 );
@@ -200,7 +201,7 @@ export default function Index(props) {
                         <Text preset="regular" text={item.formatAmount} textEnd />
                         {/*<Text preset="sub" text={`${'$' + getTruncate(totalPrice)}`} textEnd />*/}
                         {/*<Text preset="sub" text={`${balanceVisible ? '$' + getTruncate(totalPrice) : '**'}`} textEnd/>*/}
-                        <Text preset="sub" text={`$${item.totalValue}`} textEnd />
+                        <Text preset="sub" text={`$${BigNumber(item.totalValue).toFormat(2)}`} textEnd />
                       </Column>
                     </Row>
                   </div>

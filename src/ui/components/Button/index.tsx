@@ -69,7 +69,8 @@ const $baseViewStyle: CSSProperties = {
   fontWeight: 600,
   paddingLeft: spacing.small,
   paddingRight: spacing.small,
-  fontSize: '14px'
+  fontSize: '14px',
+  position: 'relative'
 };
 
 // button view theme
@@ -128,8 +129,7 @@ const $hoverViewPresets: Record<Presets, CSSProperties> = {
     // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
   },
   primary: {
-    backgroundColor: colors.blue_dark2
-    // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
+    // 移除 &::before 相关代码，改用 className
   },
   approval: {
     backgroundColor: colors.orange_dark
@@ -220,13 +220,11 @@ export function Button(props: ButtonProps) {
         style={$viewStyle}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        onClick={disabled ? undefined : onClick}
-      >
+        onClick={disabled ? undefined : onClick}>
         <Row
           style={{
             gap: spacing.tiny
-          }}
-        >
+          }}>
           {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
           {icon}
           <Column justifyCenter gap="zero">
@@ -251,15 +249,16 @@ export function Button(props: ButtonProps) {
           : preset === 'ghost'
           ? 'hover:bg-[#F7931A] group'
           : ''
-      } `}
+      } ${
+        preset === 'primary' && !disabled
+          ? 'before:content-[""] before:absolute before:left-[-100%] before:w-[20%] before:h-full before:bg-white/30 before:blur-[10px] before:transition-all before:duration-[2s] hover:before:left-[100%] hover:before:opacity-100 before:opacity-0'
+          : ''
+      }`}
       onClick={disabled ? undefined : onClick}
       onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
+      onMouseLeave={() => setHover(false)}>
       {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
-      {/*{icon}*/}
       <Icon icon={icon} color={icon === 'expand' ? 'black' : icon === 'plus' ? 'primary' : 'white'} />
-      {/*color={preset === 'ghost' ? '' : ''}*/}
       {text && (
         <Text
           style={$textStyle}

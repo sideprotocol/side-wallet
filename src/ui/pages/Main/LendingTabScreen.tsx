@@ -12,12 +12,13 @@ import useGetDlcEventById from '@/ui/hooks/useGetDlcEventById';
 import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
 import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
-import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { Box, Stack, Typography } from '@mui/material';
+
+import MainHeader from './MainHeader';
 
 export default function LendingTanScreen() {
   const currentAccount = useCurrentAccount();
@@ -37,13 +38,13 @@ export default function LendingTanScreen() {
 
   const collateralValue = useMemo(() => {
     if (!collateralAmount || !satBalance) return '$0';
-    const value = BigNumber(collateralAmount).times(satBalance.denomPrice).toFixed(2);
+    const value = BigNumber(collateralAmount).times(satBalance.denomPrice).toFormat(2);
     return '$' + value;
   }, [collateralAmount, satBalance]);
 
   const borrowValue = useMemo(() => {
     if (!borrowAmount || !usdcBalance) return '$0';
-    const value = BigNumber(borrowAmount).times(usdcBalance.denomPrice).toFixed(2);
+    const value = BigNumber(borrowAmount).times(usdcBalance.denomPrice).toFormat(2);
 
     return '$' + value;
   }, [borrowAmount, usdcBalance]);
@@ -193,10 +194,10 @@ export default function LendingTanScreen() {
     },
     {
       label: 'Liquidation Price (BTC/USDC)',
-      value: `$${getTruncate(liquidationEvent?.price || '0', 2)}`
+      value: `${getTruncate(liquidationEvent?.price || '0', 2)}`
     },
     {
-      label: 'Interest Rate',
+      label: 'Max Interest',
       value: `${poolData?.borrowApy}%`
     },
     {
@@ -238,7 +239,7 @@ export default function LendingTanScreen() {
     }
   ];
 
-  const { loading, createLoan, visible, setVisible } = useCreateLoan();
+  const { loading, createLoan } = useCreateLoan();
 
   const { dlcEvent } = useGetDlcEventById(liquidationEvent?.event_id);
 
@@ -258,7 +259,7 @@ export default function LendingTanScreen() {
   return (
     <Layout>
       <MainHeader title={''} />
-      <Content gap="lg" mt="xxl">
+      <Content gap="lg" mt="lg">
         <Column gap="xs">
           <Row full justifyBetween itemsCenter>
             <Text color="white" size="xs">
@@ -364,41 +365,28 @@ export default function LendingTanScreen() {
                 alignItems: 'end'
               }}>
               <Row itemsCenter>
-                <Text
-                  px="sm"
-                  py="sm"
-                  style={{
-                    borderRadius: '10px',
-                    cursor: 'pointer'
-                  }}
-                  size="xxs"
-                  color="white2"
-                  bg="white1"
-                  text="Half"
+                <div
+                  className={
+                    'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
+                  }
                   onClick={() => {
-                    console.log(borrowMaxAmount);
-
                     const amount = new BigNumber(borrowMaxAmount || '0')
                       .multipliedBy(0.5)
                       .toFixed(poolData?.token.asset.precision || 6, BigNumber.ROUND_DOWN);
                     setBorrowAmount(amount);
-                  }}></Text>
+                  }}>
+                  Half
+                </div>
 
-                <Text
-                  style={{
-                    borderRadius: '10px',
-                    cursor: 'pointer'
-                  }}
-                  px="sm"
-                  py="sm"
-                  rounded
-                  size="xxs"
-                  color="white2"
-                  bg="white1"
-                  text="Max"
+                <div
+                  className={
+                    'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
+                  }
                   onClick={() => {
                     setBorrowAmount(borrowMaxAmount || '0');
-                  }}></Text>
+                  }}>
+                  Max
+                </div>
               </Row>
 
               <Text
@@ -524,7 +512,7 @@ export default function LendingTanScreen() {
               }}
               disabled={isDisabled}
               preset="primary"
-              text="Next"
+              text="Request Loan"
               full></Button>
           </Row>
         </Column>

@@ -1,12 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { ADDRESS_TYPES, KEYRING_TYPE } from '@/shared/constant';
-import { Column, Content, Header, Layout, Row, Text } from '@/ui/components';
+import { ADDRESS_TYPES, CHAINS_ENUM } from '@/shared/constant';
+import { AddressType } from '@/shared/types';
+import { Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
-import { satoshisToAmount, shortAddress, useWallet } from '@/ui/utils';
+import { colors } from '@/ui/theme/colors';
+import { fontSizes } from '@/ui/theme/font';
+import { copyToClipboard, satoshisToAmount, shortAddress, useWallet } from '@/ui/utils';
+import { Box } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -55,27 +59,7 @@ export default function SelecAddressScreen() {
     loadAddresses();
   }, []);
 
-  const addressTypes = useMemo(() => {
-    if (currentKeyring.type === KEYRING_TYPE.HdKeyring) {
-      return ADDRESS_TYPES.filter((v) => {
-        if (v.displayIndex < 0) {
-          return false;
-        }
-        const address = addresses[v.value];
-        const balance = addressAssets[address];
-        if (v.isUnisatLegacy) {
-          if (!balance || balance.satoshis == 0) {
-            return false;
-          }
-        }
-        return true;
-      }).sort((a, b) => a.displayIndex - b.displayIndex);
-    } else {
-      return ADDRESS_TYPES.filter((v) => v.displayIndex >= 0 && v.isUnisatLegacy != true).sort(
-        (a, b) => a.displayIndex - b.displayIndex
-      );
-    }
-  }, [currentKeyring.type, addressAssets, addresses]);
+  const displayAddress = ADDRESS_TYPES.filter((v) => v.value == AddressType.P2WPKH || v.value === AddressType.P2TR);
 
   return (
     <Layout>
@@ -93,38 +77,164 @@ export default function SelecAddressScreen() {
           style={{
             margin: '16px 0'
           }}>
-          {addressTypes.map((item) => {
-            if (
-              item.displayIndex === 1 ||
-              item.displayIndex === 3 ||
-              item.displayIndex === 4 ||
-              item.displayIndex === 5
-            )
-              return null;
+          {displayAddress.map((item) => {
             const address = addresses[item.value];
             return (
               <Row
-                classname={'bg-item-hover'}
+                // classname={'bg-item-hover-v2'}
+                itemsCenter
+                justifyBetween
                 style={{
                   cursor: 'pointer',
-                  margin: '0 16px',
-                  padding: '8px 16px',
-                  borderRadius: '8px'
+                  backgroundColor: colors.card_bgColor,
+                  padding: '10px 16px',
+                  borderRadius: 10
+                }}
+                full
+                key={item.value}>
+                <Row>
+                  <Icon icon="btc" size={32}></Icon>
+
+                  <Column gap={'zero'}>
+                    <Text preset="regular" text={'Bitcoin' + ' ' + `(${item.name})`}></Text>
+                    <Text preset="sub" text={shortAddress(address)}></Text>
+                  </Column>
+                </Row>
+
+                <Row>
+                  <Box
+                    sx={{
+                      borderRadius: '100%',
+                      p: 1,
+                      bgcolor: colors.black,
+                      '&:hover': {
+                        bgcolor: colors.white_muted
+                      },
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => {
+                      navigate('ReceiveScreen', {
+                        ...state,
+                        address,
+                        addressType: item.name
+                      });
+                    }}>
+                    <Image
+                      src={
+                        '/images/icons/main/recevie-icon.svg' // Default image source
+                      }
+                      size={fontSizes.xl}
+                      className="" // Hide the default image on hover
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{
+                      borderRadius: '100%',
+                      p: 1,
+                      bgcolor: colors.black,
+                      '&:hover': {
+                        bgcolor: colors.white_muted
+                      },
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => {
+                      copyToClipboard(address);
+                    }}>
+                    <Image
+                      src={
+                        '/images/icons/copy-03.svg' // Default image source
+                      }
+                      size={fontSizes.xl}
+                      className="" // Hide the default image on hover
+                    />
+                  </Box>
+                </Row>
+              </Row>
+            );
+          })}
+
+          {displayAddress.map((item) => {
+            const address = addresses[item.value];
+            return (
+              <Row
+                itemsCenter
+                justifyBetween
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: colors.card_bgColor,
+                  padding: '10px 16px',
+                  borderRadius: 10
                 }}
                 full
                 onClick={() => {
                   navigate('ReceiveScreen', {
                     ...state,
                     address,
-                    addressType: item.name
+                    addressType: item.name,
+                    chain: CHAINS_ENUM.BTC
                   });
                 }}
-                key={item.value}
-                justifyBetween>
-                <Column gap={'zero'}>
-                  <Text preset="regular" text={item.name}></Text>
-                  <Text preset="sub" text={shortAddress(address)}></Text>
-                </Column>
+                key={item.value}>
+                <Row>
+                  <Icon icon="side" size={32}></Icon>
+
+                  <Column gap={'zero'}>
+                    <Text preset="regular" text={'Side Chain' + ' ' + `(${item.name})`}></Text>
+                    <Text preset="sub" text={shortAddress(address)}></Text>
+                  </Column>
+                </Row>
+
+                <Row>
+                  <Box
+                    sx={{
+                      borderRadius: '100%',
+                      p: 1,
+                      bgcolor: colors.black,
+                      '&:hover': {
+                        bgcolor: colors.white_muted
+                      },
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => {
+                      navigate('ReceiveScreen', {
+                        ...state,
+                        address,
+                        addressType: item.name,
+                        chain: CHAINS_ENUM.SIDE
+                      });
+                    }}>
+                    <Image
+                      src={
+                        '/images/icons/main/recevie-icon.svg' // Default image source
+                      }
+                      size={fontSizes.xl}
+                      className="" // Hide the default image on hover
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{
+                      borderRadius: '100%',
+                      p: 1,
+                      bgcolor: colors.black,
+                      '&:hover': {
+                        bgcolor: colors.white_muted
+                      },
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => {
+                      copyToClipboard(address);
+                    }}>
+                    <Image
+                      src={
+                        '/images/icons/copy-03.svg' // Default image source
+                      }
+                      size={fontSizes.xl}
+                      className="" // Hide the default image on hover
+                    />
+                  </Box>
+                </Row>
               </Row>
             );
           })}

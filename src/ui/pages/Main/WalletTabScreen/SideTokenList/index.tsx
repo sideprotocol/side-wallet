@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { Fragment } from 'react';
 
 import { BalanceItem } from '@/shared/types';
@@ -65,7 +66,11 @@ export function TokenItem({ token, balanceVisible }: { token: BalanceItem; balan
         <Text preset="regular" text={balanceVisible ? token?.formatAmount : '**'} textEnd />
         {/*<Text preset="sub" text={`${'$' + getTruncate(totalPrice)}`} textEnd />*/}
         {/*<Text preset="sub" text={`${balanceVisible ? '$' + getTruncate(totalPrice) : '**'}`} textEnd/>*/}
-        <Text preset="sub" text={`${balanceVisible ? '$' + token?.totalValue : '**'}`} textEnd />
+        <Text
+          preset="sub"
+          text={`${balanceVisible ? '$' + BigNumber(token?.totalValue || '').toFormat(2) : '**'}`}
+          textEnd
+        />
       </Column>
     </Row>
   );

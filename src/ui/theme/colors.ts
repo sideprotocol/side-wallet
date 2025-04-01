@@ -10,6 +10,7 @@ export const colors = {
   grey: '#7D7D7D',
   grey2: '#6C7080',
   main: '#F7771A',
+  main30: '#F7771A4D',
   black_dark: '#1E1E1F',
   green_dark2: '#2D7E24',
   green_dark: '#379a29',
@@ -48,7 +49,7 @@ export const colors = {
   primary: '#F7771A',
   bg2: '#09090A',
   bg3: '#434242',
-  bg4: '#F7771A33',
+  bg4: '#F7771A4D',
   border: 'rgba(255,255,255,0.1)',
   icon_yellow: '#FFBA33',
   brc20_deploy: '#233933',
@@ -59,7 +60,7 @@ export const colors = {
   light_gray: '#F5F5F5',
   background: '#000000',
   swapBg: '#1D1D1F',
-  backgroundChoose: '#F7771A33',
+  backgroundChoose: '#F7771A4D',
   card_bgColor: '#17171C'
 };
 

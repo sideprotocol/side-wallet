@@ -36,7 +36,7 @@ function SideCryptoItem({ token }: { token: BalanceItem }) {
                 sx={{
                   borderRadius: '4px',
                   color: '#F7771A',
-                  bgcolor: '#F7771A33',
+                  bgcolor: '#F7771A4D',
                   fontSize: '10px',
                   fontWeight: 500,
                   height: '16px',

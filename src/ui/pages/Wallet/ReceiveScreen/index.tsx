@@ -5,12 +5,11 @@ import { useLocation } from 'react-router-dom';
 import { CHAINS_ENUM } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import { Button, Card, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
-import ImageIcon from '@/ui/components/ImageIcon';
+import { colors } from '@/ui/theme/colors';
 import { sizes } from '@/ui/theme/spacing';
 import { copyToClipboard } from '@/ui/utils';
 
 import './index.less';
-import { colors } from '@/ui/theme/colors';
 
 export default function ReceiveScreen() {
   const { state } = useLocation();
@@ -51,16 +50,16 @@ export default function ReceiveScreen() {
             borderRadius: '14px'
           }}>
           <Row full itemsCenter>
-            <ImageIcon
+            {/* <ImageIcon
               url={token.asset.logo}
               style={{
                 width: '42px',
                 height: '42px',
                 borderRadius: '50%'
               }}
-            />
+            /> */}
             <Column>
-              <Row>
+              {/* <Row>
                 <Text
                   preset="regular"
                   style={{
@@ -68,7 +67,7 @@ export default function ReceiveScreen() {
                   }}
                   color="black"
                   text={token.asset.symbol}></Text>
-              </Row>
+              </Row> */}
 
               <Row>
                 <Text

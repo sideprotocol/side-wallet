@@ -26,6 +26,9 @@ export const svgRegistry = {
   github: './images/icons/github.svg',
 
   btc: './images/icons/btc.svg',
+
+  side: './images/icons/side.png',
+
   qrcode: './images/icons/qrcode.svg',
 
   user: '/images/icons/user-solid.svg',
@@ -45,9 +48,7 @@ export const svgRegistry = {
   'eye-white': '/images/icons/eye-white.svg',
   copy: './images/icons/copy-solid.svg',
   copy2: './images/icons/settings/copy2.svg',
-
   close: './images/icons/xmark.svg',
-
   'circle-check': '/images/icons/circle-check.svg',
   pencil: '/images/icons/pencil.svg',
   'circle-info': '/images/icons/circle-info.svg',
@@ -83,10 +84,12 @@ export const svgRegistry = {
   'main-bridge-ac': '/images/icons/main/bridge-ac-icon.svg',
   'main-summon': '/images/icons/main/summon-ac-icon.svg',
   'main-loans': '/images/icons/main/loans-icon.svg',
+
   'main-summon-ac': '/images/icons/main/summon-ac-icon.svg',
   'swap-down-icon': '/images/icons/swap/bottom-icon.svg',
   'swap-down-hover': '/images/icons/swap/bottom-hover.svg',
   'check-circle': '/images/icons/check-circle.svg',
+
   'check-circle-broken': '/images/icons/check-circle-broken.svg',
   clear: '/images/icons/main/clear.svg',
   'wallet-icon': '/images/icons/wallet-icon.svg',

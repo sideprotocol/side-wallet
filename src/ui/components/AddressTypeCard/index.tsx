@@ -28,16 +28,14 @@ export function AddressTypeCard(props: AddressTypeCardProps) {
       py="zero"
       gap="zero"
       onClick={onClick}
-      classname={!checked ? 'hover:!bg-[#F7771A33] hover:border-[#F7771A1A]' : ''}
-    >
+      classname={!checked ? 'hover:!bg-[#F7771A4D] hover:border-[#F7771A1A]' : ''}>
       <Column full gap={'zero'}>
         <Row
           justifyBetween
           px="lg"
           style={{
             paddingTop: '16px'
-          }}
-        >
+          }}>
           <Column justifyCenter>
             <Text text={label} size="xs" disableTranslate />
           </Column>
@@ -49,8 +47,7 @@ export function AddressTypeCard(props: AddressTypeCardProps) {
               position: 'relative',
               top: '-10px'
             }}
-            justifyCenter
-          >
+            justifyCenter>
             {checked && <Icon color={'primary'} contain={'contain'} icon="check-circle" />}
           </Column>
         </Row>
