@@ -54,6 +54,8 @@ function TabButton({
           navigate('BridgeTabScreen');
         } else if (tabName === 'loans') {
           navigate('LoansTabScreen');
+        } else if (tabName === 'earn') {
+          navigate('EarnTabScreen');
         }
       }}>
       <Column

@@ -33,6 +33,7 @@ import AppTabScrren from './Main/AppTabScreen';
 import BoostScreen from './Main/BoostScreen';
 import BridgeTabScreen from './Main/BridgeTabScreen';
 import DiscoverTabScreen from './Main/DiscoverTabScreen';
+import EarnTabScreen from './Main/EarnTabScreen';
 import ExploreTabScreen from './Main/ExploreTabScreen';
 import LendingTabScreen from './Main/LendingTabScreen';
 import LoansTabScreen from './Main/LoansTabScreen';
@@ -110,6 +111,11 @@ export const routes = {
   LoansTabScreen: {
     path: '/loans',
     element: <LoansTabScreen />
+  },
+
+  EarnTabScreen: {
+    path: '/earn',
+    element: <EarnTabScreen />
   },
 
   LendingTabScreen: {
