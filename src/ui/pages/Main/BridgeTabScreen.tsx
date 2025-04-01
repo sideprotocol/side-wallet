@@ -56,8 +56,6 @@ export default function BridgeTabScreen() {
 
   const protocolLimit = params?.params?.protocol_limits;
 
-  console.log({ params });
-
   const protocolFee = params?.params?.protocol_fees;
 
   const depositEnabled = params?.params?.deposit_enabled;

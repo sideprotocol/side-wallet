@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from 'axios';
 import ApiClient from '@/ui/services/network/ApiClient';
 
 import { getQueryParams } from '../getQueryParams';
-import { GetTxRequest, GetTxsResponse } from './types';
+import { GetTxByHashResponse, GetTxRequest, GetTxsResponse } from './types';
 
 export default class TxService {
   private apiClient: ApiClient;
@@ -17,7 +17,7 @@ export default class TxService {
     return await this.apiClient.get<GetTxsResponse>(`/cosmos/tx/v1beta1/txs?${queryParams}`, config);
   }
 
-  async getTxByHash(txHash: string, config: AxiosRequestConfig): Promise<GetTxsResponse> {
-    return await this.apiClient.get<GetTxsResponse>(`/cosmos/tx/v1beta1/txs/${txHash}`, config);
+  async getTxByHash(txHash: string, config: AxiosRequestConfig): Promise<GetTxByHashResponse> {
+    return await this.apiClient.get<GetTxByHashResponse>(`/cosmos/tx/v1beta1/txs/${txHash}`, config);
   }
 }

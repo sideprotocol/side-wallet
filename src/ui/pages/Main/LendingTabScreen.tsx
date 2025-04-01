@@ -91,7 +91,7 @@ export default function LendingTanScreen() {
         .div(+poolData.token.denomPrice || '1')
         .toFixed(+poolData.token.asset.precision, BigNumber.ROUND_DOWN);
     } catch (error) {
-      console.log(error);
+
       return {
         borrowMaxAmount: '0'
       };
