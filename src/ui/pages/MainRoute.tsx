@@ -30,12 +30,15 @@ import SendArc20Screen from './Atomicals/SendArc20Screen';
 import SendAtomicalsInscriptionScreen from './Atomicals/SendAtomicalsNFTScreen';
 import BridgeConfirmTabScreen from './Bridge/BridgeConfirmTabScreen';
 import AppTabScrren from './Main/AppTabScreen';
+import ApproveSuccessScreen from './Main/ApproveSuccessScreen';
 import BoostScreen from './Main/BoostScreen';
 import BridgeTabScreen from './Main/BridgeTabScreen';
 import DiscoverTabScreen from './Main/DiscoverTabScreen';
 import EarnTabScreen from './Main/EarnTabScreen';
 import ExploreTabScreen from './Main/ExploreTabScreen';
 import LendingTabScreen from './Main/LendingTabScreen';
+import LoanAuthorizeScreen from './Main/LoanAuthorizeScreen';
+import LoanDepositScreen from './Main/LoanDepositScreen';
 import LoansTabScreen from './Main/LoansTabScreen';
 import SettingsTabScreen from './Main/SettingsTabScreen';
 import SwapTabScreen from './Main/SwapTabScreen';
@@ -121,6 +124,21 @@ export const routes = {
   LendingTabScreen: {
     path: '/lending',
     element: <LendingTabScreen />
+  },
+
+  LoanDepositScreen: {
+    path: '/loan-deposit',
+    element: <LoanDepositScreen />
+  },
+
+  LoanAuthorizeScreen: {
+    path: '/loan-authorize',
+    element: <LoanAuthorizeScreen />
+  },
+
+  ApproveSuccessScreen: {
+    path: '/approve-success',
+    element: <ApproveSuccessScreen />
   },
 
   BridgeTabScreen: {

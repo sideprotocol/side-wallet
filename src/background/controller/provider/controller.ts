@@ -157,14 +157,19 @@ class ProviderController extends BaseController {
     }
   }
 
-
-
-
   @Reflect.metadata('APPROVAL', ['SignText', () => {
     // todo check text
   }])
   signAdaptor = async ({ data: { params: { text, adaptorPoint } } }) => {
     return wallet.signAdaptor(text, adaptorPoint)
+  }
+
+
+  @Reflect.metadata('APPROVAL', ['SignText', () => {
+    // todo check text
+  }])
+  signSnorr = async ({ data: { params: { text } } }) => {
+    return wallet.signSnorr(text)
   }
 
   @Reflect.metadata('APPROVAL', ['SignText', () => {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
-import { CHAINS_ENUM, SERVICE_BASE_URL, sideChain } from '@/shared/constant';
+import { SERVICE_BASE_URL, sideChain } from '@/shared/constant';
 import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
@@ -10,8 +10,11 @@ import { Coin } from '@cosmjs/amino';
 import { Box } from '@mui/material';
 
 import services from '../services';
+import { LiquidationEvent } from '../services/lending/types';
 import { GetTxByHashResponse } from '../services/tx/types';
 import { useCurrentAccount } from '../state/accounts/hooks';
+import { useUpdateUiTxCreateScreen } from '../state/ui/hooks';
+import { toReadableAmount } from '../utils/formatter';
 import { toXOnly } from '../wallet-sdk/utils';
 
 export default function useCreateLoan() {
@@ -25,16 +28,20 @@ export default function useCreateLoan() {
 
   const navigate = useNavigate();
 
+  const setUiState = useUpdateUiTxCreateScreen();
+
   const createLoan = async ({
     borrowAmount,
     maturityTime,
     poolId,
-    btcUnitAmount
+    btcUnitAmount,
+    liquidationEvent
   }: {
     borrowAmount: Coin;
     maturityTime: string;
     poolId: string;
     btcUnitAmount: string;
+    liquidationEvent: LiquidationEvent;
   }) => {
     try {
       if (!currentAccount.address) return;
@@ -107,7 +114,21 @@ export default function useCreateLoan() {
           </ToastView>
         ));
 
-        navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
+        // navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
+
+        setUiState({
+          toInfo: {
+            address,
+            domain: ''
+          },
+          inputAmount: toReadableAmount(btcUnitAmount, 8)
+        });
+
+        navigate('LoanDepositScreen', {
+          borrowAmount: borrowAmount.amount,
+          collateralAmount: btcUnitAmount,
+          liquidationEvent
+        });
       } else {
         toast.custom((t) => (
           <ToastView toaster={t} type="fail">

@@ -148,6 +148,8 @@ export interface WalletController {
 
   signAdaptor(message: string, adaptorPoint: string): Promise<string>;
 
+  signSnorr(message: string): Promise<string>;
+
   signAdaptorAndMessage(
     message: string,
     sigHash: string,

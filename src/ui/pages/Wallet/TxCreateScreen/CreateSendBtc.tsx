@@ -130,10 +130,6 @@ export default function CreateSendBtc() {
 
     prepareSendBTC({ toAddressInfo: toInfo, toAmount: toSatoshis, feeRate, enableRBF })
       .then((data) => {
-        // if (data.fee < data.estimateFee) {
-        //   setError(`Network fee must be at leat ${data.estimateFee}`);
-        //   return;
-        // }
         setRawTxInfo(data);
         setDisabled(false);
       })
@@ -175,7 +171,6 @@ export default function CreateSendBtc() {
             marginTop: '10px'
           }}>
           <Image src={token?.asset.logo} size={50}></Image>
-          {/* <Icon icon={token.logo || 'btc'} size={50} /> */}
         </Row>
       </Row>
 
@@ -249,14 +244,7 @@ export default function CreateSendBtc() {
               }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Row itemsCenter>
-                  <Text
-                    text="Unavailable"
-                    // text="Unavailable >"
-                    color="textDim"
-                    // onClick={() => {
-                    //   navigate('UnavailableUtxoScreen');
-                    // }}
-                  />
+                  <Text text="Unavailable" color="textDim" />
                   <Icon icon="circle-question" color="textDim" />
                 </Row>
               </div>

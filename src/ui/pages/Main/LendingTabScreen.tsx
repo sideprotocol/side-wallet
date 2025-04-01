@@ -91,7 +91,6 @@ export default function LendingTanScreen() {
         .div(+poolData.token.denomPrice || '1')
         .toFixed(+poolData.token.asset.precision, BigNumber.ROUND_DOWN);
     } catch (error) {
-
       return {
         borrowMaxAmount: '0'
       };
@@ -507,7 +506,8 @@ export default function LendingTanScreen() {
                   },
                   maturityTime,
                   poolId: poolData.baseData.id,
-                  btcUnitAmount: toUnitAmount(collateralAmount, satBalance?.asset.exponent || 8)
+                  btcUnitAmount: toUnitAmount(collateralAmount, satBalance?.asset.exponent || 8),
+                  liquidationEvent
                 });
               }}
               disabled={isDisabled}

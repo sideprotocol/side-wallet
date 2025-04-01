@@ -8,7 +8,7 @@ import { useNavigate } from '../../MainRoute';
 import { TxConfirmLocationState } from './index';
 
 export default function BitcoinTxConfirmScreen() {
-  const { rawTxInfo, type } = useLocationState<TxConfirmLocationState>();
+  const { rawTxInfo, lendingState } = useLocationState<TxConfirmLocationState>();
   const navigate = useNavigate();
   const pushBitcoinTx = usePushBitcoinTxCallback();
   return (
@@ -30,26 +30,21 @@ export default function BitcoinTxConfirmScreen() {
         window.history.go(-1);
       }}
       handleConfirm={(res) => {
-        // if (type === TxType.SEND_RUNE_TEST || type === TxType.SEND_BTC_TEST) {
-        //   // console.log(`here11: `, type);
-        //   postRuneTest({
-        //     rawTransaction: rawTxInfo.rawtx
-        //   })
-        //     .then((txid) => {
-        //       navigate('TxSuccessScreen', { txid, chain: CHAINS_ENUM.SIDE_SIGNET });
-        //     })
-        //     .catch((error) => {
-        //       console.log('error: ', error);
-        //       navigate('TxFailScreen', { error });
-        //     });
-        //   return;
-        // }
-        // console.log(`here22: `, type);
         pushBitcoinTx((res ?? rawTxInfo).rawtx).then(({ success, txid, error }) => {
           if (success) {
+            if (lendingState) {
+              return navigate('LoanAuthorizeScreen', {
+                txid,
+                psbtHex: rawTxInfo.psbtHex,
+                loanId: lendingState.loanId,
+                borrowAmount: lendingState.borrowAmount,
+                collateralAmount: lendingState.collateralAmount,
+                feeRate: lendingState.feeRate,
+                liquidationEvent: lendingState.liquidationEvent
+              });
+            }
             navigate('TxSuccessScreen', { txid });
           } else {
-            console.log('error: ', error);
             navigate('TxFailScreen', { error });
           }
         });
