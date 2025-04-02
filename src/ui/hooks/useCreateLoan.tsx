@@ -7,6 +7,7 @@ import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { Coin } from '@cosmjs/amino';
+import { fromHex } from '@cosmjs/encoding';
 import { Box } from '@mui/material';
 
 import services from '../services';
@@ -69,7 +70,7 @@ export default function useCreateLoan() {
         dcmId: BigInt(dcm.id),
         borrowAmount,
         borrower: currentAccount.address,
-        borrowerPubkey: toXOnly(Buffer.from(currentAccount.pubkey)).toString('hex'),
+        borrowerPubkey: toXOnly(Buffer.from(fromHex(currentAccount.pubkey))).toString('hex'),
         maturityTime: BigInt(maturityTime),
         poolId: poolId
       });

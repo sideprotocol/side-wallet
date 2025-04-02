@@ -203,7 +203,7 @@ export function useSignAndBroadcastTxRaw() {
       messages,
       fee: {
         gas: gas || '1000000', // gas limit
-        amount: [{ amount: feeAmount || '60000', denom: feeDenom || 'uside' }]
+        amount: [{ amount: feeAmount || '1000', denom: feeDenom || 'uside' }]
       },
       memo: memo || '',
       signerData: {
@@ -284,7 +284,7 @@ export function useSignAndBroadcastTxRaw() {
     return broadcastTx(txRaw);
   };
 
-  const mockSignature = 'H7zK7+Cil6z3doIhLvB4IIY7G98EdTDpsPgjinsQab+pAsw0vWh1gPzGCv0z/SPLOGhaRyteMDoJYcXgJyLmHYU=';
+  const mockSignature = 'H4P0Yxg/b8Et1VnDZQTFtTuvqgdhH60B6G/7B/W2ixrtXGURLmL5qvUyy9J2Pn7Eku8EE9t6w/xCCwJWF6BhOt4=';
 
   const signAmino = async (tx: CosmosTransaction): Promise<TxRaw> => {
     const accountFromSigner = currentAccount;
