@@ -52,7 +52,7 @@ export default function useCreateLoan() {
 
       const dcm = activeAgencies?.dcms?.[0];
 
-      const borrowerPubkey = Buffer.from(currentAccount.pubkey).toString('hex');
+      const borrowerPubkey = Buffer.from(fromHex(currentAccount.pubkey)).toString('hex');
       const pbk = toXOnly(Buffer.from(borrowerPubkey, 'hex')).toString('hex');
 
       const { address } = await services.lending.getCollateralAddress(
