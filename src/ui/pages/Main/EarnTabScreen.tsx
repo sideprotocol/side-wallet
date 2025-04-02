@@ -2,28 +2,32 @@ import { BigNumber } from 'bignumber.js';
 import { useMemo, useState } from 'react';
 import 'swiper/css';
 
-import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetPoolExchangeRate from '@/ui/hooks/useGetPoolExchangeRate';
 import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import useSupply from '@/ui/hooks/useSupply';
+import useWithdraw from '@/ui/hooks/useWithdraw';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
-import { Box, Stack, Typography } from '@mui/material';
-
-import { useNavigate } from '../MainRoute';
+import { Stack, Typography } from '@mui/material';
 
 export default function EarnTabScreen() {
-  const navigator = useNavigate();
   const currentAccount = useCurrentAccount();
   const [supplyAmount, setsupplyAmount] = useState('');
 
+  const [withdrawAmount, setwithdrawAmount] = useState('');
+
+  const [operationTab, setOperationTab] = useState<'supply' | 'withdraw'>('supply');
+
   const { supply, loading } = useSupply();
+
+  const { withdraw, loading: withdrawLoading } = useWithdraw();
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
@@ -59,31 +63,61 @@ export default function EarnTabScreen() {
     };
   }, [poolData, supplyAmount]);
 
+  const stokenBalance = balanceList.find((b) => b.denom == poolData?.baseData.id);
+
+  const onSupply = () => {
+    if (!poolData) return;
+
+    supply({
+      amount: {
+        denom: poolData.token.denom,
+        amount: toUnitAmount(supplyAmount, poolData.token.asset.exponent)
+      },
+      pool_id: poolData.baseData.id
+    });
+  };
+
+  const onWithdraw = () => {
+    if (!poolData) return;
+
+    withdraw({
+      shares: {
+        denom: poolData.baseData.id,
+        amount: toUnitAmount(withdrawAmount, poolData.token.asset.exponent)
+      }
+    });
+  };
+
+  const isDisabled = useMemo(() => {
+    if (operationTab === 'supply') {
+      return loading || +supplyAmount <= 0;
+    }
+    return withdrawLoading || +withdrawAmount <= 0;
+  }, [operationTab, loading, withdrawLoading, supplyAmount, withdrawAmount]);
+
   return (
     <Layout>
       <MainHeader title={''} />
-      <Content gap="lg" mt="lg">
-        <Box p={1.5} bgcolor={'#222222'} color={colors.white_muted} borderRadius={'10px'}>
-          <Row itemsCenter>
-            <Icon icon="alert-circle" color={'search_icon'} size={24}></Icon>
+      <Content gap="lg" mt="lg" classname="fadeIn-page">
+        <Row>
+          <Stack gap={'6px'} flexDirection={'row'} p={0.5} borderRadius={'10px'} bgcolor="black">
+            <div
+              className={`text-white cursor-pointer rounded-lg p-1 px-2 text-sm ${
+                operationTab === 'supply' ? 'bg-[#F7771A]' : 'bg-[#17171C]'
+              }`}
+              onClick={() => setOperationTab('supply')}>
+              Supply
+            </div>
 
-            <Text
-              text="Note:"
-              color="search_icon"
-              size="sm"
-              style={{
-                fontWeight: 600
-              }}></Text>
-          </Row>
-
-          <Row mt="lg">
-            <Text
-              color="search_icon"
-              size="xs"
-              text="This feature allows you to earn interest by providing liquidity to the lending pool. Please use the web app to withdraw your assets from the pool."></Text>
-          </Row>
-        </Box>
-
+            <div
+              className={`text-white cursor-pointer rounded-lg p-1 px-2 text-sm ${
+                operationTab === 'withdraw' ? 'bg-[#F7771A]' : 'bg-[#17171C]'
+              }`}
+              onClick={() => setOperationTab('withdraw')}>
+              Withdraw
+            </div>
+          </Stack>
+        </Row>
         <Row
           bg="card_bgColor"
           style={{
@@ -110,11 +144,15 @@ export default function EarnTabScreen() {
           <CoinInput
             size={20}
             coin={{
-              amount: supplyAmount,
+              amount: operationTab === 'supply' ? supplyAmount : withdrawAmount,
               denom: usdcBalance?.denom || 'uusdc'
             }}
             onChange={(value) => {
-              setsupplyAmount(value);
+              if (operationTab === 'supply') {
+                setsupplyAmount(value);
+              } else {
+                setwithdrawAmount(value);
+              }
             }}></CoinInput>
 
           <Column
@@ -127,10 +165,16 @@ export default function EarnTabScreen() {
                   'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
                 }
                 onClick={() => {
-                  const amount = new BigNumber(usdcBalance?.formatAmount || '0')
+                  const amount = new BigNumber(
+                    operationTab === 'supply' ? usdcBalance?.formatAmount || '0' : stokenBalance?.formatAmount || '0'
+                  )
                     .multipliedBy(0.5)
                     .toFixed(usdcBalance?.asset.precision || 6, BigNumber.ROUND_DOWN);
-                  setsupplyAmount(amount);
+                  if (operationTab === 'supply') {
+                    setsupplyAmount(amount);
+                  } else {
+                    setwithdrawAmount(amount);
+                  }
                 }}>
                 Half
               </div>
@@ -140,7 +184,13 @@ export default function EarnTabScreen() {
                   'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
                 }
                 onClick={() => {
-                  setsupplyAmount(usdcBalance?.formatAmount || '0');
+                  const amount =
+                    operationTab === 'supply' ? usdcBalance?.formatAmount || '0' : stokenBalance?.formatAmount || '0';
+                  if (operationTab === 'supply') {
+                    setsupplyAmount(amount);
+                  } else {
+                    setwithdrawAmount(amount);
+                  }
                 }}>
                 Max
               </div>
@@ -151,89 +201,135 @@ export default function EarnTabScreen() {
                 verticalAlign: 'middle',
                 whiteSpace: 'nowrap'
               }}
-              text={`Available ${BigNumber(usdcBalance?.formatAmount || '0').toFormat()}`}
+              text={`Available ${BigNumber(
+                operationTab === 'supply' ? usdcBalance?.formatAmount || '0' : stokenBalance?.formatAmount || '0'
+              ).toFormat()}`}
               size="xs"
               color="white_muted"></Text>
           </Column>
         </Row>
 
-        <Column
-          bg="card_bgColor"
-          style={{
-            borderRadius: '10px'
-          }}
-          px="lg"
-          py="lg">
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography
-              sx={{
-                fontSize: '14px',
-                color: colors.grey12
-              }}>
-              Net APR
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: '14px',
-                color: colors.white
-              }}>
-              {poolData?.supplyApy}%
-            </Typography>
-          </Stack>
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography
-              sx={{
-                fontSize: '14px',
-                color: colors.grey12
-              }}>
-              You will receive
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: '14px',
-                color: colors.white
-              }}>
-              {getTruncate(formatUnitAmount(receiveShare, 6), 6)}&nbsp;
-              <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                s{poolData?.token.asset.symbol}
-              </small>
-            </Typography>
-          </Stack>
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography
-              sx={{
-                fontSize: '14px',
-                color: colors.grey12
-              }}>
-              Expected Interests / day
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: '14px',
-                color: colors.white
-              }}>
-              {new BigNumber(expectedInterestDay).toFixed(poolData?.token?.asset.precision || 6)}&nbsp;
-              <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                {poolData?.token.asset.symbol}
-              </small>
-            </Typography>
-          </Stack>
-        </Column>
+        {operationTab === 'supply' && (
+          <Column
+            bg="card_bgColor"
+            style={{
+              borderRadius: '10px'
+            }}
+            px="lg"
+            py="lg">
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.grey12
+                }}>
+                Net APR
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.white
+                }}>
+                {poolData?.supplyApy}%
+              </Typography>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.grey12
+                }}>
+                You will receive
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.white
+                }}>
+                {getTruncate(formatUnitAmount(receiveShare, 6), 6)}&nbsp;
+                <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
+                  s{poolData?.token.asset.symbol}
+                </small>
+              </Typography>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.grey12
+                }}>
+                Expected Interests / day
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.white
+                }}>
+                {new BigNumber(expectedInterestDay).toFixed(poolData?.token?.asset.precision || 6)}&nbsp;
+                <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
+                  {poolData?.token.asset.symbol}
+                </small>
+              </Typography>
+            </Stack>
+          </Column>
+        )}
+
+        {operationTab === 'withdraw' && (
+          <Column
+            bg="card_bgColor"
+            style={{
+              borderRadius: '10px'
+            }}
+            px="lg"
+            py="lg">
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.grey12
+                }}>
+                {usdcBalance?.asset.symbol} / {stokenBalance?.asset.symbol}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.white
+                }}>
+                {+exchangeRate}
+              </Typography>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.grey12
+                }}>
+                You will burn
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.white
+                }}>
+                {new BigNumber(withdrawAmount || '0').div(exchangeRate).toFixed(6)}&nbsp;
+                <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
+                  s{stokenBalance?.asset.symbol}
+                </small>
+              </Typography>
+            </Stack>
+          </Column>
+        )}
 
         <Row mt="lg" mb="lg">
           <Button
             onClick={() => {
-              if (!poolData) return;
-
-              supply({
-                amount: {
-                  denom: poolData.token.denom,
-                  amount: toUnitAmount(supplyAmount, poolData.token.asset.exponent)
-                },
-                pool_id: poolData.baseData.id
-              });
+              if (operationTab === 'supply') {
+                onSupply();
+              } else {
+                onWithdraw();
+              }
             }}
-            disabled={loading || +supplyAmount <= 0}
+            disabled={isDisabled}
             preset="primary"
             text="Confirm"
             full></Button>

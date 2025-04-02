@@ -13,7 +13,7 @@ export default function LoansTabScreen() {
   return (
     <Layout>
       <MainHeader title={''} />
-      <Content gap="lg">
+      <Content gap="lg" classname="fadeIn-page">
         <Row itemsCenter mt="md" justifyCenter>
           <Image src="./images/img/lending-banner.png" height={114} width={130}></Image>
         </Row>
@@ -112,7 +112,7 @@ export default function LoansTabScreen() {
           </Row>
         </Column>
 
-        <Row full mt="smm">
+        <Row fullX mt="smm">
           <Button
             onClick={() => {
               navigator('LendingTabScreen');
@@ -121,18 +121,14 @@ export default function LoansTabScreen() {
             preset="primary"
             text="Start Borrowing"></Button>
         </Row>
-        <Row itemsCenter justifyCenter full>
-          <Text
-            size="xs"
-            color="white"
-            style={{
-              cursor: 'pointer'
-            }}
+        <Row itemsCenter justifyCenter fullX>
+          <div
+            className="text-xs text-[#6C7080] cursor-pointer  hover:text-white"
             onClick={() => {
               window.open(SIDE_HUB_URL, '_blank');
             }}>
             Open Web App
-          </Text>
+          </div>
         </Row>
       </Content>
       <Footer px="zero" py="zero">

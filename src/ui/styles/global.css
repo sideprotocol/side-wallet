@@ -263,3 +263,18 @@ div {
   background-color: #17171c;
 }
 /* modal end */
+
+.fadeIn-page {
+  animation: slideIn 0.1s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0.5; /* 初始透明 */
+    transform: translateX(-20px); /* 从左侧1/5处偏移并缩小 */
+  }
+  to {
+    opacity: 1; /* 完全可见 */
+    transform: translateX(0); /* 移动到正常位置并放大 */
+  }
+}

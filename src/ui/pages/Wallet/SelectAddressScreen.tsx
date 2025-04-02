@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import { ADDRESS_TYPES, CHAINS_ENUM } from '@/shared/constant';
 import { AddressType } from '@/shared/types';
-import { Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Column, Content, Header, Image, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
@@ -32,6 +32,22 @@ export default function SelecAddressScreen() {
   }>({
     addressAssets: {}
   });
+
+  const [ClickCopy, setClickCopy] = useState('');
+
+  const [copyChain, setCopyChain] = useState('');
+
+  function copy(str: string, chain: string) {
+    copyToClipboard(str).then(() => {
+      setClickCopy(str);
+      setCopyChain(chain);
+    });
+  }
+
+  useEffect(() => {
+    return () => setClickCopy('');
+  }, []);
+
   const self = selfRef.current;
 
   const loadAddresses = async () => {
@@ -81,7 +97,6 @@ export default function SelecAddressScreen() {
             const address = addresses[item.value];
             return (
               <Row
-                // classname={'bg-item-hover-v2'}
                 itemsCenter
                 justifyBetween
                 style={{
@@ -92,12 +107,23 @@ export default function SelecAddressScreen() {
                 }}
                 full
                 key={item.value}>
-                <Row>
-                  <Icon icon="btc" size={32}></Icon>
+                <Row itemsCenter>
+                  <Box
+                    p={'2px'}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '100%'
+                    }}>
+                    <Image src="https://api.side.one/static/token/logo/btc.svg" size={28}></Image>
+                  </Box>
 
                   <Column gap={'zero'}>
                     <Text preset="regular" text={'Bitcoin' + ' ' + `(${item.name})`}></Text>
-                    <Text preset="sub" text={shortAddress(address)}></Text>
+                    <Text
+                      preset="sub"
+                      text={ClickCopy === address && copyChain == 'bitcoin' ? 'Copied!' : shortAddress(address)}></Text>
                   </Column>
                 </Row>
 
@@ -139,7 +165,7 @@ export default function SelecAddressScreen() {
                       cursor: 'pointer'
                     }}
                     onClick={() => {
-                      copyToClipboard(address);
+                      copy(address, 'bitcoin');
                     }}>
                     <Image
                       src={
@@ -167,26 +193,28 @@ export default function SelecAddressScreen() {
                   borderRadius: 10
                 }}
                 full
-                onClick={() => {
-                  navigate('ReceiveScreen', {
-                    ...state,
-                    address,
-                    addressType: item.name,
-                    chain: CHAINS_ENUM.BTC
-                  });
-                }}
                 key={item.value}>
-                <Row>
-                  <Icon icon="side" size={32}></Icon>
+                <Row itemsCenter>
+                  <Image src="https://api.side.one/static/token/logo/side.png" size={32}></Image>
 
                   <Column gap={'zero'}>
                     <Text preset="regular" text={'Side Chain' + ' ' + `(${item.name})`}></Text>
-                    <Text preset="sub" text={shortAddress(address)}></Text>
+                    <Text
+                      preset="sub"
+                      text={ClickCopy === address && copyChain == 'side' ? 'Copied!' : shortAddress(address)}></Text>
                   </Column>
                 </Row>
 
                 <Row>
                   <Box
+                    onClick={() => {
+                      navigate('ReceiveScreen', {
+                        ...state,
+                        address,
+                        addressType: item.name,
+                        chain: CHAINS_ENUM.SIDE
+                      });
+                    }}
                     sx={{
                       borderRadius: '100%',
                       p: 1,
@@ -195,14 +223,6 @@ export default function SelecAddressScreen() {
                         bgcolor: colors.white_muted
                       },
                       cursor: 'pointer'
-                    }}
-                    onClick={() => {
-                      navigate('ReceiveScreen', {
-                        ...state,
-                        address,
-                        addressType: item.name,
-                        chain: CHAINS_ENUM.SIDE
-                      });
                     }}>
                     <Image
                       src={
@@ -224,7 +244,7 @@ export default function SelecAddressScreen() {
                       cursor: 'pointer'
                     }}
                     onClick={() => {
-                      copyToClipboard(address);
+                      copy(address, 'side');
                     }}>
                     <Image
                       src={

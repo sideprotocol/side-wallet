@@ -173,7 +173,7 @@ export default function BridgeTabScreen() {
   return (
     <Layout>
       <MainHeader title={''} />
-      <Content classname={'hide-scrollbar'}>
+      <Content classname={'hide-scrollbar fadeIn-page'}>
         <Row full relative rounded={true}>
           <Column
             full

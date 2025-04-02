@@ -33,7 +33,7 @@ function BtcItem({ token }: { token: BalanceItem }) {
         style={{
           gap: '0px'
         }}>
-        <Text preset="regular" textEnd text={token.formatAmount}></Text>
+        <Text preset="regular" textEnd text={BigNumber(token.formatAmount).toFormat()}></Text>
         <Text preset="sub" textEnd text={`$${BigNumber(token.totalValue || '0').toFormat(2)}`}></Text>
       </Column>
     </>
@@ -134,7 +134,7 @@ function SideCryptoItem({ token }: { token: BalanceItem }) {
         style={{
           gap: '0px'
         }}>
-        <Text preset="regular" textEnd text={token?.formatAmount}></Text>
+        <Text preset="regular" textEnd text={BigNumber(token?.formatAmount).toFormat()}></Text>
         <Text preset="sub" textEnd text={`$${BigNumber(token?.totalValue || '0').toFormat(2)}`}></Text>
       </Column>
     </>

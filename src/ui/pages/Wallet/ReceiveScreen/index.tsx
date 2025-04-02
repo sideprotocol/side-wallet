@@ -168,21 +168,6 @@ export default function ReceiveScreen() {
             <Button full preset="primary" text="Set amount"></Button>
           </Row>
         </Card>
-
-        {/* <Column gap="xl" mt="lg">
-          <Column
-            justifyCenter
-            rounded
-            style={{ backgroundColor: 'white', alignSelf: 'center', alignItems: 'center', padding: 10 }}>
-            <QRCode value={address || ''} renderAs="svg" size={sizes.qrcode}></QRCode>
-          </Column>
-
-          <Row justifyCenter>
-            <Icon icon="user" />
-            <Text preset="regular-bold" text={currentAccount?.alianName} />
-          </Row>
-          <AddressBar />
-        </Column> */}
       </Content>
     </Layout>
   );

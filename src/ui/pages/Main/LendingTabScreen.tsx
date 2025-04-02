@@ -467,7 +467,7 @@ export default function LendingTanScreen() {
                   <Stack
                     direction="row"
                     sx={{
-                      fontSize: '14px',
+                      fontSize: '12px',
                       color: colors.grey12
                     }}>
                     {item.label}
@@ -475,7 +475,7 @@ export default function LendingTanScreen() {
                   <Stack
                     direction="row"
                     sx={{
-                      fontSize: '14px',
+                      fontSize: '12px',
                       color: colors.white
                     }}>
                     {item.value}

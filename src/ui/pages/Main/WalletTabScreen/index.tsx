@@ -90,7 +90,7 @@ export default function WalletTabScreen() {
       }}>
       <MainHeader title={''} />
       <Column
-        classname={'smooth-scroll'}
+        classname={'smooth-scroll fadeIn-page'}
         style={{
           flex: 1,
           gap: '0px',
@@ -296,8 +296,6 @@ export default function WalletTabScreen() {
             onChange={(value, index) => {
               const tab = value as CHAINS_ENUM;
               setCurrentTab(tab);
-              // console.log(`value: `, value, tab, index);
-              // dispatch(uiActions.updateAssetTabScreen({ assetTabKey: index as unknown as AssetTabKey }));
             }}
             value={currentTab}
           />

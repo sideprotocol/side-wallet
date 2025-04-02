@@ -63,7 +63,7 @@ export function TokenItem({ token, balanceVisible }: { token: BalanceItem; balan
           gap: '0px'
         }}>
         {/*<Text preset="regular" text={balanceVisible ? formatUnitAmount(balanceAmount, token.exponent) : '**'}*/}
-        <Text preset="regular" text={balanceVisible ? token?.formatAmount : '**'} textEnd />
+        <Text preset="regular" text={balanceVisible ? BigNumber(token?.formatAmount).toFormat() : '**'} textEnd />
         {/*<Text preset="sub" text={`${'$' + getTruncate(totalPrice)}`} textEnd />*/}
         {/*<Text preset="sub" text={`${balanceVisible ? '$' + getTruncate(totalPrice) : '**'}`} textEnd/>*/}
         <Text
