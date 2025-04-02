@@ -94,7 +94,6 @@ export default function LoanDepositScreen() {
     }
 
     if (toSatoshis > avaiableSatoshis + spendUnavailableSatoshis) {
-      console.log(toSatoshis, avaiableSatoshis + spendUnavailableSatoshis, 'exceed');
       setError('Amount exceeds your available balance');
       return;
     }

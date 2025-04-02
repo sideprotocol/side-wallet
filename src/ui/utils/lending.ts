@@ -56,10 +56,12 @@ export async function prepareApply({
   }
 
   // send btc to collateral address
-
-  const psbt = Psbt.fromHex(psbtHex);
-
   const network = isProduction ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
+
+  const psbt = Psbt.fromHex(psbtHex, {
+    network
+  });
+
   const agencyPsbtToFee = new bitcoin.Psbt({ network });
 
   const agencyPsbt = new bitcoin.Psbt({ network });

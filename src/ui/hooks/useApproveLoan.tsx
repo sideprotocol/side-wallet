@@ -97,7 +97,7 @@ export default function useApproveLoan(loan_id: string) {
       const { liquidationCet, repaymentCet, getRepaymentSignatureParams, getLiquidationAdaptorSignatureParams } =
         await prepareApply({
           params: {
-            collateralAddress: currentAccount.address,
+            collateralAddress: loanId,
             collateralAmount: collateralAmount,
             borrowAmount,
             cetInfos,
