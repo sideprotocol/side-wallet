@@ -265,8 +265,8 @@ export function Button(props: ButtonProps) {
       {loading ? (
         <svg
           className="animate-[spin_3s_linear_infinite] inline-block "
-          width="17"
-          height="17"
+          width="21"
+          height="21"
           viewBox="0 0 17 17"
           fill="none"
           xmlns="http://www.w3.org/2000/svg">
