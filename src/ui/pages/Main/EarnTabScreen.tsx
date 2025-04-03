@@ -15,7 +15,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
-import { Box, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 
 export default function EarnTabScreen() {
   const currentAccount = useCurrentAccount();
@@ -168,31 +168,56 @@ export default function EarnTabScreen() {
               py="md"
               itemsCenter
               bg="card_bgColor">
-              <Image src={usdcBalance?.asset.logo} height={28} width={28}></Image>
+              <Image
+                src={operationTab === 'supply' ? usdcBalance?.asset.logo : stokenBalance?.asset.logo}
+                height={28}
+                width={28}></Image>
 
-              <Text text={usdcBalance?.asset.symbol || 'USDC'} color="white" size="md"></Text>
+              <Text
+                text={
+                  operationTab === 'supply'
+                    ? usdcBalance?.asset.symbol || 'USDC'
+                    : stokenBalance?.asset.symbol || 'sUSDC'
+                }
+                color="white"
+                size="md"></Text>
             </Row>
 
-            <Column>
-              <Row itemsCenter justifyBetween>
-                <Box py={'2px'}>
-                  <CoinInput
-                    size={20}
-                    coin={{
-                      amount: operationTab === 'supply' ? supplyAmount : withdrawAmount,
-                      denom: usdcBalance?.denom || 'uusdc'
-                    }}
-                    onChange={(value) => {
-                      if (operationTab === 'supply') {
-                        setsupplyAmount(value);
-                      } else {
-                        setwithdrawAmount(value);
-                      }
-                    }}
-                  />
-                </Box>
-
-                <Row itemsCenter>
+            <Column
+              fullY
+              style={{
+                paddingTop: '10px'
+              }}
+              justifyBetween>
+              <Row
+                itemsCenter
+                justifyBetween
+                style={{
+                  height: '10px',
+                  borderRadius: '100px',
+                  padding: '8px 0px',
+                  position: 'relative'
+                }}>
+                <CoinInput
+                  size={22}
+                  coin={{
+                    amount: operationTab === 'supply' ? supplyAmount : withdrawAmount,
+                    denom: usdcBalance?.denom || 'uusdc'
+                  }}
+                  decimalScale={usdcBalance?.asset.precision || 6}
+                  onChange={(value) => {
+                    if (operationTab === 'supply') {
+                      setsupplyAmount(value);
+                    } else {
+                      setwithdrawAmount(value);
+                    }
+                  }}
+                />
+                <div
+                  style={{
+                    flexShrink: 0
+                  }}
+                  className="flex items-center gap-1 ">
                   <div
                     className={
                       'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
@@ -231,24 +256,30 @@ export default function EarnTabScreen() {
                     }}>
                     Max
                   </div>
-                </Row>
+                </div>
               </Row>
 
               <Row itemsCenter justifyBetween>
                 <Text
                   style={{
                     verticalAlign: 'middle',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    maxWidth: '90px',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden'
                   }}
                   text={`$${BigNumber(operationTab === 'supply' ? supplyAmount || '0' : withdrawAmount || '0')
-                    .times(
-                      operationTab === 'supply' ? usdcBalance?.denomPrice || '0' : stokenBalance?.denomPrice || '0'
-                    )
-                    .toFormat()}`}
+                    .times(BigNumber(usdcBalance?.denomPrice || '0').div(exchangeRate || 1))
+                    .toFormat(2)}`}
                   size="xxs"
                   color="white_muted"></Text>
 
-                <Row itemsCenter gap="xs">
+                <Row
+                  style={{
+                    flexShrink: 0
+                  }}
+                  itemsCenter
+                  gap="xs">
                   <Icon color="white_muted" icon="wallet-icon" size={12}></Icon>
                   <Text
                     style={{
@@ -360,16 +391,16 @@ export default function EarnTabScreen() {
                     fontSize: '12px',
                     color: colors.grey12
                   }}>
-                  You will burn
+                  You will receive
                 </Typography>
                 <Typography
                   sx={{
                     fontSize: '12px',
                     color: colors.white
                   }}>
-                  {new BigNumber(withdrawAmount || '0').div(exchangeRate).toFixed(6)}&nbsp;
+                  {new BigNumber(withdrawAmount || '0').times(exchangeRate).toFixed(6)}&nbsp;
                   <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                    {stokenBalance?.asset.symbol}
+                    {usdcBalance?.asset.symbol}
                   </small>
                 </Typography>
               </Stack>

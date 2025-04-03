@@ -142,7 +142,8 @@ export default function SelecAddressScreen() {
                       navigate('ReceiveScreen', {
                         ...state,
                         address,
-                        addressType: item.name
+                        addressType: item.name,
+                        chain: CHAINS_ENUM.BTC
                       });
                     }}>
                     <Image

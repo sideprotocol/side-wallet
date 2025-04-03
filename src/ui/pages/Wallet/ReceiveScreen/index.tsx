@@ -157,7 +157,7 @@ export default function ReceiveScreen() {
                 margin: 'auto',
                 textAlign: 'center'
               }}
-              text={`Send only ${chain === CHAINS_ENUM.BTC ? 'BTC' : 'Side'} network assets to this address`}></Text>
+              text={`Send only ${chain === CHAINS_ENUM.BTC ? 'Bitcoin' : 'Side Chain'} assets to this address`}></Text>
           </Column>
 
           <Row

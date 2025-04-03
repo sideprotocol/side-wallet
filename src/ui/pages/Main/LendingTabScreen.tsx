@@ -162,7 +162,7 @@ export default function LendingTanScreen() {
           }}>
           {`${new BigNumber(borrowAmount || 0)
             .multipliedBy(poolData?.token.denomPrice || 0)
-            .div(collateralAmount || 1)
+            .div(+collateralAmount || 1)
             .div(+(satBalance?.denomPrice || '0') || '1')
             .multipliedBy(100)
             .toFixed(2)}%`}
@@ -295,9 +295,9 @@ export default function LendingTanScreen() {
               <Text text={satBalance?.asset.symbol || 'BTC'} color="white" size="md"></Text>
             </Row>
 
-            <Box py={'2px'}>
+            <Box py={'2px'} height={'max-content'}>
               <CoinInput
-                size={20}
+                size={22}
                 coin={{
                   amount: collateralAmount,
                   denom: 'sat'
@@ -310,7 +310,10 @@ export default function LendingTanScreen() {
             <Column>
               <Text
                 style={{
-                  verticalAlign: 'middle'
+                  verticalAlign: 'middle',
+                  maxWidth: '90px',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden'
                 }}
                 text={collateralValue}
                 size="xs"
@@ -353,7 +356,7 @@ export default function LendingTanScreen() {
 
             <Box py={'2px'}>
               <CoinInput
-                size={20}
+                size={22}
                 coin={{
                   amount: borrowAmount,
                   denom: usdcBalance?.denom || 'uusdc'
@@ -394,7 +397,10 @@ export default function LendingTanScreen() {
 
               <Text
                 style={{
-                  verticalAlign: 'middle'
+                  verticalAlign: 'middle',
+                  maxWidth: '90px',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden'
                 }}
                 text={borrowValue}
                 size="xs"

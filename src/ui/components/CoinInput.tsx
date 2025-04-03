@@ -25,7 +25,9 @@ export function CoinInput({ coin, onChange, readOnly, onInput, size, color, deci
         border: 'none',
         fontWeight: '500',
         outline: 'none',
-        color: color
+        color: color,
+        overflow: 'hidden',
+        resize: 'none'
       }}
       decimalScale={decimalScale || 6}
       onInput={() => onInput?.()}
