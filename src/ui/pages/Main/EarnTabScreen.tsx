@@ -98,243 +98,269 @@ export default function EarnTabScreen() {
   return (
     <Layout>
       <MainHeader title={''} />
-      <Content gap="lg" mt="lg" classname="fadeIn-page">
-        <Row>
-          <Stack gap={'6px'} flexDirection={'row'} p={0.5} borderRadius={'10px'} bgcolor="black">
-            <div
-              className={`text-white cursor-pointer rounded-lg p-1 px-2 text-sm ${
-                operationTab === 'supply' ? 'bg-[#F7771A]' : 'bg-[#17171C]'
-              }`}
-              onClick={() => setOperationTab('supply')}>
-              Supply
-            </div>
-
-            <div
-              className={`text-white cursor-pointer rounded-lg p-1 px-2 text-sm ${
-                operationTab === 'withdraw' ? 'bg-[#F7771A]' : 'bg-[#17171C]'
-              }`}
-              onClick={() => setOperationTab('withdraw')}>
-              Withdraw
-            </div>
-          </Stack>
-        </Row>
-        <Row
+      <Content mt="lg" classname="fadeIn-page">
+        <Column
           bg="card_bgColor"
-          style={{
-            height: 70
-          }}
-          itemsCenter
-          rounded
+          gap="lg"
           px="lg"
-          py="md">
-          <Row
-            style={{
-              flexShrink: 0,
-              minWidth: 110
-            }}
-            rounded={true}
-            px="lg"
-            py="md"
-            bg="black">
-            <Image src={usdcBalance?.asset.logo} height={24} width={24}></Image>
+          py="md"
+          style={{
+            borderRadius: '10px'
+          }}>
+          <Row>
+            <Stack gap={'6px'} flexDirection={'row'} p={0.5} borderRadius={'10px'} bgcolor="black">
+              <div
+                className={`text-white cursor-pointer rounded-lg py-1.5 px-2 text-xs ${
+                  operationTab === 'supply' ? 'bg-[#F7771A]' : ''
+                }`}
+                onClick={() => setOperationTab('supply')}>
+                Supply
+              </div>
 
-            <Text text={usdcBalance?.asset.symbol || 'USDC'} color="white" size="md"></Text>
+              <div
+                className={`text-white cursor-pointer rounded-lg py-1.5 px-2 text-xs ${
+                  operationTab === 'withdraw' ? 'bg-[#F7771A]' : ''
+                }`}
+                onClick={() => setOperationTab('withdraw')}>
+                Withdraw
+              </div>
+            </Stack>
           </Row>
-
-          <CoinInput
-            size={20}
-            coin={{
-              amount: operationTab === 'supply' ? supplyAmount : withdrawAmount,
-              denom: usdcBalance?.denom || 'uusdc'
-            }}
-            onChange={(value) => {
-              if (operationTab === 'supply') {
-                setsupplyAmount(value);
-              } else {
-                setwithdrawAmount(value);
-              }
-            }}></CoinInput>
-
-          <Column
+          <Row
+            bg="black"
             style={{
-              alignItems: 'end'
-            }}>
-            <Row itemsCenter>
-              <div
-                className={
-                  'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
-                }
-                onClick={() => {
-                  const amount = new BigNumber(
-                    operationTab === 'supply' ? usdcBalance?.formatAmount || '0' : stokenBalance?.formatAmount || '0'
-                  )
-                    .multipliedBy(0.5)
-                    .toFixed(usdcBalance?.asset.precision || 6, BigNumber.ROUND_DOWN);
-                  if (operationTab === 'supply') {
-                    setsupplyAmount(amount);
-                  } else {
-                    setwithdrawAmount(amount);
-                  }
-                }}>
-                Half
-              </div>
+              height: 70
+            }}
+            itemsCenter
+            rounded
+            px="md"
+            py="md">
+            <Row
+              style={{
+                flexShrink: 0
+              }}
+              rounded={true}
+              px="md"
+              py="md"
+              itemsCenter
+              bg="card_bgColor">
+              <Image src={usdcBalance?.asset.logo} height={28} width={28}></Image>
 
-              <div
-                className={
-                  'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
-                }
-                onClick={() => {
-                  const amount =
-                    operationTab === 'supply' ? usdcBalance?.formatAmount || '0' : stokenBalance?.formatAmount || '0';
-                  if (operationTab === 'supply') {
-                    setsupplyAmount(amount);
-                  } else {
-                    setwithdrawAmount(amount);
-                  }
-                }}>
-                Max
-              </div>
+              <Text text={usdcBalance?.asset.symbol || 'USDC'} color="white" size="md"></Text>
             </Row>
 
-            <Text
+            <Column>
+              <Row itemsCenter justifyBetween>
+                <CoinInput
+                  size={20}
+                  coin={{
+                    amount: operationTab === 'supply' ? supplyAmount : withdrawAmount,
+                    denom: usdcBalance?.denom || 'uusdc'
+                  }}
+                  onChange={(value) => {
+                    if (operationTab === 'supply') {
+                      setsupplyAmount(value);
+                    } else {
+                      setwithdrawAmount(value);
+                    }
+                  }}></CoinInput>
+
+                <Row itemsCenter>
+                  <div
+                    className={
+                      'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
+                    }
+                    onClick={() => {
+                      const amount = new BigNumber(
+                        operationTab === 'supply'
+                          ? usdcBalance?.formatAmount || '0'
+                          : stokenBalance?.formatAmount || '0'
+                      )
+                        .multipliedBy(0.5)
+                        .toFixed(usdcBalance?.asset.precision || 6, BigNumber.ROUND_DOWN);
+                      if (operationTab === 'supply') {
+                        setsupplyAmount(amount);
+                      } else {
+                        setwithdrawAmount(amount);
+                      }
+                    }}>
+                    Half
+                  </div>
+
+                  <div
+                    className={
+                      'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
+                    }
+                    onClick={() => {
+                      const amount =
+                        operationTab === 'supply'
+                          ? usdcBalance?.formatAmount || '0'
+                          : stokenBalance?.formatAmount || '0';
+                      if (operationTab === 'supply') {
+                        setsupplyAmount(amount);
+                      } else {
+                        setwithdrawAmount(amount);
+                      }
+                    }}>
+                    Max
+                  </div>
+                </Row>
+              </Row>
+
+              <Row itemsCenter justifyBetween>
+                <Text
+                  style={{
+                    verticalAlign: 'middle',
+                    whiteSpace: 'nowrap'
+                  }}
+                  text={`$${BigNumber(operationTab === 'supply' ? supplyAmount || '0' : withdrawAmount || '0')
+                    .times(
+                      operationTab === 'supply' ? usdcBalance?.denomPrice || '0' : stokenBalance?.denomPrice || '0'
+                    )
+                    .toFormat()}`}
+                  size="xxs"
+                  color="white_muted"></Text>
+                <Text
+                  style={{
+                    verticalAlign: 'middle',
+                    whiteSpace: 'nowrap'
+                  }}
+                  text={`Available ${BigNumber(
+                    operationTab === 'supply' ? usdcBalance?.formatAmount || '0' : stokenBalance?.formatAmount || '0'
+                  ).toFormat()}`}
+                  size="xxs"
+                  color="white_muted"></Text>
+              </Row>
+            </Column>
+          </Row>
+
+          {operationTab === 'supply' && (
+            <Column
+              bg="black"
               style={{
-                verticalAlign: 'middle',
-                whiteSpace: 'nowrap'
+                borderRadius: '10px'
               }}
-              text={`Available ${BigNumber(
-                operationTab === 'supply' ? usdcBalance?.formatAmount || '0' : stokenBalance?.formatAmount || '0'
-              ).toFormat()}`}
-              size="xs"
-              color="white_muted"></Text>
-          </Column>
-        </Row>
+              px="lg"
+              py="lg">
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.grey12
+                  }}>
+                  Net APR
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.white
+                  }}>
+                  {poolData?.supplyApy}%
+                </Typography>
+              </Stack>
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.grey12
+                  }}>
+                  You will receive
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.white
+                  }}>
+                  {getTruncate(formatUnitAmount(receiveShare, 6), 6)}&nbsp;
+                  <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
+                    s{poolData?.token.asset.symbol}
+                  </small>
+                </Typography>
+              </Stack>
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.grey12
+                  }}>
+                  Expected Interests / day
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.white
+                  }}>
+                  {new BigNumber(expectedInterestDay).toFixed(poolData?.token?.asset.precision || 6)}&nbsp;
+                  <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
+                    {poolData?.token.asset.symbol}
+                  </small>
+                </Typography>
+              </Stack>
+            </Column>
+          )}
 
-        {operationTab === 'supply' && (
-          <Column
-            bg="card_bgColor"
-            style={{
-              borderRadius: '10px'
-            }}
-            px="lg"
-            py="lg">
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography
-                sx={{
-                  fontSize: '12px',
-                  color: colors.grey12
-                }}>
-                Net APR
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: '12px',
-                  color: colors.white
-                }}>
-                {poolData?.supplyApy}%
-              </Typography>
-            </Stack>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography
-                sx={{
-                  fontSize: '12px',
-                  color: colors.grey12
-                }}>
-                You will receive
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: '12px',
-                  color: colors.white
-                }}>
-                {getTruncate(formatUnitAmount(receiveShare, 6), 6)}&nbsp;
-                <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                  s{poolData?.token.asset.symbol}
-                </small>
-              </Typography>
-            </Stack>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography
-                sx={{
-                  fontSize: '12px',
-                  color: colors.grey12
-                }}>
-                Expected Interests / day
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: '12px',
-                  color: colors.white
-                }}>
-                {new BigNumber(expectedInterestDay).toFixed(poolData?.token?.asset.precision || 6)}&nbsp;
-                <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                  {poolData?.token.asset.symbol}
-                </small>
-              </Typography>
-            </Stack>
-          </Column>
-        )}
+          {operationTab === 'withdraw' && (
+            <Column
+              bg="black"
+              style={{
+                borderRadius: '10px'
+              }}
+              px="lg"
+              py="lg">
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.grey12
+                  }}>
+                  {usdcBalance?.asset.symbol} / {stokenBalance?.asset.symbol}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.white
+                  }}>
+                  {+exchangeRate}
+                </Typography>
+              </Stack>
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.grey12
+                  }}>
+                  You will burn
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.white
+                  }}>
+                  {new BigNumber(withdrawAmount || '0').div(exchangeRate).toFixed(6)}&nbsp;
+                  <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
+                    {stokenBalance?.asset.symbol}
+                  </small>
+                </Typography>
+              </Stack>
+            </Column>
+          )}
 
-        {operationTab === 'withdraw' && (
-          <Column
-            bg="card_bgColor"
-            style={{
-              borderRadius: '10px'
-            }}
-            px="lg"
-            py="lg">
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography
-                sx={{
-                  fontSize: '12px',
-                  color: colors.grey12
-                }}>
-                {usdcBalance?.asset.symbol} / {stokenBalance?.asset.symbol}
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: '12px',
-                  color: colors.white
-                }}>
-                {+exchangeRate}
-              </Typography>
-            </Stack>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography
-                sx={{
-                  fontSize: '12px',
-                  color: colors.grey12
-                }}>
-                You will burn
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: '12px',
-                  color: colors.white
-                }}>
-                {new BigNumber(withdrawAmount || '0').div(exchangeRate).toFixed(6)}&nbsp;
-                <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                  {stokenBalance?.asset.symbol}
-                </small>
-              </Typography>
-            </Stack>
-          </Column>
-        )}
-
-        <Row mt="md" mb="lg">
-          <Button
-            onClick={() => {
-              if (operationTab === 'supply') {
-                onSupply();
-              } else {
-                onWithdraw();
-              }
-            }}
-            loading={loading || withdrawLoading}
-            disabled={isDisabled}
-            preset="primary"
-            text="Confirm"
-            full></Button>
-        </Row>
+          <Row mt="md" mb="lg">
+            <Button
+              onClick={() => {
+                if (operationTab === 'supply') {
+                  onSupply();
+                } else {
+                  onWithdraw();
+                }
+              }}
+              loading={loading || withdrawLoading}
+              disabled={isDisabled}
+              preset="primary"
+              text="Confirm"
+              full></Button>
+          </Row>
+        </Column>
       </Content>
       <Footer px="zero" py="zero">
         <NavTabBar tab="earn" />
