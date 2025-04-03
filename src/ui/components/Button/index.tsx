@@ -53,6 +53,7 @@ export interface ButtonProps {
   icon?: IconTypes;
   disabled?: boolean;
   full?: boolean;
+  loading?: boolean;
 }
 
 // button common theme
@@ -174,6 +175,7 @@ const $baseDisabledViewStyle: CSSProperties = {
   opacity: 0.5,
   backgroundColor: colors.grey_dark
 };
+
 export function Button(props: ButtonProps) {
   const {
     text,
@@ -189,6 +191,7 @@ export function Button(props: ButtonProps) {
     icon,
     disabled,
     full,
+    loading,
     ...rest
   } = props;
 
@@ -259,13 +262,31 @@ export function Button(props: ButtonProps) {
       onMouseLeave={() => setHover(false)}>
       {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
       <Icon icon={icon} color={icon === 'expand' ? 'black' : icon === 'plus' ? 'primary' : 'white'} />
-      {text && (
-        <Text
-          style={$textStyle}
-          text={text}
-          preset="regular-bold"
-          classname={preset === 'ghost' ? 'group-hover:!text-[#000]' : ''}
-        />
+      {loading ? (
+        <svg
+          className="animate-[spin_3s_linear_infinite] inline-block "
+          width="17"
+          height="17"
+          viewBox="0 0 17 17"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M8.5 2V3.66667M8.5 12.5V15.1667M4.33333 8.5H2M14.6667 8.5H13.6667M12.8047 12.8047L12.3333 12.3333M12.9428 4.11052L12 5.05333M3.78105 13.219L5.66667 11.3333M3.91912 3.97245L5.33333 5.38667"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ) : (
+        text && (
+          <Text
+            style={$textStyle}
+            text={text}
+            preset="regular-bold"
+            classname={preset === 'ghost' ? 'group-hover:!text-[#000]' : ''}
+          />
+        )
       )}
       {children}
       {RightAccessory && <div style={$rightAccessoryStyle}>{RightAccessory}</div>}

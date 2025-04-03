@@ -12,8 +12,7 @@ import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
 
-export default function Index(props) {
-  let { open, onClose } = props;
+export default function BridgeSelectTokenScreen() {
   const currentAccount = useCurrentAccount();
   let { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   let { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
@@ -41,22 +40,13 @@ export default function Index(props) {
       );
     });
   }
-
+  const onClose = () => window.history.go(-1);
   // console.log('runeAndBtcTokens: ', runeAndBtcTokens);
   return (
-    <Layout
-      style={{
-        width: '100%',
-        transform: 'translate(-50%, -50%)',
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        display: open ? 'flex' : 'none',
-        zIndex: 2
-      }}>
+    <Layout>
       <Header
         onBack={() => {
-          onClose();
+          window.history.go(-1);
         }}
         title="Select crypto"
       />
@@ -66,10 +56,7 @@ export default function Index(props) {
           padding: 0,
           marginTop: 16
         }}>
-        <Column
-          style={{
-            padding: '0 24px'
-          }}>
+        <Column px="lg">
           <div
             className={
               'hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] flex gap-[8px] items-center px-[10px] rounded-[12px] bg-[#17171C] relative '
@@ -128,7 +115,7 @@ export default function Index(props) {
                     style={{
                       cursor: 'pointer',
                       height: '44px',
-                      padding: '10px 16px'
+                      padding: '10px 0px'
                     }}>
                     <Row>
                       <ImageIcon
@@ -152,7 +139,7 @@ export default function Index(props) {
                       style={{
                         gap: '0px'
                       }}>
-                      <Text preset="regular" textEnd text={asset.formatAmount}></Text>
+                      <Text preset="regular" textEnd text={BigNumber(asset.formatAmount).toFormat()}></Text>
                       <Text preset="sub" textEnd text={`$${BigNumber(asset.totalValue).toFormat(2)}`}></Text>
                     </Column>
                   </Row>
@@ -197,10 +184,7 @@ export default function Index(props) {
                         style={{
                           gap: '0px'
                         }}>
-                        {/*<Text preset="regular" text={balanceVisible ? formatUnitAmount(balanceAmount, token.exponent) : '**'}*/}
-                        <Text preset="regular" text={item.formatAmount} textEnd />
-                        {/*<Text preset="sub" text={`${'$' + getTruncate(totalPrice)}`} textEnd />*/}
-                        {/*<Text preset="sub" text={`${balanceVisible ? '$' + getTruncate(totalPrice) : '**'}`} textEnd/>*/}
+                        <Text preset="regular" text={BigNumber(item.formatAmount).toFormat()} textEnd />
                         <Text preset="sub" text={`$${BigNumber(item.totalValue).toFormat(2)}`} textEnd />
                       </Column>
                     </Row>

@@ -5,6 +5,7 @@ import { HashRouter, Route, Routes, useNavigate as useNavigateOrigin } from 'rea
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { Content, Icon } from '../components';
+import BridgeSelectTokenScreen from '../components/Bridge/BridgeSelectToken';
 import { accountActions } from '../state/accounts/reducer';
 import { useIsReady, useIsUnlocked } from '../state/global/hooks';
 import { globalActions } from '../state/global/reducer';
@@ -144,6 +145,11 @@ export const routes = {
   BridgeTabScreen: {
     path: '/bridge',
     element: <BridgeTabScreen />
+  },
+
+  BridgeSelectTokenScreen: {
+    path: '/bridge-select-token',
+    element: <BridgeSelectTokenScreen />
   },
 
   BridgeConfirmTabScreen: {

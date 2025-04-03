@@ -81,16 +81,14 @@ export default function ExportPrivateKeyScreen() {
         style={{
           flex: 1,
           padding: '0 16px 24px'
-        }}
-      >
+        }}>
         {privateKey.wif == '' ? (
           <>
             <Column
               style={{
                 flex: 1,
                 gap: '16px'
-              }}
-            >
+              }}>
               <LongPress />
             </Column>
             <Text
@@ -136,8 +134,7 @@ export default function ExportPrivateKeyScreen() {
             <Column
               style={{
                 flex: 1
-              }}
-            >
+              }}>
               <Mask>
                 <div
                   // className={'flex'}
@@ -147,8 +144,7 @@ export default function ExportPrivateKeyScreen() {
                     // boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
                     borderRadius: '14px',
                     padding: '16px'
-                  }}
-                >
+                  }}>
                   <span
                     style={{
                       color: '#fff',
@@ -157,35 +153,20 @@ export default function ExportPrivateKeyScreen() {
                       // opacity: 0.5,
                       wordBreak: 'break-word',
                       marginRight: '4px'
-                    }}
-                  >
+                    }}>
                     {privateKey.wif}
                   </span>
-                  {/*<span*/}
-                  {/*  style={{*/}
-                  {/*    cursor: 'pointer'*/}
-                  {/*  }}*/}
-                  {/*  onClick={() => {*/}
-                  {/*    copy(privateKey.wif);*/}
-                  {/*  }}>*/}
-                  {/*  <Image src="/images/icons/copy-03.svg" size={16} />*/}
-                  {/*</span>*/}
+
                   <div
-                    className={'inline-block cursor-pointer'}
+                    className={'inline-flex items-center relative top-1.5 cursor-pointer  '}
                     onMouseOver={handleMouseOver}
                     onMouseLeave={handleMouseLeave}
                     onClick={(e) => {
                       copy(privateKey.wif);
                       setIsClickCopy(true);
-                    }}
-                    style={
-                      {
-                        // marginTop: '8px'
-                      }
-                    }
-                  >
+                    }}>
                     <Icon
-                      className={'inline-block relative top-[5px] ml-[5px] mr-[2px]'}
+                      className={'inline-block relative  ml-[5px] mr-[2px]'}
                       icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
                       color={isClickCopy ? 'primary' : isHovered ? 'white' : 'search_icon'}
                       size={20}
@@ -193,6 +174,7 @@ export default function ExportPrivateKeyScreen() {
                     <Text
                       classname={'inline-block'}
                       text={isClickCopy ? 'Copied' : ''}
+                      size="sm"
                       color={isClickCopy ? 'primary' : isHovered ? 'white' : 'search_icon'}
                     />
                   </div>
@@ -205,14 +187,12 @@ export default function ExportPrivateKeyScreen() {
                   borderRadius: '10px',
                   padding: '10px',
                   gap: '4px'
-                }}
-              >
+                }}>
                 <Row
                   style={{
                     alignItems: 'center',
                     gap: '8px'
-                  }}
-                >
+                  }}>
                   <Image src="/images/icons/alert-triangle.svg" size={24} />
                   <Text
                     text="No Recovery Options:"
@@ -242,14 +222,12 @@ export default function ExportPrivateKeyScreen() {
                   borderRadius: '10px',
                   padding: '10px',
                   gap: '4px'
-                }}
-              >
+                }}>
                 <Row
                   style={{
                     alignItems: 'center',
                     gap: '8px'
-                  }}
-                >
+                  }}>
                   <Image src="/images/icons/alert-triangle.svg" size={24} />
                   <Text
                     text="Store Securely:"

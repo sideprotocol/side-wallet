@@ -270,11 +270,26 @@ div {
 
 @keyframes slideIn {
   from {
-    opacity: 0.5; /* 初始透明 */
-    transform: translateX(-20px); /* 从左侧1/5处偏移并缩小 */
+    opacity: 0.5;
+    transform: translateX(-20px);
   }
   to {
     opacity: 1; /* 完全可见 */
-    transform: translateX(0); /* 移动到正常位置并放大 */
+    transform: translateX(0);
+  }
+}
+
+.fadeIn-page-bottom {
+  animation: slideInBottom 0.1s ease-out forwards;
+}
+
+@keyframes slideInBottom {
+  from {
+    opacity: 0.5;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1; /* 完全可见 */
+    transform: translateY(0);
   }
 }

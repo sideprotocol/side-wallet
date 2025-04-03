@@ -123,7 +123,7 @@ function PasswordInput(props: InputProps) {
         />
       )}
       {type === 'text' && (
-        <Icon icon="eye" size={24} style={{ marginLeft: spacing.tiny }} onClick={() => setType('password')} />
+        <Icon icon="eye-white" size={24} style={{ marginLeft: spacing.tiny }} onClick={() => setType('password')} />
       )}
     </div>
   );

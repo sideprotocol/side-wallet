@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { isDev, sideChain } from '@/shared/constant';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
-import BridgeSelectToken from '@/ui/components/Bridge/BridgeSelectToken';
 import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
 import ImageIcon from '@/ui/components/ImageIcon';
@@ -308,7 +307,7 @@ export default function BridgeTabScreen() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    dispatch(BridgeActions.update({ selectTokenModalShow: true }));
+                    navigate('BridgeSelectTokenScreen');
                   }}>
                   <Row itemsCenter>
                     {' '}
@@ -470,13 +469,6 @@ export default function BridgeTabScreen() {
             </Row> */}
           </Column>
         </Row>
-
-        <BridgeSelectToken
-          open={selectTokenModalShow}
-          onClose={() => {
-            dispatch(BridgeActions.update({ selectTokenModalShow: false }));
-          }}
-        />
       </Content>
       <Footer px="zero" py="zero">
         <NavTabBar tab="bridge" />

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import 'swiper/css';
 
-import { COIN_DUST } from '@/shared/constant';
+import { COIN_DUST, SIDE_HUB_URL } from '@/shared/constant';
 import { RawTxInfo } from '@/shared/types';
 import { Button, Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -189,8 +189,10 @@ export default function LoanDepositScreen() {
             fullX
             style={{
               border: `1px solid ${colors.white1}`,
-              borderRadius: 10
-            }}>
+              borderRadius: 10,
+              cursor: 'pointer'
+            }}
+            onClick={() => window.open(`${SIDE_HUB_URL}/loan/${toInfo.address}`, '_blank')}>
             <Text text="Funding using another wallet on web app" color="white" size="xs"></Text>
           </Row>
         </Column>

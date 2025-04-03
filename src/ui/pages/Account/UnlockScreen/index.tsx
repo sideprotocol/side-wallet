@@ -64,7 +64,8 @@ export default function UnlockScreen() {
         fullY
         style={{
           padding: '0 16px 24px'
-        }}>
+        }}
+        classname="fadeIn-page-bottom">
         <Column
           justifyCenter
           style={{
@@ -98,7 +99,7 @@ export default function UnlockScreen() {
             borderColor: errorMsg ? 'rgba(255, 69, 69, 1)' : isFocused ? 'white' : ''
           }}
           preset="password"
-          placeholder="Password"
+          placeholder="Enter your password"
           onChange={(e) => {
             setPassword(e.target.value);
             setBtnText('Unlock');

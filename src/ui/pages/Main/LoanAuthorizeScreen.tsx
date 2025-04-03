@@ -76,7 +76,9 @@ export default function LoanAuthorizeScreen() {
             <Text
               color="search_icon"
               size="xs"
-              text="This feature allows you to earn interest by providing liquidity to the lending pool. Please use the web app to withdraw your assets from the pool."></Text>
+              text={`In this step, you will presign a CET (Contract Execution Transaction) within a DLC (Discrete Log Contract), authorizing the liquidation of your loan collateral if the oracle price reaches ${BigNumber(
+                liquidationEvent.price
+              ).toFormat()}.`}></Text>
           </Row>
         </Box>
 
@@ -84,7 +86,7 @@ export default function LoanAuthorizeScreen() {
           <Text text="Liquidation Price (BTC/USDC)" color="white_muted" size="xs"></Text>
 
           <Text
-            text={`${BigNumber(liquidationEvent.price).toFormat(2)}`}
+            text={`${BigNumber(liquidationEvent.price).toFormat()}`}
             color="main"
             style={{
               fontSize: 36,
@@ -112,6 +114,7 @@ export default function LoanAuthorizeScreen() {
                 });
               }}
               full
+              loading={loading}
               text="Authorize"
               preset="primary"></Button>
           </Row>

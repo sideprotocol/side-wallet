@@ -313,14 +313,14 @@ export default function EarnTabScreen() {
                 }}>
                 {new BigNumber(withdrawAmount || '0').div(exchangeRate).toFixed(6)}&nbsp;
                 <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                  s{stokenBalance?.asset.symbol}
+                  {stokenBalance?.asset.symbol}
                 </small>
               </Typography>
             </Stack>
           </Column>
         )}
 
-        <Row mt="lg" mb="lg">
+        <Row mt="md" mb="lg">
           <Button
             onClick={() => {
               if (operationTab === 'supply') {
@@ -329,6 +329,7 @@ export default function EarnTabScreen() {
                 onWithdraw();
               }
             }}
+            loading={loading || withdrawLoading}
             disabled={isDisabled}
             preset="primary"
             text="Confirm"

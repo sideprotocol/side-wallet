@@ -265,9 +265,9 @@ export default function LendingTanScreen() {
               Collateral{' '}
             </Text>
 
-            <Row itemsCenter px="lg">
+            <Row itemsCenter>
               <Icon color="white_muted" icon="wallet-icon" size={16} />
-              <Text text={satBalance?.formatAmount || '0'} color="white" size="xs"></Text>
+              <Text text={BigNumber(satBalance?.formatAmount || '0').toFormat()} color="white" size="xs"></Text>
             </Row>
           </Row>
 
@@ -322,7 +322,7 @@ export default function LendingTanScreen() {
 
             <Row itemsCenter>
               <Icon icon="wallet-icon" color="white_muted" size={16} />
-              <Text text={usdcBalance?.formatAmount || '0'} color="white" size="xs"></Text>
+              <Text text={BigNumber(usdcBalance?.formatAmount || '0').toFormat()} color="white" size="xs"></Text>
             </Row>
           </Row>
 
@@ -511,6 +511,7 @@ export default function LendingTanScreen() {
                 });
               }}
               disabled={isDisabled}
+              loading={loading}
               preset="primary"
               text="Request Loan"
               full></Button>
