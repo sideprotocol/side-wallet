@@ -267,18 +267,16 @@ export default function CreateSendSide() {
           </Row>
         </Row>
 
-        <Button
-          style={{
-            bottom: '24px',
-            left: 0
-          }}
-          preset="primary"
-          text={+inputAmount > +available ? 'Insufficient Balance' : 'Next'}
-          disabled={disabled || +inputAmount > +available}
-          onClick={() => {
-            navigate('TxConfirmScreen', { type: TxType.SEND_SIDE });
-          }}
-        />
+        <Column>
+          <Button
+            preset="primary"
+            text={+inputAmount > +available ? 'Insufficient Balance' : 'Next'}
+            disabled={disabled || +inputAmount > +available}
+            onClick={() => {
+              navigate('TxConfirmScreen', { type: TxType.SEND_SIDE });
+            }}
+          />
+        </Column>
       </Column>
     </Layout>
   );
