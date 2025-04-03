@@ -310,7 +310,6 @@ export default function BridgeTabScreen() {
                     navigate('BridgeSelectTokenScreen');
                   }}>
                   <Row itemsCenter>
-                    {' '}
                     <ImageIcon
                       style={{
                         width: '24px',
@@ -350,7 +349,7 @@ export default function BridgeTabScreen() {
                 <div className={'flex gap-[5px] items-center'}>
                   <img className={'w-[14px] h-[14px]'} src={WalletIcon} alt="" />
 
-                  <Text size="xs">{balance}</Text>
+                  <Text size="xs">{BigNumber(balance).toFormat()}</Text>
                 </div>
               </Row>
 

@@ -34,6 +34,8 @@ export default function LendingTanScreen() {
 
   const satBalance = bitcoinBalanceList.find((b) => b.denom === 'sat');
 
+  console.log({ satBalance });
+
   const usdcBalance = balanceList.find((b) => b.denom == 'uusdc');
 
   const collateralValue = useMemo(() => {
@@ -161,7 +163,7 @@ export default function LendingTanScreen() {
           {`${new BigNumber(borrowAmount || 0)
             .multipliedBy(poolData?.token.denomPrice || 0)
             .div(collateralAmount || 1)
-            .div(satBalance?.denomPrice || '0')
+            .div(+(satBalance?.denomPrice || '0') || '1')
             .multipliedBy(100)
             .toFixed(2)}%`}
         </Typography>
@@ -175,7 +177,7 @@ export default function LendingTanScreen() {
             fontSize: '14px',
             color: colors.grey12
           }}>
-          {`${poolData?.baseData.config.max_ltv}%`}
+          {!poolData ? '-' : `${poolData?.baseData.config.max_ltv}%`}
         </Typography>
       )
     },
@@ -187,7 +189,7 @@ export default function LendingTanScreen() {
             fontSize: '14px',
             color: colors.grey12
           }}>
-          {`${poolData?.baseData.config.liquidation_threshold}%`}
+          {!poolData ? '-' : `${poolData?.baseData.config.liquidation_threshold}%`}
         </Typography>
       )
     },
@@ -196,11 +198,11 @@ export default function LendingTanScreen() {
       value: `${getTruncate(liquidationEvent?.price || '0', 2)}`
     },
     {
-      label: 'Max Interest',
+      label: 'Interest Rate',
       value: `${poolData?.borrowApy}%`
     },
     {
-      label: 'Total Interest',
+      label: 'Max Interest',
       value: (
         <>
           {new BigNumber(borrowAmount || 0)
@@ -272,13 +274,12 @@ export default function LendingTanScreen() {
           </Row>
 
           <Row
-            bg="card_bgColor"
+            bg="black"
             style={{
               height: 70
             }}
             itemsCenter
             rounded
-            px="lg"
             py="md">
             <Row
               style={{
@@ -288,21 +289,23 @@ export default function LendingTanScreen() {
               rounded={true}
               px="lg"
               py="md"
-              bg="black">
+              bg="card_bgColor">
               <Image src="/images/icons/btc.svg" height={24} width={24}></Image>
 
               <Text text={satBalance?.asset.symbol || 'BTC'} color="white" size="md"></Text>
             </Row>
 
-            <CoinInput
-              size={20}
-              coin={{
-                amount: collateralAmount,
-                denom: 'sat'
-              }}
-              onChange={(value) => {
-                setcollateralAmount(value);
-              }}></CoinInput>
+            <Box py={'2px'}>
+              <CoinInput
+                size={20}
+                coin={{
+                  amount: collateralAmount,
+                  denom: 'sat'
+                }}
+                onChange={(value) => {
+                  setcollateralAmount(value);
+                }}></CoinInput>
+            </Box>
 
             <Column>
               <Text
@@ -327,7 +330,7 @@ export default function LendingTanScreen() {
           </Row>
 
           <Row
-            bg="card_bgColor"
+            bg="black"
             style={{
               height: 70
             }}
@@ -341,23 +344,24 @@ export default function LendingTanScreen() {
                 minWidth: 110
               }}
               rounded={true}
-              px="lg"
               py="md"
-              bg="black">
+              bg="card_bgColor">
               <Image src={usdcBalance?.asset.logo} height={24} width={24}></Image>
 
               <Text text={usdcBalance?.asset.symbol || 'USDC'} color="white" size="md"></Text>
             </Row>
 
-            <CoinInput
-              size={20}
-              coin={{
-                amount: borrowAmount,
-                denom: usdcBalance?.denom || 'uusdc'
-              }}
-              onChange={(value) => {
-                setBorrowAmount(value);
-              }}></CoinInput>
+            <Box py={'2px'}>
+              <CoinInput
+                size={20}
+                coin={{
+                  amount: borrowAmount,
+                  denom: usdcBalance?.denom || 'uusdc'
+                }}
+                onChange={(value) => {
+                  setBorrowAmount(value);
+                }}></CoinInput>
+            </Box>
 
             <Column
               style={{

@@ -1,8 +1,8 @@
 import { BigNumber } from 'bignumber.js';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import 'swiper/css';
 
-import { Button, Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetPoolExchangeRate from '@/ui/hooks/useGetPoolExchangeRate';
@@ -15,7 +15,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
 export default function EarnTabScreen() {
   const currentAccount = useCurrentAccount();
@@ -95,6 +95,12 @@ export default function EarnTabScreen() {
     return withdrawLoading || +withdrawAmount <= 0;
   }, [operationTab, loading, withdrawLoading, supplyAmount, withdrawAmount]);
 
+  const buttonRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const activeIndex = useMemo(() => {
+    return operationTab === 'supply' ? 0 : 1;
+  }, [operationTab]);
+
   return (
     <Layout>
       <MainHeader title={''} />
@@ -108,19 +114,37 @@ export default function EarnTabScreen() {
             borderRadius: '10px'
           }}>
           <Row>
-            <Stack gap={'6px'} flexDirection={'row'} p={0.5} borderRadius={'10px'} bgcolor="black">
+            <Stack
+              gap={'6px'}
+              flexDirection={'row'}
+              p={0.5}
+              borderRadius={'10px'}
+              bgcolor="black"
+              style={{
+                position: 'relative'
+              }}>
               <div
-                className={`text-white cursor-pointer rounded-lg py-1.5 px-2 text-xs ${
-                  operationTab === 'supply' ? 'bg-[#F7771A]' : ''
-                }`}
+                style={{
+                  position: 'absolute',
+                  height: '28px',
+                  backgroundColor: '#F7771A',
+                  borderRadius: '10px',
+                  transition: 'all 0.3s ease',
+                  left: buttonRefs.current[activeIndex]?.offsetLeft ?? 0,
+                  width: buttonRefs.current[activeIndex]?.offsetWidth ?? 0
+                }}
+              />
+
+              <div
+                className={'text-white relative z-10 cursor-pointer  py-1.5 px-2 text-xs '}
+                ref={(el) => (buttonRefs.current[0] = el)}
                 onClick={() => setOperationTab('supply')}>
                 Supply
               </div>
 
               <div
-                className={`text-white cursor-pointer rounded-lg py-1.5 px-2 text-xs ${
-                  operationTab === 'withdraw' ? 'bg-[#F7771A]' : ''
-                }`}
+                className={'text-white relative z-10 cursor-pointer  py-1.5 px-2 text-xs '}
+                ref={(el) => (buttonRefs.current[1] = el)}
                 onClick={() => setOperationTab('withdraw')}>
                 Withdraw
               </div>
@@ -151,19 +175,22 @@ export default function EarnTabScreen() {
 
             <Column>
               <Row itemsCenter justifyBetween>
-                <CoinInput
-                  size={20}
-                  coin={{
-                    amount: operationTab === 'supply' ? supplyAmount : withdrawAmount,
-                    denom: usdcBalance?.denom || 'uusdc'
-                  }}
-                  onChange={(value) => {
-                    if (operationTab === 'supply') {
-                      setsupplyAmount(value);
-                    } else {
-                      setwithdrawAmount(value);
-                    }
-                  }}></CoinInput>
+                <Box py={'2px'}>
+                  <CoinInput
+                    size={20}
+                    coin={{
+                      amount: operationTab === 'supply' ? supplyAmount : withdrawAmount,
+                      denom: usdcBalance?.denom || 'uusdc'
+                    }}
+                    onChange={(value) => {
+                      if (operationTab === 'supply') {
+                        setsupplyAmount(value);
+                      } else {
+                        setwithdrawAmount(value);
+                      }
+                    }}
+                  />
+                </Box>
 
                 <Row itemsCenter>
                   <div
@@ -220,16 +247,20 @@ export default function EarnTabScreen() {
                     .toFormat()}`}
                   size="xxs"
                   color="white_muted"></Text>
-                <Text
-                  style={{
-                    verticalAlign: 'middle',
-                    whiteSpace: 'nowrap'
-                  }}
-                  text={`Available ${BigNumber(
-                    operationTab === 'supply' ? usdcBalance?.formatAmount || '0' : stokenBalance?.formatAmount || '0'
-                  ).toFormat()}`}
-                  size="xxs"
-                  color="white_muted"></Text>
+
+                <Row itemsCenter gap="xs">
+                  <Icon color="white_muted" icon="wallet-icon" size={12}></Icon>
+                  <Text
+                    style={{
+                      verticalAlign: 'middle',
+                      whiteSpace: 'nowrap'
+                    }}
+                    text={`${BigNumber(
+                      operationTab === 'supply' ? usdcBalance?.formatAmount || '0' : stokenBalance?.formatAmount || '0'
+                    ).toFormat()}`}
+                    size="xxs"
+                    color="white_muted"></Text>
+                </Row>
               </Row>
             </Column>
           </Row>

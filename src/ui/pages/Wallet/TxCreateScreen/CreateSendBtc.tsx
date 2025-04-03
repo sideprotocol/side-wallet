@@ -1,4 +1,5 @@
 import { Tooltip } from 'antd';
+import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
 
 import { COIN_DUST } from '@/shared/constant';
@@ -222,14 +223,14 @@ export default function CreateSendBtc() {
             <Text text="Available" color="primary" />
             {spendUnavailableSatoshis > 0 && (
               <Row>
-                <Text text={`${spendUnavailableAmount}`} size="sm" style={{ color: '#65D5F0' }} />
+                <Text text={`${BigNumber(spendUnavailableAmount).toFormat()}`} size="sm" style={{ color: '#65D5F0' }} />
                 <Text text={token.asset.symbol} size="sm" color="textDim" />
                 <Text text={'+'} size="sm" color="textDim" />
               </Row>
             )}
 
             <Row>
-              <Text text={`${avaiableAmount}`} size="sm" color="primary" />
+              <Text text={`${BigNumber(avaiableAmount).toFormat()}`} size="sm" color="primary" />
               <Text text={token.asset.symbol} size="sm" color="textDim" />
             </Row>
           </Row>
@@ -252,12 +253,12 @@ export default function CreateSendBtc() {
 
             {spendUnavailableSatoshis > 0 ? (
               <Row>
-                <Text text={`${unspendUnavailableAmount}`} size="sm" color="white" />
+                <Text text={`${BigNumber(unspendUnavailableAmount).toFormat()}`} size="sm" color="white" />
                 <Text text={''} size="sm" color="textDim" />
               </Row>
             ) : (
               <Row>
-                <Text text={`${unavailableAmount}`} size="sm" color="white" />
+                <Text text={`${BigNumber(unavailableAmount).toFormat()}`} size="sm" color="white" />
                 <Text text={token.asset.symbol} size="sm" color="textDim" />
               </Row>
             )}
@@ -266,7 +267,7 @@ export default function CreateSendBtc() {
           <Row justifyBetween>
             <Text text="Total" color="textDim" />
             <Row>
-              <Text text={`${totalAmount}`} size="sm" color="white" />
+              <Text text={`${BigNumber(totalAmount).toFormat()}`} size="sm" color="white" />
               <Text text={token.asset.symbol} size="sm" color="textDim" />
             </Row>
           </Row>

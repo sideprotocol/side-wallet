@@ -15,7 +15,6 @@ export function CoinInput({ coin, onChange, readOnly, onInput, size, color, deci
   return (
     <NumericFormat
       type="text"
-      // disableUnderline
       className="coin-input"
       readOnly={readOnly}
       style={{

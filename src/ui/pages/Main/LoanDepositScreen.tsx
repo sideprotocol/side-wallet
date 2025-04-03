@@ -193,7 +193,7 @@ export default function LoanDepositScreen() {
               cursor: 'pointer'
             }}
             onClick={() => window.open(`${SIDE_HUB_URL}/loan/${toInfo.address}`, '_blank')}>
-            <Text text="Funding using another wallet on web app" color="white" size="xs"></Text>
+            <div className="text-white text-xs hover:text-[#F7931A]">Funding using another wallet on web app</div>
           </Row>
         </Column>
       </Content>

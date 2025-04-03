@@ -93,7 +93,7 @@ export default function LoanAuthorizeScreen() {
               fontWeight: 700
             }}></Text>
 
-          <Row fullX mt="xxl">
+          <Row fullX mt="md">
             <Button
               disabled={disabled}
               onClick={async () => {

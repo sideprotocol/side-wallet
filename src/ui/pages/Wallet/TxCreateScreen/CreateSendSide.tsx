@@ -191,7 +191,7 @@ export default function CreateSendSide() {
               }}>
               <Image src="./images/icons/wallet-04.svg" size={14} />
               <Text
-                text={available}
+                text={BigNumber(available).toFormat()}
                 style={{
                   fontSize: '14px',
                   lineHeight: '24px'
