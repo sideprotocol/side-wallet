@@ -1,6 +1,8 @@
 {
   "externally_connectable": {
-    "matches": ["https://side.one/*"],
-    "ids": ["*"]
+    "matches": [
+      "https://side.one/*",
+      "https://*.side.one/*"
+    ]
   }
 }

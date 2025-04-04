@@ -2,7 +2,6 @@
   "manifest_version": 3,
   "name": "__MSG_appName__",
   "version": "1.0",
-
   "default_locale": "en",
   "description": "__MSG_appDescription__",
   "icons": {
@@ -11,7 +10,6 @@
     "48": "/images/logo/logo@48x.png",
     "128": "/images/logo/logo@128x.png"
   },
-
   "action": {
     "default_popup": "index.html",
     "default_icon": {
@@ -22,48 +20,50 @@
     },
     "default_title": "__MSG_appName__"
   },
-
   "author": "https://side.one/",
   "background": {
     "service_worker": "background.js"
   },
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "homepage_url": "https://side.one/",
   "permissions": [
     "storage",
-    "unlimitedStorage",
     "sidePanel",
-    "contextMenus",
-    "alarms",
     "tabs",
     "activeTab",
     "scripting",
     "webRequest",
-    "nativeMessaging",
     "webNavigation"
   ],
   "short_name": "__MSG_appName__",
-
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content-script.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content-script.js"
+      ],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
-
   "web_accessible_resources": [
     {
-      "resources": ["pageProvider.js"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "pageProvider.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
   "minimum_chrome_version": "88",
-
   "side_panel": {
     "default_path": "sidePanel.html#/main",
     "openPanelOnActionClick": true
