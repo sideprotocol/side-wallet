@@ -224,6 +224,15 @@ export class SideProvider extends EventEmitter {
     });
   };
 
+  signSnorr = async (text: string) => {
+    return this._request({
+      method: 'signSnorr',
+      params: {
+        text
+      }
+    });
+  };
+
   signAdaptor = async (sigHash: string, adaptorPoint: string) => {
     return this._request({
       method: 'signAdaptor',
