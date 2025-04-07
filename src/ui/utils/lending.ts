@@ -11,8 +11,8 @@ import services from '../services';
 import { GetCetInfoResponse } from '../services/lending/types';
 
 export interface DepositToLendingAgency {
-  borrowAmount: Coin; // 1uusdc
-  collateralAmount: Coin; // 1sat
+  borrowAmount: Coin;
+  collateralAmount: Coin;
   collateralAddress: string;
   restUrl: string;
   feeRate: number;

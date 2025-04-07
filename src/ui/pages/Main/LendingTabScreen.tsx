@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-import { Fragment, useMemo, useState } from 'react';
+import React, { Fragment, useMemo, useState } from 'react';
 import 'swiper/css';
 
 import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
@@ -16,7 +16,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Popover, Stack, Typography } from '@mui/material';
 
 import MainHeader from './MainHeader';
 
@@ -24,6 +24,11 @@ export default function LendingTanScreen() {
   const currentAccount = useCurrentAccount();
 
   const [collateralAmount, setcollateralAmount] = useState('');
+
+  const [poolTokenDenom, setPoolTokenDenom] = useState('uusdc');
+
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const open = !!anchorEl;
 
   const [borrowAmount, setBorrowAmount] = useState('');
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
@@ -34,9 +39,7 @@ export default function LendingTanScreen() {
 
   const satBalance = bitcoinBalanceList.find((b) => b.denom === 'sat');
 
-  console.log({ satBalance });
-
-  const usdcBalance = balanceList.find((b) => b.denom == 'uusdc');
+  const poolTokenBalance = balanceList.find((b) => b.denom == poolTokenDenom);
 
   const collateralValue = useMemo(() => {
     if (!collateralAmount || !satBalance) return '$0';
@@ -45,15 +48,15 @@ export default function LendingTanScreen() {
   }, [collateralAmount, satBalance]);
 
   const borrowValue = useMemo(() => {
-    if (!borrowAmount || !usdcBalance) return '$0';
-    const value = BigNumber(borrowAmount).times(usdcBalance.denomPrice).toFormat(2);
+    if (!borrowAmount || !poolTokenBalance) return '$0';
+    const value = BigNumber(borrowAmount).times(poolTokenBalance.denomPrice).toFormat(2);
 
     return '$' + value;
-  }, [borrowAmount, usdcBalance]);
+  }, [borrowAmount, poolTokenBalance]);
 
   const { data: poolsData } = useGetPoolsData();
 
-  const poolData = poolsData.find((p) => p.token.denom === usdcBalance?.denom);
+  const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
 
   const { liquidationEvent } = useGetLiquidationEvent({
     bitcoinAmount: collateralAmount,
@@ -76,7 +79,7 @@ export default function LendingTanScreen() {
         .div(new BigNumber(borrowAmount || 1).times(poolData?.token.denomPrice || 0))
         .toFixed(2)
     };
-  }, [borrowAmount, usdcBalance, collateralAmount, satBalance, poolData]);
+  }, [borrowAmount, poolTokenBalance, collateralAmount, satBalance, poolData]);
 
   const { borrowMaxAmount } = useMemo(() => {
     let borrowMaxAmount = '0';
@@ -99,7 +102,7 @@ export default function LendingTanScreen() {
     }
 
     return { borrowMaxAmount };
-  }, [collateralAmount, borrowAmount, poolData, satBalance, usdcBalance]);
+  }, [collateralAmount, borrowAmount, poolData, satBalance, poolTokenBalance]);
 
   const maturityTime = useMemo(() => {
     return new BigNumber(dayjs().unix()).plus(new BigNumber(deadline).multipliedBy(24).multipliedBy(3600)).toString();
@@ -194,7 +197,7 @@ export default function LendingTanScreen() {
       )
     },
     {
-      label: 'Liquidation Price (BTC/USDC)',
+      label: `Liquidation Price (BTC/${poolTokenBalance?.asset.symbol})`,
       value: `${getTruncate(liquidationEvent?.price || '0', 2)}`
     },
     {
@@ -260,9 +263,16 @@ export default function LendingTanScreen() {
   return (
     <Layout>
       <MainHeader title={''} />
-      <Content gap="lg" mt="lg">
-        <Column gap="xs">
-          <Row full justifyBetween itemsCenter>
+      <Content gap="lg" mt="xl">
+        <Column
+          gap="xs"
+          style={{
+            borderRadius: '10px'
+          }}
+          bg="card_bgColor"
+          px="lg"
+          py="md">
+          <Row px="md" full justifyBetween itemsCenter>
             <Text color="white" size="xs">
               Collateral{' '}
             </Text>
@@ -278,13 +288,13 @@ export default function LendingTanScreen() {
             style={{
               height: 70
             }}
+            px="md"
             itemsCenter
             rounded
             py="md">
             <Row
               style={{
-                flexShrink: 0,
-                minWidth: 110
+                flexShrink: 0
               }}
               rounded={true}
               px="lg"
@@ -321,14 +331,14 @@ export default function LendingTanScreen() {
             </Column>
           </Row>
 
-          <Row full justifyBetween itemsCenter mt="lg">
+          <Row px="md" full justifyBetween itemsCenter mt="lg">
             <Text color="white" size="xs">
               I want to borrow
             </Text>
 
             <Row itemsCenter>
               <Icon icon="wallet-icon" color="white_muted" size={16} />
-              <Text text={BigNumber(usdcBalance?.formatAmount || '0').toFormat()} color="white" size="xs"></Text>
+              <Text text={BigNumber(poolTokenBalance?.formatAmount || '0').toFormat()} color="white" size="xs"></Text>
             </Row>
           </Row>
 
@@ -337,29 +347,92 @@ export default function LendingTanScreen() {
             style={{
               height: 70
             }}
+            px="md"
             itemsCenter
             rounded
-            px="lg"
             py="md">
             <Row
               style={{
-                flexShrink: 0,
-                minWidth: 110
+                flexShrink: 0
               }}
               rounded={true}
               py="md"
-              bg="card_bgColor">
-              <Image src={usdcBalance?.asset.logo} height={24} width={24}></Image>
+              px="md"
+              itemsCenter
+              classname="bg-[#17171C]  hover:bg-opacity-80"
+              onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+                event.stopPropagation();
+                setAnchorEl(event.currentTarget);
+              }}>
+              <Image src={poolTokenBalance?.asset.logo} height={24} width={24}></Image>
 
-              <Text text={usdcBalance?.asset.symbol || 'USDC'} color="white" size="md"></Text>
+              <Text text={poolTokenBalance?.asset.symbol || 'USDC'} color="white" size="md"></Text>
+
+              <Icon icon="down" size={10}></Icon>
             </Row>
+
+            <Popover
+              open={open}
+              sx={{
+                '.MuiPaper-root': {
+                  width: 'max-content',
+                  bgcolor: 'transparent'
+                }
+              }}
+              onClose={(event: React.MouseEvent<HTMLDivElement>) => {
+                setAnchorEl(null);
+                event.stopPropagation();
+              }}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left'
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left'
+              }}>
+              <Column
+                gap="md"
+                bg="black"
+                px="md"
+                py="md"
+                style={{
+                  border: `1px solid ${colors.card_bgColor}`,
+                  borderRadius: '10px'
+                }}>
+                {poolsData.map((pool) => {
+                  return (
+                    <Row
+                      key={pool.token.denom}
+                      style={{
+                        flexShrink: 0
+                      }}
+                      classname="bg-[#17171C]  hover:bg-opacity-80"
+                      rounded={true}
+                      px="lg"
+                      py="md"
+                      itemsCenter
+                      onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+                        event.stopPropagation();
+                        setPoolTokenDenom(pool.token.denom);
+                        setAnchorEl(null);
+                      }}>
+                      <Image src={pool.token.asset.logo} height={28} width={28}></Image>
+
+                      <Text text={pool.token.asset.symbol} color="white" size="md"></Text>
+                    </Row>
+                  );
+                })}
+              </Column>
+            </Popover>
 
             <Box py={'2px'}>
               <CoinInput
                 size={22}
                 coin={{
                   amount: borrowAmount,
-                  denom: usdcBalance?.denom || 'uusdc'
+                  denom: poolTokenBalance?.denom || 'uusdc'
                 }}
                 onChange={(value) => {
                   setBorrowAmount(value);
@@ -419,7 +492,7 @@ export default function LendingTanScreen() {
             }}
             direction="row"
             alignItems="center"
-            gap="12px">
+            gap="8px">
             {['7 days', '30 days', '90 days', '180 days', '360 days'].map((item, index) => {
               const [value, unit] = item.split(' ');
               return (
@@ -428,8 +501,9 @@ export default function LendingTanScreen() {
                   sx={{
                     fontSize: '10px',
                     borderRadius: '10px',
-                    background: value === deadline ? colors.main : colors.card_bgColor,
+                    background: value === deadline ? colors.main : colors.black,
                     p: '6px',
+                    px: '8px',
                     color: value === deadline ? colors.black : colors.white,
                     fontWeight: 500,
                     cursor: 'pointer',
@@ -464,7 +538,7 @@ export default function LendingTanScreen() {
           </Stack>
 
           <Column
-            bg="card_bgColor"
+            bg="black"
             style={{
               borderRadius: '10px'
             }}

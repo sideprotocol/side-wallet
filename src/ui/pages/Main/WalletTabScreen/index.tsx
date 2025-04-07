@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { AddressFlagType, CHAINS_ENUM, SIDE_STATION_URL } from '@/shared/constant';
+import { AddressFlagType, CHAINS_ENUM, SIDE_HUB_URL, SIDE_STATION_URL } from '@/shared/constant';
 import { checkAddressFlag } from '@/shared/utils';
 import { ButtonGroup, Column, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPopover';
@@ -11,7 +11,6 @@ import useGetAccountBalanceByUSD from '@/ui/hooks/useGetAccountBalanceByUSD';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
-import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
 import { fontSizes } from '@/ui/theme/font';
 import { getTruncate, useWallet } from '@/ui/utils';
@@ -25,7 +24,6 @@ import SideTokenList from './SideTokenList';
 export default function WalletTabScreen() {
   const navigate = useNavigate();
   const [balanceVisible, setBalanceVisible] = useState(true);
-  const currentKeyring = useCurrentKeyring();
   const currentAccount = useCurrentAccount();
 
   const wallet = useWallet();
@@ -41,7 +39,6 @@ export default function WalletTabScreen() {
 
   const blockStreamUrl = useBlockstreamUrl();
 
-  // console.log(`balanceList: `, balanceList);
   useEffect(() => {
     if (currentAccount.address === addressSummary.address) {
       if (addressSummary.arc20Count > 0 || addressSummary.runesCount > 0) {
@@ -209,7 +206,7 @@ export default function WalletTabScreen() {
           <div
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
-              window.open(`${SIDE_STATION_URL}/staking`, '_blank');
+              window.open(`${SIDE_STATION_URL}`, '_blank');
             }}>
             <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -222,13 +219,15 @@ export default function WalletTabScreen() {
                 />
               </svg>
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">Stake</div>
+            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">
+              Station
+            </div>
           </div>
 
           <div
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
-              window.open(`${SIDE_STATION_URL}/explorer`, '_blank');
+              window.open(`${SIDE_HUB_URL}`, '_blank');
             }}>
             <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -242,7 +241,7 @@ export default function WalletTabScreen() {
                 />
               </svg>
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">View</div>
+            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">Hub</div>
           </div>
 
           <div
@@ -268,7 +267,9 @@ export default function WalletTabScreen() {
                 />
               </svg>
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">View</div>
+            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">
+              Mempool
+            </div>
           </div>
         </Row>
 

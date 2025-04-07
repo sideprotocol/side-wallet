@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js';
-import { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import 'swiper/css';
 
 import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
@@ -15,13 +15,18 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
-import { Stack, Typography } from '@mui/material';
+import { Popover, Stack, Typography } from '@mui/material';
 
 export default function EarnTabScreen() {
   const currentAccount = useCurrentAccount();
   const [supplyAmount, setsupplyAmount] = useState('');
 
   const [withdrawAmount, setwithdrawAmount] = useState('');
+
+  const [poolTokenDenom, setPoolTokenDenom] = useState('uusdc');
+
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const open = !!anchorEl;
 
   const [operationTab, setOperationTab] = useState<'supply' | 'withdraw'>('supply');
 
@@ -31,11 +36,11 @@ export default function EarnTabScreen() {
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
-  const usdcBalance = balanceList.find((b) => b.denom == 'uusdc');
+  const poolTokenBalance = balanceList.find((b) => b.denom == poolTokenDenom);
 
   const { data: poolsData } = useGetPoolsData();
 
-  const poolData = poolsData.find((p) => p.token.denom === usdcBalance?.denom);
+  const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
 
   const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: poolData?.baseData?.id || '' });
 
@@ -167,21 +172,87 @@ export default function EarnTabScreen() {
               px="md"
               py="md"
               itemsCenter
-              bg="card_bgColor">
+              classname="bg-[#17171C]  hover:bg-opacity-80"
+              onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+                event.stopPropagation();
+                setAnchorEl(event.currentTarget);
+              }}>
               <Image
-                src={operationTab === 'supply' ? usdcBalance?.asset.logo : stokenBalance?.asset.logo}
+                src={operationTab === 'supply' ? poolTokenBalance?.asset.logo : stokenBalance?.asset.logo}
                 height={28}
                 width={28}></Image>
 
               <Text
                 text={
                   operationTab === 'supply'
-                    ? usdcBalance?.asset.symbol || 'USDC'
+                    ? poolTokenBalance?.asset.symbol || 'USDC'
                     : stokenBalance?.asset.symbol || 'sUSDC'
                 }
                 color="white"
                 size="md"></Text>
+
+              <Icon icon="down" size={10}></Icon>
             </Row>
+
+            <Popover
+              open={open}
+              sx={{
+                '.MuiPaper-root': {
+                  width: 'max-content',
+                  bgcolor: 'transparent'
+                }
+              }}
+              onClose={(event: React.MouseEvent<HTMLDivElement>) => {
+                setAnchorEl(null);
+                event.stopPropagation();
+              }}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left'
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left'
+              }}>
+              <Column
+                gap="md"
+                bg="black"
+                px="md"
+                py="md"
+                style={{
+                  border: `1px solid ${colors.card_bgColor}`,
+                  borderRadius: '10px'
+                }}>
+                {poolsData.map((pool) => {
+                  const stoken = balanceList.find((b) => b.denom == pool.baseData.id);
+                  return (
+                    <Row
+                      key={pool.token.denom}
+                      style={{
+                        flexShrink: 0
+                      }}
+                      classname="bg-[#17171C]  hover:bg-opacity-80"
+                      rounded={true}
+                      px="lg"
+                      py="md"
+                      itemsCenter
+                      onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+                        event.stopPropagation();
+                        setPoolTokenDenom(pool.token.denom);
+                        setAnchorEl(null);
+                      }}>
+                      <Image src={pool.token.asset.logo} height={28} width={28}></Image>
+
+                      <Text
+                        text={operationTab === 'supply' ? pool.token.asset.symbol : stoken?.asset.symbol}
+                        color="white"
+                        size="md"></Text>
+                    </Row>
+                  );
+                })}
+              </Column>
+            </Popover>
 
             <Column
               fullY
@@ -202,9 +273,9 @@ export default function EarnTabScreen() {
                   size={22}
                   coin={{
                     amount: operationTab === 'supply' ? supplyAmount : withdrawAmount,
-                    denom: usdcBalance?.denom || 'uusdc'
+                    denom: poolTokenBalance?.denom || 'uusdc'
                   }}
-                  decimalScale={usdcBalance?.asset.precision || 6}
+                  decimalScale={poolTokenBalance?.asset.precision || 6}
                   onChange={(value) => {
                     if (operationTab === 'supply') {
                       setsupplyAmount(value);
@@ -225,11 +296,11 @@ export default function EarnTabScreen() {
                     onClick={() => {
                       const amount = new BigNumber(
                         operationTab === 'supply'
-                          ? usdcBalance?.formatAmount || '0'
+                          ? poolTokenBalance?.formatAmount || '0'
                           : stokenBalance?.formatAmount || '0'
                       )
                         .multipliedBy(0.5)
-                        .toFixed(usdcBalance?.asset.precision || 6, BigNumber.ROUND_DOWN);
+                        .toFixed(poolTokenBalance?.asset.precision || 6, BigNumber.ROUND_DOWN);
                       if (operationTab === 'supply') {
                         setsupplyAmount(amount);
                       } else {
@@ -246,7 +317,7 @@ export default function EarnTabScreen() {
                     onClick={() => {
                       const amount =
                         operationTab === 'supply'
-                          ? usdcBalance?.formatAmount || '0'
+                          ? poolTokenBalance?.formatAmount || '0'
                           : stokenBalance?.formatAmount || '0';
                       if (operationTab === 'supply') {
                         setsupplyAmount(amount);
@@ -269,7 +340,7 @@ export default function EarnTabScreen() {
                     overflow: 'hidden'
                   }}
                   text={`$${BigNumber(operationTab === 'supply' ? supplyAmount || '0' : withdrawAmount || '0')
-                    .times(BigNumber(usdcBalance?.denomPrice || '0').div(exchangeRate || 1))
+                    .times(BigNumber(poolTokenBalance?.denomPrice || '0').div(exchangeRate || 1))
                     .toFormat(2)}`}
                   size="xxs"
                   color="white_muted"></Text>
@@ -287,7 +358,9 @@ export default function EarnTabScreen() {
                       whiteSpace: 'nowrap'
                     }}
                     text={`${BigNumber(
-                      operationTab === 'supply' ? usdcBalance?.formatAmount || '0' : stokenBalance?.formatAmount || '0'
+                      operationTab === 'supply'
+                        ? poolTokenBalance?.formatAmount || '0'
+                        : stokenBalance?.formatAmount || '0'
                     ).toFormat()}`}
                     size="xxs"
                     color="white_muted"></Text>
@@ -375,7 +448,7 @@ export default function EarnTabScreen() {
                     fontSize: '12px',
                     color: colors.grey12
                   }}>
-                  {usdcBalance?.asset.symbol} / {stokenBalance?.asset.symbol}
+                  {poolTokenBalance?.asset.symbol} / {stokenBalance?.asset.symbol}
                 </Typography>
                 <Typography
                   sx={{
@@ -400,7 +473,7 @@ export default function EarnTabScreen() {
                   }}>
                   {new BigNumber(withdrawAmount || '0').times(exchangeRate).toFixed(6)}&nbsp;
                   <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                    {usdcBalance?.asset.symbol}
+                    {poolTokenBalance?.asset.symbol}
                   </small>
                 </Typography>
               </Stack>

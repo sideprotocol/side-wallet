@@ -76,8 +76,8 @@ export default function useApproveLoan(loan_id: string) {
     depositTxId: string;
     psbtHex: string;
     feeRate: number;
-    borrowAmount: Coin; // 1uusdc
-    collateralAmount: Coin; // 1sat
+    borrowAmount: Coin;
+    collateralAmount: Coin;
     loanId: string;
     liquidationEvent: LiquidationEvent;
   }) => {

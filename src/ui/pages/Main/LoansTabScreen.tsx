@@ -42,7 +42,7 @@ export default function LoansTabScreen() {
         </Column>
 
         <Text size="sm" color="white_muted">
-          Use native BTC as collateral and borrow USDC from a liquidity pool
+          Use native BTC as collateral to request a loan from a liquidity pool.
         </Text>
         <Column gap="sm">
           <Row itemsCenter>
