@@ -95,11 +95,7 @@ export default function BridgeSelectTokenScreen() {
           </div>
         </Column>
 
-        <Column
-          gap="xl"
-          style={{
-            margin: '0 16px'
-          }}>
+        <Column gap="sm">
           {isDeposit
             ? btcBalanceList?.map((asset) => {
                 return (
@@ -110,6 +106,7 @@ export default function BridgeSelectTokenScreen() {
                       onClose();
                     }}
                     full
+                    px="lg"
                     key={asset.asset.symbol}
                     justifyBetween
                     style={{

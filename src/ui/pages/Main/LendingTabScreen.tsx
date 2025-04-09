@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-import React, { Fragment, useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import 'swiper/css';
 
 import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
@@ -13,11 +13,13 @@ import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
 import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useLendingState } from '@/ui/state/lending/hook';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-import { Box, Popover, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
+import { useNavigate } from '../MainRoute';
 import MainHeader from './MainHeader';
 
 export default function LendingTanScreen() {
@@ -25,10 +27,9 @@ export default function LendingTanScreen() {
 
   const [collateralAmount, setcollateralAmount] = useState('');
 
-  const [poolTokenDenom, setPoolTokenDenom] = useState('uusdc');
+  const { poolTokenDenom } = useLendingState();
 
-  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-  const open = !!anchorEl;
+  const navigator = useNavigate();
 
   const [borrowAmount, setBorrowAmount] = useState('');
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
@@ -360,9 +361,11 @@ export default function LendingTanScreen() {
               px="md"
               itemsCenter
               classname="bg-[#17171C]  hover:bg-opacity-80"
-              onClick={(event: React.MouseEvent<HTMLDivElement>) => {
-                event.stopPropagation();
-                setAnchorEl(event.currentTarget);
+              onClick={() => {
+                navigator('LendingSelectTokenScreen', {
+                  poolsData,
+                  type: ''
+                });
               }}>
               <Image src={poolTokenBalance?.asset.logo} height={24} width={24}></Image>
 
@@ -370,62 +373,6 @@ export default function LendingTanScreen() {
 
               <Icon icon="down" size={10}></Icon>
             </Row>
-
-            <Popover
-              open={open}
-              sx={{
-                '.MuiPaper-root': {
-                  width: 'max-content',
-                  bgcolor: 'transparent'
-                }
-              }}
-              onClose={(event: React.MouseEvent<HTMLDivElement>) => {
-                setAnchorEl(null);
-                event.stopPropagation();
-              }}
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left'
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left'
-              }}>
-              <Column
-                gap="md"
-                bg="black"
-                px="md"
-                py="md"
-                style={{
-                  border: `1px solid ${colors.card_bgColor}`,
-                  borderRadius: '10px'
-                }}>
-                {poolsData.map((pool) => {
-                  return (
-                    <Row
-                      key={pool.token.denom}
-                      style={{
-                        flexShrink: 0
-                      }}
-                      classname="bg-[#17171C]  hover:bg-opacity-80"
-                      rounded={true}
-                      px="lg"
-                      py="md"
-                      itemsCenter
-                      onClick={(event: React.MouseEvent<HTMLDivElement>) => {
-                        event.stopPropagation();
-                        setPoolTokenDenom(pool.token.denom);
-                        setAnchorEl(null);
-                      }}>
-                      <Image src={pool.token.asset.logo} height={28} width={28}></Image>
-
-                      <Text text={pool.token.asset.symbol} color="white" size="md"></Text>
-                    </Row>
-                  );
-                })}
-              </Column>
-            </Popover>
 
             <Box py={'2px'}>
               <CoinInput

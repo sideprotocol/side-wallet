@@ -6,6 +6,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 import { Content, Icon } from '../components';
 import BridgeSelectTokenScreen from '../components/Bridge/BridgeSelectToken';
+import LendingSelectTokenScreen from '../components/Lending/LendingSelectToken';
 import { accountActions } from '../state/accounts/reducer';
 import { useIsReady, useIsUnlocked } from '../state/global/hooks';
 import { globalActions } from '../state/global/reducer';
@@ -150,6 +151,11 @@ export const routes = {
   BridgeSelectTokenScreen: {
     path: '/bridge-select-token',
     element: <BridgeSelectTokenScreen />
+  },
+
+  LendingSelectTokenScreen: {
+    path: '/lending-select-token',
+    element: <LendingSelectTokenScreen />
   },
 
   BridgeConfirmTabScreen: {
