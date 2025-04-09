@@ -30,7 +30,6 @@ export interface BridgeState {
   bridgeAmount: string;
   from: IChain;
   to: IChain;
-  balance: string;
   fee: number;
   feeSummary: any[];
   loading: boolean;
@@ -42,7 +41,6 @@ export const initialState: BridgeState = {
   bridgeAmount: '',
   from: bitcoinChain,
   to: sideChain,
-  balance: '',
   fee: 20,
   feeSummary: [],
   loading: false,
@@ -64,7 +62,6 @@ const slice = createSlice({
           bridgeAmount?: string;
           from?: IChain;
           to?: IChain;
-          balance?: string;
           fee?: number;
           feeSummary?: any[];
           loading?: boolean;

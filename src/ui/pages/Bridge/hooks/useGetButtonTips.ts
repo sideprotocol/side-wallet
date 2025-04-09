@@ -15,7 +15,7 @@ export default function useGetButtonTips() {
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
   const { bridgeParams } = useInitBtcBridge();
-  const { bridgeAmount, balance, from, to, bridgeAsset } = useBridgeState();
+  const { bridgeAmount, from, to, bridgeAsset } = useBridgeState();
 
   const isBtcTransfer = from?.isBitcoin || to?.isBitcoin;
 
@@ -28,8 +28,8 @@ export default function useGetButtonTips() {
     }
     const isDeposit = !!from?.isBitcoin;
 
-    // 未输入
-    if (!bridgeAmount || !bridgeParams) {
+    // 未输入 初始化未成功
+    if (!bridgeAmount || !bridgeParams || !bridgeAsset) {
       return {
         transferBtcDisabled: true,
         transferBtcButtonTips: ''
@@ -49,7 +49,6 @@ export default function useGetButtonTips() {
     const btcVault = bridgeParams?.params?.vaults
       .filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
       .reduce(
-        // @ts-ignore
         (max, current) => {
           return BigInt(current.version) > BigInt(max.version) ? current : max;
         },
@@ -61,7 +60,6 @@ export default function useGetButtonTips() {
     const runeVault = bridgeParams?.params?.vaults
       .filter((vault) => vault.asset_type === 'ASSET_TYPE_RUNES')
       .reduce(
-        // @ts-ignore
         (max, current) => {
           return BigInt(current.version) > BigInt(max.version) ? current : max;
         },
@@ -123,14 +121,14 @@ export default function useGetButtonTips() {
       }
     }
 
-    if (BigNumber(bridgeAmount || '0').gt(balance)) {
+    if (BigNumber(bridgeAmount || '0').gt(bridgeAsset.formatAmount)) {
       return {
         transferBtcDisabled: true,
         transferBtcButtonTips: 'Insufficient Balance'
       };
     }
 
-    if (bridgeAsset?.denom === bridgeFeeAssetInfo?.denom && +bridgeAmount === +balance) {
+    if (bridgeAsset.denom === bridgeFeeAssetInfo?.denom && +bridgeAmount === +bridgeAsset.formatAmount) {
       return {
         transferBtcDisabled: true,
         transferBtcButtonTips: 'Please reserve sufficient funds for network and bridge fees.'
@@ -140,7 +138,7 @@ export default function useGetButtonTips() {
       transferBtcDisabled: false,
       transferBtcButtonTips: ''
     };
-  }, [bridgeParams, bridgeAmount, bridgeAsset, btcBalanceList, sideBalanceList, from, to, balance, isBtcTransfer]);
+  }, [bridgeParams, bridgeAmount, bridgeAsset, btcBalanceList, sideBalanceList, from, to, isBtcTransfer]);
 
   return {
     isDisabled: transferBtcDisabled,

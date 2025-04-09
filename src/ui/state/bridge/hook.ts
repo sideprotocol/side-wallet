@@ -112,7 +112,8 @@ export const useBitcoinRuneBalance = (base: string) => {
 };
 
 export const useBridge = () => {
-  const { from, bridgeAmount, fee, exponent } = useBridgeState();
+  const { from, bridgeAmount, fee } = useBridgeState();
+  const exponent = 8;
   const dispatch = useAppDispatch();
 
   const currentAccount = useCurrentAccount();

@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
@@ -8,123 +7,31 @@ import { CoinInput } from '@/ui/components/CoinInput';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useBitcoinRuneBalance, useBridgeParams, useBridgeState } from '@/ui/state/bridge/hook';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
-import { toUnitAmount } from '@/ui/utils/formatter';
+import { getTruncate } from '@/ui/utils';
 
 import useGetButtonTips from '../Bridge/hooks/useGetButtonTips';
 import { useNavigate } from '../MainRoute';
 
-const SAT_ITEM = {
-  denom: 'sat',
-  amount: '0',
-  denomPrice: '0',
-  formatAmount: '0',
-  totalValue: '0',
-  asset: {
-    denom: 'sat',
-    symbol: 'BTC',
-    name: 'Bitcoin',
-    exponent: '8',
-    precision: 8,
-    logo: 'https://api.side.one/static/token/logo/btc.svg',
-    runeData: null,
-    rune: false
-  }
-};
-
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const currentAccount = useCurrentAccount();
-  const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
-  const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
   const { bridgeAmount, from, to, bridgeAsset } = useBridgeState();
-  const {isDisabled, buttonTips} = useGetButtonTips()
-  const dispatch = useAppDispatch();
-  // const isBtcBridge = base === 'sat';
-
-
-  const isDeposit = !!from?.isBitcoin;
-  const assets = isDeposit ? btcBalanceList : sideBalanceList;
-  const { params } = useBridgeParams();
-
-  const protocolLimit = params?.params?.protocol_limits;
-
-  const protocolFee = params?.params?.protocol_fees;
-
-  const depositEnabled = params?.params?.deposit_enabled;
-
-  const withdrawEnabled = params?.params?.withdraw_enabled;
-
-  const btcVault = params?.params?.vaults
-    ?.filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
-    ?.reduce(
-      (max, current) => {
-        return BigInt(current.version) > BigInt(max.version) ? current : max;
-      },
-      { version: '0', address: '' }
-    )?.address;
-
-  const runeVault = params?.params?.vaults
-    ?.filter((vault) => vault.asset_type === 'ASSET_TYPE_RUNES')
-    ?.reduce(
-      (max, current) => {
-        return BigInt(current.version) > BigInt(max.version) ? current : max;
-      },
-      { version: '0', address: '' }
-    )?.address;
-
-  const bridgeEnabled = isDeposit ? depositEnabled : withdrawEnabled;
-
-  let runeBalance = useBitcoinRuneBalance(base);
-
-  const bridgeAsset = assets.find((a) => a?.denom === `${base}`) || SAT_ITEM;
-
-  const satAsset = assets.find((a) => a?.denom === 'sat');
-
-  const accountBalance = useAccountBalance();
-  const btcBalance = accountBalance?.amount;
-
-  const balance = isDeposit ? (isBtcBridge ? btcBalance : runeBalance) : bridgeAsset?.formatAmount || '0';
-
-  const btcBalanceOnFromChain = isDeposit ? btcBalance : satAsset?.formatAmount || '0';
-
-  const isBTCEnoughPayingFee = BigNumber(toUnitAmount(btcBalanceOnFromChain, satAsset?.asset.precision || 8)).gte(
-    isDeposit ? protocolFee?.deposit_fee || 0 : protocolFee?.withdraw_fee || 0
-  );
-
-  const lessThanMinSatWithdraw =
-    base == 'sat' &&
-    BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(
-      BigNumber(protocolLimit?.btc_min_withdraw || 0).plus(protocolFee?.withdraw_fee || 0)
-    ) &&
-    !isDeposit;
-
-  const lessThanMinSatDeposit =
-    base == 'sat' &&
-    BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(
-      BigNumber(protocolLimit?.btc_min_deposit || 0).plus(protocolFee?.deposit_fee || 0)
-    ) &&
-    isDeposit;
-
-  const isGreaterThanMaxWithdraw =
-    base == 'sat' &&
-    BigNumber(toUnitAmount(bridgeAmount || '0', 8)).gt(
-      protocolLimit?.btc_max_withdraw || toUnitAmount(bridgeAmount || '0', 8)
-    ) &&
-    !isDeposit;
+  const { isDisabled, buttonTips } = useGetButtonTips();
+  const { balanceList: btcBalanceList, loading } = useGetBitcoinBalanceList(currentAccount.address);
 
   useEffect(() => {
-    dispatch(BridgeActions.update({ balance: balance }));
-  }, [balance]);
-
-  const isGreaterThanBalance = BigNumber(bridgeAmount || '0').gt(balance);
+    if (!loading) {
+      dispatch(BridgeActions.update({ bridgeAsset: btcBalanceList.find((item) => item.denom === 'sat') }));
+    }
+  }, [loading]);
 
   return (
     <Layout>
@@ -185,25 +92,11 @@ export default function BridgeTabScreen() {
                 style={{
                   top: '12px'
                 }}>
-                <div
-                  onMouseEnter={() => {
-                    dispatch(BridgeActions.update({ hoverExchange: true }));
-                  }}
-                  onMouseLeave={() => {
-                    dispatch(BridgeActions.update({ hoverExchange: false }));
-                  }}
-                  onClick={() => {
-                    dispatch(
-                      BridgeActions.update({
-                        from: to,
-                        to: from
-                      })
-                    );
-                  }}>
+                <div>
                   <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M17 15L0.999999 15M0.999999 15L5 11M0.999999 15L5 19M1 5L17 5M17 5L13 1M17 5L13 9"
-                      stroke={hoverExchange ? '#F7771A' : 'white'}
+                      stroke="white"
                       strokeWidth="2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -306,7 +199,7 @@ export default function BridgeTabScreen() {
                 <div className={'flex gap-[5px] items-center'}>
                   <img className={'w-[14px] h-[14px]'} src={WalletIcon} alt="" />
 
-                  <Text size="xs">{BigNumber(balance).toFormat()}</Text>
+                  <Text size="xs">{getTruncate(bridgeAsset?.formatAmount || '0', bridgeAsset?.asset.precision)}</Text>
                 </div>
               </Row>
 
@@ -330,9 +223,9 @@ export default function BridgeTabScreen() {
                     size={14}
                     coin={{
                       amount: bridgeAmount,
-                      denom: bridgeAsset?.denom || "sat"
+                      denom: bridgeAsset?.denom || 'sat'
                     }}
-                    decimalScale={bridgeAsset?+bridgeAsset.asset.exponent:6}
+                    decimalScale={bridgeAsset ? +bridgeAsset.asset.exponent : 6}
                     onChange={(value) => {
                       dispatch(BridgeActions.update({ bridgeAmount: value }));
                     }}
@@ -342,7 +235,7 @@ export default function BridgeTabScreen() {
                       'absolute right-[10px] top-1/2 -translate-y-1/2 p-2 text-[#F7771A] text-sm  cursor-pointer rounded-lg hover:bg-[#F7771A1A]'
                     }
                     onClick={() => {
-                      dispatch(BridgeActions.update({ bridgeAmount: balance }));
+                      dispatch(BridgeActions.update({ bridgeAmount: bridgeAsset?.formatAmount }));
                     }}>
                     Max
                   </div>
@@ -357,10 +250,12 @@ export default function BridgeTabScreen() {
                 }}
                 disabled={isDisabled}
                 full
-                text={'Bridge'
-                }
+                text={'Bridge'}
                 preset="primary"
               />
+            </Row>
+            <Row mt={'md'}>
+              <span>{buttonTips}</span>
             </Row>
           </Column>
         </Row>
