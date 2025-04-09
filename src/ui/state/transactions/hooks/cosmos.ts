@@ -19,6 +19,7 @@ import { CosmosTransaction, CosmosTxResponse } from '@/shared/types';
 import services from '@/ui/services';
 import { useWallet } from '@/ui/utils';
 import { errorPatterns } from '@/ui/utils/errorPatterns';
+import { getAddressTypeUrl } from '@/ui/wallet-sdk/utils';
 import { makeSignDoc as makeSignDocAmino } from '@cosmjs/amino';
 import { serializeSignDoc } from '@cosmjs/amino/build/signdoc';
 import { createWasmAminoConverters } from '@cosmjs/cosmwasm-stargate';
@@ -33,36 +34,6 @@ import {
 } from '@cosmjs/stargate';
 
 import { useCurrentAccount } from '../../accounts/hooks';
-
-export function getAddressTypeUrl(address: string) {
-  if (address.startsWith('bc1')) {
-    if (address.length === 42) {
-      return {
-        algo: 'segwit',
-        typeUrl: '/cosmos.crypto.segwit.PubKey'
-      };
-    } else if (address.length === 62) {
-      return {
-        algo: 'taproot',
-        typeUrl: '/cosmos.crypto.taproot.PubKey'
-      };
-    }
-  } else if (address.startsWith('tb1')) {
-    if (address.length === 42) {
-      return {
-        algo: 'segwit',
-        typeUrl: '/cosmos.crypto.segwit.PubKey'
-      };
-    } else if (address.length === 62) {
-      return {
-        algo: 'taproot',
-        typeUrl: '/cosmos.crypto.taproot.PubKey'
-      };
-    }
-  } else {
-    throw new Error('Please switch to Native Segwit or Taproot address ');
-  }
-}
 
 const aminoTypes = new AminoTypes({
   ...createDefaultAminoConverters(),

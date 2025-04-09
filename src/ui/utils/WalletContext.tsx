@@ -3,6 +3,7 @@ import { createContext, ReactNode, useContext } from 'react';
 import { AccountAsset } from '@/background/controller/wallet';
 import { ContactBookItem, ContactBookStore } from '@/background/service/contactBook';
 import { ToSignInput } from '@/background/service/keyring';
+import { OpenApiService } from '@/background/service/openapi';
 import { ConnectedSite } from '@/background/service/permission';
 import { AddressFlagType, ChainType } from '@/shared/constant';
 import {
@@ -32,15 +33,21 @@ import {
   WalletConfig,
   WalletKeyring
 } from '@/shared/types';
+import {
+  AminoSignResponse,
+  DirectSignResponse,
+  KeplrSignOptions,
+  OfflineAminoSigner,
+  OfflineDirectSigner,
+  StdSignDoc
+} from '@keplr-wallet/types';
 import { AddressType, UnspentOutput } from '@unisat/wallet-sdk';
 import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 
 export interface WalletController {
-  openapi: {
-    [key: string]: () => Promise<any>;
-  };
+  openapi: OpenApiService;
 
-  boot(): Promise<void>;
+  boot(password: string): Promise<void>;
   isBooted(): Promise<boolean>;
 
   getApproval(): Promise<void>;
@@ -140,8 +147,6 @@ export interface WalletController {
   getAccounts(): Promise<Account[]>;
   getNextAlianName: (keyring: WalletKeyring) => Promise<string>;
 
-  getCurrentKeyringAccounts(): Promise<Account[]>;
-
   signTransaction(psbt: bitcoin.Psbt, inputs: ToSignInput[]): Promise<bitcoin.Psbt>;
   signPsbtWithHex(psbtHex: string, toSignInputs: ToSignInput[], autoFinalized: boolean): Promise<string>;
   signMessage(message: string): Promise<string>;
@@ -209,8 +214,6 @@ export interface WalletController {
   getBTCUtxos(): Promise<UnspentOutput[]>;
   getUnavailableUtxos(): Promise<UnspentOutput[]>;
   getAssetUtxosAtomicalsFT(ticker: string): Promise<UnspentOutput[]>;
-  getAssetUtxosAtomicalsNFT(atomicalId: string): Promise<UnspentOutput[]>;
-  getAssetUtxosInscriptions(inscriptionId: string): Promise<UnspentOutput[]>;
 
   getNetworkType(): Promise<NetworkType>;
   setNetworkType(type: NetworkType): Promise<void>;
@@ -232,8 +235,6 @@ export interface WalletController {
 
   setAccountAlianName(account: Account, name: string): Promise<Account>;
   getFeeSummary(): Promise<FeeSummary>;
-  getBtcPrice(): Promise<number>;
-  getBrc20sPrice(ticks: string[]): Promise<{ [tick: string]: TickPriceItem }>;
   getRunesPrice(ticks: string[]): Promise<{ [tick: string]: TickPriceItem }>;
 
   setEditingKeyring(keyringIndex: number): Promise<void>;
@@ -401,6 +402,27 @@ export interface WalletController {
   getAutoLockTime(): Promise<number>;
 
   setLastActiveTime(): Promise<void>;
+
+  getOfflineSigner(chainId: string, signOptions?: KeplrSignOptions): Promise<OfflineAminoSigner & OfflineDirectSigner>;
+
+  signAmino(
+    chainId: string,
+    signer: string,
+    signDoc: StdSignDoc,
+    signOptions?: KeplrSignOptions
+  ): Promise<AminoSignResponse>;
+
+  signDirect(
+    chainId: string,
+    signer: string,
+    signDoc: {
+      bodyBytes: Uint8Array;
+      authInfoBytes: Uint8Array;
+      chainId: string;
+      accountNumber: Long;
+    },
+    signOptions?: KeplrSignOptions
+  ): Promise<DirectSignResponse>;
 }
 
 const WalletContext = createContext<{
