@@ -362,9 +362,6 @@ export default function BridgeTabScreen() {
                 preset="primary"
               />
             </Row>
-            <Row mt={"md"}>
-              <span>{buttonTips}</span>
-            </Row>
           </Column>
         </Row>
       </Content>

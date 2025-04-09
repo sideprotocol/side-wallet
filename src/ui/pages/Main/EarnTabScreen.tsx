@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js';
-import React, { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import 'swiper/css';
 
 import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
@@ -12,10 +12,13 @@ import useSupply from '@/ui/hooks/useSupply';
 import useWithdraw from '@/ui/hooks/useWithdraw';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useLendingState } from '@/ui/state/lending/hook';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
-import { Popover, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+
+import { useNavigate } from '../MainRoute';
 
 export default function EarnTabScreen() {
   const currentAccount = useCurrentAccount();
@@ -23,10 +26,7 @@ export default function EarnTabScreen() {
 
   const [withdrawAmount, setwithdrawAmount] = useState('');
 
-  const [poolTokenDenom, setPoolTokenDenom] = useState('uusdc');
-
-  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
-  const open = !!anchorEl;
+  const { poolTokenDenom } = useLendingState();
 
   const [operationTab, setOperationTab] = useState<'supply' | 'withdraw'>('supply');
 
@@ -39,6 +39,8 @@ export default function EarnTabScreen() {
   const poolTokenBalance = balanceList.find((b) => b.denom == poolTokenDenom);
 
   const { data: poolsData } = useGetPoolsData();
+
+  const navigator = useNavigate();
 
   const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
 
@@ -173,9 +175,11 @@ export default function EarnTabScreen() {
               py="md"
               itemsCenter
               classname="bg-[#17171C]  hover:bg-opacity-80"
-              onClick={(event: React.MouseEvent<HTMLDivElement>) => {
-                event.stopPropagation();
-                setAnchorEl(event.currentTarget);
+              onClick={() => {
+                navigator('LendingSelectTokenScreen', {
+                  poolsData,
+                  type: operationTab === 'supply' ? 'token' : 'stoken'
+                });
               }}>
               <Image
                 src={operationTab === 'supply' ? poolTokenBalance?.asset.logo : stokenBalance?.asset.logo}
@@ -193,66 +197,6 @@ export default function EarnTabScreen() {
 
               <Icon icon="down" size={10}></Icon>
             </Row>
-
-            <Popover
-              open={open}
-              sx={{
-                '.MuiPaper-root': {
-                  width: 'max-content',
-                  bgcolor: 'transparent'
-                }
-              }}
-              onClose={(event: React.MouseEvent<HTMLDivElement>) => {
-                setAnchorEl(null);
-                event.stopPropagation();
-              }}
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left'
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left'
-              }}>
-              <Column
-                gap="md"
-                bg="black"
-                px="md"
-                py="md"
-                style={{
-                  border: `1px solid ${colors.card_bgColor}`,
-                  borderRadius: '10px'
-                }}>
-                {poolsData.map((pool) => {
-                  const stoken = balanceList.find((b) => b.denom == pool.baseData.id);
-                  return (
-                    <Row
-                      key={pool.token.denom}
-                      style={{
-                        flexShrink: 0
-                      }}
-                      classname="bg-[#17171C]  hover:bg-opacity-80"
-                      rounded={true}
-                      px="lg"
-                      py="md"
-                      itemsCenter
-                      onClick={(event: React.MouseEvent<HTMLDivElement>) => {
-                        event.stopPropagation();
-                        setPoolTokenDenom(pool.token.denom);
-                        setAnchorEl(null);
-                      }}>
-                      <Image src={pool.token.asset.logo} height={28} width={28}></Image>
-
-                      <Text
-                        text={operationTab === 'supply' ? pool.token.asset.symbol : stoken?.asset.symbol}
-                        color="white"
-                        size="md"></Text>
-                    </Row>
-                  );
-                })}
-              </Column>
-            </Popover>
 
             <Column
               fullY
