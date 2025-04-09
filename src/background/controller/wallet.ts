@@ -1,4 +1,6 @@
 import BigNumber from 'bignumber.js';
+import { PubKey } from 'cosmjs-types/cosmos/crypto/secp256k1/keys';
+import Long from 'long';
 
 import {
   assetService,
@@ -12,6 +14,7 @@ import {
 } from '@/background/service';
 import i18n from '@/background/service/i18n';
 import { DisplayedKeyring, Keyring } from '@/background/service/keyring';
+import { Any } from '@/codegen/src/google/protobuf/any';
 import {
   ADDRESS_TYPES,
   AddressFlagType,
@@ -41,6 +44,12 @@ import {
   WalletKeyring
 } from '@/shared/types';
 import { checkAddressFlag, getChainInfo } from '@/shared/utils';
+import { CosmJSOfflineSigner } from '@/ui/wallet-sdk/cosmjs';
+import { getAddressTypeUrl } from '@/ui/wallet-sdk/utils';
+import { makeSignDoc as makeSignDocAmino, serializeSignDoc } from '@cosmjs/amino';
+import { fromHex } from '@cosmjs/encoding';
+import { makeSignBytes, makeSignDoc } from '@cosmjs/proto-signing';
+import { AminoSignResponse, DirectSignResponse, KeplrSignOptions, StdSignDoc } from '@keplr-wallet/types';
 import { UnspentOutput, txHelpers } from '@unisat/wallet-sdk';
 import { publicKeyToAddress, scriptPkToAddress } from '@unisat/wallet-sdk/lib/address';
 import { ECPair, bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
@@ -2090,6 +2099,88 @@ export class WalletController extends BaseController {
     this.timer = setTimeout(() => {
       this.lockWallet();
     }, timeoutNum);
+  };
+
+  getOfflineSigner = (chainId: string, signOptions?: KeplrSignOptions) => {
+    return new CosmJSOfflineSigner(chainId, this, signOptions);
+  };
+
+  signAmino = async (
+    chainId: string,
+    signer: string,
+    signDoc: StdSignDoc,
+    signOptions: KeplrSignOptions = {}
+  ): Promise<AminoSignResponse> => {
+    const { msgs, account_number, timeout_height, sequence, fee, memo } = signDoc;
+
+    const [account] = await this.getAccounts();
+
+    const pubkey = Any.fromPartial({
+      typeUrl: getAddressTypeUrl(signer)?.typeUrl,
+      value: PubKey.encode({
+        key: fromHex(account.pubkey)
+      }).finish()
+    });
+
+    const _signDoc = makeSignDocAmino(msgs, fee, chainId, memo, account_number, sequence);
+
+    const signDocBuffer = serializeSignDoc(_signDoc);
+
+    const signString = Buffer.from(signDocBuffer).toString();
+
+    const signature = await this.signMessage(signString);
+
+    return {
+      signed: {
+        chain_id: chainId,
+        account_number: _signDoc.account_number,
+        sequence: _signDoc.sequence,
+        timeout_height,
+        fee: _signDoc.fee,
+        msgs: _signDoc.msgs,
+        memo: _signDoc.memo
+      },
+      signature: { pub_key: pubkey, signature }
+    };
+  };
+
+  signDirect = async (
+    chainId: string,
+    signer: string,
+    signDoc: {
+      bodyBytes: Uint8Array;
+      authInfoBytes: Uint8Array;
+      chainId: string;
+      accountNumber: Long;
+    },
+    signOptions: KeplrSignOptions = {}
+  ): Promise<DirectSignResponse> => {
+    const [account] = await this.getAccounts();
+
+    const pubkey = Any.fromPartial({
+      typeUrl: getAddressTypeUrl(signer)?.typeUrl,
+      value: PubKey.encode({
+        key: fromHex(account.pubkey)
+      }).finish()
+    });
+
+    const _signDoc = makeSignDoc(signDoc.bodyBytes, signDoc.authInfoBytes, chainId, +signDoc.accountNumber);
+
+    const signDocBuffer = makeSignBytes(_signDoc);
+
+    const signString = new TextDecoder().decode(signDocBuffer);
+
+    const signature = await this.signMessage(signString);
+
+    return {
+      signed: {
+        bodyBytes: _signDoc.bodyBytes,
+        authInfoBytes: _signDoc.authInfoBytes,
+        chainId: _signDoc.chainId,
+        accountNumber: Long.fromString(_signDoc.accountNumber.toString())
+      },
+      signature: { pub_key: pubkey, signature }
+    };
   };
 }
 
