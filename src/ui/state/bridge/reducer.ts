@@ -1,12 +1,8 @@
+import { bitcoinChain, sideChain } from '@/shared/constant';
+import { BalanceItem, IChain } from '@/shared/types';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { updateVersion } from '../global/actions';
-
-export interface ChainItem {
-  id: string;
-  name: string;
-  logo: string;
-}
 
 export interface DepositBTCBridge {
   amount: number;
@@ -30,33 +26,27 @@ export interface UTXOAddress {
 }
 
 export interface BridgeState {
-  base: string;
-  exponent: number;
+  bridgeAsset: BalanceItem | null;
   bridgeAmount: string;
-  from: ChainItem;
-  to: ChainItem;
+  from: IChain;
+  to: IChain;
   balance: string;
   fee: number;
   feeSummary: any[];
   loading: boolean;
-  selectTokenModalShow: boolean;
   accountUtxo: UTXOAddress | null;
-  hoverExchange: boolean;
 }
 
 export const initialState: BridgeState = {
-  base: 'sat',
-  exponent: 8,
+  bridgeAsset: null,
   bridgeAmount: '',
-  from: {} as ChainItem,
-  to: {} as ChainItem,
+  from: bitcoinChain,
+  to: sideChain,
   balance: '',
   fee: 20,
   feeSummary: [],
   loading: false,
-  selectTokenModalShow: false,
-  accountUtxo: null,
-  hoverExchange: false
+  accountUtxo: null
 };
 
 const slice = createSlice({
@@ -70,18 +60,15 @@ const slice = createSlice({
       state,
       action: {
         payload: {
-          base?: string;
-          exponent?: number;
+          bridgeAsset?: BalanceItem;
           bridgeAmount?: string;
-          from?: ChainItem;
-          to?: ChainItem;
+          from?: IChain;
+          to?: IChain;
           balance?: string;
           fee?: number;
           feeSummary?: any[];
           loading?: boolean;
-          selectTokenModalShow?: boolean;
           accountUtxo?: UTXOAddress | null;
-          hoverExchange?: boolean;
         };
       }
     ) {

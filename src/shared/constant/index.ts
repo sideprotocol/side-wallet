@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 
 /* constants pool */
-import { AddressType, NetworkType, RestoreWalletType } from '../types';
+import { AddressType, IChain, NetworkType, RestoreWalletType } from '../types';
 
 export enum CHAINS_ENUM {
   BTC = 'BTC',
@@ -405,7 +405,7 @@ const SIDE_STATION_URL_TESTNET = 'https://station-dev.side.one';
 const SIDE_HUB_URL_TESTNET = 'https://hub-dev.side.one';
 const SIDE_EXPLORER_URL_TESTNET = 'https://station-dev.side.one/explorer';
 const SIDE_BRIDGEEXPLORER_URL_TESTNET = 'https://station-dev.side.one/bridge/explorer';
-const SIDE_CHAIN_TESTNET = {
+const SIDE_CHAIN_TESTNET: IChain = {
   chainID: 'devnet',
   name: 'Side Chain',
   prefix: 'tb',
@@ -416,6 +416,19 @@ const SIDE_CHAIN_TESTNET = {
   logo: 'https://api.side.one/static/token/logo/side.png',
   faucetUrl: 'https://faucet.side.exchange',
   explorerUrl: SIDE_EXPLORER_URL_TESTNET
+};
+export const BTC_CHAIN_TESTNET: IChain = {
+  chainID: 'bitcoin_test',
+  name: 'Bitcoin',
+  prefix: '',
+  rpcUrl: '',
+  restUrl: '',
+  denom: '',
+  hdPath: '',
+  logo: '/images/icons/btc.svg',
+  faucetUrl: '',
+  explorerUrl: '',
+  isBitcoin: true
 };
 
 // MAINNET
@@ -432,7 +445,7 @@ const SIDE_STATION_URL_MAINNET = 'https://station.side.one';
 const SIDE_HUB_URL_MAINNET = 'https://hub.side.one';
 const SIDE_EXPLORER_URL_MAINNET = 'https://station.side.one/explorer';
 const SIDE_BRIDGEEXPLORER_URL_MAINNET = 'https://station.side.one/bridge/explorer';
-const SIDE_CHAIN_MAINNET = {
+const SIDE_CHAIN_MAINNET: IChain = {
   chainID: 'sidechain-1',
   name: 'Side Chain',
   prefix: 'bc',
@@ -443,6 +456,19 @@ const SIDE_CHAIN_MAINNET = {
   logo: 'https://api.side.one/static/token/logo/side.png',
   faucetUrl: '',
   explorerUrl: SIDE_EXPLORER_URL_MAINNET
+};
+export const BTC_CHAIN_MAINNET: IChain = {
+  chainID: 'bitcoin_main',
+  name: 'Bitcoin',
+  prefix: '',
+  rpcUrl: '',
+  restUrl: '',
+  denom: '',
+  hdPath: '',
+  logo: '/images/icons/btc.svg',
+  faucetUrl: '',
+  explorerUrl: '',
+  isBitcoin: true
 };
 
 export const UNISAT_RUNE_URL = isProduction ? UNISAT_RUNE_URL_MAINNET : UNISAT_RUNE_URL_TESTNET;
@@ -461,3 +487,4 @@ export const SIDE_HUB_URL = isProduction ? SIDE_HUB_URL_MAINNET : SIDE_HUB_URL_T
 export const SIDE_EXPLORER_URL = isProduction ? SIDE_EXPLORER_URL_MAINNET : SIDE_EXPLORER_URL_TESTNET;
 export const SIDE_BRIDGEEXPLORER_URL = isProduction ? SIDE_BRIDGEEXPLORER_URL_MAINNET : SIDE_BRIDGEEXPLORER_URL_TESTNET;
 export const sideChain = isProduction ? SIDE_CHAIN_MAINNET : SIDE_CHAIN_TESTNET;
+export const bitcoinChain = isProduction ? BTC_CHAIN_MAINNET : BTC_CHAIN_TESTNET;

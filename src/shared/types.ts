@@ -574,7 +574,7 @@ export interface BalanceItem {
   asset: IAsset; // asset info
 }
 
-export interface CosmosChain {
+export interface IChain {
   chainID: string;
   name: string;
   prefix: string;
@@ -585,4 +585,7 @@ export interface CosmosChain {
   logo: string;
   faucetUrl: string;
   explorerUrl: string;
+  isEvm?: boolean;
+  isBitcoin?: boolean;
+  isCosmos?: boolean;
 }

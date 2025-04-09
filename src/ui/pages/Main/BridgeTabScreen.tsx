@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 
-import { isDev, sideChain } from '@/shared/constant';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
@@ -16,8 +15,9 @@ import { useBitcoinRuneBalance, useBridgeParams, useBridgeState } from '@/ui/sta
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
-import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
+import { toUnitAmount } from '@/ui/utils/formatter';
 
+import useGetButtonTips from '../Bridge/hooks/useGetButtonTips';
 import { useNavigate } from '../MainRoute';
 
 const SAT_ITEM = {
@@ -44,13 +44,14 @@ export default function BridgeTabScreen() {
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
-  const { bridgeAmount, from, to, selectTokenModalShow, base, hoverExchange } = useBridgeState();
+  const { bridgeAmount, from, to, bridgeAsset } = useBridgeState();
+  const {isDisabled, buttonTips} = useGetButtonTips()
   const dispatch = useAppDispatch();
-  const isBtcBridge = base === 'sat';
+  // const isBtcBridge = base === 'sat';
 
-  const isDeposit = (from?.name || '').includes('Bitcoin');
+
+  const isDeposit = !!from?.isBitcoin;
   const assets = isDeposit ? btcBalanceList : sideBalanceList;
-
   const { params } = useBridgeParams();
 
   const protocolLimit = params?.params?.protocol_limits;
@@ -124,50 +125,6 @@ export default function BridgeTabScreen() {
   }, [balance]);
 
   const isGreaterThanBalance = BigNumber(bridgeAmount || '0').gt(balance);
-  const disabled =
-    BigNumber(bridgeAmount || 0).lte(0) ||
-    isGreaterThanBalance ||
-    lessThanMinSatWithdraw ||
-    isGreaterThanMaxWithdraw ||
-    lessThanMinSatDeposit ||
-    !bridgeEnabled ||
-    !isBTCEnoughPayingFee ||
-    !btcVault ||
-    !runeVault;
-
-  useEffect(() => {
-    if (isDev) {
-      dispatch(
-        BridgeActions.update({
-          from: {
-            id: 'LIVENET',
-            name: 'Bitcoin',
-            logo: '/images/icons/btc.svg'
-          },
-          to: {
-            id: sideChain.chainID,
-            name: sideChain.name,
-            logo: sideChain.logo
-          }
-        })
-      );
-    } else {
-      dispatch(
-        BridgeActions.update({
-          from: {
-            id: sideChain.chainID,
-            name: sideChain.name,
-            logo: sideChain.logo
-          },
-          to: {
-            id: 'mainnet',
-            name: 'Bitcoin',
-            logo: '/images/icons/btc.svg'
-          }
-        })
-      );
-    }
-  }, []);
 
   return (
     <Layout>
@@ -373,9 +330,9 @@ export default function BridgeTabScreen() {
                     size={14}
                     coin={{
                       amount: bridgeAmount,
-                      denom: bridgeAsset.denom
+                      denom: bridgeAsset?.denom || "sat"
                     }}
-                    decimalScale={+bridgeAsset.asset.exponent}
+                    decimalScale={bridgeAsset?+bridgeAsset.asset.exponent:6}
                     onChange={(value) => {
                       dispatch(BridgeActions.update({ bridgeAmount: value }));
                     }}
@@ -398,74 +355,16 @@ export default function BridgeTabScreen() {
                 onClick={() => {
                   navigate('BridgeConfirmTabScreen');
                 }}
-                disabled={disabled}
+                disabled={isDisabled}
                 full
-                text={
-                  !isBTCEnoughPayingFee
-                    ? 'Insufficient BTC balance'
-                    : lessThanMinSatDeposit || lessThanMinSatWithdraw
-                    ? `Minimum amount is ${
-                        isDeposit
-                          ? toReadableAmount(
-                              BigNumber(protocolLimit?.btc_min_deposit || '10000')
-                                .plus(protocolFee?.deposit_fee || '0')
-                                .toFixed(),
-                              8
-                            )
-                          : toReadableAmount(
-                              BigNumber(protocolLimit?.btc_min_withdraw || '20000')
-                                .plus(protocolFee?.withdraw_fee || '0')
-                                .toFixed(),
-                              8
-                            )
-                      } BTC`
-                    : isGreaterThanBalance
-                    ? 'Insufficient Balance'
-                    : 'Bridge'
+                text={'Bridge'
                 }
                 preset="primary"
               />
             </Row>
-
-            {/* <Row justifyBetween itemsCenter mt={'sm'}>
-              <Row itemsCenter>
-                <Text color="white_muted" size="xs">
-                  Powrered by
-                </Text>
-                <Image height={15} width={70} src="./images/img/side-bridge.png"></Image>
-              </Row>
-
-              <Row itemsCenter>
-                <Text
-                  color="white"
-                  style={{
-                    textDecoration: 'underline',
-                    cursor: 'pointer'
-                  }}
-                  size="xs"
-                  onClick={() => {
-                    window.open(`${SIDE_STATION_URL}/bridge`, '_blank');
-                  }}>
-                  Bridge USDC
-                </Text>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <g clipPath="url(#clip0_21577_17883)">
-                    <path
-                      d="M10.5 4.5L10.5 1.5M10.5 1.5H7.49999M10.5 1.5L6 6M5 1.5H3.9C3.05992 1.5 2.63988 1.5 2.31901 1.66349C2.03677 1.8073 1.8073 2.03677 1.66349 2.31901C1.5 2.63988 1.5 3.05992 1.5 3.9V8.1C1.5 8.94008 1.5 9.36012 1.66349 9.68099C1.8073 9.96323 2.03677 10.1927 2.31901 10.3365C2.63988 10.5 3.05992 10.5 3.9 10.5H8.1C8.94008 10.5 9.36012 10.5 9.68099 10.3365C9.96323 10.1927 10.1927 9.96323 10.3365 9.68099C10.5 9.36012 10.5 8.94008 10.5 8.1V7"
-                      stroke="#6C7080"
-                      strokeWidth="1.4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_21577_17883">
-                      <rect width="12" height="12" fill="white" />
-                    </clipPath>
-                  </defs>
-                </svg>
-              </Row>
-            </Row> */}
+            <Row mt={"md"}>
+              <span>{buttonTips}</span>
+            </Row>
           </Column>
         </Row>
       </Content>

@@ -5,8 +5,6 @@ import { useEffect, useState } from 'react';
 import { KEYRING_TYPE, SIDE_BTC_EXPLORER, UNISAT_SERVICE_ENDPOINT, sideChain } from '@/shared/constant';
 import { Button, Column, Content, Footer, Header, Image, Layout, Row } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -15,7 +13,6 @@ import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { parseUnitAmount } from '@/ui/utils';
 import { formatAddress } from '@/ui/utils/format';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { estimateNetworkFeeHelper as estimateNetworkFee } from '@/ui/wallet-sdk/utils';
@@ -51,42 +48,29 @@ export interface CacheUTXO {
 
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
-
-  const currentKeyring = useCurrentKeyring();
-
-  const { bridge, bridgeRune } = useBridge();
-
-  const { bridgeAmount, from, to, loading, selectTokenModalShow, base, accountUtxo, fee, feeSummary } =
-    useBridgeState();
   const dispatch = useAppDispatch();
+  const currentKeyring = useCurrentKeyring();
+  const currentAccount = useCurrentAccount();
+  const queryAddressUtxo = useQueryAddressUtxo();
 
   const [networkFee, setNetworkFee] = useState<number>(0);
-
   const [tx, setTx] = useState<CacheUTXO[]>([]);
+  const [withdrawFee, setWithdrawFee] = useState<string>('-');
+  const [openEditId, setOpenEditId] = useState('');
 
-  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, 8)).toNumber();
+  const { bridgeAmount, from, loading, bridgeAsset, fee, feeSummary } = useBridgeState();
+  const { bridge, bridgeRune } = useBridge();
 
-  const currentAccount = useCurrentAccount();
-  const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
-  const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
-  const isDeposit = (from?.name || '').includes('Bitcoin');
-  const assets = isDeposit ? btcBalanceList : sideBalanceList;
-  const balanceList = assets?.filter((item) => {
-    return item?.denom.includes('rune') || item?.denom.includes('sat');
-  });
-  const isBtcBridge = base === 'sat';
-  const bridgeAsset = balanceList.find((item) => item.denom === base);
-  const runeId = bridgeAsset?.denom.split('/')[1];
+  const isDeposit = !!from.isBitcoin;
+  const isBtcBridge = !bridgeAsset?.denom.includes('rune');
 
-  const yourReceive = toReadableAmount(
-    BigNumber(toUnitAmount(bridgeAmount || '0', 8))
-      .minus((from?.name || '').includes('Bitcoin') ? networkFee : '0')
-      .toFixed(),
-    8
-  );
+  useEffect(() => {
+    queryAddressUtxo(currentAccount.address, UNISAT_SERVICE_ENDPOINT);
+  }, [currentAccount.address]);
 
   useEffect(() => {
     const getFee = async () => {
+      const unitAmount = BigNumber(toUnitAmount(bridgeAmount, bridgeAsset?.asset.exponent || 8)).toNumber();
       const networkFee = await estimateNetworkFee({ amount: unitAmount, fee }, currentAccount);
       setTx(networkFee?.walletInputs || []);
     };
@@ -99,29 +83,26 @@ export default function BridgeTabScreen() {
     });
   }, [fee]);
 
-  const [withdrawFee, setWithdrawFee] = useState<string>('-');
-
-  const getWithdrawFee = async (address: string, amount: string) => {
-    const result = await services.bridge.getBridgeWithdrawFee(address, amount, sideChain.restUrl);
-
-    setWithdrawFee(toReadableAmount(result, 8));
-  };
-
   useEffect(() => {
+    const runeId = bridgeAsset?.denom.split('/')[1];
     const amount =
       toUnitAmount(bridgeAmount, bridgeAsset?.asset.exponent || 8) + (!isBtcBridge ? 'runes/' + runeId : 'sat');
 
+    const getWithdrawFee = async (address: string, amount: string) => {
+      const result = await services.bridge.getBridgeWithdrawFee(address, amount, sideChain.restUrl);
+      setWithdrawFee(toReadableAmount(result, bridgeAsset?.asset.exponent || 8));
+    };
+
     getWithdrawFee(currentAccount.address, amount);
-  }, [currentAccount]);
+  }, [currentAccount, bridgeAsset]);
 
+  const yourReceive = toReadableAmount(
+    BigNumber(toUnitAmount(bridgeAmount || '0', 8))
+      .minus(isDeposit ? networkFee : '0')
+      .toFixed(),
+    8
+  );
   const isDisabled = BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(networkFee) || loading || Number(fee) === 0;
-
-  const [openEditId, setOpenEditId] = useState('');
-  const queryAddressUtxo = useQueryAddressUtxo();
-
-  useEffect(() => {
-    queryAddressUtxo(currentAccount.address, UNISAT_SERVICE_ENDPOINT);
-  }, [currentAccount.address]);
 
   return (
     <Layout>
@@ -130,7 +111,7 @@ export default function BridgeTabScreen() {
           <>
             <Image
               onClick={() => {
-                navigate('/settings');
+                navigate('SettingsTabScreen');
               }}
               src="/images/icons/main/menu-icon.svg"
               size={fontSizes.xxl}
@@ -361,8 +342,8 @@ export default function BridgeTabScreen() {
                 }}
                 onClick={() => {
                   // console.log(`base: `, base);
-                  if (base?.includes('rune')) {
-                    bridgeRune(base?.split('/')[1]);
+                  if (bridgeAsset?.denom?.includes('rune')) {
+                    bridgeRune(bridgeAsset.denom?.split('/')[1]);
                   } else {
                     bridge();
                   }
