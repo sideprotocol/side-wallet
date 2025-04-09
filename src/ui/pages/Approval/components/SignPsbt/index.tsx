@@ -787,7 +787,6 @@ export default function SignPsbt({
                 mt="md"
                 style={{
                   background: '#1E1E1F',
-                  border: '1px solid #FFFFFF1A',
                   padding: '16px 10px 16px 10px',
                   borderRadius: '8px',
                   position: 'relative'
@@ -829,7 +828,8 @@ export default function SignPsbt({
                       style={{
                         fontWeight: '600',
                         color: 'black'
-                      }}>
+                      }}
+                      size="xs">
                       {currentKeyring.alianName}
                     </Text>
 
@@ -837,14 +837,16 @@ export default function SignPsbt({
                       style={{
                         fontWeight: '600',
                         color: 'black'
-                      }}>
+                      }}
+                      size="xs">
                       /
                     </Text>
 
                     <Text
                       style={{
                         color: 'black'
-                      }}>
+                      }}
+                      size="xs">
                       {currentAccount.alianName}
                     </Text>
                   </Row>
