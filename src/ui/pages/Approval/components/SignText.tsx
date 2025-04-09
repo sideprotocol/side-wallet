@@ -60,22 +60,19 @@ export default function SignText({ params: { data, session } }: Props) {
       style={{
         minHeight: '560px',
         height: '560px'
-      }}
-    >
+      }}>
       <Content>
         <Column
           itemsCenter
           style={{
             paddingBottom: '4px'
-          }}
-        >
+          }}>
           <Text
             textCenter
             size="xl"
             style={{
               fontWeight: '600'
-            }}
-          >
+            }}>
             Signature request
           </Text>
 
@@ -89,8 +86,7 @@ export default function SignText({ params: { data, session } }: Props) {
               fontSize: '14px',
               maxWidth: 'max-content'
             }}
-            classname=""
-          >
+            classname="">
             {session.origin}
           </Text>
         </Column>
@@ -101,23 +97,19 @@ export default function SignText({ params: { data, session } }: Props) {
           mt="md"
           style={{
             background: '#1E1E1F',
-            border: '1px solid #FFFFFF1A',
             padding: '16px 10px 16px 10px',
             borderRadius: '8px',
             position: 'relative'
-          }}
-        >
+          }}>
           <Column
             style={{
               width: '90%'
-            }}
-          >
+            }}>
             <Text
               style={{
                 fontWeight: '500',
                 fontSize: '16px'
-              }}
-            >
+              }}>
               Account connected
             </Text>
 
@@ -127,8 +119,7 @@ export default function SignText({ params: { data, session } }: Props) {
                 color: 'white',
                 opacity: '0.5',
                 wordBreak: 'break-word'
-              }}
-            >
+              }}>
               {currentAccount.address}
             </Text>
 
@@ -142,14 +133,13 @@ export default function SignText({ params: { data, session } }: Props) {
                 fontSize: '12px',
                 width: 'max-content',
                 color: 'black'
-              }}
-            >
+              }}>
               <Text
                 style={{
                   fontWeight: '600',
                   color: 'black'
                 }}
-              >
+                size="xs">
                 {currentKeyring.alianName}
               </Text>
 
@@ -158,7 +148,7 @@ export default function SignText({ params: { data, session } }: Props) {
                   fontWeight: '600',
                   color: 'black'
                 }}
-              >
+                size="xs">
                 /
               </Text>
 
@@ -166,7 +156,7 @@ export default function SignText({ params: { data, session } }: Props) {
                 style={{
                   color: 'black'
                 }}
-              >
+                size="xs">
                 {currentAccount.alianName}
               </Text>
             </Row>
@@ -184,8 +174,7 @@ export default function SignText({ params: { data, session } }: Props) {
           <Card
             style={{
               flexDirection: 'column'
-            }}
-          >
+            }}>
             <Text text="You are signing:" textCenter mt="lg" />
             <div
               style={{
@@ -196,8 +185,7 @@ export default function SignText({ params: { data, session } }: Props) {
                 wordBreak: 'break-word',
                 flexWrap: 'wrap',
                 lineHeight: '18px'
-              }}
-            >
+              }}>
               {data.text}
             </div>
           </Card>
