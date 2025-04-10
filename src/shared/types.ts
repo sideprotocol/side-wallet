@@ -589,3 +589,5 @@ export interface IChain {
   isBitcoin?: boolean;
   isCosmos?: boolean;
 }
+
+export interface ShortChain extends Pick<IChain, 'chainID' | 'name' | 'logo' | 'isBitcoin'> {}

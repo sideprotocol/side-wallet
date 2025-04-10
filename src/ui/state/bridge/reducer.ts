@@ -1,5 +1,5 @@
 import { bitcoinChain, sideChain } from '@/shared/constant';
-import { BalanceItem, IChain } from '@/shared/types';
+import { BalanceItem, ShortChain } from '@/shared/types';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { updateVersion } from '../global/actions';
@@ -28,8 +28,8 @@ export interface UTXOAddress {
 export interface BridgeState {
   bridgeAsset: BalanceItem | null;
   bridgeAmount: string;
-  from: IChain;
-  to: IChain;
+  from: ShortChain;
+  to: ShortChain;
   fee: number;
   feeSummary: any[];
   loading: boolean;
@@ -60,8 +60,8 @@ const slice = createSlice({
         payload: {
           bridgeAsset?: BalanceItem;
           bridgeAmount?: string;
-          from?: IChain;
-          to?: IChain;
+          from?: ShortChain;
+          to?: ShortChain;
           fee?: number;
           feeSummary?: any[];
           loading?: boolean;

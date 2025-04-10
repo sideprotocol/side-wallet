@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
-import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
+import { Column, Content, Footer, Layout, Row, Text } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
 import ImageIcon from '@/ui/components/ImageIcon';
@@ -15,7 +15,9 @@ import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate } from '@/ui/utils';
 
+import { ChainSelect } from '../Bridge/ChainSelect';
 import useGetButtonTips from '../Bridge/hooks/useGetButtonTips';
+import useGetChainList from '../Bridge/hooks/useGetChainList';
 import { useNavigate } from '../MainRoute';
 
 export default function BridgeTabScreen() {
@@ -26,6 +28,8 @@ export default function BridgeTabScreen() {
   const { bridgeAmount, from, to, bridgeAsset } = useBridgeState();
   const { isDisabled, buttonTips } = useGetButtonTips();
   const { balanceList: btcBalanceList, loading } = useGetBitcoinBalanceList(currentAccount.address);
+
+  const { fromChainList, toChainList } = useGetChainList();
 
   useEffect(() => {
     if (!loading) {
@@ -67,24 +71,13 @@ export default function BridgeTabScreen() {
                     From
                   </div>
                 </Row>
-
-                <Row
-                  itemsCenter
-                  gap={'zero'}
-                  style={{
-                    borderRadius: '10px',
-                    padding: '10px',
-                    backgroundColor: '#000'
-                  }}>
-                  <Image size={28} src={from.logo} />
-                  <span
-                    style={{
-                      fontSize: '14px',
-                      paddingLeft: '5px'
-                    }}>
-                    {from.name}
-                  </span>
-                </Row>
+                <ChainSelect
+                  chainList={fromChainList}
+                  curChain={from}
+                  onChange={(chain) => {
+                    dispatch(BridgeActions.update({ from: chain }));
+                  }}
+                />
               </Column>
 
               <Row
@@ -119,24 +112,14 @@ export default function BridgeTabScreen() {
                     To
                   </div>
                 </Row>
-
-                <Row
-                  itemsCenter
-                  gap={'zero'}
-                  style={{
-                    borderRadius: '10px',
-                    padding: '10px',
-                    backgroundColor: '#000'
-                  }}>
-                  <Image size={28} src={to.logo} />
-                  <span
-                    style={{
-                      fontSize: '14px',
-                      paddingLeft: '5px'
-                    }}>
-                    {to.name}
-                  </span>
-                </Row>
+                <ChainSelect
+                  chainList={toChainList}
+                  curChain={to}
+                  onChange={(chain) => {
+                    dispatch(BridgeActions.update({ to: chain }));
+                  }}
+                  horizontal="right"
+                />
               </Column>
             </Row>
 
