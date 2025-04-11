@@ -3,12 +3,14 @@ import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/
 import { BinaryReader, BinaryWriter } from "../../binary";
 /** Params defines the parameters for the module. */
 export interface Params {
+  /** final timeout duration for loan */
+  finalTimeoutDuration: Duration;
+  /** request fee collector address */
+  requestFeeCollector: string;
   /** origination fee collector address */
   originationFeeCollector: string;
   /** protocol fee collector address */
   protocolFeeCollector: string;
-  /** final timeout duration for each loan */
-  finalTimeoutDuration: Duration;
 }
 export interface ParamsProtoMsg {
   typeUrl: "/side.lending.Params";
@@ -16,12 +18,14 @@ export interface ParamsProtoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
+  /** final timeout duration for loan */
+  final_timeout_duration?: DurationAmino;
+  /** request fee collector address */
+  request_fee_collector?: string;
   /** origination fee collector address */
   origination_fee_collector?: string;
   /** protocol fee collector address */
   protocol_fee_collector?: string;
-  /** final timeout duration for each loan */
-  final_timeout_duration?: DurationAmino;
 }
 export interface ParamsAminoMsg {
   type: "/side.lending.Params";
@@ -29,28 +33,33 @@ export interface ParamsAminoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
+  final_timeout_duration: DurationSDKType;
+  request_fee_collector: string;
   origination_fee_collector: string;
   protocol_fee_collector: string;
-  final_timeout_duration: DurationSDKType;
 }
 function createBaseParams(): Params {
   return {
+    finalTimeoutDuration: Duration.fromPartial({}),
+    requestFeeCollector: "",
     originationFeeCollector: "",
-    protocolFeeCollector: "",
-    finalTimeoutDuration: Duration.fromPartial({})
+    protocolFeeCollector: ""
   };
 }
 export const Params = {
   typeUrl: "/side.lending.Params",
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.finalTimeoutDuration !== undefined) {
+      Duration.encode(message.finalTimeoutDuration, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.requestFeeCollector !== "") {
+      writer.uint32(18).string(message.requestFeeCollector);
+    }
     if (message.originationFeeCollector !== "") {
-      writer.uint32(10).string(message.originationFeeCollector);
+      writer.uint32(26).string(message.originationFeeCollector);
     }
     if (message.protocolFeeCollector !== "") {
-      writer.uint32(18).string(message.protocolFeeCollector);
-    }
-    if (message.finalTimeoutDuration !== undefined) {
-      Duration.encode(message.finalTimeoutDuration, writer.uint32(26).fork()).ldelim();
+      writer.uint32(34).string(message.protocolFeeCollector);
     }
     return writer;
   },
@@ -62,13 +71,16 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.originationFeeCollector = reader.string();
+          message.finalTimeoutDuration = Duration.decode(reader, reader.uint32());
           break;
         case 2:
-          message.protocolFeeCollector = reader.string();
+          message.requestFeeCollector = reader.string();
           break;
         case 3:
-          message.finalTimeoutDuration = Duration.decode(reader, reader.uint32());
+          message.originationFeeCollector = reader.string();
+          break;
+        case 4:
+          message.protocolFeeCollector = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -79,29 +91,34 @@ export const Params = {
   },
   fromPartial(object: Partial<Params>): Params {
     const message = createBaseParams();
+    message.finalTimeoutDuration = object.finalTimeoutDuration !== undefined && object.finalTimeoutDuration !== null ? Duration.fromPartial(object.finalTimeoutDuration) : undefined;
+    message.requestFeeCollector = object.requestFeeCollector ?? "";
     message.originationFeeCollector = object.originationFeeCollector ?? "";
     message.protocolFeeCollector = object.protocolFeeCollector ?? "";
-    message.finalTimeoutDuration = object.finalTimeoutDuration !== undefined && object.finalTimeoutDuration !== null ? Duration.fromPartial(object.finalTimeoutDuration) : undefined;
     return message;
   },
   fromAmino(object: ParamsAmino): Params {
     const message = createBaseParams();
+    if (object.final_timeout_duration !== undefined && object.final_timeout_duration !== null) {
+      message.finalTimeoutDuration = Duration.fromAmino(object.final_timeout_duration);
+    }
+    if (object.request_fee_collector !== undefined && object.request_fee_collector !== null) {
+      message.requestFeeCollector = object.request_fee_collector;
+    }
     if (object.origination_fee_collector !== undefined && object.origination_fee_collector !== null) {
       message.originationFeeCollector = object.origination_fee_collector;
     }
     if (object.protocol_fee_collector !== undefined && object.protocol_fee_collector !== null) {
       message.protocolFeeCollector = object.protocol_fee_collector;
     }
-    if (object.final_timeout_duration !== undefined && object.final_timeout_duration !== null) {
-      message.finalTimeoutDuration = Duration.fromAmino(object.final_timeout_duration);
-    }
     return message;
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};
+    obj.final_timeout_duration = message.finalTimeoutDuration ? Duration.toAmino(message.finalTimeoutDuration) : undefined;
+    obj.request_fee_collector = message.requestFeeCollector === "" ? undefined : message.requestFeeCollector;
     obj.origination_fee_collector = message.originationFeeCollector === "" ? undefined : message.originationFeeCollector;
     obj.protocol_fee_collector = message.protocolFeeCollector === "" ? undefined : message.protocolFeeCollector;
-    obj.final_timeout_duration = message.finalTimeoutDuration ? Duration.toAmino(message.finalTimeoutDuration) : undefined;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

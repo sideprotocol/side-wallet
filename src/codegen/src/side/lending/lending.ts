@@ -165,20 +165,58 @@ export function cetTypeToJSON(object: CetType): string {
       return "UNRECOGNIZED";
   }
 }
-/** Lending pool config */
-export interface PoolConfig {
+/** Pool tranche config */
+export interface PoolTrancheConfig {
+  /** maturity duration in seconds */
+  maturity: bigint;
   /** borrow apr permille */
   borrowApr: number;
-  /** reserve factor permille */
-  reserveFactor: number;
+  /** minimum maturity factor permille */
+  minMaturityFactor: number;
+}
+export interface PoolTrancheConfigProtoMsg {
+  typeUrl: "/side.lending.PoolTrancheConfig";
+  value: Uint8Array;
+}
+/** Pool tranche config */
+export interface PoolTrancheConfigAmino {
+  /** maturity duration in seconds */
+  maturity?: string;
+  /** borrow apr permille */
+  borrow_apr?: number;
+  /** minimum maturity factor permille */
+  min_maturity_factor?: number;
+}
+export interface PoolTrancheConfigAminoMsg {
+  type: "/side.lending.PoolTrancheConfig";
+  value: PoolTrancheConfigAmino;
+}
+/** Pool tranche config */
+export interface PoolTrancheConfigSDKType {
+  maturity: bigint;
+  borrow_apr: number;
+  min_maturity_factor: number;
+}
+/** Pool config */
+export interface PoolConfig {
   /** supply cap */
   supplyCap: string;
   /** borrow cap */
   borrowCap: string;
-  /** debt ceiling */
-  debtCeiling: string;
+  /** minimum amount to be borrowed */
+  minBorrowAmount: string;
+  /** maximum amount to be borrowed */
+  maxBorrowAmount: string;
+  /** tranches */
+  tranches: PoolTrancheConfig[];
+  /** request fee */
+  requestFee: Coin;
   /** origination fee */
   originationFee: string;
+  /** reserve factor permille */
+  reserveFactor: number;
+  /** referral fee factor permille */
+  referralFeeFactor: number;
   /** maximum ltv percent */
   maxLtv: number;
   /** liquidation ltv percent */
@@ -190,20 +228,26 @@ export interface PoolConfigProtoMsg {
   typeUrl: "/side.lending.PoolConfig";
   value: Uint8Array;
 }
-/** Lending pool config */
+/** Pool config */
 export interface PoolConfigAmino {
-  /** borrow apr permille */
-  borrow_apr?: number;
-  /** reserve factor permille */
-  reserve_factor?: number;
   /** supply cap */
   supply_cap?: string;
   /** borrow cap */
   borrow_cap?: string;
-  /** debt ceiling */
-  debt_ceiling?: string;
+  /** minimum amount to be borrowed */
+  min_borrow_amount?: string;
+  /** maximum amount to be borrowed */
+  max_borrow_amount?: string;
+  /** tranches */
+  tranches?: PoolTrancheConfigAmino[];
+  /** request fee */
+  request_fee?: CoinAmino;
   /** origination fee */
   origination_fee?: string;
+  /** reserve factor permille */
+  reserve_factor?: number;
+  /** referral fee factor permille */
+  referral_fee_factor?: number;
   /** maximum ltv percent */
   max_ltv?: number;
   /** liquidation ltv percent */
@@ -215,25 +259,57 @@ export interface PoolConfigAminoMsg {
   type: "/side.lending.PoolConfig";
   value: PoolConfigAmino;
 }
-/** Lending pool config */
+/** Pool config */
 export interface PoolConfigSDKType {
-  borrow_apr: number;
-  reserve_factor: number;
   supply_cap: string;
   borrow_cap: string;
-  debt_ceiling: string;
+  min_borrow_amount: string;
+  max_borrow_amount: string;
+  tranches: PoolTrancheConfigSDKType[];
+  request_fee: CoinSDKType;
   origination_fee: string;
+  reserve_factor: number;
+  referral_fee_factor: number;
   max_ltv: number;
   liquidation_threshold: number;
   paused: boolean;
+}
+/** Pool tranche */
+export interface PoolTranche {
+  /** maturity duration */
+  maturity: bigint;
+  /** total borrowed */
+  totalBorrowed: string;
+}
+export interface PoolTrancheProtoMsg {
+  typeUrl: "/side.lending.PoolTranche";
+  value: Uint8Array;
+}
+/** Pool tranche */
+export interface PoolTrancheAmino {
+  /** maturity duration */
+  maturity?: string;
+  /** total borrowed */
+  total_borrowed?: string;
+}
+export interface PoolTrancheAminoMsg {
+  type: "/side.lending.PoolTranche";
+  value: PoolTrancheAmino;
+}
+/** Pool tranche */
+export interface PoolTrancheSDKType {
+  maturity: bigint;
+  total_borrowed: string;
 }
 export interface LendingPool {
   id: string;
   supply: Coin;
   availableAmount: string;
+  borrowedAmount: string;
   totalBorrowed: string;
-  totalReserves: string;
+  reserveAmount: string;
   totalStokens: Coin;
+  tranches: PoolTranche[];
   config: PoolConfig;
   status: PoolStatus;
 }
@@ -245,9 +321,11 @@ export interface LendingPoolAmino {
   id?: string;
   supply?: CoinAmino;
   available_amount?: string;
+  borrowed_amount?: string;
   total_borrowed?: string;
-  total_reserves?: string;
+  reserve_amount?: string;
   total_stokens?: CoinAmino;
+  tranches?: PoolTrancheAmino[];
   config?: PoolConfigAmino;
   status?: PoolStatus;
 }
@@ -259,9 +337,11 @@ export interface LendingPoolSDKType {
   id: string;
   supply: CoinSDKType;
   available_amount: string;
+  borrowed_amount: string;
   total_borrowed: string;
-  total_reserves: string;
+  reserve_amount: string;
   total_stokens: CoinSDKType;
+  tranches: PoolTrancheSDKType[];
   config: PoolConfigSDKType;
   status: PoolStatus;
 }
@@ -275,10 +355,13 @@ export interface Loan {
   finalTimeout: bigint;
   poolId: string;
   borrowAmount: Coin;
+  requestFee: Coin;
   originationFee: string;
   interest: string;
   protocolFee: string;
-  term: string;
+  maturity: bigint;
+  borrowApr: number;
+  minMaturity: bigint;
   liquidationPrice: string;
   liquidationEventId: bigint;
   defaultLiquidationEventId: bigint;
@@ -286,7 +369,9 @@ export interface Loan {
   depositTxs: string[];
   collateralAmount: string;
   liquidationId: bigint;
+  referrer: string;
   createAt: Date;
+  disburseAt: Date;
   status: LoanStatus;
 }
 export interface LoanProtoMsg {
@@ -303,10 +388,13 @@ export interface LoanAmino {
   final_timeout?: string;
   pool_id?: string;
   borrow_amount?: CoinAmino;
+  request_fee?: CoinAmino;
   origination_fee?: string;
   interest?: string;
   protocol_fee?: string;
-  term?: string;
+  maturity?: string;
+  borrow_apr?: number;
+  min_maturity?: string;
   liquidation_price?: string;
   liquidation_event_id?: string;
   default_liquidation_event_id?: string;
@@ -314,7 +402,9 @@ export interface LoanAmino {
   deposit_txs?: string[];
   collateral_amount?: string;
   liquidation_id?: string;
+  referrer?: string;
   create_at?: string;
+  disburse_at?: string;
   status?: LoanStatus;
 }
 export interface LoanAminoMsg {
@@ -330,10 +420,13 @@ export interface LoanSDKType {
   final_timeout: bigint;
   pool_id: string;
   borrow_amount: CoinSDKType;
+  request_fee: CoinSDKType;
   origination_fee: string;
   interest: string;
   protocol_fee: string;
-  term: string;
+  maturity: bigint;
+  borrow_apr: number;
+  min_maturity: bigint;
   liquidation_price: string;
   liquidation_event_id: bigint;
   default_liquidation_event_id: bigint;
@@ -341,7 +434,9 @@ export interface LoanSDKType {
   deposit_txs: string[];
   collateral_amount: string;
   liquidation_id: bigint;
+  referrer: string;
   create_at: Date;
+  disburse_at: Date;
   status: LoanStatus;
 }
 export interface CetInfo {
@@ -432,6 +527,7 @@ export interface DLCMeta {
   liquidationCet: LiquidationCet;
   defaultLiquidationCet: LiquidationCet;
   repaymentCet: RepaymentCet;
+  timeoutRefundTx: string;
   vaultUtxos: UTXO[];
   internalKey: string;
   multisigScript: string;
@@ -445,6 +541,7 @@ export interface DLCMetaAmino {
   liquidation_cet?: LiquidationCetAmino;
   default_liquidation_cet?: LiquidationCetAmino;
   repayment_cet?: RepaymentCetAmino;
+  timeout_refund_tx?: string;
   vault_utxos?: UTXOAmino[];
   internal_key?: string;
   multisig_script?: string;
@@ -458,6 +555,7 @@ export interface DLCMetaSDKType {
   liquidation_cet: LiquidationCetSDKType;
   default_liquidation_cet: LiquidationCetSDKType;
   repayment_cet: RepaymentCetSDKType;
+  timeout_refund_tx: string;
   vault_utxos: UTXOSDKType[];
   internal_key: string;
   multisig_script: string;
@@ -517,7 +615,7 @@ export interface Cancellation {
   txid: string;
   tx: string;
   signatures: string[];
-  dcaSignatures: string[];
+  dcmSignatures: string[];
   createAt: Date;
 }
 export interface CancellationProtoMsg {
@@ -529,7 +627,7 @@ export interface CancellationAmino {
   txid?: string;
   tx?: string;
   signatures?: string[];
-  dca_signatures?: string[];
+  dcm_signatures?: string[];
   create_at?: string;
 }
 export interface CancellationAminoMsg {
@@ -541,17 +639,107 @@ export interface CancellationSDKType {
   txid: string;
   tx: string;
   signatures: string[];
-  dca_signatures: string[];
+  dcm_signatures: string[];
   create_at: Date;
 }
+function createBasePoolTrancheConfig(): PoolTrancheConfig {
+  return {
+    maturity: BigInt(0),
+    borrowApr: 0,
+    minMaturityFactor: 0
+  };
+}
+export const PoolTrancheConfig = {
+  typeUrl: "/side.lending.PoolTrancheConfig",
+  encode(message: PoolTrancheConfig, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.maturity !== BigInt(0)) {
+      writer.uint32(8).int64(message.maturity);
+    }
+    if (message.borrowApr !== 0) {
+      writer.uint32(16).uint32(message.borrowApr);
+    }
+    if (message.minMaturityFactor !== 0) {
+      writer.uint32(24).uint32(message.minMaturityFactor);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): PoolTrancheConfig {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePoolTrancheConfig();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.maturity = reader.int64();
+          break;
+        case 2:
+          message.borrowApr = reader.uint32();
+          break;
+        case 3:
+          message.minMaturityFactor = reader.uint32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<PoolTrancheConfig>): PoolTrancheConfig {
+    const message = createBasePoolTrancheConfig();
+    message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
+    message.borrowApr = object.borrowApr ?? 0;
+    message.minMaturityFactor = object.minMaturityFactor ?? 0;
+    return message;
+  },
+  fromAmino(object: PoolTrancheConfigAmino): PoolTrancheConfig {
+    const message = createBasePoolTrancheConfig();
+    if (object.maturity !== undefined && object.maturity !== null) {
+      message.maturity = BigInt(object.maturity);
+    }
+    if (object.borrow_apr !== undefined && object.borrow_apr !== null) {
+      message.borrowApr = object.borrow_apr;
+    }
+    if (object.min_maturity_factor !== undefined && object.min_maturity_factor !== null) {
+      message.minMaturityFactor = object.min_maturity_factor;
+    }
+    return message;
+  },
+  toAmino(message: PoolTrancheConfig): PoolTrancheConfigAmino {
+    const obj: any = {};
+    obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
+    obj.borrow_apr = message.borrowApr === 0 ? undefined : message.borrowApr;
+    obj.min_maturity_factor = message.minMaturityFactor === 0 ? undefined : message.minMaturityFactor;
+    return obj;
+  },
+  fromAminoMsg(object: PoolTrancheConfigAminoMsg): PoolTrancheConfig {
+    return PoolTrancheConfig.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolTrancheConfigProtoMsg): PoolTrancheConfig {
+    return PoolTrancheConfig.decode(message.value);
+  },
+  toProto(message: PoolTrancheConfig): Uint8Array {
+    return PoolTrancheConfig.encode(message).finish();
+  },
+  toProtoMsg(message: PoolTrancheConfig): PoolTrancheConfigProtoMsg {
+    return {
+      typeUrl: "/side.lending.PoolTrancheConfig",
+      value: PoolTrancheConfig.encode(message).finish()
+    };
+  }
+};
 function createBasePoolConfig(): PoolConfig {
   return {
-    borrowApr: 0,
-    reserveFactor: 0,
     supplyCap: "",
     borrowCap: "",
-    debtCeiling: "",
+    minBorrowAmount: "",
+    maxBorrowAmount: "",
+    tranches: [],
+    requestFee: Coin.fromPartial({}),
     originationFee: "",
+    reserveFactor: 0,
+    referralFeeFactor: 0,
     maxLtv: 0,
     liquidationThreshold: 0,
     paused: false
@@ -560,32 +748,41 @@ function createBasePoolConfig(): PoolConfig {
 export const PoolConfig = {
   typeUrl: "/side.lending.PoolConfig",
   encode(message: PoolConfig, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.borrowApr !== 0) {
-      writer.uint32(8).uint32(message.borrowApr);
-    }
-    if (message.reserveFactor !== 0) {
-      writer.uint32(16).uint32(message.reserveFactor);
-    }
     if (message.supplyCap !== "") {
-      writer.uint32(26).string(message.supplyCap);
+      writer.uint32(10).string(message.supplyCap);
     }
     if (message.borrowCap !== "") {
-      writer.uint32(34).string(message.borrowCap);
+      writer.uint32(18).string(message.borrowCap);
     }
-    if (message.debtCeiling !== "") {
-      writer.uint32(42).string(message.debtCeiling);
+    if (message.minBorrowAmount !== "") {
+      writer.uint32(26).string(message.minBorrowAmount);
+    }
+    if (message.maxBorrowAmount !== "") {
+      writer.uint32(34).string(message.maxBorrowAmount);
+    }
+    for (const v of message.tranches) {
+      PoolTrancheConfig.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    if (message.requestFee !== undefined) {
+      Coin.encode(message.requestFee, writer.uint32(50).fork()).ldelim();
     }
     if (message.originationFee !== "") {
-      writer.uint32(50).string(message.originationFee);
+      writer.uint32(58).string(message.originationFee);
+    }
+    if (message.reserveFactor !== 0) {
+      writer.uint32(64).uint32(message.reserveFactor);
+    }
+    if (message.referralFeeFactor !== 0) {
+      writer.uint32(72).uint32(message.referralFeeFactor);
     }
     if (message.maxLtv !== 0) {
-      writer.uint32(56).uint32(message.maxLtv);
+      writer.uint32(80).uint32(message.maxLtv);
     }
     if (message.liquidationThreshold !== 0) {
-      writer.uint32(64).uint32(message.liquidationThreshold);
+      writer.uint32(88).uint32(message.liquidationThreshold);
     }
     if (message.paused === true) {
-      writer.uint32(72).bool(message.paused);
+      writer.uint32(96).bool(message.paused);
     }
     return writer;
   },
@@ -597,30 +794,39 @@ export const PoolConfig = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.borrowApr = reader.uint32();
-          break;
-        case 2:
-          message.reserveFactor = reader.uint32();
-          break;
-        case 3:
           message.supplyCap = reader.string();
           break;
-        case 4:
+        case 2:
           message.borrowCap = reader.string();
           break;
+        case 3:
+          message.minBorrowAmount = reader.string();
+          break;
+        case 4:
+          message.maxBorrowAmount = reader.string();
+          break;
         case 5:
-          message.debtCeiling = reader.string();
+          message.tranches.push(PoolTrancheConfig.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.originationFee = reader.string();
+          message.requestFee = Coin.decode(reader, reader.uint32());
           break;
         case 7:
-          message.maxLtv = reader.uint32();
+          message.originationFee = reader.string();
           break;
         case 8:
-          message.liquidationThreshold = reader.uint32();
+          message.reserveFactor = reader.uint32();
           break;
         case 9:
+          message.referralFeeFactor = reader.uint32();
+          break;
+        case 10:
+          message.maxLtv = reader.uint32();
+          break;
+        case 11:
+          message.liquidationThreshold = reader.uint32();
+          break;
+        case 12:
           message.paused = reader.bool();
           break;
         default:
@@ -632,12 +838,15 @@ export const PoolConfig = {
   },
   fromPartial(object: Partial<PoolConfig>): PoolConfig {
     const message = createBasePoolConfig();
-    message.borrowApr = object.borrowApr ?? 0;
-    message.reserveFactor = object.reserveFactor ?? 0;
     message.supplyCap = object.supplyCap ?? "";
     message.borrowCap = object.borrowCap ?? "";
-    message.debtCeiling = object.debtCeiling ?? "";
+    message.minBorrowAmount = object.minBorrowAmount ?? "";
+    message.maxBorrowAmount = object.maxBorrowAmount ?? "";
+    message.tranches = object.tranches?.map(e => PoolTrancheConfig.fromPartial(e)) || [];
+    message.requestFee = object.requestFee !== undefined && object.requestFee !== null ? Coin.fromPartial(object.requestFee) : undefined;
     message.originationFee = object.originationFee ?? "";
+    message.reserveFactor = object.reserveFactor ?? 0;
+    message.referralFeeFactor = object.referralFeeFactor ?? 0;
     message.maxLtv = object.maxLtv ?? 0;
     message.liquidationThreshold = object.liquidationThreshold ?? 0;
     message.paused = object.paused ?? false;
@@ -645,23 +854,30 @@ export const PoolConfig = {
   },
   fromAmino(object: PoolConfigAmino): PoolConfig {
     const message = createBasePoolConfig();
-    if (object.borrow_apr !== undefined && object.borrow_apr !== null) {
-      message.borrowApr = object.borrow_apr;
-    }
-    if (object.reserve_factor !== undefined && object.reserve_factor !== null) {
-      message.reserveFactor = object.reserve_factor;
-    }
     if (object.supply_cap !== undefined && object.supply_cap !== null) {
       message.supplyCap = object.supply_cap;
     }
     if (object.borrow_cap !== undefined && object.borrow_cap !== null) {
       message.borrowCap = object.borrow_cap;
     }
-    if (object.debt_ceiling !== undefined && object.debt_ceiling !== null) {
-      message.debtCeiling = object.debt_ceiling;
+    if (object.min_borrow_amount !== undefined && object.min_borrow_amount !== null) {
+      message.minBorrowAmount = object.min_borrow_amount;
+    }
+    if (object.max_borrow_amount !== undefined && object.max_borrow_amount !== null) {
+      message.maxBorrowAmount = object.max_borrow_amount;
+    }
+    message.tranches = object.tranches?.map(e => PoolTrancheConfig.fromAmino(e)) || [];
+    if (object.request_fee !== undefined && object.request_fee !== null) {
+      message.requestFee = Coin.fromAmino(object.request_fee);
     }
     if (object.origination_fee !== undefined && object.origination_fee !== null) {
       message.originationFee = object.origination_fee;
+    }
+    if (object.reserve_factor !== undefined && object.reserve_factor !== null) {
+      message.reserveFactor = object.reserve_factor;
+    }
+    if (object.referral_fee_factor !== undefined && object.referral_fee_factor !== null) {
+      message.referralFeeFactor = object.referral_fee_factor;
     }
     if (object.max_ltv !== undefined && object.max_ltv !== null) {
       message.maxLtv = object.max_ltv;
@@ -676,12 +892,19 @@ export const PoolConfig = {
   },
   toAmino(message: PoolConfig): PoolConfigAmino {
     const obj: any = {};
-    obj.borrow_apr = message.borrowApr === 0 ? undefined : message.borrowApr;
-    obj.reserve_factor = message.reserveFactor === 0 ? undefined : message.reserveFactor;
     obj.supply_cap = message.supplyCap === "" ? undefined : message.supplyCap;
     obj.borrow_cap = message.borrowCap === "" ? undefined : message.borrowCap;
-    obj.debt_ceiling = message.debtCeiling === "" ? undefined : message.debtCeiling;
+    obj.min_borrow_amount = message.minBorrowAmount === "" ? undefined : message.minBorrowAmount;
+    obj.max_borrow_amount = message.maxBorrowAmount === "" ? undefined : message.maxBorrowAmount;
+    if (message.tranches) {
+      obj.tranches = message.tranches.map(e => e ? PoolTrancheConfig.toAmino(e) : undefined);
+    } else {
+      obj.tranches = message.tranches;
+    }
+    obj.request_fee = message.requestFee ? Coin.toAmino(message.requestFee) : undefined;
     obj.origination_fee = message.originationFee === "" ? undefined : message.originationFee;
+    obj.reserve_factor = message.reserveFactor === 0 ? undefined : message.reserveFactor;
+    obj.referral_fee_factor = message.referralFeeFactor === 0 ? undefined : message.referralFeeFactor;
     obj.max_ltv = message.maxLtv === 0 ? undefined : message.maxLtv;
     obj.liquidation_threshold = message.liquidationThreshold === 0 ? undefined : message.liquidationThreshold;
     obj.paused = message.paused === false ? undefined : message.paused;
@@ -703,14 +926,91 @@ export const PoolConfig = {
     };
   }
 };
+function createBasePoolTranche(): PoolTranche {
+  return {
+    maturity: BigInt(0),
+    totalBorrowed: ""
+  };
+}
+export const PoolTranche = {
+  typeUrl: "/side.lending.PoolTranche",
+  encode(message: PoolTranche, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.maturity !== BigInt(0)) {
+      writer.uint32(8).int64(message.maturity);
+    }
+    if (message.totalBorrowed !== "") {
+      writer.uint32(18).string(message.totalBorrowed);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): PoolTranche {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePoolTranche();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.maturity = reader.int64();
+          break;
+        case 2:
+          message.totalBorrowed = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<PoolTranche>): PoolTranche {
+    const message = createBasePoolTranche();
+    message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
+    message.totalBorrowed = object.totalBorrowed ?? "";
+    return message;
+  },
+  fromAmino(object: PoolTrancheAmino): PoolTranche {
+    const message = createBasePoolTranche();
+    if (object.maturity !== undefined && object.maturity !== null) {
+      message.maturity = BigInt(object.maturity);
+    }
+    if (object.total_borrowed !== undefined && object.total_borrowed !== null) {
+      message.totalBorrowed = object.total_borrowed;
+    }
+    return message;
+  },
+  toAmino(message: PoolTranche): PoolTrancheAmino {
+    const obj: any = {};
+    obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
+    obj.total_borrowed = message.totalBorrowed === "" ? undefined : message.totalBorrowed;
+    return obj;
+  },
+  fromAminoMsg(object: PoolTrancheAminoMsg): PoolTranche {
+    return PoolTranche.fromAmino(object.value);
+  },
+  fromProtoMsg(message: PoolTrancheProtoMsg): PoolTranche {
+    return PoolTranche.decode(message.value);
+  },
+  toProto(message: PoolTranche): Uint8Array {
+    return PoolTranche.encode(message).finish();
+  },
+  toProtoMsg(message: PoolTranche): PoolTrancheProtoMsg {
+    return {
+      typeUrl: "/side.lending.PoolTranche",
+      value: PoolTranche.encode(message).finish()
+    };
+  }
+};
 function createBaseLendingPool(): LendingPool {
   return {
     id: "",
     supply: Coin.fromPartial({}),
     availableAmount: "",
+    borrowedAmount: "",
     totalBorrowed: "",
-    totalReserves: "",
+    reserveAmount: "",
     totalStokens: Coin.fromPartial({}),
+    tranches: [],
     config: PoolConfig.fromPartial({}),
     status: 0
   };
@@ -727,20 +1027,26 @@ export const LendingPool = {
     if (message.availableAmount !== "") {
       writer.uint32(26).string(message.availableAmount);
     }
-    if (message.totalBorrowed !== "") {
-      writer.uint32(34).string(message.totalBorrowed);
+    if (message.borrowedAmount !== "") {
+      writer.uint32(34).string(message.borrowedAmount);
     }
-    if (message.totalReserves !== "") {
-      writer.uint32(42).string(message.totalReserves);
+    if (message.totalBorrowed !== "") {
+      writer.uint32(42).string(message.totalBorrowed);
+    }
+    if (message.reserveAmount !== "") {
+      writer.uint32(50).string(message.reserveAmount);
     }
     if (message.totalStokens !== undefined) {
-      Coin.encode(message.totalStokens, writer.uint32(50).fork()).ldelim();
+      Coin.encode(message.totalStokens, writer.uint32(58).fork()).ldelim();
+    }
+    for (const v of message.tranches) {
+      PoolTranche.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     if (message.config !== undefined) {
-      PoolConfig.encode(message.config, writer.uint32(58).fork()).ldelim();
+      PoolConfig.encode(message.config, writer.uint32(74).fork()).ldelim();
     }
     if (message.status !== 0) {
-      writer.uint32(64).int32(message.status);
+      writer.uint32(80).int32(message.status);
     }
     return writer;
   },
@@ -761,18 +1067,24 @@ export const LendingPool = {
           message.availableAmount = reader.string();
           break;
         case 4:
-          message.totalBorrowed = reader.string();
+          message.borrowedAmount = reader.string();
           break;
         case 5:
-          message.totalReserves = reader.string();
+          message.totalBorrowed = reader.string();
           break;
         case 6:
-          message.totalStokens = Coin.decode(reader, reader.uint32());
+          message.reserveAmount = reader.string();
           break;
         case 7:
-          message.config = PoolConfig.decode(reader, reader.uint32());
+          message.totalStokens = Coin.decode(reader, reader.uint32());
           break;
         case 8:
+          message.tranches.push(PoolTranche.decode(reader, reader.uint32()));
+          break;
+        case 9:
+          message.config = PoolConfig.decode(reader, reader.uint32());
+          break;
+        case 10:
           message.status = reader.int32() as any;
           break;
         default:
@@ -787,9 +1099,11 @@ export const LendingPool = {
     message.id = object.id ?? "";
     message.supply = object.supply !== undefined && object.supply !== null ? Coin.fromPartial(object.supply) : undefined;
     message.availableAmount = object.availableAmount ?? "";
+    message.borrowedAmount = object.borrowedAmount ?? "";
     message.totalBorrowed = object.totalBorrowed ?? "";
-    message.totalReserves = object.totalReserves ?? "";
+    message.reserveAmount = object.reserveAmount ?? "";
     message.totalStokens = object.totalStokens !== undefined && object.totalStokens !== null ? Coin.fromPartial(object.totalStokens) : undefined;
+    message.tranches = object.tranches?.map(e => PoolTranche.fromPartial(e)) || [];
     message.config = object.config !== undefined && object.config !== null ? PoolConfig.fromPartial(object.config) : undefined;
     message.status = object.status ?? 0;
     return message;
@@ -805,15 +1119,19 @@ export const LendingPool = {
     if (object.available_amount !== undefined && object.available_amount !== null) {
       message.availableAmount = object.available_amount;
     }
+    if (object.borrowed_amount !== undefined && object.borrowed_amount !== null) {
+      message.borrowedAmount = object.borrowed_amount;
+    }
     if (object.total_borrowed !== undefined && object.total_borrowed !== null) {
       message.totalBorrowed = object.total_borrowed;
     }
-    if (object.total_reserves !== undefined && object.total_reserves !== null) {
-      message.totalReserves = object.total_reserves;
+    if (object.reserve_amount !== undefined && object.reserve_amount !== null) {
+      message.reserveAmount = object.reserve_amount;
     }
     if (object.total_stokens !== undefined && object.total_stokens !== null) {
       message.totalStokens = Coin.fromAmino(object.total_stokens);
     }
+    message.tranches = object.tranches?.map(e => PoolTranche.fromAmino(e)) || [];
     if (object.config !== undefined && object.config !== null) {
       message.config = PoolConfig.fromAmino(object.config);
     }
@@ -827,9 +1145,15 @@ export const LendingPool = {
     obj.id = message.id === "" ? undefined : message.id;
     obj.supply = message.supply ? Coin.toAmino(message.supply) : undefined;
     obj.available_amount = message.availableAmount === "" ? undefined : message.availableAmount;
+    obj.borrowed_amount = message.borrowedAmount === "" ? undefined : message.borrowedAmount;
     obj.total_borrowed = message.totalBorrowed === "" ? undefined : message.totalBorrowed;
-    obj.total_reserves = message.totalReserves === "" ? undefined : message.totalReserves;
+    obj.reserve_amount = message.reserveAmount === "" ? undefined : message.reserveAmount;
     obj.total_stokens = message.totalStokens ? Coin.toAmino(message.totalStokens) : undefined;
+    if (message.tranches) {
+      obj.tranches = message.tranches.map(e => e ? PoolTranche.toAmino(e) : undefined);
+    } else {
+      obj.tranches = message.tranches;
+    }
     obj.config = message.config ? PoolConfig.toAmino(message.config) : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
     return obj;
@@ -860,10 +1184,13 @@ function createBaseLoan(): Loan {
     finalTimeout: BigInt(0),
     poolId: "",
     borrowAmount: Coin.fromPartial({}),
+    requestFee: Coin.fromPartial({}),
     originationFee: "",
     interest: "",
     protocolFee: "",
-    term: "",
+    maturity: BigInt(0),
+    borrowApr: 0,
+    minMaturity: BigInt(0),
     liquidationPrice: "",
     liquidationEventId: BigInt(0),
     defaultLiquidationEventId: BigInt(0),
@@ -871,7 +1198,9 @@ function createBaseLoan(): Loan {
     depositTxs: [],
     collateralAmount: "",
     liquidationId: BigInt(0),
+    referrer: "",
     createAt: new Date(),
+    disburseAt: new Date(),
     status: 0
   };
 }
@@ -902,44 +1231,59 @@ export const Loan = {
     if (message.borrowAmount !== undefined) {
       Coin.encode(message.borrowAmount, writer.uint32(66).fork()).ldelim();
     }
+    if (message.requestFee !== undefined) {
+      Coin.encode(message.requestFee, writer.uint32(74).fork()).ldelim();
+    }
     if (message.originationFee !== "") {
-      writer.uint32(74).string(message.originationFee);
+      writer.uint32(82).string(message.originationFee);
     }
     if (message.interest !== "") {
-      writer.uint32(82).string(message.interest);
+      writer.uint32(90).string(message.interest);
     }
     if (message.protocolFee !== "") {
-      writer.uint32(90).string(message.protocolFee);
+      writer.uint32(98).string(message.protocolFee);
     }
-    if (message.term !== "") {
-      writer.uint32(98).string(message.term);
+    if (message.maturity !== BigInt(0)) {
+      writer.uint32(104).int64(message.maturity);
+    }
+    if (message.borrowApr !== 0) {
+      writer.uint32(112).uint32(message.borrowApr);
+    }
+    if (message.minMaturity !== BigInt(0)) {
+      writer.uint32(120).int64(message.minMaturity);
     }
     if (message.liquidationPrice !== "") {
-      writer.uint32(106).string(message.liquidationPrice);
+      writer.uint32(130).string(message.liquidationPrice);
     }
     if (message.liquidationEventId !== BigInt(0)) {
-      writer.uint32(112).uint64(message.liquidationEventId);
+      writer.uint32(136).uint64(message.liquidationEventId);
     }
     if (message.defaultLiquidationEventId !== BigInt(0)) {
-      writer.uint32(120).uint64(message.defaultLiquidationEventId);
+      writer.uint32(144).uint64(message.defaultLiquidationEventId);
     }
     if (message.repaymentEventId !== BigInt(0)) {
-      writer.uint32(128).uint64(message.repaymentEventId);
+      writer.uint32(152).uint64(message.repaymentEventId);
     }
     for (const v of message.depositTxs) {
-      writer.uint32(138).string(v!);
+      writer.uint32(162).string(v!);
     }
     if (message.collateralAmount !== "") {
-      writer.uint32(146).string(message.collateralAmount);
+      writer.uint32(170).string(message.collateralAmount);
     }
     if (message.liquidationId !== BigInt(0)) {
-      writer.uint32(152).uint64(message.liquidationId);
+      writer.uint32(176).uint64(message.liquidationId);
+    }
+    if (message.referrer !== "") {
+      writer.uint32(186).string(message.referrer);
     }
     if (message.createAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createAt), writer.uint32(162).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.createAt), writer.uint32(194).fork()).ldelim();
+    }
+    if (message.disburseAt !== undefined) {
+      Timestamp.encode(toTimestamp(message.disburseAt), writer.uint32(202).fork()).ldelim();
     }
     if (message.status !== 0) {
-      writer.uint32(168).int32(message.status);
+      writer.uint32(208).int32(message.status);
     }
     return writer;
   },
@@ -975,42 +1319,57 @@ export const Loan = {
           message.borrowAmount = Coin.decode(reader, reader.uint32());
           break;
         case 9:
-          message.originationFee = reader.string();
+          message.requestFee = Coin.decode(reader, reader.uint32());
           break;
         case 10:
-          message.interest = reader.string();
+          message.originationFee = reader.string();
           break;
         case 11:
-          message.protocolFee = reader.string();
+          message.interest = reader.string();
           break;
         case 12:
-          message.term = reader.string();
+          message.protocolFee = reader.string();
           break;
         case 13:
-          message.liquidationPrice = reader.string();
+          message.maturity = reader.int64();
           break;
         case 14:
-          message.liquidationEventId = reader.uint64();
+          message.borrowApr = reader.uint32();
           break;
         case 15:
-          message.defaultLiquidationEventId = reader.uint64();
+          message.minMaturity = reader.int64();
           break;
         case 16:
-          message.repaymentEventId = reader.uint64();
+          message.liquidationPrice = reader.string();
           break;
         case 17:
-          message.depositTxs.push(reader.string());
+          message.liquidationEventId = reader.uint64();
           break;
         case 18:
-          message.collateralAmount = reader.string();
+          message.defaultLiquidationEventId = reader.uint64();
           break;
         case 19:
-          message.liquidationId = reader.uint64();
+          message.repaymentEventId = reader.uint64();
           break;
         case 20:
-          message.createAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.depositTxs.push(reader.string());
           break;
         case 21:
+          message.collateralAmount = reader.string();
+          break;
+        case 22:
+          message.liquidationId = reader.uint64();
+          break;
+        case 23:
+          message.referrer = reader.string();
+          break;
+        case 24:
+          message.createAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 25:
+          message.disburseAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 26:
           message.status = reader.int32() as any;
           break;
         default:
@@ -1030,10 +1389,13 @@ export const Loan = {
     message.finalTimeout = object.finalTimeout !== undefined && object.finalTimeout !== null ? BigInt(object.finalTimeout.toString()) : BigInt(0);
     message.poolId = object.poolId ?? "";
     message.borrowAmount = object.borrowAmount !== undefined && object.borrowAmount !== null ? Coin.fromPartial(object.borrowAmount) : undefined;
+    message.requestFee = object.requestFee !== undefined && object.requestFee !== null ? Coin.fromPartial(object.requestFee) : undefined;
     message.originationFee = object.originationFee ?? "";
     message.interest = object.interest ?? "";
     message.protocolFee = object.protocolFee ?? "";
-    message.term = object.term ?? "";
+    message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
+    message.borrowApr = object.borrowApr ?? 0;
+    message.minMaturity = object.minMaturity !== undefined && object.minMaturity !== null ? BigInt(object.minMaturity.toString()) : BigInt(0);
     message.liquidationPrice = object.liquidationPrice ?? "";
     message.liquidationEventId = object.liquidationEventId !== undefined && object.liquidationEventId !== null ? BigInt(object.liquidationEventId.toString()) : BigInt(0);
     message.defaultLiquidationEventId = object.defaultLiquidationEventId !== undefined && object.defaultLiquidationEventId !== null ? BigInt(object.defaultLiquidationEventId.toString()) : BigInt(0);
@@ -1041,7 +1403,9 @@ export const Loan = {
     message.depositTxs = object.depositTxs?.map(e => e) || [];
     message.collateralAmount = object.collateralAmount ?? "";
     message.liquidationId = object.liquidationId !== undefined && object.liquidationId !== null ? BigInt(object.liquidationId.toString()) : BigInt(0);
+    message.referrer = object.referrer ?? "";
     message.createAt = object.createAt ?? undefined;
+    message.disburseAt = object.disburseAt ?? undefined;
     message.status = object.status ?? 0;
     return message;
   },
@@ -1071,6 +1435,9 @@ export const Loan = {
     if (object.borrow_amount !== undefined && object.borrow_amount !== null) {
       message.borrowAmount = Coin.fromAmino(object.borrow_amount);
     }
+    if (object.request_fee !== undefined && object.request_fee !== null) {
+      message.requestFee = Coin.fromAmino(object.request_fee);
+    }
     if (object.origination_fee !== undefined && object.origination_fee !== null) {
       message.originationFee = object.origination_fee;
     }
@@ -1080,8 +1447,14 @@ export const Loan = {
     if (object.protocol_fee !== undefined && object.protocol_fee !== null) {
       message.protocolFee = object.protocol_fee;
     }
-    if (object.term !== undefined && object.term !== null) {
-      message.term = object.term;
+    if (object.maturity !== undefined && object.maturity !== null) {
+      message.maturity = BigInt(object.maturity);
+    }
+    if (object.borrow_apr !== undefined && object.borrow_apr !== null) {
+      message.borrowApr = object.borrow_apr;
+    }
+    if (object.min_maturity !== undefined && object.min_maturity !== null) {
+      message.minMaturity = BigInt(object.min_maturity);
     }
     if (object.liquidation_price !== undefined && object.liquidation_price !== null) {
       message.liquidationPrice = object.liquidation_price;
@@ -1102,8 +1475,14 @@ export const Loan = {
     if (object.liquidation_id !== undefined && object.liquidation_id !== null) {
       message.liquidationId = BigInt(object.liquidation_id);
     }
+    if (object.referrer !== undefined && object.referrer !== null) {
+      message.referrer = object.referrer;
+    }
     if (object.create_at !== undefined && object.create_at !== null) {
       message.createAt = fromTimestamp(Timestamp.fromAmino(object.create_at));
+    }
+    if (object.disburse_at !== undefined && object.disburse_at !== null) {
+      message.disburseAt = fromTimestamp(Timestamp.fromAmino(object.disburse_at));
     }
     if (object.status !== undefined && object.status !== null) {
       message.status = object.status;
@@ -1120,10 +1499,13 @@ export const Loan = {
     obj.final_timeout = message.finalTimeout !== BigInt(0) ? message.finalTimeout.toString() : undefined;
     obj.pool_id = message.poolId === "" ? undefined : message.poolId;
     obj.borrow_amount = message.borrowAmount ? Coin.toAmino(message.borrowAmount) : undefined;
+    obj.request_fee = message.requestFee ? Coin.toAmino(message.requestFee) : undefined;
     obj.origination_fee = message.originationFee === "" ? undefined : message.originationFee;
     obj.interest = message.interest === "" ? undefined : message.interest;
     obj.protocol_fee = message.protocolFee === "" ? undefined : message.protocolFee;
-    obj.term = message.term === "" ? undefined : message.term;
+    obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
+    obj.borrow_apr = message.borrowApr === 0 ? undefined : message.borrowApr;
+    obj.min_maturity = message.minMaturity !== BigInt(0) ? message.minMaturity.toString() : undefined;
     obj.liquidation_price = message.liquidationPrice === "" ? undefined : message.liquidationPrice;
     obj.liquidation_event_id = message.liquidationEventId !== BigInt(0) ? message.liquidationEventId.toString() : undefined;
     obj.default_liquidation_event_id = message.defaultLiquidationEventId !== BigInt(0) ? message.defaultLiquidationEventId.toString() : undefined;
@@ -1135,7 +1517,9 @@ export const Loan = {
     }
     obj.collateral_amount = message.collateralAmount === "" ? undefined : message.collateralAmount;
     obj.liquidation_id = message.liquidationId !== BigInt(0) ? message.liquidationId.toString() : undefined;
+    obj.referrer = message.referrer === "" ? undefined : message.referrer;
     obj.create_at = message.createAt ? Timestamp.toAmino(toTimestamp(message.createAt)) : undefined;
+    obj.disburse_at = message.disburseAt ? Timestamp.toAmino(toTimestamp(message.disburseAt)) : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
     return obj;
   },
@@ -1493,6 +1877,7 @@ function createBaseDLCMeta(): DLCMeta {
     liquidationCet: LiquidationCet.fromPartial({}),
     defaultLiquidationCet: LiquidationCet.fromPartial({}),
     repaymentCet: RepaymentCet.fromPartial({}),
+    timeoutRefundTx: "",
     vaultUtxos: [],
     internalKey: "",
     multisigScript: "",
@@ -1511,17 +1896,20 @@ export const DLCMeta = {
     if (message.repaymentCet !== undefined) {
       RepaymentCet.encode(message.repaymentCet, writer.uint32(26).fork()).ldelim();
     }
+    if (message.timeoutRefundTx !== "") {
+      writer.uint32(34).string(message.timeoutRefundTx);
+    }
     for (const v of message.vaultUtxos) {
-      UTXO.encode(v!, writer.uint32(34).fork()).ldelim();
+      UTXO.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     if (message.internalKey !== "") {
-      writer.uint32(42).string(message.internalKey);
+      writer.uint32(50).string(message.internalKey);
     }
     if (message.multisigScript !== "") {
-      writer.uint32(50).string(message.multisigScript);
+      writer.uint32(58).string(message.multisigScript);
     }
     if (message.timeoutRefundScript !== "") {
-      writer.uint32(58).string(message.timeoutRefundScript);
+      writer.uint32(66).string(message.timeoutRefundScript);
     }
     return writer;
   },
@@ -1542,15 +1930,18 @@ export const DLCMeta = {
           message.repaymentCet = RepaymentCet.decode(reader, reader.uint32());
           break;
         case 4:
-          message.vaultUtxos.push(UTXO.decode(reader, reader.uint32()));
+          message.timeoutRefundTx = reader.string();
           break;
         case 5:
-          message.internalKey = reader.string();
+          message.vaultUtxos.push(UTXO.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.multisigScript = reader.string();
+          message.internalKey = reader.string();
           break;
         case 7:
+          message.multisigScript = reader.string();
+          break;
+        case 8:
           message.timeoutRefundScript = reader.string();
           break;
         default:
@@ -1565,6 +1956,7 @@ export const DLCMeta = {
     message.liquidationCet = object.liquidationCet !== undefined && object.liquidationCet !== null ? LiquidationCet.fromPartial(object.liquidationCet) : undefined;
     message.defaultLiquidationCet = object.defaultLiquidationCet !== undefined && object.defaultLiquidationCet !== null ? LiquidationCet.fromPartial(object.defaultLiquidationCet) : undefined;
     message.repaymentCet = object.repaymentCet !== undefined && object.repaymentCet !== null ? RepaymentCet.fromPartial(object.repaymentCet) : undefined;
+    message.timeoutRefundTx = object.timeoutRefundTx ?? "";
     message.vaultUtxos = object.vaultUtxos?.map(e => UTXO.fromPartial(e)) || [];
     message.internalKey = object.internalKey ?? "";
     message.multisigScript = object.multisigScript ?? "";
@@ -1581,6 +1973,9 @@ export const DLCMeta = {
     }
     if (object.repayment_cet !== undefined && object.repayment_cet !== null) {
       message.repaymentCet = RepaymentCet.fromAmino(object.repayment_cet);
+    }
+    if (object.timeout_refund_tx !== undefined && object.timeout_refund_tx !== null) {
+      message.timeoutRefundTx = object.timeout_refund_tx;
     }
     message.vaultUtxos = object.vault_utxos?.map(e => UTXO.fromAmino(e)) || [];
     if (object.internal_key !== undefined && object.internal_key !== null) {
@@ -1599,6 +1994,7 @@ export const DLCMeta = {
     obj.liquidation_cet = message.liquidationCet ? LiquidationCet.toAmino(message.liquidationCet) : undefined;
     obj.default_liquidation_cet = message.defaultLiquidationCet ? LiquidationCet.toAmino(message.defaultLiquidationCet) : undefined;
     obj.repayment_cet = message.repaymentCet ? RepaymentCet.toAmino(message.repaymentCet) : undefined;
+    obj.timeout_refund_tx = message.timeoutRefundTx === "" ? undefined : message.timeoutRefundTx;
     if (message.vaultUtxos) {
       obj.vault_utxos = message.vaultUtxos.map(e => e ? UTXO.toAmino(e) : undefined);
     } else {
@@ -1817,7 +2213,7 @@ function createBaseCancellation(): Cancellation {
     txid: "",
     tx: "",
     signatures: [],
-    dcaSignatures: [],
+    dcmSignatures: [],
     createAt: new Date()
   };
 }
@@ -1836,7 +2232,7 @@ export const Cancellation = {
     for (const v of message.signatures) {
       writer.uint32(34).string(v!);
     }
-    for (const v of message.dcaSignatures) {
+    for (const v of message.dcmSignatures) {
       writer.uint32(42).string(v!);
     }
     if (message.createAt !== undefined) {
@@ -1864,7 +2260,7 @@ export const Cancellation = {
           message.signatures.push(reader.string());
           break;
         case 5:
-          message.dcaSignatures.push(reader.string());
+          message.dcmSignatures.push(reader.string());
           break;
         case 6:
           message.createAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
@@ -1882,7 +2278,7 @@ export const Cancellation = {
     message.txid = object.txid ?? "";
     message.tx = object.tx ?? "";
     message.signatures = object.signatures?.map(e => e) || [];
-    message.dcaSignatures = object.dcaSignatures?.map(e => e) || [];
+    message.dcmSignatures = object.dcmSignatures?.map(e => e) || [];
     message.createAt = object.createAt ?? undefined;
     return message;
   },
@@ -1898,7 +2294,7 @@ export const Cancellation = {
       message.tx = object.tx;
     }
     message.signatures = object.signatures?.map(e => e) || [];
-    message.dcaSignatures = object.dca_signatures?.map(e => e) || [];
+    message.dcmSignatures = object.dcm_signatures?.map(e => e) || [];
     if (object.create_at !== undefined && object.create_at !== null) {
       message.createAt = fromTimestamp(Timestamp.fromAmino(object.create_at));
     }
@@ -1914,10 +2310,10 @@ export const Cancellation = {
     } else {
       obj.signatures = message.signatures;
     }
-    if (message.dcaSignatures) {
-      obj.dca_signatures = message.dcaSignatures.map(e => e);
+    if (message.dcmSignatures) {
+      obj.dcm_signatures = message.dcmSignatures.map(e => e);
     } else {
-      obj.dca_signatures = message.dcaSignatures;
+      obj.dcm_signatures = message.dcmSignatures;
     }
     obj.create_at = message.createAt ? Timestamp.toAmino(toTimestamp(message.createAt)) : undefined;
     return obj;

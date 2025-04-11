@@ -43,6 +43,8 @@ import LoanAuthorizeScreen from './Main/LoanAuthorizeScreen';
 import LoanDepositScreen from './Main/LoanDepositScreen';
 import LoansTabScreen from './Main/LoansTabScreen';
 import SettingsTabScreen from './Main/SettingsTabScreen';
+import SwapSideScreen from './Main/SwapSideScreen';
+import SwapSideSuccessScreen from './Main/SwapSideSuccessScreen';
 import SwapTabScreen from './Main/SwapTabScreen';
 import WalletTabScreen from './Main/WalletTabScreen';
 import WelcomeScreen from './Main/WelcomeScreen';
@@ -167,6 +169,17 @@ export const routes = {
     path: '/swap',
     element: <SwapTabScreen />
   },
+
+  SwapSideScreen: {
+    path: '/swap-side',
+    element: <SwapSideScreen />
+  },
+
+  SwapSideSuccessScreen: {
+    path: '/swap-side-success',
+    element: <SwapSideSuccessScreen />
+  },
+
   CreateHDWalletScreen: {
     path: '/account/create-hd-wallet',
     element: <CreateHDWalletScreen />

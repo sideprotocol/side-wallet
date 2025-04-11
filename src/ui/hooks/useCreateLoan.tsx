@@ -71,8 +71,9 @@ export default function useCreateLoan() {
         borrowAmount,
         borrower: currentAccount.address,
         borrowerPubkey: toXOnly(Buffer.from(fromHex(currentAccount.pubkey))).toString('hex'),
-        maturityTime: BigInt(maturityTime),
-        poolId: poolId
+        maturity: BigInt(maturityTime),
+        poolId: poolId,
+        referrer: ''
       });
       const result = await signAndBroadcastTxRaw({
         messages: [msg],

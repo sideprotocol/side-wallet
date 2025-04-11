@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
-import dayjs from 'dayjs';
-import { Fragment, useMemo, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import 'swiper/css';
 
 import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
@@ -17,7 +16,7 @@ import { useLendingState } from '@/ui/state/lending/hook';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Popover, Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 import MainHeader from './MainHeader';
@@ -36,11 +35,24 @@ export default function LendingTanScreen() {
 
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
-  const [deadline, setDeadLine] = useState('7');
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const open = !!anchorEl;
 
   const satBalance = bitcoinBalanceList.find((b) => b.denom === 'sat');
 
   const poolTokenBalance = balanceList.find((b) => b.denom == poolTokenDenom);
+
+  const { data: poolsData } = useGetPoolsData();
+
+  const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
+
+  const [maturity, setMaturity] = useState(poolData?.baseData.config.tranches[0].maturity);
+
+  useEffect(() => {
+    setMaturity(poolData?.baseData.config.tranches[0].maturity);
+  }, [poolData]);
+
+  const requestFeeToken = balanceList.find((item) => item.denom === poolData?.baseData.config.request_fee.denom);
 
   const collateralValue = useMemo(() => {
     if (!collateralAmount || !satBalance) return '$0';
@@ -55,15 +67,12 @@ export default function LendingTanScreen() {
     return '$' + value;
   }, [borrowAmount, poolTokenBalance]);
 
-  const { data: poolsData } = useGetPoolsData();
-
-  const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
-
   const { liquidationEvent } = useGetLiquidationEvent({
     bitcoinAmount: collateralAmount,
     borrowToken: poolData?.token,
     borrowTokenAmount: borrowAmount,
-    poolId: poolData?.baseData.id || ''
+    poolId: poolData?.baseData.id || '',
+    maturity: maturity
   });
 
   const { healthFactor } = useMemo(() => {
@@ -105,9 +114,7 @@ export default function LendingTanScreen() {
     return { borrowMaxAmount };
   }, [collateralAmount, borrowAmount, poolData, satBalance, poolTokenBalance]);
 
-  const maturityTime = useMemo(() => {
-    return new BigNumber(dayjs().unix()).plus(new BigNumber(deadline).multipliedBy(24).multipliedBy(3600)).toString();
-  }, [deadline]);
+  const borrow_apr = poolData?.baseData.config.tranches.find((item) => item.maturity === maturity)?.borrow_apr || 0;
 
   const data = [
     {
@@ -176,13 +183,25 @@ export default function LendingTanScreen() {
     {
       label: 'Max Initial LTV',
       value: (
-        <Typography
-          sx={{
-            fontSize: '14px',
-            color: colors.grey12
-          }}>
-          {!poolData ? '-' : `${poolData?.baseData.config.max_ltv}%`}
-        </Typography>
+        <>
+          {new BigNumber(borrowAmount || 0)
+            .multipliedBy(borrow_apr)
+            .div(1000)
+            .div(365)
+            .multipliedBy(maturity || 0)
+            .div(60)
+            .div(60)
+            .div(24)
+            .toFixed(poolData?.token.asset.precision || 0)}
+          <small
+            style={{
+              fontSize: '100%',
+              color: colors.grey12,
+              marginLeft: '2px'
+            }}>
+            {poolData?.token.asset.symbol}
+          </small>
+        </>
       )
     },
     {
@@ -213,7 +232,10 @@ export default function LendingTanScreen() {
             .multipliedBy(poolData?.borrowApy || 0)
             .div(100)
             .div(365)
-            .multipliedBy(deadline)
+            .multipliedBy(maturity || 0)
+            .div(60)
+            .div(60)
+            .div(24)
             .toFixed(poolData?.token.asset.precision || 0)}
           <small
             style={{
@@ -227,17 +249,20 @@ export default function LendingTanScreen() {
       )
     },
     {
-      label: 'Origination fee',
+      label: 'Request fee',
       value: (
         <>
-          {toReadableAmount(poolData?.baseData.config.origination_fee || '0', poolData?.token.asset.exponent || '6')}
+          {toReadableAmount(
+            poolData?.baseData.config.request_fee.amount || '0',
+            requestFeeToken?.asset.exponent || '6'
+          )}
           <small
             style={{
               fontSize: '100%',
               color: colors.grey12,
               marginLeft: '2px'
             }}>
-            {poolData?.token.asset.symbol}
+            {requestFeeToken?.asset.symbol}
           </small>
         </>
       )
@@ -428,68 +453,144 @@ export default function LendingTanScreen() {
             </Column>
           </Row>
 
-          <Row mt="md">
-            <Text color="white" size="xs" text="Duration"></Text>
-          </Row>
-
-          <Stack
+          <Box
             sx={{
-              mt: '8px',
-              width: '100%'
+              px: '12px',
+              py: '8px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              cursor: 'pointer'
             }}
-            direction="row"
-            alignItems="center"
-            gap="8px">
-            {['7 days', '30 days', '90 days', '180 days', '360 days'].map((item, index) => {
-              const [value, unit] = item.split(' ');
+            onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+              event.stopPropagation();
+              setAnchorEl(event.currentTarget);
+            }}>
+            <Typography
+              sx={{
+                fontSize: '12px',
+                color: colors.white
+              }}>
+              Maturity
+            </Typography>
+            <Stack direction="row" alignItems="center" gap="8px">
+              <Box
+                sx={{
+                  fontSize: '12px',
+                  color: colors.white,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
+                }}>
+                {new BigNumber(maturity || 0).div(3600).div(24).toFixed(0)}
+                <Typography
+                  style={{
+                    display: 'inline'
+                  }}
+                  sx={{ fontSize: '12px', color: colors.grey12 }}>
+                  days
+                </Typography>
+                <Box
+                  sx={{
+                    transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: '.4s'
+                  }}>
+                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M1 1L5 5L9 1"
+                      stroke={open ? colors.main : 'white'}
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Box>
+              </Box>
+            </Stack>
+          </Box>
+          <Popover
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right'
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            sx={{
+              '.MuiPaper-root': {
+                p: '12px',
+                backgroundColor: colors.card_bgColor,
+                border: `1px solid ${colors.white1}`,
+                borderRadius: '10px',
+                width: '304px'
+              }
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={() => setAnchorEl(null)}>
+            {poolData?.baseData.config.tranches.map((item, index) => {
+              const selected = item.maturity === maturity;
               return (
                 <Box
                   key={index}
                   sx={{
-                    fontSize: '10px',
+                    p: '8px 10px',
                     borderRadius: '10px',
-                    background: value === deadline ? colors.main : colors.black,
-                    p: '6px',
-                    px: '8px',
-                    color: value === deadline ? colors.black : colors.white,
-                    fontWeight: 500,
                     cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '100%',
-                    transition: '.4s',
-                    small: {
-                      color: value === deadline ? colors.black : colors.grey12
-                    },
+                    mt: index !== 0 ? '10px' : '0px',
+                    background: selected ? colors.white1 : 'transparent',
                     ':hover': {
-                      background: colors.main,
-                      color: colors.black,
-                      small: {
-                        color: colors.black
-                      }
-                    }
+                      bgcolor: colors.white1
+                    },
+                    position: 'relative'
                   }}
-                  onClick={() => setDeadLine(value)}>
-                  {value}&nbsp;
-                  <small
-                    style={{
-                      fontSize: '100%',
-                      transition: '.4s'
-                    }}>
-                    {unit}
-                  </small>
+                  onClick={() => {
+                    setMaturity(item.maturity);
+                    setAnchorEl(null);
+                  }}>
+                  <Typography
+                    sx={{
+                      fontSize: '14px'
+                    }}
+                    color={colors.white}>
+                    {new BigNumber(item.maturity).div(3600).div(24).toFixed(0)} days &nbsp;
+                    <small
+                      style={{
+                        color: colors.main,
+                        fontSize: '100%'
+                      }}>
+                      ({new BigNumber(item.borrow_apr).div(10).toFixed(2)}%)
+                    </small>
+                  </Typography>
+                  {selected && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        right: '10px',
+                        top: '50%',
+                        transform: 'translateY(-50%)'
+                      }}>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M13.3346 4L6.0013 11.3333L2.66797 8"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </Box>
+                  )}
                 </Box>
               );
             })}
-          </Stack>
-
+          </Popover>
           <Column
             bg="black"
             style={{
               borderRadius: '10px'
             }}
-            mt="lg"
             px="lg"
             py="lg">
             {data.map((item, index) => (
@@ -527,7 +628,7 @@ export default function LendingTanScreen() {
           <Row mt="lg" mb="lg">
             <Button
               onClick={() => {
-                if (!liquidationEvent || !poolData) {
+                if (!liquidationEvent || !poolData || !maturity) {
                   return;
                 }
                 createLoan({
@@ -535,7 +636,7 @@ export default function LendingTanScreen() {
                     denom: poolData.token.denom,
                     amount: toUnitAmount(borrowAmount, poolData.token.asset.exponent)
                   },
-                  maturityTime,
+                  maturityTime: maturity || '0',
                   poolId: poolData.baseData.id,
                   btcUnitAmount: toUnitAmount(collateralAmount, satBalance?.asset.exponent || 8),
                   liquidationEvent

@@ -2,7 +2,7 @@
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryPoolRequest, QueryPoolResponse, QueryPoolsRequest, QueryPoolsResponse, QueryPoolExchangeRateRequest, QueryPoolExchangeRateResponse, QueryCollateralAddressRequest, QueryCollateralAddressResponse, QueryLiquidationEventRequest, QueryLiquidationEventResponse, QueryLoanRequest, QueryLoanResponse, QueryLoansRequest, QueryLoansResponse, QueryLoansByAddressRequest, QueryLoansByAddressResponse, QueryLoanCetInfosRequest, QueryLoanCetInfosResponse, QueryLoanDlcMetaRequest, QueryLoanDlcMetaResponse, QueryLoanCancellationRequest, QueryLoanCancellationResponse, QueryRepaymentRequest, QueryRepaymentResponse, QueryCurrentInterestRequest, QueryCurrentInterestResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryPoolRequest, QueryPoolResponse, QueryPoolsRequest, QueryPoolsResponse, QueryPoolExchangeRateRequest, QueryPoolExchangeRateResponse, QueryCollateralAddressRequest, QueryCollateralAddressResponse, QueryLiquidationEventRequest, QueryLiquidationEventResponse, QueryLoanRequest, QueryLoanResponse, QueryLoansRequest, QueryLoansResponse, QueryLoansByAddressRequest, QueryLoansByAddressResponse, QueryLoanCetInfosRequest, QueryLoanCetInfosResponse, QueryLoanDlcMetaRequest, QueryLoanDlcMetaResponse, QueryLoanCancellationRequest, QueryLoanCancellationResponse, QueryRepaymentRequest, QueryRepaymentResponse, QueryCurrentInterestRequest, QueryCurrentInterestResponse, QueryPriceRequest, QueryPriceResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Params queries the parameters of the module. */
@@ -20,6 +20,8 @@ export interface Query {
   loanCancellation(request: QueryLoanCancellationRequest): Promise<QueryLoanCancellationResponse>;
   repayment(request: QueryRepaymentRequest): Promise<QueryRepaymentResponse>;
   currentInterest(request: QueryCurrentInterestRequest): Promise<QueryCurrentInterestResponse>;
+  /** Price queries the current price by the given pair. */
+  price(request: QueryPriceRequest): Promise<QueryPriceResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -39,6 +41,7 @@ export class QueryClientImpl implements Query {
     this.loanCancellation = this.loanCancellation.bind(this);
     this.repayment = this.repayment.bind(this);
     this.currentInterest = this.currentInterest.bind(this);
+    this.price = this.price.bind(this);
   }
   params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -112,6 +115,11 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("side.lending.Query", "CurrentInterest", data);
     return promise.then(data => QueryCurrentInterestResponse.decode(new BinaryReader(data)));
   }
+  price(request: QueryPriceRequest): Promise<QueryPriceResponse> {
+    const data = QueryPriceRequest.encode(request).finish();
+    const promise = this.rpc.request("side.lending.Query", "Price", data);
+    return promise.then(data => QueryPriceResponse.decode(new BinaryReader(data)));
+  }
 }
 export const createRpcQueryExtension = (base: QueryClient) => {
   const rpc = createProtobufRpcClient(base);
@@ -158,6 +166,9 @@ export const createRpcQueryExtension = (base: QueryClient) => {
     },
     currentInterest(request: QueryCurrentInterestRequest): Promise<QueryCurrentInterestResponse> {
       return queryService.currentInterest(request);
+    },
+    price(request: QueryPriceRequest): Promise<QueryPriceResponse> {
+      return queryService.price(request);
     }
   };
 };

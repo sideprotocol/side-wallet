@@ -131,7 +131,7 @@ export interface QueryLiquidationEventRequest {
   poolId: string;
   collateralAmount: string;
   borrowAmount: string;
-  term: bigint;
+  maturity: bigint;
 }
 export interface QueryLiquidationEventRequestProtoMsg {
   typeUrl: "/side.lending.QueryLiquidationEventRequest";
@@ -141,7 +141,7 @@ export interface QueryLiquidationEventRequestAmino {
   pool_id?: string;
   collateral_amount?: string;
   borrow_amount?: string;
-  term?: string;
+  maturity?: string;
 }
 export interface QueryLiquidationEventRequestAminoMsg {
   type: "/side.lending.QueryLiquidationEventRequest";
@@ -151,7 +151,7 @@ export interface QueryLiquidationEventRequestSDKType {
   pool_id: string;
   collateral_amount: string;
   borrow_amount: string;
-  term: bigint;
+  maturity: bigint;
 }
 export interface QueryLiquidationEventResponse {
   eventId: bigint;
@@ -582,6 +582,46 @@ export interface QueryCurrentInterestResponseAminoMsg {
 export interface QueryCurrentInterestResponseSDKType {
   interest: CoinSDKType;
 }
+/** QueryPriceRequest is request type for the Query/Price RPC method. */
+export interface QueryPriceRequest {
+  pair: string;
+}
+export interface QueryPriceRequestProtoMsg {
+  typeUrl: "/side.lending.QueryPriceRequest";
+  value: Uint8Array;
+}
+/** QueryPriceRequest is request type for the Query/Price RPC method. */
+export interface QueryPriceRequestAmino {
+  pair?: string;
+}
+export interface QueryPriceRequestAminoMsg {
+  type: "/side.lending.QueryPriceRequest";
+  value: QueryPriceRequestAmino;
+}
+/** QueryPriceRequest is request type for the Query/Price RPC method. */
+export interface QueryPriceRequestSDKType {
+  pair: string;
+}
+/** QueryPriceResponse is response type for the Query/Price RPC method. */
+export interface QueryPriceResponse {
+  price: string;
+}
+export interface QueryPriceResponseProtoMsg {
+  typeUrl: "/side.lending.QueryPriceResponse";
+  value: Uint8Array;
+}
+/** QueryPriceResponse is response type for the Query/Price RPC method. */
+export interface QueryPriceResponseAmino {
+  price?: string;
+}
+export interface QueryPriceResponseAminoMsg {
+  type: "/side.lending.QueryPriceResponse";
+  value: QueryPriceResponseAmino;
+}
+/** QueryPriceResponse is response type for the Query/Price RPC method. */
+export interface QueryPriceResponseSDKType {
+  price: string;
+}
 function createBaseQueryPoolRequest(): QueryPoolRequest {
   return {
     id: ""
@@ -979,7 +1019,7 @@ function createBaseQueryLiquidationEventRequest(): QueryLiquidationEventRequest 
     poolId: "",
     collateralAmount: "",
     borrowAmount: "",
-    term: BigInt(0)
+    maturity: BigInt(0)
   };
 }
 export const QueryLiquidationEventRequest = {
@@ -994,8 +1034,8 @@ export const QueryLiquidationEventRequest = {
     if (message.borrowAmount !== "") {
       writer.uint32(26).string(message.borrowAmount);
     }
-    if (message.term !== BigInt(0)) {
-      writer.uint32(32).int64(message.term);
+    if (message.maturity !== BigInt(0)) {
+      writer.uint32(32).int64(message.maturity);
     }
     return writer;
   },
@@ -1016,7 +1056,7 @@ export const QueryLiquidationEventRequest = {
           message.borrowAmount = reader.string();
           break;
         case 4:
-          message.term = reader.int64();
+          message.maturity = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1030,7 +1070,7 @@ export const QueryLiquidationEventRequest = {
     message.poolId = object.poolId ?? "";
     message.collateralAmount = object.collateralAmount ?? "";
     message.borrowAmount = object.borrowAmount ?? "";
-    message.term = object.term !== undefined && object.term !== null ? BigInt(object.term.toString()) : BigInt(0);
+    message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
     return message;
   },
   fromAmino(object: QueryLiquidationEventRequestAmino): QueryLiquidationEventRequest {
@@ -1044,8 +1084,8 @@ export const QueryLiquidationEventRequest = {
     if (object.borrow_amount !== undefined && object.borrow_amount !== null) {
       message.borrowAmount = object.borrow_amount;
     }
-    if (object.term !== undefined && object.term !== null) {
-      message.term = BigInt(object.term);
+    if (object.maturity !== undefined && object.maturity !== null) {
+      message.maturity = BigInt(object.maturity);
     }
     return message;
   },
@@ -1054,7 +1094,7 @@ export const QueryLiquidationEventRequest = {
     obj.pool_id = message.poolId === "" ? undefined : message.poolId;
     obj.collateral_amount = message.collateralAmount === "" ? undefined : message.collateralAmount;
     obj.borrow_amount = message.borrowAmount === "" ? undefined : message.borrowAmount;
-    obj.term = message.term !== BigInt(0) ? message.term.toString() : undefined;
+    obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryLiquidationEventRequestAminoMsg): QueryLiquidationEventRequest {
@@ -2552,6 +2592,132 @@ export const QueryCurrentInterestResponse = {
     return {
       typeUrl: "/side.lending.QueryCurrentInterestResponse",
       value: QueryCurrentInterestResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPriceRequest(): QueryPriceRequest {
+  return {
+    pair: ""
+  };
+}
+export const QueryPriceRequest = {
+  typeUrl: "/side.lending.QueryPriceRequest",
+  encode(message: QueryPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pair !== "") {
+      writer.uint32(10).string(message.pair);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPriceRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pair = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPriceRequest>): QueryPriceRequest {
+    const message = createBaseQueryPriceRequest();
+    message.pair = object.pair ?? "";
+    return message;
+  },
+  fromAmino(object: QueryPriceRequestAmino): QueryPriceRequest {
+    const message = createBaseQueryPriceRequest();
+    if (object.pair !== undefined && object.pair !== null) {
+      message.pair = object.pair;
+    }
+    return message;
+  },
+  toAmino(message: QueryPriceRequest): QueryPriceRequestAmino {
+    const obj: any = {};
+    obj.pair = message.pair === "" ? undefined : message.pair;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPriceRequestAminoMsg): QueryPriceRequest {
+    return QueryPriceRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPriceRequestProtoMsg): QueryPriceRequest {
+    return QueryPriceRequest.decode(message.value);
+  },
+  toProto(message: QueryPriceRequest): Uint8Array {
+    return QueryPriceRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPriceRequest): QueryPriceRequestProtoMsg {
+    return {
+      typeUrl: "/side.lending.QueryPriceRequest",
+      value: QueryPriceRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPriceResponse(): QueryPriceResponse {
+  return {
+    price: ""
+  };
+}
+export const QueryPriceResponse = {
+  typeUrl: "/side.lending.QueryPriceResponse",
+  encode(message: QueryPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.price !== "") {
+      writer.uint32(10).string(message.price);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPriceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.price = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPriceResponse>): QueryPriceResponse {
+    const message = createBaseQueryPriceResponse();
+    message.price = object.price ?? "";
+    return message;
+  },
+  fromAmino(object: QueryPriceResponseAmino): QueryPriceResponse {
+    const message = createBaseQueryPriceResponse();
+    if (object.price !== undefined && object.price !== null) {
+      message.price = object.price;
+    }
+    return message;
+  },
+  toAmino(message: QueryPriceResponse): QueryPriceResponseAmino {
+    const obj: any = {};
+    obj.price = message.price === "" ? undefined : message.price;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPriceResponseAminoMsg): QueryPriceResponse {
+    return QueryPriceResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPriceResponseProtoMsg): QueryPriceResponse {
+    return QueryPriceResponse.decode(message.value);
+  },
+  toProto(message: QueryPriceResponse): Uint8Array {
+    return QueryPriceResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPriceResponse): QueryPriceResponseProtoMsg {
+    return {
+      typeUrl: "/side.lending.QueryPriceResponse",
+      value: QueryPriceResponse.encode(message).finish()
     };
   }
 };
