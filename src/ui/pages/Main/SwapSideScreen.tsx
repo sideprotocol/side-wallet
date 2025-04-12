@@ -1,33 +1,77 @@
 import BigNumber from 'bignumber.js';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import 'swiper/css';
 
-import { Button, Column, Content, Footer, Grid, Image, Layout, Row, Text } from '@/ui/components';
+import { RawTxInfo, TxType } from '@/shared/types';
+import { Button, Column, Content, Footer, Grid, Header, Image, Layout, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
+import useGetBtcStoreParams from '@/ui/hooks/useGetBtcStoreParams';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { colors } from '@/ui/theme/colors';
+import { amountToSatoshis, btcTosatoshis } from '@/ui/utils';
+import { toReadableAmount } from '@/ui/utils/formatter';
 import { Box } from '@mui/material';
 
-import MainHeader from './MainHeader';
+import {
+  usePrepareSendBTCCallback,
+  useSafeBalance,
+  useSpendUnavailableUtxos
+} from '../../state/transactions/hooks/index';
+import { useNavigate } from '../MainRoute';
 
 export default function SwapSideScreen() {
   const currentAccount = useCurrentAccount();
 
   const [sideAmount, setSideAmount] = useState('');
 
-  const [satAmount, setSatAmount] = useState('');
+  const { params } = useGetBtcStoreParams();
 
   const [rateExchange, setRateExchange] = useState(false);
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
+  const [rawTxInfo, setRawTxInfo] = useState<RawTxInfo>();
+
+  const uiState = useUiTxCreateScreen();
+  const navigate = useNavigate();
+  const toInfo = uiState.toInfo;
+  const inputAmount = uiState.inputAmount;
+  const enableRBF = uiState.enableRBF;
+  const feeRate = uiState.feeRate;
+
   const sideBalance = balanceList.find((b) => b.denom === 'uside');
 
   const satBalance = bitcoinBalanceList.find((b) => b.denom === 'sat');
+
+  const sideToBtcRate = useMemo(() => {
+    if (!params) return '-';
+
+    return BigNumber(params.sidePriceInSats)
+      .div(10 ** +(satBalance?.asset.exponent || 8))
+      .toNumber();
+  }, [params, satBalance]);
+
+  const btcToSideRate = useMemo(() => {
+    if (!params) return '-';
+
+    return BigNumber(1).div(sideToBtcRate).toNumber();
+  }, [sideToBtcRate]);
+
+  const satAmount = useMemo(() => {
+    if (!params) return '0';
+
+    return toReadableAmount(
+      BigNumber(sideAmount || 0)
+        .times(params.sidePriceInSats)
+        .toFixed(),
+      satBalance?.asset.exponent || 8
+    );
+  }, [sideAmount, params]);
 
   const satValue = useMemo(() => {
     return (
@@ -36,17 +80,89 @@ export default function SwapSideScreen() {
         .times(satBalance?.denomPrice || 0)
         .toFormat()
     );
-  }, [satAmount, satBalance]);
+  }, [satBalance, satAmount]);
+
+  const tooLessSideAmount = useMemo(() => {
+    if (!params) return false;
+
+    return BigNumber(sideAmount).lt(params.minPurchaseAmount);
+  }, [sideAmount, params]);
+
+  const tooMuchSideAmount = useMemo(() => {
+    if (!params) return false;
+
+    return BigNumber(sideAmount).gt(params.maxPurchaseAmount);
+  }, [sideAmount, params]);
+
+  const prepareSendBTC = usePrepareSendBTCCallback();
+
+  const [disabled, setDisabled] = useState(true);
+
+  const safeBalance = useSafeBalance();
+
+  const avaiableSatoshis = useMemo(() => {
+    return amountToSatoshis(safeBalance);
+  }, [safeBalance]);
+
+  const [error, setError] = useState('');
+  const spendUnavailableUtxos = useSpendUnavailableUtxos();
+  const spendUnavailableSatoshis = useMemo(() => {
+    return spendUnavailableUtxos.reduce((acc, cur) => {
+      return acc + cur.satoshis;
+    }, 0);
+  }, [spendUnavailableUtxos]);
+
+  useEffect(() => {
+    if (!satAmount || !params) return;
+
+    setError('');
+    setDisabled(true);
+
+    const toSatoshis = +btcTosatoshis(+satAmount);
+
+    if (toSatoshis > avaiableSatoshis + spendUnavailableSatoshis) {
+      setError('Amount exceeds your available balance');
+      return;
+    }
+
+    if (feeRate <= 0) {
+      return;
+    }
+
+    prepareSendBTC({
+      toAddressInfo: {
+        address: params?.btcVaultAddress
+      },
+      toAmount: toSatoshis,
+      feeRate,
+      enableRBF
+    })
+      .then((data) => {
+        setRawTxInfo(data);
+        setDisabled(false);
+      })
+      .catch((e) => {
+        setError(e.message);
+      });
+  }, [toInfo, inputAmount, feeRate, enableRBF, params, satAmount]);
+
+  const disabledBuy = tooLessSideAmount || tooMuchSideAmount || !params || +satAmount <= 0 || disabled;
 
   return (
     <Layout>
-      <MainHeader title={'Swap SIDE'} />
-      <Content gap="lg" mt="md">
+      <Header
+        onBack={() => {
+          window.history.go(-1);
+        }}
+        title="Swap SIDE"
+      />
+      <Content gap="lg" mt="lg">
         <Column
           gap="xs"
           style={{
             borderRadius: '10px'
           }}
+          bg="card_bgColor"
           px="lg"
           py="md">
           <Row px="md" full justifyBetween itemsCenter>
@@ -56,7 +172,7 @@ export default function SwapSideScreen() {
           </Row>
 
           <Row
-            bg="card_bgColor"
+            bg="black"
             style={{
               height: 68
             }}
@@ -71,7 +187,7 @@ export default function SwapSideScreen() {
               rounded={true}
               px="lg"
               py="md"
-              bg="black">
+              bg="card_bgColor">
               <Image src={sideBalance?.asset.logo} height={24} width={24}></Image>
 
               <Text text={sideBalance?.asset.symbol || 'BTC'} color="white" size="md"></Text>
@@ -94,28 +210,31 @@ export default function SwapSideScreen() {
                   gridTemplateColumns: 'repeat(2, 1fr)',
                   gap: '4px'
                 }}>
-                {['100', '200', '500', '800'].map((item) => (
-                  <Box
-                    key={item}
-                    sx={{
-                      fontSize: '8px',
-                      borderRadius: '4px',
-                      bgcolor: colors.white1,
-                      p: '0px 4px',
-                      height: '20px',
-                      color: colors.white2,
-                      width: 'max-content',
-                      cursor: 'pointer',
-                      ':hover': {
-                        color: colors.main
-                      }
-                    }}
-                    onClick={() => {
-                      setSideAmount(item);
-                    }}>
-                    {item}
-                  </Box>
-                ))}
+                {['100', '200', '500', params?.maxPurchaseAmount || ''].map((item) => {
+                  if (!item) return null;
+                  return (
+                    <Box
+                      key={item}
+                      sx={{
+                        fontSize: '8px',
+                        borderRadius: '4px',
+                        bgcolor: colors.white1,
+                        p: '0px 4px',
+                        height: '20px',
+                        color: colors.white2,
+                        width: 'max-content',
+                        cursor: 'pointer',
+                        ':hover': {
+                          color: colors.main
+                        }
+                      }}
+                      onClick={() => {
+                        setSideAmount(item);
+                      }}>
+                      {item}
+                    </Box>
+                  );
+                })}
               </Grid>
             </Box>
           </Row>
@@ -127,7 +246,7 @@ export default function SwapSideScreen() {
           </Row>
 
           <Row
-            bg="card_bgColor"
+            bg="black"
             style={{
               height: 68
             }}
@@ -143,7 +262,7 @@ export default function SwapSideScreen() {
               py="md"
               px="lg"
               itemsCenter
-              bg="black">
+              bg="card_bgColor">
               <Image src={satBalance?.asset.logo} height={24} width={24}></Image>
 
               <Text text={satBalance?.asset.symbol || 'BTC'} color="white" size="md"></Text>
@@ -154,6 +273,7 @@ export default function SwapSideScreen() {
                 readOnly
                 onChange={(_) => null}
                 size={22}
+                decimalScale={+(satBalance?.asset.exponent || 8)}
                 coin={{
                   amount: satAmount,
                   denom: satBalance?.denom || 'uusdc'
@@ -165,7 +285,7 @@ export default function SwapSideScreen() {
             </Box>
           </Row>
 
-          <Column rounded px="lg" py="md" full justifyBetween bg="card_bgColor" mt="lg">
+          <Column rounded px="lg" py="md" full justifyBetween bg="black" mt="lg">
             <Row itemsCenter justifyBetween>
               <Row itemsCenter gap="xs">
                 <Text text={rateExchange ? 'BTC/SIDE' : 'SIDE/BTC'} color="grey12" size="sm"></Text>
@@ -188,7 +308,7 @@ export default function SwapSideScreen() {
                 </Box>
               </Row>
 
-              <Text text="809523.32" color="white" size="sm"></Text>
+              <Text text={rateExchange ? btcToSideRate : sideToBtcRate} color="white" size="sm"></Text>
             </Row>
 
             <Row itemsCenter justifyBetween>
@@ -200,12 +320,23 @@ export default function SwapSideScreen() {
 
           <Row>
             <Text color="red" size="xs">
-              Max purchase amount: 800
+              {tooLessSideAmount
+                ? `Min purchase amount: ${params?.minPurchaseAmount}`
+                : tooMuchSideAmount
+                ? `Max purchase amount: ${params?.maxPurchaseAmount}`
+                : null}
             </Text>
           </Row>
 
           <Row fullX mt="xl">
-            <Button text="Buy Now" preset="primary" full></Button>
+            <Button
+              onClick={() => {
+                navigate('TxConfirmScreen', { rawTxInfo, type: TxType.SWAP_SIDE });
+              }}
+              disabled={disabledBuy}
+              text="Buy Now"
+              preset="primary"
+              full></Button>
           </Row>
         </Column>
       </Content>

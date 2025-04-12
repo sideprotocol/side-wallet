@@ -1,22 +1,24 @@
 import Lottie from 'react-lottie';
 import 'swiper/css';
 
-import { SIDE_BTC_EXPLORER } from '@/shared/constant';
 import successAnimation from '@/ui/assets/lottie/correct.json';
 import { Button, Column, Content, Footer, Layout, Row, Text } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import MainHeader from '@/ui/pages/Main/MainHeader';
+import { useTxIdUrl } from '@/ui/state/settings/hooks';
 import { useLocationState } from '@/ui/utils';
 import { Box } from '@mui/material';
 
 interface SwapSideSuccessLocationState {
-  txId: string;
+  txid: string;
 }
 
 export default function SwapSideSuccessScreen() {
   const state = useLocationState<SwapSideSuccessLocationState>();
 
-  const txId = state?.txId;
+  const txid = state?.txid;
+
+  const txIdUrl = useTxIdUrl(txid || '');
 
   return (
     <Layout>
@@ -46,7 +48,7 @@ export default function SwapSideSuccessScreen() {
         <Row fullX mt="sm">
           <Button
             onClick={() => {
-              window.open(`${SIDE_BTC_EXPLORER}/tx/${txId}`, '_blank');
+              window.open(txIdUrl, '_blank');
             }}
             preset="primary"
             text="View Tx"

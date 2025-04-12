@@ -4,6 +4,7 @@ import { useLocationState } from '@/ui/utils';
 
 import BitcoinTxConfirmScreen from './BitcoinTxConfirmScreen';
 import SideTxConfirmScreen from './SideTxConfirmScreen';
+import SwapSideTxConfirmScreen from './SwapSideTxConfirmScreen';
 
 export interface TxConfirmLocationState {
   rawTxInfo: RawTxInfo;
@@ -23,5 +24,10 @@ export default function TxConfirmScreen() {
   if (state.type === TxType.SEND_SIDE) {
     return <SideTxConfirmScreen />;
   }
+
+  if (state.type === TxType.SWAP_SIDE) {
+    return <SwapSideTxConfirmScreen />;
+  }
+
   return <BitcoinTxConfirmScreen />;
 }
