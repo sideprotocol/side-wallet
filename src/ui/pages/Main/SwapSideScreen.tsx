@@ -320,7 +320,7 @@ export default function SwapSideScreen() {
 
           <Row>
             <Text color="red" size="xs">
-              {tooLessSideAmount
+              {error || tooLessSideAmount
                 ? `Min purchase amount: ${params?.minPurchaseAmount}`
                 : tooMuchSideAmount
                 ? `Max purchase amount: ${params?.maxPurchaseAmount}`
