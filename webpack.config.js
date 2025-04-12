@@ -17,7 +17,19 @@ const config = (env) => {
   }
 
   if (env.config) {
-    return webpackMerge.merge(commonConfig(env), configs[env.config]);
+    return webpackMerge.merge(commonConfig(env), configs[env.config], {
+      module: {
+        rules: [
+          {
+            test: /\.m?js$/,
+            type: 'javascript/auto',
+            resolve: {
+              fullySpecified: false
+            }
+          }
+        ]
+      }
+    });
   }
 
   return commonConfig(env);

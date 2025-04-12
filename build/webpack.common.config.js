@@ -432,6 +432,7 @@ const config = (env) => {
             },
             // ** STOP ** Are you adding a new loader?
             // Make sure to add the new loader(s) before the "file" loader.
+
             {
               test: /\.m?js$/,
               include: [path.join(paths.appNodeModules, 'tiny-secp256k1')],
