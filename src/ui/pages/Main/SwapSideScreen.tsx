@@ -3,24 +3,21 @@ import { useEffect, useMemo, useState } from 'react';
 import 'swiper/css';
 
 import { RawTxInfo, TxType } from '@/shared/types';
-import { Button, Column, Content, Footer, Grid, Header, Image, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Footer, Grid, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { NavTabBar } from '@/ui/components/NavTabBar';
+import { useFeeSummary } from '@/ui/hooks/useFeeSummary';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import useGetBtcStoreParams from '@/ui/hooks/useGetBtcStoreParams';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { colors } from '@/ui/theme/colors';
-import { amountToSatoshis, btcTosatoshis } from '@/ui/utils';
+import { btcTosatoshis } from '@/ui/utils';
 import { toReadableAmount } from '@/ui/utils/formatter';
 import { Box } from '@mui/material';
 
-import {
-  usePrepareSendBTCCallback,
-  useSafeBalance,
-  useSpendUnavailableUtxos
-} from '../../state/transactions/hooks/index';
+import { usePrepareSendBTCCallback } from '../../state/transactions/hooks/index';
 import { useNavigate } from '../MainRoute';
 
 export default function SwapSideScreen() {
@@ -42,7 +39,8 @@ export default function SwapSideScreen() {
   const toInfo = uiState.toInfo;
   const inputAmount = uiState.inputAmount;
   const enableRBF = uiState.enableRBF;
-  const feeRate = uiState.feeRate;
+
+  const { maxFee, fastTimeDesc } = useFeeSummary();
 
   const sideBalance = balanceList.find((b) => b.denom === 'uside');
 
@@ -63,14 +61,20 @@ export default function SwapSideScreen() {
   }, [sideToBtcRate]);
 
   const satAmount = useMemo(() => {
-    if (!params) return '0';
+    if (!params) return '';
 
-    return toReadableAmount(
+    const value = toReadableAmount(
       BigNumber(sideAmount || 0)
         .times(params.sidePriceInSats)
         .toFixed(),
       satBalance?.asset.exponent || 8
     );
+
+    if (+value == 0) {
+      return '';
+    } else {
+      return value;
+    }
   }, [sideAmount, params]);
 
   const satValue = useMemo(() => {
@@ -78,7 +82,7 @@ export default function SwapSideScreen() {
       '$' +
       BigNumber(satAmount || '0')
         .times(satBalance?.denomPrice || 0)
-        .toFormat()
+        .toFormat(2)
     );
   }, [satBalance, satAmount]);
 
@@ -98,34 +102,22 @@ export default function SwapSideScreen() {
 
   const [disabled, setDisabled] = useState(true);
 
-  const safeBalance = useSafeBalance();
-
-  const avaiableSatoshis = useMemo(() => {
-    return amountToSatoshis(safeBalance);
-  }, [safeBalance]);
-
   const [error, setError] = useState('');
-  const spendUnavailableUtxos = useSpendUnavailableUtxos();
-  const spendUnavailableSatoshis = useMemo(() => {
-    return spendUnavailableUtxos.reduce((acc, cur) => {
-      return acc + cur.satoshis;
-    }, 0);
-  }, [spendUnavailableUtxos]);
 
   useEffect(() => {
-    if (!satAmount || !params) return;
+    if (!satAmount || !params || !maxFee || !satBalance) return;
 
     setError('');
     setDisabled(true);
 
     const toSatoshis = +btcTosatoshis(+satAmount);
 
-    if (toSatoshis > avaiableSatoshis + spendUnavailableSatoshis) {
+    if (btcTosatoshis(+satBalance.formatAmount) < toSatoshis) {
       setError('Amount exceeds your available balance');
       return;
     }
 
-    if (feeRate <= 0) {
+    if (maxFee <= 0) {
       return;
     }
 
@@ -134,7 +126,7 @@ export default function SwapSideScreen() {
         address: params?.btcVaultAddress
       },
       toAmount: toSatoshis,
-      feeRate,
+      feeRate: maxFee,
       enableRBF
     })
       .then((data) => {
@@ -144,7 +136,7 @@ export default function SwapSideScreen() {
       .catch((e) => {
         setError(e.message);
       });
-  }, [toInfo, inputAmount, feeRate, enableRBF, params, satAmount]);
+  }, [toInfo, inputAmount, maxFee, enableRBF, params, satAmount, sideAmount, satBalance]);
 
   const disabledBuy = tooLessSideAmount || tooMuchSideAmount || !params || +satAmount <= 0 || disabled;
 
@@ -210,7 +202,7 @@ export default function SwapSideScreen() {
                   gridTemplateColumns: 'repeat(2, 1fr)',
                   gap: '4px'
                 }}>
-                {['100', '200', '500', params?.maxPurchaseAmount || ''].map((item) => {
+                {['100', '200', '500', '800'].map((item) => {
                   if (!item) return null;
                   return (
                     <Box
@@ -243,6 +235,11 @@ export default function SwapSideScreen() {
             <Text color="white" size="xs">
               You need to pay
             </Text>
+
+            <Row itemsCenter>
+              <Icon icon="wallet-icon" size={12} color="white_muted"></Icon>
+              <Text color="white_muted" size="xs" text={BigNumber(satBalance?.formatAmount || '0').toFormat()}></Text>
+            </Row>
           </Row>
 
           <Row
@@ -314,17 +311,17 @@ export default function SwapSideScreen() {
             <Row itemsCenter justifyBetween>
               <Text text="Estimated Time" color="grey12" size="sm"></Text>
 
-              <Text text="~ 10 minutes" color="white" size="sm"></Text>
+              <Text text={fastTimeDesc} color="white" size="sm"></Text>
             </Row>
           </Column>
 
           <Row>
             <Text color="red" size="xs">
-              {error || tooLessSideAmount
+              {tooLessSideAmount
                 ? `Min purchase amount: ${params?.minPurchaseAmount}`
                 : tooMuchSideAmount
                 ? `Max purchase amount: ${params?.maxPurchaseAmount}`
-                : null}
+                : error}
             </Text>
           </Row>
 

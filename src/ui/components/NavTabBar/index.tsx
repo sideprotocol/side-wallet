@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Lottie from 'react-lottie';
 
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useReadTab, useUnreadAppSummary } from '@/ui/state/accounts/hooks';
@@ -8,21 +9,20 @@ import { colors } from '@/ui/theme/colors';
 import { BaseView } from '../BaseView';
 import { Column } from '../Column';
 import { Grid } from '../Grid';
-import { Icon, IconTypes } from '../Icon';
+import { Icon, IconTypes, lottieRegistry } from '../Icon';
 
-export function NavTabBar({ tab }: { tab: TabOption }) {
+export const NavTabBar = function NavTabBar({ tab }: { tab: TabOption }) {
   return (
     <Grid columns={4} style={{ width: '100%', height: '66px', backgroundColor: colors.bg2 }}>
-      <TabButton tabName="home" icon="main-home" isActive={tab === 'home'} />
-      <TabButton tabName="loans" icon="main-loans" isActive={tab === 'loans'} />
-
-      <TabButton tabName="earn" icon="main-earn" isActive={tab === 'earn'} />
-      <TabButton tabName="bridge" icon="main-bridge" isActive={tab === 'bridge'} />
+      <TabButton tabName="home" icon="main-home-dynamic" isActive={tab === 'home'} />
+      <TabButton tabName="loans" icon="main-loans-dynamic" isActive={tab === 'loans'} />
+      <TabButton tabName="earn" icon="main-earn-dynamic" isActive={tab === 'earn'} />
+      <TabButton tabName="bridge" icon="main-bridge-dynamic" isActive={tab === 'bridge'} />
     </Grid>
   );
-}
+};
 
-function TabButton({
+const TabButton = function TabButton({
   tabName,
   icon,
   isActive,
@@ -37,6 +37,9 @@ function TabButton({
   const unreadApp = useUnreadAppSummary();
   const readTab = useReadTab();
   const [isHover, setIsHover] = useState(false);
+
+  const iconPathDynamic = lottieRegistry[icon];
+
   return (
     <Column
       justifyCenter
@@ -66,7 +69,15 @@ function TabButton({
         }}
         onMouseOver={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}>
-        <Icon size={24} icon={icon} color={isActive || isHover ? 'white' : 'white_muted'} />
+        {isHover ? (
+          <Lottie options={{ animationData: iconPathDynamic, autoplay: true, loop: false }} height={24} width={24} />
+        ) : (
+          <Icon
+            size={24}
+            color={isActive ? 'white' : 'white_muted'}
+            icon={icon.replace('-dynamic', '') as IconTypes}></Icon>
+        )}
+
         <span
           style={{
             textTransform: 'capitalize' as const,
@@ -92,4 +103,4 @@ function TabButton({
       </BaseView>
     </Column>
   );
-}
+};

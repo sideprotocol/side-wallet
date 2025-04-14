@@ -4,11 +4,11 @@ import { Buffer } from 'buffer';
 import { Coin } from 'cosmwasm';
 
 import { isProduction } from '@/shared/constant';
-import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 import { toXOnly } from '@unisat/wallet-sdk/lib/utils';
 
 import services from '../services';
 import { GetCetInfoResponse } from '../services/lending/types';
+import { bitcoin } from './bitcoin-core';
 
 export interface DepositToLendingAgency {
   borrowAmount: Coin;
@@ -62,12 +62,9 @@ export async function prepareApply({
     network
   });
 
-  const agencyPsbtToFee = new bitcoin.Psbt({ network });
+  const agencyPsbtToFee = new Psbt({ network });
 
-  const agencyPsbt = new bitcoin.Psbt({ network });
-
-  const repaymentPsbt = new bitcoin.Psbt({ network });
-
+  const agencyPsbt = new Psbt({ network });
   const collateralOutput = psbt.txOutputs.find(
     (out) => bitcoin.address.fromOutputScript(out.script, network) === collateralAddress
   );
@@ -121,21 +118,23 @@ export async function prepareApply({
 
   // generate repayment cet
 
-  repaymentPsbt.addInput({
-    hash: depositTxId,
-    index: collateralOutputIndex,
-    witnessUtxo: {
-      script: collateralOutput.script,
-      value: collateralOutput.value
-    }
-  });
+  const getRepaymentSignatureParams = (refundAddress: string) => {
+    const repaymentPsbt = new bitcoin.Psbt({ network });
 
-  repaymentPsbt.addOutput({
-    address: senderAddress,
-    value: collateralOutput.value - feeAmount
-  });
+    repaymentPsbt.addInput({
+      hash: depositTxId,
+      index: collateralOutputIndex,
+      witnessUtxo: {
+        script: collateralOutput.script,
+        value: collateralOutput.value
+      }
+    });
 
-  const getRepaymentSignatureParams = () => {
+    repaymentPsbt.addOutput({
+      address: refundAddress || senderAddress,
+      value: collateralOutput.value - feeAmount
+    });
+
     const script = Buffer.from(cetInfos.repayment_cet_info.script, 'hex');
 
     const leafHash = bip341.tapleafHash({
@@ -160,7 +159,8 @@ export async function prepareApply({
     const sigHashHex = sigHash.toString('hex');
 
     return {
-      sigHashHex
+      sigHashHex,
+      repaymentCet: repaymentPsbt.toBase64()
     };
   };
 
@@ -197,7 +197,6 @@ export async function prepareApply({
     getLiquidationAdaptorSignatureParams,
     getRepaymentSignatureParams,
     liquidationCet: agencyPsbt.toBase64(),
-    repaymentCet: repaymentPsbt.toBase64(),
     agencyId: dcm.id,
     agencyAddress
   };

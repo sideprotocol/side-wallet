@@ -17,7 +17,7 @@ import { useSignAndBroadcastTxRaw } from '../state/transactions/hooks/cosmos';
 import { useWallet } from '../utils';
 import { prepareApply } from '../utils/lending';
 
-async function buildPsbtFromTxHex(txid: string) {
+export async function buildPsbtFromTxHex(txid: string) {
   const txHex = await services.bridge.getTxHex(txid);
   const tx = bitcoin.Transaction.fromHex(txHex);
   const psbt = new bitcoin.Psbt({ network: isProduction ? bitcoin.networks.bitcoin : bitcoin.networks.testnet });
@@ -71,7 +71,8 @@ export default function useApproveLoan(loan_id: string) {
     borrowAmount,
     collateralAmount,
     loanId,
-    liquidationEvent
+    liquidationEvent,
+    refundAddress
   }: {
     depositTxId: string;
     psbtHex: string;
@@ -80,6 +81,7 @@ export default function useApproveLoan(loan_id: string) {
     collateralAmount: Coin;
     loanId: string;
     liquidationEvent: LiquidationEvent;
+    refundAddress: string;
   }) => {
     try {
       setLoading(true);
@@ -94,20 +96,19 @@ export default function useApproveLoan(loan_id: string) {
         }
       );
 
-      const { liquidationCet, repaymentCet, getRepaymentSignatureParams, getLiquidationAdaptorSignatureParams } =
-        await prepareApply({
-          params: {
-            collateralAddress: loanId,
-            collateralAmount: collateralAmount,
-            borrowAmount,
-            cetInfos,
-            restUrl: sideChain.restUrl,
-            feeRate
-          },
-          psbtHex,
-          depositTxId: depositTxId,
-          senderAddress: currentAccount.address
-        });
+      const { liquidationCet, getRepaymentSignatureParams, getLiquidationAdaptorSignatureParams } = await prepareApply({
+        params: {
+          collateralAddress: loanId,
+          collateralAmount: collateralAmount,
+          borrowAmount,
+          cetInfos,
+          restUrl: sideChain.restUrl,
+          feeRate
+        },
+        psbtHex,
+        depositTxId: depositTxId,
+        senderAddress: currentAccount.address
+      });
 
       if (!liquidationEvent?.event_id) {
         throw new Error('No liquidation event found.');
@@ -117,11 +118,7 @@ export default function useApproveLoan(loan_id: string) {
         throw new Error('No Cet info found.');
       }
 
-      // cetInfos.liquidation_cet_info.signature_point
-      // cetInfos.default_liquidation_cet_info.signature_point
       const { sigHashHex } = getLiquidationAdaptorSignatureParams();
-
-      console.log({ cetInfos });
 
       const liquidationAdaptorSignature = await wallet.signAdaptor(
         sigHashHex,
@@ -133,13 +130,15 @@ export default function useApproveLoan(loan_id: string) {
         cetInfos.default_liquidation_cet_info.signature_point
       );
 
-      const { sigHashHex: repaymentSigHashHex } = getRepaymentSignatureParams();
+      const { sigHashHex: repaymentSigHashHex, repaymentCet } = getRepaymentSignatureParams(refundAddress);
 
       let repaymentSignature = '';
 
       await wallet.signSnorr(repaymentSigHashHex).then((res) => {
         repaymentSignature = res;
       });
+
+      debugger;
 
       console.log({
         repaymentSignature
@@ -191,6 +190,8 @@ export default function useApproveLoan(loan_id: string) {
       }
     } catch (err) {
       const error = err as Error;
+
+      console.log({ error });
 
       toast.custom((t) => (
         <ToastView toaster={t} type="fail">

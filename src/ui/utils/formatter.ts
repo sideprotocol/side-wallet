@@ -100,3 +100,10 @@ export function toReadableAmount(amount: string, exp: number | string, pre?: str
     .toFixed(Number(pre || exp), BigNumber.ROUND_DOWN)
     .replace(/\.?0*$/, '');
 }
+
+export function formatTimeWithUTC(time: string | number) {
+  const timeFormat = dayjs(time).format('MMM-D-YYYY HH:mm:ss');
+  // const timeZone = dayjs().utcOffset() / 60;
+  // return `${timeFormat} UTC${timeZone > 0 ? "+" : ""}${timeZone !== 0 ? timeZone + ":00" : ""}`;
+  return `${timeFormat}`;
+}

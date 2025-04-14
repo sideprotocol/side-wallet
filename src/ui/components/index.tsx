@@ -18,6 +18,7 @@ import { Row } from './Row';
 import { StepBar } from './StepBar';
 import { Text } from './Text';
 import { TextArea } from './TextArea';
+import { Tooltip } from './Tooltip';
 
 export {
   AddressBar,
@@ -39,5 +40,6 @@ export {
   Row,
   StepBar,
   Text,
-  TextArea
+  TextArea,
+  Tooltip
 };

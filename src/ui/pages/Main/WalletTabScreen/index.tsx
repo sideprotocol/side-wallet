@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 
 import { AddressFlagType, CHAINS_ENUM, SIDE_HUB_URL, SIDE_STATION_URL } from '@/shared/constant';
 import { checkAddressFlag } from '@/shared/utils';
-import { ButtonGroup, Column, Footer, Image, Layout, Row, Text } from '@/ui/components';
+import { Column, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPopover';
+import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import { NoticePopover } from '@/ui/components/NoticePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
@@ -12,7 +13,6 @@ import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks'
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
-import { fontSizes } from '@/ui/theme/font';
 import { getTruncate, useWallet } from '@/ui/utils';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
@@ -163,25 +163,27 @@ export default function WalletTabScreen() {
         <Row
           style={{
             justifyContent: 'center',
-            gap: '20px',
-            marginTop: '20px'
-          }}>
+            gap: '20px'
+          }}
+          mt="xl">
           <div
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
               navigate('SelectAddressScreen');
             }}>
-            <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
-              <Image
-                src={
+            <div className="w-[75px] h-[66px] gap-2 pt-1 rounded-xl flex flex-col items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
+              <ImageIcon
+                url={
                   '/images/icons/main/recevie-icon.svg' // Default image source
                 }
-                size={fontSizes.xl}
-                className="" // Hide the default image on hover
+                style={{
+                  width: '22px',
+                  height: '22px'
+                }}
               />
-            </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">
-              Receive
+              <div className="text-[#fff]/80 group-hover:text-[#fff] text-[12px] leading-[17px] font-[Saira]">
+                Receive
+              </div>
             </div>
           </div>
 
@@ -190,16 +192,18 @@ export default function WalletTabScreen() {
             onClick={() => {
               navigate('SelectNetworkScreen', { type: 'send' });
             }}>
-            <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
-              <Image
-                src={
+            <div className="w-[75px] h-[66px] gap-2 pt-1 rounded-xl flex flex-col items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
+              <ImageIcon
+                url={
                   '/images/icons/main/send-icon.svg' // Default image source
                 }
-                size={fontSizes.xxl}
-                className="" // Hide the default image on hover
+                style={{
+                  width: '22px',
+                  height: '22px'
+                }}
               />
+              <div className="text-[#fff]/80 group-hover:text-[#fff] text-[12px] leading-[17px] font-[Saira]">Send</div>
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">Send</div>
           </div>
 
           <div
@@ -207,7 +211,7 @@ export default function WalletTabScreen() {
             onClick={() => {
               window.open(`${SIDE_STATION_URL}/stake`, '_blank');
             }}>
-            <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
+            <div className="w-[75px] h-[66px] gap-2 pt-1 rounded-xl flex flex-col items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M14.9377 14.9377C18.3603 14.4795 21 11.548 21 8C21 4.13401 17.866 1 14 1C10.452 1 7.52049 3.63967 7.06227 7.06227M15 14C15 17.866 11.866 21 8 21C4.13401 21 1 17.866 1 14C1 10.134 4.13401 7 8 7C11.866 7 15 10.134 15 14Z"
@@ -217,8 +221,10 @@ export default function WalletTabScreen() {
                   strokeLinejoin="round"
                 />
               </svg>
+              <div className="text-[#fff]/80 group-hover:text-[#fff] text-[12px] leading-[17px] font-[Saira]">
+                Stake
+              </div>
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">Stake</div>
           </div>
 
           <div
@@ -226,7 +232,7 @@ export default function WalletTabScreen() {
             onClick={() => {
               window.open(blockStreamUrl, '_blank');
             }}>
-            <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
+            <div className="w-[75px] h-[66px] gap-2 pt-1 rounded-xl flex flex-col items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M20.1635 17.674C20.1635 19.0643 19.0423 20.1868 17.6536 20.1868H2.50998C1.12112 20.1868 0 19.0643 0 17.674V2.51309C0 1.12265 1.12949 0.000244141 2.50998 0.000244141H17.6536C19.0423 0.000244141 20.1635 1.12265 20.1635 2.51309V17.674Z"
@@ -243,14 +249,14 @@ export default function WalletTabScreen() {
                   fill="#09090A"
                 />
               </svg>
-            </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">
-              Mempool
+              <div className="text-[#fff]/80 group-hover:text-[#fff] text-[12px] leading-[17px] font-[Saira]">
+                Mempool
+              </div>
             </div>
           </div>
         </Row>
 
-        <Row my="xl" fullX itemsCenter justifyCenter gap="xl">
+        <Row my="xl" fullX itemsCenter justifyCenter gap="lg">
           <div
             className="flex items-center gap-[8px] group transition text-[#6c7080] hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]"
             onClick={() => {
@@ -319,45 +325,9 @@ export default function WalletTabScreen() {
           </div>
         </Row>
 
-        <Row
-          style={{
-            marginBottom: '20px'
-          }}
-          justifyCenter>
-          <ButtonGroup
-            size="big"
-            rowProps={{
-              justifyCenter: true
-            }}
-            list={[
-              {
-                key: CHAINS_ENUM.SIDE,
-                label: 'Side Chain'
-              },
-              {
-                key: CHAINS_ENUM.BTC,
-                label: 'Bitcoin'
-              }
-            ]}
-            onChange={(value, index) => {
-              const tab = value as CHAINS_ENUM;
-              setCurrentTab(tab);
-            }}
-            value={currentTab}
-          />
-        </Row>
-
-        <Column
-          style={{
-            padding: '0 16px',
-            marginBottom: '20px',
-            gap: '0px'
-          }}>
-          {currentTab === CHAINS_ENUM.SIDE ? (
-            <SideTokenList balanceVisible={balanceVisible} />
-          ) : (
-            <BtcTokenList balanceVisible={balanceVisible} />
-          )}
+        <Column mb="xl">
+          <BtcTokenList balanceVisible={balanceVisible} />
+          <SideTokenList balanceVisible={balanceVisible} />
         </Column>
       </Column>
 
