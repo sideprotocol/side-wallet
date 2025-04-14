@@ -138,12 +138,6 @@ export default function useApproveLoan(loan_id: string) {
         repaymentSignature = res;
       });
 
-      debugger;
-
-      console.log({
-        repaymentSignature
-      });
-
       const msg = sideLendingMessageComposer.withTypeUrl.submitCets({
         borrower: currentAccount.address,
         loanId: loan_id,
