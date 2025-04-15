@@ -410,6 +410,8 @@ export default function LoanDepositScreen() {
               </svg>
             </Stack>
           </Stack>
+
+          {errorMsg && <Text text={errorMsg} color={'red'} size="xs" textCenter></Text>}
         </Column>
       </Content>
       <Footer px="zero" py="zero">

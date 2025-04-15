@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Lottie from 'react-lottie';
 
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useReadTab, useUnreadAppSummary } from '@/ui/state/accounts/hooks';
@@ -14,10 +13,10 @@ import { Icon, IconTypes, lottieRegistry } from '../Icon';
 export const NavTabBar = function NavTabBar({ tab }: { tab: TabOption }) {
   return (
     <Grid columns={4} style={{ width: '100%', height: '66px', backgroundColor: colors.bg2 }}>
-      <TabButton tabName="home" icon="main-home-dynamic" isActive={tab === 'home'} />
-      <TabButton tabName="loans" icon="main-loans-dynamic" isActive={tab === 'loans'} />
-      <TabButton tabName="earn" icon="main-earn-dynamic" isActive={tab === 'earn'} />
-      <TabButton tabName="bridge" icon="main-bridge-dynamic" isActive={tab === 'bridge'} />
+      <TabButton tabName="home" icon="main-home" isActive={tab === 'home'} />
+      <TabButton tabName="loans" icon="main-loans" isActive={tab === 'loans'} />
+      <TabButton tabName="earn" icon="main-earn" isActive={tab === 'earn'} />
+      <TabButton tabName="bridge" icon="main-bridge" isActive={tab === 'bridge'} />
     </Grid>
   );
 };
@@ -69,14 +68,7 @@ const TabButton = function TabButton({
         }}
         onMouseOver={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}>
-        {isHover ? (
-          <Lottie options={{ animationData: iconPathDynamic, autoplay: true, loop: false }} height={24} width={24} />
-        ) : (
-          <Icon
-            size={24}
-            color={isActive ? 'white' : 'white_muted'}
-            icon={icon.replace('-dynamic', '') as IconTypes}></Icon>
-        )}
+        <Icon size={24} color={isActive || isHover ? 'white' : 'white_muted'} icon={icon as IconTypes}></Icon>
 
         <span
           style={{

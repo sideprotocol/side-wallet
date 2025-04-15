@@ -99,7 +99,7 @@ export default function LendingTanScreen() {
           borrowMaxAmount: '0'
         };
       }
-      borrowMaxAmount = new BigNumber(collateralAmount)
+      borrowMaxAmount = new BigNumber(collateralAmount || '0')
         .multipliedBy(satBalance.denomPrice || '0')
         .multipliedBy(poolData.baseData.config.max_ltv)
         .div(100)
@@ -421,9 +421,14 @@ export default function LendingTanScreen() {
                     'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
                   }
                   onClick={() => {
+                    if (!+borrowMaxAmount) {
+                      return;
+                    }
+
                     const amount = new BigNumber(borrowMaxAmount || '0')
                       .multipliedBy(0.5)
                       .toFixed(poolData?.token.asset.precision || 6, BigNumber.ROUND_DOWN);
+
                     setBorrowAmount(amount);
                   }}>
                   Half
@@ -434,6 +439,9 @@ export default function LendingTanScreen() {
                     'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
                   }
                   onClick={() => {
+                    if (!+borrowMaxAmount) {
+                      return;
+                    }
                     setBorrowAmount(borrowMaxAmount || '0');
                   }}>
                   Max
@@ -457,10 +465,17 @@ export default function LendingTanScreen() {
             sx={{
               px: '12px',
               py: '8px',
+              my: '8px',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              bgcolor: open ? colors.white1 : colors.black,
+              transition: '.4s',
+              borderRadius: '10px',
+              ':hover': {
+                bgcolor: colors.white1
+              }
             }}
             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
               event.stopPropagation();

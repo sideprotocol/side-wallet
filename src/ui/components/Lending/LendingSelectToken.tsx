@@ -1,7 +1,7 @@
 // import { CHAINS_ENUM } from '@/shared/constant';
 import BigNumber from 'bignumber.js';
 
-import { Button, Column, Content, Header, Layout, Row, Text } from '@/ui/components';
+import { Column, Content, Header, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
@@ -96,23 +96,6 @@ export default function LendingSelectTokenScreen() {
             );
           })}
         </Column>
-
-        <Row
-          fullX
-          style={{
-            position: 'absolute',
-            bottom: '0'
-          }}
-          mb="lg"
-          px="lg">
-          <Button
-            onClick={() => {
-              onClose();
-            }}
-            preset="primary"
-            text="Close"
-            full></Button>
-        </Row>
       </Content>
     </Layout>
   );

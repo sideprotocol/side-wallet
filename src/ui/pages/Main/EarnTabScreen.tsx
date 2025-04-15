@@ -72,6 +72,17 @@ export default function EarnTabScreen() {
 
   const stokenBalance = balanceList.find((b) => b.denom == poolData?.baseData.id);
 
+  const maxWithdrawAmount = useMemo(() => {
+    if (!poolData) return '0';
+
+    const poolMaxCanWithdraw = new BigNumber(poolData?.totalSupply)
+      .minus(poolData?.totalBorrow)
+      .toFixed(6, BigNumber.ROUND_DOWN);
+    return poolMaxCanWithdraw;
+  }, [poolData]);
+
+  const withdrawExceed = BigNumber(withdrawAmount || '0').gt(maxWithdrawAmount);
+
   const onSupply = () => {
     if (!poolData) return;
 
@@ -422,6 +433,13 @@ export default function EarnTabScreen() {
                 </Typography>
               </Stack>
             </Column>
+          )}
+
+          {operationTab === 'withdraw' && withdrawExceed && (
+            <Text
+              color="red"
+              size="xs"
+              text={`Max redeemable: ${maxWithdrawAmount} ${stokenBalance?.asset.symbol}`}></Text>
           )}
 
           <Row mt="md" mb="lg">

@@ -321,7 +321,9 @@ export default function SwapSideScreen() {
                 ? `Min purchase amount: ${params?.minPurchaseAmount}`
                 : tooMuchSideAmount
                 ? `Max purchase amount: ${params?.maxPurchaseAmount}`
-                : error}
+                : error
+                ? 'Insufficient BTC balance'
+                : ''}
             </Text>
           </Row>
 
@@ -331,7 +333,7 @@ export default function SwapSideScreen() {
                 navigate('TxConfirmScreen', { rawTxInfo, type: TxType.SWAP_SIDE });
               }}
               disabled={disabledBuy}
-              text="Buy Now"
+              text="Swap Now"
               preset="primary"
               full></Button>
           </Row>

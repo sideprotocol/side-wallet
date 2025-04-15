@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { useState } from 'react';
 import 'swiper/css';
 
@@ -38,6 +37,8 @@ export default function LoanAuthorizeScreen() {
 
   const { loan } = useGetLoanById({ loanId });
 
+  console.log({ loan });
+
   const data = [
     {
       label: 'Liquidation Price (BTC/USDC)',
@@ -45,7 +46,7 @@ export default function LoanAuthorizeScreen() {
     },
     {
       label: 'Maturity Date',
-      value: !loan ? '-' : formatTimeWithUTC(new BigNumber(loan.loan.maturity_time).multipliedBy(1000).toFixed())
+      value: !loan ? '-' : formatTimeWithUTC(+loan.loan.maturity_time * 1000)
     }
   ];
 
