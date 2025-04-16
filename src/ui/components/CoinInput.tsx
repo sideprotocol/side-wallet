@@ -10,13 +10,15 @@ export type CoinInputProps = {
   color?: string;
   onInput?: () => void;
   decimalScale?: number;
+  disabled?: boolean;
 };
-export function CoinInput({ coin, onChange, readOnly, onInput, size, color, decimalScale }: CoinInputProps) {
+export function CoinInput({ coin, onChange, readOnly, onInput, size, color, decimalScale, disabled }: CoinInputProps) {
   return (
     <NumericFormat
       type="text"
       className="coin-input"
       readOnly={readOnly}
+      disabled={disabled}
       style={{
         textDecoration: 'none',
         width: '100%',

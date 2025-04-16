@@ -9,11 +9,11 @@ import SkipGo from '@/ui/pages/SkipGo';
 const tabArr = [
   {
     key: 0,
-    label: 'Bridge'
+    label: 'Swap'
   },
   {
     key: 1,
-    label: 'Swap'
+    label: 'Bridge'
   }
 ];
 
@@ -40,7 +40,7 @@ export default function BridgeTabScreen() {
             value={curTab}
           />
         </Row>
-        {curTab === tabArr[0].key ? <Bridge /> : <SkipGo />}
+        {curTab === tabArr[0].key ? <SkipGo /> : <Bridge />}
       </Content>
       <Footer px="zero" py="zero">
         <NavTabBar tab="bridge" />

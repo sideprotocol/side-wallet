@@ -15,6 +15,7 @@ import { Logo } from './Logo';
 import { LongPress } from './LongPress';
 import { Mask } from './Mask';
 import { Row } from './Row';
+import { Search } from './Search';
 import { StepBar } from './StepBar';
 import { Text } from './Text';
 import { TextArea } from './TextArea';
@@ -37,6 +38,7 @@ export {
   LongPress,
   Mask,
   Row,
+  Search,
   StepBar,
   Text,
   TextArea
