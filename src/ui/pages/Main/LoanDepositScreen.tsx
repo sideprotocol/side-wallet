@@ -71,7 +71,21 @@ export default function LoanDepositScreen() {
 
   const [temporaryLoading, setTemporaryLoading] = useState(false);
 
-  const { refetch } = useGetDepositTx(toInfo.address, collateralAmount);
+  const { refetch, depositTxs } = useGetDepositTx(toInfo.address, collateralAmount);
+
+  useEffect(() => {
+    console.log({ depositTxs });
+
+    if (depositTxs?.length) {
+      navigate('LoanAuthorizeScreen', {
+        loanId: toInfo.address,
+        borrowAmount,
+        collateralAmount,
+        feeRate,
+        liquidationEvent
+      });
+    }
+  }, [depositTxs]);
 
   const avaiableSatoshis = useMemo(() => {
     return amountToSatoshis(safeBalance);

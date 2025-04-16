@@ -14,8 +14,6 @@ import { formatTimeWithUTC } from '@/ui/utils/formatter';
 import { Input, Stack, Typography } from '@mui/material';
 
 export interface LoanAuthorizeLocationState {
-  txid: string;
-  psbtHex: string;
   loanId: string;
   borrowAmount: string;
   collateralAmount: string;
@@ -24,20 +22,18 @@ export interface LoanAuthorizeLocationState {
 }
 
 export default function LoanAuthorizeScreen() {
-  const { txid, psbtHex, loanId, feeRate, borrowAmount, collateralAmount, liquidationEvent } =
+  const { loanId, feeRate, borrowAmount, collateralAmount, liquidationEvent } =
     useLocationState<LoanAuthorizeLocationState>();
 
-  const { approveLoan, loading } = useApproveLoan(loanId);
+  const { approveLoan, loading, depositTxs } = useApproveLoan(loanId, collateralAmount);
 
   const currentAccount = useCurrentAccount();
 
-  const disabled = loading || !txid || !psbtHex || !loanId || !borrowAmount || !collateralAmount || !liquidationEvent;
+  const disabled = loading || !loanId || !borrowAmount || !collateralAmount || !liquidationEvent;
 
   const [refundAddress, setRefundAddress] = useState(currentAccount.address);
 
   const { loan } = useGetLoanById({ loanId });
-
-  console.log({ loan });
 
   const data = [
     {
@@ -190,8 +186,6 @@ export default function LoanAuthorizeScreen() {
               disabled={disabled}
               onClick={async () => {
                 await approveLoan({
-                  depositTxId: txid,
-                  psbtHex,
                   loanId,
                   borrowAmount: {
                     amount: borrowAmount,

@@ -34,8 +34,6 @@ export default function BitcoinTxConfirmScreen() {
           if (success) {
             if (lendingState) {
               return navigate('LoanAuthorizeScreen', {
-                txid,
-                psbtHex: rawTxInfo.psbtHex,
                 loanId: lendingState.loanId,
                 borrowAmount: lendingState.borrowAmount,
                 collateralAmount: lendingState.collateralAmount,

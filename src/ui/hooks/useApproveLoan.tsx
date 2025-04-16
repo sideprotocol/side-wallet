@@ -16,6 +16,7 @@ import { useCurrentAccount } from '../state/accounts/hooks';
 import { useSignAndBroadcastTxRaw } from '../state/transactions/hooks/cosmos';
 import { useWallet } from '../utils';
 import { prepareApply } from '../utils/lending';
+import useGetDepositTx from './useGetDepositTx';
 
 export async function buildPsbtFromTxHex(txid: string) {
   const txHex = await services.bridge.getTxHex(txid);
@@ -53,20 +54,20 @@ export async function buildPsbtFromTxHex(txid: string) {
   return psbt;
 }
 
-export default function useApproveLoan(loan_id: string) {
+export default function useApproveLoan(loan_id: string, collateralAmount: string) {
   const [loading, setLoading] = useState(false);
 
   const currentAccount = useCurrentAccount();
 
   const navigate = useNavigate();
 
+  const { txids, depositTxs, refetch } = useGetDepositTx(loan_id, collateralAmount);
+
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 
   const wallet = useWallet();
 
   const approveLoan = async ({
-    depositTxId,
-    psbtHex,
     feeRate,
     borrowAmount,
     collateralAmount,
@@ -74,8 +75,6 @@ export default function useApproveLoan(loan_id: string) {
     liquidationEvent,
     refundAddress
   }: {
-    depositTxId: string;
-    psbtHex: string;
     feeRate: number;
     borrowAmount: Coin;
     collateralAmount: Coin;
@@ -86,27 +85,26 @@ export default function useApproveLoan(loan_id: string) {
     try {
       setLoading(true);
 
-      const cetInfos = await services.lending.getCetInfo(
-        {
-          loan_id: loanId,
-          collateral_amount: `${collateralAmount.amount}sat`
-        },
-        {
-          baseURL: sideChain.restUrl
-        }
-      );
+      let depositTxs: string[] | undefined = undefined;
+
+      while (!depositTxs) {
+        await new Promise((r) => setTimeout(r, 1000));
+        const { data } = await refetch();
+        depositTxs = data?.txBase64s;
+      }
+
+      console.log({ depositTxs });
 
       const { liquidationCet, getRepaymentSignatureParams, getLiquidationAdaptorSignatureParams } = await prepareApply({
         params: {
           collateralAddress: loanId,
           collateralAmount: collateralAmount,
           borrowAmount,
-          cetInfos,
           restUrl: sideChain.restUrl,
           feeRate
         },
-        psbtHex,
-        depositTxId: depositTxId,
+        depositTxIds: txids || [],
+        depositTxs: depositTxs || [],
         senderAddress: currentAccount.address
       });
 
@@ -114,39 +112,33 @@ export default function useApproveLoan(loan_id: string) {
         throw new Error('No liquidation event found.');
       }
 
-      if (!cetInfos) {
-        throw new Error('No Cet info found.');
-      }
+      const { sigHashHexs, cetInfos } = await getLiquidationAdaptorSignatureParams();
 
-      const { sigHashHex } = getLiquidationAdaptorSignatureParams();
-
-      const liquidationAdaptorSignature = await wallet.signAdaptor(
-        sigHashHex,
-        cetInfos.liquidation_cet_info.signature_point
+      const liquidationAdaptorSignatures = await Promise.all(
+        sigHashHexs.map((sigHashHex) => wallet.signAdaptor(sigHashHex, cetInfos.liquidation_cet_info.signature_point))
       );
 
-      const defaultLiquidationAdaptorSignature = await wallet.signAdaptor(
-        sigHashHex,
-        cetInfos.default_liquidation_cet_info.signature_point
+      const defaultLiquidationAdaptorSignatures = await Promise.all(
+        sigHashHexs.map((sigHashHex) =>
+          wallet.signAdaptor(sigHashHex, cetInfos.default_liquidation_cet_info.signature_point)
+        )
       );
 
-      const { sigHashHex: repaymentSigHashHex, repaymentCet } = getRepaymentSignatureParams(refundAddress);
+      const { sigHashHexs: repaymentSigHashHexs, repaymentCet } = await getRepaymentSignatureParams(refundAddress);
 
-      let repaymentSignature = '';
-
-      await wallet.signSnorr(repaymentSigHashHex).then((res) => {
-        repaymentSignature = res;
-      });
+      const repaymentSignatures = await Promise.all(
+        repaymentSigHashHexs.map((sigHashHex) => wallet.signSnorr(sigHashHex))
+      );
 
       const msg = sideLendingMessageComposer.withTypeUrl.submitCets({
         borrower: currentAccount.address,
         loanId: loan_id,
-        depositTx: (await buildPsbtFromTxHex(depositTxId)).toBase64(),
+        depositTxs: depositTxs || [],
         liquidationCet: liquidationCet,
-        liquidationAdaptorSignatures: [liquidationAdaptorSignature],
-        defaultLiquidationAdaptorSignatures: [defaultLiquidationAdaptorSignature], //
+        liquidationAdaptorSignatures: liquidationAdaptorSignatures,
+        defaultLiquidationAdaptorSignatures: defaultLiquidationAdaptorSignatures, //
         repaymentCet: repaymentCet, // sign psbt
-        repaymentSignatures: [repaymentSignature] // sighash,
+        repaymentSignatures: repaymentSignatures // sighash,
       });
 
       const result = await signAndBroadcastTxRaw({
@@ -206,6 +198,7 @@ export default function useApproveLoan(loan_id: string) {
 
   return {
     approveLoan,
-    loading
+    loading,
+    depositTxs
   };
 }

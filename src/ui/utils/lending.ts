@@ -7,7 +7,6 @@ import { isProduction } from '@/shared/constant';
 import { toXOnly } from '@unisat/wallet-sdk/lib/utils';
 
 import services from '../services';
-import { GetCetInfoResponse } from '../services/lending/types';
 import { bitcoin } from './bitcoin-core';
 
 export interface DepositToLendingAgency {
@@ -16,7 +15,6 @@ export interface DepositToLendingAgency {
   collateralAddress: string;
   restUrl: string;
   feeRate: number;
-  cetInfos: GetCetInfoResponse;
 }
 
 export function hexPubKeyToTaprootAddress(pubkeyHex: string): string {
@@ -36,16 +34,17 @@ export function hexPubKeyToTaprootAddress(pubkeyHex: string): string {
 
 export async function prepareApply({
   params,
-  psbtHex,
   senderAddress,
-  depositTxId
+  depositTxIds,
+  depositTxs
 }: {
   params: DepositToLendingAgency;
   senderAddress: string;
-  psbtHex: string;
-  depositTxId: string;
+
+  depositTxIds?: string[];
+  depositTxs?: string[];
 }) {
-  const { restUrl, feeRate, collateralAddress, cetInfos } = params;
+  const { restUrl, feeRate, collateralAddress } = params;
 
   const activeAgencies = await services.lending.getDlcDcms({ status: 3 }, { baseURL: restUrl });
 
@@ -58,48 +57,51 @@ export async function prepareApply({
   // send btc to collateral address
   const network = isProduction ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
 
-  const psbt = Psbt.fromHex(psbtHex, {
-    network
-  });
-
   const agencyPsbtToFee = new Psbt({ network });
 
   const agencyPsbt = new Psbt({ network });
-  const collateralOutput = psbt.txOutputs.find(
-    (out) => bitcoin.address.fromOutputScript(out.script, network) === collateralAddress
-  );
-  const collateralOutputIndex = psbt.txOutputs.findIndex(
-    (out) => bitcoin.address.fromOutputScript(out.script, network) === collateralAddress
-  );
 
-  if (!collateralOutput) {
-    throw new Error('Cannot find collateral output in the first transaction');
-  }
+  const outputValue =
+    depositTxs?.reduce((pre, cur) => {
+      const depositTxPsbt = bitcoin.Psbt.fromBase64(cur);
+      return pre + depositTxPsbt.txOutputs[0].value;
+    }, 0) || 0;
 
   //   generate liquidation cet
-  agencyPsbt.addInput({
-    hash: depositTxId,
-    index: collateralOutputIndex,
-    witnessUtxo: {
-      script: collateralOutput.script,
-      value: collateralOutput.value
-    }
-  });
+  if (depositTxs?.length && depositTxIds) {
+    depositTxs.forEach((depositTx, index) => {
+      const depositTxPsbt = bitcoin.Psbt.fromBase64(depositTx);
+      agencyPsbtToFee.addInput({
+        hash: depositTxIds[index],
+        index: 0,
+        witnessUtxo: {
+          script: depositTxPsbt.txOutputs[0].script,
+          value: depositTxPsbt.txOutputs[0].value
+        }
+      });
+    });
+  }
 
-  agencyPsbtToFee.addInput({
-    hash: depositTxId,
-    index: collateralOutputIndex,
-    witnessUtxo: {
-      script: collateralOutput.script,
-      value: collateralOutput.value
-    }
-  });
+  if (depositTxs?.length && depositTxIds) {
+    depositTxs.forEach((depositTx, index) => {
+      const depositTxPsbt = bitcoin.Psbt.fromBase64(depositTx);
+
+      agencyPsbt.addInput({
+        hash: depositTxIds[index],
+        index: 0,
+        witnessUtxo: {
+          script: depositTxPsbt.txOutputs[0].script,
+          value: depositTxPsbt.txOutputs[0].value
+        }
+      });
+    });
+  }
 
   const agencyAddress = hexPubKeyToTaprootAddress(dcm.pubkey);
 
   agencyPsbtToFee.addOutput({
     address: agencyAddress,
-    value: collateralOutput.value
+    value: outputValue
   });
 
   const agencyTxTemp = bitcoin.Transaction.fromBuffer(agencyPsbtToFee.data.getTransaction());
@@ -113,26 +115,41 @@ export async function prepareApply({
 
   agencyPsbt.addOutput({
     address: agencyAddress,
-    value: collateralOutput.value - feeAmount
+    value: outputValue - feeAmount
   });
 
   // generate repayment cet
 
-  const getRepaymentSignatureParams = (refundAddress: string) => {
+  const getRepaymentSignatureParams = async (refundAddress: string) => {
+    const cetInfos = await services.lending.getCetInfo(
+      {
+        loan_id: collateralAddress!,
+        collateral_amount: `${outputValue}sat`
+      },
+      {
+        baseURL: restUrl
+      }
+    );
+
     const repaymentPsbt = new bitcoin.Psbt({ network });
 
-    repaymentPsbt.addInput({
-      hash: depositTxId,
-      index: collateralOutputIndex,
-      witnessUtxo: {
-        script: collateralOutput.script,
-        value: collateralOutput.value
-      }
-    });
+    if (depositTxs?.length && depositTxIds) {
+      depositTxs.forEach((depositTx, index) => {
+        const depositTxPsbt = bitcoin.Psbt.fromBase64(depositTx);
+        repaymentPsbt.addInput({
+          hash: depositTxIds[index],
+          index: 0,
+          witnessUtxo: {
+            script: depositTxPsbt.txOutputs[0].script,
+            value: depositTxPsbt.txOutputs[0].value
+          }
+        });
+      });
+    }
 
     repaymentPsbt.addOutput({
       address: refundAddress || senderAddress,
-      value: collateralOutput.value - feeAmount
+      value: outputValue - feeAmount
     });
 
     const script = Buffer.from(cetInfos.repayment_cet_info.script, 'hex');
@@ -154,17 +171,26 @@ export async function prepareApply({
       return repaymentTx.hashForWitnessV1(index, prevOutScripts, prevOutValues, sighashType, leafHash);
     });
 
-    const sigHash = sighashes[0];
-
-    const sigHashHex = sigHash.toString('hex');
+    const sigHashHexs = sighashes.map((sighash) => sighash.toString('hex'));
 
     return {
-      sigHashHex,
-      repaymentCet: repaymentPsbt.toBase64()
+      sigHashHexs,
+      repaymentCet: repaymentPsbt.toBase64(),
+      cetInfos
     };
   };
 
-  const getLiquidationAdaptorSignatureParams = () => {
+  const getLiquidationAdaptorSignatureParams = async () => {
+    const cetInfos = await services.lending.getCetInfo(
+      {
+        loan_id: collateralAddress!,
+        collateral_amount: `${outputValue}sat`
+      },
+      {
+        baseURL: restUrl
+      }
+    );
+
     const script = Buffer.from(cetInfos.liquidation_cet_info.script, 'hex');
 
     const leafHash = bip341.tapleafHash({
@@ -184,12 +210,11 @@ export async function prepareApply({
       return agencyTx.hashForWitnessV1(index, prevOutScripts, prevOutValues, sighashType, leafHash);
     });
 
-    const sigHash = sighashes[0];
-
-    const sigHashHex = sigHash.toString('hex');
+    const sigHashHexs = sighashes.map((sighash) => sighash.toString('hex'));
 
     return {
-      sigHashHex
+      sigHashHexs,
+      cetInfos
     };
   };
 

@@ -32,16 +32,18 @@ export default function useGetDepositTx(collateralAddress: string, collateralUni
           )} BTC. Please send more to reach ${formatUnitAmount(collateralUnitAmount, 8)} BTC.`
         );
       } else {
-        const tx = txs[0];
-        const txid = tx.txid;
+        console.log({ txs });
 
-        const txHex = await services.bridge.getTxHex(txid);
+        const txBase64s = await Promise.all(
+          txs.map(async (tx) => {
+            const psbt = await buildPsbtFromTxHex(tx.txid);
+            return psbt.toBase64();
+          })
+        );
 
-        const psbt = await buildPsbtFromTxHex(txHex);
+        const txids = txs.map((tx) => tx.txid);
 
-        const txBase64 = psbt.toBase64();
-
-        return { txBase64, txid };
+        return { txBase64s, txids };
       }
     },
     refetchInterval: (data) => {
@@ -52,8 +54,8 @@ export default function useGetDepositTx(collateralAddress: string, collateralUni
 
   return {
     loading,
-    depositTx: data?.txBase64,
-    txid: data?.txid,
+    depositTxs: data?.txBase64s,
+    txids: data?.txids,
     refetch
   };
 }
