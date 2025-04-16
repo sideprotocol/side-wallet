@@ -233,7 +233,7 @@ export interface MsgApplyResponseSDKType {}
 export interface MsgSubmitCets {
   borrower: string;
   loanId: string;
-  depositTx: string;
+  depositTxs: string[];
   liquidationCet: string;
   liquidationAdaptorSignatures: string[];
   defaultLiquidationAdaptorSignatures: string[];
@@ -247,7 +247,7 @@ export interface MsgSubmitCetsProtoMsg {
 export interface MsgSubmitCetsAmino {
   borrower?: string;
   loan_id?: string;
-  deposit_tx?: string;
+  deposit_txs?: string[];
   liquidation_cet?: string;
   liquidation_adaptor_signatures?: string[];
   default_liquidation_adaptor_signatures?: string[];
@@ -261,7 +261,7 @@ export interface MsgSubmitCetsAminoMsg {
 export interface MsgSubmitCetsSDKType {
   borrower: string;
   loan_id: string;
-  deposit_tx: string;
+  deposit_txs: string[];
   liquidation_cet: string;
   liquidation_adaptor_signatures: string[];
   default_liquidation_adaptor_signatures: string[];
@@ -1424,7 +1424,7 @@ function createBaseMsgSubmitCets(): MsgSubmitCets {
   return {
     borrower: "",
     loanId: "",
-    depositTx: "",
+    depositTxs: [],
     liquidationCet: "",
     liquidationAdaptorSignatures: [],
     defaultLiquidationAdaptorSignatures: [],
@@ -1441,8 +1441,8 @@ export const MsgSubmitCets = {
     if (message.loanId !== "") {
       writer.uint32(18).string(message.loanId);
     }
-    if (message.depositTx !== "") {
-      writer.uint32(26).string(message.depositTx);
+    for (const v of message.depositTxs) {
+      writer.uint32(26).string(v!);
     }
     if (message.liquidationCet !== "") {
       writer.uint32(34).string(message.liquidationCet);
@@ -1475,7 +1475,7 @@ export const MsgSubmitCets = {
           message.loanId = reader.string();
           break;
         case 3:
-          message.depositTx = reader.string();
+          message.depositTxs.push(reader.string());
           break;
         case 4:
           message.liquidationCet = reader.string();
@@ -1503,7 +1503,7 @@ export const MsgSubmitCets = {
     const message = createBaseMsgSubmitCets();
     message.borrower = object.borrower ?? "";
     message.loanId = object.loanId ?? "";
-    message.depositTx = object.depositTx ?? "";
+    message.depositTxs = object.depositTxs?.map(e => e) || [];
     message.liquidationCet = object.liquidationCet ?? "";
     message.liquidationAdaptorSignatures = object.liquidationAdaptorSignatures?.map(e => e) || [];
     message.defaultLiquidationAdaptorSignatures = object.defaultLiquidationAdaptorSignatures?.map(e => e) || [];
@@ -1519,9 +1519,7 @@ export const MsgSubmitCets = {
     if (object.loan_id !== undefined && object.loan_id !== null) {
       message.loanId = object.loan_id;
     }
-    if (object.deposit_tx !== undefined && object.deposit_tx !== null) {
-      message.depositTx = object.deposit_tx;
-    }
+    message.depositTxs = object.deposit_txs?.map(e => e) || [];
     if (object.liquidation_cet !== undefined && object.liquidation_cet !== null) {
       message.liquidationCet = object.liquidation_cet;
     }
@@ -1537,7 +1535,11 @@ export const MsgSubmitCets = {
     const obj: any = {};
     obj.borrower = message.borrower === "" ? undefined : message.borrower;
     obj.loan_id = message.loanId === "" ? undefined : message.loanId;
-    obj.deposit_tx = message.depositTx === "" ? undefined : message.depositTx;
+    if (message.depositTxs) {
+      obj.deposit_txs = message.depositTxs.map(e => e);
+    } else {
+      obj.deposit_txs = message.depositTxs;
+    }
     obj.liquidation_cet = message.liquidationCet === "" ? undefined : message.liquidationCet;
     if (message.liquidationAdaptorSignatures) {
       obj.liquidation_adaptor_signatures = message.liquidationAdaptorSignatures.map(e => e);
