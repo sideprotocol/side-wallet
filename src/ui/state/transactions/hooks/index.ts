@@ -1,3 +1,4 @@
+import * as bitcoin from 'bitcoinjs-lib';
 import { useCallback, useMemo } from 'react';
 
 import { KEYRING_TYPE } from '@/shared/constant';
@@ -5,7 +6,6 @@ import { RawTxInfo, ToAddressInfo } from '@/shared/types';
 import { useTools } from '@/ui/components/ActionComponent';
 import { satoshisToAmount, satoshisToBTC, sleep, useWallet } from '@/ui/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
-import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 
 import { AppState } from '../..';
 import { useAccountAddress, useCurrentAccount } from '../../accounts/hooks';
@@ -71,10 +71,6 @@ export function usePrepareSendBTCCallback() {
       }
       let psbtHex = '';
 
-      console.log({
-        toAddressInfo
-      });
-
       if (safeBalance === toAmount && !disableAutoAdjust) {
         psbtHex = await wallet.sendAllBTC({
           to: toAddressInfo.address,
@@ -97,8 +93,6 @@ export function usePrepareSendBTCCallback() {
       const psbt = bitcoin.Psbt.fromHex(psbtHex);
       const rawtx = account.type === KEYRING_TYPE.KeystoneKeyring ? '' : psbt.extractTransaction().toHex();
       const fee = account.type === KEYRING_TYPE.KeystoneKeyring ? 0 : psbt.getFee();
-
-      console.log('fee: ', fee);
 
       dispatch(
         transactionsActions.updateBitcoinTx({

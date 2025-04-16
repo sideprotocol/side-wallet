@@ -3,8 +3,11 @@ import { Timestamp } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { toTimestamp, fromTimestamp } from "../../helpers";
 export enum DLCOracleStatus {
-  Oracle_status_Enable = 0,
-  Oracle_status_Disable = 1,
+  Oracle_Status_Pending = 0,
+  Oracle_Status_Failed = 1,
+  Oracle_Status_Timedout = 2,
+  Oracle_status_Enable = 3,
+  Oracle_status_Disable = 4,
   UNRECOGNIZED = -1,
 }
 export const DLCOracleStatusSDKType = DLCOracleStatus;
@@ -12,9 +15,18 @@ export const DLCOracleStatusAmino = DLCOracleStatus;
 export function dLCOracleStatusFromJSON(object: any): DLCOracleStatus {
   switch (object) {
     case 0:
+    case "Oracle_Status_Pending":
+      return DLCOracleStatus.Oracle_Status_Pending;
+    case 1:
+    case "Oracle_Status_Failed":
+      return DLCOracleStatus.Oracle_Status_Failed;
+    case 2:
+    case "Oracle_Status_Timedout":
+      return DLCOracleStatus.Oracle_Status_Timedout;
+    case 3:
     case "Oracle_status_Enable":
       return DLCOracleStatus.Oracle_status_Enable;
-    case 1:
+    case 4:
     case "Oracle_status_Disable":
       return DLCOracleStatus.Oracle_status_Disable;
     case -1:
@@ -25,6 +37,12 @@ export function dLCOracleStatusFromJSON(object: any): DLCOracleStatus {
 }
 export function dLCOracleStatusToJSON(object: DLCOracleStatus): string {
   switch (object) {
+    case DLCOracleStatus.Oracle_Status_Pending:
+      return "Oracle_Status_Pending";
+    case DLCOracleStatus.Oracle_Status_Failed:
+      return "Oracle_Status_Failed";
+    case DLCOracleStatus.Oracle_Status_Timedout:
+      return "Oracle_Status_Timedout";
     case DLCOracleStatus.Oracle_status_Enable:
       return "Oracle_status_Enable";
     case DLCOracleStatus.Oracle_status_Disable:
@@ -35,8 +53,11 @@ export function dLCOracleStatusToJSON(object: DLCOracleStatus): string {
   }
 }
 export enum DCMStatus {
-  DCM_status_Enable = 0,
-  DCM_status_Disable = 1,
+  DCM_Status_Pending = 0,
+  DCM_Status_Failed = 1,
+  DCM_Status_Timedout = 2,
+  DCM_status_Enable = 3,
+  DCM_status_Disable = 4,
   UNRECOGNIZED = -1,
 }
 export const DCMStatusSDKType = DCMStatus;
@@ -44,9 +65,18 @@ export const DCMStatusAmino = DCMStatus;
 export function dCMStatusFromJSON(object: any): DCMStatus {
   switch (object) {
     case 0:
+    case "DCM_Status_Pending":
+      return DCMStatus.DCM_Status_Pending;
+    case 1:
+    case "DCM_Status_Failed":
+      return DCMStatus.DCM_Status_Failed;
+    case 2:
+    case "DCM_Status_Timedout":
+      return DCMStatus.DCM_Status_Timedout;
+    case 3:
     case "DCM_status_Enable":
       return DCMStatus.DCM_status_Enable;
-    case 1:
+    case 4:
     case "DCM_status_Disable":
       return DCMStatus.DCM_status_Disable;
     case -1:
@@ -57,6 +87,12 @@ export function dCMStatusFromJSON(object: any): DCMStatus {
 }
 export function dCMStatusToJSON(object: DCMStatus): string {
   switch (object) {
+    case DCMStatus.DCM_Status_Pending:
+      return "DCM_Status_Pending";
+    case DCMStatus.DCM_Status_Failed:
+      return "DCM_Status_Failed";
+    case DCMStatus.DCM_Status_Timedout:
+      return "DCM_Status_Timedout";
     case DCMStatus.DCM_status_Enable:
       return "DCM_status_Enable";
     case DCMStatus.DCM_status_Disable:
@@ -110,81 +146,11 @@ export function dlcEventTypeToJSON(object: DlcEventType): string {
       return "UNRECOGNIZED";
   }
 }
-/** Signing intent */
-export enum SigningIntent {
-  SIGNING_INTENT_DEFAULT = 0,
-  UNRECOGNIZED = -1,
-}
-export const SigningIntentSDKType = SigningIntent;
-export const SigningIntentAmino = SigningIntent;
-export function signingIntentFromJSON(object: any): SigningIntent {
-  switch (object) {
-    case 0:
-    case "SIGNING_INTENT_DEFAULT":
-      return SigningIntent.SIGNING_INTENT_DEFAULT;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return SigningIntent.UNRECOGNIZED;
-  }
-}
-export function signingIntentToJSON(object: SigningIntent): string {
-  switch (object) {
-    case SigningIntent.SIGNING_INTENT_DEFAULT:
-      return "SIGNING_INTENT_DEFAULT";
-    case SigningIntent.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-/** DKG intent */
-export enum DKGIntent {
-  DKG_INTENT_DEFAULT = 0,
-  DKG_INTENT_PRICE_EVENT_NONCE = 10000,
-  DKG_INTENT_DATE_EVENT_NONCE = 20000,
-  DKG_INTENT_LENDING_EVENT_NONCE = 30000,
-  UNRECOGNIZED = -1,
-}
-export const DKGIntentSDKType = DKGIntent;
-export const DKGIntentAmino = DKGIntent;
-export function dKGIntentFromJSON(object: any): DKGIntent {
-  switch (object) {
-    case 0:
-    case "DKG_INTENT_DEFAULT":
-      return DKGIntent.DKG_INTENT_DEFAULT;
-    case 10000:
-    case "DKG_INTENT_PRICE_EVENT_NONCE":
-      return DKGIntent.DKG_INTENT_PRICE_EVENT_NONCE;
-    case 20000:
-    case "DKG_INTENT_DATE_EVENT_NONCE":
-      return DKGIntent.DKG_INTENT_DATE_EVENT_NONCE;
-    case 30000:
-    case "DKG_INTENT_LENDING_EVENT_NONCE":
-      return DKGIntent.DKG_INTENT_LENDING_EVENT_NONCE;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return DKGIntent.UNRECOGNIZED;
-  }
-}
-export function dKGIntentToJSON(object: DKGIntent): string {
-  switch (object) {
-    case DKGIntent.DKG_INTENT_DEFAULT:
-      return "DKG_INTENT_DEFAULT";
-    case DKGIntent.DKG_INTENT_PRICE_EVENT_NONCE:
-      return "DKG_INTENT_PRICE_EVENT_NONCE";
-    case DKGIntent.DKG_INTENT_DATE_EVENT_NONCE:
-      return "DKG_INTENT_DATE_EVENT_NONCE";
-    case DKGIntent.DKG_INTENT_LENDING_EVENT_NONCE:
-      return "DKG_INTENT_LENDING_EVENT_NONCE";
-    case DKGIntent.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
 export interface DLCOracle {
   id: bigint;
   desc: string;
+  participants: string[];
+  threshold: number;
   pubkey: string;
   nonceIndex: bigint;
   time: Date;
@@ -197,6 +163,8 @@ export interface DLCOracleProtoMsg {
 export interface DLCOracleAmino {
   id?: string;
   desc?: string;
+  participants?: string[];
+  threshold?: number;
   pubkey?: string;
   nonce_index?: string;
   time?: string;
@@ -209,6 +177,8 @@ export interface DLCOracleAminoMsg {
 export interface DLCOracleSDKType {
   id: bigint;
   desc: string;
+  participants: string[];
+  threshold: number;
   pubkey: string;
   nonce_index: bigint;
   time: Date;
@@ -217,6 +187,8 @@ export interface DLCOracleSDKType {
 export interface DCM {
   id: bigint;
   desc: string;
+  participants: string[];
+  threshold: number;
   pubkey: string;
   time: Date;
   status: DCMStatus;
@@ -228,6 +200,8 @@ export interface DCMProtoMsg {
 export interface DCMAmino {
   id?: string;
   desc?: string;
+  participants?: string[];
+  threshold?: number;
   pubkey?: string;
   time?: string;
   status?: DCMStatus;
@@ -239,6 +213,8 @@ export interface DCMAminoMsg {
 export interface DCMSDKType {
   id: bigint;
   desc: string;
+  participants: string[];
+  threshold: number;
   pubkey: string;
   time: Date;
   status: DCMStatus;
@@ -279,6 +255,7 @@ export interface DLCEvent {
   hasTriggered: boolean;
   outcomeIndex: number;
   publishAt: Date;
+  triggerAt: Date;
 }
 export interface DLCEventProtoMsg {
   typeUrl: "/side.dlc.DLCEvent";
@@ -294,6 +271,7 @@ export interface DLCEventAmino {
   has_triggered?: boolean;
   outcome_index?: number;
   publish_at?: string;
+  trigger_at?: string;
 }
 export interface DLCEventAminoMsg {
   type: "/side.dlc.DLCEvent";
@@ -309,6 +287,7 @@ export interface DLCEventSDKType {
   has_triggered: boolean;
   outcome_index: number;
   publish_at: Date;
+  trigger_at: Date;
 }
 export interface DLCAttestation {
   id: bigint;
@@ -346,6 +325,8 @@ function createBaseDLCOracle(): DLCOracle {
   return {
     id: BigInt(0),
     desc: "",
+    participants: [],
+    threshold: 0,
     pubkey: "",
     nonceIndex: BigInt(0),
     time: new Date(),
@@ -361,17 +342,23 @@ export const DLCOracle = {
     if (message.desc !== "") {
       writer.uint32(18).string(message.desc);
     }
+    for (const v of message.participants) {
+      writer.uint32(26).string(v!);
+    }
+    if (message.threshold !== 0) {
+      writer.uint32(32).uint32(message.threshold);
+    }
     if (message.pubkey !== "") {
-      writer.uint32(26).string(message.pubkey);
+      writer.uint32(42).string(message.pubkey);
     }
     if (message.nonceIndex !== BigInt(0)) {
-      writer.uint32(32).uint64(message.nonceIndex);
+      writer.uint32(48).uint64(message.nonceIndex);
     }
     if (message.time !== undefined) {
-      Timestamp.encode(toTimestamp(message.time), writer.uint32(42).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.time), writer.uint32(58).fork()).ldelim();
     }
     if (message.status !== 0) {
-      writer.uint32(48).int32(message.status);
+      writer.uint32(64).int32(message.status);
     }
     return writer;
   },
@@ -389,15 +376,21 @@ export const DLCOracle = {
           message.desc = reader.string();
           break;
         case 3:
-          message.pubkey = reader.string();
+          message.participants.push(reader.string());
           break;
         case 4:
-          message.nonceIndex = reader.uint64();
+          message.threshold = reader.uint32();
           break;
         case 5:
-          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.pubkey = reader.string();
           break;
         case 6:
+          message.nonceIndex = reader.uint64();
+          break;
+        case 7:
+          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 8:
           message.status = reader.int32() as any;
           break;
         default:
@@ -411,6 +404,8 @@ export const DLCOracle = {
     const message = createBaseDLCOracle();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.desc = object.desc ?? "";
+    message.participants = object.participants?.map(e => e) || [];
+    message.threshold = object.threshold ?? 0;
     message.pubkey = object.pubkey ?? "";
     message.nonceIndex = object.nonceIndex !== undefined && object.nonceIndex !== null ? BigInt(object.nonceIndex.toString()) : BigInt(0);
     message.time = object.time ?? undefined;
@@ -424,6 +419,10 @@ export const DLCOracle = {
     }
     if (object.desc !== undefined && object.desc !== null) {
       message.desc = object.desc;
+    }
+    message.participants = object.participants?.map(e => e) || [];
+    if (object.threshold !== undefined && object.threshold !== null) {
+      message.threshold = object.threshold;
     }
     if (object.pubkey !== undefined && object.pubkey !== null) {
       message.pubkey = object.pubkey;
@@ -443,6 +442,12 @@ export const DLCOracle = {
     const obj: any = {};
     obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     obj.desc = message.desc === "" ? undefined : message.desc;
+    if (message.participants) {
+      obj.participants = message.participants.map(e => e);
+    } else {
+      obj.participants = message.participants;
+    }
+    obj.threshold = message.threshold === 0 ? undefined : message.threshold;
     obj.pubkey = message.pubkey === "" ? undefined : message.pubkey;
     obj.nonce_index = message.nonceIndex !== BigInt(0) ? message.nonceIndex.toString() : undefined;
     obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : undefined;
@@ -469,6 +474,8 @@ function createBaseDCM(): DCM {
   return {
     id: BigInt(0),
     desc: "",
+    participants: [],
+    threshold: 0,
     pubkey: "",
     time: new Date(),
     status: 0
@@ -483,14 +490,20 @@ export const DCM = {
     if (message.desc !== "") {
       writer.uint32(18).string(message.desc);
     }
+    for (const v of message.participants) {
+      writer.uint32(26).string(v!);
+    }
+    if (message.threshold !== 0) {
+      writer.uint32(32).uint32(message.threshold);
+    }
     if (message.pubkey !== "") {
-      writer.uint32(26).string(message.pubkey);
+      writer.uint32(42).string(message.pubkey);
     }
     if (message.time !== undefined) {
-      Timestamp.encode(toTimestamp(message.time), writer.uint32(34).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.time), writer.uint32(50).fork()).ldelim();
     }
     if (message.status !== 0) {
-      writer.uint32(40).int32(message.status);
+      writer.uint32(56).int32(message.status);
     }
     return writer;
   },
@@ -508,12 +521,18 @@ export const DCM = {
           message.desc = reader.string();
           break;
         case 3:
-          message.pubkey = reader.string();
+          message.participants.push(reader.string());
           break;
         case 4:
-          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.threshold = reader.uint32();
           break;
         case 5:
+          message.pubkey = reader.string();
+          break;
+        case 6:
+          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 7:
           message.status = reader.int32() as any;
           break;
         default:
@@ -527,6 +546,8 @@ export const DCM = {
     const message = createBaseDCM();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.desc = object.desc ?? "";
+    message.participants = object.participants?.map(e => e) || [];
+    message.threshold = object.threshold ?? 0;
     message.pubkey = object.pubkey ?? "";
     message.time = object.time ?? undefined;
     message.status = object.status ?? 0;
@@ -539,6 +560,10 @@ export const DCM = {
     }
     if (object.desc !== undefined && object.desc !== null) {
       message.desc = object.desc;
+    }
+    message.participants = object.participants?.map(e => e) || [];
+    if (object.threshold !== undefined && object.threshold !== null) {
+      message.threshold = object.threshold;
     }
     if (object.pubkey !== undefined && object.pubkey !== null) {
       message.pubkey = object.pubkey;
@@ -555,6 +580,12 @@ export const DCM = {
     const obj: any = {};
     obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     obj.desc = message.desc === "" ? undefined : message.desc;
+    if (message.participants) {
+      obj.participants = message.participants.map(e => e);
+    } else {
+      obj.participants = message.participants;
+    }
+    obj.threshold = message.threshold === 0 ? undefined : message.threshold;
     obj.pubkey = message.pubkey === "" ? undefined : message.pubkey;
     obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
@@ -685,7 +716,8 @@ function createBaseDLCEvent(): DLCEvent {
     outcomes: [],
     hasTriggered: false,
     outcomeIndex: 0,
-    publishAt: new Date()
+    publishAt: new Date(),
+    triggerAt: new Date()
   };
 }
 export const DLCEvent = {
@@ -717,6 +749,9 @@ export const DLCEvent = {
     }
     if (message.publishAt !== undefined) {
       Timestamp.encode(toTimestamp(message.publishAt), writer.uint32(74).fork()).ldelim();
+    }
+    if (message.triggerAt !== undefined) {
+      Timestamp.encode(toTimestamp(message.triggerAt), writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -754,6 +789,9 @@ export const DLCEvent = {
         case 9:
           message.publishAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
+        case 10:
+          message.triggerAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -772,6 +810,7 @@ export const DLCEvent = {
     message.hasTriggered = object.hasTriggered ?? false;
     message.outcomeIndex = object.outcomeIndex ?? 0;
     message.publishAt = object.publishAt ?? undefined;
+    message.triggerAt = object.triggerAt ?? undefined;
     return message;
   },
   fromAmino(object: DLCEventAmino): DLCEvent {
@@ -801,6 +840,9 @@ export const DLCEvent = {
     if (object.publish_at !== undefined && object.publish_at !== null) {
       message.publishAt = fromTimestamp(Timestamp.fromAmino(object.publish_at));
     }
+    if (object.trigger_at !== undefined && object.trigger_at !== null) {
+      message.triggerAt = fromTimestamp(Timestamp.fromAmino(object.trigger_at));
+    }
     return message;
   },
   toAmino(message: DLCEvent): DLCEventAmino {
@@ -818,6 +860,7 @@ export const DLCEvent = {
     obj.has_triggered = message.hasTriggered === false ? undefined : message.hasTriggered;
     obj.outcome_index = message.outcomeIndex === 0 ? undefined : message.outcomeIndex;
     obj.publish_at = message.publishAt ? Timestamp.toAmino(toTimestamp(message.publishAt)) : undefined;
+    obj.trigger_at = message.triggerAt ? Timestamp.toAmino(toTimestamp(message.triggerAt)) : undefined;
     return obj;
   },
   fromAminoMsg(object: DLCEventAminoMsg): DLCEvent {

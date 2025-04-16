@@ -50,25 +50,7 @@ export default function ReceiveScreen() {
             borderRadius: '14px'
           }}>
           <Row full itemsCenter>
-            {/* <ImageIcon
-              url={token.asset.logo}
-              style={{
-                width: '42px',
-                height: '42px',
-                borderRadius: '50%'
-              }}
-            /> */}
             <Column>
-              {/* <Row>
-                <Text
-                  preset="regular"
-                  style={{
-                    padding: '0'
-                  }}
-                  color="black"
-                  text={token.asset.symbol}></Text>
-              </Row> */}
-
               <Row>
                 <Text
                   style={{
@@ -146,7 +128,7 @@ export default function ReceiveScreen() {
               color="background"></Text>
           </Row>
           <Column>
-            <QRCode value={address || ''} renderAs="svg" size={sizes.qrcode}></QRCode>
+            <QRCode.QRCodeSVG value={address || ''} size={sizes.qrcode}></QRCode.QRCodeSVG>
           </Column>
 
           <Column>

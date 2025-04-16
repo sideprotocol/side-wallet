@@ -15,6 +15,7 @@ import {
   Runes,
   UTXO,
   UTXOAddress,
+  UTXOBridge,
   WithdrawRequest
 } from './types';
 
@@ -193,6 +194,17 @@ export default class BridgeService {
         'Content-Type': 'application/json',
         Accept: 'application/json'
       }
+    });
+  }
+
+  async getMemPoolTxs(address: string): Promise<UTXOBridge[]> {
+    return this.apiClient.get<UTXOBridge[]>(`/api/address/${address}/txs`, {
+      baseURL: SIDE_BTC_EXPLORER
+    });
+  }
+  async getMemPoolAddress(address: string): Promise<AddressInfo> {
+    return this.apiClient.get<AddressInfo>(`/api/address/${address}`, {
+      baseURL: SIDE_BTC_EXPLORER
     });
   }
 

@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 
+import { CHAINS_ENUM } from '@/shared/constant';
 import { Column } from '@/ui/components';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -41,7 +42,7 @@ export default function BtcTokenList({ balanceVisible }) {
         filterList.map((item) => {
           return (
             <Fragment key={item?.asset?.symbol + item?.asset?.name}>
-              <TokenItem token={item} balanceVisible={balanceVisible} />
+              <TokenItem chainType={CHAINS_ENUM.BTC} token={item} balanceVisible={balanceVisible} />
             </Fragment>
           );
         })

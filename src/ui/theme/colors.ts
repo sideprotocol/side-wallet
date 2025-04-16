@@ -21,6 +21,7 @@ export const colors = {
   green_light2: '#58e593',
   green_check: '#22AB38',
   green_success: '#48bb78',
+  green_success15: '#48bb781A',
   green_success40: '#48bb7866',
   yellow_dark: '#d5ac00',
   grey12: '#6C7080',

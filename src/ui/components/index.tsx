@@ -19,6 +19,7 @@ import { Search } from './Search';
 import { StepBar } from './StepBar';
 import { Text } from './Text';
 import { TextArea } from './TextArea';
+import { Tooltip } from './Tooltip';
 
 export {
   AddressBar,
@@ -41,5 +42,6 @@ export {
   Search,
   StepBar,
   Text,
-  TextArea
+  TextArea,
+  Tooltip
 };

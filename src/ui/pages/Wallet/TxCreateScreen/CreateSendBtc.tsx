@@ -89,6 +89,9 @@ export default function CreateSendBtc() {
   const unavailableSatoshis = totalSatoshis - avaiableSatoshis;
 
   const avaiableAmount = safeBalance;
+
+  console.log({ safeBalance });
+
   const unavailableAmount = satoshisToAmount(unavailableSatoshis);
   const totalAmount = accountBalance.amount;
 

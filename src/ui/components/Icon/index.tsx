@@ -1,7 +1,18 @@
 import React, { CSSProperties } from 'react';
 
+import BridgeDynamic from '@/ui/assets/lottie/bridge.json';
+import EarnDynamic from '@/ui/assets/lottie/earn.json';
+import HomeDynamic from '@/ui/assets/lottie/home.json';
+import LoansDynamic from '@/ui/assets/lottie/loans.json';
 import { ColorTypes, colors } from '@/ui/theme/colors';
 import { fontSizes } from '@/ui/theme/font';
+
+export const lottieRegistry = {
+  'main-home-dynamic': HomeDynamic,
+  'main-earn-dynamic': EarnDynamic,
+  'main-loans-dynamic': LoansDynamic,
+  'main-bridge-dynamic': BridgeDynamic
+};
 
 export const svgRegistry = {
   history: './images/icons/clock-solid.svg',
@@ -14,21 +25,16 @@ export const svgRegistry = {
   security: './images/icons/settings/security.svg',
   lock: '/images/icons/settings/lock.svg',
   telegram: './images/icons/telegram.svg',
-
   right: './images/icons/arrow-right.svg',
   left: './images/icons/arrow-left.svg',
   down: './images/icons/down.svg',
   up: './images/icons/up.svg',
   link: './images/icons/arrow-up-right.svg',
-
   discord: './images/icons/discord.svg',
   twitter: './images/icons/twitter.svg',
   github: './images/icons/github.svg',
-
   btc: './images/icons/btc.svg',
-
   side: './images/icons/side.png',
-
   qrcode: './images/icons/qrcode.svg',
 
   user: '/images/icons/user-solid.svg',
@@ -75,6 +81,7 @@ export const svgRegistry = {
   'main-home-ac': '/images/icons/main/home-ac-icon.svg',
   'main-swap': '/images/icons/main/swap-icon.svg',
   'main-earn': '/images/icons/main/earn-icon.svg',
+
   'main-swap-ac': '/images/icons/main/swap-ac-icon.svg',
   'main-activity': '/images/icons/main/activity-icon.svg',
   'main-activity-ac': '/images/icons/main/activity-ac-icon.svg',
@@ -104,7 +111,7 @@ export const svgRegistry = {
 
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];
 
-export type IconTypes = keyof typeof svgRegistry;
+export type IconTypes = keyof typeof svgRegistry | keyof typeof lottieRegistry;
 interface IconProps {
   /**
    * The name of the icon
@@ -162,6 +169,7 @@ export function Icon(props: IconProps) {
     height,
     width
   } = props;
+
   if (!icon) {
     return (
       <div
@@ -185,6 +193,7 @@ export function Icon(props: IconProps) {
     );
   }
   const iconPath = svgRegistry[icon as IconTypes];
+
   if (iconImgList.includes(icon)) {
     return (
       <img

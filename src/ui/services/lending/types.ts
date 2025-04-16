@@ -538,6 +538,7 @@ export interface GetLoanByIdCexResponse {
   collateralAmountInDollar: string;
   maturity: string;
   liquidationPrice: string;
+
   liquidationEventId: string;
   defaultLiquidationEventId: string;
   repaymentEventId: string;
