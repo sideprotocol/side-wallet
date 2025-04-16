@@ -8,7 +8,6 @@ interface ButtonItem {
   key: string | number;
   label: string;
 }
-
 interface IButtonGroupProps {
   list: ButtonItem[];
   value: ButtonItem['key'];
@@ -16,19 +15,23 @@ interface IButtonGroupProps {
   rowProps: RowProps;
   size?: 'normal' | 'big';
 }
-
 export function ButtonGroup(props: IButtonGroupProps) {
   const { list, value, onChange, size, rowProps } = props;
   const [activeIndex, setActiveIndex] = useState(0);
   const buttonRefs = useRef<(HTMLDivElement | null)[]>([]);
-
+  const [offsetLeft, setOffsetLeft] = useState(0);
+  const [offsetWidth, setOffsetWidth] = useState(0);
   let height = size === 'big' ? '34px' : '26px';
 
   useEffect(() => {
     const index = list.findIndex((item) => item.key === value);
     setActiveIndex(index);
-  }, [value, list]);
+  }, [value, list, buttonRefs.current]);
 
+  useEffect(() => {
+    setOffsetLeft(buttonRefs.current[activeIndex]?.offsetLeft ?? 0);
+    setOffsetWidth(buttonRefs.current[activeIndex]?.offsetWidth ?? 0);
+  }, [activeIndex, buttonRefs.current]);
   return (
     <Row {...rowProps}>
       <Row
@@ -47,8 +50,8 @@ export function ButtonGroup(props: IButtonGroupProps) {
             backgroundColor: '#404045',
             borderRadius: '100px',
             transition: 'all 0.3s ease',
-            left: buttonRefs.current[activeIndex]?.offsetLeft ?? 0,
-            width: buttonRefs.current[activeIndex]?.offsetWidth ?? 0
+            left: offsetLeft ?? 0,
+            width: offsetWidth ?? 0
           }}
         />
         {list.map((item, index) => {
