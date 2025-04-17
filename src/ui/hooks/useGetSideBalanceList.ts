@@ -19,7 +19,7 @@ function formateTokenList(tokens: IAsset[]) {
 }
 
 export function useGetSideBalanceList(address?: string) {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['getSideAssets'],
     queryFn: async () => {
       return services.dex.getSideAssets();
@@ -39,6 +39,7 @@ export function useGetSideBalanceList(address?: string) {
     refetchBalances,
     allCoinBalances,
     priceMap,
-    sideAssets: data || []
+    sideAssets: data || [],
+    loading: isLoading
   };
 }

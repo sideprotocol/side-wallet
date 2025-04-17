@@ -206,9 +206,7 @@ export default function CreatePasswordScreen() {
           />
           <Input
             containerStyle={{
-              // borderColor: isConfirmError ? '#ff0000' : isConfirmFocus ? 'white' : 'rgba(255, 255, 255, 0.2)'
               borderColor: isConfirmError ? '#ff0000' : isConfirmFocus ? 'white' : ''
-              // borderColor: isConfirmError ? '#ff0000' : 'rgba(255, 255, 255, 0.2)'
             }}
             preset="password"
             placeholder="Repeat your password"

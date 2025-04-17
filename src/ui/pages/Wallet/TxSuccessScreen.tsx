@@ -31,7 +31,7 @@ export default function TxSuccessScreen() {
             onClick={() => {
               window.open(`${blockstreamUrl}/tx/${txid}`);
             }}>
-            <Icon icon="eye" color="white" />
+            <Icon icon="eye-white" color="white" size={20} />
             <Text preset="regular-bold" text="View on Block Explorer" color="white" />
           </Row>
         </Column>

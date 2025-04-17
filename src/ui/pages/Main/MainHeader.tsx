@@ -1,10 +1,8 @@
 import { useState } from 'react';
 
-// import { KEYRING_TYPE } from '@/shared/constant';
 import { Header, Image } from '@/ui/components';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-// import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { fontSizes } from '@/ui/theme/font';
 
 import { useNavigate } from '../MainRoute';
@@ -13,9 +11,7 @@ export default function Index({ title }) {
   const navigate = useNavigate();
   const currentAccount = useCurrentAccount();
   const address = currentAccount.address;
-  // const currentKeyring = useCurrentKeyring();
   const [isHovered, setIsHovered] = useState(false);
-  // console.log('currentKeyring.type: ', currentKeyring.type, '|', KEYRING_TYPE.HdKeyring, '|', KEYRING_TYPE.KeystoneKeyring);
   return (
     <Header
       LeftComponent={
@@ -29,10 +25,7 @@ export default function Index({ title }) {
           />
         </>
       }
-      title={
-        // title ? title : currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
-        title ? title : address ? <AccountSelect /> : ''
-      }
+      title={title ? title : address ? <AccountSelect /> : ''}
       RightComponent={
         window.location.pathname !== '/sidePanel.html' ? (
           <img

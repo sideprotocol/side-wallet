@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { useEffect } from 'react';
 
-import { Layout, Content, Icon, Header, Text, Row, Column, Card } from '@/ui/components';
+import { Card, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useAccountAddress, useFetchHistoryCallback, useHistory } from '@/ui/state/accounts/hooks';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
@@ -36,9 +36,8 @@ const MyItem: React.ForwardRefRenderFunction<any, MyItemProps> = ({ group, index
           justifyCenter
           onClick={() => {
             window.open(`${blockstreamUrl}/address/${address}`);
-          }}
-        >
-          <Icon icon="eye" color="textDim" />
+          }}>
+          <Icon icon="eye-white" color="textDim" size={20} />
           <Text preset="regular-bold" text="View on Block Explorer" color="textDim" />
         </Row>
       </Column>

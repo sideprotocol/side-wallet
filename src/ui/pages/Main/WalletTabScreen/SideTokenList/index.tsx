@@ -160,22 +160,13 @@ export function TokenItem({
 export default function SideTokenList({ balanceVisible }) {
   const currentAccount = useCurrentAccount();
 
-  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+  const { balanceList, loading } = useGetSideBalanceList(currentAccount?.address);
   const filterList = balanceList.filter((item) => !(!+item.amount && item.denom !== 'uside'));
 
   return (
     <Column>
-      {!filterList.length ? (
+      {loading ? (
         <>
-          <Skeleton
-            sx={{
-              bgcolor: colors.card_bgColor,
-              transform: 'scale(1)',
-              width: '100%',
-              borderRadius: '10px'
-            }}
-            height={60}
-          />
           <Skeleton
             sx={{
               bgcolor: colors.card_bgColor,

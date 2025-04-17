@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { AddressFlagType, CHAINS_ENUM, SIDE_STATION_URL } from '@/shared/constant';
+import { AddressFlagType, SIDE_STATION_URL } from '@/shared/constant';
 import { checkAddressFlag } from '@/shared/utils';
 import { Column, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPopover';
@@ -28,7 +28,6 @@ export default function WalletTabScreen() {
 
   const wallet = useWallet();
   const [connected, setConnected] = useState(false);
-  const [currentTab, setCurrentTab] = useState<CHAINS_ENUM>(CHAINS_ENUM.SIDE);
   const dispatch = useAppDispatch();
   const accountBalanceByUSD = useGetAccountBalanceByUSD();
 
