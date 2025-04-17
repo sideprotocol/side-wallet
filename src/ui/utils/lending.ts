@@ -4,10 +4,10 @@ import { Buffer } from 'buffer';
 import { Coin } from 'cosmwasm';
 
 import { isProduction } from '@/shared/constant';
+import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 import { toXOnly } from '@unisat/wallet-sdk/lib/utils';
 
 import services from '../services';
-import { bitcoin } from './bitcoin-core';
 
 export interface DepositToLendingAgency {
   borrowAmount: Coin;
