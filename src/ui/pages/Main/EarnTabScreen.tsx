@@ -1,462 +1,259 @@
-import { BigNumber } from 'bignumber.js';
-import { useMemo, useRef, useState } from 'react';
 import 'swiper/css';
 
-import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
-import { CoinInput } from '@/ui/components/CoinInput';
+import { Column, Content, Footer, Layout, Text } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import useGetPoolExchangeRate from '@/ui/hooks/useGetPoolExchangeRate';
-import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
-import useSupply from '@/ui/hooks/useSupply';
-import useWithdraw from '@/ui/hooks/useWithdraw';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useLendingState } from '@/ui/state/lending/hook';
-import { colors } from '@/ui/theme/colors';
-import { formatUnitAmount, getTruncate } from '@/ui/utils';
-import { toUnitAmount } from '@/ui/utils/formatter';
-import { Stack, Typography } from '@mui/material';
-
-import { useNavigate } from '../MainRoute';
 
 export default function EarnTabScreen() {
-  const currentAccount = useCurrentAccount();
-  const [supplyAmount, setsupplyAmount] = useState('');
-
-  const [withdrawAmount, setwithdrawAmount] = useState('');
-
-  const { poolTokenDenom } = useLendingState();
-
-  const [operationTab, setOperationTab] = useState<'supply' | 'withdraw'>('supply');
-
-  const { supply, loading } = useSupply();
-
-  const { withdraw, loading: withdrawLoading } = useWithdraw();
-
-  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
-
-  const poolTokenBalance = balanceList.find((b) => b.denom == poolTokenDenom);
-
-  const { data: poolsData } = useGetPoolsData();
-
-  const navigator = useNavigate();
-
-  const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
-
-  const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: poolData?.baseData?.id || '' });
-
-  const { receiveShare, expectedInterestDay } = useMemo(() => {
-    if (!poolData) {
-      return {
-        receiveShare: '0',
-        expectedInterestDay: '0'
-      };
-    }
-
-    const receiveShare = new BigNumber(poolData.baseData.total_stokens.amount)
-      .div(formatUnitAmount(poolData.baseData.supply.amount || '0', poolData.token.asset.precision))
-      .multipliedBy(supplyAmount || '0')
-      .div(exchangeRate || 1)
-      .toFixed(poolData.token.asset.precision);
-    const expectedInterestDay = new BigNumber(supplyAmount || '0')
-      .multipliedBy(poolData.supplyApy)
-      .div(100)
-      .div(365)
-      .toFixed(poolData.token.asset.precision);
-    return {
-      receiveShare,
-      expectedInterestDay
-    };
-  }, [poolData, supplyAmount]);
-
-  const stokenBalance = balanceList.find((b) => b.denom == poolData?.baseData.id);
-
-  const maxWithdrawAmount = useMemo(() => {
-    if (!poolData) return '0';
-
-    const poolMaxCanWithdraw = new BigNumber(poolData?.totalSupply)
-      .minus(poolData?.totalBorrow)
-      .toFixed(6, BigNumber.ROUND_DOWN);
-    return poolMaxCanWithdraw;
-  }, [poolData]);
-
-  const withdrawExceed = BigNumber(withdrawAmount || '0').gt(maxWithdrawAmount);
-
-  const onSupply = () => {
-    if (!poolData) return;
-
-    supply({
-      amount: {
-        denom: poolData.token.denom,
-        amount: toUnitAmount(supplyAmount, poolData.token.asset.exponent)
-      },
-      pool_id: poolData.baseData.id
-    });
-  };
-
-  const onWithdraw = () => {
-    if (!poolData) return;
-
-    withdraw({
-      shares: {
-        denom: poolData.baseData.id,
-        amount: toUnitAmount(withdrawAmount, poolData.token.asset.exponent)
-      }
-    });
-  };
-
-  const isDisabled = useMemo(() => {
-    if (operationTab === 'supply') {
-      return loading || +supplyAmount <= 0;
-    }
-    return withdrawLoading || +withdrawAmount <= 0;
-  }, [operationTab, loading, withdrawLoading, supplyAmount, withdrawAmount]);
-
-  const buttonRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const activeIndex = useMemo(() => {
-    return operationTab === 'supply' ? 0 : 1;
-  }, [operationTab]);
-
   return (
     <Layout>
       <MainHeader title={''} />
       <Content mt="lg" classname="fadeIn-page">
         <Column
-          bg="card_bgColor"
           gap="lg"
           px="lg"
+          full
+          itemsCenter
+          justifyCenter
           py="md"
           style={{
             borderRadius: '10px'
           }}>
-          <Row>
-            <Stack
-              gap={'6px'}
-              flexDirection={'row'}
-              p={0.5}
-              borderRadius={'10px'}
-              bgcolor="black"
-              style={{
-                position: 'relative'
-              }}>
+          <svg width="90" height="97" viewBox="0 0 90 97" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <foreignObject x="-13.3053" y="0.792391" width="116.611" height="73.2175">
               <div
                 style={{
-                  position: 'absolute',
-                  height: '28px',
-                  backgroundColor: '#F7771A',
-                  borderRadius: '10px',
-                  transition: 'all 0.3s ease',
-                  left: buttonRefs.current[activeIndex]?.offsetLeft ?? 0,
-                  width: buttonRefs.current[activeIndex]?.offsetWidth ?? 0
-                }}
-              />
-
+                  backdropFilter: 'blur(6.65px)',
+                  clipPath: 'url(#bgblur_0_23227_11149_clip_path)',
+                  height: '100%',
+                  width: '100%'
+                }}></div>
+            </foreignObject>
+            <path
+              data-figma-bg-blur-radius="13.3053"
+              d="M0 32.9977C0 27.3689 0 24.5545 0.86607 22.3158C2.17234 18.9393 4.84164 16.27 8.21815 14.9637C10.4568 14.0977 13.2712 14.0977 18.9 14.0977H71.1C76.7288 14.0977 79.5432 14.0977 81.7819 14.9637C85.1584 16.27 87.8277 18.9393 89.1339 22.3158C90 24.5545 90 27.3689 90 32.9977V60.7048H0V32.9977Z"
+              fill="url(#paint0_linear_23227_11149)"
+            />
+            <foreignObject x="-0.44589" y="-13.2769" width="45.8957" height="52.3249">
               <div
-                className={'text-white relative z-10 cursor-pointer  py-1.5 px-2 text-xs '}
-                ref={(el) => (buttonRefs.current[0] = el)}
-                onClick={() => setOperationTab('supply')}>
-                Supply
-              </div>
-
-              <div
-                className={'text-white relative z-10 cursor-pointer  py-1.5 px-2 text-xs '}
-                ref={(el) => (buttonRefs.current[1] = el)}
-                onClick={() => setOperationTab('withdraw')}>
-                Withdraw
-              </div>
-            </Stack>
-          </Row>
-          <Row
-            bg="black"
-            style={{
-              height: 70
-            }}
-            itemsCenter
-            rounded
-            px="md"
-            py="md">
-            <Row
-              style={{
-                flexShrink: 0
-              }}
-              rounded={true}
-              px="md"
-              py="md"
-              itemsCenter
-              classname="bg-[#17171C]  hover:bg-opacity-80"
-              onClick={() => {
-                navigator('LendingSelectTokenScreen', {
-                  poolsData,
-                  type: operationTab === 'supply' ? 'token' : 'stoken'
-                });
-              }}>
-              <Image
-                src={operationTab === 'supply' ? poolTokenBalance?.asset.logo : stokenBalance?.asset.logo}
-                height={28}
-                width={28}></Image>
-
-              <Text
-                text={
-                  operationTab === 'supply'
-                    ? poolTokenBalance?.asset.symbol || 'USDC'
-                    : stokenBalance?.asset.symbol || 'sUSDC'
-                }
-                color="white"
-                size="md"></Text>
-
-              <Icon icon="down" size={10}></Icon>
-            </Row>
-
-            <Column
-              fullY
-              style={{
-                paddingTop: '10px'
-              }}
-              justifyBetween>
-              <Row
-                itemsCenter
-                justifyBetween
                 style={{
-                  height: '10px',
-                  borderRadius: '100px',
-                  padding: '8px 0px',
-                  position: 'relative'
-                }}>
-                <CoinInput
-                  size={22}
-                  coin={{
-                    amount: operationTab === 'supply' ? supplyAmount : withdrawAmount,
-                    denom: poolTokenBalance?.denom || 'uusdc'
-                  }}
-                  decimalScale={poolTokenBalance?.asset.precision || 6}
-                  onChange={(value) => {
-                    if (operationTab === 'supply') {
-                      setsupplyAmount(value);
-                    } else {
-                      setwithdrawAmount(value);
-                    }
-                  }}
+                  backdropFilter: 'blur(6.65px)',
+                  clipPath: 'url(#bgblur_1_23227_11149_clip_path)',
+                  height: '100%',
+                  width: '100%'
+                }}></div>
+            </foreignObject>
+            <rect
+              data-figma-bg-blur-radius="13.3053"
+              x="13.1653"
+              y="0.334268"
+              width="18.6738"
+              height="25.1024"
+              rx="9.33691"
+              fill="#FFBCB5"
+              fillOpacity="0.6"
+              stroke="url(#paint1_linear_23227_11149)"
+              strokeWidth="0.611895"
+            />
+            <foreignObject x="44.5541" y="-13.2769" width="45.8957" height="52.3249">
+              <div
+                style={{
+                  backdropFilter: 'blur(6.65px)',
+                  clipPath: 'url(#bgblur_2_23227_11149_clip_path)',
+                  height: '100%',
+                  width: '100%'
+                }}></div>
+            </foreignObject>
+            <rect
+              data-figma-bg-blur-radius="13.3053"
+              x="58.1653"
+              y="0.334268"
+              width="18.6738"
+              height="25.1024"
+              rx="9.33691"
+              fill="#FFBCB5"
+              fillOpacity="0.6"
+              stroke="url(#paint2_linear_23227_11149)"
+              strokeWidth="0.611895"
+            />
+            <foreignObject x="-13.3053" y="18.8661" width="116.611" height="90.8962">
+              <div
+                style={{
+                  backdropFilter: 'blur(6.65px)',
+                  clipPath: 'url(#bgblur_3_23227_11149_clip_path)',
+                  height: '100%',
+                  width: '100%'
+                }}></div>
+            </foreignObject>
+            <path
+              data-figma-bg-blur-radius="13.3053"
+              d="M0.305948 53.4598C0.305948 49.7289 0.306186 46.9492 0.486205 44.7458C0.665933 42.5461 1.02333 40.9478 1.72279 39.5751C2.96908 37.1291 4.95772 35.1405 7.4037 33.8942C8.77646 33.1947 10.3747 32.8373 12.5745 32.6576C14.7778 32.4776 17.5576 32.4773 21.2884 32.4773H68.7116C72.4425 32.4773 75.2222 32.4776 77.4255 32.6576C79.6253 32.8373 81.2235 33.1947 82.5963 33.8942C85.0423 35.1405 87.0309 37.1291 88.2772 39.5751C88.9767 40.9478 89.3341 42.5461 89.5138 44.7459C89.6938 46.9492 89.6941 49.7289 89.6941 53.4598V64.5245C89.6941 70.1183 89.6938 74.2952 89.4232 77.6079C89.1528 80.917 88.6141 83.3367 87.5521 85.421C85.668 89.1188 82.6617 92.1251 78.9639 94.0092C76.8796 95.0712 74.4599 95.6099 71.1508 95.8803C67.8381 96.1509 63.6611 96.1512 58.0674 96.1512H31.9326C26.3389 96.1512 22.1619 96.1509 18.8492 95.8803C15.5401 95.6099 13.1204 95.0712 11.0361 94.0092C7.33835 92.1251 4.33198 89.1188 2.44788 85.421C1.38588 83.3367 0.847206 80.917 0.576842 77.6079C0.306186 74.2952 0.305948 70.1183 0.305948 64.5245V53.4598Z"
+              fill="#FFBCB5"
+              fillOpacity="0.6"
+              stroke="url(#paint3_linear_23227_11149)"
+              strokeWidth="0.611895"
+            />
+            <foreignObject x="12.4096" y="38.1513" width="65.1808" height="33.0392">
+              <div
+                style={{
+                  backdropFilter: 'blur(6.65px)',
+                  clipPath: 'url(#bgblur_4_23227_11149_clip_path)',
+                  height: '100%',
+                  width: '100%'
+                }}></div>
+            </foreignObject>
+            <rect
+              data-figma-bg-blur-radius="13.3053"
+              x="64.0404"
+              y="51.7013"
+              width="5.93906"
+              height="38.0819"
+              rx="2.96953"
+              transform="rotate(90 64.0404 51.7013)"
+              fill="url(#paint4_linear_23227_11149)"
+              fillOpacity="0.9"
+              stroke="url(#paint5_linear_23227_11149)"
+              strokeWidth="0.489516"
+            />
+            <foreignObject x="12.4096" y="57.4369" width="65.1808" height="33.0392">
+              <div
+                style={{
+                  backdropFilter: 'blur(6.65px)',
+                  clipPath: 'url(#bgblur_5_23227_11149_clip_path)',
+                  height: '100%',
+                  width: '100%'
+                }}></div>
+            </foreignObject>
+            <rect
+              data-figma-bg-blur-radius="13.3053"
+              x="64.0404"
+              y="70.9869"
+              width="5.93906"
+              height="38.0819"
+              rx="2.96953"
+              transform="rotate(90 64.0404 70.9869)"
+              fill="url(#paint6_linear_23227_11149)"
+              fillOpacity="0.9"
+              stroke="url(#paint7_linear_23227_11149)"
+              strokeWidth="0.489516"
+            />
+            <defs>
+              <clipPath id="bgblur_0_23227_11149_clip_path" transform="translate(13.3053 -0.792391)">
+                <path d="M0 32.9977C0 27.3689 0 24.5545 0.86607 22.3158C2.17234 18.9393 4.84164 16.27 8.21815 14.9637C10.4568 14.0977 13.2712 14.0977 18.9 14.0977H71.1C76.7288 14.0977 79.5432 14.0977 81.7819 14.9637C85.1584 16.27 87.8277 18.9393 89.1339 22.3158C90 24.5545 90 27.3689 90 32.9977V60.7048H0V32.9977Z" />
+              </clipPath>
+              <clipPath id="bgblur_1_23227_11149_clip_path" transform="translate(0.44589 13.2769)">
+                <rect x="13.1653" y="0.334268" width="18.6738" height="25.1024" rx="9.33691" />
+              </clipPath>
+              <clipPath id="bgblur_2_23227_11149_clip_path" transform="translate(-44.5541 13.2769)">
+                <rect x="58.1653" y="0.334268" width="18.6738" height="25.1024" rx="9.33691" />
+              </clipPath>
+              <clipPath id="bgblur_3_23227_11149_clip_path" transform="translate(13.3053 -18.8661)">
+                <path d="M0.305948 53.4598C0.305948 49.7289 0.306186 46.9492 0.486205 44.7458C0.665933 42.5461 1.02333 40.9478 1.72279 39.5751C2.96908 37.1291 4.95772 35.1405 7.4037 33.8942C8.77646 33.1947 10.3747 32.8373 12.5745 32.6576C14.7778 32.4776 17.5576 32.4773 21.2884 32.4773H68.7116C72.4425 32.4773 75.2222 32.4776 77.4255 32.6576C79.6253 32.8373 81.2235 33.1947 82.5963 33.8942C85.0423 35.1405 87.0309 37.1291 88.2772 39.5751C88.9767 40.9478 89.3341 42.5461 89.5138 44.7459C89.6938 46.9492 89.6941 49.7289 89.6941 53.4598V64.5245C89.6941 70.1183 89.6938 74.2952 89.4232 77.6079C89.1528 80.917 88.6141 83.3367 87.5521 85.421C85.668 89.1188 82.6617 92.1251 78.9639 94.0092C76.8796 95.0712 74.4599 95.6099 71.1508 95.8803C67.8381 96.1509 63.6611 96.1512 58.0674 96.1512H31.9326C26.3389 96.1512 22.1619 96.1509 18.8492 95.8803C15.5401 95.6099 13.1204 95.0712 11.0361 94.0092C7.33835 92.1251 4.33198 89.1188 2.44788 85.421C1.38588 83.3367 0.847206 80.917 0.576842 77.6079C0.306186 74.2952 0.305948 70.1183 0.305948 64.5245V53.4598Z" />
+              </clipPath>
+              <clipPath id="bgblur_4_23227_11149_clip_path" transform="translate(-12.4096 -38.1513)">
+                <rect
+                  x="64.0404"
+                  y="51.7013"
+                  width="5.93906"
+                  height="38.0819"
+                  rx="2.96953"
+                  transform="rotate(90 64.0404 51.7013)"
                 />
-                <div
-                  style={{
-                    flexShrink: 0
-                  }}
-                  className="flex items-center gap-1 ">
-                  <div
-                    className={
-                      'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
-                    }
-                    onClick={() => {
-                      const amount = new BigNumber(
-                        operationTab === 'supply'
-                          ? poolTokenBalance?.formatAmount || '0'
-                          : stokenBalance?.formatAmount || '0'
-                      )
-                        .multipliedBy(0.5)
-                        .toFixed(poolTokenBalance?.asset.precision || 6, BigNumber.ROUND_DOWN);
-                      if (operationTab === 'supply') {
-                        setsupplyAmount(amount);
-                      } else {
-                        setwithdrawAmount(amount);
-                      }
-                    }}>
-                    Half
-                  </div>
+              </clipPath>
+              <clipPath id="bgblur_5_23227_11149_clip_path" transform="translate(-12.4096 -57.4369)">
+                <rect
+                  x="64.0404"
+                  y="70.9869"
+                  width="5.93906"
+                  height="38.0819"
+                  rx="2.96953"
+                  transform="rotate(90 64.0404 70.9869)"
+                />
+              </clipPath>
+              <linearGradient
+                id="paint0_linear_23227_11149"
+                x1="-9.40069"
+                y1="37.4358"
+                x2="18.5286"
+                y2="64.4506"
+                gradientUnits="userSpaceOnUse">
+                <stop stopColor="#F7771A" />
+                <stop offset="1" stopColor="#F7771A" />
+              </linearGradient>
+              <linearGradient
+                id="paint1_linear_23227_11149"
+                x1="11.8951"
+                y1="1.86505"
+                x2="31.9901"
+                y2="24.883"
+                gradientUnits="userSpaceOnUse">
+                <stop stopColor="white" />
+                <stop offset="0.765625" stopColor="white" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient
+                id="paint2_linear_23227_11149"
+                x1="56.8951"
+                y1="1.86505"
+                x2="76.9901"
+                y2="24.883"
+                gradientUnits="userSpaceOnUse">
+                <stop stopColor="white" />
+                <stop offset="0.765625" stopColor="white" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient
+                id="paint3_linear_23227_11149"
+                x1="-4.5"
+                y1="36.7632"
+                x2="34.4133"
+                y2="119.967"
+                gradientUnits="userSpaceOnUse">
+                <stop stopColor="white" />
+                <stop offset="0.765625" stopColor="white" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient
+                id="paint4_linear_23227_11149"
+                x1="75.533"
+                y1="46.904"
+                x2="67.255"
+                y2="83.5637"
+                gradientUnits="userSpaceOnUse">
+                <stop stopColor="white" stopOpacity="0" />
+                <stop offset="0.979167" stopColor="white" />
+              </linearGradient>
+              <linearGradient
+                id="paint5_linear_23227_11149"
+                x1="67.4994"
+                y1="51.4565"
+                x2="67.4994"
+                y2="90.028"
+                gradientUnits="userSpaceOnUse">
+                <stop stopColor="white" stopOpacity="0" />
+                <stop offset="1" stopColor="white" />
+              </linearGradient>
+              <linearGradient
+                id="paint6_linear_23227_11149"
+                x1="72.8033"
+                y1="70.3286"
+                x2="66.8904"
+                y2="101.076"
+                gradientUnits="userSpaceOnUse">
+                <stop stopColor="white" stopOpacity="0" />
+                <stop offset="0.979167" stopColor="white" />
+              </linearGradient>
+              <linearGradient
+                id="paint7_linear_23227_11149"
+                x1="67.4994"
+                y1="70.7422"
+                x2="67.4994"
+                y2="109.314"
+                gradientUnits="userSpaceOnUse">
+                <stop stopColor="white" stopOpacity="0" />
+                <stop offset="1" stopColor="white" />
+              </linearGradient>
+            </defs>
+          </svg>
 
-                  <div
-                    className={
-                      'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
-                    }
-                    onClick={() => {
-                      const amount =
-                        operationTab === 'supply'
-                          ? poolTokenBalance?.formatAmount || '0'
-                          : stokenBalance?.formatAmount || '0';
-                      if (operationTab === 'supply') {
-                        setsupplyAmount(amount);
-                      } else {
-                        setwithdrawAmount(amount);
-                      }
-                    }}>
-                    Max
-                  </div>
-                </div>
-              </Row>
-
-              <Row itemsCenter justifyBetween>
-                <Text
-                  style={{
-                    verticalAlign: 'middle',
-                    whiteSpace: 'nowrap',
-                    maxWidth: '90px',
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden'
-                  }}
-                  text={`$${BigNumber(operationTab === 'supply' ? supplyAmount || '0' : withdrawAmount || '0')
-                    .times(BigNumber(poolTokenBalance?.denomPrice || '0').div(exchangeRate || 1))
-                    .toFormat(2)}`}
-                  size="xxs"
-                  color="white_muted"></Text>
-
-                <Row
-                  style={{
-                    flexShrink: 0
-                  }}
-                  itemsCenter
-                  gap="xs">
-                  <Icon color="white_muted" icon="wallet-icon" size={12}></Icon>
-                  <Text
-                    style={{
-                      verticalAlign: 'middle',
-                      whiteSpace: 'nowrap'
-                    }}
-                    text={`${BigNumber(
-                      operationTab === 'supply'
-                        ? poolTokenBalance?.formatAmount || '0'
-                        : stokenBalance?.formatAmount || '0'
-                    ).toFormat()}`}
-                    size="xxs"
-                    color="white_muted"></Text>
-                </Row>
-              </Row>
-            </Column>
-          </Row>
-
-          {operationTab === 'supply' && (
-            <Column
-              bg="black"
-              style={{
-                borderRadius: '10px'
-              }}
-              px="lg"
-              py="lg">
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.grey12
-                  }}>
-                  Net APR
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.white
-                  }}>
-                  {poolData?.supplyApy}%
-                </Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.grey12
-                  }}>
-                  You will receive
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.white
-                  }}>
-                  {getTruncate(formatUnitAmount(receiveShare, 6), 6)}&nbsp;
-                  <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                    s{poolData?.token.asset.symbol}
-                  </small>
-                </Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.grey12
-                  }}>
-                  Expected Interests / day
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.white
-                  }}>
-                  {new BigNumber(expectedInterestDay).toFixed(poolData?.token?.asset.precision || 6)}&nbsp;
-                  <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                    {poolData?.token.asset.symbol}
-                  </small>
-                </Typography>
-              </Stack>
-            </Column>
-          )}
-
-          {operationTab === 'withdraw' && (
-            <Column
-              bg="black"
-              style={{
-                borderRadius: '10px'
-              }}
-              px="lg"
-              py="lg">
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.grey12
-                  }}>
-                  {poolTokenBalance?.asset.symbol} / {stokenBalance?.asset.symbol}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.white
-                  }}>
-                  {+exchangeRate}
-                </Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.grey12
-                  }}>
-                  You will receive
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.white
-                  }}>
-                  {new BigNumber(withdrawAmount || '0').times(exchangeRate).toFixed(6)}&nbsp;
-                  <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                    {poolTokenBalance?.asset.symbol}
-                  </small>
-                </Typography>
-              </Stack>
-            </Column>
-          )}
-
-          {operationTab === 'withdraw' && withdrawExceed && (
-            <Text
-              color="red"
-              size="xs"
-              text={`Max redeemable: ${maxWithdrawAmount} ${stokenBalance?.asset.symbol}`}></Text>
-          )}
-
-          <Row mt="md" mb="lg">
-            <Button
-              onClick={() => {
-                if (operationTab === 'supply') {
-                  onSupply();
-                } else {
-                  onWithdraw();
-                }
-              }}
-              loading={loading || withdrawLoading}
-              disabled={isDisabled}
-              preset="primary"
-              text="Confirm"
-              full></Button>
-          </Row>
+          <Text text="Coming Soon" color="white" size="lg"></Text>
         </Column>
       </Content>
       <Footer px="zero" py="zero">

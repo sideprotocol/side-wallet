@@ -54,7 +54,12 @@ export default function AboutScreen() {
                 itemsCenter
                 full>
                 <Text preset="regular" text={'Terms of Service'}></Text>
-                <Icon icon={'link'} size={18}></Icon>
+                <Icon
+                  onClick={() => {
+                    window.open('https://docs.side.one/about/privacy-policy ', '_blank');
+                  }}
+                  icon={'link'}
+                  size={18}></Icon>
               </Row>
             </Card>
 
@@ -72,7 +77,12 @@ export default function AboutScreen() {
                 full>
                 <Text preset="regular" text={'Privacy Policy'}></Text>
 
-                <Icon icon={'link'} size={18}></Icon>
+                <Icon
+                  onClick={() => {
+                    window.open('https://docs.side.one/about/privacy-policy ', '_blank');
+                  }}
+                  icon={'link'}
+                  size={18}></Icon>
               </Row>
             </Card>
 

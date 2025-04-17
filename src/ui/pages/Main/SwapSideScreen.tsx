@@ -305,13 +305,22 @@ export default function SwapSideScreen() {
                 </Box>
               </Row>
 
-              <Text text={rateExchange ? btcToSideRate : sideToBtcRate} color="white" size="sm"></Text>
+              <Text
+                text="-"
+                // text={rateExchange ? btcToSideRate : sideToBtcRate}
+                color="white"
+                size="sm"></Text>
             </Row>
 
             <Row itemsCenter justifyBetween>
               <Text text="Estimated Time" color="grey12" size="sm"></Text>
 
-              <Text text={fastTimeDesc} color="white" size="sm"></Text>
+              <Text
+                // text={fastTimeDesc}
+
+                text="-"
+                color="white"
+                size="sm"></Text>
             </Row>
           </Column>
 
@@ -332,8 +341,11 @@ export default function SwapSideScreen() {
               onClick={() => {
                 navigate('TxConfirmScreen', { rawTxInfo, type: TxType.SWAP_SIDE });
               }}
-              disabled={disabledBuy}
-              text="Swap Now"
+              // disabled={disabledBuy}
+
+              disabled={true}
+              // text="Swap Now"
+              text="Not Available"
               preset="primary"
               full></Button>
           </Row>
