@@ -1,13 +1,26 @@
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Button, Column, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useAppDispatch } from '@/ui/state/hooks';
+import { useSkipGoState } from '@/ui/state/skipGo/hook';
+import { SkipGoActions } from '@/ui/state/skipGo/reducer';
 import { colors } from '@/ui/theme/colors';
+import { getTruncate } from '@/ui/utils';
 
 import PowerBy from '../../PowerBy';
 import SelectToken from './SelectToken';
 import Setting from './Setting';
 
 export default function Index() {
+  const currentAccount = useCurrentAccount();
+  const dispatch = useAppDispatch();
+  const { sourceAsset, sourceAssetChain, destAsset, destAssetChain, amountOut } = useSkipGoState();
+
+  const { balanceList } = useGetSideBalanceList(currentAccount.address);
+  const available = balanceList.find((item) => item.denom === sourceAsset?.denom)?.formatAmount || '0';
+
   return (
     <Row full relative rounded={true}>
       <Column full relative gap="lg">
@@ -16,12 +29,21 @@ export default function Index() {
             <Setting />
             <Row itemsCenter gap="sm">
               <img className={'w-[14px] h-[14px]'} src={WalletIcon} alt="" />
-              <Text size="xs">1 USDC</Text>
+              <Text size="xs">
+                {getTruncate(available, sourceAsset?.decimals)} {sourceAsset?.symbol}
+              </Text>
               <Text
                 size="xs"
                 style={{
                   color: colors.main,
                   cursor: 'pointer'
+                }}
+                onClick={() => {
+                  dispatch(
+                    SkipGoActions.update({
+                      amountOut: available
+                    })
+                  );
                 }}>
                 Max
               </Text>
@@ -39,8 +61,8 @@ export default function Index() {
               <CoinInput
                 size={14}
                 coin={{
-                  amount: '',
-                  denom: 'uusdc'
+                  amount: amountOut,
+                  denom: sourceAsset?.denom || ''
                 }}
                 decimalScale={+6}
                 onChange={(value) => {
@@ -48,7 +70,7 @@ export default function Index() {
                 }}
               />
             </Row>
-            <SelectToken />
+            <SelectToken chain={sourceAssetChain} asset={sourceAsset} />
           </Row>
           <Text
             size="sm"
@@ -56,7 +78,7 @@ export default function Index() {
               textAlign: 'right',
               color: colors.grey12
             }}>
-            on Side Chain
+            on {sourceAssetChain?.chainName}
           </Text>
         </Column>
 
@@ -75,7 +97,7 @@ export default function Index() {
                 size={14}
                 coin={{
                   amount: '',
-                  denom: 'uusdc'
+                  denom: destAsset?.denom || ''
                 }}
                 decimalScale={+6}
                 onChange={(value) => {
@@ -83,7 +105,7 @@ export default function Index() {
                 }}
               />
             </Row>
-            <SelectToken />
+            <SelectToken chain={destAssetChain} asset={destAsset} />
           </Row>
           <Text
             size="sm"
@@ -91,7 +113,7 @@ export default function Index() {
               textAlign: 'right',
               color: colors.grey12
             }}>
-            on Side Chain
+            on {destAssetChain?.chainName}
           </Text>
         </Column>
 

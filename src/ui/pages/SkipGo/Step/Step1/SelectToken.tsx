@@ -1,10 +1,12 @@
 import { Drawer } from 'antd';
 import { useState } from 'react';
 
+import { Chain } from '@/core/skip-go';
 import { Column, Icon, Row, Search, Text } from '@/ui/components';
 import { colors } from '@/ui/theme/colors';
+import { Asset } from '@skip-go/client';
 
-export default function Index() {
+export default function Index({ chain, asset }: { chain?: Chain; asset?: Asset }) {
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -20,7 +22,7 @@ export default function Index() {
         }}
         onClick={() => setOpen(true)}>
         <img
-          src="https://api.side.one/static/token/logo/usdc.svg"
+          src={asset?.logoURI}
           alt=""
           style={{
             width: '28px',
@@ -32,7 +34,7 @@ export default function Index() {
           style={{
             fontSize: '14px'
           }}>
-          USDC
+          {asset?.symbol}
         </Text>
         <Icon
           icon="down"

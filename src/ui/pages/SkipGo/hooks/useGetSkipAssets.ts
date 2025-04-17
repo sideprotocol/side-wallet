@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 
 import useSkipClient from './useSkipClient';
 
-export default function useGetChainList() {
+export default function useGetSkipAssets() {
   const { skipClient } = useSkipClient();
 
   const { data: skipAssets } = useQuery({

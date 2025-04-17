@@ -5,9 +5,11 @@ import { ButtonGroup, Column, Row, Text } from '@/ui/components';
 import { colors } from '@/ui/theme/colors';
 
 import PowerBy from '../../PowerBy';
+import useGetSkipRoute from '../../hooks/useGetSkipRoute';
 
 export default function Index() {
   const [open, setOpen] = useState(false);
+  const { skipRoute } = useGetSkipRoute();
   return (
     <>
       <Row
