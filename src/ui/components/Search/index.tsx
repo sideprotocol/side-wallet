@@ -8,7 +8,7 @@ export function Search({ value, setValue }: { value: string; setValue: (data: st
   const [isHover, setIsHover] = useState(false);
   return (
     <div
-      className={`border-[1px] border-solid px-[10px] flex items-center rounded-[10px] bg-[#17171C] relative gap-[8px] ${
+      className={`w-full border-[1px] border-solid px-[10px] flex items-center rounded-[10px] bg-[#17171C] relative gap-[8px] ${
         isFocus ? 'border-white' : ' border-[#ffffff20] hover:border-[#ffffff50]'
       }`}>
       <Icon icon="search" color={'search_icon'} size={20}></Icon>

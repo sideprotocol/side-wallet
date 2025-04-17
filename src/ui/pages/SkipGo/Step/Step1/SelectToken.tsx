@@ -69,7 +69,26 @@ export default function Index() {
               }}
             />
           </Row>
-          <Text size="xs">Max Slippage</Text>
+          <Row
+            itemsCenter
+            gap="md"
+            classname={'bg-item-hover-v2'}
+            style={{
+              backgroundColor: colors.black,
+              padding: '10px 16px',
+              borderRadius: '10px',
+              cursor: 'pointer'
+            }}>
+            <img className={'w-[14px] h-[14px]'} src={''} alt="" />
+            <Text size="sm">ATOM</Text>
+            <Text
+              size="xs"
+              style={{
+                color: colors.grey12
+              }}>
+              50 networks
+            </Text>
+          </Row>
         </Column>
       </Drawer>
     </>
