@@ -1,6 +1,5 @@
 import 'swiper/css';
 
-import { SIDE_HUB_URL } from '@/shared/constant';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
 import { NavTabBar } from '@/ui/components/NavTabBar';
@@ -118,10 +117,13 @@ export default function LoansTabScreen() {
               navigator('LendingTabScreen');
             }}
             full
+            disabled={true}
             preset="primary"
-            text="Start Borrowing"></Button>
+            // text="Start Borrowing"
+
+            text="Coming Soon"></Button>
         </Row>
-        <Row itemsCenter justifyCenter fullX>
+        {/* <Row itemsCenter justifyCenter fullX>
           <div
             className="text-xs text-[#6C7080] cursor-pointer  hover:text-white"
             onClick={() => {
@@ -129,7 +131,7 @@ export default function LoansTabScreen() {
             }}>
             Open Web App
           </div>
-        </Row>
+        </Row> */}
       </Content>
       <Footer px="zero" py="zero">
         <NavTabBar tab="loans" />

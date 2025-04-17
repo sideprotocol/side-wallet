@@ -1,4 +1,4 @@
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -128,7 +128,7 @@ export default function ReceiveScreen() {
               color="background"></Text>
           </Row>
           <Column>
-            <QRCode.QRCodeSVG value={address || ''} size={sizes.qrcode}></QRCode.QRCodeSVG>
+            <QRCodeSVG value={address || ''} size={sizes.qrcode}></QRCodeSVG>
           </Column>
 
           <Column>
