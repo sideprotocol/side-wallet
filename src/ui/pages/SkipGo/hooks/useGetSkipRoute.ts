@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { useSkipGoState } from '@/ui/state/skipGo/hook';
+import { toUnitAmount } from '@/ui/utils/formatter';
 
 import useSkipClient from './useSkipClient';
 
@@ -9,7 +10,11 @@ export default function useGetSkipRoute() {
 
   const { sourceAsset, sourceAssetChain, destAsset, destAssetChain, amountOut, routeConfig } = useSkipGoState();
 
-  const { data: skipRoute } = useQuery({
+  const {
+    data: skipRoute,
+    isLoading,
+    error
+  } = useQuery({
     queryKey: [
       'getSkipRoute',
       {
@@ -27,14 +32,17 @@ export default function useGetSkipRoute() {
         sourceAssetChainID: sourceAssetChain!.chainID,
         destAssetDenom: destAsset!.denom,
         destAssetChainID: destAssetChain!.chainID,
-        amountOut,
+        amountOut: toUnitAmount(amountOut, sourceAsset!.decimals || 8),
         ...routeConfig
       });
     },
-    enabled: !!skipClient && !!sourceAsset && !!sourceAssetChain && !!destAsset && !!destAssetChain && !!amountOut
+    enabled: !!skipClient && !!sourceAsset && !!sourceAssetChain && !!destAsset && !!destAssetChain && !!amountOut,
+    retry: 0
   });
 
   return {
-    skipRoute
+    skipRoute,
+    isLoading,
+    error
   };
 }

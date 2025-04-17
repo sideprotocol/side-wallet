@@ -1,3 +1,4 @@
+import { sideChain } from '@/shared/constant';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Button, Column, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
@@ -7,9 +8,12 @@ import { useAppDispatch } from '@/ui/state/hooks';
 import { useSkipGoState } from '@/ui/state/skipGo/hook';
 import { SkipGoActions } from '@/ui/state/skipGo/reducer';
 import { colors } from '@/ui/theme/colors';
-import { getTruncate } from '@/ui/utils';
+import { formatUnitAmount, getTruncate } from '@/ui/utils';
 
 import PowerBy from '../../PowerBy';
+import useGetSkipAssets from '../../hooks/useGetSkipAssets';
+import useGetSkipChains from '../../hooks/useGetSkipChains';
+import useGetSkipRoute from '../../hooks/useGetSkipRoute';
 import SelectToken from './SelectToken';
 import Setting from './Setting';
 
@@ -17,9 +21,13 @@ export default function Index() {
   const currentAccount = useCurrentAccount();
   const dispatch = useAppDispatch();
   const { sourceAsset, sourceAssetChain, destAsset, destAssetChain, amountOut } = useSkipGoState();
+  const { skipRoute, isLoading, error } = useGetSkipRoute();
 
   const { balanceList } = useGetSideBalanceList(currentAccount.address);
   const available = balanceList.find((item) => item.denom === sourceAsset?.denom)?.formatAmount || '0';
+
+  const { skipChains } = useGetSkipChains();
+  const { skipAssets } = useGetSkipAssets();
 
   return (
     <Row full relative rounded={true}>
@@ -66,11 +74,30 @@ export default function Index() {
                 }}
                 decimalScale={+6}
                 onChange={(value) => {
-                  console.log(value);
+                  dispatch(
+                    SkipGoActions.update({
+                      amountOut: value
+                    })
+                  );
                 }}
               />
             </Row>
-            <SelectToken chain={sourceAssetChain} asset={sourceAsset} />
+            {skipAssets && (
+              <SelectToken
+                chainList={(skipChains || [])?.filter((item) => item.chainID === sideChain.chainID)}
+                assetList={{ [sideChain.chainID]: skipAssets[sideChain.chainID] }}
+                asset={sourceAsset}
+                onChange={({ chain, asset }) => {
+                  dispatch(
+                    SkipGoActions.update({
+                      sourceAssetChain: chain,
+                      sourceAsset: asset,
+                      amountOut: ''
+                    })
+                  );
+                }}
+              />
+            )}
           </Row>
           <Text
             size="sm"
@@ -96,7 +123,7 @@ export default function Index() {
                 disabled
                 size={14}
                 coin={{
-                  amount: '',
+                  amount: skipRoute ? formatUnitAmount(skipRoute.amountIn, +destAsset!.decimals!) : '',
                   denom: destAsset?.denom || ''
                 }}
                 decimalScale={+6}
@@ -105,7 +132,19 @@ export default function Index() {
                 }}
               />
             </Row>
-            <SelectToken chain={destAssetChain} asset={destAsset} />
+            <SelectToken
+              chainList={skipChains || []}
+              assetList={skipAssets || {}}
+              asset={destAsset}
+              onChange={({ chain, asset }) => {
+                dispatch(
+                  SkipGoActions.update({
+                    destAssetChain: chain,
+                    destAsset: asset
+                  })
+                );
+              }}
+            />
           </Row>
           <Text
             size="sm"
@@ -118,8 +157,24 @@ export default function Index() {
         </Column>
 
         <Row>
-          <Button disabled full text="Swap" preset="primary" />
+          <Button
+            disabled={isLoading || !skipRoute}
+            full
+            text={isLoading ? 'Finding best route' : 'Swap'}
+            preset="primary"
+          />
         </Row>
+
+        {error ? (
+          <Text
+            size="sm"
+            style={{
+              textAlign: 'center',
+              color: colors.red
+            }}>
+            {(error as Error).message}
+          </Text>
+        ) : null}
 
         <PowerBy />
       </Column>

@@ -3,7 +3,15 @@ import { useState } from 'react';
 import { Icon } from '../Icon';
 import { Input } from '../Input';
 
-export function Search({ value, setValue }: { value: string; setValue: (data: string) => void }) {
+export function Search({
+  placeholder,
+  value,
+  setValue
+}: {
+  placeholder?: string;
+  value: string;
+  setValue: (data: string) => void;
+}) {
   const [isFocus, setIsFocus] = useState(false);
   const [isHover, setIsHover] = useState(false);
   return (
@@ -28,7 +36,7 @@ export function Search({ value, setValue }: { value: string; setValue: (data: st
           border: 'none',
           padding: '0'
         }}
-        placeholder="Search crypto"
+        placeholder={placeholder || 'Search crypto'}
       />
       <div
         onClick={() => {
