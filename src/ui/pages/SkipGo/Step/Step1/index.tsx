@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { sideChain } from '@/shared/constant';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Button, Column, Row, Text } from '@/ui/components';
@@ -18,7 +20,7 @@ import useGetSkipRoute from '../../hooks/useGetSkipRoute';
 import SelectToken from './SelectToken';
 import Setting from './Setting';
 
-export default function Index() {
+export default function Index({ setStep }: { setStep: Dispatch<SetStateAction<number>> }) {
   const currentAccount = useCurrentAccount();
   const dispatch = useAppDispatch();
   const { sourceAsset, sourceAssetChain, destAsset, destAssetChain, amountOut } = useSkipGoState();
@@ -183,8 +185,9 @@ export default function Index() {
           <Button
             disabled={isLoading || !skipRoute}
             full
-            text={isLoading ? 'Finding best route' : 'Swap'}
+            text={isLoading ? 'Finding best route...' : 'Swap'}
             preset="primary"
+            onClick={() => setStep(2)}
           />
         </Row>
 
