@@ -319,7 +319,7 @@ export default function BridgeTabScreen() {
                       }}
                       url={bridgeAsset?.asset?.logo}
                     />
-                    <div className="text-[14px] pr-[6px] whitespace-nowrap max-w-[72px] text-ellipsis overflow-hidden">
+                    <div className="text-[14px] pr-[6px] whitespace-nowrap ">
                       {bridgeAsset?.asset?.symbol || 'Select Token'}
                     </div>
                   </Row>

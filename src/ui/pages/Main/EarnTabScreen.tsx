@@ -253,7 +253,7 @@ export default function EarnTabScreen() {
             </defs>
           </svg>
 
-          <Text text="Coming Soon" color="white" size="lg"></Text>
+          <Text text="Coming Soon" color="white" size="md"></Text>
         </Column>
       </Content>
       <Footer px="zero" py="zero">

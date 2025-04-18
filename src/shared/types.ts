@@ -564,6 +564,13 @@ export interface IAsset {
     mintable: boolean;
     remaining: string;
   };
+  ibcData?: Array<{
+    oppositeChainId: string;
+    oppositeChainDenom: string;
+    oppositeChainChannelId: string;
+    sideChainChannelId: string;
+    portId: string;
+  }> | null;
 }
 
 export interface BalanceItem {

@@ -245,8 +245,6 @@ export default function CreateSendRune() {
               <img src={WalletIcon} alt={'WalletIcon'} />
 
               <div>{runeBalance?.toString()}</div>
-
-              {token.asset.symbol}
             </Row>
           </Row>
           <Input

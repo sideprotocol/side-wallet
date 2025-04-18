@@ -3,10 +3,8 @@ import { useEffect, useState } from 'react';
 import { AddressFlagType, SIDE_STATION_URL } from '@/shared/constant';
 import { checkAddressFlag } from '@/shared/utils';
 import { Column, Footer, Image, Layout, Row, Text } from '@/ui/components';
-import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPopover';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import { NoticePopover } from '@/ui/components/NoticePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
 import useGetAccountBalanceByUSD from '@/ui/hooks/useGetAccountBalanceByUSD';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -264,18 +262,6 @@ export default function WalletTabScreen() {
         </Column>
       </Column>
 
-      {showSafeNotice && (
-        <NoticePopover
-          onClose={() => {
-            wallet.setShowSafeNotice(false);
-            setShowSafeNotice(false);
-          }}
-        />
-      )}
-
-      {showDisableUnconfirmedUtxoNotice && (
-        <DisableUnconfirmedsPopover onClose={() => setShowDisableUnconfirmedUtxoNotice(false)} />
-      )}
       {buyBtcModalVisible && (
         <BuyBTCModal
           onClose={() => {

@@ -61,7 +61,8 @@ const AccountSelect = () => {
             text={shortAddress(currentAccount?.alianName, 8)}
             style={{
               fontSize: '12px',
-              lineHeight: '15px'
+              lineHeight: '15px',
+              fontWeight: 600
             }}
           />
         </Row>

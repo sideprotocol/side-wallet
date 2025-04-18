@@ -157,7 +157,6 @@ export default function WalletSelect() {
           <Button
             text="Add Wallet"
             preset="primary"
-            icon={'plus'}
             onClick={() => {
               navigate('WelcomeScreen', { addWallet: true });
             }}

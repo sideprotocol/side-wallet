@@ -4,12 +4,26 @@ import { useNavigate } from 'react-router-dom';
 
 import { CHAINS_ENUM } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
-import { Column, Row, Text, Tooltip } from '@/ui/components';
+import { Column, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
-import { Box, Skeleton } from '@mui/material';
+import { Box, Skeleton, styled, Tooltip, tooltipClasses, TooltipProps } from '@mui/material';
+
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: 'rgba(0, 0, 0, 1)',
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+    '& .MuiTooltip-arrow': {
+      color: theme.palette.common.white
+    }
+  }
+}));
 
 export function TokenItem({
   token,
@@ -23,6 +37,8 @@ export function TokenItem({
   const isIbc = token.asset.denom.includes('ibc/');
 
   const isSide = token.asset.denom === 'uside';
+
+  const ibcData = token.asset.ibcData?.find((item) => !!item.sideChainChannelId);
 
   const navigate = useNavigate();
 
@@ -80,7 +96,10 @@ export function TokenItem({
               <Text preset="sub" text={token?.asset?.name}></Text>
 
               {isIbc && (
-                <Tooltip title={'IBC'}>
+                <LightTooltip
+                  arrow
+                  placement="top"
+                  title={`${ibcData?.oppositeChainId}/${ibcData?.oppositeChainChannelId}`}>
                   <Box
                     sx={{
                       borderRadius: '4px',
@@ -96,7 +115,7 @@ export function TokenItem({
                     }}>
                     IBC
                   </Box>
-                </Tooltip>
+                </LightTooltip>
               )}
             </Row>
           </Column>
@@ -161,7 +180,8 @@ export default function SideTokenList({ balanceVisible }) {
   const currentAccount = useCurrentAccount();
 
   const { balanceList, loading } = useGetSideBalanceList(currentAccount?.address);
-  const filterList = balanceList.filter((item) => !(!+item.amount && item.denom !== 'uside'));
+  // const filterList = balanceList.filter((item) => !(!+item.amount && item.denom !== 'uside'));
+  const filterList = balanceList;
 
   return (
     <Column>
