@@ -180,8 +180,7 @@ export default function SideTokenList({ balanceVisible }) {
   const currentAccount = useCurrentAccount();
 
   const { balanceList, loading } = useGetSideBalanceList(currentAccount?.address);
-  // const filterList = balanceList.filter((item) => !(!+item.amount && item.denom !== 'uside'));
-  const filterList = balanceList;
+  const filterList = balanceList.filter((item) => !(!+item.amount && item.denom !== 'uside'));
 
   return (
     <Column>
