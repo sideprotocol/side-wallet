@@ -86,7 +86,7 @@ export default function ReceiveScreen() {
                 display: 'inline-block',
                 position: 'relative'
               }}></Icon>
-            <Text color="white" size="sm" text="Copy"></Text>
+            <Text color={isClickCopy ? 'primary' : 'white'} size="sm" text={isClickCopy ? 'Copied' : 'Copy'}></Text>
           </Row>
 
           <Row fullX style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }} mt="lg">
