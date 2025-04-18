@@ -9,6 +9,7 @@ import { useSkipGoState } from '@/ui/state/skipGo/hook';
 import { SkipGoActions } from '@/ui/state/skipGo/reducer';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
+import { Skeleton } from '@mui/material';
 
 import PowerBy from '../../PowerBy';
 import useGetSkipAssets from '../../hooks/useGetSkipAssets';
@@ -82,7 +83,7 @@ export default function Index() {
                 }}
               />
             </Row>
-            {skipAssets && (
+            {skipAssets ? (
               <SelectToken
                 chainList={(skipChains || [])?.filter((item) => item.chainID === sideChain.chainID)}
                 assetList={{ [sideChain.chainID]: skipAssets[sideChain.chainID] }}
@@ -96,6 +97,16 @@ export default function Index() {
                     })
                   );
                 }}
+              />
+            ) : (
+              <Skeleton
+                sx={{
+                  bgcolor: colors.black,
+                  width: '102px',
+                  borderRadius: '10px',
+                  transform: 'scale(1)'
+                }}
+                height={48}
               />
             )}
           </Row>
@@ -132,19 +143,31 @@ export default function Index() {
                 }}
               />
             </Row>
-            <SelectToken
-              chainList={skipChains || []}
-              assetList={skipAssets || {}}
-              asset={destAsset}
-              onChange={({ chain, asset }) => {
-                dispatch(
-                  SkipGoActions.update({
-                    destAssetChain: chain,
-                    destAsset: asset
-                  })
-                );
-              }}
-            />
+            {destAsset ? (
+              <SelectToken
+                chainList={skipChains || []}
+                assetList={skipAssets || {}}
+                asset={destAsset}
+                onChange={({ chain, asset }) => {
+                  dispatch(
+                    SkipGoActions.update({
+                      destAssetChain: chain,
+                      destAsset: asset
+                    })
+                  );
+                }}
+              />
+            ) : (
+              <Skeleton
+                sx={{
+                  bgcolor: colors.black,
+                  width: '102px',
+                  borderRadius: '10px',
+                  transform: 'scale(1)'
+                }}
+                height={48}
+              />
+            )}
           </Row>
           <Text
             size="sm"

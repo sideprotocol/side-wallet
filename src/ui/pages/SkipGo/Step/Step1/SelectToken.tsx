@@ -109,7 +109,7 @@ export default function Index({
         title={null}
         placement="bottom"
         width={500}
-        onClose={() => reset}
+        onClose={reset}
         open={open}
         closable={false}
         headerStyle={{

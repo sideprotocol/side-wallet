@@ -107,3 +107,17 @@ export function formatTimeWithUTC(time: string | number) {
   // return `${timeFormat} UTC${timeZone > 0 ? "+" : ""}${timeZone !== 0 ? timeZone + ":00" : ""}`;
   return `${timeFormat}`;
 }
+
+export function convertSecondsToTime(seconds: number): string {
+  if (seconds < 60) {
+    return `${seconds}secs`;
+  } else {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    if (remainingSeconds === 0) {
+      return `${minutes}mins`;
+    } else {
+      return `${minutes}mins${remainingSeconds}secs`;
+    }
+  }
+}

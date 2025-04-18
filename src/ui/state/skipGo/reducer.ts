@@ -18,7 +18,9 @@ export const initialState: SkipGoState = {
   destAsset: undefined,
   destAssetChain: undefined,
   amountOut: '',
-  routeConfig: {}
+  routeConfig: {
+    goFast: true
+  }
 };
 
 const slice = createSlice({
