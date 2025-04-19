@@ -297,7 +297,7 @@ export default function LendingTanScreen() {
           }}
           bg="card_bgColor"
           px="lg"
-          py="md">
+          py="lg">
           <Row px="md" full justifyBetween itemsCenter>
             <Text color="white" size="xs">
               Collateral{' '}

@@ -145,7 +145,6 @@ export default function CreateSendSide() {
                 alignItems: 'center'
               }}
               justifyCenter>
-              {/*<Image src={curToken.logo} size={62} />*/}
               <ImageIcon
                 url={curToken?.asset.logo}
                 style={{

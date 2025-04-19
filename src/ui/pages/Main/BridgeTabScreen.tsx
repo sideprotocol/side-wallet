@@ -216,7 +216,7 @@ export default function BridgeTabScreen() {
                   <span
                     style={{
                       fontSize: '14px',
-                      paddingLeft: '5px'
+                      paddingLeft: '4px'
                     }}>
                     {from.name}
                   </span>
@@ -282,7 +282,7 @@ export default function BridgeTabScreen() {
                   <span
                     style={{
                       fontSize: '14px',
-                      paddingLeft: '5px'
+                      paddingLeft: '4px'
                     }}>
                     {to.name}
                   </span>
@@ -309,17 +309,16 @@ export default function BridgeTabScreen() {
                     e.stopPropagation();
                     navigate('BridgeSelectTokenScreen');
                   }}>
-                  <Row itemsCenter>
+                  <Row itemsCenter gap="sm">
                     <ImageIcon
                       style={{
                         width: '24px',
                         height: '24px',
-                        marginRight: '4px',
                         borderRadius: '20px'
                       }}
                       url={bridgeAsset?.asset?.logo}
                     />
-                    <div className="text-[14px] pr-[6px] whitespace-nowrap ">
+                    <div className="text-[14px]  whitespace-nowrap ">
                       {bridgeAsset?.asset?.symbol || 'Select Token'}
                     </div>
                   </Row>

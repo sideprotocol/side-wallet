@@ -156,7 +156,7 @@ export default function SwapSideScreen() {
           }}
           bg="card_bgColor"
           px="lg"
-          py="md">
+          py="lg">
           <Row px="md" full justifyBetween itemsCenter>
             <Text color="white" size="xs">
               How much would you like to buy?
@@ -288,7 +288,11 @@ export default function SwapSideScreen() {
                 <Text text={rateExchange ? 'BTC/SIDE' : 'SIDE/BTC'} color="grey12" size="sm"></Text>
                 <Box
                   sx={{
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    color: colors.grey12,
+                    ':hover': {
+                      color: colors.white
+                    }
                   }}
                   onClick={() => {
                     setRateExchange((b) => !b);
@@ -296,7 +300,7 @@ export default function SwapSideScreen() {
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                       d="M1.66797 10.3333H12.3346M12.3346 10.3333L9.66797 7.66667M12.3346 10.3333L9.66797 13M12.3346 3.66667H1.66797M1.66797 3.66667L4.33464 1M1.66797 3.66667L4.33464 6.33333"
-                      stroke="#6C7080"
+                      stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"

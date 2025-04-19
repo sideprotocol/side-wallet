@@ -15,6 +15,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useRuneListV2 } from '@/ui/state/bridge/hook';
 import { useFetchUtxosCallback, usePrepareSendRunesCallback } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
+import { colors } from '@/ui/theme/colors';
 import { useLocationState, useWallet } from '@/ui/utils';
 import { getAddressUtxoDust } from '@unisat/wallet-sdk/lib/transaction';
 
@@ -205,9 +206,9 @@ export default function CreateSendRune() {
           position: 'relative',
           borderTop: '1px solid #404045',
           borderRadius: '10px',
-          background: '#222',
           padding: '16px 16px 64px 16px',
           marginTop: '30px',
+          background: colors.card_bgColor,
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
         }}>
         <Column mt="xxl">

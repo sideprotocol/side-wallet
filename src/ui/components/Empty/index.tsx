@@ -7,28 +7,17 @@ interface EmptyProps {
 }
 export function Empty(props: EmptyProps) {
   const { text } = props;
-  const content = text || 'NO DATA';
+  const content = text || 'No data';
   return (
-    <div
-      className="flex flex-col items-center gap-[10px]"
-      style={
-        {
-          // display: 'flex',
-          // flexDirection: 'col',
-          // gap: spacing.small,
-          // alignSelf: 'center'
-        }
-      }
-    >
+    <div className="flex flex-col items-center gap-[10px]">
       <Image
-        // src={'./images/img/no-data.gif'}
         src={'./images/icons/main/no-data.svg'}
         size={64}
         style={{
           height: '80px'
         }}
       />
-      <Text color={'white'} text={content} preset="sub" textCenter />
+      <Text color={'grey2'} text={content} size="xs" textCenter />
     </div>
   );
 }

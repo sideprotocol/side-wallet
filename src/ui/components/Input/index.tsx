@@ -96,7 +96,7 @@ function PasswordInput(props: InputProps) {
   return (
     <div
       className={` border-[1px] border-solid ${
-        isFocus ? 'border-white' : 'border-[#ffffff20] hover:border-[#ffffff50] '
+        isFocus ? 'border-white' : 'border-transparent hover:border-[#ffffff50] '
       } `}
       style={Object.assign({}, $baseContainerStyle, containerStyle, {
         // borderColor: isContainerMouseOver ? '#ffffff50!important' : 'transparent'
@@ -209,8 +209,7 @@ function AmountInput(props: InputProps) {
           size="sm"
           style={{
             padding: '8px',
-            borderRadius: '8px',
-            backgroundColor: '#F7771A1A'
+            borderRadius: '8px'
           }}
         />
       ) : null}

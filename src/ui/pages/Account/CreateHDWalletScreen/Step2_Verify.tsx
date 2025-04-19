@@ -51,15 +51,13 @@ export default function Step2_Verify({
         flex: 1,
         overflow: 'hidden',
         padding: '0 16px 24px'
-      }}
-    >
+      }}>
       <Column
         style={{
           flex: 1,
           alignItems: 'center',
           overflow: 'auto'
-        }}
-      >
+        }}>
         <Text
           text="Verify Your Recovery Phrase"
           style={{
@@ -85,21 +83,17 @@ export default function Step2_Verify({
         />
         <Column
           style={{
-            border: '1px solid #404045',
-            boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
             backgroundColor: '#222222',
-            borderRadius: '14px',
+            borderRadius: '10px',
             padding: '24px 16px',
             marginTop: '24px',
             width: '100%'
-          }}
-        >
+          }}>
           <Row
             style={{
               gap: '10px',
               alignItems: 'center'
-            }}
-          >
+            }}>
             <Text
               text={`Word #${firstWordIndex}`}
               style={{
@@ -132,8 +126,7 @@ export default function Step2_Verify({
               gap: '10px',
               alignItems: 'center',
               marginTop: '16px'
-            }}
-          >
+            }}>
             <Text
               text={`Word #${secondWordIndex}`}
               style={{

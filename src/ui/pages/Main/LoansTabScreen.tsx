@@ -16,29 +16,25 @@ export default function LoansTabScreen() {
         <Row itemsCenter mt="md" justifyCenter>
           <Image src="./images/img/lending-banner.png" height={114} width={130}></Image>
         </Row>
-        <Column gap="zero">
+        <Row itemsCenter>
           <Text
             preset="bold"
-            size="xxl"
+            size="xl"
             style={{
-              fontWeight: 700
+              fontWeight: 700,
+              whiteSpace: 'nowrap'
             }}>
-            Borrowing against native
-          </Text>
-
-          <Row itemsCenter>
-            <Text
-              preset="bold"
-              size="xxl"
+            Borrowing against native Bitcoin
+            <Image
+              src="/images/icons/btc.svg"
+              height={25}
+              width={25}
               style={{
-                fontWeight: 700
-              }}>
-              Bitcoin
-            </Text>
-
-            <Image src="/images/icons/btc.svg" height={25} width={25}></Image>
-          </Row>
-        </Column>
+                display: 'inline',
+                marginLeft: '4px'
+              }}></Image>
+          </Text>
+        </Row>
 
         <Text size="sm" color="white_muted">
           Use native BTC as collateral to request a loan from a liquidity pool.

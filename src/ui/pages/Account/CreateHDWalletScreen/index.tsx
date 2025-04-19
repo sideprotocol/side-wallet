@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { AddressType, RestoreWalletType } from '@/shared/types';
-import { Column, Header, StepBar } from '@/ui/components';
+import { Column, Header, Layout, StepBar } from '@/ui/components';
 import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 
 import { useNavigate } from '../../MainRoute';
@@ -92,14 +92,11 @@ export default function CreateHDWalletScreen() {
   }, [items, contextData.tabType]);
 
   return (
-    <div
-      className={`bg-[#000000] flex flex-col w-full ${
-        window.location.pathname === '/sidePanel.html' ? 'max-w-[100vw]' : 'max-w-[360px]'
-      } min-h-[600px] ${
-        window.location.pathname === '/sidePanel.html' ? 'h-screen' : 'h-[600px]'
-      } overflow-y-auto overflow-x-hidden ${
-        !isInTab ? 'border border-solid border-white/10' : 'border-none'
-      } justify-center`}>
+    <Layout
+      style={{
+        minHeight: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px',
+        height: window.location.pathname === '/sidePanel.html' ? '100vh' : '600px'
+      }}>
       <Header
         onBack={() => {
           if (fromUnlock) {
@@ -125,6 +122,6 @@ export default function CreateHDWalletScreen() {
         />
       </Column>
       {currentChildren}
-    </div>
+    </Layout>
   );
 }

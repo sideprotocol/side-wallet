@@ -90,8 +90,6 @@ export default function CreateSendBtc() {
 
   const avaiableAmount = safeBalance;
 
-  console.log({ safeBalance });
-
   const unavailableAmount = satoshisToAmount(unavailableSatoshis);
   const totalAmount = accountBalance.amount;
 
@@ -185,7 +183,8 @@ export default function CreateSendBtc() {
           borderRadius: '10px',
           padding: '16px 16px 64px 16px',
           marginTop: '66px',
-          boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
+          boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
+          background: colors.card_bgColor
         }}>
         <Column mt="xxl">
           <Text text="Recipient" preset="regular" color="white" />
