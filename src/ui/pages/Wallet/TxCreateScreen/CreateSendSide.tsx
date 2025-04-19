@@ -120,7 +120,7 @@ export default function CreateSendSide() {
           flex: 1,
           borderTop: '1px solid #404045',
           borderRadius: '10px',
-          background: colors.card_bgColor,
+          background: colors.black_dark,
           padding: '0 16px',
           paddingBottom: '14px',
           marginTop: '66px',
@@ -138,7 +138,8 @@ export default function CreateSendSide() {
             }}>
             <Row
               style={{
-                background: colors.card_bgColor,
+                background: colors.black_dark,
+
                 width: '74px',
                 height: '74px',
                 borderRadius: '50%',

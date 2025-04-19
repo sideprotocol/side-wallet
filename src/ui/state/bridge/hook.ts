@@ -142,10 +142,8 @@ export const useBridge = () => {
           currentAccount
         )
           .then((res) => {
-            console.log('res: ', res);
             if (res) {
-              navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
-              // tools.toastSuccess('Deposit Successful! ');
+              navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE, type: 'bridge' });
             }
           })
           .catch((err) => {
@@ -170,9 +168,7 @@ export const useBridge = () => {
           messages: [txMsg]
         })
           .then((result) => {
-            // tools.toastSuccess('Withdraw Successful!');
-
-            navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
+            navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE, type: 'bridge' });
           })
           .catch((err) => {
             console.log('err: ', err);
@@ -773,47 +769,8 @@ export function useQueryAddressUtxo() {
   );
 }
 
-const DEFAULT = {
-  params: {
-    confirmations: 1,
-    max_acceptable_block_depth: '100',
-    btc_voucher_denom: 'sat',
-    deposit_enabled: true,
-    withdraw_enabled: true,
-    non_btc_relayers: ['tb1qzqkpqjtql2j30gwlq0vt7ltslqe72ftma767su'],
-    vaults: [
-      {
-        address: 'tb1ptnl9qnzkzm2szu850yfy9dh5a3c5re0ttn0f6jeg669wzzj089mqljt839',
-        pub_key: '',
-        asset_type: 'ASSET_TYPE_BTC',
-        version: '1'
-      },
-      {
-        address: 'tb1prnk5h7mffuuce7k2wyxhclgnkmjgmjld7lyyrxua5vpswrsh5zmqxgl4ea',
-        pub_key: '',
-        asset_type: 'ASSET_TYPE_RUNES',
-        version: '1'
-      }
-    ],
-    protocol_limits: {
-      btc_min_deposit: '10000',
-      btc_min_withdraw: '20000',
-      btc_max_withdraw: '500000000'
-    },
-    protocol_fees: {
-      deposit_fee: '1000',
-      withdraw_fee: '2000',
-      collector: 'tb1qthnu8ck0hcgw0a33rhv7wf6mt39cxrtyr87sdw'
-    },
-    tss_params: {
-      dkg_timeout_period: '86400s',
-      participant_update_transition_period: '1209600s'
-    }
-  }
-} as SideBridgeParams;
-
 export function useBridgeParams() {
-  const [params, setParams] = useState<SideBridgeParams>(DEFAULT);
+  const [params, setParams] = useState<SideBridgeParams>();
 
   const [loading, setLoading] = useState(false);
 

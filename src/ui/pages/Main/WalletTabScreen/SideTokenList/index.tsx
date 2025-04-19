@@ -176,11 +176,24 @@ export function TokenItem({
   );
 }
 
+const STATIC_TOKENS = ['uside', 'sat', 'ibc/65D0BEC6DAD96C7F5043D1E54E54B6BB5D5B3AEC3FF6CEBB75B9E059F3580EA3'];
+
 export default function SideTokenList({ balanceVisible }) {
   const currentAccount = useCurrentAccount();
 
   const { balanceList, loading } = useGetSideBalanceList(currentAccount?.address);
-  const filterList = balanceList.filter((item) => !(!+item.amount && item.denom !== 'uside'));
+
+  const allZeroBalanceList = balanceList.every((item) => !+item.amount);
+
+  const filterList = allZeroBalanceList
+    ? balanceList
+        .filter((item) => STATIC_TOKENS.includes(item.denom))
+        .sort((a, b) => {
+          const aIndex = STATIC_TOKENS.indexOf(a.denom);
+          const bIndex = STATIC_TOKENS.indexOf(b.denom);
+          return aIndex - bIndex;
+        })
+    : balanceList.sort((a, b) => +b.totalValue - +a.totalValue);
 
   return (
     <Column>

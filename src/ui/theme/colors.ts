@@ -2,6 +2,7 @@ export const colors = {
   white: '#ffffff',
   white1: '#FFFFFF1A',
   white2: '#b8bfbd',
+  white30: '#FFFFFF4D',
   white_4: 'rgb(255 255 255 / 50%)',
   white_muted: '#6C7080',
   black: '#000000',
@@ -14,6 +15,8 @@ export const colors = {
   black_dark: '#1E1E1F',
 
   black_dark2: '#282833',
+  black_dark3: '#121212',
+
   green_dark2: '#2D7E24',
   green_dark: '#379a29',
   green: '#41B530',

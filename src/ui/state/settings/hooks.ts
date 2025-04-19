@@ -1,7 +1,7 @@
 import compareVersions from 'compare-versions';
 import { useCallback } from 'react';
 
-import { BITCOIN_CHAINS_MAP, CHAINS_ENUM, ChainType, VERSION, sideChain } from '@/shared/constant';
+import { BITCOIN_CHAINS_MAP, CHAINS_ENUM, ChainType, VERSION, isProduction, sideChain } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { useWallet } from '@/ui/utils';
 import i18n, { addResourceBundle } from '@/ui/utils/i18n';
@@ -78,7 +78,12 @@ export function useBlockstreamUrl(chain?: CHAINS_ENUM) {
   if (chain === CHAINS_ENUM.SIDE) {
     return sideChain.explorerUrl;
   }
-  return 'https://mempool.space/testnet';
+
+  if (isProduction) {
+    return 'https://mempool.space';
+  } else {
+    return 'https://mempool.space/testnet';
+  }
 }
 
 export function useTxIdUrl(txid: string) {

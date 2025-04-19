@@ -179,7 +179,7 @@ export default function CreateSendRune() {
 
       <Row
         style={{
-          background: '#222',
+          background: colors.black_dark,
           width: '74px',
           height: '74px',
           position: 'absolute',
@@ -208,7 +208,7 @@ export default function CreateSendRune() {
           borderRadius: '10px',
           padding: '16px 16px 64px 16px',
           marginTop: '30px',
-          background: colors.card_bgColor,
+          background: colors.black_dark,
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset'
         }}>
         <Column mt="xxl">

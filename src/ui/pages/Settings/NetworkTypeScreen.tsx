@@ -28,15 +28,6 @@ export default function NetworkTypeScreen() {
         <Column gap={'md'}>
           <Row
             rounded
-            onClick={async () => {
-              // if (item.value == networkType) {
-              //   return;
-              // }
-              // await changeNetworkType(item.value);
-              // reloadAccounts();
-              // navigate('MainScreen');
-              // tools.toastSuccess('Network type changed');
-            }}
             style={{
               height: 56,
               padding: '16px 10px',
@@ -48,45 +39,28 @@ export default function NetworkTypeScreen() {
             itemsCenter
             classname={'hover:bg-[#17171C] '}>
             <Row itemsCenter>
-              <Text text={`${sideChain.name} & Bitcoin`} />
+              <Text text={`${sideChain.name} & Bitcoin (mainnet)`} />
             </Row>
             <Column>
               <Icon color={'primary'} contain={'contain'} icon="check-circle" />
             </Column>
           </Row>
-          {/*{NETWORK_TYPES.map((item, index) => {*/}
-          {/*  return (*/}
-          {/*    <Row*/}
-          {/*      rounded*/}
-          {/*      onClick={async () => {*/}
-          {/*        if (item.value == networkType) {*/}
-          {/*          return;*/}
-          {/*        }*/}
-          {/*        await changeNetworkType(item.value);*/}
-          {/*        reloadAccounts();*/}
-          {/*        navigate('MainScreen');*/}
-          {/*        tools.toastSuccess('Network type changed');*/}
-          {/*      }}*/}
-          {/*      key={index}*/}
-          {/*      style={{*/}
-          {/*        height: 56,*/}
-          {/*        padding: '16px 10px',*/}
-          {/*        backgroundColor: item.value == networkType ? colors.green_light : 'tr',*/}
-          {/*        border: `1px solid ${item.value == networkType ? colors.green_light : 'transparent'}`*/}
-          {/*      }}*/}
-          {/*      full*/}
-          {/*      justifyBetween*/}
-          {/*      itemsCenter*/}
-          {/*      classname={item.value != networkType ? 'hover:bg-[#17171C] ' : ''}>*/}
-          {/*      <Row itemsCenter>*/}
-          {/*        <Text text={item.label === 'DEVNET' ? 'grimoria-testnet-1' : item.label} />*/}
-          {/*      </Row>*/}
-          {/*      <Column>*/}
-          {/*        {item.value == networkType && <Icon color={'green'} contain={'contain'} icon="check-circle" />}*/}
-          {/*      </Column>*/}
-          {/*    </Row>*/}
-          {/*  );*/}
-          {/*})}*/}
+
+          <Row
+            rounded
+            style={{
+              height: 56,
+              padding: '16px 10px',
+              backgroundColor: colors.card_bgColor,
+              border: `1px solid ${colors.white1}`
+            }}
+            full
+            justifyBetween
+            itemsCenter>
+            <Row itemsCenter>
+              <Text text={`${sideChain.name} & Bitcoin (testnet)`} />
+            </Row>
+          </Row>
         </Column>
       </Content>
     </Layout>

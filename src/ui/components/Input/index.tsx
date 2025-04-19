@@ -58,13 +58,13 @@ const $baseContainerStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  backgroundColor: colors.card_bgColor,
+  backgroundColor: colors.black_dark3,
   paddingLeft: 15.2,
   paddingRight: 15.2,
   paddingTop: 11,
   paddingBottom: 11,
   borderRadius: 10,
-  minHeight: '50px',
+  minHeight: '48px',
   alignSelf: 'stretch'
   // border: '1px solid #FFFFFF33'
 };
@@ -337,7 +337,7 @@ export const AddressInput = (props: InputProps) => {
         className={`hover:border-[#ffffff50] border-[1px] border-solid border-[#ffffff20] ${
           formatError ? '!border-[#e52937]' : ''
         }`}
-        style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '50px' })}>
+        style={Object.assign({}, $baseContainerStyle, { flexDirection: 'column', minHeight: '48px' })}>
         <input
           placeholder={'Address...'}
           className="placeholder:opacity-30"

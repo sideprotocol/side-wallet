@@ -2,18 +2,22 @@ import { CHAINS_ENUM } from '@/shared/constant';
 import { Button, Column, Content, Footer, Icon, Layout, Row, Text } from '@/ui/components';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
+import { colors } from '@/ui/theme/colors';
 import { spacing } from '@/ui/theme/spacing';
 import { useLocationState } from '@/ui/utils';
+import { Typography } from '@mui/material';
 
 interface LocationState {
   txid: string;
   chain: CHAINS_ENUM;
+  type?: 'bridge' | 'send';
 }
 
 export default function TxSuccessScreen() {
-  const { txid, chain } = useLocationState<LocationState>();
+  const { txid, chain, type } = useLocationState<LocationState>();
   const navigate = useNavigate();
-  const blockstreamUrl = useBlockstreamUrl(chain);
+
+  const blockstream = useBlockstreamUrl(chain);
 
   return (
     <Layout>
@@ -29,10 +33,21 @@ export default function TxSuccessScreen() {
             itemsCenter
             justifyCenter
             onClick={() => {
-              window.open(`${blockstreamUrl}/tx/${txid}`);
+              window.open(`${blockstream}/tx/${txid}`);
             }}>
-            <Icon icon="eye-white" color="white" size={20} />
-            <Text preset="regular-bold" text="View on Block Explorer" color="white" />
+            <Typography
+              sx={{
+                fontSize: '14px',
+                fontWeight: '500',
+                color: colors.grey12,
+                ':hover': {
+                  color: colors.white
+                }
+              }}>
+              {type === 'bridge' ? 'View on Side Chain' : 'View on Block Explorer'}
+            </Typography>
+
+            <Icon icon="link" color="white" size={20} />
           </Row>
         </Column>
       </Content>

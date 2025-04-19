@@ -155,7 +155,7 @@ export default function CreateSendBtc() {
 
       <Row
         style={{
-          background: colors.card_bgColor,
+          background: colors.black_dark,
           width: '74px',
           height: '74px',
           position: 'absolute',
@@ -184,7 +184,7 @@ export default function CreateSendBtc() {
           padding: '16px 16px 64px 16px',
           marginTop: '66px',
           boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
-          background: colors.card_bgColor
+          background: colors.black_dark
         }}>
         <Column mt="xxl">
           <Text text="Recipient" preset="regular" color="white" />

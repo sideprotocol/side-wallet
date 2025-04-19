@@ -130,7 +130,7 @@ export default function BridgeTabScreen() {
           <>
             <Image
               onClick={() => {
-                navigate('/settings');
+                navigate('SettingsTabScreen');
               }}
               src="/images/icons/main/menu-icon.svg"
               size={fontSizes.xxl}
@@ -360,7 +360,6 @@ export default function BridgeTabScreen() {
                   fontSize: '14px'
                 }}
                 onClick={() => {
-                  // console.log(`base: `, base);
                   if (base?.includes('rune')) {
                     bridgeRune(base?.split('/')[1]);
                   } else {

@@ -44,7 +44,7 @@ export default function BridgeTabScreen() {
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
-  const { bridgeAmount, from, to, selectTokenModalShow, base, hoverExchange } = useBridgeState();
+  const { bridgeAmount, from, to, base, hoverExchange } = useBridgeState();
   const dispatch = useAppDispatch();
   const isBtcBridge = base === 'sat';
 
@@ -173,7 +173,7 @@ export default function BridgeTabScreen() {
     <Layout>
       <MainHeader title={''} />
       <Content classname={'hide-scrollbar fadeIn-page'}>
-        <Row full relative rounded={true}>
+        <Column full relative rounded={true}>
           <Column
             full
             relative
@@ -417,7 +417,7 @@ export default function BridgeTabScreen() {
                                 .toFixed(),
                               8
                             )
-                      } BTC`
+                      } ${satAsset?.asset?.symbol}`
                     : isGreaterThanBalance
                     ? 'Insufficient Balance'
                     : 'Bridge'
@@ -426,6 +426,11 @@ export default function BridgeTabScreen() {
               />
             </Row>
           </Column>
+        </Column>
+        <Row itemsCenter justifyCenter>
+          <Text text="Powered by" color="grey12" size="xs" textCenter />
+
+          <Image src={'/images/img/side-bridge.png'} width={70} height={16} />
         </Row>
       </Content>
       <Footer px="zero" py="zero">
