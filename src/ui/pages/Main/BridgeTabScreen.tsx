@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 
-import { isDev, sideChain } from '@/shared/constant';
+import { sideChain } from '@/shared/constant';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
@@ -45,6 +45,9 @@ export default function BridgeTabScreen() {
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
   const { bridgeAmount, from, to, base, hoverExchange, isDeposit } = useBridgeState();
+
+  console.log({ from, to });
+
   const dispatch = useAppDispatch();
   const isBtcBridge = base === 'sat';
 
@@ -135,37 +138,20 @@ export default function BridgeTabScreen() {
     !runeVault;
 
   useEffect(() => {
-    if (isDev) {
-      dispatch(
-        BridgeActions.update({
-          from: {
-            id: 'LIVENET',
-            name: 'Bitcoin',
-            logo: '/images/icons/btc.svg'
-          },
-          to: {
-            id: sideChain.chainID,
-            name: sideChain.name,
-            logo: sideChain.logo
-          }
-        })
-      );
-    } else {
-      dispatch(
-        BridgeActions.update({
-          from: {
-            id: sideChain.chainID,
-            name: sideChain.name,
-            logo: sideChain.logo
-          },
-          to: {
-            id: 'mainnet',
-            name: 'Bitcoin',
-            logo: '/images/icons/btc.svg'
-          }
-        })
-      );
-    }
+    dispatch(
+      BridgeActions.update({
+        from: {
+          id: 'mainnet',
+          name: 'Bitcoin',
+          logo: '/images/icons/btc.svg'
+        },
+        to: {
+          id: sideChain.chainID,
+          name: sideChain.name,
+          logo: sideChain.logo
+        }
+      })
+    );
   }, []);
 
   return (
