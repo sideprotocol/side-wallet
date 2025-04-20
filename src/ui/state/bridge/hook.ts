@@ -400,8 +400,6 @@ export const useBridge = () => {
       enableRBF: true
     });
 
-    debugger;
-
     const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
     const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
