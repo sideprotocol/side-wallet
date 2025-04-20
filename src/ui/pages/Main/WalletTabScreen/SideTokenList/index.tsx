@@ -4,26 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 import { CHAINS_ENUM } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
-import { Column, Row, Text } from '@/ui/components';
+import { Column, LightTooltip, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
-import { Box, Skeleton, styled, Tooltip, tooltipClasses, TooltipProps } from '@mui/material';
-
-const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: theme.palette.common.white,
-    color: 'rgba(0, 0, 0, 1)',
-    boxShadow: theme.shadows[1],
-    fontSize: 11,
-    '& .MuiTooltip-arrow': {
-      color: theme.palette.common.white
-    }
-  }
-}));
+import { Box, Skeleton } from '@mui/material';
 
 export function TokenItem({
   token,

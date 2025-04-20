@@ -3,26 +3,17 @@ import * as bitcoin from 'bitcoinjs-lib';
 import { useCallback, useEffect, useState } from 'react';
 
 import { MessageComposer } from '@/codegen/src/side/btcbridge/tx.registry';
-import {
-  BTC_BRIDGE_VAULT,
-  CHAINS_ENUM,
-  RUNE_BRIDGE_VAULT,
-  SIDE_BTC_INDEXER,
-  SIDE_RUNE_INDEXER,
-  UNISAT_SERVICE_ENDPOINT
-} from '@/shared/constant';
-import { decodeTxToGetValue, runesUtils } from '@/shared/lib/runes-utils';
+import { CHAINS_ENUM, isProduction } from '@/shared/constant';
+import { runesUtils } from '@/shared/lib/runes-utils';
 import { RuneBalance, TickPriceItem } from '@/shared/types';
 import { useTools } from '@/ui/components/ActionComponent';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { SideBridgeParams } from '@/ui/services/bridge';
 import { useChainType } from '@/ui/state/settings/hooks';
 import { parseUnitAmount, useWallet } from '@/ui/utils';
-import { satoshisToAmount, sendAllBTC, sendRunesWithBTC } from '@/ui/wallet-sdk/utils';
+import { satoshisToAmount, sendAllBTC, sendBTC, sendRunesWithBTC } from '@/ui/wallet-sdk/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
-import { sendBTC, sendRunes } from '@unisat/wallet-sdk/lib/tx-helpers';
 
 import { AppState } from '..';
 import { useCurrentAccount } from '../accounts/hooks';
@@ -30,14 +21,6 @@ import { useAppDispatch, useAppSelector } from '../hooks';
 import { useNetworkType } from '../settings/hooks';
 import { useSignAndBroadcastTxRaw } from '../transactions/hooks/cosmos';
 import { BridgeActions, DepositBTCBridge } from './reducer';
-
-async function fetchRuneOutput(key: string, SIDE_RUNE_INDEXER: string) {
-  return fetch(`${SIDE_RUNE_INDEXER}/output/${key}`, {
-    headers: {
-      Accept: 'application/json'
-    }
-  }).then((res) => res.json());
-}
 
 function compareAmount(a: string, b: string) {
   return new BigNumber(a || '0').comparedTo(new BigNumber(b || '0'));
@@ -125,22 +108,31 @@ export const useBridge = () => {
   const wallet = useWallet();
   const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, exponent)).toNumber();
 
-  const isDeposit = (from?.name || '').includes('Bitcoin');
-
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
+
+  const { params, isDeposit } = useBridgeState();
+
+  const btcVault = params?.params?.vaults
+    .filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
+    .reduce((max, current) => {
+      return BigInt(current.version) > BigInt(max.version) ? current : max;
+    });
+
+  const runeVault = params?.params?.vaults
+    .filter((vault) => vault.asset_type === 'ASSET_TYPE_RUNES')
+    .reduce((max, current) => {
+      return BigInt(current.version) > BigInt(max.version) ? current : max;
+    });
 
   const bridge = async () => {
     dispatch(BridgeActions.update({ loading: true }));
 
     if (isDeposit) {
       try {
-        abstractDepositBTC(
-          {
-            amount: unitAmount,
-            fee: Number(fee || '200')
-          },
-          currentAccount
-        )
+        abstractDepositBTC({
+          amount: unitAmount,
+          fee: Number(fee || '200')
+        })
           .then((res) => {
             if (res) {
               navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE, type: 'bridge' });
@@ -189,19 +181,14 @@ export const useBridge = () => {
 
     if (isDeposit) {
       try {
-        abstractDepositRune(
-          {
-            amount: bridgeAmount,
-            fee: Number(fee || '200'),
-            runeId
-          },
-          currentAccount
-        )
+        abstractDepositRune({
+          amount: bridgeAmount,
+          fee: Number(fee || '200'),
+          runeId
+        })
           .then((res) => {
-            console.log('res: ', res);
             if (res) {
               navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
-              // tools.toastSuccess('Deposit Successful! ');
             }
           })
           .catch((err) => {
@@ -216,8 +203,6 @@ export const useBridge = () => {
         dispatch(BridgeActions.update({ loading: false }));
       }
     } else {
-      console.log(runeId, 'runeid');
-
       const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
         amount: `${unitAmount}runes/${runeId}`,
         sender: currentAccount?.address
@@ -245,7 +230,7 @@ export const useBridge = () => {
       }
     }
   };
-  async function abstractDepositBTC(params, currentAccount) {
+  async function abstractDepositBTC(params) {
     const { amount, fee: feeRate } = params;
 
     const senderAddress = currentAccount?.address;
@@ -270,14 +255,6 @@ export const useBridge = () => {
         pubkey: pbk
       };
     });
-
-    const bridgeParams = await services.bridge.getBridgeParams();
-
-    const btcVault = bridgeParams.params.vaults
-      .filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
-      .reduce((max, current) => {
-        return BigInt(current.version) > BigInt(max.version) ? current : max;
-      });
 
     if (!btcVault) {
       throw new Error('No valid vault address found.');
@@ -313,31 +290,18 @@ export const useBridge = () => {
     return txid;
   }
 
-  async function abstractDepositRune(params, currentAccount) {
-    const senderAddress = currentAccount?.address;
-    const pbk = currentAccount?.pubkey;
+  async function abstractDepositRune(params) {
+    const senderAddress = currentAccount.address;
+    const pbk = currentAccount.pubkey;
 
-    const { runeId, amount, fee } = params;
-    const runeid = runeId;
+    const { runeId, fee } = params;
     const runeAmount = runesUtils.fromDecimalAmount(bridgeAmount, exponent);
 
     const bridgeParams = await services.bridge.getBridgeParams();
 
-    const btcVault = bridgeParams.params.vaults
-      .filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
-      .reduce((max, current) => {
-        return BigInt(current.version) > BigInt(max.version) ? current : max;
-      });
-
     if (!btcVault) {
       throw new Error('No valid vault address found.');
     }
-
-    const runeVault = bridgeParams.params.vaults
-      .filter((vault) => vault.asset_type === 'ASSET_TYPE_RUNES')
-      .reduce((max, current) => {
-        return BigInt(current.version) > BigInt(max.version) ? current : max;
-      });
 
     if (!runeVault) {
       throw new Error('No valid vault address found.');
@@ -356,7 +320,7 @@ export const useBridge = () => {
       };
     });
 
-    const runes_utxos = await services.unisat.getRunesUtxos(senderAddress, runeid!);
+    const runes_utxos = await services.unisat.getRunesUtxos(senderAddress, runeId!);
 
     const assetUtxosRunes = runes_utxos.map((v) => {
       return Object.assign(v, { pubkey: pbk });
@@ -368,8 +332,8 @@ export const useBridge = () => {
     });
 
     assetUtxosRunes.sort((a, b) => {
-      const bAmount = b.runes.find((v) => v.runeid == runeid)?.amount || '0';
-      const aAmount = a.runes.find((v) => v.runeid == runeid)?.amount || '0';
+      const bAmount = b.runes.find((v) => v.runeid == runeId)?.amount || '0';
+      const aAmount = a.runes.find((v) => v.runeid == runeId)?.amount || '0';
       return compareAmount(bAmount, aAmount);
     });
 
@@ -381,7 +345,7 @@ export const useBridge = () => {
     for (let i = 0; i < assetUtxos.length; i++) {
       const v = assetUtxos[i];
       if (v.runes && v.runes.length > 1) {
-        const balance = v.runes.find((r) => r.runeid == runeid);
+        const balance = v.runes.find((r) => r.runeid == runeId);
         if (balance && balance.amount == runeAmount) {
           _assetUtxos.push(v);
           break;
@@ -393,7 +357,7 @@ export const useBridge = () => {
       for (let i = 0; i < assetUtxos.length; i++) {
         const v = assetUtxos[i];
         if (v.runes) {
-          const balance = v.runes.find((r) => r.runeid == runeid);
+          const balance = v.runes.find((r) => r.runeid == runeId);
           if (balance && balance.amount == runeAmount) {
             _assetUtxos.push(v);
             break;
@@ -407,7 +371,7 @@ export const useBridge = () => {
       for (let i = 0; i < assetUtxos.length; i++) {
         const v = assetUtxos[i];
         v.runes?.forEach((r) => {
-          if (r.runeid == runeid) {
+          if (r.runeid == runeId) {
             total = total + BigInt(r.amount);
           }
         });
@@ -420,7 +384,7 @@ export const useBridge = () => {
 
     assetUtxos = _assetUtxos;
 
-    let p = {
+    const { psbt, toSignInputs } = await sendRunesWithBTC({
       assetUtxos,
       btcUtxos: btcUtxos,
       networkType,
@@ -430,15 +394,14 @@ export const useBridge = () => {
       assetAddress: senderAddress,
       btcAddress: senderAddress,
       feeRate: fee,
-      runeid: runeid!,
+      runeid: runeId!,
       runeAmount: runeAmount,
       outputValue: 546,
       enableRBF: true
-    };
-    console.log('p: ', p);
-    const { psbt, toSignInputs } = await sendRunesWithBTC(p);
+    });
 
-    console.log('wallet: ', wallet, psbt, toSignInputs);
+    debugger;
+
     const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
     const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
@@ -449,301 +412,56 @@ export const useBridge = () => {
   }
 
   async function estimateNetworkFee(params: DepositBTCBridge) {
+    if (!btcVault) {
+      throw new Error('No valid vault address found.');
+    }
+
     const { amount, fee } = params;
     const senderAddress = currentAccount.address;
-    const txs = await fetch(`${UNISAT_SERVICE_ENDPOINT}/v5/address/btc-utxo?address=${currentAccount.address}`).then(
-      (res) => res.json()
-    );
 
-    const rawUtxos = (
-      await fetch(`${UNISAT_SERVICE_ENDPOINT}/v5/address/btc-utxo?address=${currentAccount.address}`).then((res) =>
-        res.json()
-      )
-    ).filter((utxo) => {
-      const findTx = txs.find((tx) => tx.txid === utxo.txid);
-      if (!findTx) return false;
-      else {
-        return !decodeTxToGetValue(findTx);
-      }
+    const _utxos = await services.unisat.getBTCUtxos({ address: senderAddress });
+
+    const safeBalance = _utxos.filter((v) => v.inscriptions.length == 0).reduce((pre, cur) => pre + cur.satoshis, 0);
+
+    if (safeBalance < amount) {
+      throw new Error(
+        `Insufficient balance. Non-Inscription balance(${satoshisToAmount(
+          safeBalance
+        )} BTC) is lower than ${satoshisToAmount(amount)} BTC `
+      );
+    }
+
+    const btcUtxos: UnspentOutput[] = _utxos.map((v) => {
+      return {
+        ...v,
+        pubkey: currentAccount.pubkey
+      };
     });
 
-    const btcRawUtxos = await Promise.all(
-      rawUtxos.map(async (item) => {
-        return fetch(`${UNISAT_SERVICE_ENDPOINT}/tx/${item.txid}`).then((res) => res.json());
-      })
-    );
-
-    const btcUtxos: UnspentOutput[] = [];
-
-    const decodeBech32 = bitcoin.address.fromBech32(senderAddress);
-
-    const isTaproot = decodeBech32.version === 1 && decodeBech32.data.length === 32;
-
-    btcRawUtxos.forEach((tx) => {
-      const realUtxo = rawUtxos.find((utxo) => utxo.txid === tx.txid);
-      if (!realUtxo) return;
-
-      btcUtxos.push({
-        txid: tx.txid,
-        vout: realUtxo.vout,
-        satoshis: realUtxo.value,
-        scriptPk: tx.vout[realUtxo.vout].scriptpubkey,
-        pubkey: currentAccount.pubkey,
-        inscriptions: [],
-        atomicals: [],
-        addressType: isTaproot ? 2 : 1
-      });
-    });
-
-    const { networkFee, walletInputs } = await sendBTC({
-      btcUtxos: btcUtxos.sort((a, b) => b.satoshis - a.satoshis),
-
-      tos: [{ address: BTC_BRIDGE_VAULT, satoshis: amount }],
-      networkType,
-      changeAddress: senderAddress,
-      feeRate: fee,
-      enableRBF: false,
-      memo: undefined,
-      memos: undefined
-    });
+    const { networkFee, walletInputs } =
+      safeBalance === amount
+        ? await sendAllBTC({
+            btcUtxos: btcUtxos,
+            toAddress: btcVault.address,
+            networkType: isProduction ? 0 : 1,
+            feeRate: fee,
+            enableRBF: true
+          })
+        : await sendBTC({
+            btcUtxos: btcUtxos,
+            tos: [{ address: btcVault.address, satoshis: amount }],
+            networkType: isProduction ? 0 : 1,
+            changeAddress: senderAddress,
+            feeRate: fee,
+            enableRBF: true,
+            memo: undefined,
+            memos: undefined
+          });
 
     return { networkFee, walletInputs };
   }
 
   return { bridge, bridgeRune, estimateNetworkFee };
-};
-
-export const useRuneBridge = () => {
-  const { from, bridgeAmount, fee, base, loading } = useBridgeState();
-  const dispatch = useAppDispatch();
-
-  const currentAccount = useCurrentAccount();
-
-  const navigate = useNavigate();
-
-  const tools = useTools();
-
-  const networkType = useNetworkType();
-  const { balanceList } = useGetSideBalanceList(currentAccount.address);
-
-  const asset = balanceList.find((a) => a.denom === base);
-
-  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, asset?.asset.exponent || 6)).toNumber();
-
-  const isDeposit = (from?.name || '').includes('Bitcoin');
-
-  const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
-
-  const bridge = async () => {
-    dispatch(BridgeActions.update({ loading: true }));
-
-    if (isDeposit) {
-      try {
-        depositRune(
-          {
-            amount: unitAmount,
-            fee: Number(fee || '200')
-          },
-          SIDE_BTC_INDEXER,
-          SIDE_RUNE_INDEXER
-        )
-          .then((res) => {
-            return res.text();
-          })
-          .then((res) => {
-            if (res) {
-              navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
-            }
-          })
-          .catch((err) => {
-            console.log('err: ', err);
-            tools.toastError(err.message);
-          });
-      } catch (error) {
-        tools.toastError('Deposit Failed! ');
-      }
-    } else {
-      const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
-        amount: `${unitAmount}${base}`,
-        sender: currentAccount?.address
-      });
-
-      try {
-        signAndBroadcastTxRaw({
-          messages: [txMsg]
-        })
-          .then((result) => {
-            // tools.toastSuccess('Withdraw Successful!');
-
-            navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
-          })
-          .catch((err) => {
-            console.log('err: ', err);
-            tools.toastError(err.message);
-          });
-      } catch (error) {
-        tools.toastError('Deposit Failed! ');
-      }
-    }
-    dispatch(BridgeActions.update({ loading: false }));
-  };
-
-  const wallet = useWallet();
-
-  const depositRune = async (params: DepositBTCBridge, SIDE_BTC_INDEXER: string, SIDE_RUNE_INDEXER: string) => {
-    const { amount, fee, to } = params;
-    const senderAddress = currentAccount.address;
-
-    const runeAmount = BigNumber(amount).toFixed();
-
-    const runeid = base?.substring(6);
-
-    const rawUtxos = await fetch(`${SIDE_BTC_INDEXER}/address/${currentAccount.address}/utxo`).then((res) =>
-      res.json()
-    );
-
-    const btcRawUtxos = await Promise.all(
-      rawUtxos.map(async (item) => {
-        return fetch(`${SIDE_BTC_INDEXER}/tx/${item.txid}`).then((res) => res.json());
-      })
-    );
-
-    const btcUtxos: UnspentOutput[] = [];
-
-    const _assetUtxos: UnspentOutput[] = [];
-
-    let assetUtxos: UnspentOutput[] = [];
-
-    const decodeBech32 = bitcoin.address.fromBech32(senderAddress);
-
-    const isTaproot = decodeBech32.version === 1 && decodeBech32.data.length === 32;
-
-    btcRawUtxos.forEach((tx, index) => {
-      if (decodeTxToGetValue(tx) == 0) {
-        btcUtxos.push({
-          txid: tx.txid,
-          vout: rawUtxos[index].vout,
-          satoshis: rawUtxos[index].value,
-          scriptPk: tx.vout[rawUtxos[index].vout].scriptpubkey,
-          pubkey: currentAccount.pubkey,
-          inscriptions: [],
-          atomicals: [],
-          addressType: isTaproot ? 2 : 1
-        });
-      }
-    });
-    const runesOutputsData = rawUtxos.map((utxo) => `${utxo.txid}:${utxo.vout}`);
-
-    const allRunes = await fetch(`${SIDE_RUNE_INDEXER}/runes`, {
-      headers: {
-        Accept: 'application/json'
-      }
-    }).then((res) => res.json());
-
-    const outputs = await Promise.all(runesOutputsData.map((key) => fetchRuneOutput(key, SIDE_RUNE_INDEXER)));
-
-    outputs.forEach((output, index) => {
-      assetUtxos.push({
-        txid: rawUtxos[index].txid,
-        vout: rawUtxos[index].vout,
-        satoshis: output.value,
-        scriptPk: btcRawUtxos[index].vout[rawUtxos[index].vout].scriptpubkey,
-        pubkey: currentAccount.pubkey,
-        inscriptions: [],
-        atomicals: [],
-        addressType: isTaproot ? 2 : 1,
-
-        runes: Object.values(output.runes).map((rune, i) => {
-          const runeid =
-            allRunes.entries.find((entry) => (entry[1] as Entry).spaced_rune === Object.keys(output.runes)[i])?.[0] ||
-            '';
-          return {
-            amount: BigNumber(rune.amount).toFixed(),
-            runeid: runeid as string
-          };
-        })
-      });
-    });
-
-    assetUtxos.sort((a, b) => {
-      const bAmount = b?.runes?.find((v) => v.runeid == runeid)?.amount || '0';
-      const aAmount = a?.runes?.find((v) => v.runeid == runeid)?.amount || '0';
-      return compareAmount(bAmount, aAmount);
-    });
-
-    for (let i = 0; i < assetUtxos.length; i++) {
-      const v = assetUtxos[i];
-      if (v.runes && v.runes.length > 1) {
-        const balance = v.runes.find((r) => r.runeid == runeid);
-        if (balance && balance.amount == runeAmount) {
-          _assetUtxos.push(v);
-          break;
-        }
-      }
-    }
-
-    if (_assetUtxos.length == 0) {
-      for (let i = 0; i < assetUtxos.length; i++) {
-        const v = assetUtxos[i];
-        if (v.runes) {
-          const balance = v.runes.find((r) => r.runeid == runeid);
-          if (balance && balance.amount == runeAmount) {
-            _assetUtxos.push(v);
-            break;
-          }
-        }
-      }
-    }
-
-    if (_assetUtxos.length == 0) {
-      let total = BigInt(0);
-      for (let i = 0; i < assetUtxos.length; i++) {
-        const v = assetUtxos[i];
-        v.runes?.forEach((r) => {
-          if (r.runeid == runeid) {
-            total = total + BigInt(r.amount);
-          }
-        });
-        _assetUtxos.push(v);
-        if (total >= BigInt(runeAmount)) {
-          break;
-        }
-      }
-    }
-
-    assetUtxos = _assetUtxos;
-
-    const { psbt, toSignInputs } = await sendRunes({
-      assetUtxos,
-      btcUtxos: btcUtxos.sort((a, b) => b.satoshis - a.satoshis),
-      networkType,
-      toAddress: to || RUNE_BRIDGE_VAULT,
-      assetAddress: senderAddress,
-      btcAddress: senderAddress,
-      feeRate: fee,
-      runeid: runeid!,
-      runeAmount: BigNumber(amount).toFixed(),
-      outputValue: 546, //
-      enableRBF: true
-    });
-    const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
-
-    const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
-
-    const rawTransaction = signedPsbt.extractTransaction().toHex();
-
-    const res = await fetch(`${SIDE_BTC_INDEXER}/tx`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain'
-      },
-      body: rawTransaction
-    });
-
-    return res;
-  };
-
-  return { bridge };
 };
 
 export function useQueryAddressUtxo() {
@@ -773,11 +491,12 @@ export function useBridgeParams() {
   const [params, setParams] = useState<SideBridgeParams>();
 
   const [loading, setLoading] = useState(false);
-
+  const dispatch = useAppDispatch();
   const fetchParams = async () => {
     setLoading(true);
     const params = await services.bridge.getBridgeParams();
     setParams(params);
+    dispatch(BridgeActions.update({ params }));
     setLoading(false);
   };
 

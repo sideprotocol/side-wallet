@@ -44,11 +44,10 @@ export default function BridgeTabScreen() {
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
-  const { bridgeAmount, from, to, base, hoverExchange } = useBridgeState();
+  const { bridgeAmount, from, to, base, hoverExchange, isDeposit } = useBridgeState();
   const dispatch = useAppDispatch();
   const isBtcBridge = base === 'sat';
 
-  const isDeposit = (from?.name || '').includes('Bitcoin');
   const assets = isDeposit ? btcBalanceList : sideBalanceList;
 
   const { params } = useBridgeParams();
@@ -239,7 +238,8 @@ export default function BridgeTabScreen() {
                     dispatch(
                       BridgeActions.update({
                         from: to,
-                        to: from
+                        to: from,
+                        isDeposit: !isDeposit
                       })
                     );
                   }}>
