@@ -138,21 +138,37 @@ export default function BridgeTabScreen() {
     !runeVault;
 
   useEffect(() => {
-    dispatch(
-      BridgeActions.update({
-        from: {
+    const from = isDeposit
+      ? {
           id: 'mainnet',
           name: 'Bitcoin',
           logo: '/images/icons/btc.svg'
-        },
-        to: {
+        }
+      : {
+          id: sideChain.chainID,
+          name: sideChain.name,
+          logo: sideChain.logo
+        };
+
+    const to = isDeposit
+      ? {
           id: sideChain.chainID,
           name: sideChain.name,
           logo: sideChain.logo
         }
+      : {
+          id: 'mainnet',
+          name: 'Bitcoin',
+          logo: '/images/icons/btc.svg'
+        };
+
+    dispatch(
+      BridgeActions.update({
+        from,
+        to
       })
     );
-  }, []);
+  }, [isDeposit]);
 
   return (
     <Layout>
@@ -223,8 +239,6 @@ export default function BridgeTabScreen() {
                   onClick={() => {
                     dispatch(
                       BridgeActions.update({
-                        from: to,
-                        to: from,
                         isDeposit: !isDeposit
                       })
                     );
