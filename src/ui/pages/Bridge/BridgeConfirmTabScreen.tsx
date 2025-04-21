@@ -416,7 +416,7 @@ export default function BridgeTabScreen() {
 
                 <div className="font-semibold text-sm text-[#F0B622]">
                   {!isDeposit
-                    ? ' Your BTC tokens on the Side Chain will be burnt'
+                    ? ' Your sBTC tokens on the Side Chain will be burnt'
                     : 'Make sure above UTXO carries no inscripted assets'}
                 </div>
               </div>

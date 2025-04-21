@@ -6,20 +6,13 @@ import { CHAINS_ENUM } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import { Column, LightTooltip, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
+import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { Box, Skeleton } from '@mui/material';
 
-export function TokenItem({
-  token,
-  balanceVisible,
-  chainType
-}: {
-  token: BalanceItem;
-  balanceVisible: boolean;
-  chainType: CHAINS_ENUM;
-}) {
+export function TokenItem({ token, balanceVisible }: { token: BalanceItem; balanceVisible: boolean }) {
   const isIbc = token.asset.denom.includes('ibc/');
 
   const isSide = token.asset.denom === 'uside';
@@ -30,9 +23,9 @@ export function TokenItem({
 
   const [hover, setHover] = useState(false);
 
-  const isSideChain = chainType === CHAINS_ENUM.SIDE;
+  const isSideChain = token.asset.chain === CHAINS_ENUM.SIDE;
 
-  const isBitcoinChain = chainType === CHAINS_ENUM.BTC;
+  const isBitcoinChain = token.asset.chain === CHAINS_ENUM.BTC;
 
   return (
     <Column
@@ -167,7 +160,13 @@ const STATIC_TOKENS = ['uside', 'sat', 'ibc/65D0BEC6DAD96C7F5043D1E54E54B6BB5D5B
 export default function SideTokenList({ balanceVisible }) {
   const currentAccount = useCurrentAccount();
 
-  const { balanceList, loading } = useGetSideBalanceList(currentAccount?.address);
+  const { balanceList: sideBalanceList, loading: sideLoading } = useGetSideBalanceList(currentAccount?.address);
+
+  const { balanceList: btcBalanceList, loading: btcLoading } = useGetBitcoinBalanceList(currentAccount?.address);
+
+  const loading = sideLoading || btcLoading;
+
+  const balanceList = [...sideBalanceList, ...btcBalanceList];
 
   const allZeroBalanceList = balanceList.every((item) => !+item.amount);
 
@@ -179,7 +178,7 @@ export default function SideTokenList({ balanceVisible }) {
           const bIndex = STATIC_TOKENS.indexOf(b.denom);
           return aIndex - bIndex;
         })
-    : balanceList.sort((a, b) => +b.totalValue - +a.totalValue);
+    : balanceList.filter((item) => !!+item.amount).sort((a, b) => +b.totalValue - +a.totalValue);
 
   return (
     <Column>
@@ -198,8 +197,8 @@ export default function SideTokenList({ balanceVisible }) {
       ) : (
         filterList.map((item) => {
           return (
-            <Fragment key={item?.asset?.symbol + item?.asset?.name}>
-              <TokenItem chainType={CHAINS_ENUM.SIDE} token={item} balanceVisible={balanceVisible} />
+            <Fragment key={item.denom + item.asset.chain}>
+              <TokenItem token={item} balanceVisible={balanceVisible} />
             </Fragment>
           );
         })

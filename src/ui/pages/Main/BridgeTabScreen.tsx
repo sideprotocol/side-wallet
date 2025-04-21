@@ -9,34 +9,16 @@ import { CoinInput } from '@/ui/components/CoinInput';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
+import useGetBridgeButtonTips from '@/ui/hooks/useGetBridgeButtonTips';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-import { useAccountBalance, useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useBitcoinRuneBalance, useBridgeParams, useBridgeState } from '@/ui/state/bridge/hook';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
-import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
 import { useNavigate } from '../MainRoute';
-
-const SAT_ITEM = {
-  denom: 'sat',
-  amount: '0',
-  denomPrice: '0',
-  formatAmount: '0',
-  totalValue: '0',
-  asset: {
-    denom: 'sat',
-    symbol: 'BTC',
-    name: 'Bitcoin',
-    exponent: '8',
-    precision: 8,
-    logo: 'https://api.side.one/static/token/logo/btc.svg',
-    runeData: null,
-    rune: false
-  }
-};
 
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
@@ -46,96 +28,15 @@ export default function BridgeTabScreen() {
 
   const { bridgeAmount, from, to, base, hoverExchange, isDeposit } = useBridgeState();
 
-  console.log({ from, to });
-
   const dispatch = useAppDispatch();
-  const isBtcBridge = base === 'sat';
 
   const assets = isDeposit ? btcBalanceList : sideBalanceList;
 
-  const { params } = useBridgeParams();
+  const bridgeAsset = assets.find((a) => a?.denom === `${base}`)!;
 
-  const protocolLimit = params?.params?.protocol_limits;
+  const balance = bridgeAsset.formatAmount;
 
-  const protocolFee = params?.params?.protocol_fees;
-
-  const depositEnabled = params?.params?.deposit_enabled;
-
-  const withdrawEnabled = params?.params?.withdraw_enabled;
-
-  const btcVault = params?.params?.vaults
-    ?.filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
-    ?.reduce(
-      (max, current) => {
-        return BigInt(current.version) > BigInt(max.version) ? current : max;
-      },
-      { version: '0', address: '' }
-    )?.address;
-
-  const runeVault = params?.params?.vaults
-    ?.filter((vault) => vault.asset_type === 'ASSET_TYPE_RUNES')
-    ?.reduce(
-      (max, current) => {
-        return BigInt(current.version) > BigInt(max.version) ? current : max;
-      },
-      { version: '0', address: '' }
-    )?.address;
-
-  const bridgeEnabled = isDeposit ? depositEnabled : withdrawEnabled;
-
-  let runeBalance = useBitcoinRuneBalance(base);
-
-  const bridgeAsset = assets.find((a) => a?.denom === `${base}`) || SAT_ITEM;
-
-  const satAsset = assets.find((a) => a?.denom === 'sat');
-
-  const accountBalance = useAccountBalance();
-  const btcBalance = accountBalance?.amount;
-
-  const balance = isDeposit ? (isBtcBridge ? btcBalance : runeBalance) : bridgeAsset?.formatAmount || '0';
-
-  const btcBalanceOnFromChain = isDeposit ? btcBalance : satAsset?.formatAmount || '0';
-
-  const isBTCEnoughPayingFee = BigNumber(toUnitAmount(btcBalanceOnFromChain, satAsset?.asset.precision || 8)).gte(
-    isDeposit ? protocolFee?.deposit_fee || 0 : protocolFee?.withdraw_fee || 0
-  );
-
-  const lessThanMinSatWithdraw =
-    base == 'sat' &&
-    BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(
-      BigNumber(protocolLimit?.btc_min_withdraw || 0).plus(protocolFee?.withdraw_fee || 0)
-    ) &&
-    !isDeposit;
-
-  const lessThanMinSatDeposit =
-    base == 'sat' &&
-    BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(
-      BigNumber(protocolLimit?.btc_min_deposit || 0).plus(protocolFee?.deposit_fee || 0)
-    ) &&
-    isDeposit;
-
-  const isGreaterThanMaxWithdraw =
-    base == 'sat' &&
-    BigNumber(toUnitAmount(bridgeAmount || '0', 8)).gt(
-      protocolLimit?.btc_max_withdraw || toUnitAmount(bridgeAmount || '0', 8)
-    ) &&
-    !isDeposit;
-
-  useEffect(() => {
-    dispatch(BridgeActions.update({ balance: balance }));
-  }, [balance]);
-
-  const isGreaterThanBalance = BigNumber(bridgeAmount || '0').gt(balance);
-  const disabled =
-    BigNumber(bridgeAmount || 0).lte(0) ||
-    isGreaterThanBalance ||
-    lessThanMinSatWithdraw ||
-    isGreaterThanMaxWithdraw ||
-    lessThanMinSatDeposit ||
-    !bridgeEnabled ||
-    !isBTCEnoughPayingFee ||
-    !btcVault ||
-    !runeVault;
+  const { isDisabled, buttonTips } = useGetBridgeButtonTips();
 
   useEffect(() => {
     const from = isDeposit
@@ -169,6 +70,10 @@ export default function BridgeTabScreen() {
       })
     );
   }, [isDeposit]);
+
+  useEffect(() => {
+    dispatch(BridgeActions.update({ balance: balance, bridgeAsset: bridgeAsset }));
+  }, [balance, bridgeAsset]);
 
   return (
     <Layout>
@@ -397,41 +302,14 @@ export default function BridgeTabScreen() {
                 onClick={() => {
                   navigate('BridgeConfirmTabScreen');
                 }}
-                disabled={disabled}
+                disabled={isDisabled}
                 full
-                text={
-                  !isBTCEnoughPayingFee
-                    ? 'Insufficient BTC balance'
-                    : lessThanMinSatDeposit || lessThanMinSatWithdraw
-                    ? `Minimum amount is ${
-                        isDeposit
-                          ? toReadableAmount(
-                              BigNumber(protocolLimit?.btc_min_deposit || '10000')
-                                .plus(protocolFee?.deposit_fee || '0')
-                                .toFixed(),
-                              8
-                            )
-                          : toReadableAmount(
-                              BigNumber(protocolLimit?.btc_min_withdraw || '20000')
-                                .plus(protocolFee?.withdraw_fee || '0')
-                                .toFixed(),
-                              8
-                            )
-                      } ${satAsset?.asset?.symbol}`
-                    : isGreaterThanBalance
-                    ? 'Insufficient Balance'
-                    : 'Bridge'
-                }
+                text={buttonTips || 'Next'}
                 preset="primary"
               />
             </Row>
           </Column>
         </Column>
-        <Row itemsCenter justifyCenter>
-          <Text text="Powered by" color="grey12" size="xs" textCenter />
-
-          <Image src={'/images/img/side-bridge.png'} width={70} height={16} />
-        </Row>
       </Content>
       <Footer px="zero" py="zero">
         <NavTabBar tab="bridge" />

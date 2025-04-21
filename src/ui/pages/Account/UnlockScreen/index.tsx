@@ -73,7 +73,7 @@ export default function UnlockScreen() {
             alignItems: 'center',
             gap: '16px'
           }}>
-          <Image src="/images/logo/wallet-logo.png" size={90} />
+          <Image src="/images/logo/wallet-logo.png" size={70} />
           <Text
             text="Welcome Back!"
             textCenter

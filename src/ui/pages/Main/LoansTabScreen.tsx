@@ -28,8 +28,8 @@ export default function LoansTabScreen() {
               Turn Your Bitcoin
               <Image
                 src="/images/icons/btc.svg"
-                height={25}
-                width={25}
+                height={20}
+                width={20}
                 style={{
                   display: 'inline',
                   marginLeft: '4px',

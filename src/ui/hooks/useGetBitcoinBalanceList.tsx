@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useQuery } from 'react-query';
 
-import { UNISAT_RUNE_URL } from '@/shared/constant';
+import { CHAINS_ENUM, UNISAT_RUNE_URL } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import services from '@/ui/services';
 
@@ -15,8 +15,9 @@ const defaultBtcBalance: BalanceItem = {
   amount: '0',
   asset: {
     denom: 'sat',
+    chain: CHAINS_ENUM.BTC,
     exponent: '8',
-    logo: `https://api.side.one/static/token/logo/btc.svg`,
+    logo: 'https://api.side.one/static/token/logo/btc.svg',
     name: 'Bitcoin',
     symbol: 'BTC',
     precision: 8,
@@ -35,7 +36,7 @@ function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
     amount: toUnitAmount(balance, '8'),
     asset: {
       denom: 'sat',
-      chain: 'bitcoin',
+      chain: CHAINS_ENUM.BTC,
       exponent: '8',
       logo: 'https://api.side.one/static/token/logo/btc.svg',
       name: 'Bitcoin',
@@ -84,7 +85,7 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
             totalValue: BigNumber(toReadableAmount(item.amount, item.divisibility)).multipliedBy(denomPrice).toFixed(2),
             asset: {
               denom: `runes/${item.runeid}`,
-              chain: 'bitcoin',
+              chain: CHAINS_ENUM.BTC,
               precision: item.divisibility,
               logo: `${UNISAT_RUNE_URL}/${item.spacedRune}`,
               name: 'Rune',

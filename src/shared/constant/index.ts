@@ -273,10 +273,9 @@ export const CHANNEL = process.env.channel!;
 export const VERSION = process.env.release!;
 export const MANIFEST_VERSION = process.env.manifest!;
 // TODO:
-export const isProduction = process.env.BUILD_ENV === 'PRO';
-export const isDev = process.env.BUILD_ENV === 'DEV';
+// export const isProduction = process.env.BUILD_ENV === 'PRO';
 
-// export const isProduction = true;
+export const isProduction = true;
 
 export enum AddressFlagType {
   Is_Enable_Atomicals = 0b1,

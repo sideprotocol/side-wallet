@@ -153,7 +153,6 @@ export async function abstractDepositBTC(params, currentAccount) {
           memos: undefined
         });
   const wallet = useWallet();
-  console.log('wallet: ', wallet);
   const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 
   const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
@@ -216,14 +215,14 @@ export async function estimateNetworkFeeHelper(params, account) {
       ? await sendAllBTC({
           btcUtxos: btcUtxos,
           toAddress: btcVaultAddress,
-          networkType: 1,
+          networkType: isProduction ? 0 : 1,
           feeRate: feeRate,
           enableRBF: true
         })
       : await sendBTC({
           btcUtxos: btcUtxos,
           tos: [{ address: btcVaultAddress, satoshis: amount }],
-          networkType: 1,
+          networkType: isProduction ? 0 : 1,
           changeAddress: senderAddress,
           feeRate: feeRate,
           enableRBF: true,

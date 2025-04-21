@@ -540,6 +540,7 @@ export interface IAsset {
   precision: number;
   rune: boolean;
   symbol: string;
+  chain?: CHAINS_ENUM;
   runeData?: {
     runeid: string;
     rune: string;

@@ -1,4 +1,4 @@
-import { CHAINS_ENUM } from '@/shared/constant';
+import { CHAINS_ENUM, SIDE_STATION_URL } from '@/shared/constant';
 import { Button, Column, Content, Footer, Icon, Layout, Row, Text } from '@/ui/components';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
@@ -33,7 +33,9 @@ export default function TxSuccessScreen() {
             itemsCenter
             justifyCenter
             onClick={() => {
-              window.open(`${blockstream}/tx/${txid}`);
+              window.open(
+                type === 'bridge' ? `${SIDE_STATION_URL}/bridge/explorer/${txid}` : `${blockstream}/tx/${txid}`
+              );
             }}>
             <Typography
               sx={{
@@ -44,7 +46,7 @@ export default function TxSuccessScreen() {
                   color: colors.white
                 }
               }}>
-              {type === 'bridge' ? 'View on Side Chain' : 'View on Block Explorer'}
+              {type === 'bridge' ? 'View on Side Station' : 'View on Block Explorer'}
             </Typography>
 
             <Icon icon="link" color="white" size={20} />
