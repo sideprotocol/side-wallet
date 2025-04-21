@@ -19,7 +19,7 @@ import { fontSizes } from '@/ui/theme/font';
 import { parseUnitAmount } from '@/ui/utils';
 import { formatAddress } from '@/ui/utils/format';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-import { Input, Typography } from '@mui/material';
+import { Box, Input, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -44,7 +44,7 @@ function DetailRow({ text, value, tooltip }: DetailRowItem) {
           </LightTooltip>
         )}
       </span>
-      <span className={'flex  w-full justify-end items-center   gap-2'}>{value}</span>
+      <span className={'flex  w-full justify-end items-center gap-1'}>{value}</span>
     </div>
   );
 }
@@ -123,6 +123,7 @@ export default function BridgeTabScreen() {
   }, [fee]);
 
   useEffect(() => {
+    if (isBtcBridge) return;
     setGetTxLoading(true);
     estimateNetworkFee({ amount: unitAmount, fee })
       .then((res) => {
@@ -136,7 +137,7 @@ export default function BridgeTabScreen() {
       .finally(() => {
         setGetTxLoading(false);
       });
-  }, [isDeposit, bridgeAmount, fee]);
+  }, [isDeposit, bridgeAmount, fee, isBtcBridge]);
 
   const getWithdrawFee = async (address: string, amount: string) => {
     const result = await services.bridge.getBridgeWithdrawFee(address, amount, sideChain.restUrl);
@@ -270,7 +271,25 @@ export default function BridgeTabScreen() {
         text={'You will receive'}
         value={
           <>
-            {yourReceive} {bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}
+            <Box
+              display={'inline'}
+              sx={{
+                maxWidth: 160,
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
+              }}>
+              {yourReceive}
+              {' '}
+              <LightTooltip
+                placement="top"
+                arrow
+                title={bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}>
+                <span className="cursor-pointer">
+                  {bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}
+                </span>
+              </LightTooltip>
+            </Box>
             <ImageIcon
               url={bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.logo : bridgeAsset?.asset.logo}
               style={{ width: 20, height: 20, borderRadius: 100 }}></ImageIcon>
@@ -318,7 +337,25 @@ export default function BridgeTabScreen() {
         text={'You will receive'}
         value={
           <>
-            {yourReceive} {bridgeAsset?.denom === 'sat' ? bitcoinAssetInfo?.asset.symbol : bridgeAsset?.asset.symbol}{' '}
+            <Box
+              display={'inline'}
+              sx={{
+                maxWidth: 160,
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
+              }}>
+              {yourReceive}{' '}
+              <LightTooltip
+                placement="top"
+                arrow
+                title={bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}>
+                <span className="cursor-pointer">
+                  {bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}
+                </span>
+              </LightTooltip>
+              {bridgeAsset?.denom === 'sat' ? bitcoinAssetInfo?.asset.symbol : bridgeAsset?.asset.symbol}{' '}
+            </Box>
             <ImageIcon
               url={bridgeAsset?.denom === 'sat' ? bitcoinAssetInfo?.asset?.logo : bridgeAsset?.asset.logo}
               style={{ width: 20, height: 20, marginLeft: '4px' }}></ImageIcon>
@@ -358,77 +395,80 @@ export default function BridgeTabScreen() {
             style={{
               gap: '12px'
             }}>
-            <Column
-              relative
-              rounded
-              style={{
-                fontSize: '14px',
-                padding: '8px',
-                background: colors.card_bgColor,
-                border: `1px solid ${colors.main}`,
-                display: isDeposit ? 'flex' : 'none'
-              }}>
-              <Row relative full justifyBetween color={'grey12'}>
-                <Typography color={colors.grey12} fontSize={'14px'} className="w-1/3 text-left">
-                  Tx
-                </Typography>
+            {isBtcBridge && (
+              <Column
+                relative
+                rounded
+                style={{
+                  fontSize: '14px',
+                  padding: '8px',
+                  background: colors.card_bgColor,
+                  border: `1px solid ${colors.main}`,
+                  display: isDeposit ? 'flex' : 'none'
+                }}>
+                <Row relative full justifyBetween color={'grey12'}>
+                  <Typography color={colors.grey12} fontSize={'14px'} className="w-1/3 text-left">
+                    Tx
+                  </Typography>
 
-                <Typography color={colors.grey12} fontSize={'14px'} className="w-1/3">
-                  Index
-                </Typography>
-                <Typography color={colors.grey12} fontSize={'14px'} className="text-right">
-                  Amount
-                </Typography>
-              </Row>
+                  <Typography color={colors.grey12} fontSize={'14px'} className="w-1/3">
+                    Index
+                  </Typography>
+                  <Typography color={colors.grey12} fontSize={'14px'} className="text-right">
+                    Amount
+                  </Typography>
+                </Row>
 
-              {tx.map((item) => {
-                return (
-                  <Row key={item.txid} relative full justifyBetween color={'white'}>
-                    <a
-                      target="_blank"
-                      className="underline text-white w-1/3 text-left hover:text-white"
-                      href={`${SIDE_BTC_EXPLORER}/tx/${item?.txid}`}
-                      rel="noreferrer">
-                      {formatAddress(item.txid || '-', 6)}
-                    </a>
+                {tx.map((item) => {
+                  return (
+                    <Row key={item.txid} relative full justifyBetween color={'white'}>
+                      <a
+                        target="_blank"
+                        className="underline text-white w-1/3 text-left hover:text-white"
+                        href={`${SIDE_BTC_EXPLORER}/tx/${item?.txid}`}
+                        rel="noreferrer">
+                        {formatAddress(item.txid || '-', 6)}
+                      </a>
 
-                    <Typography className="w-1/3 text-center">{item.vout}</Typography>
-                    <Typography className="w-1/3 text-right">
-                      {' '}
-                      {toReadableAmount(item.satoshis.toString() || '0', 8)}
-                    </Typography>
-                  </Row>
-                );
-              })}
-            </Column>
+                      <Typography className="w-1/3 text-center">{item.vout}</Typography>
+                      <Typography className="w-1/3 text-right">
+                        {' '}
+                        {toReadableAmount(item.satoshis.toString() || '0', 8)}
+                      </Typography>
+                    </Row>
+                  );
+                })}
+              </Column>
+            )}
+            {isBtcBridge && (
+              <Column relative classname="bg-[#F0B622] p-3 px-2 bg-opacity-30 " rounded>
+                <div className="flex items-start gap-1">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M11.9978 8.99632V12.9963M11.9978 16.9963H12.0078M10.6131 3.88805L2.38823 18.0947C1.93203 18.8827 1.70393 19.2767 1.73764 19.6C1.76705 19.8821 1.91482 20.1384 2.14417 20.3051C2.40713 20.4963 2.86239 20.4963 3.77292 20.4963H20.2227C21.1332 20.4963 21.5885 20.4963 21.8514 20.3051C22.0808 20.1384 22.2286 19.8821 22.258 19.6C22.2917 19.2767 22.0636 18.8827 21.6074 18.0947L13.3825 3.88804C12.9279 3.10288 12.7006 2.7103 12.4041 2.57845C12.1454 2.46343 11.8502 2.46343 11.5915 2.57845C11.295 2.7103 11.0677 3.10288 10.6131 3.88805Z"
+                      stroke="#F0B622"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
 
-            <Column relative classname="bg-[#F0B622] p-3 px-2 bg-opacity-30 " rounded>
-              <div className="flex items-start gap-1">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M11.9978 8.99632V12.9963M11.9978 16.9963H12.0078M10.6131 3.88805L2.38823 18.0947C1.93203 18.8827 1.70393 19.2767 1.73764 19.6C1.76705 19.8821 1.91482 20.1384 2.14417 20.3051C2.40713 20.4963 2.86239 20.4963 3.77292 20.4963H20.2227C21.1332 20.4963 21.5885 20.4963 21.8514 20.3051C22.0808 20.1384 22.2286 19.8821 22.258 19.6C22.2917 19.2767 22.0636 18.8827 21.6074 18.0947L13.3825 3.88804C12.9279 3.10288 12.7006 2.7103 12.4041 2.57845C12.1454 2.46343 11.8502 2.46343 11.5915 2.57845C11.295 2.7103 11.0677 3.10288 10.6131 3.88805Z"
-                    stroke="#F0B622"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-
-                <div className="font-semibold text-sm text-[#F0B622]">
-                  {!isDeposit
-                    ? ' Your sBTC tokens on the Side Chain will be burnt'
-                    : 'Make sure above UTXO carries no inscripted assets'}
+                  <div className="font-semibold text-sm text-[#F0B622]">
+                    {!isDeposit
+                      ? ' Your sBTC tokens on the Side Chain will be burnt'
+                      : 'Make sure above UTXO carries no inscripted assets'}
+                  </div>
                 </div>
-              </div>
 
-              <div className="text-white text-xs font-normal pl-6">
-                {!isDeposit
-                  ? 'In return, you will receive native BTC on the Bitcoin network. Ensure you have noted this change and take any necessary actions to secure your assets.'
-                  : 'This transaction will use the above Inputs. Please double check and confirm that these Inputs do not carry other assets including Ordinals and Runes.'}
-              </div>
-            </Column>
+                <div className="text-white text-xs font-normal pl-6">
+                  {!isDeposit
+                    ? 'In return, you will receive native BTC on the Bitcoin network. Ensure you have noted this change and take any necessary actions to secure your assets.'
+                    : 'This transaction will use the above Inputs. Please double check and confirm that these Inputs do not carry other assets including Ordinals and Runes.'}
+                </div>
+              </Column>
+            )}
 
-            <Column relative rounded bg={'card_bgColor'} classname=" p-2 py-3">
+            <Column relative rounded bg={'card_bgColor'} mt="lg" classname=" p-2 py-3">
               {isDeposit ? depositDetailItems : withdrawDetailItems}
             </Column>
 

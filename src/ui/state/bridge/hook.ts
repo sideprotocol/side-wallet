@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
 import { useCallback, useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 
 import { MessageComposer } from '@/codegen/src/side/btcbridge/tx.registry';
 import { CHAINS_ENUM, isProduction } from '@/shared/constant';
@@ -9,7 +10,6 @@ import { RuneBalance, TickPriceItem } from '@/shared/types';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
-import { SideBridgeParams } from '@/ui/services/bridge';
 import { useChainType } from '@/ui/state/settings/hooks';
 import { parseUnitAmount, useWallet } from '@/ui/utils';
 import { satoshisToAmount, sendAllBTC, sendBTC, sendRunesWithBTC } from '@/ui/wallet-sdk/utils';
@@ -19,6 +19,7 @@ import { AppState } from '..';
 import { useCurrentAccount } from '../accounts/hooks';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { useNetworkType } from '../settings/hooks';
+import { useSafeBalance, useUtxos } from '../transactions/hooks';
 import { useSignAndBroadcastTxRaw } from '../transactions/hooks/cosmos';
 import { BridgeActions, DepositBTCBridge } from './reducer';
 
@@ -104,6 +105,10 @@ export const useBridge = () => {
 
   const tools = useTools();
 
+  const safeBalance = useSafeBalance();
+
+  const _utxos = useUtxos();
+
   const networkType = useNetworkType();
   const wallet = useWallet();
   const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, exponent)).toNumber();
@@ -188,7 +193,7 @@ export const useBridge = () => {
         })
           .then((res) => {
             if (res) {
-              navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE_SIGNET });
+              navigate('TxSuccessScreen', { txid: res, chain: CHAINS_ENUM.SIDE });
             }
           })
           .catch((err) => {
@@ -236,10 +241,6 @@ export const useBridge = () => {
     const senderAddress = currentAccount?.address;
 
     const pbk = currentAccount?.pubkey;
-
-    const _utxos = await services.unisat.getBTCUtxos({ address: senderAddress });
-
-    const safeBalance = _utxos.filter((v) => v.inscriptions.length == 0).reduce((pre, cur) => pre + cur.satoshis, 0);
 
     if (safeBalance < amount) {
       throw new Error(
@@ -310,8 +311,6 @@ export const useBridge = () => {
     const btcVaultAddress = btcVault.address;
 
     const runeVaultAddress = runeVault.address;
-
-    const _utxos = await services.unisat.getBTCUtxos({ address: senderAddress });
 
     const btcUtxos: UnspentOutput[] = _utxos.map((v) => {
       return {
@@ -417,10 +416,6 @@ export const useBridge = () => {
     const { amount, fee } = params;
     const senderAddress = currentAccount.address;
 
-    const _utxos = await services.unisat.getBTCUtxos({ address: senderAddress });
-
-    const safeBalance = _utxos.filter((v) => v.inscriptions.length == 0).reduce((pre, cur) => pre + cur.satoshis, 0);
-
     if (safeBalance < amount) {
       throw new Error(
         `Insufficient balance. Non-Inscription balance(${satoshisToAmount(
@@ -486,21 +481,18 @@ export function useQueryAddressUtxo() {
 }
 
 export function useBridgeParams() {
-  const [params, setParams] = useState<SideBridgeParams>();
-
-  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-  const fetchParams = async () => {
-    setLoading(true);
-    const params = await services.bridge.getBridgeParams();
-    setParams(params);
-    dispatch(BridgeActions.update({ params }));
-    setLoading(false);
-  };
 
-  useEffect(() => {
-    fetchParams();
-  }, []);
+  const { data: params, isLoading } = useQuery({
+    queryKey: ['bridgeParams'],
+    queryFn: async () => {
+      const params = await services.bridge.getBridgeParams();
 
-  return { params, loading };
+      dispatch(BridgeActions.update({ params }));
+
+      return params;
+    }
+  });
+
+  return { params, loading: isLoading };
 }

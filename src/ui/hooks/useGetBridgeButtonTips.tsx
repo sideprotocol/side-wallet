@@ -6,6 +6,7 @@ import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
 import { useCurrentAccount } from '../state/accounts/hooks';
 import { useBridgeParams, useBridgeState } from '../state/bridge/hook';
+import { useUtxos } from '../state/transactions/hooks';
 import { estimateNetworkFeeHelper } from '../wallet-sdk/utils';
 import useGetBitcoinBalanceList from './useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from './useGetSideBalanceList';
@@ -24,6 +25,8 @@ export default function useGetButtonTips() {
   const [btcTransferGasError, setBtcTransferGasError] = useState<string | undefined>(undefined);
   const [debouncedBridgeAmount] = useDebounce(bridgeAmount, 300);
 
+  const _utxos = useUtxos();
+
   // 校验比特币跨链的网络费用
   async function estimateNetworkFee() {
     if (!isDeposit || !params || +debouncedBridgeAmount > +balance) {
@@ -38,6 +41,8 @@ export default function useGetButtonTips() {
             : +toUnitAmount(debouncedBridgeAmount || '0', bridgeAsset?.asset?.exponent || 8),
           fee: fee
         },
+        params,
+        _utxos,
         currentAccount
       )
         .then(() => {

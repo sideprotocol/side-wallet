@@ -1,10 +1,12 @@
 import BigNumber from 'bignumber.js';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import { CHAINS_ENUM, UNISAT_RUNE_URL } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import services from '@/ui/services';
 
+import { useFetchUtxosCallback, useSafeBalance } from '../state/transactions/hooks';
 import { toReadableAmount, toUnitAmount } from '../utils/formatter';
 
 const defaultBtcBalance: BalanceItem = {
@@ -48,6 +50,19 @@ function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
 }
 
 export default function useGetBitcoinBalanceList(address?: string, flag?: boolean) {
+  const fetchUtxos = useFetchUtxosCallback();
+
+  const [fetchUtxoLoading, setFetchUtxoLoading] = useState(true);
+
+  useEffect(() => {
+    setFetchUtxoLoading(true);
+    fetchUtxos().finally(() => {
+      setFetchUtxoLoading(false);
+    });
+  }, []);
+
+  const safeBalance = useSafeBalance();
+
   const { data, isLoading } = useQuery({
     queryKey: [
       'getBitcoinBalanceList',
@@ -59,9 +74,7 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
     queryFn: async () => {
       try {
         // btc 资产
-        const btcAmount = await services.unisat.getAvailableBtcBalance({
-          address: address!
-        });
+        const btcAmount = safeBalance;
 
         // rune 资产
         const { list } = await services.unisat.getRunesList({
@@ -96,7 +109,7 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
             }
           } as BalanceItem;
         });
-        const btcBalance = formatBitcoinItem(btcAmount, priceMap['sat']);
+        const btcBalance = formatBitcoinItem(btcAmount.toString(), priceMap['sat']);
 
         return [btcBalance, ...runeBalanceList];
       } catch (err) {
@@ -104,7 +117,7 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
       }
       return [defaultBtcBalance];
     },
-    enabled: !!address || !!flag,
+    enabled: !fetchUtxoLoading && (!!address || !!flag),
     refetchInterval: 600000,
     refetchIntervalInBackground: true
   });
