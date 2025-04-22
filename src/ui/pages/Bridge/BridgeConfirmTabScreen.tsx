@@ -409,9 +409,10 @@ export default function BridgeTabScreen() {
                         {formatAddress(item.txid || '-', 6)}
                       </a>
 
-                      <Typography className="w-1/3 text-center">{item.vout}</Typography>
-                      <Typography className="w-1/3 text-right">
-                        {' '}
+                      <Typography fontSize={'14px'} className="w-1/3 text-center">
+                        {item.vout}
+                      </Typography>
+                      <Typography fontSize={'14px'} className="w-1/3 text-right">
                         {toReadableAmount(item.satoshis.toString() || '0', 8)}
                       </Typography>
                     </Row>
