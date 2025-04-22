@@ -206,7 +206,7 @@ export default function WalletTabScreen() {
           <div
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
-              window.open(`${SIDE_STATION_URL}/explorer/account/${currentAccount.address}`, '_blank');
+              window.open(`${SIDE_STATION_URL}/explorer/address/${currentAccount.address}`, '_blank');
             }}>
             <div className="w-[75px] h-[66px] gap-2 pt-1 rounded-xl flex flex-col items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">

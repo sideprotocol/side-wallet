@@ -123,7 +123,7 @@ export default function BridgeTabScreen() {
   }, [fee]);
 
   useEffect(() => {
-    if (isBtcBridge) return;
+    if (!isBtcBridge) return;
     setGetTxLoading(true);
     estimateNetworkFee({ amount: unitAmount, fee })
       .then((res) => {
@@ -279,8 +279,7 @@ export default function BridgeTabScreen() {
                 overflow: 'hidden',
                 whiteSpace: 'nowrap'
               }}>
-              {yourReceive}
-              {' '}
+              {yourReceive}{' '}
               <LightTooltip
                 placement="top"
                 arrow

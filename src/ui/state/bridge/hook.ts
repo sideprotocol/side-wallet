@@ -242,7 +242,7 @@ export const useBridge = () => {
 
     const pbk = currentAccount?.pubkey;
 
-    if (safeBalance < amount) {
+    if (safeBalance < +satoshisToAmount(amount)) {
       throw new Error(
         `Insufficient balance. Non-Inscription balance(${satoshisToAmount(
           safeBalance
@@ -416,7 +416,7 @@ export const useBridge = () => {
     const { amount, fee } = params;
     const senderAddress = currentAccount.address;
 
-    if (safeBalance < amount) {
+    if (safeBalance < +satoshisToAmount(amount)) {
       throw new Error(
         `Insufficient balance. Non-Inscription balance(${satoshisToAmount(
           safeBalance
