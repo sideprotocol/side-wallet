@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
-import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import { CHAINS_ENUM, UNISAT_RUNE_URL } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import services from '@/ui/services';
 
-import { useFetchUtxosCallback, useSafeBalance } from '../state/transactions/hooks';
+import { useFetchUtxosCallback } from '../state/transactions/hooks/index';
+import { satoshisToAmount } from '../utils';
 import { toReadableAmount, toUnitAmount } from '../utils/formatter';
 
 const defaultBtcBalance: BalanceItem = {
@@ -52,17 +52,6 @@ function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
 export default function useGetBitcoinBalanceList(address?: string, flag?: boolean) {
   const fetchUtxos = useFetchUtxosCallback();
 
-  const [fetchUtxoLoading, setFetchUtxoLoading] = useState(true);
-
-  useEffect(() => {
-    setFetchUtxoLoading(true);
-    fetchUtxos().finally(() => {
-      setFetchUtxoLoading(false);
-    });
-  }, []);
-
-  const safeBalance = useSafeBalance();
-
   const { data, isLoading } = useQuery({
     queryKey: [
       'getBitcoinBalanceList',
@@ -74,9 +63,12 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
     queryFn: async () => {
       try {
         // btc 资产
-        const btcAmount = safeBalance;
 
-        // rune 资产
+        const utxos = await fetchUtxos();
+        const safeBalance = utxos.filter((v) => v.inscriptions.length == 0).reduce((pre, cur) => pre + cur.satoshis, 0);
+
+        const btcAmount = satoshisToAmount(safeBalance);
+
         const { list } = await services.unisat.getRunesList({
           address: address!,
           currentPage: 1,
@@ -117,7 +109,7 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
       }
       return [defaultBtcBalance];
     },
-    enabled: !fetchUtxoLoading && (!!address || !!flag),
+    enabled: !!address || !!flag,
     refetchInterval: 600000,
     refetchIntervalInBackground: true
   });

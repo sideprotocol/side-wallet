@@ -42,7 +42,6 @@ export interface BridgeState {
   feeSummary: any[];
   loading: boolean;
   selectTokenModalShow: boolean;
-  accountUtxo: UTXOAddress | null;
   hoverExchange: boolean;
   isDeposit: boolean;
   params: SideBridgeParams;
@@ -61,7 +60,6 @@ export const initialState: BridgeState = {
   feeSummary: [],
   loading: false,
   selectTokenModalShow: false,
-  accountUtxo: null,
   hoverExchange: false,
   params: {} as SideBridgeParams,
   bridgeAsset: {} as BalanceItem
@@ -88,7 +86,6 @@ const slice = createSlice({
           feeSummary?: any[];
           loading?: boolean;
           selectTokenModalShow?: boolean;
-          accountUtxo?: UTXOAddress | null;
           hoverExchange?: boolean;
           isDeposit?: boolean;
           params?: SideBridgeParams;

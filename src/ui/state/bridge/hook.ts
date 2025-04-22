@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import { MessageComposer } from '@/codegen/src/side/btcbridge/tx.registry';
@@ -456,29 +456,6 @@ export const useBridge = () => {
 
   return { bridge, bridgeRune, estimateNetworkFee };
 };
-
-export function useQueryAddressUtxo() {
-  const dispatch = useAppDispatch();
-  return useCallback(
-    async (address: string, UNISAT_SERVICE_ENDPOINT: string) => {
-      if (!address) return;
-      const utxos = await fetch(`${UNISAT_SERVICE_ENDPOINT}/v5/address/btc-utxo?address=${address}`).then((res) =>
-        res.json()
-      );
-
-      if (utxos.length === 1) {
-        dispatch(BridgeActions.update({ accountUtxo: utxos[0] }));
-        return;
-      }
-
-      const vout1 = utxos?.data?.find((utxo) => utxo.vout === 1);
-      if (vout1) {
-        dispatch(BridgeActions.update({ accountUtxo: vout1 }));
-      }
-    },
-    [dispatch]
-  );
-}
 
 export function useBridgeParams() {
   const dispatch = useAppDispatch();

@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 
-import { KEYRING_TYPE, SIDE_BTC_EXPLORER, UNISAT_SERVICE_ENDPOINT, sideChain } from '@/shared/constant';
+import { KEYRING_TYPE, SIDE_BTC_EXPLORER, sideChain } from '@/shared/constant';
 import { Button, Column, Content, Footer, Header, Icon, Image, Layout, LightTooltip, Row } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
@@ -10,7 +10,7 @@ import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import AccountSelect from '@/ui/pages/Account/AccountSelect';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useBridge, useBridgeState, useQueryAddressUtxo } from '@/ui/state/bridge/hook';
+import { useBridge, useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
@@ -83,8 +83,8 @@ export default function BridgeTabScreen() {
   const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, 8)).toNumber();
 
   const currentAccount = useCurrentAccount();
-  const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
-  const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
+  const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount.address);
+  const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount.address);
 
   const assets = isDeposit ? btcBalanceList : sideBalanceList;
   const balanceList = assets?.filter((item) => {
@@ -150,12 +150,6 @@ export default function BridgeTabScreen() {
 
   const isDisabled =
     BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(networkFee) || loading || Number(fee) === 0 || getTxLoading;
-
-  const queryAddressUtxo = useQueryAddressUtxo();
-
-  useEffect(() => {
-    queryAddressUtxo(currentAccount.address, UNISAT_SERVICE_ENDPOINT);
-  }, [currentAccount.address]);
 
   const satPrice = sideFeeInfo?.denomPrice || bitcoinFeeInfo?.denomPrice || '0';
 
