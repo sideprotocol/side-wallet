@@ -45,7 +45,8 @@ export default function useGetButtonTips() {
         _utxos,
         currentAccount
       )
-        .then(() => {
+        .then((res) => {
+          console.log({ res, fee });
           setBtcTransferGasError(undefined);
         })
         .catch((error) => {
@@ -58,7 +59,7 @@ export default function useGetButtonTips() {
 
   useEffect(() => {
     estimateNetworkFee();
-  }, [bridgeAsset, debouncedBridgeAmount, params, balance]);
+  }, [bridgeAsset, debouncedBridgeAmount, params, balance, fee]);
 
   const { transferBtcDisabled, transferBtcButtonTips } = useMemo(() => {
     // 未链接钱包 + 未输入

@@ -115,11 +115,7 @@ export default function BridgeTabScreen() {
   const sideFeeInfo = sideBalanceList.find((item) => item.denom === 'sat');
 
   useEffect(() => {
-    services.unisat.getFeeSummary().then((res) => {
-      const rcFee = res.list[2].feeRate;
-      setNetworkFee(rcFee || 20);
-      dispatch(BridgeActions.update({ fee: +rcFee, feeSummary: res.list }));
-    });
+    setNetworkFee(fee || 20);
   }, [fee]);
 
   useEffect(() => {

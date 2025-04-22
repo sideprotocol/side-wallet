@@ -12,6 +12,7 @@ import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import useGetBridgeButtonTips from '@/ui/hooks/useGetBridgeButtonTips';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
+import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
@@ -70,6 +71,13 @@ export default function BridgeTabScreen() {
       })
     );
   }, [isDeposit]);
+
+  useEffect(() => {
+    services.unisat.getFeeSummary().then((res) => {
+      const rcFee = res.list[2].feeRate;
+      dispatch(BridgeActions.update({ fee: +rcFee, feeSummary: res.list }));
+    });
+  }, []);
 
   useEffect(() => {
     dispatch(BridgeActions.update({ balance: balance, bridgeAsset: bridgeAsset }));
