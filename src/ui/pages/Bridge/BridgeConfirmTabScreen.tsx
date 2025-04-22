@@ -361,7 +361,7 @@ export default function BridgeTabScreen() {
         RightComponent={''}
       />
       <Content classname={'hide-scrollbar'}>
-        <Row full relative rounded={true}>
+        <Row full relative mt="lg" rounded={true}>
           <Column
             full
             relative
@@ -442,7 +442,7 @@ export default function BridgeTabScreen() {
               </Column>
             )}
 
-            <Column relative rounded bg={'card_bgColor'} mt="lg" classname=" p-2 py-3">
+            <Column relative rounded bg={'card_bgColor'} classname=" p-2 py-3">
               {isDeposit ? depositDetailItems : withdrawDetailItems}
             </Column>
 
