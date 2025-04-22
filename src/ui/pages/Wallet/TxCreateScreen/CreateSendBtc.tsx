@@ -203,7 +203,6 @@ export default function CreateSendBtc() {
           <Input
             preset="amount"
             placeholder={'Amount'}
-            defaultValue={inputAmount}
             value={inputAmount}
             onAmountInputChange={(amount) => {
               setError('');
