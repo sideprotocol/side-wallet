@@ -279,15 +279,7 @@ export default function BridgeTabScreen() {
                 overflow: 'hidden',
                 whiteSpace: 'nowrap'
               }}>
-              {yourReceive}{' '}
-              <LightTooltip
-                placement="top"
-                arrow
-                title={bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}>
-                <span className="cursor-pointer">
-                  {bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}
-                </span>
-              </LightTooltip>
+              {yourReceive} {bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}
             </Box>
             <ImageIcon
               url={bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.logo : bridgeAsset?.asset.logo}
@@ -345,15 +337,7 @@ export default function BridgeTabScreen() {
                 whiteSpace: 'nowrap'
               }}>
               {yourReceive}{' '}
-              <LightTooltip
-                placement="top"
-                arrow
-                title={bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}>
-                <span className="cursor-pointer">
-                  {bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}
-                </span>
-              </LightTooltip>
-              {bridgeAsset?.denom === 'sat' ? bitcoinAssetInfo?.asset.symbol : bridgeAsset?.asset.symbol}{' '}
+              {bridgeAsset?.denom === 'sat' ? bitcoinAssetInfo?.asset?.symbol : sideAssetInfo?.asset.symbol}
             </Box>
             <ImageIcon
               url={bridgeAsset?.denom === 'sat' ? bitcoinAssetInfo?.asset?.logo : bridgeAsset?.asset.logo}
