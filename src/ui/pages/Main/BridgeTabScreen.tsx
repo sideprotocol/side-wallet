@@ -33,9 +33,9 @@ export default function BridgeTabScreen() {
 
   const assets = isDeposit ? btcBalanceList : sideBalanceList;
 
-  const bridgeAsset = assets.find((a) => a?.denom === `${base}`)!;
+  const bridgeAsset = assets.find((a) => a?.denom === `${base}`);
 
-  const balance = bridgeAsset.formatAmount;
+  const balance = bridgeAsset?.formatAmount || '';
 
   const { isDisabled, buttonTips } = useGetBridgeButtonTips();
 
@@ -285,9 +285,9 @@ export default function BridgeTabScreen() {
                     size={14}
                     coin={{
                       amount: bridgeAmount,
-                      denom: bridgeAsset.denom
+                      denom: bridgeAsset?.denom || ''
                     }}
-                    decimalScale={+bridgeAsset.asset.exponent}
+                    decimalScale={bridgeAsset ? +bridgeAsset.asset.exponent : 6}
                     onChange={(value) => {
                       dispatch(BridgeActions.update({ bridgeAmount: value }));
                     }}
