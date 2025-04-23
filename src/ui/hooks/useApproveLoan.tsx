@@ -61,9 +61,7 @@ export default function useApproveLoan(loan_id: string, collateralAmount: string
 
   const navigate = useNavigate();
 
-  console.log({ loan_id, collateralAmount });
-
-  const { txids, depositTxs, refetch } = useGetDepositTx(loan_id, collateralAmount);
+  const { depositTxs, refetch } = useGetDepositTx(loan_id, collateralAmount);
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 

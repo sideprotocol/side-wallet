@@ -24,10 +24,18 @@ export interface LoanAuthorizeLocationState {
   collateralAmount: string;
   feeRate: number;
   liquidationEvent: LiquidationEvent;
+  isWalletDeposit?: boolean;
 }
 
 export default function LoanAuthorizeScreen() {
-  const { loanId, feeRate, borrowAmount, collateralAmount } = useLocationState<LoanAuthorizeLocationState>();
+  const {
+    loanId,
+    feeRate,
+    borrowAmount,
+    collateralAmount,
+    isWalletDeposit,
+    liquidationEvent: LiquidationEventExact
+  } = useLocationState<LoanAuthorizeLocationState>();
   const currentAccount = useCurrentAccount();
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
@@ -47,7 +55,7 @@ export default function LoanAuthorizeScreen() {
 
   const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
 
-  const { liquidationEvent } = useGetLiquidationEvent({
+  const { liquidationEvent: liquidationEventCalc } = useGetLiquidationEvent({
     bitcoinAmount: value ? satoshisToAmount(value) : '',
     borrowToken: poolData?.token,
     borrowTokenAmount: toReadableAmount(borrowAmount, poolData?.token.asset.exponent || 6),
@@ -55,7 +63,7 @@ export default function LoanAuthorizeScreen() {
     maturity: maturity
   });
 
-  console.log({ liquidationEvent });
+  const liquidationEvent = isWalletDeposit ? LiquidationEventExact : liquidationEventCalc;
 
   const data = [
     {

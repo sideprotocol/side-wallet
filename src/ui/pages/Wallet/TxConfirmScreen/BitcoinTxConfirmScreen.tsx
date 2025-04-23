@@ -38,7 +38,8 @@ export default function BitcoinTxConfirmScreen() {
                 borrowAmount: lendingState.borrowAmount,
                 collateralAmount: lendingState.collateralAmount,
                 feeRate: lendingState.feeRate,
-                liquidationEvent: lendingState.liquidationEvent
+                liquidationEvent: lendingState.liquidationEvent,
+                isWalletDeposit: true
               });
             }
             navigate('TxSuccessScreen', { txid });

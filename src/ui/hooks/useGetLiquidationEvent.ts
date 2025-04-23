@@ -27,7 +27,7 @@ export default function useGetLiquidationEvent({
 
   const bitcoinToken = bitcoinBalanceList.find((item) => item.denom === 'sat');
 
-  const { data } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: [
       'getLiquidationEvent',
       { bitcoinAmount, borrowTokenAmount, bitcoinPrice: bitcoinToken?.denomPrice, maturity }
@@ -47,6 +47,8 @@ export default function useGetLiquidationEvent({
   });
 
   return {
-    liquidationEvent: data
+    liquidationEvent: data,
+    refetch,
+    isLoading
   };
 }
