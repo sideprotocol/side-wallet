@@ -2,7 +2,7 @@
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryEventRequest, QueryEventResponse, QueryEventsRequest, QueryEventsResponse, QueryAttestationRequest, QueryAttestationResponse, QueryAttestationByEventRequest, QueryAttestationByEventResponse, QueryAttestationsRequest, QueryAttestationsResponse, QueryPriceRequest, QueryPriceResponse, QueryNonceRequest, QueryNonceResponse, QueryNoncesRequest, QueryNoncesResponse, QueryCountNoncesRequest, QueryCountNoncesResponse, QueryOraclesRequest, QueryOraclesResponse, QueryDCMsRequest, QueryDCMsResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryEventRequest, QueryEventResponse, QueryEventsRequest, QueryEventsResponse, QueryAttestationRequest, QueryAttestationResponse, QueryAttestationByEventRequest, QueryAttestationByEventResponse, QueryAttestationsRequest, QueryAttestationsResponse, QueryNonceRequest, QueryNonceResponse, QueryNoncesRequest, QueryNoncesResponse, QueryCountNoncesRequest, QueryCountNoncesResponse, QueryOraclesRequest, QueryOraclesResponse, QueryDCMsRequest, QueryDCMsResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Params queries the parameters of the module. */
@@ -17,8 +17,6 @@ export interface Query {
   attestationByEvent(request: QueryAttestationByEventRequest): Promise<QueryAttestationByEventResponse>;
   /** Attestations queries all attestations. */
   attestations(request?: QueryAttestationsRequest): Promise<QueryAttestationsResponse>;
-  /** Price queries the current price by the given symbol. */
-  price(request: QueryPriceRequest): Promise<QueryPriceResponse>;
   /** Nonce queries the nonce by the given oracle id and index */
   nonce(request: QueryNonceRequest): Promise<QueryNonceResponse>;
   /** Nonces queries all nonces of the given oracle */
@@ -40,7 +38,6 @@ export class QueryClientImpl implements Query {
     this.attestation = this.attestation.bind(this);
     this.attestationByEvent = this.attestationByEvent.bind(this);
     this.attestations = this.attestations.bind(this);
-    this.price = this.price.bind(this);
     this.nonce = this.nonce.bind(this);
     this.nonces = this.nonces.bind(this);
     this.countNonces = this.countNonces.bind(this);
@@ -78,11 +75,6 @@ export class QueryClientImpl implements Query {
     const data = QueryAttestationsRequest.encode(request).finish();
     const promise = this.rpc.request("side.dlc.Query", "Attestations", data);
     return promise.then(data => QueryAttestationsResponse.decode(new BinaryReader(data)));
-  }
-  price(request: QueryPriceRequest): Promise<QueryPriceResponse> {
-    const data = QueryPriceRequest.encode(request).finish();
-    const promise = this.rpc.request("side.dlc.Query", "Price", data);
-    return promise.then(data => QueryPriceResponse.decode(new BinaryReader(data)));
   }
   nonce(request: QueryNonceRequest): Promise<QueryNonceResponse> {
     const data = QueryNonceRequest.encode(request).finish();
@@ -131,9 +123,6 @@ export const createRpcQueryExtension = (base: QueryClient) => {
     },
     attestations(request?: QueryAttestationsRequest): Promise<QueryAttestationsResponse> {
       return queryService.attestations(request);
-    },
-    price(request: QueryPriceRequest): Promise<QueryPriceResponse> {
-      return queryService.price(request);
     },
     nonce(request: QueryNonceRequest): Promise<QueryNonceResponse> {
       return queryService.nonce(request);

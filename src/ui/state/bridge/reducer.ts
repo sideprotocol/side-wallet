@@ -1,3 +1,5 @@
+import { BalanceItem } from '@/shared/types';
+import { SideBridgeParams } from '@/ui/services/bridge';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { updateVersion } from '../global/actions';
@@ -40,8 +42,10 @@ export interface BridgeState {
   feeSummary: any[];
   loading: boolean;
   selectTokenModalShow: boolean;
-  accountUtxo: UTXOAddress | null;
   hoverExchange: boolean;
+  isDeposit: boolean;
+  params: SideBridgeParams;
+  bridgeAsset: BalanceItem;
 }
 
 export const initialState: BridgeState = {
@@ -52,11 +56,13 @@ export const initialState: BridgeState = {
   to: {} as ChainItem,
   balance: '',
   fee: 20,
+  isDeposit: true,
   feeSummary: [],
   loading: false,
   selectTokenModalShow: false,
-  accountUtxo: null,
-  hoverExchange: false
+  hoverExchange: false,
+  params: {} as SideBridgeParams,
+  bridgeAsset: {} as BalanceItem
 };
 
 const slice = createSlice({
@@ -80,8 +86,10 @@ const slice = createSlice({
           feeSummary?: any[];
           loading?: boolean;
           selectTokenModalShow?: boolean;
-          accountUtxo?: UTXOAddress | null;
           hoverExchange?: boolean;
+          isDeposit?: boolean;
+          params?: SideBridgeParams;
+          bridgeAsset?: BalanceItem;
         };
       }
     ) {

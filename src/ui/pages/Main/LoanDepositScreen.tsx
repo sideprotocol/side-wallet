@@ -1,14 +1,18 @@
+import { QRCodeSVG } from 'qrcode.react';
 import { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 import 'swiper/css';
 
-import { COIN_DUST, SIDE_HUB_URL } from '@/shared/constant';
+import { COIN_DUST, SIDE_BTC_EXPLORER } from '@/shared/constant';
 import { RawTxInfo } from '@/shared/types';
-import { Button, Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Footer, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
+import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
+import ToastView from '@/ui/components/ToastView';
+import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useNavigate } from '@/ui/pages/MainRoute';
-// import { useSendRune } from '@/ui/state/send/hook';
 import { LiquidationEvent } from '@/ui/services/lending/types';
 import { useBTCUnit } from '@/ui/state/settings/hooks';
 import {
@@ -20,7 +24,8 @@ import {
 } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { colors } from '@/ui/theme/colors';
-import { amountToSatoshis, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
+import { amountToSatoshis, copyToClipboard, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
+import { Box, Stack, Typography } from '@mui/material';
 
 interface LoanDepositLocationState {
   borrowAmount: string;
@@ -57,6 +62,30 @@ export default function LoanDepositScreen() {
   }, []);
 
   const prepareSendBTC = usePrepareSendBTCCallback();
+
+  const [isClickCopy, setIsClickCopy] = useState(false);
+
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const [isClickCopyAmount, setIsClickCopyAmount] = useState(false);
+
+  const [temporaryLoading, setTemporaryLoading] = useState(false);
+
+  const { refetch, depositTxs } = useGetDepositTx(toInfo.address, collateralAmount);
+
+  useEffect(() => {
+    console.log({ depositTxs });
+
+    if (depositTxs?.length) {
+      navigate('LoanAuthorizeScreen', {
+        loanId: toInfo.address,
+        borrowAmount,
+        collateralAmount,
+        feeRate,
+        liquidationEvent
+      });
+    }
+  }, [depositTxs]);
 
   const avaiableSatoshis = useMemo(() => {
     return amountToSatoshis(safeBalance);
@@ -130,7 +159,7 @@ export default function LoanDepositScreen() {
         <Row>
           <Text
             text="Step 1: Fund BTC Collateral"
-            size="xs"
+            size="lg"
             style={{
               fontWeight: 700
             }}></Text>
@@ -140,6 +169,7 @@ export default function LoanDepositScreen() {
           bg="black_dark2"
           fullX
           style={{
+            // borderRadius: '100%',
             borderRadius: '10px',
             height: 6
           }}>
@@ -147,20 +177,130 @@ export default function LoanDepositScreen() {
             bg="main"
             fullY
             style={{
-              width: '50%',
-              borderRadius: '10px'
+              borderRadius: '10px',
+              width: '50%'
             }}
           />
         </Row>
 
-        <Column itemsCenter gap="xl" mt="lg">
-          <Text text="Funding using Side Wallet" color="white_muted" size="xs"></Text>
+        <Column itemsCenter gap="lg">
+          <Box
+            sx={{
+              borderRadius: '6px',
+              overflow: 'hidden'
+            }}>
+            <QRCodeSVG value={toInfo.address} marginSize={1} width={140} height={140} fgColor={'#000'} />
+          </Box>
 
-          <Image src="/images/logo/wallet-logo.png" width={62} height={62} />
+          <Stack
+            justifyContent="space-between"
+            gap="8px"
+            sx={{
+              flex: 1,
+              overflow: 'hidden'
+            }}>
+            <Box>
+              <Typography
+                color={colors.grey12}
+                sx={{
+                  fontSize: '12px'
+                }}>
+                Collateral Vault Address
+              </Typography>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                gap="8px"
+                sx={{
+                  p: '8px',
+                  borderRadius: '10px',
+                  bgcolor: colors.card_bgColor,
+                  width: '100%',
+                  mt: '8px'
+                }}>
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    wordBreak: 'break-all',
+                    lineHeight: '16px',
+                    cursor: 'pointer',
+                    ':hover': {
+                      textDecorationLine: 'underline'
+                    }
+                  }}
+                  onClick={() => {
+                    window.open(`${SIDE_BTC_EXPLORER}/address/${toInfo.address}`);
+                  }}>
+                  {toInfo.address}
+                </Typography>
+                <Box
+                  onClick={(e) => {
+                    copyToClipboard(toInfo.address).then(() => {
+                      // tools.toastSuccess('Copied');
+                      setTimeout(() => {
+                        setIsClickCopy(false);
+                      }, 3000);
+                    });
+                    setIsClickCopy(true);
+                  }}>
+                  <Icon color="main" icon={isClickCopy ? 'check-circle-broken' : 'copy2'} size={16} />
+                </Box>
+              </Stack>
+            </Box>
+            <Box>
+              <Typography
+                color={colors.grey12}
+                sx={{
+                  fontSize: '12px'
+                }}>
+                Collatearl Amount
+              </Typography>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                gap="8px"
+                sx={{
+                  p: '8px',
+                  borderRadius: '10px',
+                  bgcolor: colors.card_bgColor,
+                  width: '100%',
+                  mt: '8px'
+                }}>
+                <Stack direction="row" alignItems="center" gap="4px">
+                  <ImageIcon
+                    url={'/images/img/btc.png'}
+                    style={{
+                      width: '16px',
+                      height: '16px'
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 500
+                    }}>
+                    {satoshisToAmount(+collateralAmount)}
+                  </Typography>
+                </Stack>
+                <Box
+                  onClick={(e) => {
+                    copyToClipboard(satoshisToAmount(+collateralAmount)).then(() => {
+                      setTimeout(() => {
+                        setIsClickCopyAmount(false);
+                      }, 3000);
+                    });
+                    setIsClickCopyAmount(true);
+                  }}>
+                  <Icon color="main" icon={isClickCopyAmount ? 'check-circle-broken' : 'copy2'} size={16} />
+                </Box>
+              </Stack>
+            </Box>
+          </Stack>
 
-          <Image src="/images/icons/side_wallet.svg" width={186} height={20} />
-
-          <Row fullX mt="xl">
+          <Row fullX>
             <Button
               onClick={() => {
                 navigate('TxConfirmScreen', {
@@ -176,25 +316,116 @@ export default function LoanDepositScreen() {
               }}
               full
               disabled={disabled}
-              text="Sign"
+              text="Deposit"
               preset="primary"></Button>
           </Row>
 
-          <Text text="or" color="white_muted" size="xs"></Text>
+          <Stack direction="row" justifyContent="center" alignItems="center" gap="4px">
+            <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M5.754 5.2C5.89506 4.799 6.17349 4.46086 6.53997 4.24548C6.90645 4.0301 7.33734 3.95136 7.75631 4.02323C8.17527 4.09509 8.55529 4.31291 8.82905 4.63812C9.1028 4.96332 9.25263 5.37491 9.252 5.8C9.252 7 7.452 7.6 7.452 7.6M7.5 10H7.506M13.5 7C13.5 10.3137 10.8137 13 7.5 13C4.18629 13 1.5 10.3137 1.5 7C1.5 3.68629 4.18629 1 7.5 1C10.8137 1 13.5 3.68629 13.5 7Z"
+                stroke="#6C7080"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
 
-          <Row
-            py="lg"
-            itemsCenter
-            justifyCenter
-            fullX
-            style={{
-              border: `1px solid ${colors.white1}`,
-              borderRadius: 10,
-              cursor: 'pointer'
-            }}
-            onClick={() => window.open(`${SIDE_HUB_URL}/loan/${toInfo.address}`, '_blank')}>
-            <div className="text-white text-xs hover:text-[#F7931A]">Funding using another wallet on web app</div>
-          </Row>
+            <Typography
+              sx={{
+                fontSize: '14px',
+                fontWeight: 500,
+                color: colors.grey12,
+                small: {}
+              }}>
+              Deposited from another wallet?
+            </Typography>
+            <Stack
+              direction="row"
+              alignItems="center"
+              gap="2px"
+              sx={{
+                cursor: 'pointer',
+                p: {
+                  color: colors.white
+                },
+                path: {
+                  stroke: colors.white
+                },
+                ':hover': {
+                  p: {
+                    color: colors.main
+                  },
+                  path: {
+                    stroke: colors.main
+                  }
+                }
+              }}
+              onClick={async () => {
+                try {
+                  setTemporaryLoading(true);
+                  const { error: err } = await refetch();
+
+                  const error = err as Error;
+                  if (error) {
+                    setErrorMsg(error.message);
+                    toast.custom((t) => (
+                      <ToastView toaster={t} type="fail">
+                        <Box
+                          sx={{
+                            mb: '6px',
+                            fontSize: '12px',
+                            fontWeight: '500'
+                          }}>
+                          {error.message}
+                        </Box>
+                      </ToastView>
+                    ));
+                  } else {
+                    setErrorMsg('');
+                  }
+                } catch {
+                  setTemporaryLoading(false);
+                } finally {
+                  setTemporaryLoading(false);
+                }
+              }}>
+              <Typography
+                sx={{
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  transition: '.4s'
+                }}>
+                Check status
+              </Typography>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                className={temporaryLoading ? 'animate-[spin_1s_linear_infinite]' : ''}>
+                <g clipPath="url(#clip0_22981_11416)">
+                  <path
+                    d="M12.072 5.85742C12.072 5.85742 10.9263 4.2964 9.99551 3.36499C9.06474 2.43358 7.7785 1.85742 6.3577 1.85742C3.51738 1.85742 1.21484 4.15996 1.21484 7.00028C1.21484 9.8406 3.51738 12.1431 6.3577 12.1431C8.70233 12.1431 10.6805 10.5742 11.2995 8.42885M12.072 5.85742V2.42885M12.072 5.85742H8.64342"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                      transition: '.4s'
+                    }}
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_22981_11416">
+                    <rect width="13.7143" height="13.7143" fill="white" transform="translate(0.0703125 0.142578)" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </Stack>
+          </Stack>
+
+          {errorMsg && <Text text={errorMsg} color={'red'} size="xs" textCenter></Text>}
         </Column>
       </Content>
       <Footer px="zero" py="zero">

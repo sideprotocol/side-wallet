@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import { ADDRESS_TYPES, CHAINS_ENUM } from '@/shared/constant';
 import { AddressType } from '@/shared/types';
-import { Column, Content, Header, Image, Layout, Row, Text } from '@/ui/components';
+import { Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
@@ -85,14 +85,8 @@ export default function SelecAddressScreen() {
         }}
         title="Select address type"
       />
-      <Content
-        style={{
-          padding: 0
-        }}>
-        <Column
-          style={{
-            margin: '16px 0'
-          }}>
+      <Content>
+        <Column mt="lg">
           {displayAddress.map((item) => {
             const address = addresses[item.value];
             return (
@@ -105,6 +99,7 @@ export default function SelecAddressScreen() {
                   padding: '10px 16px',
                   borderRadius: 10
                 }}
+                classname="bg-item-hover-v2"
                 full
                 key={item.value}>
                 <Row itemsCenter>
@@ -120,10 +115,25 @@ export default function SelecAddressScreen() {
                   </Box>
 
                   <Column gap={'zero'}>
-                    <Text preset="regular" text={'Bitcoin' + ' ' + `(${item.name})`}></Text>
                     <Text
-                      preset="sub"
-                      text={ClickCopy === address && copyChain == 'bitcoin' ? 'Copied!' : shortAddress(address)}></Text>
+                      style={{
+                        whiteSpace: 'nowrap'
+                      }}
+                      preset="regular"
+                      text={'Bitcoin' + ' ' + `(${item.name})`}></Text>
+
+                    <Row itemsCenter gap="sm">
+                      {ClickCopy === address && copyChain == 'bitcoin' && (
+                        <Icon icon="check-circle-broken" color="green_success" size={16}></Icon>
+                      )}
+
+                      <Text
+                        preset="sub"
+                        color={ClickCopy === address && copyChain == 'bitcoin' ? 'green_success' : 'grey2'}
+                        text={
+                          ClickCopy === address && copyChain == 'bitcoin' ? 'Copied' : shortAddress(address)
+                        }></Text>
+                    </Row>
                   </Column>
                 </Row>
 
@@ -134,7 +144,7 @@ export default function SelecAddressScreen() {
                       p: 1,
                       bgcolor: colors.black,
                       '&:hover': {
-                        bgcolor: colors.white_muted
+                        bgcolor: colors.main
                       },
                       cursor: 'pointer'
                     }}
@@ -161,7 +171,7 @@ export default function SelecAddressScreen() {
                       p: 1,
                       bgcolor: colors.black,
                       '&:hover': {
-                        bgcolor: colors.white_muted
+                        bgcolor: colors.main
                       },
                       cursor: 'pointer'
                     }}
@@ -199,10 +209,23 @@ export default function SelecAddressScreen() {
                   <Image src="https://api.side.one/static/token/logo/side.png" size={32}></Image>
 
                   <Column gap={'zero'}>
-                    <Text preset="regular" text={'Side Chain' + ' ' + `(${item.name})`}></Text>
                     <Text
-                      preset="sub"
-                      text={ClickCopy === address && copyChain == 'side' ? 'Copied!' : shortAddress(address)}></Text>
+                      style={{
+                        whiteSpace: 'nowrap'
+                      }}
+                      preset="regular"
+                      text={'Side Chain' + ' ' + `(${item.name})`}></Text>
+
+                    <Row itemsCenter gap="sm">
+                      {ClickCopy === address && copyChain == 'side' && (
+                        <Icon icon="check-circle-broken" color="green_success" size={16}></Icon>
+                      )}
+
+                      <Text
+                        preset="sub"
+                        color={ClickCopy === address && copyChain == 'side' ? 'green_success' : 'grey2'}
+                        text={ClickCopy === address && copyChain == 'side' ? 'Copied' : shortAddress(address)}></Text>
+                    </Row>
                   </Column>
                 </Row>
 
@@ -221,7 +244,7 @@ export default function SelecAddressScreen() {
                       p: 1,
                       bgcolor: colors.black,
                       '&:hover': {
-                        bgcolor: colors.white_muted
+                        bgcolor: colors.main
                       },
                       cursor: 'pointer'
                     }}>
@@ -240,7 +263,7 @@ export default function SelecAddressScreen() {
                       p: 1,
                       bgcolor: colors.black,
                       '&:hover': {
-                        bgcolor: colors.white_muted
+                        bgcolor: colors.main
                       },
                       cursor: 'pointer'
                     }}

@@ -18,6 +18,7 @@ import { Row } from './Row';
 import { StepBar } from './StepBar';
 import { Text } from './Text';
 import { TextArea } from './TextArea';
+import { LightTooltip } from './Tooltip';
 
 export {
   AddressBar,
@@ -33,6 +34,7 @@ export {
   Image,
   Input,
   Layout,
+  LightTooltip,
   Logo,
   LongPress,
   Mask,

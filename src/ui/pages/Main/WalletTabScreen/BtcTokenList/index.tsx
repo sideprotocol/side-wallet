@@ -11,22 +11,13 @@ import { TokenItem } from '../SideTokenList';
 export default function BtcTokenList({ balanceVisible }) {
   const currentAccount = useCurrentAccount();
 
-  const { balanceList } = useGetBitcoinBalanceList(currentAccount?.address);
+  const { balanceList, loading } = useGetBitcoinBalanceList(currentAccount?.address);
   const filterList = balanceList.filter((item) => !(!+item.amount && item.denom !== 'sat'));
 
   return (
     <Column>
-      {!filterList.length ? (
+      {loading ? (
         <>
-          <Skeleton
-            sx={{
-              bgcolor: colors.card_bgColor,
-              transform: 'scale(1)',
-              width: '100%',
-              borderRadius: '10px'
-            }}
-            height={60}
-          />
           <Skeleton
             sx={{
               bgcolor: colors.card_bgColor,

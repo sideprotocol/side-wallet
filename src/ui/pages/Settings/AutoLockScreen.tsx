@@ -32,13 +32,6 @@ export default function AutoLockScreen() {
             paddingTop: '70px',
             paddingBottom: '25px'
           }}>
-          {/*<Image*/}
-          {/*  style={{*/}
-          {/*    margin: 'auto'*/}
-          {/*  }}*/}
-          {/*  src="/images/icons/settings/auto-lock.svg"*/}
-          {/*  size={90}*/}
-          {/*/>*/}
           <div className="">
             <Lottie
               options={

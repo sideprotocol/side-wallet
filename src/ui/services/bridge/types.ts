@@ -13,7 +13,7 @@ interface Status {
   block_time: number;
 }
 
-export interface UTXO {
+export interface UTXOBridge {
   txid: string;
   version: number;
   locktime: number;
@@ -55,13 +55,22 @@ export interface BridgeTxItem {
   time: number;
   txid: string;
   amount: string;
-  status: 'pending' | 'confirmed';
+  status: 'pending' | 'confirmed' | 'failed';
   url: string;
+  denom?: string;
 }
 
 export interface WithdrawRequest {
   requests: Request[];
   pagination: null;
+}
+
+export interface GetBridgeWithdrawFeeReponse {
+  fee_rate: string;
+  fee: string;
+  code?: number;
+  message?: string;
+  details?: any;
 }
 
 interface Request {
@@ -80,7 +89,7 @@ export interface Runes {
   next: null;
 }
 
-export interface Entry {
+interface Entry {
   block: number;
   burned: number;
   divisibility: number;
@@ -127,12 +136,56 @@ interface Chainstats {
   tx_count: number;
 }
 
+export interface FeeEstimateResponse {
+  [block: string]: number;
+}
+
+export interface Inscription {
+  inscriptionId: string;
+  inscriptionNumber: number;
+  address: string;
+  outputValue: number;
+  preview: string;
+  content: string;
+  contentType: string;
+  contentLength: number;
+  timestamp: number;
+  genesisTransaction: string;
+  location: string;
+  output: string;
+  offset: number;
+  contentBody: string;
+  utxoHeight: number;
+  utxoConfirmation: number;
+  brc20?: {
+    op: string;
+    tick: string;
+    lim: string;
+    amt: string;
+    decimal: string;
+  };
+}
+
+export interface ToAddressInfo {
+  address: string;
+  domain?: string;
+  inscription?: Inscription;
+}
+
+export interface RawTxInfo {
+  psbtHex: string;
+  rawtx: string;
+  toAddressInfo?: ToAddressInfo;
+  fee?: number;
+}
+
 export interface SideBridgeParams {
   params: Params;
 }
 
-interface Params {
-  confirmations: number;
+export interface Params {
+  deposit_confirmation_depth: number;
+  withdraw_confirmation_depth: number;
   max_acceptable_block_depth: string;
   btc_voucher_denom: string;
   deposit_enabled: boolean;
@@ -168,10 +221,85 @@ interface Vault {
   version: string;
 }
 
-export interface GetBridgeWithdrawFeeReponse {
-  fee_rate: string;
-  fee: string;
-  code?: number;
-  message?: string;
-  details?: any;
+export interface GetIncentiveParamsResponse {
+  params: {
+    enabled: boolean;
+    reward_per_deposit: {
+      amount: string;
+      denom: string;
+    };
+    reward_per_withdraw: {
+      amount: string;
+      denom: string;
+    };
+  };
+}
+
+export interface GetIncentiveRewardsStatsResponse {
+  reward_stats: {
+    address_count: string;
+    total_reward_amount: {
+      amount: string;
+      denom: string;
+    };
+    tx_count: string;
+  };
+}
+
+export interface GetIncentiveRewardsByAddressResponse {
+  rewards: {
+    address: string;
+    deposit_count: string;
+    deposit_reward: {
+      amount: string;
+      denom: string;
+    };
+    total_amount: {
+      amount: string;
+      denom: string;
+    };
+    withdraw_count: string;
+    withdraw_reward: {
+      amount: string;
+      denom: string;
+    };
+  };
+}
+
+export interface UTXO {
+  txid: string;
+  version: number;
+  locktime: number;
+  vin: Vin[];
+  vout: Prevout[];
+  size: number;
+  weight: number;
+  fee: number;
+  status: Status;
+}
+
+interface Status {
+  confirmed: boolean;
+  block_height: number;
+  block_hash: string;
+  block_time: number;
+}
+
+interface Vin {
+  txid: string;
+  vout: number;
+  prevout: Prevout;
+  scriptsig: string;
+  scriptsig_asm: string;
+  witness: string[];
+  is_coinbase: boolean;
+  sequence: number;
+}
+
+interface Prevout {
+  scriptpubkey: string;
+  scriptpubkey_asm: string;
+  scriptpubkey_type: string;
+  scriptpubkey_address: string;
+  value: number;
 }

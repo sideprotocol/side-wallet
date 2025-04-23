@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 
-import { UNISAT_RUNE_URL, sideChain } from '@/shared/constant';
+import { CHAINS_ENUM, UNISAT_RUNE_URL, sideChain } from '@/shared/constant';
 import { IAsset } from '@/shared/types';
 import services from '@/ui/services';
 
@@ -11,15 +11,17 @@ function formateTokenList(tokens: IAsset[]) {
     if (token.rune) {
       return {
         ...token,
-        logo: `${UNISAT_RUNE_URL}/${token.symbol}`
+        logo: `${UNISAT_RUNE_URL}/${token.symbol}`,
+        chain: CHAINS_ENUM.SIDE
       };
     }
-    return token;
+
+    return { ...token, chain: CHAINS_ENUM.SIDE };
   });
 }
 
 export function useGetSideBalanceList(address?: string) {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['getSideAssets'],
     queryFn: async () => {
       return services.dex.getSideAssets();
@@ -39,6 +41,7 @@ export function useGetSideBalanceList(address?: string) {
     refetchBalances,
     allCoinBalances,
     priceMap,
-    sideAssets: data || []
+    sideAssets: data || [],
+    loading: isLoading
   };
 }

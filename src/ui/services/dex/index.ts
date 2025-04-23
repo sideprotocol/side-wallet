@@ -1,7 +1,9 @@
 import { SERVICE_BASE_URL } from '@/shared/constant';
+import { IAsset } from '@/shared/types';
 import ApiClient from '@/ui/services/network/ApiClient';
 
 import { getQueryParams } from '../getQueryParams';
+import { addIbcInformation } from './ibcData';
 import {
   IGetChartDataRequest,
   IGetChartDataResponse,
@@ -17,16 +19,6 @@ import {
   IPoolTranscationWithdrawsResponse,
   SwapRouteResult
 } from './type';
-
-export interface IAsset {
-  denom: string;
-  exponent: string;
-  logo: string;
-  name: string;
-  precision: number;
-  rune: boolean;
-  symbol: string;
-}
 
 export default class DexService {
   private apiClient: ApiClient;
@@ -135,8 +127,9 @@ export default class DexService {
   }
 
   async getSideAssets(): Promise<IAsset[]> {
-    return this.apiClient.get<IAsset[]>('/asset/assets', {
+    const result = await this.apiClient.get<IAsset[]>('/asset/assets', {
       baseURL: SERVICE_BASE_URL
     });
+    return addIbcInformation(result);
   }
 }

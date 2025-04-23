@@ -1,18 +1,19 @@
-import BigNumber from 'bignumber.js';
+import { useState } from 'react';
 import 'swiper/css';
 
-import { Button, Column, Content, Footer, Icon, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Footer, Layout, Row, Text } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useApproveLoan from '@/ui/hooks/useApproveLoan';
+import useGetLoanById from '@/ui/hooks/useGetLoanById';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { LiquidationEvent } from '@/ui/services/lending/types';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
-import { useLocationState } from '@/ui/utils';
-import { Box } from '@mui/material';
+import { getTruncate, useLocationState } from '@/ui/utils';
+import { formatTimeWithUTC } from '@/ui/utils/formatter';
+import { Input, Stack, Typography } from '@mui/material';
 
 export interface LoanAuthorizeLocationState {
-  txid: string;
-  psbtHex: string;
   loanId: string;
   borrowAmount: string;
   collateralAmount: string;
@@ -21,12 +22,29 @@ export interface LoanAuthorizeLocationState {
 }
 
 export default function LoanAuthorizeScreen() {
-  const { txid, psbtHex, loanId, feeRate, borrowAmount, collateralAmount, liquidationEvent } =
+  const { loanId, feeRate, borrowAmount, collateralAmount, liquidationEvent } =
     useLocationState<LoanAuthorizeLocationState>();
 
-  const { approveLoan, loading } = useApproveLoan(loanId);
+  const { approveLoan, loading, depositTxs } = useApproveLoan(loanId, collateralAmount);
 
-  const disabled = loading || !txid || !psbtHex || !loanId || !borrowAmount || !collateralAmount || !liquidationEvent;
+  const currentAccount = useCurrentAccount();
+
+  const disabled = loading || !loanId || !borrowAmount || !collateralAmount || !liquidationEvent;
+
+  const [refundAddress, setRefundAddress] = useState(currentAccount.address);
+
+  const { loan } = useGetLoanById({ loanId });
+
+  const data = [
+    {
+      label: 'Liquidation Price (BTC/USDC)',
+      value: getTruncate(liquidationEvent?.price || '0', 2)
+    },
+    {
+      label: 'Maturity Date',
+      value: !loan ? '-' : formatTimeWithUTC(+loan.loan.maturity_time * 1000)
+    }
+  ];
 
   return (
     <Layout>
@@ -35,7 +53,7 @@ export default function LoanAuthorizeScreen() {
         <Row>
           <Text
             text="Step 2: Authorize Liquidation"
-            size="xs"
+            size="lg"
             style={{
               fontWeight: 700
             }}></Text>
@@ -45,7 +63,6 @@ export default function LoanAuthorizeScreen() {
           bg="black_dark2"
           fullX
           style={{
-            // borderRadius: '100%',
             borderRadius: '10px',
             height: 6
           }}>
@@ -59,47 +76,116 @@ export default function LoanAuthorizeScreen() {
           />
         </Row>
 
-        <Box p={1.5} bgcolor={'#222222'} color={colors.white_muted} borderRadius={'10px'}>
-          <Row itemsCenter>
-            <Icon icon="alert-circle" color={'search_icon'} size={24}></Icon>
-
-            <Text
-              text="Note:"
-              color="search_icon"
-              size="sm"
-              style={{
-                fontWeight: 600
-              }}></Text>
-          </Row>
-
-          <Row mt="lg">
-            <Text
-              color="search_icon"
-              size="xs"
-              text={`In this step, you will presign a CET (Contract Execution Transaction) within a DLC (Discrete Log Contract), authorizing the liquidation of your loan collateral if the oracle price reaches ${BigNumber(
-                liquidationEvent.price
-              ).toFormat()}.`}></Text>
-          </Row>
-        </Box>
-
         <Column itemsCenter gap="xl" mt="lg">
-          <Text text="Liquidation Price (BTC/USDC)" color="white_muted" size="xs"></Text>
+          <Column fullX>
+            <Stack
+              direction="row"
+              justifyContent="start"
+              alignItems="center"
+              gap="4px"
+              sx={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.grey12
+              }}>
+              Liquidation Events
+            </Stack>
+            {data.map((item) => (
+              <Stack
+                key={item.label}
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{
+                  width: '100%',
+                  py: '12px',
+                  px: '12px',
+                  borderRadius: '10px',
+                  bgcolor: colors.card_bgColor
+                }}>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  gap="4px"
+                  sx={{
+                    fontSize: '14px',
+                    color: colors.white
+                  }}>
+                  {item.label}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      id="Icon"
+                      d="M6.17784 5.9C6.34242 5.43217 6.66725 5.03767 7.09481 4.78639C7.52237 4.53511 8.02507 4.44326 8.51387 4.5271C9.00266 4.61094 9.44602 4.86507 9.7654 5.24447C10.0848 5.62387 10.2596 6.10407 10.2588 6.6C10.2588 8 8.15884 8.7 8.15884 8.7M8.21484 11.5H8.22184M15.2148 8C15.2148 11.866 12.0808 15 8.21484 15C4.34885 15 1.21484 11.866 1.21484 8C1.21484 4.13401 4.34885 1 8.21484 1C12.0808 1 15.2148 4.13401 15.2148 8Z"
+                      stroke="#6C7080"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Stack>
+                <Typography
+                  sx={{
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: colors.main
+                  }}>
+                  {item.value}
+                </Typography>
+              </Stack>
+            ))}
+          </Column>
 
-          <Text
-            text={`${BigNumber(liquidationEvent.price).toFormat()}`}
-            color="main"
-            style={{
-              fontSize: 36,
-              fontWeight: 700
-            }}></Text>
+          <Column fullX>
+            <Stack
+              direction="row"
+              justifyContent="start"
+              alignItems="center"
+              gap="4px"
+              sx={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.grey12
+              }}>
+              Collateral Refund Address
+            </Stack>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              sx={{
+                py: '12px',
+                px: '12px',
+                borderRadius: '10px',
+                bgcolor: colors.card_bgColor,
+                width: '100%'
+              }}>
+              <Input
+                onChange={(event) => {
+                  setRefundAddress(event.target.value.trim());
+                }}
+                value={refundAddress}
+                placeholder={'Refund Address'}
+                disableUnderline
+                sx={{
+                  color: colors.white,
+                  fontSize: '12px',
+                  textAlign: 'left',
+                  bgcolor: 'transparent',
+                  p: '0',
+                  width: '100%',
+                  height: '20px',
+                  border: 'none',
+                  outline: 'none'
+                }}
+              />
+            </Stack>
+          </Column>
 
           <Row fullX mt="md">
             <Button
               disabled={disabled}
               onClick={async () => {
                 await approveLoan({
-                  depositTxId: txid,
-                  psbtHex,
                   loanId,
                   borrowAmount: {
                     amount: borrowAmount,
@@ -110,7 +196,8 @@ export default function LoanAuthorizeScreen() {
                     denom: 'sat'
                   },
                   liquidationEvent: liquidationEvent,
-                  feeRate
+                  feeRate,
+                  refundAddress
                 });
               }}
               full

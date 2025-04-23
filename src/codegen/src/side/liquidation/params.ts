@@ -2,6 +2,8 @@
 import { BinaryReader, BinaryWriter } from "../../binary";
 /** Params defines the parameters for the module. */
 export interface Params {
+  /** minimum liquidation factor permille */
+  minLiquidationFactor: number;
   /** liquidation bonus factor permille */
   liquidationBonusFactor: number;
   /** protocol liquidation fee factor permille */
@@ -15,6 +17,8 @@ export interface ParamsProtoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
+  /** minimum liquidation factor permille */
+  min_liquidation_factor?: number;
   /** liquidation bonus factor permille */
   liquidation_bonus_factor?: number;
   /** protocol liquidation fee factor permille */
@@ -28,12 +32,14 @@ export interface ParamsAminoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
+  min_liquidation_factor: number;
   liquidation_bonus_factor: number;
   protocol_liquidation_fee_factor: number;
   protocol_liquidation_fee_collector: string;
 }
 function createBaseParams(): Params {
   return {
+    minLiquidationFactor: 0,
     liquidationBonusFactor: 0,
     protocolLiquidationFeeFactor: 0,
     protocolLiquidationFeeCollector: ""
@@ -42,14 +48,17 @@ function createBaseParams(): Params {
 export const Params = {
   typeUrl: "/side.liquidation.Params",
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.minLiquidationFactor !== 0) {
+      writer.uint32(8).uint32(message.minLiquidationFactor);
+    }
     if (message.liquidationBonusFactor !== 0) {
-      writer.uint32(8).uint32(message.liquidationBonusFactor);
+      writer.uint32(16).uint32(message.liquidationBonusFactor);
     }
     if (message.protocolLiquidationFeeFactor !== 0) {
-      writer.uint32(16).uint32(message.protocolLiquidationFeeFactor);
+      writer.uint32(24).uint32(message.protocolLiquidationFeeFactor);
     }
     if (message.protocolLiquidationFeeCollector !== "") {
-      writer.uint32(26).string(message.protocolLiquidationFeeCollector);
+      writer.uint32(34).string(message.protocolLiquidationFeeCollector);
     }
     return writer;
   },
@@ -61,12 +70,15 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.liquidationBonusFactor = reader.uint32();
+          message.minLiquidationFactor = reader.uint32();
           break;
         case 2:
-          message.protocolLiquidationFeeFactor = reader.uint32();
+          message.liquidationBonusFactor = reader.uint32();
           break;
         case 3:
+          message.protocolLiquidationFeeFactor = reader.uint32();
+          break;
+        case 4:
           message.protocolLiquidationFeeCollector = reader.string();
           break;
         default:
@@ -78,6 +90,7 @@ export const Params = {
   },
   fromPartial(object: Partial<Params>): Params {
     const message = createBaseParams();
+    message.minLiquidationFactor = object.minLiquidationFactor ?? 0;
     message.liquidationBonusFactor = object.liquidationBonusFactor ?? 0;
     message.protocolLiquidationFeeFactor = object.protocolLiquidationFeeFactor ?? 0;
     message.protocolLiquidationFeeCollector = object.protocolLiquidationFeeCollector ?? "";
@@ -85,6 +98,9 @@ export const Params = {
   },
   fromAmino(object: ParamsAmino): Params {
     const message = createBaseParams();
+    if (object.min_liquidation_factor !== undefined && object.min_liquidation_factor !== null) {
+      message.minLiquidationFactor = object.min_liquidation_factor;
+    }
     if (object.liquidation_bonus_factor !== undefined && object.liquidation_bonus_factor !== null) {
       message.liquidationBonusFactor = object.liquidation_bonus_factor;
     }
@@ -98,6 +114,7 @@ export const Params = {
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};
+    obj.min_liquidation_factor = message.minLiquidationFactor === 0 ? undefined : message.minLiquidationFactor;
     obj.liquidation_bonus_factor = message.liquidationBonusFactor === 0 ? undefined : message.liquidationBonusFactor;
     obj.protocol_liquidation_fee_factor = message.protocolLiquidationFeeFactor === 0 ? undefined : message.protocolLiquidationFeeFactor;
     obj.protocol_liquidation_fee_collector = message.protocolLiquidationFeeCollector === "" ? undefined : message.protocolLiquidationFeeCollector;

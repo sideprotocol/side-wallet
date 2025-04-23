@@ -129,14 +129,14 @@ export default function SecurityTabScreen() {
       <Content justifyBetween>
         <Column>
           <div>
-            {toRenderSettings.map((item) => {
+            {toRenderSettings.map((item, index) => {
               if (!item.label) {
                 return null;
               }
               return (
                 <Card
                   classname="bg-item-hover"
-                  key={item.action}
+                  key={item.action + index}
                   mt="lg"
                   onClick={(e) => {
                     if (item.action == 'addressType') {
@@ -153,8 +153,7 @@ export default function SecurityTabScreen() {
                   }}
                   style={{
                     backgroundColor: 'transparent'
-                  }}
-                >
+                  }}>
                   <Row full justifyBetween>
                     <Column justifyCenter>
                       <Text text={item.label || item.desc} preset="regular-bold" />

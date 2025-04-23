@@ -79,19 +79,15 @@ export default function Step2_SetName({
         style={{
           flex: 1,
           alignItems: 'center',
-          justifyContent: 'center',
           overflow: 'auto'
         }}>
         <Column
           style={{
-            border: '1px solid #404045',
-            boxShadow: '0px 1px 0px 0px rgba(255, 255, 255, 0.25) inset',
-            backgroundColor: '#222222',
             borderRadius: '14px',
             padding: '32px 16px 24px',
             width: '100%'
           }}>
-          <Row justifyCenter>
+          <Row justifyCenter my="xl">
             <Image src="/images/icons/wallet.svg" size={78} />
           </Row>
           <Text

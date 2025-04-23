@@ -1,36 +1,30 @@
 import { useEffect, useState } from 'react';
 
-import { AddressFlagType, CHAINS_ENUM, SIDE_STATION_URL } from '@/shared/constant';
+import { AddressFlagType, SIDE_STATION_URL } from '@/shared/constant';
 import { checkAddressFlag } from '@/shared/utils';
-import { ButtonGroup, Column, Footer, Image, Layout, Row, Text } from '@/ui/components';
-import { DisableUnconfirmedsPopover } from '@/ui/components/DisableUnconfirmedPopover';
+import { Column, Footer, Image, Layout, Row, Text } from '@/ui/components';
+import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import { NoticePopover } from '@/ui/components/NoticePopover';
 import { getCurrentTab } from '@/ui/features/browser/tabs';
 import useGetAccountBalanceByUSD from '@/ui/hooks/useGetAccountBalanceByUSD';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
 import { useAppDispatch } from '@/ui/state/hooks';
-import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
-import { fontSizes } from '@/ui/theme/font';
 import { getTruncate, useWallet } from '@/ui/utils';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
 import MainHeader from '../MainHeader';
-import BtcTokenList from './BtcTokenList';
 import SideTokenList from './SideTokenList';
 
 export default function WalletTabScreen() {
   const navigate = useNavigate();
   const [balanceVisible, setBalanceVisible] = useState(true);
-  const currentKeyring = useCurrentKeyring();
   const currentAccount = useCurrentAccount();
 
   const wallet = useWallet();
   const [connected, setConnected] = useState(false);
-  const [currentTab, setCurrentTab] = useState<CHAINS_ENUM>(CHAINS_ENUM.SIDE);
   const dispatch = useAppDispatch();
   const accountBalanceByUSD = useGetAccountBalanceByUSD();
 
@@ -41,7 +35,6 @@ export default function WalletTabScreen() {
 
   const blockStreamUrl = useBlockstreamUrl();
 
-  // console.log(`balanceList: `, balanceList);
   useEffect(() => {
     if (currentAccount.address === addressSummary.address) {
       if (addressSummary.arc20Count > 0 || addressSummary.runesCount > 0) {
@@ -111,7 +104,6 @@ export default function WalletTabScreen() {
               justifyCenter
               style={{
                 gap: 0
-                // alignItems: 'flex-end'
               }}>
               <Text
                 text="$"
@@ -167,25 +159,28 @@ export default function WalletTabScreen() {
         <Row
           style={{
             justifyContent: 'center',
-            gap: '20px',
-            marginTop: '20px'
-          }}>
+            gap: '12px'
+          }}
+          mt="xl"
+          px="lg">
           <div
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
               navigate('SelectAddressScreen');
             }}>
-            <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
-              <Image
-                src={
+            <div className="w-[75px] h-[66px] gap-2 pt-1 rounded-xl flex flex-col items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
+              <ImageIcon
+                url={
                   '/images/icons/main/recevie-icon.svg' // Default image source
                 }
-                size={fontSizes.xl}
-                className="" // Hide the default image on hover
+                style={{
+                  width: '22px',
+                  height: '22px'
+                }}
               />
-            </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">
-              Receive
+              <div className="text-[#fff]/80 group-hover:text-[#fff] text-[12px] leading-[17px] font-[Saira]">
+                Receive
+              </div>
             </div>
           </div>
 
@@ -194,63 +189,49 @@ export default function WalletTabScreen() {
             onClick={() => {
               navigate('SelectNetworkScreen', { type: 'send' });
             }}>
-            <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
-              <Image
-                src={
+            <div className="w-[75px] h-[66px] gap-2 pt-1 rounded-xl flex flex-col items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
+              <ImageIcon
+                url={
                   '/images/icons/main/send-icon.svg' // Default image source
                 }
-                size={fontSizes.xxl}
-                className="" // Hide the default image on hover
+                style={{
+                  width: '22px',
+                  height: '22px'
+                }}
               />
+              <div className="text-[#fff]/80 group-hover:text-[#fff] text-[12px] leading-[17px] font-[Saira]">Send</div>
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">Send</div>
           </div>
 
           <div
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
-              window.open(`${SIDE_STATION_URL}/staking`, '_blank');
+              window.open(`${SIDE_STATION_URL}/explorer/address/${currentAccount.address}`, '_blank');
             }}>
-            <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
+            <div className="w-[75px] h-[66px] gap-2 pt-1 rounded-xl flex flex-col items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
-                  d="M9.25796 3.66659C10.4153 2.5325 12.0003 1.83325 13.7487 1.83325C17.2925 1.83325 20.1654 4.70609 20.1654 8.24992C20.1654 9.99831 19.4661 11.5834 18.332 12.7407M14.6654 13.7499C14.6654 17.2937 11.7925 20.1666 8.2487 20.1666C4.70487 20.1666 1.83203 17.2937 1.83203 13.7499C1.83203 10.2061 4.70487 7.33325 8.2487 7.33325C11.7925 7.33325 14.6654 10.2061 14.6654 13.7499Z"
-                  stroke="white"
-                  strokeWidth="1.83333"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">Stake</div>
-          </div>
-
-          <div
-            className="flex flex-col items-center gap-[8px] group transition"
-            onClick={() => {
-              window.open(`${SIDE_STATION_URL}/explorer`, '_blank');
-            }}>
-            <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M0 9.99634C0 4.47549 4.47525 0.000244141 9.99609 0.000244141C15.5169 0.000244141 19.9922 4.47549 19.9922 9.99634C19.9922 15.5172 15.5169 19.9924 9.99609 19.9924C4.47525 19.9924 0 15.5172 0 9.99634Z"
+                  d="M10.9974 2.33366C6.21069 2.33366 2.33073 6.21362 2.33073 11.0003C2.33073 15.787 6.21069 19.667 10.9974 19.667C15.7841 19.667 19.6641 15.787 19.6641 11.0003C19.6641 6.21362 15.7841 2.33366 10.9974 2.33366ZM0.164062 11.0003C0.164062 5.01708 5.01415 0.166992 10.9974 0.166992C16.9806 0.166992 21.8307 5.01708 21.8307 11.0003C21.8307 16.9836 16.9806 21.8337 10.9974 21.8337C5.01415 21.8337 0.164062 16.9836 0.164062 11.0003Z"
                   fill="white"
                 />
                 <path
-                  d="M14.2398 5.75517C14.371 5.88642 14.463 6.05159 14.5057 6.23219C14.5483 6.4128 14.5398 6.60171 14.4812 6.77777L12.7144 12.0792C12.6653 12.2264 12.5826 12.3602 12.4729 12.47C12.3631 12.5797 12.2294 12.6624 12.0821 12.7115L6.78069 14.4783C6.60456 14.537 6.41556 14.5455 6.23486 14.5029C6.05416 14.4602 5.88891 14.3681 5.75762 14.2368C5.62634 14.1055 5.53421 13.9403 5.49157 13.7596C5.44892 13.5789 5.45745 13.3899 5.51619 13.2138L7.28349 7.91283C7.33257 7.76559 7.41525 7.63181 7.52499 7.52207C7.63473 7.41233 7.76851 7.32965 7.91575 7.28057L13.2172 5.51327C13.3933 5.45468 13.5822 5.44628 13.7628 5.48901C13.9434 5.53173 14.1086 5.62389 14.2398 5.75517ZM9.02182 9.01889L8.0452 11.9497L10.9756 10.9726L11.9527 8.04228L9.02231 9.01939L9.02182 9.01889Z"
-                  fill="#09090A"
+                  d="M15.5099 6.31755C15.6521 6.45979 15.7519 6.6388 15.7981 6.83453C15.8443 7.03027 15.8351 7.235 15.7715 7.4258L13.8567 13.1713C13.8035 13.3308 13.7139 13.4758 13.595 13.5947C13.4761 13.7137 13.3311 13.8033 13.1715 13.8565L7.42606 15.7713C7.23518 15.8349 7.03034 15.8442 6.83451 15.7979C6.63867 15.7517 6.45958 15.6519 6.3173 15.5096C6.17502 15.3673 6.07518 15.1882 6.02896 14.9924C5.98275 14.7966 5.99199 14.5917 6.05564 14.4008L7.97098 8.65593C8.02416 8.49636 8.11376 8.35137 8.2327 8.23244C8.35163 8.11351 8.49662 8.0239 8.65618 7.97072L14.4016 6.05539C14.5925 5.9919 14.7973 5.98279 14.993 6.0291C15.1887 6.0754 15.3677 6.17528 15.5099 6.31755ZM9.85489 9.85464L8.79647 13.031L11.9723 11.972L13.0312 8.79622L9.85543 9.85518L9.85489 9.85464Z"
+                  fill="white"
                 />
               </svg>
+
+              <div className="text-[#fff]/80 group-hover:text-[#fff] text-[12px] leading-[17px] font-[Saira]">
+                Station
+              </div>
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">View</div>
           </div>
 
           <div
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
-              window.open(blockStreamUrl, '_blank');
+              window.open(`${blockStreamUrl}/address/${currentAccount.address}`, '_blank');
             }}>
-            <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
+            <div className="w-[75px] h-[66px] gap-2 pt-1 rounded-xl flex flex-col items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M20.1635 17.674C20.1635 19.0643 19.0423 20.1868 17.6536 20.1868H2.50998C1.12112 20.1868 0 19.0643 0 17.674V2.51309C0 1.12265 1.12949 0.000244141 2.50998 0.000244141H17.6536C19.0423 0.000244141 20.1635 1.12265 20.1635 2.51309V17.674Z"
@@ -267,66 +248,18 @@ export default function WalletTabScreen() {
                   fill="#09090A"
                 />
               </svg>
+              <div className="text-[#fff]/80 group-hover:text-[#fff] text-[12px] leading-[17px] font-[Saira]">
+                Mempool
+              </div>
             </div>
-            <div className="text-[#fff]/80 group-hover:text-[#fff] text-[14px] leading-[17px] font-[Saira]">View</div>
           </div>
         </Row>
 
-        <Row
-          style={{
-            marginTop: '20px',
-            marginBottom: '20px'
-          }}
-          justifyCenter>
-          <ButtonGroup
-            size="big"
-            rowProps={{
-              justifyCenter: true
-            }}
-            list={[
-              {
-                key: CHAINS_ENUM.SIDE,
-                label: 'Side Chain'
-              },
-              {
-                key: CHAINS_ENUM.BTC,
-                label: 'Bitcoin'
-              }
-            ]}
-            onChange={(value, index) => {
-              const tab = value as CHAINS_ENUM;
-              setCurrentTab(tab);
-            }}
-            value={currentTab}
-          />
-        </Row>
-
-        <Column
-          style={{
-            padding: '0 16px',
-            marginBottom: '20px',
-            gap: '0px'
-          }}>
-          {currentTab === CHAINS_ENUM.SIDE ? (
-            <SideTokenList balanceVisible={balanceVisible} />
-          ) : (
-            <BtcTokenList balanceVisible={balanceVisible} />
-          )}
+        <Column my="xl" px="lg">
+          <SideTokenList balanceVisible={balanceVisible} />
         </Column>
       </Column>
 
-      {showSafeNotice && (
-        <NoticePopover
-          onClose={() => {
-            wallet.setShowSafeNotice(false);
-            setShowSafeNotice(false);
-          }}
-        />
-      )}
-
-      {showDisableUnconfirmedUtxoNotice && (
-        <DisableUnconfirmedsPopover onClose={() => setShowDisableUnconfirmedUtxoNotice(false)} />
-      )}
       {buyBtcModalVisible && (
         <BuyBTCModal
           onClose={() => {

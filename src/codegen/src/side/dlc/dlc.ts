@@ -255,6 +255,7 @@ export interface DLCEvent {
   hasTriggered: boolean;
   outcomeIndex: number;
   publishAt: Date;
+  triggerAt: Date;
 }
 export interface DLCEventProtoMsg {
   typeUrl: "/side.dlc.DLCEvent";
@@ -270,6 +271,7 @@ export interface DLCEventAmino {
   has_triggered?: boolean;
   outcome_index?: number;
   publish_at?: string;
+  trigger_at?: string;
 }
 export interface DLCEventAminoMsg {
   type: "/side.dlc.DLCEvent";
@@ -285,6 +287,7 @@ export interface DLCEventSDKType {
   has_triggered: boolean;
   outcome_index: number;
   publish_at: Date;
+  trigger_at: Date;
 }
 export interface DLCAttestation {
   id: bigint;
@@ -713,7 +716,8 @@ function createBaseDLCEvent(): DLCEvent {
     outcomes: [],
     hasTriggered: false,
     outcomeIndex: 0,
-    publishAt: new Date()
+    publishAt: new Date(),
+    triggerAt: new Date()
   };
 }
 export const DLCEvent = {
@@ -745,6 +749,9 @@ export const DLCEvent = {
     }
     if (message.publishAt !== undefined) {
       Timestamp.encode(toTimestamp(message.publishAt), writer.uint32(74).fork()).ldelim();
+    }
+    if (message.triggerAt !== undefined) {
+      Timestamp.encode(toTimestamp(message.triggerAt), writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -782,6 +789,9 @@ export const DLCEvent = {
         case 9:
           message.publishAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
+        case 10:
+          message.triggerAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -800,6 +810,7 @@ export const DLCEvent = {
     message.hasTriggered = object.hasTriggered ?? false;
     message.outcomeIndex = object.outcomeIndex ?? 0;
     message.publishAt = object.publishAt ?? undefined;
+    message.triggerAt = object.triggerAt ?? undefined;
     return message;
   },
   fromAmino(object: DLCEventAmino): DLCEvent {
@@ -829,6 +840,9 @@ export const DLCEvent = {
     if (object.publish_at !== undefined && object.publish_at !== null) {
       message.publishAt = fromTimestamp(Timestamp.fromAmino(object.publish_at));
     }
+    if (object.trigger_at !== undefined && object.trigger_at !== null) {
+      message.triggerAt = fromTimestamp(Timestamp.fromAmino(object.trigger_at));
+    }
     return message;
   },
   toAmino(message: DLCEvent): DLCEventAmino {
@@ -846,6 +860,7 @@ export const DLCEvent = {
     obj.has_triggered = message.hasTriggered === false ? undefined : message.hasTriggered;
     obj.outcome_index = message.outcomeIndex === 0 ? undefined : message.outcomeIndex;
     obj.publish_at = message.publishAt ? Timestamp.toAmino(toTimestamp(message.publishAt)) : undefined;
+    obj.trigger_at = message.triggerAt ? Timestamp.toAmino(toTimestamp(message.triggerAt)) : undefined;
     return obj;
   },
   fromAminoMsg(object: DLCEventAminoMsg): DLCEvent {

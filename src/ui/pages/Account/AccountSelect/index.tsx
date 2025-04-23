@@ -38,28 +38,28 @@ const AccountSelect = () => {
             gap: '0'
           }}>
           <Text
-            color="text"
+            color="white_muted"
             text={currentKeyring.alianName}
             style={{
               fontSize: '14px',
-              fontWeight: 600,
-              lineHeight: '17px'
+              fontWeight: 600
             }}
           />
-          <span
-            style={{
-              color: '#6C7080',
-              fontWeight: 400,
-              fontSize: '12px'
-            }}>
-            &nbsp;/&nbsp;
-          </span>
+
           <Text
-            color="white_muted"
+            color="white"
+            text={'/'}
+            size="xs"
+            style={{
+              fontSize: '14px'
+            }}
+          />
+          <Text
+            color="white"
             text={shortAddress(currentAccount?.alianName, 8)}
             style={{
-              fontSize: '12px',
-              lineHeight: '15px'
+              fontSize: '14px',
+              fontWeight: 600
             }}
           />
         </Row>

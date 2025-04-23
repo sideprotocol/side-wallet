@@ -2,7 +2,9 @@ import { useState } from 'react';
 
 import { DISCORD_URL, TELEGRAM_URL, TWITTER_URL } from '@/shared/constant';
 import { Card, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { colors } from '@/ui/theme/colors';
 import { copyToClipboard } from '@/ui/utils';
+import { Box } from '@mui/material';
 
 export default function AboutScreen() {
   const [isClickCopy, setIsClickCopy] = useState(false);
@@ -25,26 +27,18 @@ export default function AboutScreen() {
       />
       <Content justifyBetween>
         <Column>
-          <Column
-            style={{
-              paddingTop: '30px',
-              paddingBottom: '25px'
-            }}
-            justifyCenter
-            itemsCenter>
+          <Column mb="x3l" py="xl" gap="xl" justifyCenter itemsCenter>
             <Image src={'/images/logo/wallet-logo.png'} height={78} width={78} />
 
             <Image src={'/images/icons/side_wallet.svg'} height={20} width={186} />
           </Column>
 
-          <Column
-            style={{
-              gap: '10px'
-            }}>
+          <Column gap="lg">
             <Card
               style={{
                 height: '58px',
-                borderRadius: '10px'
+                borderRadius: '10px',
+                backgroundColor: colors.card_bgColor
               }}>
               <Row
                 style={{
@@ -54,14 +48,20 @@ export default function AboutScreen() {
                 itemsCenter
                 full>
                 <Text preset="regular" text={'Terms of Service'}></Text>
-                <Icon icon={'link'} size={18}></Icon>
+                <Icon
+                  onClick={() => {
+                    window.open('https://docs.side.one/about/privacy-policy ', '_blank');
+                  }}
+                  icon={'link'}
+                  size={18}></Icon>
               </Row>
             </Card>
 
             <Card
               style={{
                 height: '58px',
-                borderRadius: '10px'
+                borderRadius: '10px',
+                backgroundColor: colors.card_bgColor
               }}>
               <Row
                 style={{
@@ -72,14 +72,20 @@ export default function AboutScreen() {
                 full>
                 <Text preset="regular" text={'Privacy Policy'}></Text>
 
-                <Icon icon={'link'} size={18}></Icon>
+                <Icon
+                  onClick={() => {
+                    window.open('https://docs.side.one/about/privacy-policy ', '_blank');
+                  }}
+                  icon={'link'}
+                  size={18}></Icon>
               </Row>
             </Card>
 
             <Card
               style={{
                 height: '58px',
-                borderRadius: '10px'
+                borderRadius: '10px',
+                backgroundColor: colors.card_bgColor
               }}>
               <Row
                 style={{
@@ -117,14 +123,18 @@ export default function AboutScreen() {
 
         <Column>
           <Row justifyCenter gap="x3l" mt="lg">
-            <Row
-              itemsCenter
-              justifyCenter
-              style={{
+            <Box
+              display={'flex'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              sx={{
                 border: '0.7px solid #2A2A2A',
                 borderRadius: '40px',
                 width: '40px',
-                height: '40px'
+                height: '40px',
+                ':hover': {
+                  backgroundColor: '#4D4D4D'
+                }
               }}>
               <Icon
                 size={20}
@@ -133,16 +143,20 @@ export default function AboutScreen() {
                   window.open(TWITTER_URL);
                 }}
               />
-            </Row>
+            </Box>
 
-            <Row
-              itemsCenter
-              justifyCenter
-              style={{
+            <Box
+              display={'flex'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              sx={{
                 border: '0.7px solid #2A2A2A',
                 borderRadius: '100%',
                 width: '40px',
-                height: '40px'
+                height: '40px',
+                ':hover': {
+                  backgroundColor: '#4D4D4D'
+                }
               }}>
               <Icon
                 size={20}
@@ -151,16 +165,20 @@ export default function AboutScreen() {
                   window.open(TELEGRAM_URL);
                 }}
               />
-            </Row>
+            </Box>
 
-            <Row
-              itemsCenter
-              justifyCenter
-              style={{
+            <Box
+              display={'flex'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              sx={{
                 border: '0.7px solid #2A2A2A',
                 borderRadius: '100%',
                 width: '40px',
-                height: '40px'
+                height: '40px',
+                ':hover': {
+                  backgroundColor: '#4D4D4D'
+                }
               }}>
               <Icon
                 contain={'contain'}
@@ -170,7 +188,7 @@ export default function AboutScreen() {
                   window.open(DISCORD_URL);
                 }}
               />
-            </Row>
+            </Box>
           </Row>
         </Column>
       </Content>

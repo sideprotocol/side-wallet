@@ -96,26 +96,37 @@ export type LoanStatus = keyof typeof LoanStatusEnum;
 export type LiquidationStatus = keyof typeof LiquidationStatusEnum;
 
 export interface Loan {
-  dcm: string;
-  borrow_amount: Coin;
+  borrow_amount: {
+    amount: string;
+    denom: string;
+  };
+  borrow_apr: number;
   borrower: string;
   borrowerPubKey: string;
   collateral_amount: string;
-  create_at: string;
+  create_at: number;
+  dcm: string;
   default_liquidation_event_id: string;
-  deposit_txs: string[];
+  deposit_txs: [string];
+  disburse_at: number;
   final_timeout: string;
   interest: string;
   liquidation_event_id: string;
   liquidation_id: string;
   liquidation_price: string;
+  maturity: string;
   maturity_time: string;
+  min_maturity: string;
   origination_fee: string;
   pool_id: string;
   protocol_fee: string;
+  referrer: string;
   repayment_event_id: string;
+  request_fee: {
+    amount: string;
+    denom: string;
+  };
   status: LoanStatus;
-  term: string;
   vault_address: string;
 }
 
@@ -135,9 +146,10 @@ export interface LoanBaseData {
   borrowDenom: string;
   borrowAmount: number;
   originationFee: number;
+  expectedCollateralAmount: string;
   interest: number;
   protocolFee: number;
-  term: string;
+  maturity: string;
   eventId: string;
   attestationId: string;
   depositTxs: string[];
@@ -177,32 +189,36 @@ export interface LoanBaseData {
 }
 
 export interface LeadingPool {
-  total_borrowed: string;
-  id: string;
-  status: string;
-  supply: {
-    amount: string;
-    denom: string;
-  };
   available_amount: string;
-
-  total_stokens: {
-    denom: string;
-    amount: string;
-  };
-
+  borrowed_amount: string;
   config: {
-    borrow_apr: number;
+    borrow_cap: string;
+    liquidation_threshold: number;
+    max_borrow_amount: string;
+    max_ltv: number;
+    min_borrow_amount: string;
+    origination_fee: string;
+    paused: true;
+    referral_fee_factor: number;
+    request_fee: Coin;
     reserve_factor: number;
     supply_cap: string;
-    borrow_cap: string;
-    debt_ceiling: string;
-    origination_fee: string;
-    max_ltv: number;
-    liquidation_threshold: number;
-    paused: boolean;
+    tranches: Array<{
+      borrow_apr: number;
+      maturity: string;
+      min_maturity_factor: number;
+    }>;
   };
-  total_reserves: string;
+  id: string;
+  reserve_amount: string;
+  status: 'INACTIVE' | 'ACTIVE';
+  supply: Coin;
+  total_borrowed: string;
+  total_stokens: Coin;
+  tranches: Array<{
+    maturity: string;
+    total_borrowed: string;
+  }>;
 }
 
 export type LendingPool = {
@@ -231,30 +247,40 @@ export type LendingPool = {
     additionalProp1: Record<string, unknown>;
     additionalProp2: Record<string, unknown>;
     additionalProp3: Record<string, unknown>;
+    supply_cap: string;
+    borrow_cap: string;
+    min_borrow_amount: string;
+    max_borrow_amount: string;
+    tranches: {
+      maturity: string;
+      borrow_apr: number;
+      min_maturity_factor: number;
+    }[];
   };
   statusText: string;
   ofSuppliers: number;
   ofBorrowers: number;
 };
 
-export interface Liquidation {
-  borrower: string;
+export type Liquidation = {
+  status: LiquidationStatus;
+  collateral_amount: Coin;
   dcm: string;
   debt_amount: Coin;
+  debtor: string;
   id: string;
-  liquidated_collateral: Coin;
+  liquidated_collateral_amount: Coin;
   liquidated_debt_amount: Coin;
   liquidated_price: string;
   liquidated_time: string;
-  liquidation_bonus: number;
   liquidation_bonus_amount: Coin;
   liquidation_cet: string;
   loan_id: string;
   protocol_liquidation_fee: Coin;
   settlement_tx: string;
   settlement_tx_id: string;
-  status: LiquidationStatus;
-}
+  unliquidated_collateral_amount: Coin;
+};
 
 export interface LiquidationRecord {
   liquidationId: string;
@@ -302,6 +328,10 @@ export interface GetDlcDcmsResponse extends LendingBaseResponse {
 
 export interface GetDlcAttestationsResponse extends LendingBaseResponse {
   attestations: Array<Attestation>;
+}
+
+export interface GetDlcAttestationByIdResponse {
+  attestation: Attestation;
 }
 
 export interface GetDlcAttestationByIdRequest {
@@ -389,6 +419,7 @@ export interface GetLiquidationEventRequest {
   borrow_amount: string;
   collateral_amount: string;
   pool_id: string;
+  maturity: string;
 }
 
 export interface GetLiquidationDlcMetaResponse {
@@ -417,6 +448,7 @@ export interface GetLiquidationDlcMetaResponse {
       tx: string;
     };
     timeout_refund_script: string;
+    timeout_refund_tx: string;
     vault_utxos: [
       {
         address: string;
@@ -466,6 +498,10 @@ export interface GetLoanBaseDataRequest extends BaseRequestOffChainApi {
   statusText?: string;
 }
 
+export interface PostLoanExpectedCollateralAmountData {
+  vaultAddress: string;
+  expectedCollateralAmount: number;
+}
 export interface GetLoanBaseDataResponse extends BaseResponse {
   content: Array<LoanBaseData>;
 }
@@ -475,6 +511,7 @@ export interface GetLoanByIdResponse {
 }
 
 export interface GetLoanByIdCexResponse {
+  actualInterest: number;
   poolId: string;
   createAt: string;
   statusText: string;
@@ -482,6 +519,8 @@ export interface GetLoanByIdCexResponse {
   finalTimeout: string;
   disbursementTime: string;
   disbursementTxhash: string;
+  repaymentTime: string;
+  repaymentTxhash: string;
   vaultAddress: string;
   borrower: string;
   borrowerPubKey: string;
@@ -497,13 +536,16 @@ export interface GetLoanByIdCexResponse {
   protocolFeeInDollar: string;
   collateralAmount: number;
   collateralAmountInDollar: string;
-  term: string;
+  maturity: string;
   liquidationPrice: string;
+
   liquidationEventId: string;
   defaultLiquidationEventId: string;
   repaymentEventId: string;
   liquidationId: string;
   deposit_txs: string[];
+  returnBtcTxhash: string;
+
   borrowToken: {
     denom: string;
     symbol: string;
@@ -564,6 +606,8 @@ export interface GetLoanByIdCexResponse {
 export interface GetLeadingParamsResponse {
   params: {
     final_timeout_duration: string;
+    max_loan_duration: string;
+    min_loan_duration: string;
     origination_fee_collector: string;
     protocol_fee_collector: string;
   };
@@ -571,9 +615,10 @@ export interface GetLeadingParamsResponse {
 
 export interface GetLiquidationParamsResponse {
   params: {
-    liquidation_bonus: number;
+    liquidation_bonus_factor: number;
     protocol_liquidation_fee: number;
     protocol_liquidation_fee_collector: string;
+    min_liquidation_factor: number;
   };
 }
 
@@ -643,7 +688,7 @@ export interface GetLendingUserActivityResponse extends BaseResponse {
 }
 
 export interface GetLiquidationsRequest extends BaseRequestPage {
-  status?: LiquidationStatus;
+  status?: number;
 }
 
 export interface GetLiquidationsResponse extends LendingBaseResponse {
@@ -693,9 +738,4 @@ export interface GetLoanInterestResponse {
     amount: string;
     denom: string;
   };
-}
-
-export interface PostLoanExpectedCollateralAmountData {
-  vaultAddress: string;
-  expectedCollateralAmount: number;
 }

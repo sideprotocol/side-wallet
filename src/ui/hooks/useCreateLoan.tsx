@@ -52,27 +52,14 @@ export default function useCreateLoan() {
 
       const dcm = activeAgencies?.dcms?.[0];
 
-      const borrowerPubkey = Buffer.from(fromHex(currentAccount.pubkey)).toString('hex');
-      const pbk = toXOnly(Buffer.from(borrowerPubkey, 'hex')).toString('hex');
-
-      const { address } = await services.lending.getCollateralAddress(
-        {
-          borrower_pubkey: pbk,
-          dcm_pubkey: dcm.pubkey,
-          maturity_time: maturityTime
-        },
-        { baseURL: sideChain.restUrl }
-      );
-
-      // 缓存 hashLoanSecret btcAmount
-
       const msg = sideLendingMessageComposer.withTypeUrl.apply({
         dcmId: BigInt(dcm.id),
         borrowAmount,
         borrower: currentAccount.address,
         borrowerPubkey: toXOnly(Buffer.from(fromHex(currentAccount.pubkey))).toString('hex'),
-        maturityTime: BigInt(maturityTime),
-        poolId: poolId
+        maturity: BigInt(maturityTime),
+        poolId: poolId,
+        referrer: ''
       });
       const result = await signAndBroadcastTxRaw({
         messages: [msg],
@@ -91,9 +78,13 @@ export default function useCreateLoan() {
       }
 
       if (hashResponse.tx_response.code === 0) {
+        const loanId = hashResponse.tx_response.events
+          .find((event) => event.type === 'apply')!
+          .attributes.find((item) => item.key === 'vault')!.value;
+
         services.lending.saveLoanExpectedCollateralAmount(
           {
-            vaultAddress: address,
+            vaultAddress: loanId,
             expectedCollateralAmount: +btcUnitAmount
           },
           { baseURL: SERVICE_BASE_URL }
@@ -119,7 +110,7 @@ export default function useCreateLoan() {
 
         setUiState({
           toInfo: {
-            address,
+            address: loanId,
             domain: ''
           },
           inputAmount: toReadableAmount(btcUnitAmount, 8)

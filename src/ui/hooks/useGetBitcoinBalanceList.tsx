@@ -1,10 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { useQuery } from 'react-query';
 
-import { UNISAT_RUNE_URL } from '@/shared/constant';
+import { CHAINS_ENUM, UNISAT_RUNE_URL } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import services from '@/ui/services';
 
+import { useFetchUtxosCallback } from '../state/transactions/hooks/index';
+import { satoshisToAmount } from '../utils';
 import { toReadableAmount, toUnitAmount } from '../utils/formatter';
 
 const defaultBtcBalance: BalanceItem = {
@@ -15,8 +17,9 @@ const defaultBtcBalance: BalanceItem = {
   amount: '0',
   asset: {
     denom: 'sat',
+    chain: CHAINS_ENUM.BTC,
     exponent: '8',
-    logo: `https://api.side.one/static/token/logo/btc.svg`,
+    logo: 'https://api.side.one/static/token/logo/btc.svg',
     name: 'Bitcoin',
     symbol: 'BTC',
     precision: 8,
@@ -35,7 +38,7 @@ function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
     amount: toUnitAmount(balance, '8'),
     asset: {
       denom: 'sat',
-      chain: 'bitcoin',
+      chain: CHAINS_ENUM.BTC,
       exponent: '8',
       logo: 'https://api.side.one/static/token/logo/btc.svg',
       name: 'Bitcoin',
@@ -47,6 +50,8 @@ function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
 }
 
 export default function useGetBitcoinBalanceList(address?: string, flag?: boolean) {
+  const fetchUtxos = useFetchUtxosCallback();
+
   const { data, isLoading } = useQuery({
     queryKey: [
       'getBitcoinBalanceList',
@@ -58,11 +63,12 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
     queryFn: async () => {
       try {
         // btc 资产
-        const btcAmount = await services.unisat.getAvailableBtcBalance({
-          address: address!
-        });
 
-        // rune 资产
+        const utxos = await fetchUtxos();
+        const safeBalance = utxos.filter((v) => v.inscriptions.length == 0).reduce((pre, cur) => pre + cur.satoshis, 0);
+
+        const btcAmount = satoshisToAmount(safeBalance);
+
         const { list } = await services.unisat.getRunesList({
           address: address!,
           currentPage: 1,
@@ -84,7 +90,7 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
             totalValue: BigNumber(toReadableAmount(item.amount, item.divisibility)).multipliedBy(denomPrice).toFixed(2),
             asset: {
               denom: `runes/${item.runeid}`,
-              chain: 'bitcoin',
+              chain: CHAINS_ENUM.BTC,
               precision: item.divisibility,
               logo: `${UNISAT_RUNE_URL}/${item.spacedRune}`,
               name: 'Rune',
@@ -95,7 +101,7 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
             }
           } as BalanceItem;
         });
-        const btcBalance = formatBitcoinItem(btcAmount, priceMap['sat']);
+        const btcBalance = formatBitcoinItem(btcAmount.toString(), priceMap['sat']);
 
         return [btcBalance, ...runeBalanceList];
       } catch (err) {

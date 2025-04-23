@@ -4,11 +4,11 @@ import { useQuery } from 'react-query';
 
 import { sideChain } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
-import { toReadableAmount } from '@/ui/utils/formatter';
 
 import services from '../services';
 import { GetLeadingParamsResponse, LeadingPool } from '../services/lending/types';
 import { useCurrentAccount } from '../state/accounts/hooks';
+import { formatUnitAmount } from '../utils';
 import useGetLendingParams from './useGetLendingParams';
 import { useGetSideBalanceList } from './useGetSideBalanceList';
 
@@ -19,6 +19,7 @@ export interface PoolDataItem {
   contracts: number;
   supplyApy: string;
   borrowApy: string;
+  borrowApyMax: string;
   totalSupplyInUsd: string;
   totalBorrowInUsd: string;
   token: BalanceItem;
@@ -35,7 +36,6 @@ export default function useGetPoolsData() {
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
   const { data: lendingParams } = useGetLendingParams();
-
   const { data: lendingPools, isLoading: loading } = useQuery({
     queryKey: ['getLendingPoolsData'],
     queryFn: async () => {
@@ -63,16 +63,27 @@ export default function useGetPoolsData() {
         return;
       }
 
-      const totalSupply = toReadableAmount(item.supply.amount, token.asset.exponent);
-      const totalBorrow = toReadableAmount(item.total_borrowed, token.asset.exponent);
+      const totalSupply = formatUnitAmount(item.supply.amount, token.asset.exponent);
+      const totalBorrow = formatUnitAmount(item.total_borrowed, token.asset.exponent);
+
+      const minBorrowApy = lendingPoolBase?.config.tranches.reduce((min, current) => {
+        return Math.min(min, current.borrow_apr / 10);
+      }, 1000);
+      const maxBorrowApy = lendingPoolBase?.config.tranches.reduce((max, current) => {
+        return Math.max(max, current.borrow_apr / 10);
+      }, 0);
 
       poolData.push({
         totalSupply,
         totalBorrow,
-        utilization: new BigNumber(totalBorrow).div(totalSupply).multipliedBy(100).toFixed(2),
+        utilization: new BigNumber(+totalBorrow || 0)
+          .div(+totalSupply || 1)
+          .multipliedBy(100)
+          .toFixed(2),
         contracts: lendingPoolBase?.ofContracts || 0,
         supplyApy: lendingPoolBase?.supplyAPY || '0',
-        borrowApy: lendingPoolBase?.borrowAPY || '0',
+        borrowApy: minBorrowApy?.toString() || '0',
+        borrowApyMax: maxBorrowApy?.toString() || '0',
         token,
         baseData: item,
         lendingParams: lendingParams.params,

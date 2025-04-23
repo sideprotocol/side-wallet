@@ -187,10 +187,11 @@ export interface MsgRemoveLiquidityResponseSDKType {}
 export interface MsgApply {
   borrower: string;
   borrowerPubkey: string;
-  maturityTime: bigint;
   poolId: string;
   borrowAmount: Coin;
+  maturity: bigint;
   dcmId: bigint;
+  referrer: string;
 }
 export interface MsgApplyProtoMsg {
   typeUrl: "/side.lending.MsgApply";
@@ -199,10 +200,11 @@ export interface MsgApplyProtoMsg {
 export interface MsgApplyAmino {
   borrower?: string;
   borrower_pubkey?: string;
-  maturity_time?: string;
   pool_id?: string;
   borrow_amount?: CoinAmino;
+  maturity?: string;
   dcm_id?: string;
+  referrer?: string;
 }
 export interface MsgApplyAminoMsg {
   type: "/side.lending.MsgApply";
@@ -211,10 +213,11 @@ export interface MsgApplyAminoMsg {
 export interface MsgApplySDKType {
   borrower: string;
   borrower_pubkey: string;
-  maturity_time: bigint;
   pool_id: string;
   borrow_amount: CoinSDKType;
+  maturity: bigint;
   dcm_id: bigint;
+  referrer: string;
 }
 export interface MsgApplyResponse {}
 export interface MsgApplyResponseProtoMsg {
@@ -230,7 +233,7 @@ export interface MsgApplyResponseSDKType {}
 export interface MsgSubmitCets {
   borrower: string;
   loanId: string;
-  depositTx: string;
+  depositTxs: string[];
   liquidationCet: string;
   liquidationAdaptorSignatures: string[];
   defaultLiquidationAdaptorSignatures: string[];
@@ -244,7 +247,7 @@ export interface MsgSubmitCetsProtoMsg {
 export interface MsgSubmitCetsAmino {
   borrower?: string;
   loan_id?: string;
-  deposit_tx?: string;
+  deposit_txs?: string[];
   liquidation_cet?: string;
   liquidation_adaptor_signatures?: string[];
   default_liquidation_adaptor_signatures?: string[];
@@ -258,7 +261,7 @@ export interface MsgSubmitCetsAminoMsg {
 export interface MsgSubmitCetsSDKType {
   borrower: string;
   loan_id: string;
-  deposit_tx: string;
+  deposit_txs: string[];
   liquidation_cet: string;
   liquidation_adaptor_signatures: string[];
   default_liquidation_adaptor_signatures: string[];
@@ -1236,10 +1239,11 @@ function createBaseMsgApply(): MsgApply {
   return {
     borrower: "",
     borrowerPubkey: "",
-    maturityTime: BigInt(0),
     poolId: "",
     borrowAmount: Coin.fromPartial({}),
-    dcmId: BigInt(0)
+    maturity: BigInt(0),
+    dcmId: BigInt(0),
+    referrer: ""
   };
 }
 export const MsgApply = {
@@ -1251,17 +1255,20 @@ export const MsgApply = {
     if (message.borrowerPubkey !== "") {
       writer.uint32(18).string(message.borrowerPubkey);
     }
-    if (message.maturityTime !== BigInt(0)) {
-      writer.uint32(24).int64(message.maturityTime);
-    }
     if (message.poolId !== "") {
-      writer.uint32(34).string(message.poolId);
+      writer.uint32(26).string(message.poolId);
     }
     if (message.borrowAmount !== undefined) {
-      Coin.encode(message.borrowAmount, writer.uint32(42).fork()).ldelim();
+      Coin.encode(message.borrowAmount, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.maturity !== BigInt(0)) {
+      writer.uint32(40).int64(message.maturity);
     }
     if (message.dcmId !== BigInt(0)) {
       writer.uint32(48).uint64(message.dcmId);
+    }
+    if (message.referrer !== "") {
+      writer.uint32(58).string(message.referrer);
     }
     return writer;
   },
@@ -1279,16 +1286,19 @@ export const MsgApply = {
           message.borrowerPubkey = reader.string();
           break;
         case 3:
-          message.maturityTime = reader.int64();
-          break;
-        case 4:
           message.poolId = reader.string();
           break;
-        case 5:
+        case 4:
           message.borrowAmount = Coin.decode(reader, reader.uint32());
+          break;
+        case 5:
+          message.maturity = reader.int64();
           break;
         case 6:
           message.dcmId = reader.uint64();
+          break;
+        case 7:
+          message.referrer = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1301,10 +1311,11 @@ export const MsgApply = {
     const message = createBaseMsgApply();
     message.borrower = object.borrower ?? "";
     message.borrowerPubkey = object.borrowerPubkey ?? "";
-    message.maturityTime = object.maturityTime !== undefined && object.maturityTime !== null ? BigInt(object.maturityTime.toString()) : BigInt(0);
     message.poolId = object.poolId ?? "";
     message.borrowAmount = object.borrowAmount !== undefined && object.borrowAmount !== null ? Coin.fromPartial(object.borrowAmount) : undefined;
+    message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
     message.dcmId = object.dcmId !== undefined && object.dcmId !== null ? BigInt(object.dcmId.toString()) : BigInt(0);
+    message.referrer = object.referrer ?? "";
     return message;
   },
   fromAmino(object: MsgApplyAmino): MsgApply {
@@ -1315,17 +1326,20 @@ export const MsgApply = {
     if (object.borrower_pubkey !== undefined && object.borrower_pubkey !== null) {
       message.borrowerPubkey = object.borrower_pubkey;
     }
-    if (object.maturity_time !== undefined && object.maturity_time !== null) {
-      message.maturityTime = BigInt(object.maturity_time);
-    }
     if (object.pool_id !== undefined && object.pool_id !== null) {
       message.poolId = object.pool_id;
     }
     if (object.borrow_amount !== undefined && object.borrow_amount !== null) {
       message.borrowAmount = Coin.fromAmino(object.borrow_amount);
     }
+    if (object.maturity !== undefined && object.maturity !== null) {
+      message.maturity = BigInt(object.maturity);
+    }
     if (object.dcm_id !== undefined && object.dcm_id !== null) {
       message.dcmId = BigInt(object.dcm_id);
+    }
+    if (object.referrer !== undefined && object.referrer !== null) {
+      message.referrer = object.referrer;
     }
     return message;
   },
@@ -1333,10 +1347,11 @@ export const MsgApply = {
     const obj: any = {};
     obj.borrower = message.borrower === "" ? undefined : message.borrower;
     obj.borrower_pubkey = message.borrowerPubkey === "" ? undefined : message.borrowerPubkey;
-    obj.maturity_time = message.maturityTime !== BigInt(0) ? message.maturityTime.toString() : undefined;
     obj.pool_id = message.poolId === "" ? undefined : message.poolId;
     obj.borrow_amount = message.borrowAmount ? Coin.toAmino(message.borrowAmount) : undefined;
+    obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
     obj.dcm_id = message.dcmId !== BigInt(0) ? message.dcmId.toString() : undefined;
+    obj.referrer = message.referrer === "" ? undefined : message.referrer;
     return obj;
   },
   fromAminoMsg(object: MsgApplyAminoMsg): MsgApply {
@@ -1409,7 +1424,7 @@ function createBaseMsgSubmitCets(): MsgSubmitCets {
   return {
     borrower: "",
     loanId: "",
-    depositTx: "",
+    depositTxs: [],
     liquidationCet: "",
     liquidationAdaptorSignatures: [],
     defaultLiquidationAdaptorSignatures: [],
@@ -1426,8 +1441,8 @@ export const MsgSubmitCets = {
     if (message.loanId !== "") {
       writer.uint32(18).string(message.loanId);
     }
-    if (message.depositTx !== "") {
-      writer.uint32(26).string(message.depositTx);
+    for (const v of message.depositTxs) {
+      writer.uint32(26).string(v!);
     }
     if (message.liquidationCet !== "") {
       writer.uint32(34).string(message.liquidationCet);
@@ -1460,7 +1475,7 @@ export const MsgSubmitCets = {
           message.loanId = reader.string();
           break;
         case 3:
-          message.depositTx = reader.string();
+          message.depositTxs.push(reader.string());
           break;
         case 4:
           message.liquidationCet = reader.string();
@@ -1488,7 +1503,7 @@ export const MsgSubmitCets = {
     const message = createBaseMsgSubmitCets();
     message.borrower = object.borrower ?? "";
     message.loanId = object.loanId ?? "";
-    message.depositTx = object.depositTx ?? "";
+    message.depositTxs = object.depositTxs?.map(e => e) || [];
     message.liquidationCet = object.liquidationCet ?? "";
     message.liquidationAdaptorSignatures = object.liquidationAdaptorSignatures?.map(e => e) || [];
     message.defaultLiquidationAdaptorSignatures = object.defaultLiquidationAdaptorSignatures?.map(e => e) || [];
@@ -1504,9 +1519,7 @@ export const MsgSubmitCets = {
     if (object.loan_id !== undefined && object.loan_id !== null) {
       message.loanId = object.loan_id;
     }
-    if (object.deposit_tx !== undefined && object.deposit_tx !== null) {
-      message.depositTx = object.deposit_tx;
-    }
+    message.depositTxs = object.deposit_txs?.map(e => e) || [];
     if (object.liquidation_cet !== undefined && object.liquidation_cet !== null) {
       message.liquidationCet = object.liquidation_cet;
     }
@@ -1522,7 +1535,11 @@ export const MsgSubmitCets = {
     const obj: any = {};
     obj.borrower = message.borrower === "" ? undefined : message.borrower;
     obj.loan_id = message.loanId === "" ? undefined : message.loanId;
-    obj.deposit_tx = message.depositTx === "" ? undefined : message.depositTx;
+    if (message.depositTxs) {
+      obj.deposit_txs = message.depositTxs.map(e => e);
+    } else {
+      obj.deposit_txs = message.depositTxs;
+    }
     obj.liquidation_cet = message.liquidationCet === "" ? undefined : message.liquidationCet;
     if (message.liquidationAdaptorSignatures) {
       obj.liquidation_adaptor_signatures = message.liquidationAdaptorSignatures.map(e => e);

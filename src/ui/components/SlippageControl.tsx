@@ -48,8 +48,7 @@ export default function SlippageControl(props) {
             gap: '12px',
             marginBottom: '12px'
           }}>
-          <div
-            className="flex-1 flex items-center justify-between text-white font-bold p-[5px] rounded-[16px] text-[14px] border border-solid border-[#ffffff1a] h-[50px] bg-black">
+          <div className="flex-1 flex items-center justify-between text-white font-bold p-[5px] rounded-[16px] text-[14px] border border-solid border-[#ffffff1a] h-[50px] bg-black">
             {['0.25', '0.5', '1', ''].map((item, index) => {
               if (!item && index === 3) {
                 return (
@@ -107,17 +106,6 @@ export default function SlippageControl(props) {
             </Button>
           </div>
         </div>
-        {/*<Button*/}
-        {/*  text="Add Wallet"*/}
-        {/*  preset="ghost"*/}
-        {/*  icon={'plus'}*/}
-        {/*  onClick={() => {*/}
-        {/*    // navigate('WelcomeScreen', { });*/}
-        {/*  }}*/}
-        {/*  style={{*/}
-        {/*    marginTop: '18px'*/}
-        {/*  }}*/}
-        {/*/>*/}
       </div>
     </Modal>
   );

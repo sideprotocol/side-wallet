@@ -11,25 +11,14 @@ import { getQueryParams } from '../getQueryParams';
 import {
   AddressInfo,
   GetBridgeWithdrawFeeReponse,
+  Params,
   RuneOutput,
   Runes,
   UTXO,
   UTXOAddress,
+  UTXOBridge,
   WithdrawRequest
 } from './types';
-
-interface Params {
-  confirmations: number;
-  max_acceptable_block_depth: string;
-  btc_voucher_denom: string;
-  deposit_enabled: boolean;
-  withdraw_enabled: boolean;
-  non_btc_relayers: string[];
-  vaults: Vault[];
-  protocol_limits: Protocollimits;
-  protocol_fees: Protocolfees;
-  tss_params: Tssparams;
-}
 
 interface Tssparams {
   dkg_timeout_period: string;
@@ -193,6 +182,17 @@ export default class BridgeService {
         'Content-Type': 'application/json',
         Accept: 'application/json'
       }
+    });
+  }
+
+  async getMemPoolTxs(address: string): Promise<UTXOBridge[]> {
+    return this.apiClient.get<UTXOBridge[]>(`/api/address/${address}/txs`, {
+      baseURL: SIDE_BTC_EXPLORER
+    });
+  }
+  async getMemPoolAddress(address: string): Promise<AddressInfo> {
+    return this.apiClient.get<AddressInfo>(`/api/address/${address}`, {
+      baseURL: SIDE_BTC_EXPLORER
     });
   }
 

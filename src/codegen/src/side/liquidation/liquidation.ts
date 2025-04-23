@@ -2,6 +2,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 import { toTimestamp, fromTimestamp } from "../../helpers";
 export enum AssetType {
   ASSET_TYPE_BITCOIN = 0,
@@ -85,13 +86,15 @@ export interface Liquidation {
   debtor: string;
   dcm: string;
   collateralAmount: Coin;
+  actualCollateralAmount: Coin;
   debtAmount: Coin;
-  liquidatedPrice: bigint;
+  liquidatedPrice: string;
   liquidatedTime: Date;
   liquidatedCollateralAmount: Coin;
   liquidatedDebtAmount: Coin;
   liquidationBonusAmount: Coin;
   protocolLiquidationFee: Coin;
+  unliquidatedCollateralAmount: Coin;
   liquidationCet: string;
   settlementTx: string;
   settlementTxId: string;
@@ -107,6 +110,7 @@ export interface LiquidationAmino {
   debtor?: string;
   dcm?: string;
   collateral_amount?: CoinAmino;
+  actual_collateral_amount?: CoinAmino;
   debt_amount?: CoinAmino;
   liquidated_price?: string;
   liquidated_time?: string;
@@ -114,6 +118,7 @@ export interface LiquidationAmino {
   liquidated_debt_amount?: CoinAmino;
   liquidation_bonus_amount?: CoinAmino;
   protocol_liquidation_fee?: CoinAmino;
+  unliquidated_collateral_amount?: CoinAmino;
   liquidation_cet?: string;
   settlement_tx?: string;
   settlement_tx_id?: string;
@@ -129,13 +134,15 @@ export interface LiquidationSDKType {
   debtor: string;
   dcm: string;
   collateral_amount: CoinSDKType;
+  actual_collateral_amount: CoinSDKType;
   debt_amount: CoinSDKType;
-  liquidated_price: bigint;
+  liquidated_price: string;
   liquidated_time: Date;
   liquidated_collateral_amount: CoinSDKType;
   liquidated_debt_amount: CoinSDKType;
   liquidation_bonus_amount: CoinSDKType;
   protocol_liquidation_fee: CoinSDKType;
+  unliquidated_collateral_amount: CoinSDKType;
   liquidation_cet: string;
   settlement_tx: string;
   settlement_tx_id: string;
@@ -147,6 +154,7 @@ export interface LiquidationRecord {
   liquidator: string;
   debtAmount: Coin;
   collateralAmount: Coin;
+  bonusAmount: Coin;
   time: Date;
 }
 export interface LiquidationRecordProtoMsg {
@@ -159,6 +167,7 @@ export interface LiquidationRecordAmino {
   liquidator?: string;
   debt_amount?: CoinAmino;
   collateral_amount?: CoinAmino;
+  bonus_amount?: CoinAmino;
   time?: string;
 }
 export interface LiquidationRecordAminoMsg {
@@ -171,6 +180,7 @@ export interface LiquidationRecordSDKType {
   liquidator: string;
   debt_amount: CoinSDKType;
   collateral_amount: CoinSDKType;
+  bonus_amount: CoinSDKType;
   time: Date;
 }
 function createBaseLiquidation(): Liquidation {
@@ -180,13 +190,15 @@ function createBaseLiquidation(): Liquidation {
     debtor: "",
     dcm: "",
     collateralAmount: Coin.fromPartial({}),
+    actualCollateralAmount: Coin.fromPartial({}),
     debtAmount: Coin.fromPartial({}),
-    liquidatedPrice: BigInt(0),
+    liquidatedPrice: "",
     liquidatedTime: new Date(),
     liquidatedCollateralAmount: Coin.fromPartial({}),
     liquidatedDebtAmount: Coin.fromPartial({}),
     liquidationBonusAmount: Coin.fromPartial({}),
     protocolLiquidationFee: Coin.fromPartial({}),
+    unliquidatedCollateralAmount: Coin.fromPartial({}),
     liquidationCet: "",
     settlementTx: "",
     settlementTxId: "",
@@ -211,38 +223,44 @@ export const Liquidation = {
     if (message.collateralAmount !== undefined) {
       Coin.encode(message.collateralAmount, writer.uint32(42).fork()).ldelim();
     }
-    if (message.debtAmount !== undefined) {
-      Coin.encode(message.debtAmount, writer.uint32(50).fork()).ldelim();
+    if (message.actualCollateralAmount !== undefined) {
+      Coin.encode(message.actualCollateralAmount, writer.uint32(50).fork()).ldelim();
     }
-    if (message.liquidatedPrice !== BigInt(0)) {
-      writer.uint32(56).int64(message.liquidatedPrice);
+    if (message.debtAmount !== undefined) {
+      Coin.encode(message.debtAmount, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.liquidatedPrice !== "") {
+      writer.uint32(66).string(Decimal.fromUserInput(message.liquidatedPrice, 18).atomics);
     }
     if (message.liquidatedTime !== undefined) {
-      Timestamp.encode(toTimestamp(message.liquidatedTime), writer.uint32(66).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.liquidatedTime), writer.uint32(74).fork()).ldelim();
     }
     if (message.liquidatedCollateralAmount !== undefined) {
-      Coin.encode(message.liquidatedCollateralAmount, writer.uint32(74).fork()).ldelim();
+      Coin.encode(message.liquidatedCollateralAmount, writer.uint32(82).fork()).ldelim();
     }
     if (message.liquidatedDebtAmount !== undefined) {
-      Coin.encode(message.liquidatedDebtAmount, writer.uint32(82).fork()).ldelim();
+      Coin.encode(message.liquidatedDebtAmount, writer.uint32(90).fork()).ldelim();
     }
     if (message.liquidationBonusAmount !== undefined) {
-      Coin.encode(message.liquidationBonusAmount, writer.uint32(90).fork()).ldelim();
+      Coin.encode(message.liquidationBonusAmount, writer.uint32(98).fork()).ldelim();
     }
     if (message.protocolLiquidationFee !== undefined) {
-      Coin.encode(message.protocolLiquidationFee, writer.uint32(98).fork()).ldelim();
+      Coin.encode(message.protocolLiquidationFee, writer.uint32(106).fork()).ldelim();
+    }
+    if (message.unliquidatedCollateralAmount !== undefined) {
+      Coin.encode(message.unliquidatedCollateralAmount, writer.uint32(114).fork()).ldelim();
     }
     if (message.liquidationCet !== "") {
-      writer.uint32(106).string(message.liquidationCet);
+      writer.uint32(122).string(message.liquidationCet);
     }
     if (message.settlementTx !== "") {
-      writer.uint32(114).string(message.settlementTx);
+      writer.uint32(130).string(message.settlementTx);
     }
     if (message.settlementTxId !== "") {
-      writer.uint32(122).string(message.settlementTxId);
+      writer.uint32(138).string(message.settlementTxId);
     }
     if (message.status !== 0) {
-      writer.uint32(128).int32(message.status);
+      writer.uint32(144).int32(message.status);
     }
     return writer;
   },
@@ -269,36 +287,42 @@ export const Liquidation = {
           message.collateralAmount = Coin.decode(reader, reader.uint32());
           break;
         case 6:
-          message.debtAmount = Coin.decode(reader, reader.uint32());
+          message.actualCollateralAmount = Coin.decode(reader, reader.uint32());
           break;
         case 7:
-          message.liquidatedPrice = reader.int64();
+          message.debtAmount = Coin.decode(reader, reader.uint32());
           break;
         case 8:
-          message.liquidatedTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.liquidatedPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 9:
-          message.liquidatedCollateralAmount = Coin.decode(reader, reader.uint32());
+          message.liquidatedTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 10:
-          message.liquidatedDebtAmount = Coin.decode(reader, reader.uint32());
+          message.liquidatedCollateralAmount = Coin.decode(reader, reader.uint32());
           break;
         case 11:
-          message.liquidationBonusAmount = Coin.decode(reader, reader.uint32());
+          message.liquidatedDebtAmount = Coin.decode(reader, reader.uint32());
           break;
         case 12:
-          message.protocolLiquidationFee = Coin.decode(reader, reader.uint32());
+          message.liquidationBonusAmount = Coin.decode(reader, reader.uint32());
           break;
         case 13:
-          message.liquidationCet = reader.string();
+          message.protocolLiquidationFee = Coin.decode(reader, reader.uint32());
           break;
         case 14:
-          message.settlementTx = reader.string();
+          message.unliquidatedCollateralAmount = Coin.decode(reader, reader.uint32());
           break;
         case 15:
-          message.settlementTxId = reader.string();
+          message.liquidationCet = reader.string();
           break;
         case 16:
+          message.settlementTx = reader.string();
+          break;
+        case 17:
+          message.settlementTxId = reader.string();
+          break;
+        case 18:
           message.status = reader.int32() as any;
           break;
         default:
@@ -315,13 +339,15 @@ export const Liquidation = {
     message.debtor = object.debtor ?? "";
     message.dcm = object.dcm ?? "";
     message.collateralAmount = object.collateralAmount !== undefined && object.collateralAmount !== null ? Coin.fromPartial(object.collateralAmount) : undefined;
+    message.actualCollateralAmount = object.actualCollateralAmount !== undefined && object.actualCollateralAmount !== null ? Coin.fromPartial(object.actualCollateralAmount) : undefined;
     message.debtAmount = object.debtAmount !== undefined && object.debtAmount !== null ? Coin.fromPartial(object.debtAmount) : undefined;
-    message.liquidatedPrice = object.liquidatedPrice !== undefined && object.liquidatedPrice !== null ? BigInt(object.liquidatedPrice.toString()) : BigInt(0);
+    message.liquidatedPrice = object.liquidatedPrice ?? "";
     message.liquidatedTime = object.liquidatedTime ?? undefined;
     message.liquidatedCollateralAmount = object.liquidatedCollateralAmount !== undefined && object.liquidatedCollateralAmount !== null ? Coin.fromPartial(object.liquidatedCollateralAmount) : undefined;
     message.liquidatedDebtAmount = object.liquidatedDebtAmount !== undefined && object.liquidatedDebtAmount !== null ? Coin.fromPartial(object.liquidatedDebtAmount) : undefined;
     message.liquidationBonusAmount = object.liquidationBonusAmount !== undefined && object.liquidationBonusAmount !== null ? Coin.fromPartial(object.liquidationBonusAmount) : undefined;
     message.protocolLiquidationFee = object.protocolLiquidationFee !== undefined && object.protocolLiquidationFee !== null ? Coin.fromPartial(object.protocolLiquidationFee) : undefined;
+    message.unliquidatedCollateralAmount = object.unliquidatedCollateralAmount !== undefined && object.unliquidatedCollateralAmount !== null ? Coin.fromPartial(object.unliquidatedCollateralAmount) : undefined;
     message.liquidationCet = object.liquidationCet ?? "";
     message.settlementTx = object.settlementTx ?? "";
     message.settlementTxId = object.settlementTxId ?? "";
@@ -345,11 +371,14 @@ export const Liquidation = {
     if (object.collateral_amount !== undefined && object.collateral_amount !== null) {
       message.collateralAmount = Coin.fromAmino(object.collateral_amount);
     }
+    if (object.actual_collateral_amount !== undefined && object.actual_collateral_amount !== null) {
+      message.actualCollateralAmount = Coin.fromAmino(object.actual_collateral_amount);
+    }
     if (object.debt_amount !== undefined && object.debt_amount !== null) {
       message.debtAmount = Coin.fromAmino(object.debt_amount);
     }
     if (object.liquidated_price !== undefined && object.liquidated_price !== null) {
-      message.liquidatedPrice = BigInt(object.liquidated_price);
+      message.liquidatedPrice = object.liquidated_price;
     }
     if (object.liquidated_time !== undefined && object.liquidated_time !== null) {
       message.liquidatedTime = fromTimestamp(Timestamp.fromAmino(object.liquidated_time));
@@ -365,6 +394,9 @@ export const Liquidation = {
     }
     if (object.protocol_liquidation_fee !== undefined && object.protocol_liquidation_fee !== null) {
       message.protocolLiquidationFee = Coin.fromAmino(object.protocol_liquidation_fee);
+    }
+    if (object.unliquidated_collateral_amount !== undefined && object.unliquidated_collateral_amount !== null) {
+      message.unliquidatedCollateralAmount = Coin.fromAmino(object.unliquidated_collateral_amount);
     }
     if (object.liquidation_cet !== undefined && object.liquidation_cet !== null) {
       message.liquidationCet = object.liquidation_cet;
@@ -387,13 +419,15 @@ export const Liquidation = {
     obj.debtor = message.debtor === "" ? undefined : message.debtor;
     obj.dcm = message.dcm === "" ? undefined : message.dcm;
     obj.collateral_amount = message.collateralAmount ? Coin.toAmino(message.collateralAmount) : undefined;
+    obj.actual_collateral_amount = message.actualCollateralAmount ? Coin.toAmino(message.actualCollateralAmount) : undefined;
     obj.debt_amount = message.debtAmount ? Coin.toAmino(message.debtAmount) : undefined;
-    obj.liquidated_price = message.liquidatedPrice !== BigInt(0) ? message.liquidatedPrice.toString() : undefined;
+    obj.liquidated_price = message.liquidatedPrice === "" ? undefined : message.liquidatedPrice;
     obj.liquidated_time = message.liquidatedTime ? Timestamp.toAmino(toTimestamp(message.liquidatedTime)) : undefined;
     obj.liquidated_collateral_amount = message.liquidatedCollateralAmount ? Coin.toAmino(message.liquidatedCollateralAmount) : undefined;
     obj.liquidated_debt_amount = message.liquidatedDebtAmount ? Coin.toAmino(message.liquidatedDebtAmount) : undefined;
     obj.liquidation_bonus_amount = message.liquidationBonusAmount ? Coin.toAmino(message.liquidationBonusAmount) : undefined;
     obj.protocol_liquidation_fee = message.protocolLiquidationFee ? Coin.toAmino(message.protocolLiquidationFee) : undefined;
+    obj.unliquidated_collateral_amount = message.unliquidatedCollateralAmount ? Coin.toAmino(message.unliquidatedCollateralAmount) : undefined;
     obj.liquidation_cet = message.liquidationCet === "" ? undefined : message.liquidationCet;
     obj.settlement_tx = message.settlementTx === "" ? undefined : message.settlementTx;
     obj.settlement_tx_id = message.settlementTxId === "" ? undefined : message.settlementTxId;
@@ -423,6 +457,7 @@ function createBaseLiquidationRecord(): LiquidationRecord {
     liquidator: "",
     debtAmount: Coin.fromPartial({}),
     collateralAmount: Coin.fromPartial({}),
+    bonusAmount: Coin.fromPartial({}),
     time: new Date()
   };
 }
@@ -444,8 +479,11 @@ export const LiquidationRecord = {
     if (message.collateralAmount !== undefined) {
       Coin.encode(message.collateralAmount, writer.uint32(42).fork()).ldelim();
     }
+    if (message.bonusAmount !== undefined) {
+      Coin.encode(message.bonusAmount, writer.uint32(50).fork()).ldelim();
+    }
     if (message.time !== undefined) {
-      Timestamp.encode(toTimestamp(message.time), writer.uint32(50).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.time), writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -472,6 +510,9 @@ export const LiquidationRecord = {
           message.collateralAmount = Coin.decode(reader, reader.uint32());
           break;
         case 6:
+          message.bonusAmount = Coin.decode(reader, reader.uint32());
+          break;
+        case 7:
           message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         default:
@@ -488,6 +529,7 @@ export const LiquidationRecord = {
     message.liquidator = object.liquidator ?? "";
     message.debtAmount = object.debtAmount !== undefined && object.debtAmount !== null ? Coin.fromPartial(object.debtAmount) : undefined;
     message.collateralAmount = object.collateralAmount !== undefined && object.collateralAmount !== null ? Coin.fromPartial(object.collateralAmount) : undefined;
+    message.bonusAmount = object.bonusAmount !== undefined && object.bonusAmount !== null ? Coin.fromPartial(object.bonusAmount) : undefined;
     message.time = object.time ?? undefined;
     return message;
   },
@@ -508,6 +550,9 @@ export const LiquidationRecord = {
     if (object.collateral_amount !== undefined && object.collateral_amount !== null) {
       message.collateralAmount = Coin.fromAmino(object.collateral_amount);
     }
+    if (object.bonus_amount !== undefined && object.bonus_amount !== null) {
+      message.bonusAmount = Coin.fromAmino(object.bonus_amount);
+    }
     if (object.time !== undefined && object.time !== null) {
       message.time = fromTimestamp(Timestamp.fromAmino(object.time));
     }
@@ -520,6 +565,7 @@ export const LiquidationRecord = {
     obj.liquidator = message.liquidator === "" ? undefined : message.liquidator;
     obj.debt_amount = message.debtAmount ? Coin.toAmino(message.debtAmount) : undefined;
     obj.collateral_amount = message.collateralAmount ? Coin.toAmino(message.collateralAmount) : undefined;
+    obj.bonus_amount = message.bonusAmount ? Coin.toAmino(message.bonusAmount) : undefined;
     obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : undefined;
     return obj;
   },

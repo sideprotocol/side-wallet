@@ -8,8 +8,6 @@ import { colors } from '@/ui/theme/colors';
 import { useNavigate } from '../MainRoute';
 
 export default function SelectNetworkScreen() {
-  // TODO: set select network
-
   const [isCheck, setIsCheck] = useState(false);
   const [number, setNumber] = useState(-1);
   const navigate = useNavigate();

@@ -634,17 +634,31 @@ export class WalletController extends BaseController {
 
   signAdaptorAndMessage = async (
     text: string,
-    sigHash: string,
+    sigHashs: string[],
     adaptorPoint: string,
     defaultAdaptorPoint: string,
-    repaymentSigHashHex: string
+    repaymentSigHashs: string[]
   ) => {
     const account = preferenceService.getCurrentAccount();
     if (!account) throw new Error('no current account');
 
-    const adaptorSignature = await this.signAdaptor(sigHash, adaptorPoint);
-    const defaultAdaptorSignature = await this.signAdaptor(sigHash, defaultAdaptorPoint);
-    const repaymentSignature = await this.signSnorr(repaymentSigHashHex);
+    const liquidation_adaptor_signatures = await Promise.all(
+      sigHashs.map(async (sigHash) => {
+        return await this.signAdaptor(sigHash, adaptorPoint);
+      })
+    );
+
+    const default_liquidation_adaptor_signatures = await Promise.all(
+      sigHashs.map(async (sigHash) => {
+        return await this.signAdaptor(sigHash, defaultAdaptorPoint);
+      })
+    );
+
+    const repayment_signatures = await Promise.all(
+      repaymentSigHashs.map(async (repaymentSigHash) => {
+        return await this.signSnorr(repaymentSigHash);
+      })
+    );
 
     try {
       const parsedText = JSON.parse(text);
@@ -656,9 +670,9 @@ export class WalletController extends BaseController {
             ...parsedText.msgs[0],
             value: {
               ...parsedText.msgs[0].value,
-              liquidation_adaptor_signatures: [adaptorSignature],
-              default_liquidation_adaptor_signatures: [defaultAdaptorSignature],
-              repayment_signatures: [repaymentSignature]
+              liquidation_adaptor_signatures: liquidation_adaptor_signatures,
+              default_liquidation_adaptor_signatures: default_liquidation_adaptor_signatures,
+              repayment_signatures: repayment_signatures
             }
           }
         ]
@@ -666,9 +680,9 @@ export class WalletController extends BaseController {
 
       const messageSignature = await this.signMessage(newMessage);
       return {
-        liquidation_adaptor_signature: adaptorSignature,
-        default_adaptor_signature: defaultAdaptorSignature,
-        repayment_signature: repaymentSignature,
+        liquidation_adaptor_signatures: liquidation_adaptor_signatures,
+        default_liquidation_adaptor_signatures: default_liquidation_adaptor_signatures,
+        repayment_signatures: repayment_signatures,
         message_signature: messageSignature
       };
     } catch (error) {

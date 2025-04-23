@@ -28,44 +28,41 @@ export default function WelcomeScreen() {
       ${!isInTab ? 'border border-white/10' : 'border-none'}
     `}>
       {state?.addWallet && <Header onBack={() => navigateRouter(-1)} title="Add Wallet" />}
-      {isInTab ? (
-        <Row justifyCenter itemsCenter gap="xs" mb="lg">
-          <Image src="/images/logo/wallet-logo.png" width={50} height={50} />
-          <Image src="/images/icons/side_wallet.svg" width={186} height={20} />
-        </Row>
-      ) : null}
 
       <Column
         fullX
         fullY
         style={{
           gap: '0',
-          padding: isInTab ? '0 40px 24px' : '0 16px 24px',
-          backgroundColor: isInTab ? '#17171C' : 'transparent'
+          padding: isInTab ? '0 40px 24px' : '0 16px 24px'
         }}>
         <Column
           style={{
             flex: 1
           }}
           gap={'lg'}>
-          <Row
+          <Column
             justifyCenter
             style={{
               flex: 1,
               alignItems: 'center'
-            }}>
+            }}
+            gap="lg">
             <Row
               justifyCenter
               itemsCenter
               style={{
                 borderRadius: '20px',
-                width: 120,
-                height: 120,
-                border: '1px solid #6C7080'
+                width: isInTab ? 80 : 80,
+                height: isInTab ? 80 : 80
               }}>
-              <Image src="/images/logo/wallet-logo.png" width={isInTab ? 80 : 120} height={isInTab ? 80 : 120} />
+              <Image src="/images/logo/wallet-logo.png" width={isInTab ? 80 : 80} height={isInTab ? 80 : 80} />
             </Row>
-          </Row>
+            <Row justifyCenter itemsCenter gap="xs" mb="lg">
+              <Image src="/images/icons/side_wallet.svg" width={136} height={20} />
+            </Row>
+          </Column>
+
           <Button
             text="Create new wallet"
             preset="primary"

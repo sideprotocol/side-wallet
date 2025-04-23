@@ -186,7 +186,8 @@ export enum TxType {
   SEND_ATOMICALS_INSCRIPTION,
   SEND_SIDE,
   SEND_RUNE_TEST,
-  SEND_BTC_TEST
+  SEND_BTC_TEST,
+  SWAP_SIDE
 }
 
 interface BaseUserToSignInput {
@@ -539,6 +540,7 @@ export interface IAsset {
   precision: number;
   rune: boolean;
   symbol: string;
+  chain?: CHAINS_ENUM;
   runeData?: {
     runeid: string;
     rune: string;
@@ -563,6 +565,13 @@ export interface IAsset {
     mintable: boolean;
     remaining: string;
   };
+  ibcData?: Array<{
+    oppositeChainId: string;
+    oppositeChainDenom: string;
+    oppositeChainChannelId: string;
+    sideChainChannelId: string;
+    portId: string;
+  }> | null;
 }
 
 export interface BalanceItem {
