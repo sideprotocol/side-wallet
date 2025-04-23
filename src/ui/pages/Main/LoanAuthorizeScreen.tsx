@@ -4,13 +4,18 @@ import 'swiper/css';
 import { Button, Column, Content, Footer, Layout, Row, Text } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useApproveLoan from '@/ui/hooks/useApproveLoan';
+import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
+import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
 import useGetLoanById from '@/ui/hooks/useGetLoanById';
+import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { LiquidationEvent } from '@/ui/services/lending/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useLendingState } from '@/ui/state/lending/hook';
 import { colors } from '@/ui/theme/colors';
-import { getTruncate, useLocationState } from '@/ui/utils';
-import { formatTimeWithUTC } from '@/ui/utils/formatter';
+import { getTruncate, satoshisToAmount, useLocationState } from '@/ui/utils';
+import { formatTimeWithUTC, toReadableAmount } from '@/ui/utils/formatter';
 import { Input, Stack, Typography } from '@mui/material';
 
 export interface LoanAuthorizeLocationState {
@@ -22,29 +27,48 @@ export interface LoanAuthorizeLocationState {
 }
 
 export default function LoanAuthorizeScreen() {
-  const { loanId, feeRate, borrowAmount, collateralAmount, liquidationEvent } =
-    useLocationState<LoanAuthorizeLocationState>();
-
-  const { approveLoan, loading, depositTxs } = useApproveLoan(loanId, collateralAmount);
-
+  const { loanId, feeRate, borrowAmount, collateralAmount } = useLocationState<LoanAuthorizeLocationState>();
   const currentAccount = useCurrentAccount();
 
-  const disabled = loading || !loanId || !borrowAmount || !collateralAmount || !liquidationEvent;
+  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+
+  const { value } = useGetDepositTx(loanId, collateralAmount);
+
+  const { approveLoan, loading } = useApproveLoan(loanId, collateralAmount);
+
+  const { poolTokenDenom, maturity } = useLendingState();
 
   const [refundAddress, setRefundAddress] = useState(currentAccount.address);
 
   const { loan } = useGetLoanById({ loanId });
 
+  const { data: poolsData } = useGetPoolsData();
+  const poolTokenBalance = balanceList.find((b) => b.denom == poolTokenDenom);
+
+  const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
+
+  const { liquidationEvent } = useGetLiquidationEvent({
+    bitcoinAmount: value ? satoshisToAmount(value) : '',
+    borrowToken: poolData?.token,
+    borrowTokenAmount: toReadableAmount(borrowAmount, poolData?.token.asset.exponent || 6),
+    poolId: poolData?.baseData.id || '',
+    maturity: maturity
+  });
+
+  console.log({ liquidationEvent });
+
   const data = [
     {
       label: 'Liquidation Price (BTC/USDC)',
-      value: getTruncate(liquidationEvent?.price || '0', 2)
+      value: liquidationEvent ? getTruncate(liquidationEvent?.price || '0', 2) : '-'
     },
     {
       label: 'Maturity Date',
       value: !loan ? '-' : formatTimeWithUTC(+loan.loan.maturity_time * 1000)
     }
   ];
+
+  const disabled = loading || !loanId || !borrowAmount || !collateralAmount || !liquidationEvent;
 
   return (
     <Layout>
@@ -185,11 +209,13 @@ export default function LoanAuthorizeScreen() {
             <Button
               disabled={disabled}
               onClick={async () => {
+                if (!liquidationEvent) return;
+
                 await approveLoan({
                   loanId,
                   borrowAmount: {
                     amount: borrowAmount,
-                    denom: 'uusdc'
+                    denom: poolTokenDenom
                   },
                   collateralAmount: {
                     amount: collateralAmount,

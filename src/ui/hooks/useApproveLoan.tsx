@@ -61,6 +61,8 @@ export default function useApproveLoan(loan_id: string, collateralAmount: string
 
   const navigate = useNavigate();
 
+  console.log({ loan_id, collateralAmount });
+
   const { txids, depositTxs, refetch } = useGetDepositTx(loan_id, collateralAmount);
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
@@ -86,14 +88,15 @@ export default function useApproveLoan(loan_id: string, collateralAmount: string
       setLoading(true);
 
       let depositTxs: string[] | undefined = undefined;
+      let txids: string[] | undefined = undefined;
 
-      while (!depositTxs) {
+      while (!depositTxs || !txids) {
         await new Promise((r) => setTimeout(r, 1000));
         const { data } = await refetch();
-        depositTxs = data?.txBase64s;
-      }
 
-      console.log({ depositTxs });
+        depositTxs = data?.txBase64s;
+        txids = data?.txids;
+      }
 
       const { liquidationCet, getRepaymentSignatureParams, getLiquidationAdaptorSignatureParams } = await prepareApply({
         params: {
@@ -156,6 +159,7 @@ export default function useApproveLoan(loan_id: string, collateralAmount: string
           await new Promise((r) => setTimeout(r, 1000));
         }
       }
+
       if (hashResponse.tx_response.code === 0) {
         navigate('ApproveSuccessScreen', {
           loanId: loan_id

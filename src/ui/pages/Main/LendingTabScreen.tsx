@@ -12,7 +12,9 @@ import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
 import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useAppDispatch } from '@/ui/state/hooks';
 import { useLendingState } from '@/ui/state/lending/hook';
+import { LendingActions } from '@/ui/state/lending/reducer';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
@@ -26,7 +28,9 @@ export default function LendingTanScreen() {
 
   const [collateralAmount, setcollateralAmount] = useState('');
 
-  const { poolTokenDenom } = useLendingState();
+  const { poolTokenDenom, maturity } = useLendingState();
+
+  const dispatch = useAppDispatch();
 
   const navigator = useNavigate();
 
@@ -46,10 +50,10 @@ export default function LendingTanScreen() {
 
   const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
 
-  const [maturity, setMaturity] = useState(poolData?.baseData.config.tranches[0].maturity);
-
   useEffect(() => {
-    setMaturity(poolData?.baseData.config.tranches[0].maturity);
+    if (!poolData) return;
+
+    dispatch(LendingActions.update({ maturity: poolData?.baseData.config.tranches[0].maturity }));
   }, [poolData]);
 
   const requestFeeToken = balanceList.find((item) => item.denom === poolData?.baseData.config.request_fee.denom);
@@ -561,7 +565,7 @@ export default function LendingTanScreen() {
                     position: 'relative'
                   }}
                   onClick={() => {
-                    setMaturity(item.maturity);
+                    dispatch(LendingActions.update({ maturity: item.maturity }));
                     setAnchorEl(null);
                   }}>
                   <Typography

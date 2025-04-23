@@ -12,7 +12,9 @@ import useSupply from '@/ui/hooks/useSupply';
 import useWithdraw from '@/ui/hooks/useWithdraw';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useAppDispatch } from '@/ui/state/hooks';
 import { useLendingState } from '@/ui/state/lending/hook';
+import { LendingActions } from '@/ui/state/lending/reducer';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
@@ -26,9 +28,8 @@ export default function EarnTabScreen() {
 
   const [withdrawAmount, setwithdrawAmount] = useState('');
 
-  const { poolTokenDenom } = useLendingState();
-
-  const [operationTab, setOperationTab] = useState<'supply' | 'withdraw'>('supply');
+  const dispatch = useAppDispatch();
+  const { poolTokenDenom, operationTab } = useLendingState();
 
   const { supply, loading } = useSupply();
 
@@ -156,14 +157,14 @@ export default function EarnTabScreen() {
               <div
                 className={'text-white relative z-10 cursor-pointer  py-1.5 px-2 text-xs '}
                 ref={(el) => (buttonRefs.current[0] = el)}
-                onClick={() => setOperationTab('supply')}>
+                onClick={() => dispatch(LendingActions.update({ operationTab: 'supply' }))}>
                 Supply
               </div>
 
               <div
                 className={'text-white relative z-10 cursor-pointer  py-1.5 px-2 text-xs '}
                 ref={(el) => (buttonRefs.current[1] = el)}
-                onClick={() => setOperationTab('withdraw')}>
+                onClick={() => dispatch(LendingActions.update({ operationTab: 'withdraw' }))}>
                 Withdraw
               </div>
             </Stack>

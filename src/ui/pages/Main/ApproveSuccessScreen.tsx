@@ -6,6 +6,7 @@ import successAnimation from '@/ui/assets/lottie/correct.json';
 import { Button, Column, Content, Footer, Layout, Row, Text } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import MainHeader from '@/ui/pages/Main/MainHeader';
+import { useBridgeParams } from '@/ui/state/bridge/hook';
 import { useLocationState } from '@/ui/utils';
 import { Box } from '@mui/material';
 
@@ -15,6 +16,8 @@ interface ApproveSuccessLocationState {
 
 export default function ApproveSuccessScreen() {
   const { loanId } = useLocationState<ApproveSuccessLocationState>();
+
+  const { params } = useBridgeParams();
 
   return (
     <Layout>
@@ -36,7 +39,9 @@ export default function ApproveSuccessScreen() {
         </Column>
 
         <Text
-          text="Collateral received. Your loan will be sent to your wallet after 6 confirmations. You can track and manage your position in the web app."
+          text={`Collateral received. Your loan will be sent to your wallet after ${
+            params?.params?.confirmations || 6
+          } confirmations. You can track and manage your position in the web app.`}
           color="white"
           size="xs"
           textCenter></Text>

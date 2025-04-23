@@ -43,7 +43,7 @@ export default function useGetLiquidationEvent({
         { baseURL: sideChain.restUrl }
       );
     },
-    enabled: !!bitcoinToken && !!borrowToken
+    enabled: !!bitcoinToken && !!borrowToken && !!+bitcoinAmount && !!maturity && !!poolId && !!+borrowTokenAmount
   });
 
   return {

@@ -43,7 +43,7 @@ export default function useGetDepositTx(collateralAddress: string, collateralUni
 
         const txids = txs.map((tx) => tx.txid);
 
-        return { txBase64s, txids };
+        return { txBase64s, txids, value };
       }
     },
     refetchInterval: (data) => {
@@ -56,6 +56,7 @@ export default function useGetDepositTx(collateralAddress: string, collateralUni
     loading,
     depositTxs: data?.txBase64s,
     txids: data?.txids,
+    value: data?.value,
     refetch
   };
 }

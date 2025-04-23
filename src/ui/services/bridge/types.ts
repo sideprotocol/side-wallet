@@ -187,6 +187,7 @@ export interface Params {
   deposit_confirmation_depth: number;
   withdraw_confirmation_depth: number;
   max_acceptable_block_depth: string;
+  confirmations: number;
   btc_voucher_denom: string;
   deposit_enabled: boolean;
   withdraw_enabled: boolean;
