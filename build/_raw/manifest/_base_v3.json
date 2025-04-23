@@ -30,11 +30,15 @@
   "homepage_url": "https://side.one/",
   "permissions": [
     "storage",
+    "unlimitedStorage",
     "sidePanel",
+    "contextMenus",
+    "alarms",
     "tabs",
     "activeTab",
     "scripting",
     "webRequest",
+    "nativeMessaging",
     "webNavigation"
   ],
   "short_name": "__MSG_appName__",

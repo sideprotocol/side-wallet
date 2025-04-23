@@ -47,19 +47,19 @@ export default function WelcomeScreen() {
               flex: 1,
               alignItems: 'center'
             }}
-            gap="xl">
+            gap="lg">
             <Row
               justifyCenter
               itemsCenter
               style={{
                 borderRadius: '20px',
-                width: isInTab ? 80 : 120,
-                height: isInTab ? 80 : 120
+                width: isInTab ? 80 : 80,
+                height: isInTab ? 80 : 80
               }}>
-              <Image src="/images/logo/wallet-logo.png" width={isInTab ? 80 : 120} height={isInTab ? 80 : 120} />
+              <Image src="/images/logo/wallet-logo.png" width={isInTab ? 80 : 80} height={isInTab ? 80 : 80} />
             </Row>
             <Row justifyCenter itemsCenter gap="xs" mb="lg">
-              <Image src="/images/icons/side_wallet.svg" width={186} height={20} />
+              <Image src="/images/icons/side_wallet.svg" width={136} height={20} />
             </Row>
           </Column>
 
