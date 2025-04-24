@@ -6,6 +6,8 @@ import { colors } from '@/ui/theme/colors';
 import { copyToClipboard } from '@/ui/utils';
 import { Box } from '@mui/material';
 
+const packageConfig = require('../../../../package.json');
+
 export default function AboutScreen() {
   const [isClickCopy, setIsClickCopy] = useState(false);
 
@@ -116,6 +118,30 @@ export default function AboutScreen() {
                   />
                   {isClickCopy ? <Text text={'Copied'} color={isClickCopy ? 'primary' : 'white'} /> : null}
                 </Row>
+              </Row>
+            </Card>
+
+            <Card
+              style={{
+                height: '58px',
+                borderRadius: '10px',
+                backgroundColor: colors.card_bgColor
+              }}>
+              <Row
+                style={{
+                  padding: '0 8px'
+                }}
+                justifyBetween
+                itemsCenter
+                full>
+                <Text preset="regular" text={'Version'}></Text>
+
+                <Text
+                  preset="sub"
+                  text={`v${packageConfig.version}`}
+                  style={{
+                    color: 'white'
+                  }}></Text>
               </Row>
             </Card>
           </Column>
