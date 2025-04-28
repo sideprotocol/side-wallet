@@ -226,7 +226,7 @@ export const INTERNAL_REQUEST_ORIGIN = 'https://side.one';
 export const INTERNAL_REQUEST_SESSION = {
   name: 'Side Wallet',
   origin: INTERNAL_REQUEST_ORIGIN,
-  icon: './images/logo/logo@128x.png'
+  icon: './images/logo/wallet-logo.png'
 };
 
 export const EVENTS = {
