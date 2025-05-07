@@ -148,7 +148,7 @@ export interface WalletController {
 
   signAdaptor(message: string, adaptorPoint: string): Promise<string>;
 
-  signSnorr(message: string): Promise<string>;
+  signSnorr(messages: string[]): Promise<string[]>;
 
   signAdaptorAndMessage(
     message: string,

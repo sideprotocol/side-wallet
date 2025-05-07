@@ -224,11 +224,11 @@ export class SideProvider extends EventEmitter {
     });
   };
 
-  signSnorr = async (text: string) => {
+  signSnorr = async (messages: string[]) => {
     return this._request({
       method: 'signSnorr',
       params: {
-        text
+        text: messages
       }
     });
   };

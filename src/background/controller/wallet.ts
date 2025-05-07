@@ -626,10 +626,17 @@ export class WalletController extends BaseController {
     return keyringService.signAdaptor(account.pubkey, account.type, message, adaptorPoint);
   };
 
-  signSnorr = async (message: string) => {
+  signSnorr = async (messages: string[]) => {
     const account = preferenceService.getCurrentAccount();
     if (!account) throw new Error('no current account');
-    return keyringService.signSnorr(account.pubkey, account.type, message);
+
+    const signatures = await Promise.all(
+      messages.map(async (message) => {
+        return await keyringService.signSnorr(account.pubkey, account.type, message);
+      })
+    );
+
+    return signatures;
   };
 
   signAdaptorAndMessage = async (
@@ -654,11 +661,7 @@ export class WalletController extends BaseController {
       })
     );
 
-    const repayment_signatures = await Promise.all(
-      repaymentSigHashs.map(async (repaymentSigHash) => {
-        return await this.signSnorr(repaymentSigHash);
-      })
-    );
+    const repayment_signatures = await this.signSnorr(repaymentSigHashs);
 
     try {
       const parsedText = JSON.parse(text);

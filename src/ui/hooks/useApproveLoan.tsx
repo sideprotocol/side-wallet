@@ -127,9 +127,7 @@ export default function useApproveLoan(loan_id: string, collateralAmount: string
 
       const { sigHashHexs: repaymentSigHashHexs, repaymentCet } = await getRepaymentSignatureParams(refundAddress);
 
-      const repaymentSignatures = await Promise.all(
-        repaymentSigHashHexs.map((sigHashHex) => wallet.signSnorr(sigHashHex))
-      );
+      const repaymentSignatures = await wallet.signSnorr(repaymentSigHashHexs);
 
       const msg = sideLendingMessageComposer.withTypeUrl.submitCets({
         borrower: currentAccount.address,
