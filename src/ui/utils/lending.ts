@@ -46,7 +46,7 @@ export async function prepareApply({
 }) {
   const { restUrl, feeRate, collateralAddress } = params;
 
-  const activeAgencies = await services.lending.getDlcDcms({ status: 3 }, { baseURL: restUrl });
+  const activeAgencies = await services.lending.getDlcDcms({ status: 0 }, { baseURL: restUrl });
 
   const dcm = activeAgencies?.dcms?.[0];
 

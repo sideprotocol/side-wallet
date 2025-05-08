@@ -48,7 +48,7 @@ export default function useCreateLoan() {
       if (!currentAccount.address) return;
       setLoading(true);
 
-      const activeAgencies = await services.lending.getDlcDcms({ status: 3 }, { baseURL: sideChain.restUrl });
+      const activeAgencies = await services.lending.getDlcDcms({ status: 0 }, { baseURL: sideChain.restUrl });
 
       const dcm = activeAgencies?.dcms?.[0];
 
