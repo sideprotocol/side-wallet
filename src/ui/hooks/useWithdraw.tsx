@@ -3,18 +3,20 @@ import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
-import { CHAINS_ENUM, sideChain } from '@/shared/constant';
+import { CHAINS_ENUM } from '@/shared/constant';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { Box } from '@mui/material';
 
 import ToastView from '../components/ToastView';
 import services from '../services';
 import { useCurrentAccount } from '../state/accounts/hooks';
+import { useEnvironment } from '../state/environment/hooks';
 import { useSignAndBroadcastTxRaw } from '../state/transactions/hooks/cosmos';
 
 export default function useWithdraw() {
   const [loading, setLoading] = useState(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
+  const { sideChain } = useEnvironment();
 
   const currentAccount = useCurrentAccount();
   const navigate = useNavigate();

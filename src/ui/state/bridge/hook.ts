@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import { MessageComposer } from '@/codegen/src/side/btcbridge/tx.registry';
-import { CHAINS_ENUM, isProduction } from '@/shared/constant';
+import { CHAINS_ENUM } from '@/shared/constant';
 import { runesUtils } from '@/shared/lib/runes-utils';
 import { RuneBalance, TickPriceItem } from '@/shared/types';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -17,6 +17,7 @@ import { UnspentOutput } from '@unisat/wallet-sdk';
 
 import { AppState } from '..';
 import { useCurrentAccount } from '../accounts/hooks';
+import { useEnvironment } from '../environment/hooks';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { useNetworkType } from '../settings/hooks';
 import { useSafeBalance, useUtxos } from '../transactions/hooks';
@@ -96,7 +97,8 @@ export const useBitcoinRuneBalance = (base: string) => {
 };
 
 export const useBridge = () => {
-  const { from, bridgeAmount, fee, exponent } = useBridgeState();
+  const { UNISAT_IO_API } = useEnvironment();
+  const { bridgeAmount, fee, exponent } = useBridgeState();
   const dispatch = useAppDispatch();
 
   const currentAccount = useCurrentAccount();
@@ -111,6 +113,7 @@ export const useBridge = () => {
 
   const networkType = useNetworkType();
   const wallet = useWallet();
+  const { UNISAT_SERVICE_ENDPOINT, SERVICE_BASE_URL } = useEnvironment();
   const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, exponent)).toNumber();
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
@@ -287,7 +290,7 @@ export const useBridge = () => {
     const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
 
     const rawTx = signedPsbt.extractTransaction().toHex();
-    const txid = await services.unisat.pushTx(rawTx);
+    const txid = await services.unisat.pushTx(rawTx, UNISAT_SERVICE_ENDPOINT, SERVICE_BASE_URL);
     return txid;
   }
 
@@ -298,7 +301,7 @@ export const useBridge = () => {
     const { runeId, fee } = params;
     const runeAmount = runesUtils.fromDecimalAmount(bridgeAmount, exponent);
 
-    const bridgeParams = await services.bridge.getBridgeParams();
+    const bridgeParams = await services.bridge.getBridgeParams(UNISAT_IO_API);
 
     if (!btcVault) {
       throw new Error('No valid vault address found.');
@@ -319,7 +322,7 @@ export const useBridge = () => {
       };
     });
 
-    const runes_utxos = await services.unisat.getRunesUtxos(senderAddress, runeId!);
+    const runes_utxos = await services.unisat.getRunesUtxos(senderAddress, runeId!, UNISAT_SERVICE_ENDPOINT);
 
     const assetUtxosRunes = runes_utxos.map((v) => {
       return Object.assign(v, { pubkey: pbk });
@@ -404,7 +407,7 @@ export const useBridge = () => {
     const signedPsbt = bitcoin.Psbt.fromHex(signedTx);
 
     const rawTx = signedPsbt.extractTransaction().toHex();
-    const txid = await services.unisat.pushTx(rawTx);
+    const txid = await services.unisat.pushTx(rawTx, UNISAT_SERVICE_ENDPOINT, SERVICE_BASE_URL);
     return txid;
   }
 
@@ -436,14 +439,14 @@ export const useBridge = () => {
         ? await sendAllBTC({
             btcUtxos: btcUtxos,
             toAddress: btcVault.address,
-            networkType: isProduction ? 0 : 1,
+            networkType,
             feeRate: fee,
             enableRBF: true
           })
         : await sendBTC({
             btcUtxos: btcUtxos,
             tos: [{ address: btcVault.address, satoshis: amount }],
-            networkType: isProduction ? 0 : 1,
+            networkType,
             changeAddress: senderAddress,
             feeRate: fee,
             enableRBF: true,
@@ -459,11 +462,12 @@ export const useBridge = () => {
 
 export function useBridgeParams() {
   const dispatch = useAppDispatch();
+  const { UNISAT_IO_API } = useEnvironment();
 
   const { data: params, isLoading } = useQuery({
-    queryKey: ['bridgeParams'],
+    queryKey: ['bridgeParams', { UNISAT_IO_API }],
     queryFn: async () => {
-      const params = await services.bridge.getBridgeParams();
+      const params = await services.bridge.getBridgeParams(UNISAT_IO_API);
 
       dispatch(BridgeActions.update({ params }));
 

@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 
-import { sideChain } from '@/shared/constant';
 import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
@@ -16,6 +15,7 @@ import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
 
@@ -23,6 +23,7 @@ import { useNavigate } from '../MainRoute';
 
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
+  const { sideChain, UNISAT_SERVICE_ENDPOINT } = useEnvironment();
   const currentAccount = useCurrentAccount();
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
@@ -73,7 +74,7 @@ export default function BridgeTabScreen() {
   }, [isDeposit]);
 
   useEffect(() => {
-    services.unisat.getFeeSummary().then((res) => {
+    services.unisat.getFeeSummary(UNISAT_SERVICE_ENDPOINT).then((res) => {
       const rcFee = res.list[2].feeRate;
       dispatch(BridgeActions.update({ fee: +rcFee, feeSummary: res.list }));
     });

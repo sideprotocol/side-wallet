@@ -3,19 +3,22 @@ import { useQuery } from 'react-query';
 
 import services from '@/ui/services';
 
-import { formatUnitAmount } from '../utils';
+import { useEnvironment } from '../state/environment/hooks';
+import { formatUnitAmount, useWallet } from '../utils';
 import { buildPsbtFromTxHex } from './useApproveLoan';
 
 export default function useGetDepositTx(collateralAddress: string, collateralUnitAmount: string) {
+  const wallet = useWallet();
+  const { SIDE_BTC_EXPLORER } = useEnvironment();
   const {
     data,
     isLoading: loading,
     refetch
   } = useQuery({
-    queryKey: ['getDepositTxByCollateralAddress', { collateralAddress, collateralUnitAmount }],
+    queryKey: ['getDepositTxByCollateralAddress', { collateralAddress, collateralUnitAmount, SIDE_BTC_EXPLORER }],
     queryFn: async () => {
-      const txs = await services.bridge.getMemPoolTxs(collateralAddress);
-      const addressSummary = await services.bridge.getMemPoolAddress(collateralAddress);
+      const txs = await services.bridge.getMemPoolTxs(collateralAddress, SIDE_BTC_EXPLORER);
+      const addressSummary = await services.bridge.getMemPoolAddress(collateralAddress, SIDE_BTC_EXPLORER);
 
       const value =
         addressSummary.chain_stats.funded_txo_sum +

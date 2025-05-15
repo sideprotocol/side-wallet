@@ -3,22 +3,18 @@ import 'swiper/css';
 import { Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { SIDE_BRIDGEEXPLORER_URL, SIDE_HUB_URL, SIDE_STATION_URL } from '@/shared/constant';
 import { Content, Footer, Icon, Input, Layout } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-
-// import { Image } from '@/ui/components';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
 export default function ExploreTabScreen() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const [isHover, setIsHover] = useState(false);
-  // const navigate = useNavigate();
-  // const wallet = useWallet();
-  // useEffect(() => {
 
-  // }, []);
+  const { SIDE_BRIDGEEXPLORER_URL, SIDE_STATION_URL } = useEnvironment();
+
   return (
     <Layout>
       <MainHeader title={''} />
@@ -119,7 +115,7 @@ export default function ExploreTabScreen() {
 
               <div
                 className="flex flex-col items-center gap-[6px] group cursor-pointer"
-                onClick={() => window.open(SIDE_HUB_URL)}>
+                onClick={() => window.open(SIDE_STATION_URL)}>
                 <div className="w-[56px] h-[56px] bg-[#030303] rounded-[16px] flex items-center justify-center border-[#F7771A] border-[0.5px] group-hover:border-[#F7931A] ">
                   <img className={'w-[30px] h-[30px]'} src="/images/icons/search/icon-hub.png" alt="hub" />
                 </div>

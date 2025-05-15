@@ -5,6 +5,7 @@ import { setupListeners } from '@reduxjs/toolkit/query/react';
 
 import accounts from './accounts/reducer';
 import bridge from './bridge/reducer';
+import environment from './environment/reducer';
 import { updateVersion } from './global/actions';
 import global from './global/reducer';
 import keyrings from './keyrings/reducer';
@@ -25,7 +26,8 @@ const store = configureStore({
     ui,
     bridge,
     swap,
-    lending
+    lending,
+    environment
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: true }).concat(save({ states: PERSISTED_KEYS, debounce: 1000 })),

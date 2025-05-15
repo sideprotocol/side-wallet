@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import { ADDRESS_TYPES, isProduction, RESTORE_WALLETS } from '@/shared/constant';
-import { NetworkType } from '@/shared/types';
+import { ADDRESS_TYPES, RESTORE_WALLETS } from '@/shared/constant';
 import { Button, Column, Image, Input, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { useReloadAccounts } from '@/ui/state/accounts/hooks';
@@ -61,7 +60,6 @@ export default function Step2_SetName({
       const option = hdPathOptions[contextData.addressTypeIndex];
       const hdPath = contextData.customHdPath || option.hdPath;
       await createAccount(contextData.mnemonics, hdPath, contextData.passphrase, contextData.addressType, 1, alianName);
-      changeNetworkType(isProduction ? NetworkType.MAINNET : NetworkType.TESTNET);
       reloadAccounts();
       navigate('MainScreen');
     } catch (e) {

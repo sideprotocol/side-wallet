@@ -1,5 +1,5 @@
-var fn = function () {};
-window.console = {
-  log: fn,
-  dir: fn
-};
+// var fn = function () {};
+// window.console = {
+//   log: fn,
+//   dir: fn
+// };

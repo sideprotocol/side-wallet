@@ -14,7 +14,6 @@ import {
   sideLiquidationAminoConverter,
   sideLiquidationRegistry
 } from '@/codegen/src';
-import { sideChain } from '@/shared/constant';
 import { CosmosTransaction, CosmosTxResponse } from '@/shared/types';
 import services from '@/ui/services';
 import { useWallet } from '@/ui/utils';
@@ -33,6 +32,7 @@ import {
 } from '@cosmjs/stargate';
 
 import { useCurrentAccount } from '../../accounts/hooks';
+import { useEnvironment } from '../../environment/hooks';
 
 export function getAddressTypeUrl(address: string) {
   if (address.startsWith('bc1')) {
@@ -91,6 +91,7 @@ enum BroadcastMode {
 
 export function useSignAndBroadcastTxRaw() {
   const wallet = useWallet();
+  const { sideChain } = useEnvironment();
   const currentAccount = useCurrentAccount();
 
   const mockSignAmino = async (tx: CosmosTransaction): Promise<TxRaw> => {

@@ -10,7 +10,6 @@ const config = {
   plugins: [
     // new BundleAnalyzerPlugin(),
     new webpack.DefinePlugin({
-      'process.env.BUILD_ENV': JSON.stringify('PRO'),
       'process.env.DEBUG': true
     })
   ]

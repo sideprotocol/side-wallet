@@ -3,7 +3,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
-import { isProduction, sideChain } from '@/shared/constant';
+import { NetworkType } from '@/shared/types';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { Box } from '@mui/material';
 import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
@@ -13,15 +13,22 @@ import services from '../services';
 import { LiquidationEvent } from '../services/lending/types';
 import { GetTxByHashResponse } from '../services/tx/types';
 import { useCurrentAccount } from '../state/accounts/hooks';
+import { useEnvironment } from '../state/environment/hooks';
+import { useNetworkType } from '../state/settings/hooks';
 import { useSignAndBroadcastTxRaw } from '../state/transactions/hooks/cosmos';
 import { useWallet } from '../utils';
 import { prepareApply } from '../utils/lending';
 import useGetDepositTx from './useGetDepositTx';
 
 export async function buildPsbtFromTxHex(txid: string) {
-  const txHex = await services.bridge.getTxHex(txid);
+  const { SIDE_BTC_EXPLORER } = useEnvironment();
+  const networkType = useNetworkType();
+
+  const txHex = await services.bridge.getTxHex(txid, SIDE_BTC_EXPLORER);
   const tx = bitcoin.Transaction.fromHex(txHex);
-  const psbt = new bitcoin.Psbt({ network: isProduction ? bitcoin.networks.bitcoin : bitcoin.networks.testnet });
+  const psbt = new bitcoin.Psbt({
+    network: networkType === NetworkType.MAINNET ? bitcoin.networks.bitcoin : bitcoin.networks.testnet
+  });
 
   psbt.setVersion(tx.version);
 
@@ -66,6 +73,8 @@ export default function useApproveLoan(loan_id: string, collateralAmount: string
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 
   const wallet = useWallet();
+  const networkType = useNetworkType();
+  const { sideChain } = useEnvironment();
 
   const approveLoan = async ({
     feeRate,
@@ -106,7 +115,8 @@ export default function useApproveLoan(loan_id: string, collateralAmount: string
         },
         depositTxIds: txids || [],
         depositTxs: depositTxs || [],
-        senderAddress: currentAccount.address
+        senderAddress: currentAccount.address,
+        networkType
       });
 
       if (!liquidationEvent?.event_id) {

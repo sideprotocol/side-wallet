@@ -6,6 +6,7 @@ import { Pool, SwapRouteResult } from '@/ui/services/dex/type';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
+import { useEnvironment } from '../state/environment/hooks';
 import { useAppDispatch } from '../state/hooks';
 import { useSwapState } from '../state/swap/hook';
 import { SwapActions } from '../state/swap/reducer';
@@ -16,6 +17,7 @@ export default function useSwapSimulation() {
   const currentAccount = useCurrentAccount();
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
   const dispatch = useAppDispatch();
+  const { SERVICE_BASE_URL } = useEnvironment();
 
   useEffect(() => {
     const assetIn = balanceList.find((item) => item.denom === swapPair.native.denom);
@@ -116,7 +118,9 @@ export default function useSwapSimulation() {
 
       const unitAmount = toUnitAmount(swapPair.native.amount, assetIn?.asset.exponent || '6');
 
-      const resultQuote = await services.dex.getValidRoutes(swapPair.native.denom, unitAmount, swapPair.remote.denom);
+      const resultQuote = await services.dex.getValidRoutes(swapPair.native.denom, unitAmount, swapPair.remote.denom, {
+        baseURL: SERVICE_BASE_URL
+      });
 
       // const resultQuote = [];
 

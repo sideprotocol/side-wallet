@@ -6,6 +6,7 @@ import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
 import { useCurrentAccount } from '../state/accounts/hooks';
 import { useBridgeParams, useBridgeState } from '../state/bridge/hook';
+import { useNetworkType } from '../state/settings/hooks';
 import { useUtxos } from '../state/transactions/hooks';
 import { estimateNetworkFeeHelper } from '../wallet-sdk/utils';
 import useGetBitcoinBalanceList from './useGetBitcoinBalanceList';
@@ -15,6 +16,7 @@ export default function useGetButtonTips() {
   const { isDeposit, balance, bridgeAmount, bridgeAsset, fee } = useBridgeState();
 
   const currentAccount = useCurrentAccount();
+  const networkType = useNetworkType();
 
   const { params } = useBridgeParams();
 
@@ -43,7 +45,8 @@ export default function useGetButtonTips() {
         },
         params,
         _utxos,
-        currentAccount
+        currentAccount,
+        networkType
       )
         .then((res) => {
           console.log({ res, fee });

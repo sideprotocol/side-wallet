@@ -2,12 +2,12 @@ import BigNumber from 'bignumber.js';
 import { useMemo } from 'react';
 import { useQuery } from 'react-query';
 
-import { sideChain } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 
 import services from '../services';
 import { GetLeadingParamsResponse, LeadingPool } from '../services/lending/types';
 import { useCurrentAccount } from '../state/accounts/hooks';
+import { useEnvironment } from '../state/environment/hooks';
 import { formatUnitAmount } from '../utils';
 import useGetLendingParams from './useGetLendingParams';
 import { useGetSideBalanceList } from './useGetSideBalanceList';
@@ -32,12 +32,12 @@ export interface PoolDataItem {
 
 export default function useGetPoolsData() {
   const currentAccount = useCurrentAccount();
-
+  const { sideChain, SERVICE_BASE_URL } = useEnvironment();
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
   const { data: lendingParams } = useGetLendingParams();
   const { data: lendingPools, isLoading: loading } = useQuery({
-    queryKey: ['getLendingPoolsData'],
+    queryKey: ['getLendingPoolsData', { sideChain, SERVICE_BASE_URL }],
     queryFn: async () => {
       return services.lending.getLendingPools({}, { baseURL: sideChain.restUrl });
     }
@@ -46,7 +46,7 @@ export default function useGetPoolsData() {
   const { data: lendingPoolsBase } = useQuery({
     queryKey: ['getLendingPoolsDataBase'],
     queryFn: async () => {
-      return services.lending.getLendingPoolsBase({});
+      return services.lending.getLendingPoolsBase({}, { baseURL: SERVICE_BASE_URL });
     }
   });
 

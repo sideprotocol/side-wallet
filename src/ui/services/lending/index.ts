@@ -1,7 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
 
-import { SERVICE_BASE_URL } from '@/shared/constant';
-
 import { getQueryParams } from '../getQueryParams';
 import ApiClient from '../network/ApiClient';
 import { BaseRequestOffChainApi, BaseRequestPage } from '../types';
@@ -170,11 +168,9 @@ export default class LendingService {
     return this.apiClient.get<GetLoanByIdResponse>(`/side/lending/loans/${id}`, config);
   }
 
-  async getLoanByIdCex(data: { vaultAddress: string }) {
+  async getLoanByIdCex(data: { vaultAddress: string }, config: AxiosRequestConfig) {
     const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<GetLoanByIdCexResponse>(`/lending/loan/detail?${queryParams}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+    return this.apiClient.get<GetLoanByIdCexResponse>(`/lending/loan/detail?${queryParams}`, config);
   }
 
   async getLoanBaseData(data: GetLoanBaseDataRequest, config: AxiosRequestConfig) {
@@ -206,9 +202,9 @@ export default class LendingService {
     return this.apiClient.get<GetLeadingPoolsResponse>(`/side/lending/pools?${queryParams}`, config);
   }
 
-  async getLendingPoolsBase(data: BaseRequestOffChainApi) {
+  async getLendingPoolsBase(data: BaseRequestOffChainApi, config: AxiosRequestConfig) {
     const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<GetLendingPoolsResponse>(`/lending/pools?${queryParams}`, { baseURL: SERVICE_BASE_URL });
+    return this.apiClient.get<GetLendingPoolsResponse>(`/lending/pools?${queryParams}`, config);
   }
 
   async getLendingPoolsExchangeRate(data: { pool_id: string }, config: AxiosRequestConfig) {
@@ -245,10 +241,8 @@ export default class LendingService {
     return this.apiClient.get<GetLiquidationParamsResponse>('/side/liquidation/params', config);
   }
 
-  async getLiquidationRecords(data: GetLiquidationRecordsRequest) {
+  async getLiquidationRecords(data: GetLiquidationRecordsRequest, config: AxiosRequestConfig) {
     const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<GetLiquidationRecordsResponse>(`/lending/liquidation/records?${queryParams}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+    return this.apiClient.get<GetLiquidationRecordsResponse>(`/lending/liquidation/records?${queryParams}`, config);
   }
 }

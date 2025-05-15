@@ -1,6 +1,7 @@
 import { TxType } from '@/shared/types';
 import { Header } from '@/ui/components';
 import services from '@/ui/services';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { usePushBitcoinTxCallback } from '@/ui/state/transactions/hooks';
 import { useLocationState } from '@/ui/utils';
 
@@ -12,6 +13,7 @@ export default function SwapSideTxConfirmScreen() {
   const { rawTxInfo } = useLocationState<TxConfirmLocationState>();
   const navigate = useNavigate();
   const pushBitcoinTx = usePushBitcoinTxCallback();
+  const { SERVICE_BASE_URL } = useEnvironment();
   return (
     <SignPsbt
       header={
@@ -33,7 +35,7 @@ export default function SwapSideTxConfirmScreen() {
       handleConfirm={(res) => {
         pushBitcoinTx((res ?? rawTxInfo).rawtx).then(({ success, txid, error }) => {
           if (success) {
-            services.btcStore.submit_btctxhash(txid);
+            services.btcStore.submit_btctxhash(txid, { baseURL: SERVICE_BASE_URL });
 
             navigate('SwapSideSuccessScreen', { txid });
           } else {

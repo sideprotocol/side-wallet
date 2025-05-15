@@ -1,24 +1,24 @@
 import { useQuery } from 'react-query';
 
-import { sideChain } from '@/shared/constant';
-// import { useWalletContext } from "@/ui/components/WalletContext";
 import { IPoolItem } from '@/ui/services/dex/type';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
+import { useEnvironment } from '../state/environment/hooks';
 import { useAppDispatch } from '../state/hooks';
 import { SwapActions } from '../state/swap/reducer';
 import useGetAllPairs from './useGetAllPairs';
 import { useGetSideBalanceList } from './useGetSideBalanceList';
 
 export default function useGetAllPools() {
+  const { sideChain } = useEnvironment();
   const currentAccount = useCurrentAccount();
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
   const { data: pairs } = useGetAllPairs();
   const dispatch = useAppDispatch();
 
   const { data, isLoading: loading } = useQuery({
-    queryKey: ['getAllPools'],
+    queryKey: ['getAllPools', { sideChain }],
     enabled: !!pairs.length,
     queryFn: async () => {
       // debugger;

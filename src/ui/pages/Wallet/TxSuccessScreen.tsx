@@ -1,6 +1,7 @@
-import { CHAINS_ENUM, SIDE_STATION_URL } from '@/shared/constant';
+import { CHAINS_ENUM } from '@/shared/constant';
 import { Button, Column, Content, Footer, Icon, Layout, Row, Text } from '@/ui/components';
 import { useNavigate } from '@/ui/pages/MainRoute';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
 import { spacing } from '@/ui/theme/spacing';
@@ -16,7 +17,7 @@ interface LocationState {
 export default function TxSuccessScreen() {
   const { txid, chain, type } = useLocationState<LocationState>();
   const navigate = useNavigate();
-
+  const { SIDE_BRIDGEEXPLORER_URL } = useEnvironment();
   const blockstream = useBlockstreamUrl(chain);
 
   return (
@@ -33,9 +34,7 @@ export default function TxSuccessScreen() {
             itemsCenter
             justifyCenter
             onClick={() => {
-              window.open(
-                type === 'bridge' ? `${SIDE_STATION_URL}/bridge/explorer/${txid}` : `${blockstream}/tx/${txid}`
-              );
+              window.open(type === 'bridge' ? `${SIDE_BRIDGEEXPLORER_URL}/${txid}` : `${blockstream}/tx/${txid}`);
             }}>
             <Typography
               sx={{

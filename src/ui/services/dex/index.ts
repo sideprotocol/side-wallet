@@ -1,9 +1,9 @@
-import { SERVICE_BASE_URL } from '@/shared/constant';
+import { AxiosRequestConfig } from 'axios';
+
 import { IAsset } from '@/shared/types';
 import ApiClient from '@/ui/services/network/ApiClient';
 
 import { getQueryParams } from '../getQueryParams';
-import { addIbcInformation } from './ibcData';
 import {
   IGetChartDataRequest,
   IGetChartDataResponse,
@@ -27,109 +27,105 @@ export default class DexService {
     this.apiClient = apiClient;
   }
 
-  async getMyPoolList(address: string): Promise<IPoolOne[]> {
-    return this.apiClient.get<IPoolOne[]>(`/pool/my?address=${address}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+  async getMyPoolList(address: string, config: AxiosRequestConfig): Promise<IPoolOne[]> {
+    return this.apiClient.get<IPoolOne[]>(`/pool/my?address=${address}`, config);
   }
-  async getAllPoolList(): Promise<IPoolOne[]> {
-    return this.apiClient.get<IPoolOne[]>('/pool/list', {
-      baseURL: SERVICE_BASE_URL
-    });
+  async getAllPoolList(config: AxiosRequestConfig): Promise<IPoolOne[]> {
+    return this.apiClient.get<IPoolOne[]>('/pool/list', config);
   }
 
-  async getValidRoutes(offerDenom: string, offerAmount: string, askDenom: string): Promise<SwapRouteResult[]> {
+  async getValidRoutes(
+    offerDenom: string,
+    offerAmount: string,
+    askDenom: string,
+    config: AxiosRequestConfig
+  ): Promise<SwapRouteResult[]> {
     return this.apiClient.get<SwapRouteResult[]>(
       `/pool/getValidRoutes?offerDenom=${offerDenom}&offerAmount=${offerAmount}&askDenom=${askDenom}`,
-      {
-        baseURL: SERVICE_BASE_URL
-      }
+      config
     );
   }
 
-  async refreshPoolData(): Promise<any> {
-    return this.apiClient.post(`${SERVICE_BASE_URL}/pool/refreshPoolData`, {});
+  async refreshPoolData(config: AxiosRequestConfig): Promise<any> {
+    return this.apiClient.post('/pool/refreshPoolData', {}, config);
   }
 
-  async getPoolDetail(data: IGetPoolDetailRequest): Promise<IGetPoolDetailResponse> {
+  async getPoolDetail(data: IGetPoolDetailRequest, config: AxiosRequestConfig): Promise<IGetPoolDetailResponse> {
     const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<IGetPoolDetailResponse>(`/pool/detail?${queryParams}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+    return this.apiClient.get<IGetPoolDetailResponse>(`/pool/detail?${queryParams}`, config);
   }
-  async getPoolWithdraws(data: IPoolTranscationRequest): Promise<IPoolTranscationWithdrawsResponse> {
+  async getPoolWithdraws(
+    data: IPoolTranscationRequest,
+    config: AxiosRequestConfig
+  ): Promise<IPoolTranscationWithdrawsResponse> {
     const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<IPoolTranscationWithdrawsResponse>(`/pool/detail/withdraws?${queryParams}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+    return this.apiClient.get<IPoolTranscationWithdrawsResponse>(`/pool/detail/withdraws?${queryParams}`, config);
   }
-  async getPoolAdds(data: IPoolTranscationRequest): Promise<IPoolTranscationAddsResponse> {
+  async getPoolAdds(data: IPoolTranscationRequest, config: AxiosRequestConfig): Promise<IPoolTranscationAddsResponse> {
     const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<IPoolTranscationAddsResponse>(`/pool/detail/adds?${queryParams}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+    return this.apiClient.get<IPoolTranscationAddsResponse>(`/pool/detail/adds?${queryParams}`, config);
   }
-  async getPoolSwaps(data: IPoolTranscationRequest): Promise<IPoolTranscationSwapsResponse> {
+  async getPoolSwaps(
+    data: IPoolTranscationRequest,
+    config: AxiosRequestConfig
+  ): Promise<IPoolTranscationSwapsResponse> {
     const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<IPoolTranscationSwapsResponse>(`/pool/detail/swaps?${queryParams}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+    return this.apiClient.get<IPoolTranscationSwapsResponse>(`/pool/detail/swaps?${queryParams}`, config);
   }
-  async getPoolIncentivesActive(data: IPoolTranscationRequest): Promise<IGetPoolIncentivesActiveResponse> {
+  async getPoolIncentivesActive(
+    data: IPoolTranscationRequest,
+    config: AxiosRequestConfig
+  ): Promise<IGetPoolIncentivesActiveResponse> {
     const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<IGetPoolIncentivesActiveResponse>(`/pool/detail/incentives/active?${queryParams}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+    return this.apiClient.get<IGetPoolIncentivesActiveResponse>(
+      `/pool/detail/incentives/active?${queryParams}`,
+      config
+    );
   }
-  async getPoolIncentivesCompleted(data: IPoolTranscationRequest): Promise<IGetPoolIncentivesActiveResponse> {
+  async getPoolIncentivesCompleted(
+    data: IPoolTranscationRequest,
+    config: AxiosRequestConfig
+  ): Promise<IGetPoolIncentivesActiveResponse> {
     const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<IGetPoolIncentivesActiveResponse>(`/pool/detail/incentives/completed?${queryParams}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+    return this.apiClient.get<IGetPoolIncentivesActiveResponse>(
+      `/pool/detail/incentives/completed?${queryParams}`,
+      config
+    );
   }
-  async getChartData(data: IGetChartDataRequest): Promise<IGetChartDataResponse> {
+  async getChartData(data: IGetChartDataRequest, config: AxiosRequestConfig): Promise<IGetChartDataResponse> {
     const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<IGetChartDataResponse>(`/pool/detail/statistics?${queryParams}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+    return this.apiClient.get<IGetChartDataResponse>(`/pool/detail/statistics?${queryParams}`, config);
   }
-  async getOverviewData(): Promise<IGetOverviewDataResponse> {
-    return this.apiClient.get<IGetOverviewDataResponse>('/pool/getStatisticsData?', {
-      baseURL: SERVICE_BASE_URL
-    });
+  async getOverviewData(config: AxiosRequestConfig): Promise<IGetOverviewDataResponse> {
+    return this.apiClient.get<IGetOverviewDataResponse>('/pool/getStatisticsData?', config);
   }
 
-  async getAssetPrice(denom: string): Promise<string> {
-    return this.apiClient.get<string>(`/asset/getAssetPrice?denom=${denom}`, {
-      baseURL: SERVICE_BASE_URL
-    });
+  async getAssetPrice(denom: string, config: AxiosRequestConfig): Promise<string> {
+    return this.apiClient.get<string>(`/asset/getAssetPrice?denom=${denom}`, config);
   }
 
-  async getAssetsPrice({
-    chain,
-    denomList
-  }: {
-    chain: 'bitcoin' | 'side';
-    denomList: string[];
-  }): Promise<{ [key: string]: string }> {
+  async getAssetsPrice(
+    {
+      chain,
+      denomList
+    }: {
+      chain: 'bitcoin' | 'side';
+      denomList: string[];
+    },
+    config: AxiosRequestConfig
+  ): Promise<{ [key: string]: string }> {
     return this.apiClient.get<{ [key: string]: string }>(
       `/asset/getAssetsPrice?chain=${chain}&denoms=${denomList.join(',')}`,
-      {
-        baseURL: SERVICE_BASE_URL
-      }
+      config
     );
   }
 
-  async getMarketList(): Promise<IGetMarketListItem[]> {
-    return this.apiClient.get<IGetMarketListItem[]>('/market/list', {
-      baseURL: SERVICE_BASE_URL
-    });
+  async getMarketList(config: AxiosRequestConfig): Promise<IGetMarketListItem[]> {
+    return this.apiClient.get<IGetMarketListItem[]>('/market/list', config);
   }
 
-  async getSideAssets(): Promise<IAsset[]> {
-    const result = await this.apiClient.get<IAsset[]>('/asset/assets', {
-      baseURL: SERVICE_BASE_URL
-    });
-    return addIbcInformation(result);
+  async getSideAssets(config: AxiosRequestConfig): Promise<IAsset[]> {
+    const result = await this.apiClient.get<IAsset[]>('/asset/assets', config);
+    return result;
   }
 }

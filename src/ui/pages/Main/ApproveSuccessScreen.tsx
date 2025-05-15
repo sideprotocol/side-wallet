@@ -1,12 +1,12 @@
 import Lottie from 'react-lottie';
 import 'swiper/css';
 
-import { SIDE_HUB_URL } from '@/shared/constant';
 import successAnimation from '@/ui/assets/lottie/correct.json';
 import { Button, Column, Content, Footer, Layout, Row, Text } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useBridgeParams } from '@/ui/state/bridge/hook';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useLocationState } from '@/ui/utils';
 import { Box } from '@mui/material';
 
@@ -16,6 +16,7 @@ interface ApproveSuccessLocationState {
 
 export default function ApproveSuccessScreen() {
   const { loanId } = useLocationState<ApproveSuccessLocationState>();
+  const { SIDE_STATION_URL } = useEnvironment();
 
   const { params } = useBridgeParams();
 
@@ -49,7 +50,7 @@ export default function ApproveSuccessScreen() {
         <Row fullX mt="sm">
           <Button
             onClick={() => {
-              window.open(`${SIDE_HUB_URL}/loan/${loanId}`, '_blank');
+              window.open(`${SIDE_STATION_URL}/loan/${loanId}`, '_blank');
             }}
             preset="primary"
             text="Open Web App"

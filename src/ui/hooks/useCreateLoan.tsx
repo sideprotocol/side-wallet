@@ -2,7 +2,6 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
-import { SERVICE_BASE_URL, sideChain } from '@/shared/constant';
 import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
@@ -14,11 +13,14 @@ import services from '../services';
 import { LiquidationEvent } from '../services/lending/types';
 import { GetTxByHashResponse } from '../services/tx/types';
 import { useCurrentAccount } from '../state/accounts/hooks';
+import { useEnvironment } from '../state/environment/hooks';
 import { useUpdateUiTxCreateScreen } from '../state/ui/hooks';
 import { toReadableAmount } from '../utils/formatter';
 import { toXOnly } from '../wallet-sdk/utils';
 
 export default function useCreateLoan() {
+  const { sideChain, SERVICE_BASE_URL } = useEnvironment();
+
   const [loading, setLoading] = useState(false);
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();

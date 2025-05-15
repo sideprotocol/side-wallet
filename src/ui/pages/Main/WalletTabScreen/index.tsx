@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { AddressFlagType, SIDE_STATION_URL } from '@/shared/constant';
+import { AddressFlagType } from '@/shared/constant';
 import { checkAddressFlag } from '@/shared/utils';
 import { Column, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
@@ -9,6 +9,7 @@ import { getCurrentTab } from '@/ui/features/browser/tabs';
 import useGetAccountBalanceByUSD from '@/ui/hooks/useGetAccountBalanceByUSD';
 import { useAddressSummary, useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
 import { getTruncate, useWallet } from '@/ui/utils';
@@ -26,6 +27,7 @@ export default function WalletTabScreen() {
   const wallet = useWallet();
   const [connected, setConnected] = useState(false);
   const dispatch = useAppDispatch();
+  const { sideChain } = useEnvironment();
   const accountBalanceByUSD = useGetAccountBalanceByUSD();
 
   const [showSafeNotice, setShowSafeNotice] = useState(false);
@@ -206,7 +208,7 @@ export default function WalletTabScreen() {
           <div
             className="flex flex-col items-center gap-[8px] group transition"
             onClick={() => {
-              window.open(`${SIDE_STATION_URL}/explorer/address/${currentAccount.address}`, '_blank');
+              window.open(`${sideChain.explorerUrl}/address/${currentAccount.address}`, '_blank');
             }}>
             <div className="w-[75px] h-[66px] gap-2 pt-1 rounded-xl flex flex-col items-center justify-center bg-[#17171C] group-hover:bg-[#404045] transition">
               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 
-import { KEYRING_TYPE, SIDE_BTC_EXPLORER, sideChain } from '@/shared/constant';
+import { KEYRING_TYPE } from '@/shared/constant';
 import { Button, Column, Content, Footer, Header, Icon, Image, Layout, LightTooltip, Row } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
@@ -12,6 +12,7 @@ import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBridge, useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { colors } from '@/ui/theme/colors';
@@ -62,12 +63,13 @@ export interface CacheUTXO {
 
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
+  const { SIDE_BTC_EXPLORER, sideChain } = useEnvironment();
 
   const currentKeyring = useCurrentKeyring();
 
   const { bridge, bridgeRune, estimateNetworkFee } = useBridge();
 
-  const { bridgeAmount, from, loading, base, fee, feeSummary, isDeposit, params } = useBridgeState();
+  const { bridgeAmount, loading, base, fee, feeSummary, isDeposit, params } = useBridgeState();
   const dispatch = useAppDispatch();
 
   const [networkFee, setNetworkFee] = useState<number>(0);

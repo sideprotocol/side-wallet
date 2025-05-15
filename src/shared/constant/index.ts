@@ -273,9 +273,6 @@ export const CHANNEL = process.env.channel!;
 export const VERSION = process.env.release!;
 export const MANIFEST_VERSION = process.env.manifest!;
 // TODO:
-export const isProduction = process.env.BUILD_ENV === 'PRO';
-
-// export const isProduction = true;
 
 export enum AddressFlagType {
   Is_Enable_Atomicals = 0b1,
@@ -390,26 +387,19 @@ export const BITCOIN_CHAINS = Object.values(BITCOIN_CHAINS_MAP);
 
 export const DEFAULT_LOCKTIME = 5;
 
-export const OPENAPI_URL_MAINNET = 'https://wallet-api.unisat.io/v5';
-export const OPENAPI_URL_TESTNET = 'https://wallet-api-testnet.unisat.io/v5';
-
 // TESTNET
-const UNISAT_RUNE_URL_TESTNET = 'https://api-t2.unisat.io/icon-v1/icon/runes';
-const DEX_CONTRACT_TESTNET = 'tb1pwkwy0xh89ksdgj9hr347dyd2dw7zesmtrue6kfzyml4vdtz6e5ws93fqnh';
-const DEX_ROUTER_CONTRACT_TESTNET = 'tb1p7p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgscc4xdz';
-const SERVICE_BASE_URL_TESTNET = 'https://api.side.one/indexer-station-devnet';
-const SIDE_BTC_EXPLORER_TESTNET = 'https://mempool.space/testnet';
-const UNISAT_SERVICE_ENDPOINT_TESTNET = 'https://wallet-api-testnet.unisat.io';
-const UNISAT_IO_API_TESTNET = 'https://devnet-rest.side.one/side/btcbridge';
-const SIDE_BTC_VAULT_ADDRESS_TESTNET = 'tb1q3q776wlrg6wljqyv4e52ls84zcw38yat2ym55t';
-const SIDE_RUNE_VAULT_ADDRESS_TESTNET = 'tb1qmu8nt6wye4vd644dm4tluurewa3yjdj76jnypw';
-const SIDE_STATION_URL_TESTNET = 'https://station-dev.side.one';
-const SIDE_HUB_URL_TESTNET = 'https://hub-dev.side.one';
-const SIDE_EXPLORER_URL_TESTNET = 'https://station-dev.side.one/explorer';
-const SIDE_BRIDGEEXPLORER_URL_TESTNET = 'https://station-dev.side.one/bridge/explorer';
-const SIDE_CHAIN_TESTNET = {
+export const DEX_CONTRACT_TESTNET = 'tb1pwkwy0xh89ksdgj9hr347dyd2dw7zesmtrue6kfzyml4vdtz6e5ws93fqnh';
+export const DEX_ROUTER_CONTRACT_TESTNET = 'tb1p7p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgscc4xdz';
+export const UNISAT_RUNE_URL_TESTNET = 'https://api-t2.unisat.io/icon-v1/icon/runes';
+export const UNISAT_SERVICE_ENDPOINT_TESTNET = 'https://wallet-api-testnet.unisat.io';
+export const OPENAPI_URL_TESTNET = 'https://wallet-api-testnet.unisat.io/v5';
+export const SIDE_BTC_EXPLORER_TESTNET = 'https://mempool.space/testnet';
+export const SERVICE_BASE_URL_TESTNET = 'https://api.side.one/indexer-station-devnet';
+export const SIDE_STATION_URL_TESTNET = 'https://station-dev.side.one';
+export const SIDE_BRIDGEEXPLORER_URL_TESTNET = `${SIDE_STATION_URL_TESTNET}/bridge/explorer`;
+export const SIDE_CHAIN_TESTNET = {
   chainID: 'devnet',
-  name: 'Side Chain',
+  name: 'Side Chain (testnet)',
   prefix: 'tb',
   rpcUrl: 'https://devnet-rpc.side.one',
   restUrl: 'https://devnet-rest.side.one',
@@ -417,24 +407,21 @@ const SIDE_CHAIN_TESTNET = {
   hdPath: "m/44'/118/0'/0/0",
   logo: 'https://api.side.one/static/token/logo/side.png',
   faucetUrl: 'https://faucet.side.exchange',
-  explorerUrl: SIDE_EXPLORER_URL_TESTNET
+  explorerUrl: `${SIDE_STATION_URL_TESTNET}/explorer`
 };
+export const UNISAT_IO_API_TESTNET = 'https://devnet-rest.side.one/side/btcbridge';
 
 // MAINNET
-const UNISAT_RUNE_URL_MAINNET = 'https://icon.unisat.io/icon/runes';
-const DEX_CONTRACT_MAINNET = 'bc1pwkwy0xh89ksdgj9hr347dyd2dw7zesmtrue6kfzyml4vdtz6e5wsjel0fc';
-const DEX_ROUTER_CONTRACT_MAINNET = 'bc1p7p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgs0srfhd';
-const SERVICE_BASE_URL_MAINNET = 'https://api.side.one/indexer-station-mainnet';
-const SIDE_BTC_EXPLORER_MAINNET = 'https://mempool.space';
-const UNISAT_SERVICE_ENDPOINT_MAINNET = 'https://wallet-api.unisat.io';
-const UNISAT_IO_API_MAINNET = 'https://rest.side.one/side/btcbridge';
-const SIDE_BTC_VAULT_ADDRESS_MAINNET = '';
-const SIDE_RUNE_VAULT_ADDRESS_MAINNET = '';
-const SIDE_STATION_URL_MAINNET = 'https://station.side.one';
-const SIDE_HUB_URL_MAINNET = 'https://hub.side.one';
-const SIDE_EXPLORER_URL_MAINNET = 'https://station.side.one/explorer';
-const SIDE_BRIDGEEXPLORER_URL_MAINNET = 'https://station.side.one/bridge/explorer';
-const SIDE_CHAIN_MAINNET = {
+export const DEX_CONTRACT_MAINNET = 'bc1pwkwy0xh89ksdgj9hr347dyd2dw7zesmtrue6kfzyml4vdtz6e5wsjel0fc';
+export const DEX_ROUTER_CONTRACT_MAINNET = 'bc1p7p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgs0srfhd';
+export const UNISAT_RUNE_URL_MAINNET = 'https://icon.unisat.io/icon/runes';
+export const UNISAT_SERVICE_ENDPOINT_MAINNET = 'https://wallet-api.unisat.io';
+export const OPENAPI_URL_MAINNET = 'https://wallet-api.unisat.io/v5';
+export const SIDE_BTC_EXPLORER_MAINNET = 'https://mempool.space';
+export const SERVICE_BASE_URL_MAINNET = 'https://api.side.one/indexer-station-mainnet';
+export const SIDE_STATION_URL_MAINNET = 'https://station.side.one';
+export const SIDE_BRIDGEEXPLORER_URL_MAINNET = `${SIDE_STATION_URL_MAINNET}/bridge/explorer`;
+export const SIDE_CHAIN_MAINNET = {
   chainID: 'sidechain-1',
   name: 'Side Chain',
   prefix: 'bc',
@@ -444,22 +431,6 @@ const SIDE_CHAIN_MAINNET = {
   hdPath: "m/44'/118/0'/0/0",
   logo: 'https://api.side.one/static/token/logo/side.png',
   faucetUrl: '',
-  explorerUrl: SIDE_EXPLORER_URL_MAINNET
+  explorerUrl: `${SIDE_STATION_URL_MAINNET}/explorer`
 };
-
-export const UNISAT_RUNE_URL = isProduction ? UNISAT_RUNE_URL_MAINNET : UNISAT_RUNE_URL_TESTNET;
-export const SIDE_BTC_INDEXER = '';
-export const SIDE_RUNE_INDEXER = '';
-export const DEX_CONTRACT = isProduction ? DEX_CONTRACT_MAINNET : DEX_CONTRACT_TESTNET;
-export const DEX_ROUTER_CONTRACT = isProduction ? DEX_ROUTER_CONTRACT_MAINNET : DEX_ROUTER_CONTRACT_TESTNET;
-export const SERVICE_BASE_URL = isProduction ? SERVICE_BASE_URL_MAINNET : SERVICE_BASE_URL_TESTNET;
-export const SIDE_BTC_EXPLORER = isProduction ? SIDE_BTC_EXPLORER_MAINNET : SIDE_BTC_EXPLORER_TESTNET;
-export const UNISAT_SERVICE_ENDPOINT = isProduction ? UNISAT_SERVICE_ENDPOINT_MAINNET : UNISAT_SERVICE_ENDPOINT_TESTNET;
-export const UNISAT_IO_API = isProduction ? UNISAT_IO_API_MAINNET : UNISAT_IO_API_TESTNET;
-export const BTC_BRIDGE_VAULT = isProduction ? SIDE_BTC_VAULT_ADDRESS_MAINNET : SIDE_BTC_VAULT_ADDRESS_TESTNET;
-export const RUNE_BRIDGE_VAULT = isProduction ? SIDE_RUNE_VAULT_ADDRESS_MAINNET : SIDE_RUNE_VAULT_ADDRESS_TESTNET;
-export const SIDE_STATION_URL = isProduction ? SIDE_STATION_URL_MAINNET : SIDE_STATION_URL_TESTNET;
-export const SIDE_HUB_URL = isProduction ? SIDE_HUB_URL_MAINNET : SIDE_HUB_URL_TESTNET;
-export const SIDE_EXPLORER_URL = isProduction ? SIDE_EXPLORER_URL_MAINNET : SIDE_EXPLORER_URL_TESTNET;
-export const SIDE_BRIDGEEXPLORER_URL = isProduction ? SIDE_BRIDGEEXPLORER_URL_MAINNET : SIDE_BRIDGEEXPLORER_URL_TESTNET;
-export const sideChain = isProduction ? SIDE_CHAIN_MAINNET : SIDE_CHAIN_TESTNET;
+export const UNISAT_IO_API_MAINNET = `${SIDE_CHAIN_MAINNET.restUrl}/side/btcbridge`;

@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import {
   assetService,
   contactBookService,
+  environmentService,
   keyringService,
   notificationService,
   openapiService,
@@ -863,6 +864,7 @@ export class WalletController extends BaseController {
 
   setChainType = async (chainType: ChainType) => {
     preferenceService.setChainType(chainType);
+    environmentService.setChainType(chainType);
     this.openapi.setEndpoints(BITCOIN_CHAINS_MAP[chainType].endpoints);
 
     const currentAccount = await this.getCurrentAccount();
@@ -2077,6 +2079,7 @@ export class WalletController extends BaseController {
   setSideBalanceList = assetService.setSideBalanceList;
   getBtcBalanceList = assetService.getBtcBalanceList;
   getSideBalanceList = assetService.getSideBalanceList;
+  getEnvironment = environmentService.getEnvironment;
 
   reset = async () => {
     await keyringService.reset();

@@ -1,15 +1,16 @@
 import 'swiper/css';
 
-import { SIDE_HUB_URL } from '@/shared/constant';
 import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import MainHeader from '@/ui/pages/Main/MainHeader';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
 import { useNavigate } from '../MainRoute';
 
 export default function LoansTabScreen() {
   const navigator = useNavigate();
+  const { SIDE_STATION_URL } = useEnvironment();
   return (
     <Layout>
       <MainHeader title={''} />
@@ -84,7 +85,7 @@ export default function LoansTabScreen() {
             <div
               className="text-xs text-[#6C7080] cursor-pointer  hover:text-white"
               onClick={() => {
-                window.open(SIDE_HUB_URL, '_blank');
+                window.open(SIDE_STATION_URL, '_blank');
               }}>
               Open Web App
             </div>

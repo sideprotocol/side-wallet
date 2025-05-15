@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 import { BalanceItem, IAsset } from '@/shared/types';
 import services from '@/ui/services';
 
+import { useEnvironment } from '../state/environment/hooks';
 import { formatUnitAmount } from '../utils';
 
 // 指定的排序规则
@@ -37,8 +38,9 @@ export const useGetBalanceList = ({
   restUrl: string;
   address?: string;
 }) => {
+  const { SERVICE_BASE_URL } = useEnvironment();
   const { data: allCoinBalances, refetch: refetchBalances } = useQuery({
-    queryKey: ['getAllCoinBalances', { address }],
+    queryKey: ['getAllCoinBalances', { address, SERVICE_BASE_URL }],
     queryFn: async () => {
       const result = await services.bank.getAllBalances(
         { address: address! },
@@ -52,9 +54,14 @@ export const useGetBalanceList = ({
   });
 
   const { data: priceMap } = useQuery({
-    queryKey: ['getSideAssetsPrice'],
+    queryKey: ['getSideAssetsPrice', { SERVICE_BASE_URL }],
     queryFn: () => {
-      return services.dex.getAssetsPrice({ chain: 'side', denomList: assets.map((item) => item.denom) });
+      return services.dex.getAssetsPrice(
+        { chain: 'side', denomList: assets.map((item) => item.denom) },
+        {
+          baseURL: SERVICE_BASE_URL
+        }
+      );
     },
     enabled: !!assets.length,
     refetchInterval: 600000,

@@ -7,6 +7,7 @@ import { providerController, walletController } from './controller';
 import {
   assetService,
   contactBookService,
+  environmentService,
   keyringService,
   openapiService,
   permissionService,
@@ -24,7 +25,10 @@ async function restoreAppState() {
   keyringService.loadStore(keyringState);
   keyringService.store.subscribe((value) => storage.set('keyringState', value));
 
+  await environmentService.init();
+
   await preferenceService.init();
+
   await openapiService.init();
 
   await permissionService.init();

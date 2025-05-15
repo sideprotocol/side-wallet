@@ -1,10 +1,11 @@
 import BigNumber from 'bignumber.js';
 import { useQuery } from 'react-query';
 
-import { CHAINS_ENUM, UNISAT_RUNE_URL } from '@/shared/constant';
+import { CHAINS_ENUM } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import services from '@/ui/services';
 
+import { useEnvironment } from '../state/environment/hooks';
 import { useFetchUtxosCallback } from '../state/transactions/hooks/index';
 import { satoshisToAmount } from '../utils';
 import { toReadableAmount, toUnitAmount } from '../utils/formatter';
@@ -51,33 +52,44 @@ function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
 
 export default function useGetBitcoinBalanceList(address?: string, flag?: boolean) {
   const fetchUtxos = useFetchUtxosCallback();
+  const { UNISAT_RUNE_URL, UNISAT_SERVICE_ENDPOINT, SERVICE_BASE_URL } = useEnvironment();
 
   const { data, isLoading } = useQuery({
     queryKey: [
       'getBitcoinBalanceList',
       {
         address,
-        flag
+        flag,
+        SERVICE_BASE_URL,
+        UNISAT_SERVICE_ENDPOINT,
+        UNISAT_RUNE_URL
       }
     ],
     queryFn: async () => {
       try {
         // btc 资产
-
         const utxos = await fetchUtxos();
         const safeBalance = utxos.filter((v) => v.inscriptions.length == 0).reduce((pre, cur) => pre + cur.satoshis, 0);
 
         const btcAmount = satoshisToAmount(safeBalance);
 
-        const { list } = await services.unisat.getRunesList({
-          address: address!,
-          currentPage: 1,
-          pageSize: 100
-        });
-        const priceMap = await services.dex.getAssetsPrice({
-          chain: 'bitcoin',
-          denomList: ['sat', ...list.map((item) => `runes/${item.runeid}`)]
-        });
+        const { list } = await services.unisat.getRunesList(
+          {
+            address: address!,
+            currentPage: 1,
+            pageSize: 100
+          },
+          UNISAT_SERVICE_ENDPOINT
+        );
+        const priceMap = await services.dex.getAssetsPrice(
+          {
+            chain: 'bitcoin',
+            denomList: ['sat', ...list.map((item) => `runes/${item.runeid}`)]
+          },
+          {
+            baseURL: SERVICE_BASE_URL
+          }
+        );
 
         const runeBalanceList = list.map((item) => {
           const runeDenom = `runes/${item.runeid}`;

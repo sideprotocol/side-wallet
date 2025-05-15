@@ -1,8 +1,7 @@
-import { SERVICE_BASE_URL } from '@/shared/constant';
+import { AxiosRequestConfig } from 'axios';
 
 import { getQueryParams } from '../getQueryParams';
 import ApiClient from '../network/ApiClient';
-import { GetBridgeHistoryRequest, GetBridgeHistoryResponse } from './types';
 
 export default class BitcoinService {
   private apiClient: ApiClient;
@@ -11,20 +10,9 @@ export default class BitcoinService {
     this.apiClient = apiClient;
   }
 
-  async postTxHash(txid: string) {
+  async postTxHash(txid: string, config: AxiosRequestConfig) {
     const queryParams = getQueryParams({ txid });
-    const result = await this.apiClient.post(`/bitcoin/add-deposit-bitcoin-transaction?${queryParams}`, '', {
-      baseURL: SERVICE_BASE_URL
-    });
-    return result;
-  }
-
-  async getBridgeHistory(data: GetBridgeHistoryRequest): Promise<GetBridgeHistoryResponse> {
-    const queryParams = getQueryParams(data as any);
-    const result = await this.apiClient.get<GetBridgeHistoryResponse>(`/bitcoin/bridge/history?${queryParams}`, {
-      baseURL: SERVICE_BASE_URL
-    });
-
+    const result = await this.apiClient.post(`/bitcoin/add-deposit-bitcoin-transaction?${queryParams}`, '', config);
     return result;
   }
 }

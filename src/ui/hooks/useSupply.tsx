@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
-import { CHAINS_ENUM, sideChain } from '@/shared/constant';
+import { CHAINS_ENUM } from '@/shared/constant';
 import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
@@ -11,8 +11,11 @@ import { Box } from '@mui/material';
 
 import services from '../services';
 import { useCurrentAccount } from '../state/accounts/hooks';
+import { useEnvironment } from '../state/environment/hooks';
 
 export default function useSupply() {
+  const { sideChain } = useEnvironment();
+
   const [loading, setLoading] = useState(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
   const [supplyTokenAmount, setSupplyTokenAmount] = useState('0');

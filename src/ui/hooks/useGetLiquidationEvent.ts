@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
 
-import { sideChain } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 
 import services from '../services';
 import { useCurrentAccount } from '../state/accounts/hooks';
+import { useEnvironment } from '../state/environment/hooks';
 import { toUnitAmount } from '../utils/formatter';
 import useGetBitcoinBalanceList from './useGetBitcoinBalanceList';
 
@@ -22,7 +22,7 @@ export default function useGetLiquidationEvent({
   maturity?: string;
 }) {
   const currentAccount = useCurrentAccount();
-
+  const { sideChain } = useEnvironment();
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
   const bitcoinToken = bitcoinBalanceList.find((item) => item.denom === 'sat');
@@ -30,7 +30,7 @@ export default function useGetLiquidationEvent({
   const { data, refetch, isLoading } = useQuery({
     queryKey: [
       'getLiquidationEvent',
-      { bitcoinAmount, borrowTokenAmount, bitcoinPrice: bitcoinToken?.denomPrice, maturity }
+      { bitcoinAmount, borrowTokenAmount, bitcoinPrice: bitcoinToken?.denomPrice, maturity, sideChain }
     ],
     queryFn: async () => {
       return services.lending.getLiquidationEvent(

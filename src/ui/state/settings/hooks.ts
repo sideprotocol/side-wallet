@@ -1,12 +1,13 @@
 import compareVersions from 'compare-versions';
 import { useCallback } from 'react';
 
-import { BITCOIN_CHAINS_MAP, CHAINS_ENUM, ChainType, VERSION, isProduction, sideChain } from '@/shared/constant';
+import { BITCOIN_CHAINS_MAP, CHAINS_ENUM, ChainType, VERSION } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { useWallet } from '@/ui/utils';
 import i18n, { addResourceBundle } from '@/ui/utils/i18n';
 
 import { AppState } from '..';
+import { useEnvironment } from '../environment/hooks';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { settingsActions } from './reducer';
 
@@ -58,6 +59,7 @@ export function useChangeNetworkTypeCallback() {
         await wallet.setChainType(ChainType.BITCOIN_MAINNET);
         dispatch(
           settingsActions.updateSettings({
+            networkType: type,
             chainType: ChainType.BITCOIN_MAINNET
           })
         );
@@ -65,6 +67,7 @@ export function useChangeNetworkTypeCallback() {
         await wallet.setChainType(ChainType.BITCOIN_TESTNET);
         dispatch(
           settingsActions.updateSettings({
+            networkType: type,
             chainType: ChainType.BITCOIN_TESTNET
           })
         );
@@ -75,11 +78,13 @@ export function useChangeNetworkTypeCallback() {
 }
 
 export function useBlockstreamUrl(chain?: CHAINS_ENUM) {
+  const networkType = useNetworkType();
+  const { sideChain } = useEnvironment();
   if (chain === CHAINS_ENUM.SIDE) {
     return sideChain.explorerUrl;
   }
 
-  if (isProduction) {
+  if (networkType === NetworkType.MAINNET) {
     return 'https://mempool.space';
   } else {
     return 'https://mempool.space/testnet';

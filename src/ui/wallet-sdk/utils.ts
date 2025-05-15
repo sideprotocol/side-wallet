@@ -4,8 +4,6 @@ import BigNumber from 'bignumber.js';
 import { Buffer } from 'buffer';
 
 // import { Account, DepositBTCBridge } from '../web3-wallet';
-import { RUNE_BRIDGE_VAULT, isProduction } from '@/shared/constant';
-import { UTXO } from '@/shared/lib/runes-utils';
 import { ToSignInput, UTXO_DUST, UnspentOutput } from '@unisat/wallet-sdk';
 import { ECPair, bitcoin, ecc } from '@unisat/wallet-sdk/lib/bitcoin-core';
 import { ErrorCodes, WalletUtilsError } from '@unisat/wallet-sdk/lib/error';
@@ -83,19 +81,11 @@ export function shortAddress(address?: string, len = 5) {
   return address.slice(0, len) + '...' + address.slice(address.length - len);
 }
 
-export function decodeTxToGetValue(tx: UTXO) {
-  const runeOut = tx.vout.find((vout) => vout.scriptpubkey_address === RUNE_BRIDGE_VAULT);
-
-  if (!runeOut) return 0;
-
-  return runeOut.value;
-}
-
 function toHex(data: Uint8Array): string {
   return Buffer.from(data).toString('hex');
 }
 
-export async function estimateNetworkFeeHelper(params, bridgeParams, utxos, account) {
+export async function estimateNetworkFeeHelper(params, bridgeParams, utxos, account, networkType: NetworkType) {
   const { amount, fee: feeRate } = params;
 
   const senderAddress = account?.address;
@@ -142,14 +132,14 @@ export async function estimateNetworkFeeHelper(params, bridgeParams, utxos, acco
       ? await sendAllBTC({
           btcUtxos: btcUtxos,
           toAddress: btcVaultAddress,
-          networkType: isProduction ? 0 : 1,
+          networkType,
           feeRate: feeRate,
           enableRBF: true
         })
       : await sendBTC({
           btcUtxos: btcUtxos,
           tos: [{ address: btcVaultAddress, satoshis: amount }],
-          networkType: isProduction ? 0 : 1,
+          networkType,
           changeAddress: senderAddress,
           feeRate: feeRate,
           enableRBF: true,

@@ -1,5 +1,9 @@
-import services from '@/ui/services';
 import { useEffect, useState } from 'react';
+
+import services from '@/ui/services';
+
+import { useEnvironment } from '../state/environment/hooks';
+
 export interface IGetMarketListItem {
   tokenDenom: string;
   tokenSymbol: string;
@@ -18,6 +22,7 @@ export interface IGetMarketListItem {
 export default function useGetMarketList() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<IGetMarketListItem[]>([]);
+  const { SERVICE_BASE_URL } = useEnvironment();
 
   useEffect(() => {
     getData();
@@ -26,7 +31,7 @@ export default function useGetMarketList() {
   const getData = async () => {
     try {
       setLoading(true);
-      const result = await services.dex.getMarketList();
+      const result = await services.dex.getMarketList({ baseURL: SERVICE_BASE_URL });
       setData(result);
     } catch (err) {
       console.log('err: ', err);
@@ -37,6 +42,6 @@ export default function useGetMarketList() {
 
   return {
     loading,
-    data,
+    data
   };
 }

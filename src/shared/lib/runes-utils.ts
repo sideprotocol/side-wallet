@@ -1,7 +1,5 @@
 import { BigNumber } from 'bignumber.js';
 
-import { RUNE_BRIDGE_VAULT } from '../constant';
-
 interface Status {
   confirmed: boolean;
   block_height: number;
@@ -69,14 +67,6 @@ function fromDecimalAmount(decimalAmount: string, divisibility: number) {
 
 function compareAmount(a: string, b: string) {
   return new BigNumber(a).comparedTo(new BigNumber(b));
-}
-
-export function decodeTxToGetValue(tx: UTXO) {
-  const runeOut = tx.vout.find((vout) => vout.scriptpubkey_address === RUNE_BRIDGE_VAULT);
-
-  if (!runeOut) return 0;
-
-  return runeOut.value;
 }
 
 export const runesUtils = {

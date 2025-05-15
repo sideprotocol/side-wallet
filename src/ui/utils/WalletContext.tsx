@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext } from 'react';
 
 import { AccountAsset } from '@/background/controller/wallet';
 import { ContactBookItem, ContactBookStore } from '@/background/service/contactBook';
+import { EnvironmentStore } from '@/background/service/environment';
 import { ToSignInput } from '@/background/service/keyring';
 import { ConnectedSite } from '@/background/service/permission';
 import { AddressFlagType, ChainType } from '@/shared/constant';
@@ -401,6 +402,8 @@ export interface WalletController {
   getAutoLockTime(): Promise<number>;
 
   setLastActiveTime(): Promise<void>;
+
+  getEnvironment(): Promise<EnvironmentStore>;
 }
 
 const WalletContext = createContext<{

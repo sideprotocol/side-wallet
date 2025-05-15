@@ -22,7 +22,9 @@ export const initialState: SettingsState = {
   walletConfig: {
     version: '',
     moonPayEnabled: true,
-    statusMessage: ''
+    statusMessage: '',
+    endpoint: '',
+    chainTip: ''
   },
   skippedVersion: '',
   autoLockTime: DEFAULT_LOCKTIME
@@ -42,6 +44,7 @@ const slice = createSlice({
           locale?: string;
           addressType?: AddressType;
           networkType?: NetworkType;
+          chainType?: ChainType;
           walletConfig?: WalletConfig;
           skippedVersion?: string;
           autoLockTime?: number;
@@ -55,10 +58,8 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(updateVersion, (state) => {
-      // todo
       if (!state.networkType) {
-        // state.networkType = NetworkType.MAINNET;
-        state.networkType = NetworkType.TESTNET;
+        state.networkType = NetworkType.MAINNET;
       }
     });
   }

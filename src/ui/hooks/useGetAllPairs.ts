@@ -1,12 +1,14 @@
 import { useQuery } from 'react-query';
 
-import { DEX_CONTRACT, sideChain } from '@/shared/constant';
 import { IPairItem } from '@/ui/services/dex/type';
 import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 
+import { useEnvironment } from '../state/environment/hooks';
+
 export default function useGetAllPairs() {
+  const { DEX_CONTRACT, sideChain } = useEnvironment();
   const { data, isLoading: loading } = useQuery({
-    queryKey: ['getAllPairs'],
+    queryKey: ['getAllPairs', { DEX_CONTRACT }],
     queryFn: async () => {
       const msg = {
         pairs: {

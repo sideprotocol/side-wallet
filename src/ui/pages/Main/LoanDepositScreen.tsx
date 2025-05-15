@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import 'swiper/css';
 
-import { COIN_DUST, SIDE_BTC_EXPLORER } from '@/shared/constant';
+import { COIN_DUST } from '@/shared/constant';
 import { RawTxInfo } from '@/shared/types';
 import { Button, Column, Content, Footer, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
@@ -14,6 +14,7 @@ import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { LiquidationEvent } from '@/ui/services/lending/types';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useBTCUnit } from '@/ui/state/settings/hooks';
 import {
   useBitcoinTx,
@@ -34,6 +35,7 @@ interface LoanDepositLocationState {
 }
 
 export default function LoanDepositScreen() {
+  const { SIDE_BTC_EXPLORER } = useEnvironment();
   const { borrowAmount, collateralAmount, liquidationEvent } = useLocationState<LoanDepositLocationState>();
 
   const safeBalance = useSafeBalance();

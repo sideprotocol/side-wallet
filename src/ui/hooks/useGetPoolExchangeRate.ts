@@ -1,12 +1,12 @@
 import { useQuery } from 'react-query';
 
-import { sideChain } from '@/shared/constant';
-
 import services from '../services';
+import { useEnvironment } from '../state/environment/hooks';
 
 export default function useGetPoolExchangeRate({ poolId }: { poolId: string }) {
+  const { sideChain } = useEnvironment();
   const { data, isLoading: loading } = useQuery({
-    queryKey: ['GetPoolExchangeRate'],
+    queryKey: ['GetPoolExchangeRate', { poolId, sideChain }],
     queryFn: async () => {
       return services.lending.getLendingPoolsExchangeRate({ pool_id: poolId }, { baseURL: sideChain.restUrl });
     },

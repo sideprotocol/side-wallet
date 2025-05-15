@@ -3,7 +3,7 @@ import * as bip341 from 'bitcoinjs-lib/src/payments/bip341';
 import { Buffer } from 'buffer';
 import { Coin } from 'cosmwasm';
 
-import { isProduction } from '@/shared/constant';
+import { NetworkType } from '@/shared/types';
 import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 import { toXOnly } from '@unisat/wallet-sdk/lib/utils';
 
@@ -17,12 +17,12 @@ export interface DepositToLendingAgency {
   feeRate: number;
 }
 
-export function hexPubKeyToTaprootAddress(pubkeyHex: string): string {
+export function hexPubKeyToTaprootAddress(pubkeyHex: string, networkType: NetworkType): string {
   const pubkey = Buffer.from(pubkeyHex, 'hex');
   const xOnlyPubkey = toXOnly(pubkey);
   const { address } = bitcoin.payments.p2tr({
     pubkey: xOnlyPubkey,
-    network: isProduction ? bitcoin.networks.bitcoin : bitcoin.networks.testnet
+    network: networkType === NetworkType.MAINNET ? bitcoin.networks.bitcoin : bitcoin.networks.testnet
   });
 
   if (!address) {
@@ -36,13 +36,14 @@ export async function prepareApply({
   params,
   senderAddress,
   depositTxIds,
-  depositTxs
+  depositTxs,
+  networkType
 }: {
   params: DepositToLendingAgency;
   senderAddress: string;
-
   depositTxIds?: string[];
   depositTxs?: string[];
+  networkType: NetworkType;
 }) {
   const { restUrl, feeRate, collateralAddress } = params;
 
@@ -55,7 +56,7 @@ export async function prepareApply({
   }
 
   // send btc to collateral address
-  const network = isProduction ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
+  const network = networkType === NetworkType.MAINNET ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
 
   const agencyPsbtToFee = new Psbt({ network });
 
@@ -97,7 +98,7 @@ export async function prepareApply({
     });
   }
 
-  const agencyAddress = hexPubKeyToTaprootAddress(dcm.pubkey);
+  const agencyAddress = hexPubKeyToTaprootAddress(dcm.pubkey, networkType);
 
   agencyPsbtToFee.addOutput({
     address: agencyAddress,

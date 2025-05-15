@@ -8,6 +8,7 @@ import { Content, Icon } from '../components';
 import BridgeSelectTokenScreen from '../components/Bridge/BridgeSelectToken';
 import LendingSelectTokenScreen from '../components/Lending/LendingSelectToken';
 import { accountActions } from '../state/accounts/reducer';
+import { environmentActions } from '../state/environment/reducer';
 import { useIsReady, useIsUnlocked } from '../state/global/hooks';
 import { globalActions } from '../state/global/reducer';
 import { useAppDispatch } from '../state/hooks';
@@ -447,7 +448,8 @@ const Main = () => {
     settingsLoaded: false,
     summaryLoaded: false,
     accountLoaded: false,
-    configLoaded: false
+    configLoaded: false,
+    environmentLoaded: false
   });
   const self = selfRef.current;
   const init = useCallback(async () => {
@@ -491,16 +493,17 @@ const Main = () => {
       }
 
       if (!self.configLoaded) {
-        wallet.getWalletConfig().then((data) => {
-          dispatch(settingsActions.updateSettings({ walletConfig: data }));
-        });
-        wallet.getSkippedVersion().then((data) => {
-          dispatch(settingsActions.updateSettings({ skippedVersion: data }));
-        });
-
         wallet.getAutoLockTime().then((data) => {
           dispatch(settingsActions.updateSettings({ autoLockTime: data }));
         });
+        self.configLoaded = true;
+      }
+
+      if (!self.environmentLoaded) {
+        wallet.getEnvironment().then((data) => {
+          dispatch(environmentActions.updateEnvironment(data));
+        });
+        self.environmentLoaded = true;
       }
 
       dispatch(globalActions.update({ isReady: true }));
