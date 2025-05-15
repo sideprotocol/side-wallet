@@ -3,10 +3,8 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
-import { NetworkType } from '@/shared/types';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { Box } from '@mui/material';
-import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 
 import ToastView from '../components/ToastView';
 import services from '../services';
@@ -19,47 +17,6 @@ import { useSignAndBroadcastTxRaw } from '../state/transactions/hooks/cosmos';
 import { useWallet } from '../utils';
 import { prepareApply } from '../utils/lending';
 import useGetDepositTx from './useGetDepositTx';
-
-export async function buildPsbtFromTxHex(txid: string) {
-  const { SIDE_BTC_EXPLORER } = useEnvironment();
-  const networkType = useNetworkType();
-
-  const txHex = await services.bridge.getTxHex(txid, SIDE_BTC_EXPLORER);
-  const tx = bitcoin.Transaction.fromHex(txHex);
-  const psbt = new bitcoin.Psbt({
-    network: networkType === NetworkType.MAINNET ? bitcoin.networks.bitcoin : bitcoin.networks.testnet
-  });
-
-  psbt.setVersion(tx.version);
-
-  tx.ins.forEach((input, _) => {
-    const inputData: {
-      hash: Buffer;
-      index: number;
-      sequence: number;
-      witness?: Buffer[];
-    } = {
-      hash: input.hash,
-      index: input.index,
-      sequence: input.sequence
-    };
-    if (input.witness && input.witness.length > 0) {
-      inputData.witness = input.witness;
-    }
-    psbt.addInput(inputData);
-  });
-
-  tx.outs.forEach((output) => {
-    psbt.addOutput({
-      script: output.script,
-      value: output.value
-    });
-  });
-
-  psbt.setLocktime(tx.locktime);
-
-  return psbt;
-}
 
 export default function useApproveLoan(loan_id: string, collateralAmount: string) {
   const [loading, setLoading] = useState(false);
