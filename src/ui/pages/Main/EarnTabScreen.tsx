@@ -2,6 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { useMemo, useRef, useState } from 'react';
 import 'swiper/css';
 
+import { NetworkType } from '@/shared/types';
 import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { NavTabBar } from '@/ui/components/NavTabBar';
@@ -15,6 +16,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useLendingState } from '@/ui/state/lending/hook';
 import { LendingActions } from '@/ui/state/lending/reducer';
+import { useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
@@ -23,6 +25,7 @@ import { Stack, Typography } from '@mui/material';
 import { useNavigate } from '../MainRoute';
 
 export default function EarnTabScreen() {
+  const networkType = useNetworkType();
   const currentAccount = useCurrentAccount();
   const [supplyAmount, setsupplyAmount] = useState('');
 
@@ -119,6 +122,37 @@ export default function EarnTabScreen() {
   const activeIndex = useMemo(() => {
     return operationTab === 'supply' ? 0 : 1;
   }, [operationTab]);
+
+  if (networkType === NetworkType.MAINNET) {
+    return (
+      <Layout>
+        <MainHeader title={''} />
+        <Content mt="lg" classname="fadeIn-page">
+          <Column
+            gap="lg"
+            px="lg"
+            full
+            itemsCenter
+            justifyCenter
+            py="md"
+            style={{
+              borderRadius: '10px'
+            }}>
+            <Text
+              text="COMING SOON"
+              color="white"
+              style={{
+                fontWeight: 700
+              }}
+              size="xl"></Text>
+          </Column>
+        </Content>
+        <Footer px="zero" py="zero">
+          <NavTabBar tab="earn" />
+        </Footer>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
