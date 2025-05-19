@@ -1,8 +1,13 @@
-import { ReactEventHandler } from 'react';
+import { ReactEventHandler, useEffect, useState } from 'react';
 
+import { openapiService } from '@/background/service';
+import { AddressFlagType, UNCONFIRMED_HEIGHT } from '@/shared/constant';
 import { AddressAssets } from '@/shared/types';
+import { checkAddressFlag } from '@/shared/utils';
+import services from '@/ui/services';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { fontSizes } from '@/ui/theme/font';
-import { satoshisToBTC } from '@/ui/utils';
+import { satoshisToAmount, satoshisToBTC } from '@/ui/utils';
 
 import { Card } from '../Card';
 import { Column } from '../Column';
@@ -19,8 +24,27 @@ interface AddressTypeCardProps {
   onClick?: ReactEventHandler<HTMLDivElement>;
 }
 export function AddressTypeCard(props: AddressTypeCardProps) {
-  const { onClick, label, address, checked, assets } = props;
-  const hasVault = Boolean(assets?.satoshis && assets?.satoshis > 0);
+  const { onClick, label, address, checked } = props;
+  const { UNISAT_SERVICE_ENDPOINT } = useEnvironment();
+  const [balance, setBalance] = useState('0');
+  // const hasVault = Boolean(assets?.satoshis && assets?.satoshis > 0);
+  const fetchUtxos = async () => {
+    let utxos = await services.unisat.getBTCUtxos({ address }, UNISAT_SERVICE_ENDPOINT);
+    if (checkAddressFlag(openapiService.addressFlag, AddressFlagType.CONFIRMED_UTXO_MODE)) {
+      utxos = utxos.filter((v) => (v as any).height !== UNCONFIRMED_HEIGHT);
+    }
+    const safeBalance = utxos.filter((v) => v.inscriptions.length == 0).reduce((pre, cur) => pre + cur.satoshis, 0);
+
+    const btcAmount = satoshisToAmount(safeBalance);
+    setBalance(btcAmount);
+  };
+
+  useEffect(() => {
+    if (address) {
+      fetchUtxos();
+    }
+  }, [address]);
+
   return (
     <Card
       preset={checked ? 'styleChecked' : 'styleNotCheck'}
@@ -51,20 +75,12 @@ export function AddressTypeCard(props: AddressTypeCardProps) {
             {checked && <Icon color={'primary'} contain={'contain'} icon="check-circle" />}
           </Column>
         </Row>
-        {hasVault && (
-          <Row justifyBetween bg="bg3" roundedBottom px="md" py="md">
-            <Row justifyCenter>
-              <Icon icon="btc" size={fontSizes.iconMiddle} />
-              <Text text={`${assets.total_btc} BTC`} color="yellow" />
-            </Row>
-
-            <Row>
-              {assets?.total_inscription > 0 && (
-                <Text text={`${assets.total_inscription} INSCRIPTIONS`} color="gold" preset="bold" />
-              )}
-            </Row>
+        <Row justifyBetween bg="bg3" roundedBottom px="md" py="md">
+          <Row justifyCenter>
+            <Icon icon="btc" size={fontSizes.iconMiddle} />
+            <Text text={`${balance} BTC`} color="yellow" />
           </Row>
-        )}
+        </Row>
       </Column>
     </Card>
   );

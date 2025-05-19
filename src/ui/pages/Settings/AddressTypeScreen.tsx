@@ -55,8 +55,6 @@ export default function AddressTypeScreen() {
     tools.showLoading(false);
   };
 
-  console.log({ addresses });
-
   useEffect(() => {
     loadAddresses();
   }, []);
