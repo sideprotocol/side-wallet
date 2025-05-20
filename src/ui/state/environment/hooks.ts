@@ -23,6 +23,7 @@ import {
   UNISAT_SERVICE_ENDPOINT_TESTNET
 } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
+import services from '@/ui/services';
 
 import { AppState } from '..';
 import { useAppDispatch, useAppSelector } from '../hooks';
@@ -41,6 +42,15 @@ export function useChangeEnvironmentCallback() {
   const dispatch = useAppDispatch();
   return useCallback(
     async (networkType: NetworkType) => {
+      let chainID = '';
+      try {
+        const res = await services.base.getBlocksLatest({
+          baseURL: networkType === NetworkType.MAINNET ? SIDE_CHAIN_MAINNET.restUrl : SIDE_CHAIN_TESTNET.restUrl
+        });
+        chainID = res.block.header.chain_id;
+      } catch (err) {
+        chainID = networkType === NetworkType.MAINNET ? SIDE_CHAIN_MAINNET.chainID : SIDE_CHAIN_TESTNET.chainID;
+      }
       if (networkType === NetworkType.MAINNET) {
         dispatch(
           environmentActions.updateEnvironment({
@@ -53,7 +63,10 @@ export function useChangeEnvironmentCallback() {
             UNISAT_IO_API: UNISAT_IO_API_MAINNET,
             SIDE_STATION_URL: SIDE_STATION_URL_MAINNET,
             SIDE_BRIDGEEXPLORER_URL: SIDE_BRIDGEEXPLORER_URL_MAINNET,
-            sideChain: SIDE_CHAIN_MAINNET
+            sideChain: {
+              ...SIDE_CHAIN_MAINNET,
+              chainID
+            }
           })
         );
       } else {
@@ -68,7 +81,10 @@ export function useChangeEnvironmentCallback() {
             UNISAT_IO_API: UNISAT_IO_API_TESTNET,
             SIDE_STATION_URL: SIDE_STATION_URL_TESTNET,
             SIDE_BRIDGEEXPLORER_URL: SIDE_BRIDGEEXPLORER_URL_TESTNET,
-            sideChain: SIDE_CHAIN_TESTNET
+            sideChain: {
+              ...SIDE_CHAIN_TESTNET,
+              chainID
+            }
           })
         );
       }

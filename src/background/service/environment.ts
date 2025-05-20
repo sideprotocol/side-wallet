@@ -22,6 +22,7 @@ import {
   UNISAT_SERVICE_ENDPOINT_MAINNET,
   UNISAT_SERVICE_ENDPOINT_TESTNET
 } from '@/shared/constant';
+import services from '@/ui/services';
 
 export type EnvironmentStore = {
   UNISAT_RUNE_URL: string;
@@ -57,9 +58,21 @@ class EnvironmentService {
     });
   };
 
-  setChainType = (chainType: ChainType) => {
+  setChainType = async (chainType: ChainType) => {
+    let chainID = '';
+    try {
+      const res = await services.base.getBlocksLatest({
+        baseURL: chainType === ChainType.BITCOIN_MAINNET ? SIDE_CHAIN_MAINNET.restUrl : SIDE_CHAIN_TESTNET.restUrl
+      });
+      chainID = res.block.header.chain_id;
+    } catch (err) {
+      chainID = chainType === ChainType.BITCOIN_MAINNET ? SIDE_CHAIN_MAINNET.chainID : SIDE_CHAIN_TESTNET.chainID;
+    }
     if (chainType === ChainType.BITCOIN_MAINNET) {
-      this.store.sideChain = SIDE_CHAIN_MAINNET;
+      this.store.sideChain = {
+        ...SIDE_CHAIN_MAINNET,
+        chainID
+      };
       this.store.UNISAT_RUNE_URL = UNISAT_RUNE_URL_MAINNET;
       this.store.DEX_CONTRACT = DEX_CONTRACT_MAINNET;
       this.store.DEX_ROUTER_CONTRACT = DEX_ROUTER_CONTRACT_MAINNET;
@@ -70,7 +83,10 @@ class EnvironmentService {
       this.store.SIDE_STATION_URL = SIDE_STATION_URL_MAINNET;
       this.store.SIDE_BRIDGEEXPLORER_URL = SIDE_BRIDGEEXPLORER_URL_MAINNET;
     } else {
-      this.store.sideChain = SIDE_CHAIN_TESTNET;
+      this.store.sideChain = {
+        ...SIDE_CHAIN_TESTNET,
+        chainID
+      };
       this.store.UNISAT_RUNE_URL = UNISAT_RUNE_URL_TESTNET;
       this.store.DEX_CONTRACT = DEX_CONTRACT_TESTNET;
       this.store.DEX_ROUTER_CONTRACT = DEX_ROUTER_CONTRACT_TESTNET;

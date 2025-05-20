@@ -394,22 +394,22 @@ export const UNISAT_RUNE_URL_TESTNET = 'https://api-t2.unisat.io/icon-v1/icon/ru
 export const UNISAT_SERVICE_ENDPOINT_TESTNET = 'https://wallet-api-testnet.unisat.io';
 export const OPENAPI_URL_TESTNET = 'https://wallet-api-testnet.unisat.io/v5';
 export const SIDE_BTC_EXPLORER_TESTNET = 'https://mempool.space/testnet';
-export const SERVICE_BASE_URL_TESTNET = 'https://api.side.one/indexer-station-devnet';
-export const SIDE_STATION_URL_TESTNET = 'https://station-dev.side.one';
+export const SERVICE_BASE_URL_TESTNET = 'https://api.side.one/indexer-station-testnet';
+export const SIDE_STATION_URL_TESTNET = 'https://station-test.side.one';
 export const SIDE_BRIDGEEXPLORER_URL_TESTNET = `${SIDE_STATION_URL_TESTNET}/bridge/explorer`;
 export const SIDE_CHAIN_TESTNET = {
-  chainID: 'devnet',
+  chainID: 'sidechain-testnet-5',
   name: 'Side Chain (testnet)',
   prefix: 'tb',
-  rpcUrl: 'https://devnet-rpc.side.one',
-  restUrl: 'https://devnet-rest.side.one',
+  rpcUrl: 'https://testnet-rpc.side.one',
+  restUrl: 'https://testnet-rest.side.one',
   denom: 'uside',
   hdPath: "m/44'/118/0'/0/0",
   logo: 'https://api.side.one/static/token/logo/side.png',
   faucetUrl: 'https://faucet.side.exchange',
   explorerUrl: `${SIDE_STATION_URL_TESTNET}/explorer`
 };
-export const UNISAT_IO_API_TESTNET = 'https://devnet-rest.side.one/side/btcbridge';
+export const UNISAT_IO_API_TESTNET = `${SIDE_CHAIN_TESTNET.restUrl}/side/btcbridge`;
 
 // MAINNET
 export const DEX_CONTRACT_MAINNET = 'bc1pwkwy0xh89ksdgj9hr347dyd2dw7zesmtrue6kfzyml4vdtz6e5wsjel0fc';

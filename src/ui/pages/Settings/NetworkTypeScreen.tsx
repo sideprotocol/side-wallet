@@ -1,3 +1,4 @@
+import { SIDE_CHAIN_MAINNET, SIDE_CHAIN_TESTNET } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useReloadAccounts } from '@/ui/state/accounts/hooks';
@@ -48,7 +49,7 @@ export default function NetworkTypeScreen() {
               navigate('MainScreen');
             }}>
             <Row itemsCenter>
-              <Text text={`${sideChain.name} & Bitcoin (mainnet)`} />
+              <Text text={`${SIDE_CHAIN_MAINNET.name} & Bitcoin (mainnet)`} />
             </Row>
             {networkType === NetworkType.MAINNET && (
               <Column>
@@ -76,7 +77,7 @@ export default function NetworkTypeScreen() {
               navigate('MainScreen');
             }}>
             <Row itemsCenter>
-              <Text text={`${sideChain.name} & Bitcoin (testnet)`} />
+              <Text text={`${SIDE_CHAIN_TESTNET.name} & Bitcoin (testnet)`} />
             </Row>
             {networkType === NetworkType.TESTNET && (
               <Column>
