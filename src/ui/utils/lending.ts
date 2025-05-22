@@ -21,7 +21,7 @@ export function hexPubKeyToTaprootAddress(pubkeyHex: string, networkType: Networ
   const pubkey = Buffer.from(pubkeyHex, 'hex');
   const xOnlyPubkey = toXOnly(pubkey);
   const { address } = bitcoin.payments.p2tr({
-    pubkey: xOnlyPubkey,
+    internalPubkey: xOnlyPubkey,
     network: networkType === NetworkType.MAINNET ? bitcoin.networks.bitcoin : bitcoin.networks.testnet
   });
 

@@ -132,8 +132,7 @@ export default function LoanAuthorizeScreen() {
                   width: '100%',
                   py: '12px',
                   px: '12px',
-                  borderRadius: '10px',
-                  bgcolor: colors.card_bgColor
+                  borderRadius: '10px'
                 }}>
                 <Stack
                   direction="row"

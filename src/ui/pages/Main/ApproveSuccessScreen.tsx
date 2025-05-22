@@ -10,6 +10,8 @@ import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useLocationState } from '@/ui/utils';
 import { Box } from '@mui/material';
 
+import { useNavigate } from '../MainRoute';
+
 interface ApproveSuccessLocationState {
   loanId: string;
 }
@@ -17,7 +19,7 @@ interface ApproveSuccessLocationState {
 export default function ApproveSuccessScreen() {
   const { loanId } = useLocationState<ApproveSuccessLocationState>();
   const { SIDE_STATION_URL } = useEnvironment();
-
+  const navigate = useNavigate();
   const { params } = useBridgeParams();
 
   return (
@@ -50,10 +52,10 @@ export default function ApproveSuccessScreen() {
         <Row fullX mt="sm">
           <Button
             onClick={() => {
-              window.open(`${SIDE_STATION_URL}/loan/${loanId}`, '_blank');
+              navigate('MainScreen');
             }}
             preset="primary"
-            text="Open Web App"
+            text="Close"
             full></Button>
         </Row>
       </Content>

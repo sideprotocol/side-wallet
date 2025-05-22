@@ -293,381 +293,363 @@ export default function LendingTanScreen() {
   return (
     <Layout>
       <MainHeader title={''} />
-      <Content gap="lg" mt="xl">
-        <Column
-          gap="xs"
-          style={{
-            borderRadius: '10px'
-          }}
-          bg="card_bgColor"
-          px="lg"
-          py="lg">
-          <Row px="md" full justifyBetween itemsCenter>
-            <Text color="white" size="xs">
-              Collateral{' '}
-            </Text>
-
-            <Row itemsCenter>
-              <Icon color="white_muted" icon="wallet-icon" size={16} />
-              <Text text={BigNumber(satBalance?.formatAmount || '0').toFormat()} color="white" size="xs"></Text>
-            </Row>
-          </Row>
-
-          <Row
-            bg="black"
+      <Content gap="md" mt="xl">
+        <Row px="md" full justifyBetween itemsCenter>
+          <Text
+            color="white"
+            size="lg"
             style={{
-              height: 70
-            }}
-            px="md"
-            itemsCenter
-            rounded
-            py="md">
-            <Row
-              style={{
-                flexShrink: 0
-              }}
-              rounded={true}
-              px="lg"
-              py="md"
-              bg="card_bgColor">
-              <Image src="/images/icons/btc.svg" height={24} width={24}></Image>
+              fontWeight: 600
+            }}>
+            Borrow
+          </Text>
 
+          <Row itemsCenter gap="sm">
+            <Text color="white" size="xs" style={{ marginTop: '-1px' }}>
+              My Loans
+            </Text>
+            <Icon icon="arrow-right" color="white" size={16} />
+          </Row>
+        </Row>
+        <Row px="md" full justifyBetween itemsCenter>
+          <Text color="white" size="xs">
+            Collateral Amount
+          </Text>
+
+          <Row itemsCenter>
+            <Icon color="white_muted" icon="wallet-icon" size={16} />
+            <Text text={BigNumber(satBalance?.formatAmount || '0').toFormat()} color="white" size="xs"></Text>
+          </Row>
+        </Row>
+        <Row
+          bg="card_bgColor"
+          style={{
+            height: 70
+          }}
+          px="md"
+          itemsCenter
+          rounded
+          py="md">
+          <CoinInput
+            size={22}
+            coin={{
+              amount: collateralAmount,
+              denom: 'sat'
+            }}
+            onChange={(value) => {
+              setcollateralAmount(value);
+            }}
+          />
+          <Column
+            style={{
+              gap: '0',
+              flexShrink: 0
+            }}>
+            <Row>
+              <Image src="/images/icons/btc.svg" height={24} width={24}></Image>
               <Text text={satBalance?.asset.symbol || 'BTC'} color="white" size="md"></Text>
             </Row>
 
-            <Box py={'2px'} height={'max-content'}>
-              <CoinInput
-                size={22}
-                coin={{
-                  amount: collateralAmount,
-                  denom: 'sat'
-                }}
-                onChange={(value) => {
-                  setcollateralAmount(value);
-                }}></CoinInput>
-            </Box>
-
-            <Column>
-              <Text
-                style={{
-                  verticalAlign: 'middle',
-                  maxWidth: '90px',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden'
-                }}
-                text={collateralValue}
-                size="xs"
-                color="white_muted"></Text>
-            </Column>
-          </Row>
-
-          <Row px="md" full justifyBetween itemsCenter mt="lg">
-            <Text color="white" size="xs">
-              I want to borrow
-            </Text>
-
-            <Row itemsCenter>
-              <Icon icon="wallet-icon" color="white_muted" size={16} />
-              <Text text={BigNumber(poolTokenBalance?.formatAmount || '0').toFormat()} color="white" size="xs"></Text>
-            </Row>
-          </Row>
-
-          <Row
-            bg="black"
-            style={{
-              height: 70
-            }}
-            px="md"
-            itemsCenter
-            rounded
-            py="md">
-            <Row
+            <Text
               style={{
-                flexShrink: 0
+                maxWidth: '90px',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                textAlign: 'right'
               }}
-              rounded={true}
-              py="md"
-              px="md"
-              itemsCenter
-              classname="bg-[#17171C]  hover:bg-opacity-80"
-              onClick={() => {
-                navigator('LendingSelectTokenScreen', {
-                  poolsData,
-                  type: ''
-                });
-              }}>
-              <Image src={poolTokenBalance?.asset.logo} height={24} width={24}></Image>
-
-              <Text text={poolTokenBalance?.asset.symbol || 'USDC'} color="white" size="md"></Text>
-
-              <Icon icon="down" size={10}></Icon>
-            </Row>
-
-            <Box py={'2px'}>
-              <CoinInput
-                size={22}
-                coin={{
-                  amount: borrowAmount,
-                  denom: poolTokenBalance?.denom || 'uusdc'
-                }}
-                onChange={(value) => {
-                  setBorrowAmount(value);
-                }}></CoinInput>
-            </Box>
-
-            <Column
-              style={{
-                alignItems: 'end'
-              }}>
-              <Row itemsCenter>
-                <div
-                  className={
-                    'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
-                  }
-                  onClick={() => {
-                    if (!+borrowMaxAmount) {
-                      return;
-                    }
-
-                    const amount = new BigNumber(borrowMaxAmount || '0')
-                      .multipliedBy(0.5)
-                      .toFixed(poolData?.token.asset.precision || 6, BigNumber.ROUND_DOWN);
-
-                    setBorrowAmount(amount);
-                  }}>
-                  Half
-                </div>
-
-                <div
-                  className={
-                    'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
-                  }
-                  onClick={() => {
-                    if (!+borrowMaxAmount) {
-                      return;
-                    }
-                    setBorrowAmount(borrowMaxAmount || '0');
-                  }}>
-                  Max
-                </div>
-              </Row>
-
-              <Text
-                style={{
-                  verticalAlign: 'middle',
-                  maxWidth: '90px',
-                  textOverflow: 'ellipsis',
-                  overflow: 'hidden'
-                }}
-                text={borrowValue}
-                size="xs"
-                color="white_muted"></Text>
-            </Column>
+              size="xs"
+              color="white_muted">
+              {collateralValue}
+            </Text>
+          </Column>
+        </Row>
+        <Row px="md" full justifyBetween itemsCenter>
+          <Text color="white" size="xs">
+            I want to borrow
+          </Text>
+          <Row itemsCenter>
+            <Icon icon="wallet-icon" color="white_muted" size={16} />
+            <Text text={BigNumber(poolTokenBalance?.formatAmount || '0').toFormat()} color="white" size="xs"></Text>
           </Row>
-
-          <Box
-            sx={{
-              px: '12px',
-              py: '8px',
-              my: '8px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              cursor: 'pointer',
-              bgcolor: open ? colors.white1 : colors.black,
-              transition: '.4s',
-              borderRadius: '10px',
-              ':hover': {
-                bgcolor: colors.white1
-              }
+        </Row>
+        <Row
+          bg="card_bgColor"
+          style={{
+            height: 70
+          }}
+          px="md"
+          itemsCenter
+          rounded
+          py="md">
+          <CoinInput
+            size={22}
+            coin={{
+              amount: borrowAmount,
+              denom: poolTokenBalance?.denom || 'uusdc'
             }}
-            onClick={(event: React.MouseEvent<HTMLDivElement>) => {
-              event.stopPropagation();
-              setAnchorEl(event.currentTarget);
+            onChange={(value) => {
+              setBorrowAmount(value);
+            }}
+          />
+          <Column
+            style={{
+              gap: '0',
+              flexShrink: 0,
+              alignItems: 'flex-end'
             }}>
-            <Typography
+            <Row itemsCenter gap="md">
+              <Typography
+                sx={{
+                  color: colors.main,
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  if (!+borrowMaxAmount) {
+                    return;
+                  }
+
+                  const amount = new BigNumber(borrowMaxAmount || '0')
+                    .multipliedBy(0.5)
+                    .toFixed(poolData?.token.asset.precision || 6, BigNumber.ROUND_DOWN);
+
+                  setBorrowAmount(amount);
+                }}>
+                Half
+              </Typography>
+              <Typography
+                sx={{
+                  color: colors.main,
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  if (!+borrowMaxAmount) {
+                    return;
+                  }
+                  setBorrowAmount(borrowMaxAmount || '0');
+                }}>
+                Max
+              </Typography>
+              <Row
+                itemsCenter
+                onClick={() => {
+                  navigator('LendingSelectTokenScreen', {
+                    poolsData,
+                    type: ''
+                  });
+                }}>
+                <Image src={poolTokenBalance?.asset.logo} height={24} width={24}></Image>
+                <Text text={poolTokenBalance?.asset.symbol || 'USDC'} color="white" size="md"></Text>
+                <Icon icon="down" size={10}></Icon>
+              </Row>
+            </Row>
+            <Text
+              style={{
+                maxWidth: '90px',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                textAlign: 'right'
+              }}
+              text={borrowValue}
+              size="xs"
+              color="white_muted"></Text>
+          </Column>
+        </Row>
+        <Box
+          sx={{
+            px: '12px',
+            py: '8px',
+            my: '8px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            cursor: 'pointer',
+            bgcolor: colors.card_bgColor,
+            transition: '.4s',
+            borderRadius: '8px',
+            ':hover': {
+              bgcolor: colors.white1
+            }
+          }}
+          onClick={(event: React.MouseEvent<HTMLDivElement>) => {
+            event.stopPropagation();
+            setAnchorEl(event.currentTarget);
+          }}>
+          <Typography
+            sx={{
+              fontSize: '12px',
+              color: colors.white
+            }}>
+            Maturity
+          </Typography>
+          <Stack direction="row" alignItems="center" gap="8px">
+            <Box
               sx={{
                 fontSize: '12px',
-                color: colors.white
+                color: colors.white,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
               }}>
-              Maturity
-            </Typography>
-            <Stack direction="row" alignItems="center" gap="8px">
+              {new BigNumber(maturity || 0).div(3600).div(24).toFixed(0)}
+              <Typography
+                style={{
+                  display: 'inline'
+                }}
+                sx={{ fontSize: '12px', color: colors.grey12 }}>
+                days
+              </Typography>
               <Box
                 sx={{
-                  fontSize: '12px',
-                  color: colors.white,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px'
+                  transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: '.4s'
                 }}>
-                {new BigNumber(maturity || 0).div(3600).div(24).toFixed(0)}
-                <Typography
-                  style={{
-                    display: 'inline'
-                  }}
-                  sx={{ fontSize: '12px', color: colors.grey12 }}>
-                  days
-                </Typography>
-                <Box
-                  sx={{
-                    transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: '.4s'
-                  }}>
-                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M1 1L5 5L9 1"
-                      stroke={open ? colors.main : 'white'}
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </Box>
+                <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M1 1L5 5L9 1"
+                    stroke={open ? colors.main : 'white'}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Box>
-            </Stack>
-          </Box>
-          <Popover
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right'
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right'
-            }}
-            sx={{
-              '.MuiPaper-root': {
-                p: '12px',
-                backgroundColor: colors.card_bgColor,
-                border: `1px solid ${colors.white1}`,
-                borderRadius: '10px',
-                width: '304px'
-              }
-            }}
-            anchorEl={anchorEl}
-            open={open}
-            onClose={() => setAnchorEl(null)}>
-            {poolData?.baseData.config.tranches.map((item, index) => {
-              const selected = item.maturity === maturity;
-              return (
-                <Box
-                  key={index}
+            </Box>
+          </Stack>
+        </Box>
+        <Popover
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right'
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+          sx={{
+            '.MuiPaper-root': {
+              p: '12px',
+              backgroundColor: colors.card_bgColor,
+              borderRadius: '10px',
+              width: '100%'
+            }
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={() => setAnchorEl(null)}>
+          {poolData?.baseData.config.tranches.map((item, index) => {
+            const selected = item.maturity === maturity;
+            return (
+              <Box
+                key={index}
+                sx={{
+                  p: '8px 10px',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  mt: index !== 0 ? '10px' : '0px',
+                  background: selected ? colors.white1 : 'transparent',
+                  ':hover': {
+                    bgcolor: colors.white1
+                  },
+                  position: 'relative'
+                }}
+                onClick={() => {
+                  dispatch(LendingActions.update({ maturity: item.maturity }));
+                  setAnchorEl(null);
+                }}>
+                <Typography
                   sx={{
-                    p: '8px 10px',
-                    borderRadius: '10px',
-                    cursor: 'pointer',
-                    mt: index !== 0 ? '10px' : '0px',
-                    background: selected ? colors.white1 : 'transparent',
-                    ':hover': {
-                      bgcolor: colors.white1
-                    },
-                    position: 'relative'
+                    fontSize: '14px'
                   }}
-                  onClick={() => {
-                    dispatch(LendingActions.update({ maturity: item.maturity }));
-                    setAnchorEl(null);
-                  }}>
-                  <Typography
-                    sx={{
-                      fontSize: '14px'
-                    }}
-                    color={colors.white}>
-                    {new BigNumber(item.maturity).div(3600).div(24).toFixed(0)} days &nbsp;
-                    <small
-                      style={{
-                        color: colors.main,
-                        fontSize: '100%'
-                      }}>
-                      ({new BigNumber(item.borrow_apr).div(10).toFixed(2)}%)
-                    </small>
-                  </Typography>
-                  {selected && (
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        right: '10px',
-                        top: '50%',
-                        transform: 'translateY(-50%)'
-                      }}>
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M13.3346 4L6.0013 11.3333L2.66797 8"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </Box>
-                  )}
-                </Box>
-              );
-            })}
-          </Popover>
-          <Column
-            bg="black"
-            style={{
-              borderRadius: '10px'
-            }}
-            px="lg"
-            py="lg">
-            {data.map((item, index) => (
-              <Fragment key={index}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Stack
-                    direction="row"
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.grey12
+                  color={colors.white}>
+                  {new BigNumber(item.maturity).div(3600).div(24).toFixed(0)} days &nbsp;
+                  <small
+                    style={{
+                      color: colors.main,
+                      fontSize: '100%'
                     }}>
-                    {item.label}
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.white
-                    }}>
-                    {item.value}
-                  </Stack>
-                </Stack>
-                {index === 3 && (
+                    ({new BigNumber(item.borrow_apr).div(10).toFixed(2)}%)
+                  </small>
+                </Typography>
+                {selected && (
                   <Box
                     sx={{
-                      height: '1px',
-                      width: '100%',
-                      bgcolor: colors.white1
-                    }}
-                  />
+                      position: 'absolute',
+                      right: '10px',
+                      top: '50%',
+                      transform: 'translateY(-50%)'
+                    }}>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M13.3346 4L6.0013 11.3333L2.66797 8"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </Box>
                 )}
-              </Fragment>
-            ))}
-          </Column>
-          <Row mt="lg" mb="lg">
-            <Button
-              onClick={() => {
-                if (!liquidationEvent || !poolData || !maturity) {
-                  return;
-                }
-                createLoan({
-                  borrowAmount: {
-                    denom: poolData.token.denom,
-                    amount: toUnitAmount(borrowAmount, poolData.token.asset.exponent)
-                  },
-                  maturityTime: maturity || '0',
-                  poolId: poolData.baseData.id,
-                  btcUnitAmount: toUnitAmount(collateralAmount, satBalance?.asset.exponent || 8),
-                  liquidationEvent
-                });
-              }}
-              disabled={isDisabled}
-              loading={loading}
-              preset="primary"
-              text="Request Loan"
-              full></Button>
-          </Row>
+              </Box>
+            );
+          })}
+        </Popover>
+        <Column
+          bg="black"
+          style={{
+            borderTop: `1px solid ${colors.white1}`
+          }}
+          px="lg"
+          py="lg">
+          {data.map((item, index) => (
+            <Fragment key={index}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Stack
+                  direction="row"
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.grey12
+                  }}>
+                  {item.label}
+                </Stack>
+                <Stack
+                  direction="row"
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.white
+                  }}>
+                  {item.value}
+                </Stack>
+              </Stack>
+            </Fragment>
+          ))}
         </Column>
+        <Row mt="lg" mb="lg">
+          <Button
+            onClick={() => {
+              if (!liquidationEvent || !poolData || !maturity) {
+                return;
+              }
+              createLoan({
+                borrowAmount: {
+                  denom: poolData.token.denom,
+                  amount: toUnitAmount(borrowAmount, poolData.token.asset.exponent)
+                },
+                maturityTime: maturity || '0',
+                poolId: poolData.baseData.id,
+                btcUnitAmount: toUnitAmount(collateralAmount, satBalance?.asset.exponent || 8),
+                liquidationEvent
+              });
+            }}
+            disabled={isDisabled}
+            loading={loading}
+            preset="primary"
+            text="Request Loan"
+            full></Button>
+        </Row>
       </Content>
       <Footer px="zero" py="zero">
         <NavTabBar tab="loans" />
