@@ -70,7 +70,14 @@ export const colors = {
   background: '#000000',
   swapBg: '#1D1D1F',
   backgroundChoose: '#F7771A4D',
-  card_bgColor: '#17171C'
+  card_bgColor: '#17171C',
+  grey62: '#808080',
+  grey63: '#8080801A',
+  grey64: '#505050',
+  grey65: '#5050501A',
+  green10: '#48bb781a',
+  blue3: '#F7771A1A',
+  red11: '#F565651A'
 };
 
 export type ColorTypes = keyof typeof colors;

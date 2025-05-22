@@ -119,9 +119,8 @@ export default class LendingService {
     return this.apiClient.get<GetDlcParamsResponse>('/side/dlc/params', config);
   }
 
-  async getDlcPrice(data: { symbol?: string }, config: AxiosRequestConfig): Promise<GetDlcPriceResponse> {
-    const queryParams = getQueryParams(data as any);
-    return this.apiClient.get<GetDlcPriceResponse>(`/side/dlc/price?${queryParams}`, config);
+  async getDlcPrice(symbol: string, config: AxiosRequestConfig): Promise<GetDlcPriceResponse> {
+    return this.apiClient.get<GetDlcPriceResponse>(`/side/oracle/prices/${symbol}`, config);
   }
 
   async getCollateralAddress(data: GetCollateralAddressRequest, config: AxiosRequestConfig) {

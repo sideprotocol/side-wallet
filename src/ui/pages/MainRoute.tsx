@@ -42,7 +42,9 @@ import ExploreTabScreen from './Main/ExploreTabScreen';
 import LendingTabScreen from './Main/LendingTabScreen';
 import LoanAuthorizeScreen from './Main/LoanAuthorizeScreen';
 import LoanDepositScreen from './Main/LoanDepositScreen';
+import LoanDetailScreen from './Main/LoanDetail';
 import LoansTabScreen from './Main/LoansTabScreen';
+import MyLoansScreen from './Main/MyLoans';
 import SettingsTabScreen from './Main/SettingsTabScreen';
 import SwapSideScreen from './Main/SwapSideScreen';
 import SwapSideSuccessScreen from './Main/SwapSideSuccessScreen';
@@ -144,6 +146,16 @@ export const routes = {
   ApproveSuccessScreen: {
     path: '/approve-success',
     element: <ApproveSuccessScreen />
+  },
+
+  MyLoansScreen: {
+    path: '/my-loans',
+    element: <MyLoansScreen />
+  },
+
+  LoanDetailScreen: {
+    path: '/loan-detail',
+    element: <LoanDetailScreen />
   },
 
   BridgeTabScreen: {

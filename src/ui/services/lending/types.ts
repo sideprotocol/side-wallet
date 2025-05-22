@@ -75,9 +75,9 @@ export interface LiquidationEvent {
 export enum LoanStatusEnum {
   Unspecified,
   Requested,
-  Open,
+  Authorized,
   Rejected,
-  Cancelled,
+  Open,
   Repaid,
   Defaulted,
   Liquidated,

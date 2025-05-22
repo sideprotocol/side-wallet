@@ -304,7 +304,12 @@ export default function LendingTanScreen() {
             Borrow
           </Text>
 
-          <Row itemsCenter gap="sm">
+          <Row
+            itemsCenter
+            gap="sm"
+            onClick={() => {
+              navigator('MyLoansScreen');
+            }}>
             <Text color="white" size="xs" style={{ marginTop: '-1px' }}>
               My Loans
             </Text>

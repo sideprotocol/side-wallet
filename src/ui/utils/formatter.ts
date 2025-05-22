@@ -102,7 +102,7 @@ export function toReadableAmount(amount: string, exp: number | string, pre?: str
 }
 
 export function formatTimeWithUTC(time: string | number) {
-  const timeFormat = dayjs(time).format('MMM-D-YYYY HH:mm:ss');
+  const timeFormat = dayjs(time).format('MMM-D-YYYY HH:mm');
   // const timeZone = dayjs().utcOffset() / 60;
   // return `${timeFormat} UTC${timeZone > 0 ? "+" : ""}${timeZone !== 0 ? timeZone + ":00" : ""}`;
   return `${timeFormat}`;

@@ -52,7 +52,7 @@ function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
 
 export default function useGetBitcoinBalanceList(address?: string, flag?: boolean) {
   const fetchUtxos = useFetchUtxosCallback();
-  const { UNISAT_RUNE_URL, UNISAT_SERVICE_ENDPOINT, SERVICE_BASE_URL } = useEnvironment();
+  const { UNISAT_RUNE_URL, UNISAT_SERVICE_ENDPOINT, SERVICE_BASE_URL, sideChain } = useEnvironment();
 
   const { data, isLoading } = useQuery({
     queryKey: [
@@ -113,7 +113,15 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
             }
           } as BalanceItem;
         });
-        const btcBalance = formatBitcoinItem(btcAmount.toString(), priceMap['sat']);
+        let bitcoinPrice = '0';
+        const symbol = 'BTCUSD';
+        try {
+          const { price } = await services.lending.getDlcPrice(symbol, { baseURL: sideChain?.restUrl });
+          bitcoinPrice = price;
+        } catch (error) {
+          console.error(error);
+        }
+        const btcBalance = formatBitcoinItem(btcAmount.toString(), bitcoinPrice);
 
         return [btcBalance, ...runeBalanceList];
       } catch (err) {
