@@ -95,6 +95,11 @@ export enum LiquidationStatusEnum {
 export type LoanStatus = keyof typeof LoanStatusEnum;
 export type LiquidationStatus = keyof typeof LiquidationStatusEnum;
 
+export type AuthorizationsStatus =
+  | 'AUTHORIZATION_STATUS_PENDING'
+  | 'AUTHORIZATION_STATUS_AUTHORIZED'
+  | 'AUTHORIZATION_STATUS_REJECTED';
+
 export interface Loan {
   borrow_amount: {
     amount: string;
@@ -107,7 +112,11 @@ export interface Loan {
   create_at: number;
   dcm: string;
   default_liquidation_event_id: string;
-  deposit_txs: [string];
+  authorizations: {
+    deposit_txs: string[];
+    id: string;
+    status: AuthorizationsStatus;
+  }[];
   disburse_at: number;
   final_timeout: string;
   interest: string;
@@ -511,16 +520,21 @@ export interface GetLoanByIdResponse {
 }
 
 export interface GetLoanByIdCexResponse {
-  actualInterest: number;
   poolId: string;
   createAt: string;
   statusText: string;
   maturityTime: string;
   finalTimeout: string;
+  maturity: string;
+  borrowApr: string;
+  minMaturity: string;
+  referrer: string;
+  disburseAt: string;
   disbursementTime: string;
   disbursementTxhash: string;
   repaymentTime: string;
   repaymentTxhash: string;
+  actualInterest: number;
   vaultAddress: string;
   borrower: string;
   borrowerPubKey: string;
@@ -528,6 +542,9 @@ export interface GetLoanByIdCexResponse {
   borrowDenom: string;
   borrowAmount: number;
   borrowAmountInDollar: string;
+  requestFeeDenom: string;
+  requestFeeAmount: number;
+  requestFeeInDollar: string;
   originationFee: number;
   originationFeeInDollar: string;
   interest: number;
@@ -536,16 +553,13 @@ export interface GetLoanByIdCexResponse {
   protocolFeeInDollar: string;
   collateralAmount: number;
   collateralAmountInDollar: string;
-  maturity: string;
+  term: string;
   liquidationPrice: string;
-
   liquidationEventId: string;
   defaultLiquidationEventId: string;
   repaymentEventId: string;
   liquidationId: string;
-  deposit_txs: string[];
-  returnBtcTxhash: string;
-
+  depositTxs: string[];
   borrowToken: {
     denom: string;
     symbol: string;
@@ -558,6 +572,17 @@ export interface GetLoanByIdCexResponse {
     volume: string;
   };
   collateralToken: {
+    denom: string;
+    symbol: string;
+    name: string;
+    exponent: string;
+    logo: string;
+    amount: string;
+    showAmount: string;
+    price: string;
+    volume: string;
+  };
+  requestFeeToken: {
     denom: string;
     symbol: string;
     name: string;
@@ -601,6 +626,19 @@ export interface GetLoanByIdCexResponse {
     price: string;
     volume: string;
   };
+  expectedCollateralAmount: number;
+  expectedCollateralToken: {
+    denom: string;
+    symbol: string;
+    name: string;
+    exponent: string;
+    logo: string;
+    amount: string;
+    showAmount: string;
+    price: string;
+    volume: string;
+  };
+  returnBtcTxhash: string;
 }
 
 export interface GetLeadingParamsResponse {

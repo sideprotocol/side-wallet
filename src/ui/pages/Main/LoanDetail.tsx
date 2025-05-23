@@ -1,20 +1,81 @@
-import { SIDE_CHAIN_MAINNET, SIDE_CHAIN_TESTNET } from '@/shared/constant';
-import { NetworkType } from '@/shared/types';
-import { Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
-import { useReloadAccounts } from '@/ui/state/accounts/hooks';
-import { useChangeEnvironmentCallback, useEnvironment } from '@/ui/state/environment/hooks';
-import { useChangeNetworkTypeCallback, useNetworkType } from '@/ui/state/settings/hooks';
+import BigNumber from 'bignumber.js';
+import { useQuery } from 'react-query';
+import { useLocation } from 'react-router-dom';
+
+import { Column, Content, Header, Layout, Row, Text } from '@/ui/components';
+import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
+import useGetLiquidationById from '@/ui/hooks/useGetLiquidationById';
+import useGetLiquidationParams from '@/ui/hooks/useGetLiquidationParams';
+import useGetLoanCurrentInterest from '@/ui/hooks/useGetLoanCurrentInterest';
+import useGetPoolDataById from '@/ui/hooks/useGetPoolDataById';
+import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
+import services from '@/ui/services';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { colors } from '@/ui/theme/colors';
+import { formatUnitAmount, getTruncate } from '@/ui/utils';
+import { formatAddress } from '@/ui/utils/format';
+import { formatTimeWithUTC } from '@/ui/utils/formatter';
+import { Box } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
+import { HealthFactor, LoanLTV, loanStatusStyle } from './MyLoans';
 
-export default function NetworkTypeScreen() {
-  const networkType = useNetworkType();
-  const changeEnvironment = useChangeEnvironmentCallback();
-  const changeNetworkType = useChangeNetworkTypeCallback();
-  const reloadAccounts = useReloadAccounts();
+export default function LoanDetailScreen() {
   const navigate = useNavigate();
-  const { sideChain } = useEnvironment();
+  const currentAccount = useCurrentAccount();
+  const { state } = useLocation();
+  const { loan_id } = state as { loan_id: string };
+
+  const { sideChain, SERVICE_BASE_URL, SIDE_BTC_EXPLORER } = useEnvironment();
+  const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
+  const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
+
+  const { data: loanDetailCex } = useQuery({
+    queryKey: ['getLoanByIdCex', { loan_id }],
+    queryFn: async () => {
+      return services.lending.getLoanByIdCex({ vaultAddress: loan_id }, { baseURL: SERVICE_BASE_URL });
+    },
+    enabled: !!loan_id,
+    refetchInterval: 60000,
+    refetchIntervalInBackground: true
+  });
+
+  const { data } = useQuery({
+    queryKey: ['getLoanById', { loan_id }],
+    queryFn: async () => {
+      const result = await services.lending.getLoanById(loan_id!, { baseURL: sideChain.restUrl });
+      return {
+        loan: {
+          ...result.loan,
+          collateral_amount: `${loanDetailCex!.expectedCollateralAmount || loanDetailCex!.collateralAmount}`
+        }
+      };
+    },
+    refetchInterval: (data) => {
+      return data?.loan.status === 'Closed' ? false : 30000;
+    },
+    refetchIntervalInBackground: true,
+    enabled: !!loanDetailCex
+  });
+  const loan = data?.loan;
+  const { data: lendingPool } = useGetPoolDataById({ poolId: loan?.pool_id });
+  const { data: realTimeInterest } = useGetLoanCurrentInterest({
+    loan_id: loan?.vault_address,
+    loanStatus: loan?.status
+  });
+  const { data: liquidationParams } = useGetLiquidationParams();
+  const { data: liquidation } = useGetLiquidationById({
+    liquidation_id: loan?.liquidation_id,
+    enabled: loan?.status === 'Liquidated'
+  });
+
+  const borrowToken = sideBalanceList.find((o) => o.denom === loan?.borrow_amount.denom);
+  const collateralToken = bitcoinBalanceList.find((item) => item.denom === 'sat');
+  const collateralAmount = formatUnitAmount(loan?.collateral_amount || '0', collateralToken?.asset.exponent || 8);
+  const borrowTokenAmount = formatUnitAmount(loan?.borrow_amount.amount || '0', borrowToken?.asset.exponent || 6);
+
+  if (!loan) return null;
   return (
     <Layout>
       <Header
@@ -29,62 +90,434 @@ export default function NetworkTypeScreen() {
           marginTop: 16
         }}>
         <Column gap={'md'}>
-          <Row
-            rounded
-            style={{
-              height: 56,
-              padding: '16px 10px',
-              backgroundColor: networkType === NetworkType.MAINNET ? colors.backgroundChoose : colors.card_bgColor,
-              border: `1px solid ${networkType === NetworkType.MAINNET ? colors.backgroundChoose : colors.white1}`
-            }}
-            full
-            justifyBetween
-            itemsCenter
-            classname={'hover:bg-[#17171C] '}
-            onClick={async () => {
-              if (networkType === NetworkType.MAINNET) return;
-              await changeEnvironment(NetworkType.MAINNET);
-              await changeNetworkType(NetworkType.MAINNET);
-              reloadAccounts();
-              navigate('MainScreen');
-            }}>
-            <Row itemsCenter>
-              <Text text={`${SIDE_CHAIN_MAINNET.name} & Bitcoin (mainnet)`} />
-            </Row>
-            {networkType === NetworkType.MAINNET && (
-              <Column>
-                <Icon color={'primary'} contain={'contain'} icon="check-circle" />
-              </Column>
-            )}
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '18px',
+                fontWeight: 600,
+                color: colors.white
+              }}>
+              Collateral
+            </Text>
+            <Box
+              sx={{
+                padding: '4px 8px',
+                borderRadius: '4px',
+                fontSize: '10px',
+                color: loanStatusStyle[loan.status].color,
+                bgcolor: loanStatusStyle[loan.status].bgColor
+              }}>
+              {loan.status}
+            </Box>
           </Row>
-
-          <Row
-            rounded
-            style={{
-              height: 56,
-              padding: '16px 10px',
-              backgroundColor: networkType === NetworkType.TESTNET ? colors.backgroundChoose : colors.card_bgColor,
-              border: `1px solid ${networkType === NetworkType.TESTNET ? colors.backgroundChoose : colors.white1}`
-            }}
-            full
-            justifyBetween
-            itemsCenter
-            onClick={async () => {
-              if (networkType === NetworkType.TESTNET) return;
-              await changeEnvironment(NetworkType.TESTNET);
-              await changeNetworkType(NetworkType.TESTNET);
-              reloadAccounts();
-              navigate('MainScreen');
-            }}>
-            <Row itemsCenter>
-              <Text text={`${SIDE_CHAIN_TESTNET.name} & Bitcoin (testnet)`} />
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Amount
+            </Text>
+            <Row justifyEnd itemsCenter gap="md">
+              <Text
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: colors.white
+                }}>
+                {collateralAmount}
+              </Text>
+              <Text
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: colors.grey12
+                }}>
+                {collateralToken?.asset.symbol} (Bitcoin)
+              </Text>
             </Row>
-            {networkType === NetworkType.TESTNET && (
-              <Column>
-                <Icon color={'primary'} contain={'contain'} icon="check-circle" />
-              </Column>
-            )}
           </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Vault
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}>
+              {formatAddress(loan.vault_address, 6)}
+            </Text>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Deposit Tx
+            </Text>
+            <Box>
+              {loan.authorizations[0] &&
+                (loan.authorizations[0]?.deposit_txs || [])?.map((tx, index) => (
+                  <Text
+                    key={index}
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 500,
+                      color: colors.white
+                    }}
+                    onClick={() => {
+                      window.open(`${SIDE_BTC_EXPLORER}/tx/${tx}`);
+                    }}>
+                    {formatAddress(tx, 6)}
+                  </Text>
+                ))}
+            </Box>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Withdraw Tx
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}
+              onClick={() => {
+                if (loan.status === 'Liquidated') return;
+                window.open(`${SIDE_BTC_EXPLORER}/tx/${loanDetailCex?.returnBtcTxhash}`);
+              }}>
+              {loan.status !== 'Liquidated' ? formatAddress(loanDetailCex?.returnBtcTxhash || '', 6) : ''}
+            </Text>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Unilateral Exit After
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}>
+              {formatTimeWithUTC(+loan.final_timeout * 1000)}
+            </Text>
+          </Row>
+          <Box
+            sx={{
+              height: '1px',
+              backgroundColor: colors.black_dark
+            }}
+          />
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '18px',
+                fontWeight: 600,
+                color: colors.white
+              }}>
+              Loan
+            </Text>
+            <Box
+              sx={{
+                padding: '4px 8px',
+                borderRadius: '4px',
+                fontSize: '10px',
+                color: loanStatusStyle[loan.status].color,
+                bgcolor: loanStatusStyle[loan.status].bgColor
+              }}>
+              {loan.status}
+            </Box>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Amount
+            </Text>
+            <Row justifyEnd itemsCenter gap="md">
+              <Text
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: colors.white
+                }}>
+                {borrowTokenAmount}
+              </Text>
+              <Text
+                style={{
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: colors.grey12
+                }}>
+                {borrowToken?.asset.symbol} ({sideChain.name})
+              </Text>
+            </Row>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Maturity Time
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}>
+              {formatTimeWithUTC(+loan.maturity_time * 1000)}
+            </Text>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Accrued Interest
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}>
+              {getTruncate(
+                formatUnitAmount(
+                  `${loanDetailCex?.actualInterest || realTimeInterest?.interest.amount || 0}`,
+                  borrowToken?.asset.exponent || 6
+                ),
+                borrowToken?.asset.precision || 6
+              )}
+            </Text>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Max Interest
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}>
+              {getTruncate(
+                formatUnitAmount(loan.interest, borrowToken?.asset.exponent || 6),
+                borrowToken?.asset.precision || 6
+              )}
+            </Text>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Disburse Tx
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}
+              onClick={() => {
+                window.open(`${sideChain.explorerUrl}/tx/${loanDetailCex?.disbursementTxhash || ''}`);
+              }}>
+              {formatAddress(loanDetailCex?.disbursementTxhash || '', 6)}
+            </Text>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Repay Tx
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}
+              onClick={() => {
+                window.open(`${sideChain.explorerUrl}/tx/${loanDetailCex?.repaymentTxhash || ''}`);
+              }}>
+              {formatAddress(loanDetailCex?.repaymentTxhash || '', 6)}
+            </Text>
+          </Row>
+          <Box
+            sx={{
+              height: '1px',
+              backgroundColor: colors.black_dark
+            }}
+          />
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '18px',
+                fontWeight: 600,
+                color: colors.white
+              }}>
+              Liquidation
+            </Text>
+            <Box
+              sx={{
+                padding: '4px 8px',
+                borderRadius: '4px',
+                fontSize: '10px',
+                color: loanStatusStyle[loan.status].color,
+                bgcolor: loanStatusStyle[loan.status].bgColor
+              }}>
+              {loan.status}
+            </Box>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Health Factor
+            </Text>
+            <HealthFactor loan={loan} />
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Current LTV
+            </Text>
+            <LoanLTV loan={loan} sx={{ fontSize: '12px', fontWeight: 500 }} />
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Liquidation LTV
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}>
+              {`${lendingPool?.pool?.config?.liquidation_threshold || '-'}%`}
+            </Text>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Liquidation Penalty
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}>
+              {`${(liquidationParams?.params.liquidation_bonus_factor || 0) / 10}%`}
+            </Text>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Liquidated Collateral
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}>
+              {!liquidation?.liquidation.liquidated_collateral_amount
+                ? '-'
+                : formatUnitAmount(
+                    liquidation?.liquidation.liquidated_collateral_amount.amount || '0',
+                    collateralToken?.asset?.exponent || 6
+                  )}
+            </Text>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Unliquidated Collateral
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}>
+              {!liquidation?.liquidation.liquidated_collateral_amount
+                ? '-'
+                : formatUnitAmount(
+                    BigNumber(liquidation?.liquidation.unliquidated_collateral_amount.amount || '0').toFixed(),
+                    collateralToken?.asset?.exponent || 6
+                  )}
+            </Text>
+          </Row>
+          <Row full justifyBetween itemsCenter>
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Liquidation Id
+            </Text>
+            <Text
+              style={{
+                fontSize: '12px',
+                fontWeight: 500,
+                color: colors.white
+              }}>
+              {liquidation?.liquidation.id}
+            </Text>
+          </Row>
+          <Box
+            sx={{
+              height: '1px',
+              backgroundColor: colors.black_dark
+            }}
+          />
         </Column>
       </Content>
     </Layout>

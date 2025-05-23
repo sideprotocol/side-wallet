@@ -11,7 +11,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { formatTimeWithUTC } from '@/ui/utils/formatter';
-import { Box } from '@mui/material';
+import { Box, BoxProps, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -69,7 +69,7 @@ export default function MyLoansScreen() {
                   justifyBetween
                   itemsCenter
                   onClick={() => {
-                    navigate('LoanDetailScreen', { loanId: item.vault_address });
+                    navigate('LoanDetailScreen', { loan_id: item.vault_address });
                   }}>
                   <Row itemsCenter gap="md">
                     <Image src={borrowToken?.asset.logo} height={28} width={28}></Image>
@@ -196,7 +196,7 @@ export default function MyLoansScreen() {
   );
 }
 
-function HealthFactor({ loan }: { loan: Loan }) {
+export function HealthFactor({ loan }: { loan: Loan }) {
   const currentAccount = useCurrentAccount();
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
@@ -242,5 +242,71 @@ function HealthFactor({ loan }: { loan: Loan }) {
       }}>
       {healthFactor}
     </Text>
+  );
+}
+
+export function LoanLTV({ loan, sx }: { loan: Loan; sx?: BoxProps['sx'] }) {
+  const currentAccount = useCurrentAccount();
+
+  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+  const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
+
+  const { data: lendingPool } = useGetPoolDataById({ poolId: loan.pool_id });
+
+  const borrowToken = balanceList.find((item) => item.denom === loan.borrow_amount.denom);
+  const bitcoinToken = bitcoinBalanceList.find((item) => item.denom === 'sat');
+  const bitcoinAmount = formatUnitAmount(loan.collateral_amount, bitcoinToken?.asset.exponent || 8);
+  const borrowTokenAmount = formatUnitAmount(loan.borrow_amount.amount, borrowToken?.asset.exponent || 6);
+
+  const { healthFactor } = useMemo(() => {
+    if (BigNumber(bitcoinAmount || 0).eq(0) || BigNumber(borrowTokenAmount || 0).eq(0) || !lendingPool?.pool?.config) {
+      return {
+        healthFactor: '-'
+      };
+    }
+    return {
+      healthFactor: new BigNumber(bitcoinAmount)
+        .times(bitcoinToken?.denomPrice || 0)
+        .times(lendingPool?.pool?.config?.liquidation_threshold || 0)
+        .div(100)
+        .div(new BigNumber(borrowTokenAmount || 1).times(borrowToken?.denomPrice || 0))
+        .toFixed(2)
+    };
+  }, [loan.vault_address, lendingPool, bitcoinAmount, borrowTokenAmount, borrowToken, bitcoinToken?.denomPrice]);
+
+  if (+bitcoinAmount && +borrowTokenAmount && bitcoinToken?.denomPrice && ['Requested', 'Open'].includes(loan.status)) {
+    return (
+      <Typography
+        sx={{
+          color:
+            +healthFactor > 2
+              ? colors.green
+              : +healthFactor <= 1.2
+              ? colors.red
+              : +healthFactor > 1.5
+              ? colors.yellow
+              : colors.main,
+          fontSize: '14px',
+          fontWeight: 600,
+          ...sx
+        }}>
+        {new BigNumber(borrowTokenAmount || 0)
+          .multipliedBy(borrowToken?.denomPrice || 0)
+          .div(bitcoinAmount || 1)
+          .div(bitcoinToken?.denomPrice || '1')
+          .times(100)
+          .toFixed(2) + '%'}
+      </Typography>
+    );
+  }
+  return (
+    <Typography
+      sx={{
+        fontSize: '14px',
+        fontWeight: 600,
+        ...sx
+      }}>
+      -
+    </Typography>
   );
 }
