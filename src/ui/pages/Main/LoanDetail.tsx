@@ -25,12 +25,6 @@ import { Box } from '@mui/material';
 import { useNavigate } from '../MainRoute';
 import { HealthFactor, LoanLTV } from './MyLoans';
 
-enum StatusEnum {
-  Request,
-  Deposited,
-  Authorized
-}
-
 export default function LoanDetailScreen() {
   const navigate = useNavigate();
   const currentAccount = useCurrentAccount();
@@ -564,7 +558,7 @@ export default function LoanDetailScreen() {
           preset="primary"
           style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
           onClick={() => {
-            return navigate('LoanAuthorizeScreen', {
+            navigate('LoanAuthorizeScreen', {
               loanId: loan.vault_address,
               borrowAmount: loan.borrow_amount.amount,
               collateralAmount: loan.collateral_amount || '0',
@@ -576,7 +570,12 @@ export default function LoanDetailScreen() {
           Authorize
         </Button>
       ) : loan.status === 'Open' ? (
-        <Button preset="primary" style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}>
+        <Button
+          preset="primary"
+          style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
+          onClick={() => {
+            navigate('LoanRepayScreen', { loan_id: loan.vault_address });
+          }}>
           Repay
         </Button>
       ) : null}

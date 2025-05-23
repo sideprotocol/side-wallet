@@ -43,6 +43,7 @@ import LendingTabScreen from './Main/LendingTabScreen';
 import LoanAuthorizeScreen from './Main/LoanAuthorizeScreen';
 import LoanDepositScreen from './Main/LoanDepositScreen';
 import LoanDetailScreen from './Main/LoanDetail';
+import LoanRepayScreen from './Main/LoanRepayScreen';
 import LoansTabScreen from './Main/LoansTabScreen';
 import MyLoansScreen from './Main/MyLoans';
 import SettingsTabScreen from './Main/SettingsTabScreen';
@@ -141,6 +142,11 @@ export const routes = {
   LoanAuthorizeScreen: {
     path: '/loan-authorize',
     element: <LoanAuthorizeScreen />
+  },
+
+  LoanRepayScreen: {
+    path: '/loan-repay',
+    element: <LoanRepayScreen />
   },
 
   ApproveSuccessScreen: {
