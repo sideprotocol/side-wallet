@@ -2,9 +2,12 @@ import BigNumber from 'bignumber.js';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
-import { Column, Content, Header, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Header, Layout, Row, Text } from '@/ui/components';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
+import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
+import useGetDlcMeta from '@/ui/hooks/useGetDlcMeta';
 import useGetLiquidationById from '@/ui/hooks/useGetLiquidationById';
+import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
 import useGetLiquidationParams from '@/ui/hooks/useGetLiquidationParams';
 import useGetLoanCurrentInterest from '@/ui/hooks/useGetLoanCurrentInterest';
 import useGetPoolDataById from '@/ui/hooks/useGetPoolDataById';
@@ -12,6 +15,7 @@ import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useEnvironment } from '@/ui/state/environment/hooks';
+import { useUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { formatAddress } from '@/ui/utils/format';
@@ -19,7 +23,13 @@ import { formatTimeWithUTC } from '@/ui/utils/formatter';
 import { Box } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
-import { HealthFactor, LoanLTV, loanStatusStyle } from './MyLoans';
+import { HealthFactor, LoanLTV } from './MyLoans';
+
+enum StatusEnum {
+  Request,
+  Deposited,
+  Authorized
+}
 
 export default function LoanDetailScreen() {
   const navigate = useNavigate();
@@ -70,10 +80,25 @@ export default function LoanDetailScreen() {
     enabled: loan?.status === 'Liquidated'
   });
 
+  const { dlcMetaData } = useGetDlcMeta(loan?.vault_address);
+  const { depositTxs } = useGetDepositTx(loan?.vault_address || '', loan?.collateral_amount || '0');
+
   const borrowToken = sideBalanceList.find((o) => o.denom === loan?.borrow_amount.denom);
   const collateralToken = bitcoinBalanceList.find((item) => item.denom === 'sat');
   const collateralAmount = formatUnitAmount(loan?.collateral_amount || '0', collateralToken?.asset.exponent || 8);
   const borrowTokenAmount = formatUnitAmount(loan?.borrow_amount.amount || '0', borrowToken?.asset.exponent || 6);
+
+  const { liquidationEvent } = useGetLiquidationEvent({
+    bitcoinAmount: collateralAmount,
+    borrowToken,
+    borrowTokenAmount,
+    poolId: loan?.pool_id || '',
+    maturity: loan?.maturity
+  });
+
+  const uiState = useUiTxCreateScreen();
+
+  const feeRate = uiState.feeRate;
 
   if (!loan) return null;
   return (
@@ -86,7 +111,7 @@ export default function LoanDetailScreen() {
       />
       <Content
         style={{
-          padding: '0 16px',
+          padding: '0 16px 70px',
           marginTop: 16
         }}>
         <Column gap={'md'}>
@@ -104,10 +129,19 @@ export default function LoanDetailScreen() {
                 padding: '4px 8px',
                 borderRadius: '4px',
                 fontSize: '10px',
-                color: loanStatusStyle[loan.status].color,
-                bgcolor: loanStatusStyle[loan.status].bgColor
+                backgroundColor: colors.grey65,
+                color: colors.grey64
               }}>
-              {loan.status}
+              {loan.status === 'Repaid'
+                ? 'Returning'
+                : loan.status === 'Closed'
+                ? 'Returned'
+                : dlcMetaData?.dlc_meta?.liquidation_cet?.borrower_adaptor_signatures &&
+                  dlcMetaData?.dlc_meta?.liquidation_cet?.borrower_adaptor_signatures?.length > 0
+                ? 'Authorized'
+                : depositTxs?.length
+                ? 'Deposited'
+                : 'Request'}
             </Box>
           </Row>
           <Row full justifyBetween itemsCenter>
@@ -233,16 +267,18 @@ export default function LoanDetailScreen() {
               }}>
               Loan
             </Text>
-            <Box
-              sx={{
-                padding: '4px 8px',
-                borderRadius: '4px',
-                fontSize: '10px',
-                color: loanStatusStyle[loan.status].color,
-                bgcolor: loanStatusStyle[loan.status].bgColor
-              }}>
-              {loan.status}
-            </Box>
+            {['Repaid', 'Closed'].includes(loan.status) ? (
+              <Box
+                sx={{
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  fontSize: '10px',
+                  backgroundColor: colors.grey65,
+                  color: colors.grey64
+                }}>
+                Repaid
+              </Box>
+            ) : null}
           </Row>
           <Row full justifyBetween itemsCenter>
             <Text
@@ -386,16 +422,6 @@ export default function LoanDetailScreen() {
               }}>
               Liquidation
             </Text>
-            <Box
-              sx={{
-                padding: '4px 8px',
-                borderRadius: '4px',
-                fontSize: '10px',
-                color: loanStatusStyle[loan.status].color,
-                bgcolor: loanStatusStyle[loan.status].bgColor
-              }}>
-              {loan.status}
-            </Box>
           </Row>
           <Row full justifyBetween itemsCenter>
             <Text
@@ -520,6 +546,40 @@ export default function LoanDetailScreen() {
           />
         </Column>
       </Content>
+      {!depositTxs?.length && loan.status === 'Requested' ? (
+        <Button
+          preset="primary"
+          style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
+          onClick={() => {
+            navigate('LoanDepositScreen', {
+              borrowAmount: loan.borrow_amount.amount,
+              collateralAmount: loan.collateral_amount || '0',
+              liquidationEvent
+            });
+          }}>
+          Deposit
+        </Button>
+      ) : depositTxs?.length && loan.status === 'Requested' ? (
+        <Button
+          preset="primary"
+          style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
+          onClick={() => {
+            return navigate('LoanAuthorizeScreen', {
+              loanId: loan.vault_address,
+              borrowAmount: loan.borrow_amount.amount,
+              collateralAmount: loan.collateral_amount || '0',
+              feeRate,
+              liquidationEvent,
+              isWalletDeposit: true
+            });
+          }}>
+          Authorize
+        </Button>
+      ) : loan.status === 'Open' ? (
+        <Button preset="primary" style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}>
+          Repay
+        </Button>
+      ) : null}
     </Layout>
   );
 }
