@@ -74,7 +74,7 @@ export default function EarnTabScreen() {
     };
   }, [poolData, supplyAmount]);
 
-  const stokenBalance = balanceList.find((b) => b.denom == poolData?.baseData.id);
+  const stokenBalance = balanceList.find((b) => b.denom == poolData?.baseData.total_stokens.denom);
 
   const maxWithdrawAmount = useMemo(() => {
     if (!poolData) return '0';
@@ -104,7 +104,7 @@ export default function EarnTabScreen() {
 
     withdraw({
       shares: {
-        denom: poolData.baseData.id,
+        denom: poolData.baseData.total_stokens.denom,
         amount: toUnitAmount(withdrawAmount, poolData.token.asset.exponent)
       }
     });

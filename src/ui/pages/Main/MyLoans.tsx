@@ -13,6 +13,8 @@ import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { formatTimeWithUTC } from '@/ui/utils/formatter';
 import { Box } from '@mui/material';
 
+import { useNavigate } from '../MainRoute';
+
 export const loanStatusStyle: Record<
   LoanStatus,
   {
@@ -33,9 +35,13 @@ export const loanStatusStyle: Record<
 
 export default function MyLoansScreen() {
   const currentAccount = useCurrentAccount();
-  const { data } = useGetLoansData();
+  const { data: allLoansData } = useGetLoansData();
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
+  const navigate = useNavigate();
+  const data = useMemo(() => {
+    return allLoansData.filter((item) => item.borrower === currentAccount.address);
+  }, [currentAccount.address, allLoansData]);
   return (
     <Layout>
       <Header
@@ -58,7 +64,13 @@ export default function MyLoansScreen() {
 
             return (
               <Column key={item.create_at} gap={'md'}>
-                <Row full justifyBetween itemsCenter>
+                <Row
+                  full
+                  justifyBetween
+                  itemsCenter
+                  onClick={() => {
+                    navigate('LoanDetailScreen', { loanId: item.vault_address });
+                  }}>
                   <Row itemsCenter gap="md">
                     <Image src={borrowToken?.asset.logo} height={28} width={28}></Image>
                     <Text
