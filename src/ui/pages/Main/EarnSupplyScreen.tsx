@@ -70,8 +70,8 @@ export default function EarnSupplyScreen() {
   };
 
   const isDisabled = useMemo(() => {
-    return loading || +supplyAmount <= 0;
-  }, [loading, supplyAmount]);
+    return loading || +supplyAmount <= 0 || +poolData.token.formatAmount < +supplyAmount;
+  }, [loading, supplyAmount, poolData]);
 
   return (
     <Layout>
