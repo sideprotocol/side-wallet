@@ -151,7 +151,9 @@ export default function EarnTabScreen() {
                 borderRadius: '10px'
               }}
               onClick={() => {
-                navigate('EarnSupplyScreen');
+                navigate('EarnSupplyScreen', {
+                  poolData: item
+                });
               }}>
               <Image
                 src={item.token.asset.logo}

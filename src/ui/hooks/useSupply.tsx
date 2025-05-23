@@ -2,7 +2,6 @@ import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
-import { CHAINS_ENUM } from '@/shared/constant';
 import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
@@ -21,6 +20,7 @@ export default function useSupply() {
   const [supplyTokenAmount, setSupplyTokenAmount] = useState('0');
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
   const navigate = useNavigate();
+  const [tx, setTx] = useState('');
 
   const currentAccount = useCurrentAccount();
 
@@ -68,8 +68,6 @@ export default function useSupply() {
       });
       setLoading(false);
 
-      console.log({ result });
-
       if (result.tx_response.code === 0) {
         toast.custom((t) => (
           <ToastView toaster={t} type="success" txHashUrl={`${sideChain.explorerUrl}/tx/${result.tx_response.txhash}`}>
@@ -83,8 +81,7 @@ export default function useSupply() {
             </Box>
           </ToastView>
         ));
-
-        navigate('TxSuccessScreen', { txid: txHash, chain: CHAINS_ENUM.SIDE });
+        setTx(txHash);
       } else {
         toast.custom((t) => (
           <ToastView toaster={t} type="fail">
@@ -110,6 +107,7 @@ export default function useSupply() {
     supply,
     loading,
     supplyTokenAmount,
-    setSupplyTokenAmount
+    setSupplyTokenAmount,
+    tx
   };
 }
