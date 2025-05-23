@@ -4,8 +4,9 @@ import { useLocation } from 'react-router-dom';
 
 import { CHAINS_ENUM } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
-import { Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
+import { Column, Content, Header, Image, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
+import SearchInput from '@/ui/components/Input/Search';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -191,8 +192,6 @@ function SideCrypto({ searchTerm }) {
 
 export default function SelecCryptoScreen() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [isFocus, setIsFocus] = useState(false);
-  const [isHover, setIsHover] = useState(false);
   const { state } = useLocation();
   const { chain } = state as {
     chain: CHAINS_ENUM;
@@ -216,46 +215,7 @@ export default function SelecCryptoScreen() {
             padding: '0 16px'
             // margin: '0 16px'
           }}>
-          <div
-            className={`border-[1px] border-solid px-[10px] flex items-center rounded-[10px] bg-[#17171C] relative gap-[8px] ${
-              isFocus ? 'border-white' : ' border-[#ffffff20] hover:border-[#ffffff50]'
-            }`}>
-            <Icon icon="search" color={'search_icon'} size={20}></Icon>
-            <Input
-              value={searchTerm}
-              onChange={(event) => {
-                setSearchTerm(event.target.value.trim());
-              }}
-              onFocus={() => {
-                setIsFocus(true);
-              }}
-              onBlur={() => {
-                setIsFocus(false);
-              }}
-              containerStyle={{
-                width: '100%',
-                border: 'none',
-                padding: '0'
-              }}
-              placeholder="Search crypto"
-            />
-            <div
-              onClick={() => {
-                setSearchTerm('');
-              }}
-              onMouseEnter={() => setIsHover(true)}
-              onMouseLeave={() => setIsHover(false)}
-              style={{
-                position: 'absolute',
-                right: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                cursor: 'pointer',
-                display: searchTerm ? 'block' : 'none'
-              }}>
-              <Icon icon="clear" color={isHover ? 'white' : 'search_icon'} size={20}></Icon>
-            </div>
-          </div>
+          <SearchInput value={searchTerm} onChange={setSearchTerm} />
         </Column>
 
         <Column>

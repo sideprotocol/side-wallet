@@ -21,7 +21,6 @@ import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { Box, Popover, Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
-import MainHeader from './MainHeader';
 
 export default function LendingTanScreen() {
   const currentAccount = useCurrentAccount();
@@ -292,7 +291,6 @@ export default function LendingTanScreen() {
 
   return (
     <Layout>
-      <MainHeader title={''} />
       <Content gap="md" mt="xl">
         <Row px="md" full justifyBetween itemsCenter>
           <Text

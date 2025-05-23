@@ -37,6 +37,8 @@ import ApproveSuccessScreen from './Main/ApproveSuccessScreen';
 import BoostScreen from './Main/BoostScreen';
 import BridgeTabScreen from './Main/BridgeTabScreen';
 import DiscoverTabScreen from './Main/DiscoverTabScreen';
+import EarnRedeemScreen from './Main/EarnRedeemScreen';
+import EarnSupplyScreen from './Main/EarnSupplyScreen';
 import EarnTabScreen from './Main/EarnTabScreen';
 import ExploreTabScreen from './Main/ExploreTabScreen';
 import LendingTabScreen from './Main/LendingTabScreen';
@@ -45,6 +47,7 @@ import LoanDepositScreen from './Main/LoanDepositScreen';
 import LoanDetailScreen from './Main/LoanDetail';
 import LoanRepayScreen from './Main/LoanRepayScreen';
 import LoansTabScreen from './Main/LoansTabScreen';
+import MyEarnsScreen from './Main/MyEarns';
 import MyLoansScreen from './Main/MyLoans';
 import SettingsTabScreen from './Main/SettingsTabScreen';
 import SwapSideScreen from './Main/SwapSideScreen';
@@ -147,6 +150,20 @@ export const routes = {
   LoanRepayScreen: {
     path: '/loan-repay',
     element: <LoanRepayScreen />
+  },
+
+  MyEarnsScreen: {
+    path: '/my-earns',
+    element: <MyEarnsScreen />
+  },
+  EarnSupplyScreen: {
+    path: '/earn-supply',
+    element: <EarnSupplyScreen />
+  },
+
+  EarnRedeemScreen: {
+    path: '/earn-redeem',
+    element: <EarnRedeemScreen />
   },
 
   ApproveSuccessScreen: {
