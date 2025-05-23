@@ -1,80 +1,35 @@
 import { BigNumber } from 'bignumber.js';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import 'swiper/css';
 
-import { NetworkType } from '@/shared/types';
-import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
-import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetPoolExchangeRate from '@/ui/hooks/useGetPoolExchangeRate';
-import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
+import { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
-import useSupply from '@/ui/hooks/useSupply';
 import useWithdraw from '@/ui/hooks/useWithdraw';
-import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useAppDispatch } from '@/ui/state/hooks';
-import { useLendingState } from '@/ui/state/lending/hook';
-import { LendingActions } from '@/ui/state/lending/reducer';
-import { useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
-import { formatUnitAmount, getTruncate } from '@/ui/utils';
+import { useLocationState } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
 import { Stack, Typography } from '@mui/material';
 
-import { useNavigate } from '../MainRoute';
+export default function EarnRedeemScreen() {
+  const { poolData } = useLocationState<{
+    poolData: PoolDataItem;
+  }>();
 
-export default function EarnTabScreen() {
-  const networkType = useNetworkType();
   const currentAccount = useCurrentAccount();
-  const [supplyAmount, setsupplyAmount] = useState('');
 
   const [withdrawAmount, setwithdrawAmount] = useState('');
 
-  const dispatch = useAppDispatch();
-  const { poolTokenDenom, operationTab } = useLendingState();
+  const { withdraw, loading, tx } = useWithdraw();
 
-  const { supply, loading } = useSupply();
-
-  const { withdraw, loading: withdrawLoading } = useWithdraw();
-
-  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
-
-  const poolTokenBalance = balanceList.find((b) => b.denom == poolTokenDenom);
-
-  const { data: poolsData } = useGetPoolsData();
-
-  const navigator = useNavigate();
-
-  const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
+  const { balanceList } = useGetSideBalanceList(currentAccount.address);
 
   const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: poolData?.baseData?.id || '' });
-
-  const { receiveShare, expectedInterestDay } = useMemo(() => {
-    if (!poolData) {
-      return {
-        receiveShare: '0',
-        expectedInterestDay: '0'
-      };
-    }
-
-    const receiveShare = new BigNumber(poolData.baseData.total_stokens.amount)
-      .div(formatUnitAmount(poolData.baseData.supply.amount || '0', poolData.token.asset.precision))
-      .multipliedBy(supplyAmount || '0')
-      .div(exchangeRate || 1)
-      .toFixed(poolData.token.asset.precision);
-    const expectedInterestDay = new BigNumber(supplyAmount || '0')
-      .multipliedBy(poolData.supplyApy)
-      .div(100)
-      .div(365)
-      .toFixed(poolData.token.asset.precision);
-    return {
-      receiveShare,
-      expectedInterestDay
-    };
-  }, [poolData, supplyAmount]);
-
   const stokenBalance = balanceList.find((b) => b.denom == poolData?.baseData.total_stokens.denom);
+  const poolTokenBalance = balanceList.find((b) => b.denom == poolData?.baseData.supply.denom);
 
   const maxWithdrawAmount = useMemo(() => {
     if (!poolData) return '0';
@@ -86,18 +41,6 @@ export default function EarnTabScreen() {
   }, [poolData]);
 
   const withdrawExceed = BigNumber(withdrawAmount || '0').gt(maxWithdrawAmount);
-
-  const onSupply = () => {
-    if (!poolData) return;
-
-    supply({
-      amount: {
-        denom: poolData.token.denom,
-        amount: toUnitAmount(supplyAmount, poolData.token.asset.exponent)
-      },
-      pool_id: poolData.baseData.id
-    });
-  };
 
   const onWithdraw = () => {
     if (!poolData) return;
@@ -111,230 +54,88 @@ export default function EarnTabScreen() {
   };
 
   const isDisabled = useMemo(() => {
-    if (operationTab === 'supply') {
-      return loading || +supplyAmount <= 0;
-    }
-    return withdrawLoading || +withdrawAmount <= 0;
-  }, [operationTab, loading, withdrawLoading, supplyAmount, withdrawAmount]);
-
-  const buttonRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const activeIndex = useMemo(() => {
-    return operationTab === 'supply' ? 0 : 1;
-  }, [operationTab]);
-
-  if (networkType === NetworkType.MAINNET) {
-    return (
-      <Layout>
-        <MainHeader title={''} />
-        <Content mt="lg" classname="fadeIn-page">
-          <Column
-            gap="lg"
-            px="lg"
-            full
-            itemsCenter
-            justifyCenter
-            py="md"
-            style={{
-              borderRadius: '10px'
-            }}>
-            <Text
-              text="COMING SOON"
-              color="white"
-              style={{
-                fontWeight: 700
-              }}
-              size="xl"></Text>
-          </Column>
-        </Content>
-        <Footer px="zero" py="zero">
-          <NavTabBar tab="earn" />
-        </Footer>
-      </Layout>
-    );
-  }
+    if (!stokenBalance) return true;
+    return loading || +withdrawAmount > (+stokenBalance.formatAmount || 0);
+  }, [loading, withdrawAmount]);
 
   return (
     <Layout>
-      <MainHeader title={''} />
-      <Content mt="lg" classname="fadeIn-page">
-        <Column
-          bg="card_bgColor"
-          gap="lg"
-          px="lg"
-          py="md"
-          style={{
-            borderRadius: '10px'
-          }}>
-          <Row>
-            <Stack
-              gap={'6px'}
-              flexDirection={'row'}
-              p={0.5}
-              borderRadius={'10px'}
-              bgcolor="black"
-              style={{
-                position: 'relative'
-              }}>
-              <div
-                style={{
-                  position: 'absolute',
-                  height: '28px',
-                  backgroundColor: '#F7771A',
-                  borderRadius: '10px',
-                  transition: 'all 0.3s ease',
-                  left: buttonRefs.current[activeIndex]?.offsetLeft ?? 0,
-                  width: buttonRefs.current[activeIndex]?.offsetWidth ?? 0
-                }}
-              />
-
-              <div
-                className={'text-white relative z-10 cursor-pointer  py-1.5 px-2 text-xs '}
-                ref={(el) => (buttonRefs.current[0] = el)}
-                onClick={() => dispatch(LendingActions.update({ operationTab: 'supply' }))}>
-                Supply
-              </div>
-
-              <div
-                className={'text-white relative z-10 cursor-pointer  py-1.5 px-2 text-xs '}
-                ref={(el) => (buttonRefs.current[1] = el)}
-                onClick={() => dispatch(LendingActions.update({ operationTab: 'withdraw' }))}>
-                Withdraw
-              </div>
-            </Stack>
-          </Row>
-          <Row
-            bg="black"
-            style={{
-              height: 70
-            }}
-            itemsCenter
-            rounded
-            px="md"
-            py="md">
-            <Row
-              style={{
-                flexShrink: 0
-              }}
-              rounded={true}
-              px="md"
-              py="md"
-              itemsCenter
-              classname="bg-[#17171C]  hover:bg-opacity-80"
-              onClick={() => {
-                navigator('LendingSelectTokenScreen', {
-                  poolsData,
-                  type: operationTab === 'supply' ? 'token' : 'stoken'
-                });
-              }}>
-              <Image
-                src={operationTab === 'supply' ? poolTokenBalance?.asset.logo : stokenBalance?.asset.logo}
-                height={28}
-                width={28}></Image>
-
-              <Text
-                text={
-                  operationTab === 'supply'
-                    ? poolTokenBalance?.asset.symbol || 'USDC'
-                    : stokenBalance?.asset.symbol || 'sUSDC'
-                }
-                color="white"
-                size="md"></Text>
-
-              <Icon icon="down" size={10}></Icon>
-            </Row>
-
-            <Column
-              fullY
-              style={{
-                paddingTop: '10px'
-              }}
-              justifyBetween>
-              <Row
-                itemsCenter
-                justifyBetween
-                style={{
-                  height: '10px',
-                  borderRadius: '100px',
-                  padding: '8px 0px',
-                  position: 'relative'
-                }}>
-                <CoinInput
-                  size={22}
-                  coin={{
-                    amount: operationTab === 'supply' ? supplyAmount : withdrawAmount,
-                    denom: poolTokenBalance?.denom || 'uusdc'
-                  }}
-                  decimalScale={poolTokenBalance?.asset.precision || 6}
-                  onChange={(value) => {
-                    if (operationTab === 'supply') {
-                      setsupplyAmount(value);
-                    } else {
-                      setwithdrawAmount(value);
-                    }
-                  }}
+      {tx ? (
+        <>
+          <Stack
+            alignItems="center"
+            sx={{
+              mt: '100px'
+            }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
+              <g clipPath="url(#clip0_28_7129)">
+                <path
+                  opacity="0.15"
+                  d="M0 40C0 50.6087 4.21427 60.7828 11.7157 68.2843C19.2172 75.7857 29.3913 80 40 80C50.6087 80 60.7828 75.7857 68.2843 68.2843C75.7857 60.7828 80 50.6087 80 40C80 29.3913 75.7857 19.2172 68.2843 11.7157C60.7828 4.21427 50.6087 0 40 0C29.3913 0 19.2172 4.21427 11.7157 11.7157C4.21427 19.2172 0 29.3913 0 40Z"
+                  fill="#67EBB2"
                 />
-                <div
+                <path
+                  d="M40.0001 63.6363C35.3252 63.6364 30.7552 62.2502 26.8682 59.653C22.9811 57.0558 19.9515 53.3643 18.1625 49.0452C16.3735 44.7262 15.9054 39.9737 16.8175 35.3886C17.7295 30.8035 19.9807 26.5919 23.2864 23.2863C27.7192 18.8536 33.7312 16.3633 40.0001 16.3633C46.2689 16.3633 52.281 18.8536 56.7137 23.2863C61.1464 27.719 63.6367 33.7311 63.6367 39.9999C63.6367 46.2688 61.1464 52.2808 56.7137 56.7136C54.524 58.9153 51.9192 60.6609 49.0503 61.8491C46.1814 63.0374 43.1053 63.6449 40.0001 63.6363ZM30.301 38.0072C29.7445 38.0072 29.2004 38.172 28.7374 38.4807C28.2744 38.7895 27.9132 39.2284 27.6993 39.7422C27.4854 40.2559 27.4284 40.8215 27.5355 41.3676C27.6425 41.9137 27.9089 42.4159 28.301 42.8108L35.5664 50.1336C35.7837 50.3524 36.0421 50.5261 36.3267 50.6446C36.6114 50.7631 36.9167 50.8241 37.2251 50.8241C37.5334 50.8241 37.8387 50.7631 38.1234 50.6446C38.408 50.5261 38.6664 50.3524 38.8837 50.1336L51.841 37.1063C52.263 36.6807 52.5055 36.1094 52.5184 35.5102C52.5313 34.911 52.3136 34.3298 51.9103 33.8864C51.507 33.4431 50.9488 33.1716 50.3511 33.1279C49.7534 33.0842 49.1617 33.2718 48.6982 33.6518L38.7437 41.8399C38.3176 42.1908 37.781 42.3795 37.229 42.3725C36.677 42.3655 36.1454 42.1633 35.7282 41.8018L32.1419 38.6954C31.631 38.2521 30.9774 38.0078 30.301 38.0072Z"
+                  fill="#20D76D"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_28_7129">
+                  <rect width="80" height="80" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            <Typography
+              sx={{
+                mt: '15px',
+                fontSize: '20px',
+                fontWeight: 600,
+                lineHeight: '23px',
+                color: colors.green
+              }}>
+              Completed!
+            </Typography>
+            <Typography
+              sx={{
+                mt: '32px',
+                fontSize: '12px',
+                color: colors.white,
+                maxWidth: '338px',
+                textAlign: 'center',
+                fontWeight: 400
+              }}>
+              You have successfully redeemed, please check in your account.
+            </Typography>
+          </Stack>
+        </>
+      ) : (
+        <>
+          <Header
+            onBack={() => {
+              window.history.go(-1);
+            }}
+            title="Redeem"
+          />
+          <Content
+            mt="lg"
+            classname="fadeIn-page"
+            style={{
+              padding: '0 16px 70px'
+            }}>
+            <Column gap="lg" px="lg" py="md">
+              <Row full justifyCenter itemsCenter gap="sm" mt="lg">
+                <Image
+                  src={stokenBalance?.asset.logo}
+                  size={32}
+                  height={32}
+                  width={32}
                   style={{
-                    flexShrink: 0
-                  }}
-                  className="flex items-center gap-1 ">
-                  <div
-                    className={
-                      'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
-                    }
-                    onClick={() => {
-                      const amount = new BigNumber(
-                        operationTab === 'supply'
-                          ? poolTokenBalance?.formatAmount || '0'
-                          : stokenBalance?.formatAmount || '0'
-                      )
-                        .multipliedBy(0.5)
-                        .toFixed(poolTokenBalance?.asset.precision || 6, BigNumber.ROUND_DOWN);
-                      if (operationTab === 'supply') {
-                        setsupplyAmount(amount);
-                      } else {
-                        setwithdrawAmount(amount);
-                      }
-                    }}>
-                    Half
-                  </div>
-
-                  <div
-                    className={
-                      'px-2  h-max rounded cursor-pointer text-[10px] bg-[#FFFFFF1A] text-[#b8bfbd] hover:text-[#F7771A]'
-                    }
-                    onClick={() => {
-                      const amount =
-                        operationTab === 'supply'
-                          ? poolTokenBalance?.formatAmount || '0'
-                          : stokenBalance?.formatAmount || '0';
-                      if (operationTab === 'supply') {
-                        setsupplyAmount(amount);
-                      } else {
-                        setwithdrawAmount(amount);
-                      }
-                    }}>
-                    Max
-                  </div>
-                </div>
+                    borderRadius: '50%'
+                  }}></Image>
+                <Text text={stokenBalance?.asset.symbol} size="md" color="white"></Text>
               </Row>
-
-              <Row itemsCenter justifyBetween>
-                <Text
-                  style={{
-                    verticalAlign: 'middle',
-                    whiteSpace: 'nowrap',
-                    maxWidth: '90px',
-                    textOverflow: 'ellipsis',
-                    overflow: 'hidden'
-                  }}
-                  text={`$${BigNumber(operationTab === 'supply' ? supplyAmount || '0' : withdrawAmount || '0')
-                    .times(BigNumber(poolTokenBalance?.denomPrice || '0').div(exchangeRate || 1))
-                    .toFormat(2)}`}
-                  size="xxs"
-                  color="white_muted"></Text>
-
+              <Row justifyBetween itemsCenter>
+                <Text text="Amount" size="xs" color="white"></Text>
                 <Row
                   style={{
                     flexShrink: 0
@@ -347,156 +148,99 @@ export default function EarnTabScreen() {
                       verticalAlign: 'middle',
                       whiteSpace: 'nowrap'
                     }}
-                    text={`${BigNumber(
-                      operationTab === 'supply'
-                        ? poolTokenBalance?.formatAmount || '0'
-                        : stokenBalance?.formatAmount || '0'
-                    ).toFormat()}`}
+                    text={stokenBalance?.formatAmount || '0'}
                     size="xxs"
-                    color="white_muted"></Text>
+                    color="white"></Text>
                 </Row>
               </Row>
+              <Row bg="card_bgColor" itemsCenter rounded px="md" py="md">
+                <CoinInput
+                  size={22}
+                  coin={{
+                    amount: withdrawAmount,
+                    denom: stokenBalance?.denom || ''
+                  }}
+                  decimalScale={stokenBalance?.asset.precision || 6}
+                  onChange={(value) => {
+                    setwithdrawAmount(value);
+                  }}
+                />
+                <Image src={stokenBalance?.asset.logo} height={28} width={28}></Image>
+
+                <Text text={stokenBalance?.asset.symbol} color="white" size="md"></Text>
+              </Row>
+
+              <Column
+                bg="black"
+                style={{
+                  borderRadius: '10px'
+                }}
+                px="lg"
+                py="lg">
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      color: colors.grey12
+                    }}>
+                    {poolTokenBalance?.asset.symbol} / {stokenBalance?.asset.symbol}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      color: colors.white
+                    }}>
+                    {+exchangeRate}
+                  </Typography>
+                </Stack>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      color: colors.grey12
+                    }}>
+                    You will receive
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      color: colors.white
+                    }}>
+                    {new BigNumber(withdrawAmount || '0').times(exchangeRate).toFixed(6)}&nbsp;
+                    <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
+                      {poolTokenBalance?.asset.symbol}
+                    </small>
+                  </Typography>
+                </Stack>
+              </Column>
+
+              {withdrawExceed && (
+                <Text
+                  color="red"
+                  size="xs"
+                  text={`Max redeemable: ${maxWithdrawAmount} ${stokenBalance?.asset.symbol}`}></Text>
+              )}
             </Column>
-          </Row>
-
-          {operationTab === 'supply' && (
-            <Column
-              bg="black"
-              style={{
-                borderRadius: '10px'
-              }}
-              px="lg"
-              py="lg">
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.grey12
-                  }}>
-                  Net APR
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.white
-                  }}>
-                  {poolData?.supplyApy}%
-                </Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.grey12
-                  }}>
-                  You will receive
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.white
-                  }}>
-                  {getTruncate(formatUnitAmount(receiveShare, 6), 6)}&nbsp;
-                  <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                    s{poolData?.token.asset.symbol}
-                  </small>
-                </Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.grey12
-                  }}>
-                  Expected Interests / day
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.white
-                  }}>
-                  {new BigNumber(expectedInterestDay).toFixed(poolData?.token?.asset.precision || 6)}&nbsp;
-                  <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                    {poolData?.token.asset.symbol}
-                  </small>
-                </Typography>
-              </Stack>
-            </Column>
-          )}
-
-          {operationTab === 'withdraw' && (
-            <Column
-              bg="black"
-              style={{
-                borderRadius: '10px'
-              }}
-              px="lg"
-              py="lg">
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.grey12
-                  }}>
-                  {poolTokenBalance?.asset.symbol} / {stokenBalance?.asset.symbol}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.white
-                  }}>
-                  {+exchangeRate}
-                </Typography>
-              </Stack>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.grey12
-                  }}>
-                  You will receive
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '12px',
-                    color: colors.white
-                  }}>
-                  {new BigNumber(withdrawAmount || '0').times(exchangeRate).toFixed(6)}&nbsp;
-                  <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                    {poolTokenBalance?.asset.symbol}
-                  </small>
-                </Typography>
-              </Stack>
-            </Column>
-          )}
-
-          {operationTab === 'withdraw' && withdrawExceed && (
-            <Text
-              color="red"
-              size="xs"
-              text={`Max redeemable: ${maxWithdrawAmount} ${stokenBalance?.asset.symbol}`}></Text>
-          )}
-
-          <Row mt="md" mb="lg">
-            <Button
-              onClick={() => {
-                if (operationTab === 'supply') {
-                  onSupply();
-                } else {
-                  onWithdraw();
-                }
-              }}
-              loading={loading || withdrawLoading}
-              disabled={isDisabled}
-              preset="primary"
-              text="Confirm"
-              full></Button>
-          </Row>
-        </Column>
-      </Content>
-      <Footer px="zero" py="zero">
-        <NavTabBar tab="earn" />
-      </Footer>
+          </Content>
+        </>
+      )}
+      <Row mt="md" mb="lg">
+        <Button
+          onClick={() => {
+            if (tx) {
+              window.history.go(-1);
+            } else {
+              onWithdraw();
+            }
+          }}
+          loading={loading}
+          disabled={isDisabled}
+          preset="primary"
+          text={tx ? 'Close' : 'Withdraw'}
+          full
+          style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
+        />
+      </Row>
     </Layout>
   );
 }

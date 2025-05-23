@@ -7,7 +7,7 @@ import useGetPoolsData, { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
-import { formatUnitAmount, getTruncate } from '@/ui/utils';
+import { getTruncate } from '@/ui/utils';
 import { Box } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
@@ -56,10 +56,13 @@ export default function MyEarnsScreen() {
 }
 
 function PoolItemFC({ item }: { item: PoolDataItem }) {
+  const currentAccount = useCurrentAccount();
+  const { balanceList } = useGetSideBalanceList(currentAccount.address);
+  const stokenBalance = balanceList.find((o) => o.denom === item.baseData.total_stokens.denom);
   const navigate = useNavigate();
   const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: item.baseData.id || '' });
   const { depositedAmount } = useMemo(() => {
-    const depositedAmount = new BigNumber(item.token.formatAmount)
+    const depositedAmount = new BigNumber(stokenBalance?.formatAmount || '0')
       .multipliedBy(exchangeRate || 1)
       .toFixed(item.token.asset.precision);
     const expectedInterestDay = new BigNumber(item.token.formatAmount)
@@ -126,10 +129,7 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
             fontWeight: 500,
             color: colors.white
           }}>
-          {getTruncate(
-            formatUnitAmount(item.token.amount, item.token?.asset.exponent || 6),
-            item.token?.asset.precision || 6
-          )}
+          {getTruncate(stokenBalance?.formatAmount || '0', item.token?.asset.precision || 6)}
         </Text>
       </Row>
       {/* <Row full justifyBetween itemsCenter>

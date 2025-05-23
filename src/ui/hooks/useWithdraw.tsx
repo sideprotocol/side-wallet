@@ -3,7 +3,6 @@ import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
-import { CHAINS_ENUM } from '@/shared/constant';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { Box } from '@mui/material';
 
@@ -17,6 +16,7 @@ export default function useWithdraw() {
   const [loading, setLoading] = useState(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
   const { sideChain } = useEnvironment();
+  const [tx, setTx] = useState('');
 
   const currentAccount = useCurrentAccount();
   const navigate = useNavigate();
@@ -65,20 +65,7 @@ export default function useWithdraw() {
       });
       setLoading(false);
       if (result.tx_response.code === 0) {
-        toast.custom((t) => (
-          <ToastView toaster={t} type="success" txHashUrl={`${sideChain.explorerUrl}/tx/${result.tx_response.txhash}`}>
-            <Box
-              sx={{
-                mb: '6px',
-                fontSize: '12px',
-                fontWeight: '500'
-              }}>
-              Liquidity Removed
-            </Box>
-          </ToastView>
-        ));
-
-        navigate('TxSuccessScreen', { txid: txHash, chain: CHAINS_ENUM.SIDE });
+        setTx(txHash);
       } else {
         toast.custom((t) => (
           <ToastView toaster={t} type="fail">
@@ -102,6 +89,7 @@ export default function useWithdraw() {
 
   return {
     withdraw,
-    loading
+    loading,
+    tx
   };
 }
