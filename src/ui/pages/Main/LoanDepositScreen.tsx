@@ -160,7 +160,7 @@ export default function LoanDepositScreen() {
       <Content gap="lg" mt="lg">
         <Row>
           <Text
-            text="Step 1: Fund BTC Collateral"
+            text="Step 1: Lock BTC Collateral"
             size="lg"
             style={{
               fontWeight: 700

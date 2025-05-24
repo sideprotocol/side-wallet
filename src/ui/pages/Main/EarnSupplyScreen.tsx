@@ -76,7 +76,7 @@ export default function EarnSupplyScreen() {
   return (
     <Layout>
       {tx ? (
-        <>
+        <Content>
           <Stack
             alignItems="center"
             sx={{
@@ -123,7 +123,7 @@ export default function EarnSupplyScreen() {
               interest they pay.
             </Typography>
           </Stack>
-        </>
+        </Content>
       ) : (
         <>
           <Header
@@ -146,7 +146,7 @@ export default function EarnSupplyScreen() {
                     flexShrink: 0
                   }}
                   itemsCenter
-                  gap="xs">
+                  gap="md">
                   <Icon color="white_muted" icon="wallet-icon" size={12}></Icon>
                   <Text
                     style={{
@@ -155,10 +155,10 @@ export default function EarnSupplyScreen() {
                     }}
                     text={poolTokenBalance?.formatAmount || '0'}
                     size="xxs"
-                    color="white"></Text>
+                    color="white_muted"></Text>
                 </Row>
               </Row>
-              <Row bg="card_bgColor" itemsCenter rounded px="md" py="md">
+              <Row bg="card_bgColor" itemsCenter rounded px="lg" py="md">
                 <CoinInput
                   size={22}
                   coin={{
@@ -193,7 +193,7 @@ export default function EarnSupplyScreen() {
                   <Typography
                     sx={{
                       fontSize: '12px',
-                      color: colors.white
+                      color: colors.green
                     }}>
                     {poolData?.supplyApy}%
                   </Typography>

@@ -3,7 +3,6 @@ import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
-import { useNavigate } from '@/ui/pages/MainRoute';
 import { Box } from '@mui/material';
 
 import ToastView from '../components/ToastView';
@@ -19,7 +18,6 @@ export default function useWithdraw() {
   const [tx, setTx] = useState('');
 
   const currentAccount = useCurrentAccount();
-  const navigate = useNavigate();
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 

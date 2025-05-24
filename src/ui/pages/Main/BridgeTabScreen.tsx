@@ -262,7 +262,9 @@ export default function BridgeTabScreen() {
                 <div className={'flex gap-[5px] items-center'}>
                   <img className={'w-[14px] h-[14px]'} src={WalletIcon} alt="" />
 
-                  <Text size="xs">{BigNumber(balance).toFormat()}</Text>
+                  <Text size="xs" color="white_muted">
+                    {BigNumber(balance).toFormat()}
+                  </Text>
                 </div>
               </Row>
 

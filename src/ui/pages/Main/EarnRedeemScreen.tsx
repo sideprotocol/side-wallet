@@ -61,7 +61,7 @@ export default function EarnRedeemScreen() {
   return (
     <Layout>
       {tx ? (
-        <>
+        <Content>
           <Stack
             alignItems="center"
             sx={{
@@ -107,7 +107,7 @@ export default function EarnRedeemScreen() {
               You have successfully redeemed, please check in your account.
             </Typography>
           </Stack>
-        </>
+        </Content>
       ) : (
         <>
           <Header
@@ -141,7 +141,7 @@ export default function EarnRedeemScreen() {
                     flexShrink: 0
                   }}
                   itemsCenter
-                  gap="xs">
+                  gap="md">
                   <Icon color="white_muted" icon="wallet-icon" size={12}></Icon>
                   <Text
                     style={{
@@ -150,10 +150,10 @@ export default function EarnRedeemScreen() {
                     }}
                     text={stokenBalance?.formatAmount || '0'}
                     size="xxs"
-                    color="white"></Text>
+                    color="white_muted"></Text>
                 </Row>
               </Row>
-              <Row bg="card_bgColor" itemsCenter rounded px="md" py="md">
+              <Row bg="card_bgColor" itemsCenter rounded px="lg" py="md">
                 <CoinInput
                   size={22}
                   coin={{

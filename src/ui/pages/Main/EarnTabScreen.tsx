@@ -9,7 +9,7 @@ import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -78,17 +78,43 @@ export default function EarnTabScreen() {
               Earn
             </Text>
 
-            <Row
-              itemsCenter
-              gap="sm"
+            <Stack
+              direction="row"
+              alignItems="center"
+              gap="4px"
               onClick={() => {
                 navigate('MyEarnsScreen');
+              }}
+              sx={{
+                cursor: 'pointer',
+                p: {
+                  color: colors.grey12,
+                  transition: '.4s'
+                },
+                div: {
+                  transition: '.4s'
+                },
+                ':hover': {
+                  p: {
+                    color: colors.white
+                  },
+                  div: {
+                    div: {
+                      color: `${colors.white} !important`,
+                      bgcolor: `${colors.white} !important`
+                    }
+                  }
+                }
               }}>
-              <Text color="white" size="xs" style={{ marginTop: '-1px' }}>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  mt: '-1px'
+                }}>
                 My Earns
-              </Text>
-              <Icon icon="arrow-right" color="white" size={16} />
-            </Row>
+              </Typography>
+              <Icon icon="arrow-right" color="white_muted" size={16} />
+            </Stack>
           </Row>
           <Row
             full

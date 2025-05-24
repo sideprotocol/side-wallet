@@ -29,7 +29,7 @@ export default function AboutScreen() {
       />
       <Content justifyBetween>
         <Column>
-          <Column mb="x3l" py="xl" gap="xl" justifyCenter itemsCenter>
+          <Column mb="xl" py="xl" gap="xl" justifyCenter itemsCenter>
             <Image src={'/images/logo/wallet-logo.png'} height={78} width={78} />
 
             <Image src={'/images/icons/side_wallet.svg'} height={20} width={186} />

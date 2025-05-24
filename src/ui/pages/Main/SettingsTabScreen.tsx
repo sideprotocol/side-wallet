@@ -36,6 +36,16 @@ const SettingList: Setting[] = [
   },
 
   {
+    label: 'Network',
+    value: 'TESTNET',
+    icon: 'setting-network',
+    desc: '',
+    action: 'networkType',
+    route: '/settings/network-type',
+    right: true
+  },
+
+  {
     label: 'General',
     value: '',
     icon: 'general',
@@ -73,16 +83,6 @@ const SettingList: Setting[] = [
     action: 'about',
     route: '/settings/about',
 
-    right: true
-  },
-
-  {
-    label: 'Network',
-    value: 'TESTNET',
-    icon: 'setting-network',
-    desc: '',
-    action: 'networkType',
-    route: '/settings/network-type',
     right: true
   },
   {

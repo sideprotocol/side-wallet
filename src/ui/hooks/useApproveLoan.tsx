@@ -20,6 +20,7 @@ import useGetDepositTx from './useGetDepositTx';
 
 export default function useApproveLoan(loan_id: string, collateralAmount: string) {
   const [loading, setLoading] = useState(false);
+  const [tx, setTx] = useState('');
 
   const currentAccount = useCurrentAccount();
 
@@ -124,9 +125,7 @@ export default function useApproveLoan(loan_id: string, collateralAmount: string
       }
 
       if (hashResponse.tx_response.code === 0) {
-        navigate('ApproveSuccessScreen', {
-          loanId: loan_id
-        });
+        setTx(result.tx_response.txhash);
       } else {
         toast.custom((t) => (
           <ToastView toaster={t} type="fail">
@@ -166,6 +165,7 @@ export default function useApproveLoan(loan_id: string, collateralAmount: string
   return {
     approveLoan,
     loading,
-    depositTxs
+    depositTxs,
+    tx
   };
 }
