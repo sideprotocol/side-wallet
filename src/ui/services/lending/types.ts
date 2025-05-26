@@ -229,7 +229,6 @@ export interface LeadingPool {
     total_borrowed: string;
   }>;
 }
-
 export type LendingPool = {
   poolId: string;
   tokenDenom: string;
@@ -251,20 +250,24 @@ export type LendingPool = {
   borrowAPY: string;
   totalStokensDenom: string;
   totalStokensAmount: number;
+  tranches: Array<{ maturity: string; total_borrowed: string }>;
   config: {
-    empty: boolean;
-    additionalProp1: Record<string, unknown>;
-    additionalProp2: Record<string, unknown>;
-    additionalProp3: Record<string, unknown>;
-    supply_cap: string;
     borrow_cap: string;
-    min_borrow_amount: string;
+    liquidation_threshold: number;
     max_borrow_amount: string;
-    tranches: {
-      maturity: string;
+    max_ltv: number;
+    min_borrow_amount: string;
+    origination_fee: string;
+    paused: true;
+    referral_fee_factor: number;
+    request_fee: Coin;
+    reserve_factor: number;
+    supply_cap: string;
+    tranches: Array<{
       borrow_apr: number;
+      maturity: string;
       min_maturity_factor: number;
-    }[];
+    }>;
   };
   statusText: string;
   ofSuppliers: number;

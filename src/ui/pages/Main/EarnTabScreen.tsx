@@ -198,6 +198,22 @@ export default function EarnTabScreen() {
                 }}>
                 {item.token.asset.symbol}
               </Text>
+              <Text
+                color="white_muted"
+                size="sm"
+                style={{
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  textDecoration: 'underline'
+                }}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  navigate('LendingPoolDetailScreen', {
+                    pool: item
+                  });
+                }}>
+                Details
+              </Text>
 
               <Text
                 size="md"

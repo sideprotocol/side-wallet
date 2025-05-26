@@ -28,6 +28,7 @@ export interface PoolDataItem {
   ofBorrowers: number;
   ofSuppliers: number;
   availableAmountInUsd: string;
+  tranches: Array<{ maturity: string; total_borrowed: string }>;
 }
 
 export default function useGetPoolsData() {
@@ -91,7 +92,8 @@ export default function useGetPoolsData() {
         totalBorrowInUsd: lendingPoolBase?.totalBorrowInDollar || '0',
         ofBorrowers: lendingPoolBase?.ofBorrowers || 0,
         ofSuppliers: lendingPoolBase?.ofSuppliers || 0,
-        availableAmountInUsd: lendingPoolBase?.availableAmountInDollar || '0'
+        availableAmountInUsd: lendingPoolBase?.availableAmountInDollar || '0',
+        tranches: lendingPoolBase?.tranches || []
       });
     });
 

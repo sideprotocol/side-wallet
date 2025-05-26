@@ -41,6 +41,7 @@ import EarnRedeemScreen from './Main/EarnRedeemScreen';
 import EarnSupplyScreen from './Main/EarnSupplyScreen';
 import EarnTabScreen from './Main/EarnTabScreen';
 import ExploreTabScreen from './Main/ExploreTabScreen';
+import LendingPoolDetailScreen from './Main/LendingPoolDetail';
 import LendingTabScreen from './Main/LendingTabScreen';
 import LoanAuthorizeScreen from './Main/LoanAuthorizeScreen';
 import LoanDepositScreen from './Main/LoanDepositScreen';
@@ -194,6 +195,11 @@ export const routes = {
   LendingSelectTokenScreen: {
     path: '/lending-select-token',
     element: <LendingSelectTokenScreen />
+  },
+
+  LendingPoolDetailScreen: {
+    path: '/lending-pool-detail',
+    element: <LendingPoolDetailScreen />
   },
 
   BridgeConfirmTabScreen: {
