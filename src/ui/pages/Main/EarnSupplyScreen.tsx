@@ -13,7 +13,7 @@ import { useLendingState } from '@/ui/state/lending/hook';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate, useLocationState } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, Tooltip, Typography } from '@mui/material';
 
 export default function EarnSupplyScreen() {
   const { poolData } = useLocationState<{
@@ -72,6 +72,54 @@ export default function EarnSupplyScreen() {
   const isDisabled = useMemo(() => {
     return loading || +supplyAmount <= 0 || +poolData.token.formatAmount < +supplyAmount;
   }, [loading, supplyAmount, poolData]);
+
+  const data = [
+    {
+      label: 'Net APR',
+      value: (
+        <Typography
+          sx={{
+            fontSize: '12px',
+            color: colors.green
+          }}>
+          {poolData?.supplyApy}%
+        </Typography>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'You will receive',
+      value: (
+        <Typography
+          sx={{
+            fontSize: '12px',
+            color: colors.white
+          }}>
+          {getTruncate(formatUnitAmount(receiveShare, 6), 6)}&nbsp;
+          <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
+            s{poolData?.token.asset.symbol}
+          </small>
+        </Typography>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Expected Interests / day',
+      value: (
+        <Typography
+          sx={{
+            fontSize: '12px',
+            color: colors.white
+          }}>
+          {new BigNumber(expectedInterestDay).toFixed(poolData?.token?.asset.precision || 6)}&nbsp;
+          <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
+            {poolData?.token.asset.symbol}
+          </small>
+        </Typography>
+      ),
+      tip: 'xxx'
+    }
+  ];
 
   return (
     <Layout>
@@ -158,7 +206,15 @@ export default function EarnSupplyScreen() {
                     color="white_muted"></Text>
                 </Row>
               </Row>
-              <Row bg="card_bgColor" itemsCenter rounded px="lg" py="md">
+              <Row
+                bg="card_bgColor"
+                itemsCenter
+                rounded
+                px="lg"
+                py="md"
+                style={{
+                  border: `1px solid ${colors.white1}`
+                }}>
                 <CoinInput
                   size={22}
                   coin={{
@@ -182,60 +238,24 @@ export default function EarnSupplyScreen() {
               />
 
               <Column bg="black">
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.grey12
-                    }}>
-                    Net APR
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.green
-                    }}>
-                    {poolData?.supplyApy}%
-                  </Typography>
-                </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.grey12
-                    }}>
-                    You will receive
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.white
-                    }}>
-                    {getTruncate(formatUnitAmount(receiveShare, 6), 6)}&nbsp;
-                    <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                      s{poolData?.token.asset.symbol}
-                    </small>
-                  </Typography>
-                </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.grey12
-                    }}>
-                    Expected Interests / day
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.white
-                    }}>
-                    {new BigNumber(expectedInterestDay).toFixed(poolData?.token?.asset.precision || 6)}&nbsp;
-                    <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                      {poolData?.token.asset.symbol}
-                    </small>
-                  </Typography>
-                </Stack>
+                {data.map((item) => (
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" key={item.label}>
+                    <Tooltip title={item.tip} placement="top" arrow>
+                      <Typography
+                        sx={{
+                          fontSize: '12px',
+                          color: colors.grey12,
+                          textDecoration: 'dashed underline',
+                          cursor: 'pointer'
+                        }}>
+                        {item.label}
+                      </Typography>
+                    </Tooltip>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      {item.value}
+                    </Stack>
+                  </Stack>
+                ))}
               </Column>
             </Column>
           </Content>

@@ -153,7 +153,15 @@ export default function EarnRedeemScreen() {
                     color="white_muted"></Text>
                 </Row>
               </Row>
-              <Row bg="card_bgColor" itemsCenter rounded px="lg" py="md">
+              <Row
+                bg="card_bgColor"
+                itemsCenter
+                rounded
+                px="lg"
+                py="md"
+                style={{
+                  border: `1px solid ${colors.white1}`
+                }}>
                 <CoinInput
                   size={22}
                   coin={{
@@ -165,6 +173,18 @@ export default function EarnRedeemScreen() {
                     setwithdrawAmount(value);
                   }}
                 />
+                <Typography
+                  sx={{
+                    color: colors.main,
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => {
+                    setwithdrawAmount(stokenBalance?.formatAmount || '0');
+                  }}>
+                  Max
+                </Typography>
                 <Image src={stokenBalance?.asset.logo} height={28} width={28}></Image>
 
                 <Text text={stokenBalance?.asset.symbol} color="white" size="md"></Text>
@@ -236,7 +256,7 @@ export default function EarnRedeemScreen() {
           loading={loading}
           disabled={isDisabled}
           preset="primary"
-          text={tx ? 'Close' : 'Withdraw'}
+          text={tx ? 'Close' : 'Redeem'}
           full
           style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
         />

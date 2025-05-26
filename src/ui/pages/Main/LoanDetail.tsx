@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
-import { Button, Column, Content, Header, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, CopyIcon, Header, Layout, Row, Text } from '@/ui/components';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
 import useGetDlcMeta from '@/ui/hooks/useGetDlcMeta';
@@ -20,7 +20,7 @@ import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { formatAddress } from '@/ui/utils/format';
 import { formatTimeWithUTC } from '@/ui/utils/formatter';
-import { Box } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 import { HealthFactor, LoanLTV } from './MyLoans';
@@ -109,6 +109,36 @@ export default function LoanDetailScreen() {
           marginTop: 16
         }}>
         <Column gap={'md'}>
+          <Row justifyCenter>
+            <Stack
+              direction="row"
+              alignItems="center"
+              sx={{
+                bgcolor: colors.card_bgColor,
+                borderRadius: '100px',
+                padding: '4px 10px',
+                p: {
+                  color: colors.grey12
+                },
+                ':hover': {
+                  color: colors.white
+                }
+              }}>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  maxWidth: '200px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  transition: '.4s'
+                }}>
+                Loan ID: {loan.vault_address}
+              </Typography>
+              <CopyIcon text={loan.vault_address} onlyIcon />
+            </Stack>
+          </Row>
           <Row full justifyBetween itemsCenter>
             <Text
               style={{
@@ -122,7 +152,7 @@ export default function LoanDetailScreen() {
               sx={{
                 padding: '4px 8px',
                 borderRadius: '4px',
-                fontSize: '10px',
+                fontSize: '12px',
                 backgroundColor: colors.grey65,
                 color: colors.grey64
               }}>
@@ -173,14 +203,21 @@ export default function LoanDetailScreen() {
               }}>
               Vault
             </Text>
-            <Text
-              style={{
+            <Typography
+              sx={{
                 fontSize: '12px',
                 fontWeight: 500,
-                color: colors.white
+                color: colors.white,
+                cursor: 'pointer',
+                ':hover': {
+                  color: colors.main
+                }
+              }}
+              onClick={() => {
+                window.open(`${SIDE_BTC_EXPLORER}/address/${loan.vault_address}`);
               }}>
               {formatAddress(loan.vault_address, 6)}
-            </Text>
+            </Typography>
           </Row>
           <Row full justifyBetween itemsCenter>
             <Text
@@ -193,18 +230,22 @@ export default function LoanDetailScreen() {
             <Box>
               {loan.authorizations[0] &&
                 (loan.authorizations[0]?.deposit_txs || [])?.map((tx, index) => (
-                  <Text
+                  <Typography
                     key={index}
-                    style={{
+                    sx={{
                       fontSize: '12px',
                       fontWeight: 500,
-                      color: colors.white
+                      color: colors.white,
+                      cursor: 'pointer',
+                      ':hover': {
+                        color: colors.main
+                      }
                     }}
                     onClick={() => {
                       window.open(`${SIDE_BTC_EXPLORER}/tx/${tx}`);
                     }}>
                     {formatAddress(tx, 6)}
-                  </Text>
+                  </Typography>
                 ))}
             </Box>
           </Row>
@@ -216,18 +257,22 @@ export default function LoanDetailScreen() {
               }}>
               Withdraw Tx
             </Text>
-            <Text
-              style={{
+            <Typography
+              sx={{
                 fontSize: '12px',
                 fontWeight: 500,
-                color: colors.white
+                color: colors.white,
+                cursor: 'pointer',
+                ':hover': {
+                  color: colors.main
+                }
               }}
               onClick={() => {
                 if (loan.status === 'Liquidated') return;
                 window.open(`${SIDE_BTC_EXPLORER}/tx/${loanDetailCex?.returnBtcTxhash}`);
               }}>
               {loan.status !== 'Liquidated' ? formatAddress(loanDetailCex?.returnBtcTxhash || '', 6) : ''}
-            </Text>
+            </Typography>
           </Row>
           <Row full justifyBetween itemsCenter>
             <Text
@@ -282,7 +327,7 @@ export default function LoanDetailScreen() {
               }}>
               Amount
             </Text>
-            <Row justifyEnd itemsCenter gap="md">
+            <Row justifyEnd itemsCenter gap="xs">
               <Text
                 style={{
                   fontSize: '12px',

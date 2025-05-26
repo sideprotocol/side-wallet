@@ -4,6 +4,7 @@ import { ButtonGroup } from './ButtonGroup';
 import { Card } from './Card';
 import { Column } from './Column';
 import { Content } from './Content';
+import { CopyIcon } from './CopyIcon';
 import { Footer } from './Footer';
 import { Grid } from './Grid';
 import { Header } from './Header';
@@ -27,6 +28,7 @@ export {
   Card,
   Column,
   Content,
+  CopyIcon,
   Footer,
   Grid,
   Header,

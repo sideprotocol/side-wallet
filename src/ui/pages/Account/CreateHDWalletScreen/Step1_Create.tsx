@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import { Button, ButtonGroup, Column, Grid, Image, Input, Mask, Row, Text } from '@/ui/components';
+import { Button, ButtonGroup, Column, CopyIcon, Grid, Image, Input, Mask, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
-import { Icon } from '@/ui/components/Icon';
-import { copyToClipboard, useWallet } from '@/ui/utils';
+import { useWallet } from '@/ui/utils';
 
 import { ContextData, TabType, UpdateContextDataParams, WORDS_12_ITEM, WORDS_24_ITEM, WordsType } from './type';
 
@@ -18,17 +17,7 @@ export default function Step1_Create({
   const tools = useTools();
   const [type, setType] = useState<WordsType>(WordsType.WORDS_12);
   const [isClickMask, setIsClickMask] = useState(false);
-  const [isClickCopy, setIsClickCopy] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
   const [disabled, setDisabled] = useState(true);
-
-  const handleMouseOver = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
 
   const init = async () => {
     const preMnemonics = await wallet.getPreMnemonics();
@@ -58,15 +47,6 @@ export default function Step1_Create({
     init();
   }, []);
 
-  function copy(str: string) {
-    copyToClipboard(str).then(() => {
-      // tools.toastSuccess('Copied');
-      setTimeout(() => {
-        setIsClickCopy(false);
-      }, 3000);
-    });
-  }
-
   const btnClick = () => {
     updateContextData({
       mnemonics: curMenemonics,
@@ -86,22 +66,19 @@ export default function Step1_Create({
           flex: 1,
           overflow: 'hidden',
           padding: '0 16px 32px'
-        }}
-      >
+        }}>
         <Column
           classname={'hide-scrollbar'}
           style={{
             flex: 1,
             overflow: 'auto'
-          }}
-        >
+          }}>
           <Mask
             onClick={() => {
               // alert('Mask');
               setIsClickMask(true);
               setDisabled(false);
-            }}
-          >
+            }}>
             <Column
               style={{
                 marginTop: '16px',
@@ -110,8 +87,7 @@ export default function Step1_Create({
                 padding: '16px',
                 // height: isClickMask ? 'auto' : '165px',
                 overflow: 'hidden'
-              }}
-            >
+              }}>
               {wordsItems.length > 1 ? (
                 <ButtonGroup
                   rowProps={{
@@ -141,8 +117,7 @@ export default function Step1_Create({
                           borderRadius: '8px',
                           border: '1px solid #FFFFFF33',
                           backgroundColor: '#121212'
-                        }}
-                      >
+                        }}>
                         <Text
                           text={`${index + 1}. `}
                           style={{ width: 25, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
@@ -167,28 +142,7 @@ export default function Step1_Create({
                   })}
                 </Grid>
               </Row>
-              <Row
-                onMouseOver={handleMouseOver}
-                onMouseLeave={handleMouseLeave}
-                justifyCenter
-                onClick={(e) => {
-                  copy(curMenemonics);
-                  setIsClickCopy(true);
-                }}
-                style={{
-                  marginTop: '8px'
-                }}
-              >
-                <Icon
-                  icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
-                  color={isClickCopy ? 'primary' : isHovered ? 'white' : 'search_icon'}
-                  size={20}
-                />
-                <Text
-                  text={isClickCopy ? 'Copied' : 'Copy to clipboard'}
-                  color={isClickCopy ? 'primary' : isHovered ? 'white' : 'search_icon'}
-                />
-              </Row>
+              <CopyIcon text={curMenemonics} style={{ marginTop: '8px' }} />
             </Column>
           </Mask>
 
@@ -199,14 +153,12 @@ export default function Step1_Create({
               borderRadius: '8px',
               padding: '10px',
               gap: '4px'
-            }}
-          >
+            }}>
             <Row
               style={{
                 alignItems: 'center',
                 gap: '8px'
-              }}
-            >
+              }}>
               <Image src="/images/icons/alert-triangle.svg" size={24} />
               <Text
                 text="Keep It Private:"
@@ -236,14 +188,12 @@ export default function Step1_Create({
               borderRadius: '10px',
               padding: '10px',
               gap: '4px'
-            }}
-          >
+            }}>
             <Row
               style={{
                 alignItems: 'center',
                 gap: '8px'
-              }}
-            >
+              }}>
               <Image src="/images/icons/alert-triangle.svg" size={24} />
               <Text
                 text="No Recovery Options:"
@@ -274,14 +224,12 @@ export default function Step1_Create({
               borderRadius: '10px',
               padding: '10px',
               gap: '4px'
-            }}
-          >
+            }}>
             <Row
               style={{
                 alignItems: 'center',
                 gap: '8px'
-              }}
-            >
+              }}>
               <Image src="/images/icons/alert-triangle.svg" size={24} />
               <Text
                 text="Store Securely:"

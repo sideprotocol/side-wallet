@@ -7,6 +7,7 @@ import SearchInput from '@/ui/components/Input/Search';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import MainHeader from '@/ui/pages/Main/MainHeader';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
 import { Stack, Typography } from '@mui/material';
@@ -18,6 +19,7 @@ export default function EarnTabScreen() {
   const [value, setValue] = useState('');
   const { data } = useGetPoolsData();
   const navigate = useNavigate();
+  const { SIDE_STATION_URL } = useEnvironment();
 
   const filterData = useMemo(() => {
     return data.filter((item) => {
@@ -138,16 +140,7 @@ export default function EarnTabScreen() {
             </Typography>
             <Image src="./images/img/lending-banner.png" height={68} width={68}></Image>
           </Row>
-          <SearchInput
-            value={value}
-            onChange={setValue}
-            sx={{
-              border: 'none',
-              ':hover': {
-                border: 'none'
-              }
-            }}
-          />
+          <SearchInput value={value} onChange={setValue} />
           <Row
             px="md"
             full
@@ -208,9 +201,7 @@ export default function EarnTabScreen() {
                 }}
                 onClick={(event) => {
                   event.stopPropagation();
-                  navigate('LendingPoolDetailScreen', {
-                    pool: item
-                  });
+                  window.open(`${SIDE_STATION_URL}/lendingPool/${item.baseData.id}`, '_blank');
                 }}>
                 Details
               </Text>

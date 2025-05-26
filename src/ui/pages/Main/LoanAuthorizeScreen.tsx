@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import 'swiper/css';
 
 import { Button, Column, Content, Footer, Layout, Row, Text } from '@/ui/components';
@@ -40,6 +40,7 @@ export default function LoanAuthorizeScreen() {
   } = useLocationState<LoanAuthorizeLocationState>();
   const currentAccount = useCurrentAccount();
   const navigate = useNavigate();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
@@ -72,10 +73,12 @@ export default function LoanAuthorizeScreen() {
     {
       label: 'Liquidation Price (BTC/USDC)',
       value: liquidationEvent ? getTruncate(liquidationEvent?.price || '0', 2) : '-',
-      tip: 'Price will update if multiple deposits are detected. Please wait.'
+      tip: 'xxx',
+      valueTip: 'Price will update if multiple deposits are detected. Please wait.'
     },
     {
       label: 'Maturity Date',
+      tip: 'xxx',
       value: !loan ? '-' : formatTimeWithUTC(+loan.loan.maturity_time * 1000)
     }
   ];
@@ -196,59 +199,49 @@ export default function LoanAuthorizeScreen() {
                       py: '12px',
                       borderRadius: '10px'
                     }}>
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      gap="4px"
-                      sx={{
-                        fontSize: '14px',
-                        color: colors.white
-                      }}>
-                      {item.label}
-                      {item.tip && (
-                        <Tooltip title={item.tip} arrow>
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                              id="Icon"
-                              d="M6.17784 5.9C6.34242 5.43217 6.66725 5.03767 7.09481 4.78639C7.52237 4.53511 8.02507 4.44326 8.51387 4.5271C9.00266 4.61094 9.44602 4.86507 9.7654 5.24447C10.0848 5.62387 10.2596 6.10407 10.2588 6.6C10.2588 8 8.15884 8.7 8.15884 8.7M8.21484 11.5H8.22184M15.2148 8C15.2148 11.866 12.0808 15 8.21484 15C4.34885 15 1.21484 11.866 1.21484 8C1.21484 4.13401 4.34885 1 8.21484 1C12.0808 1 15.2148 4.13401 15.2148 8Z"
-                              stroke="#6C7080"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </Tooltip>
-                      )}
-                    </Stack>
-                    <Typography
-                      sx={{
-                        fontSize: '14px',
-                        fontWeight: 600,
-                        color: colors.main
-                      }}>
-                      {item.value}
-                    </Typography>
+                    <Tooltip title={item.tip} arrow placement="top">
+                      <Typography
+                        sx={{
+                          fontSize: '14px',
+                          color: colors.grey12,
+                          textDecoration: 'dashed underline',
+                          cursor: 'pointer'
+                        }}>
+                        {item.label}
+                      </Typography>
+                    </Tooltip>
+                    <Tooltip title={item.valueTip} arrow placement="top">
+                      <Typography
+                        sx={{
+                          fontSize: '14px',
+                          fontWeight: 600,
+                          color: colors.main,
+                          textDecoration: item.valueTip ? 'dashed underline' : 'none',
+                          cursor: item.valueTip ? 'pointer' : 'default'
+                        }}>
+                        {item.value}
+                      </Typography>
+                    </Tooltip>
                   </Stack>
                 ))}
 
-                <Stack
-                  direction="row"
-                  justifyContent="start"
-                  alignItems="center"
-                  gap="4px"
-                  sx={{
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    color: colors.white,
-                    py: '12px'
-                  }}>
-                  Collateral Refund Address
-                </Stack>
+                <Tooltip title={'xxx'} arrow placement="top">
+                  <Stack
+                    direction="row"
+                    justifyContent="start"
+                    alignItems="center"
+                    gap="4px"
+                    sx={{
+                      fontSize: '14px',
+                      fontWeight: 500,
+                      color: colors.grey12,
+                      textDecoration: 'dashed underline',
+                      cursor: 'pointer',
+                      my: '12px'
+                    }}>
+                    Collateral Refund Address
+                  </Stack>
+                </Tooltip>
                 <Stack
                   direction="row"
                   justifyContent="space-between"
@@ -265,6 +258,7 @@ export default function LoanAuthorizeScreen() {
                       setRefundAddress(event.target.value.trim());
                     }}
                     value={refundAddress}
+                    inputRef={inputRef}
                     placeholder={'Refund Address'}
                     disableUnderline
                     sx={{
@@ -281,30 +275,24 @@ export default function LoanAuthorizeScreen() {
                   />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
                     fill="none"
                     style={{
                       cursor: 'pointer'
                     }}
                     onClick={() => {
                       setRefundAddress('');
+                      inputRef.current?.focus();
                     }}>
-                    <g clipPath="url(#clip0_8078_5541)">
-                      <path
-                        d="M1.91732 12.0771C1.94795 11.8015 1.96326 11.6636 2.00497 11.5348C2.04197 11.4205 2.09425 11.3117 2.16038 11.2114C2.23493 11.0984 2.33299 11.0003 2.52911 10.8042L11.3333 2.00004C12.0697 1.26366 13.2636 1.26366 14 2.00004C14.7364 2.73642 14.7364 3.93033 14 4.66671L5.19578 13.4709C4.99966 13.667 4.9016 13.7651 4.78855 13.8396C4.68826 13.9058 4.57949 13.958 4.46519 13.995C4.33636 14.0367 4.19853 14.0521 3.92287 14.0827L1.66663 14.3334L1.91732 12.0771Z"
-                        stroke="white"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_8078_5541">
-                        <rect width="16" height="16" fill="white" />
-                      </clipPath>
-                    </defs>
+                    <path
+                      d="M9.16797 3.33332L3.33464 3.33332C2.89261 3.33332 2.46868 3.50891 2.15612 3.82147C1.84356 4.13403 1.66797 4.55796 1.66797 4.99999L1.66797 16.6667C1.66797 17.1087 1.84356 17.5326 2.15612 17.8452C2.46868 18.1577 2.89261 18.3333 3.33464 18.3333L15.0013 18.3333C15.4433 18.3333 15.8673 18.1577 16.1798 17.8452C16.4924 17.5326 16.668 17.1087 16.668 16.6667L16.668 10.8333M15.418 2.08332C15.7495 1.7518 16.1991 1.56555 16.668 1.56555C17.1368 1.56555 17.5864 1.7518 17.918 2.08332C18.2495 2.41484 18.4357 2.86448 18.4357 3.33332C18.4357 3.80216 18.2495 4.2518 17.918 4.58332L10.0013 12.5L6.66797 13.3333L7.5013 9.99999L15.418 2.08332Z"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </Stack>
                 <Box
@@ -315,14 +303,50 @@ export default function LoanAuthorizeScreen() {
                     my: '12px'
                   }}
                 />
-                <Typography
+                <Stack
+                  gap="4px"
                   sx={{
-                    fontSize: '14px',
-                    color: colors.grey12
+                    borderRadius: '10px',
+                    bgcolor: colors.green_success15,
+                    p: '16px'
                   }}>
-                  By signing, you agree that your collateral can only be used for liquidation under the specified
-                  conditions above. Otherwise, no other party can move your funds.
-                </Typography>
+                  <Stack direction="row" alignItems="center" gap="4px">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="22"
+                      viewBox="0 0 18 22"
+                      fill="none"
+                      style={{
+                        flexShrink: 0
+                      }}>
+                      <path
+                        d="M8.30201 20.6149C8.5234 20.744 8.6341 20.8086 8.79032 20.8421C8.91156 20.8681 9.08844 20.8681 9.20968 20.8421C9.3659 20.8086 9.4766 20.744 9.69799 20.6149C11.646 19.4784 17 15.9084 17 11V6.21759C17 5.41808 17 5.01833 16.8692 4.6747C16.7537 4.37113 16.566 4.10027 16.3223 3.88552C16.0465 3.64243 15.6722 3.50207 14.9236 3.22134L9.5618 1.21067C9.3539 1.13271 9.24995 1.09373 9.14302 1.07827C9.04816 1.06457 8.95184 1.06457 8.85698 1.07827C8.75005 1.09373 8.6461 1.13271 8.4382 1.21067L3.0764 3.22134C2.3278 3.50207 1.9535 3.64243 1.67766 3.88552C1.43398 4.10027 1.24627 4.37113 1.13076 4.6747C1 5.01833 1 5.41808 1 6.21759V11C1 15.9084 6.35396 19.4784 8.30201 20.6149Z"
+                        stroke="#48BB78"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <Typography
+                      sx={{
+                        color: colors.green,
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        whiteSpace: 'nowrap'
+                      }}>
+                      Securely Locked, Non-Custodial Collateral
+                    </Typography>
+                  </Stack>
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      color: colors.white
+                    }}>
+                    You’re about to sign a transaction authorizing your collateral to be used only for liquidation under
+                    specific conditions. No other party can access your funds otherwise.
+                  </Typography>
+                </Stack>
               </Column>
 
               <Row fullX mt="md">

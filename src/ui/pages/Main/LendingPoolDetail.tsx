@@ -24,7 +24,7 @@ export default function LendingPoolDetailScreen() {
   const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: pool.baseData.id });
   const { data: liquidationParams } = useGetLiquidationParams();
   const { data: lendingParams } = useGetLendingParams();
-  const debtAssetInfo = balanceList.find((item) => item.denom === pool.baseData.total_stokens.denom);
+  const debtAssetInfo = balanceList.find((item) => item.denom === pool.token.denom);
 
   const data1 = [
     {

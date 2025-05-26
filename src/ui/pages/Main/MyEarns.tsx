@@ -38,13 +38,24 @@ export default function MyEarnsScreen() {
           marginTop: 16
         }}>
         {data?.length > 0 ? (
-          data.map((item) => {
-            return (
-              <Fragment key={item.baseData.id}>
-                <PoolItemFC item={item} />
-              </Fragment>
-            );
-          })
+          <>
+            {data.map((item) => {
+              return (
+                <Fragment key={item.baseData.id}>
+                  <PoolItemFC item={item} />
+                </Fragment>
+              );
+            })}
+            <Text
+              style={{
+                fontSize: '12px',
+                color: colors.grey12,
+                textAlign: 'center',
+                marginTop: '20px'
+              }}>
+              No more data
+            </Text>
+          </>
         ) : (
           <Text style={{ fontSize: '12px', color: colors.grey12, textAlign: 'center', marginTop: '100px' }}>
             No data

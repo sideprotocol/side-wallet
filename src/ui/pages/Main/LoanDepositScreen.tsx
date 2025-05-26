@@ -160,7 +160,7 @@ export default function LoanDepositScreen() {
       <Content gap="lg" mt="lg">
         <Row>
           <Text
-            text="Step 1: Lock BTC Collateral"
+            text="Lock BTC Collateral"
             size="lg"
             style={{
               fontWeight: 700
@@ -302,26 +302,6 @@ export default function LoanDepositScreen() {
             </Box>
           </Stack>
 
-          <Row fullX>
-            <Button
-              onClick={() => {
-                navigate('TxConfirmScreen', {
-                  rawTxInfo,
-                  lendingState: {
-                    loanId: toInfo.address,
-                    borrowAmount,
-                    collateralAmount,
-                    feeRate,
-                    liquidationEvent
-                  }
-                });
-              }}
-              full
-              disabled={disabled}
-              text="Deposit"
-              preset="primary"></Button>
-          </Row>
-
           <Stack direction="row" justifyContent="center" alignItems="center" gap="4px">
             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -428,6 +408,25 @@ export default function LoanDepositScreen() {
           </Stack>
 
           {errorMsg && <Text text={errorMsg} color={'red'} size="xs" textCenter></Text>}
+          <Row fullX>
+            <Button
+              onClick={() => {
+                navigate('TxConfirmScreen', {
+                  rawTxInfo,
+                  lendingState: {
+                    loanId: toInfo.address,
+                    borrowAmount,
+                    collateralAmount,
+                    feeRate,
+                    liquidationEvent
+                  }
+                });
+              }}
+              full
+              disabled={disabled}
+              text="Deposit"
+              preset="primary"></Button>
+          </Row>
         </Column>
       </Content>
       <Footer px="zero" py="zero">
