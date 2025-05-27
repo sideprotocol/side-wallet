@@ -20,7 +20,7 @@ export default function SearchInput({
     <Box
       sx={[
         {
-          border: '1px solid #ffffff20',
+          border: `1px solid ${colors.white20}`,
           px: '10px',
           borderRadius: '10px',
           bgcolor: colors.card_bgColor,
@@ -29,7 +29,7 @@ export default function SearchInput({
           alignItems: 'center',
           gap: '8px',
           ':hover': {
-            border: '1px solid #ffffff50'
+            border: `1px solid ${colors.white_4}`
           }
         },
         ...(Array.isArray(sx) ? sx : [sx])

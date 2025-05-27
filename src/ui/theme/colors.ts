@@ -3,7 +3,8 @@ export const colors = {
   white1: '#FFFFFF1A',
   white2: '#b8bfbd',
   white30: '#FFFFFF4D',
-  white_4: 'rgb(255 255 255 / 50%)',
+  white20: '#ffffff20',
+  white_4: '#ffffff50',
   white_muted: '#6C7080',
   black: '#000000',
   black_muted: 'rgba(0, 0, 0, 0.5)',
@@ -75,6 +76,7 @@ export const colors = {
   grey63: '#8080801A',
   grey64: '#505050',
   grey65: '#5050501A',
+  grey66: '#1F1F24',
   green10: '#48bb781a',
   blue3: '#F7771A1A',
   red11: '#F565651A'

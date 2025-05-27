@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { useMemo, useState } from 'react';
 import 'swiper/css';
 
-import { Button, Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Header, Icon, Image, Layout, LightTooltip, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
 import useGetPoolExchangeRate from '@/ui/hooks/useGetPoolExchangeRate';
 import { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
@@ -13,7 +13,7 @@ import { useLendingState } from '@/ui/state/lending/hook';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate, useLocationState } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
-import { Box, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
 export default function EarnSupplyScreen() {
   const { poolData } = useLocationState<{
@@ -44,7 +44,7 @@ export default function EarnSupplyScreen() {
     const receiveShare = new BigNumber(poolData.baseData.total_stokens.amount)
       .div(formatUnitAmount(poolData.baseData.supply.amount || '0', poolData.token.asset.precision))
       .multipliedBy(supplyAmount || '0')
-      .div(exchangeRate || 1)
+      .multipliedBy(exchangeRate || 1)
       .toFixed(poolData.token.asset.precision);
     const expectedInterestDay = new BigNumber(supplyAmount || '0')
       .multipliedBy(poolData.supplyApy)
@@ -171,6 +171,16 @@ export default function EarnSupplyScreen() {
               interest they pay.
             </Typography>
           </Stack>
+          <Button
+            preset="default"
+            style={{
+              marginTop: '32px'
+            }}
+            onClick={() => {
+              window.history.go(-1);
+            }}>
+            Close
+          </Button>
         </Content>
       ) : (
         <>
@@ -206,14 +216,19 @@ export default function EarnSupplyScreen() {
                     color="white_muted"></Text>
                 </Row>
               </Row>
-              <Row
-                bg="card_bgColor"
-                itemsCenter
-                rounded
-                px="lg"
-                py="md"
-                style={{
-                  border: `1px solid ${colors.white1}`
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{
+                  bgcolor: colors.card_bgColor,
+                  border: `1px solid ${colors.white20}`,
+                  borderRadius: '10px',
+                  marginTop: '4px',
+                  p: '8px 10px',
+                  transition: '.4s',
+                  ':hover': {
+                    border: `1px solid ${colors.white_4}`
+                  }
                 }}>
                 <CoinInput
                   size={22}
@@ -228,7 +243,7 @@ export default function EarnSupplyScreen() {
                 />
                 <Image src={poolTokenBalance?.asset.logo} height={28} width={28}></Image>
                 <Text text={poolTokenBalance?.asset.symbol} color="white" size="md"></Text>
-              </Row>
+              </Stack>
 
               <Box
                 sx={{
@@ -240,17 +255,18 @@ export default function EarnSupplyScreen() {
               <Column bg="black">
                 {data.map((item) => (
                   <Stack direction="row" justifyContent="space-between" alignItems="center" key={item.label}>
-                    <Tooltip title={item.tip} placement="top" arrow>
+                    <LightTooltip title={item.tip} placement="top" arrow>
                       <Typography
                         sx={{
                           fontSize: '12px',
                           color: colors.grey12,
-                          textDecoration: 'dashed underline',
+                          textDecoration: 'dotted underline',
+                          textUnderlineOffset: '2px',
                           cursor: 'pointer'
                         }}>
                         {item.label}
                       </Typography>
-                    </Tooltip>
+                    </LightTooltip>
                     <Stack direction="row" justifyContent="space-between" alignItems="center">
                       {item.value}
                     </Stack>

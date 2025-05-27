@@ -5,7 +5,7 @@ import 'swiper/css';
 
 import { COIN_DUST } from '@/shared/constant';
 import { RawTxInfo } from '@/shared/types';
-import { Button, Column, Content, Footer, Icon, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, CopyIcon, Footer, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
@@ -25,7 +25,7 @@ import {
 } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { colors } from '@/ui/theme/colors';
-import { amountToSatoshis, copyToClipboard, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
+import { amountToSatoshis, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
 import { Box, Stack, Typography } from '@mui/material';
 
 interface LoanDepositLocationState {
@@ -158,9 +158,9 @@ export default function LoanDepositScreen() {
     <Layout>
       <MainHeader title={''} />
       <Content gap="lg" mt="lg">
-        <Row>
+        <Row justifyCenter>
           <Text
-            text="Lock BTC Collateral"
+            text="Step 1: Lock BTC Collateral"
             size="lg"
             style={{
               fontWeight: 700
@@ -171,21 +171,30 @@ export default function LoanDepositScreen() {
           bg="black_dark2"
           fullX
           style={{
-            // borderRadius: '100%',
+            flexShrink: 0,
+            position: 'relative',
             borderRadius: '10px',
-            height: 6
+            height: '6px'
           }}>
           <Row
             bg="main"
             fullY
             style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
               borderRadius: '10px',
-              width: '50%'
+              width: '50%',
+              height: '100%'
             }}
           />
         </Row>
 
-        <Column itemsCenter gap="lg">
+        <Column
+          itemsCenter
+          style={{
+            gap: '0'
+          }}>
           <Box
             sx={{
               borderRadius: '6px',
@@ -196,10 +205,10 @@ export default function LoanDepositScreen() {
 
           <Stack
             justifyContent="space-between"
-            gap="8px"
             sx={{
               flex: 1,
-              overflow: 'hidden'
+              overflow: 'hidden',
+              mt: '32px'
             }}>
             <Box>
               <Typography
@@ -215,21 +224,21 @@ export default function LoanDepositScreen() {
                 alignItems="center"
                 gap="8px"
                 sx={{
-                  p: '8px',
+                  p: '16px',
                   borderRadius: '10px',
                   bgcolor: colors.card_bgColor,
                   width: '100%',
-                  mt: '8px'
+                  mt: '2px'
                 }}>
                 <Typography
                   sx={{
                     fontSize: '12px',
                     fontWeight: 500,
                     wordBreak: 'break-all',
-                    lineHeight: '16px',
                     cursor: 'pointer',
                     ':hover': {
-                      textDecorationLine: 'underline'
+                      textDecoration: 'dotted underline',
+                      textUnderlineOffset: '2px'
                     }
                   }}
                   onClick={() => {
@@ -237,25 +246,21 @@ export default function LoanDepositScreen() {
                   }}>
                   {toInfo.address}
                 </Typography>
-                <Box
-                  onClick={(e) => {
-                    copyToClipboard(toInfo.address).then(() => {
-                      // tools.toastSuccess('Copied');
-                      setTimeout(() => {
-                        setIsClickCopy(false);
-                      }, 3000);
-                    });
-                    setIsClickCopy(true);
-                  }}>
-                  <Icon color="main" icon={isClickCopy ? 'check-circle-broken' : 'copy2'} size={16} />
-                </Box>
+                <CopyIcon
+                  text={toInfo.address}
+                  onlyIcon
+                  style={{
+                    cursor: 'pointer'
+                  }}
+                />
               </Stack>
             </Box>
             <Box>
               <Typography
                 color={colors.grey12}
                 sx={{
-                  fontSize: '12px'
+                  fontSize: '12px',
+                  mt: '16px'
                 }}>
                 Collatearl Amount
               </Typography>
@@ -265,11 +270,11 @@ export default function LoanDepositScreen() {
                 alignItems="center"
                 gap="8px"
                 sx={{
-                  p: '8px',
+                  p: '16px',
                   borderRadius: '10px',
                   bgcolor: colors.card_bgColor,
                   width: '100%',
-                  mt: '8px'
+                  mt: '2px'
                 }}>
                 <Stack direction="row" alignItems="center" gap="4px">
                   <ImageIcon
@@ -287,22 +292,18 @@ export default function LoanDepositScreen() {
                     {satoshisToAmount(+collateralAmount)}
                   </Typography>
                 </Stack>
-                <Box
-                  onClick={(e) => {
-                    copyToClipboard(satoshisToAmount(+collateralAmount)).then(() => {
-                      setTimeout(() => {
-                        setIsClickCopyAmount(false);
-                      }, 3000);
-                    });
-                    setIsClickCopyAmount(true);
-                  }}>
-                  <Icon color="main" icon={isClickCopyAmount ? 'check-circle-broken' : 'copy2'} size={16} />
-                </Box>
+                <CopyIcon
+                  text={satoshisToAmount(+collateralAmount)}
+                  onlyIcon
+                  style={{
+                    cursor: 'pointer'
+                  }}
+                />
               </Stack>
             </Box>
           </Stack>
 
-          <Stack direction="row" justifyContent="center" alignItems="center" gap="4px">
+          <Stack direction="row" justifyContent="center" alignItems="center" gap="4px" mt="32px" mb="8px">
             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M5.754 5.2C5.89506 4.799 6.17349 4.46086 6.53997 4.24548C6.90645 4.0301 7.33734 3.95136 7.75631 4.02323C8.17527 4.09509 8.55529 4.31291 8.82905 4.63812C9.1028 4.96332 9.25263 5.37491 9.252 5.8C9.252 7 7.452 7.6 7.452 7.6M7.5 10H7.506M13.5 7C13.5 10.3137 10.8137 13 7.5 13C4.18629 13 1.5 10.3137 1.5 7C1.5 3.68629 4.18629 1 7.5 1C10.8137 1 13.5 3.68629 13.5 7Z"
@@ -408,7 +409,11 @@ export default function LoanDepositScreen() {
           </Stack>
 
           {errorMsg && <Text text={errorMsg} color={'red'} size="xs" textCenter></Text>}
-          <Row fullX>
+          <Row
+            fullX
+            style={{
+              marginTop: '16px'
+            }}>
             <Button
               onClick={() => {
                 navigate('TxConfirmScreen', {

@@ -64,7 +64,6 @@ export default function EarnTabScreen() {
       <Content mt="lg" classname="fadeIn-page">
         <Column gap="lg">
           <Row
-            px="md"
             full
             justifyBetween
             itemsCenter
@@ -142,7 +141,6 @@ export default function EarnTabScreen() {
           </Row>
           <SearchInput value={value} onChange={setValue} />
           <Row
-            px="md"
             full
             justifyBetween
             itemsCenter
@@ -158,16 +156,21 @@ export default function EarnTabScreen() {
             </Text>
           </Row>
           {filterData.map((item) => (
-            <Row
+            <Stack
+              direction="row"
+              alignItems="center"
+              gap="8px"
               key={item.baseData.id}
-              bg="card_bgColor"
-              px="xl"
-              py="lg"
-              full
-              itemsCenter
-              gap="md"
-              style={{
-                borderRadius: '10px'
+              sx={{
+                px: '20px',
+                py: '12px',
+                borderRadius: '10px',
+                background: colors.card_bgColor,
+                cursor: 'pointer',
+                transition: '.4s',
+                ':hover': {
+                  background: colors.grey66
+                }
               }}
               onClick={() => {
                 navigate('EarnSupplyScreen', {
@@ -197,7 +200,8 @@ export default function EarnTabScreen() {
                 style={{
                   fontWeight: 600,
                   cursor: 'pointer',
-                  textDecoration: 'underline'
+                  textDecoration: 'dashed underline',
+                  textUnderlineOffset: '2px'
                 }}
                 onClick={(event) => {
                   event.stopPropagation();
@@ -216,7 +220,7 @@ export default function EarnTabScreen() {
                 }}>
                 {item.supplyApy}%
               </Text>
-            </Row>
+            </Stack>
           ))}
         </Column>
       </Content>

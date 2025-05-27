@@ -184,7 +184,7 @@ function AmountInput(props: InputProps) {
   return (
     <div
       className={` border-[1px] border-solid ${
-        isFocus ? 'border-white' : 'border-[#ffffff20] hover:border-[#ffffff50] '
+        isFocus ? 'border-[#ffffff50]' : 'border-[#ffffff20] hover:border-[#ffffff50] '
       } `}
       style={Object.assign({}, $baseContainerStyle, { padding: '4px 10px' })}>
       <input
@@ -398,7 +398,7 @@ function TextInput(props: InputProps) {
   return (
     <div
       className={` border-[1px] border-solid ${
-        isFocus ? 'border-white' : 'border-[#ffffff20] hover:border-[#ffffff50] '
+        isFocus ? 'border-[#ffffff50]' : 'border-[#ffffff20] hover:border-[#ffffff50] '
       } `}
       style={Object.assign({}, $baseContainerStyle, containerStyle)}>
       <input

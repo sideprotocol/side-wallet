@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
@@ -38,6 +38,7 @@ export default function MyLoansScreen() {
   const { data: allLoansData } = useGetLoansData();
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
+  const [isHoverId, setIsHoverId] = useState('');
   const navigate = useNavigate();
   const data = useMemo(() => {
     return allLoansData.filter((item) => item.borrower === currentAccount.address);
@@ -67,6 +68,12 @@ export default function MyLoansScreen() {
                 <Column
                   key={item.create_at}
                   gap={'md'}
+                  onMouseOver={() => {
+                    setIsHoverId(item.vault_address);
+                  }}
+                  onMouseLeave={() => {
+                    setIsHoverId('');
+                  }}
                   onClick={() => {
                     navigate('LoanDetailScreen', { loan_id: item.vault_address });
                   }}>
@@ -100,7 +107,7 @@ export default function MyLoansScreen() {
                         {item.status}
                       </Box>
                     </Row>
-                    <Icon icon="arrow-right" color="white" size={16} />
+                    <Icon icon="arrow-right" color={isHoverId === item.vault_address ? 'main' : 'white'} size={16} />
                   </Row>
                   <Row full justifyBetween itemsCenter>
                     <Text
@@ -191,7 +198,7 @@ export default function MyLoansScreen() {
                 fontSize: '12px',
                 color: colors.grey12,
                 textAlign: 'center',
-                marginTop: '20px'
+                marginTop: '4px'
               }}>
               No more data
             </Text>

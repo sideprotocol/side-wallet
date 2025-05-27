@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { Fragment, useMemo } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 
 import { Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import useGetPoolExchangeRate from '@/ui/hooks/useGetPoolExchangeRate';
@@ -51,7 +51,7 @@ export default function MyEarnsScreen() {
                 fontSize: '12px',
                 color: colors.grey12,
                 textAlign: 'center',
-                marginTop: '20px'
+                marginTop: '4px'
               }}>
               No more data
             </Text>
@@ -68,9 +68,10 @@ export default function MyEarnsScreen() {
 
 function PoolItemFC({ item }: { item: PoolDataItem }) {
   const currentAccount = useCurrentAccount();
+  const navigate = useNavigate();
+  const [isHover, setIsHover] = useState(false);
   const { balanceList } = useGetSideBalanceList(currentAccount.address);
   const stokenBalance = balanceList.find((o) => o.denom === item.baseData.total_stokens.denom);
-  const navigate = useNavigate();
   const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: item.baseData.id || '' });
   const { depositedAmount } = useMemo(() => {
     const depositedAmount = new BigNumber(stokenBalance?.formatAmount || '0')
@@ -88,14 +89,19 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
   }, [item, exchangeRate]);
 
   return (
-    <Column key={item.baseData.id} gap={'md'}>
-      <Row
-        full
-        justifyBetween
-        itemsCenter
-        onClick={() => {
-          navigate('EarnRedeemScreen', { poolData: item });
-        }}>
+    <Column
+      key={item.baseData.id}
+      gap={'md'}
+      onMouseOver={() => {
+        setIsHover(true);
+      }}
+      onMouseLeave={() => {
+        setIsHover(false);
+      }}
+      onClick={() => {
+        navigate('EarnRedeemScreen', { poolData: item });
+      }}>
+      <Row full justifyBetween itemsCenter>
         <Row itemsCenter gap="md">
           <Image src={item.token?.asset.logo} height={28} width={28}></Image>
           <Text
@@ -107,7 +113,7 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
             {item.token.asset.symbol}
           </Text>
         </Row>
-        <Icon icon="arrow-right" color="white" size={16} />
+        <Icon icon="arrow-right" color={isHover ? 'main' : 'white'} size={16} />
       </Row>
       <Row full justifyBetween itemsCenter>
         <Text

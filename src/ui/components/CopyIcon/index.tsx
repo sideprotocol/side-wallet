@@ -2,18 +2,20 @@ import { useState } from 'react';
 
 import { copyToClipboard } from '@/ui/utils';
 
-import { Icon } from '../Icon';
+import { Icon, IconProps } from '../Icon';
 import { Row } from '../Row';
 import { Text } from '../Text';
 
 export function CopyIcon({
   text,
   onlyIcon = false,
-  style
+  style,
+  defaultColor
 }: {
   text: string;
   onlyIcon?: boolean;
   style?: React.CSSProperties;
+  defaultColor?: IconProps['color'];
 }) {
   const [isClickCopy, setIsClickCopy] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -44,7 +46,7 @@ export function CopyIcon({
       style={style}>
       <Icon
         icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
-        color={isClickCopy ? 'primary' : isHovered ? 'white' : 'search_icon'}
+        color={isClickCopy ? 'primary' : isHovered ? 'white' : defaultColor || 'search_icon'}
         size={20}
       />
       {!onlyIcon && (

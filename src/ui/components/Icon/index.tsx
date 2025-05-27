@@ -112,7 +112,7 @@ export const svgRegistry = {
 const iconImgList: Array<IconTypes> = ['success', 'delete', 'btc'];
 
 export type IconTypes = keyof typeof svgRegistry | keyof typeof lottieRegistry;
-interface IconProps {
+export interface IconProps {
   /**
    * The name of the icon
    */

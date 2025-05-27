@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import 'swiper/css';
 
-import { Button, Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Footer, Icon, Image, Layout, LightTooltip, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useCreateLoan from '@/ui/hooks/useCreateLoan';
@@ -19,7 +19,7 @@ import { LendingActions } from '@/ui/state/lending/reducer';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-import { Box, Popover, Stack, Tooltip, Typography } from '@mui/material';
+import { Box, Popover, Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -230,7 +230,7 @@ export default function LendingTanScreen() {
     },
     {
       label: 'Interest Rate',
-      value: `${poolData?.borrowApy}%`
+      value: `${new BigNumber(borrow_apr).div(10).toFixed(2)}%`
     },
     {
       label: 'Max Interest',
@@ -298,8 +298,12 @@ export default function LendingTanScreen() {
     <>
       <Layout>
         <MainHeader title="" />
-        <Content gap="md" mt="xl">
-          <Row px="md" full justifyBetween itemsCenter>
+        <Content
+          mt="xl"
+          style={{
+            gap: '0'
+          }}>
+          <Row full justifyBetween itemsCenter>
             <Text
               color="white"
               size="lg"
@@ -347,10 +351,10 @@ export default function LendingTanScreen() {
               <Icon icon="arrow-right" color="white_muted" size={16} />
             </Stack>
           </Row>
-          <Row px="md" full justifyBetween itemsCenter>
+          <Row full justifyBetween itemsCenter mt="md">
             <Row itemsCenter>
               <Text color="white" size="xs">
-                Collateral Amount
+                Collateral
               </Text>
               {+collateralValue ? (
                 <Text
@@ -362,7 +366,7 @@ export default function LendingTanScreen() {
                   }}
                   size="xs"
                   color="white_muted">
-                  ${getTruncate(collateralValue, 2)}
+                  ~${getTruncate(collateralValue, 2)}
                 </Text>
               ) : null}
             </Row>
@@ -372,15 +376,20 @@ export default function LendingTanScreen() {
               <Text text={BigNumber(satBalance?.formatAmount || '0').toFormat()} color="white_muted" size="xs"></Text>
             </Row>
           </Row>
-          <Row
-            bg="card_bgColor"
-            style={{
-              border: `1px solid ${colors.white1}`
-            }}
-            px="lg"
-            itemsCenter
-            rounded
-            py="md">
+          <Stack
+            direction="row"
+            alignItems="center"
+            sx={{
+              bgcolor: colors.card_bgColor,
+              border: `1px solid ${colors.white20}`,
+              borderRadius: '10px',
+              marginTop: '4px',
+              p: '8px 10px',
+              transition: '.4s',
+              ':hover': {
+                border: `1px solid ${colors.white_4}`
+              }
+            }}>
             <CoinInput
               size={22}
               coin={{
@@ -398,8 +407,8 @@ export default function LendingTanScreen() {
               <Image src="/images/icons/btc.svg" height={24} width={24}></Image>
               <Text text={satBalance?.asset.symbol || 'BTC'} color="white" size="md"></Text>
             </Row>
-          </Row>
-          <Row px="md" full justifyBetween itemsCenter>
+          </Stack>
+          <Row full justifyBetween itemsCenter mt="medium">
             <Row itemsCenter>
               <Text color="white" size="xs">
                 I want to borrow
@@ -414,7 +423,7 @@ export default function LendingTanScreen() {
                   }}
                   size="xs"
                   color="white_muted">
-                  ${getTruncate(borrowValue, 2)}
+                  ~${getTruncate(borrowValue, 2)}
                 </Text>
               ) : null}
             </Row>
@@ -426,15 +435,20 @@ export default function LendingTanScreen() {
                 size="xs"></Text>
             </Row>
           </Row>
-          <Row
-            bg="card_bgColor"
-            style={{
-              border: `1px solid ${colors.white1}`
-            }}
-            px="lg"
-            itemsCenter
-            rounded
-            py="md">
+          <Stack
+            direction="row"
+            alignItems="center"
+            sx={{
+              bgcolor: colors.card_bgColor,
+              border: `1px solid ${colors.white20}`,
+              borderRadius: '10px',
+              marginTop: '4px',
+              p: '8px 10px',
+              transition: '.4s',
+              ':hover': {
+                border: `1px solid ${colors.white_4}`
+              }
+            }}>
             <CoinInput
               size={22}
               coin={{
@@ -466,8 +480,17 @@ export default function LendingTanScreen() {
                 }}>
                 Max
               </Typography>
-              <Row
-                itemsCenter
+              <Stack
+                direction="row"
+                alignItems="center"
+                gap="8px"
+                sx={{
+                  cursor: 'pointer',
+                  color: colors.white,
+                  ':hover': {
+                    color: colors.main
+                  }
+                }}
                 onClick={() => {
                   navigator('LendingSelectTokenScreen', {
                     poolsData,
@@ -475,27 +498,28 @@ export default function LendingTanScreen() {
                   });
                 }}>
                 <Image src={poolTokenBalance?.asset.logo} height={24} width={24}></Image>
-                <Text text={poolTokenBalance?.asset.symbol || 'USDC'} color="white" size="md"></Text>
+                <Typography
+                  sx={{
+                    fontSize: '16px'
+                  }}>
+                  {poolTokenBalance?.asset.symbol || 'USDC'}
+                </Typography>
                 <Icon icon="down" size={10}></Icon>
-              </Row>
+              </Stack>
             </Row>
-          </Row>
+          </Stack>
           <Box
             sx={{
               px: '12px',
               py: '14px',
-              my: '8px',
+              my: '16px',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               cursor: 'pointer',
               bgcolor: colors.card_bgColor,
               transition: '.4s',
-              borderRadius: '8px',
-              border: `1px solid ${colors.white1}`,
-              ':hover': {
-                bgcolor: colors.white1
-              }
+              borderRadius: '8px'
             }}
             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
               event.stopPropagation();
@@ -530,15 +554,7 @@ export default function LendingTanScreen() {
                     transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
                     transition: '.4s'
                   }}>
-                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M1 1L5 5L9 1"
-                      stroke={open ? colors.main : 'white'}
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <Icon icon="down" size={12}></Icon>
                 </Box>
               </Box>
             </Stack>
@@ -548,23 +564,23 @@ export default function LendingTanScreen() {
             style={{
               borderTop: `1px solid ${colors.white1}`
             }}
-            px="lg"
             py="lg">
             {data.map((item, index) => (
               <Fragment key={index}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Tooltip title={item.tip} arrow placement="top">
+                  <LightTooltip title={item.tip} arrow placement="top">
                     <Stack
                       direction="row"
                       sx={{
                         fontSize: '12px',
                         color: colors.grey12,
-                        textDecoration: 'dashed underline',
+                        textDecoration: 'dotted underline',
+                        textUnderlineOffset: '2px',
                         cursor: 'pointer'
                       }}>
                       {item.label}
                     </Stack>
-                  </Tooltip>
+                  </LightTooltip>
                   <Stack
                     direction="row"
                     sx={{

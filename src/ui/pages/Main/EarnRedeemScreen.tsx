@@ -107,6 +107,16 @@ export default function EarnRedeemScreen() {
               You have successfully redeemed, please check in your account.
             </Typography>
           </Stack>
+          <Button
+            preset="default"
+            style={{
+              marginTop: '32px'
+            }}
+            onClick={() => {
+              window.history.go(-1);
+            }}>
+            Close
+          </Button>
         </Content>
       ) : (
         <>
@@ -153,14 +163,19 @@ export default function EarnRedeemScreen() {
                     color="white_muted"></Text>
                 </Row>
               </Row>
-              <Row
-                bg="card_bgColor"
-                itemsCenter
-                rounded
-                px="lg"
-                py="md"
-                style={{
-                  border: `1px solid ${colors.white1}`
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{
+                  bgcolor: colors.card_bgColor,
+                  border: `1px solid ${colors.white20}`,
+                  borderRadius: '10px',
+                  marginTop: '4px',
+                  p: '8px 10px',
+                  transition: '.4s',
+                  ':hover': {
+                    border: `1px solid ${colors.white_4}`
+                  }
                 }}>
                 <CoinInput
                   size={22}
@@ -188,7 +203,7 @@ export default function EarnRedeemScreen() {
                 <Image src={stokenBalance?.asset.logo} height={28} width={28}></Image>
 
                 <Text text={stokenBalance?.asset.symbol} color="white" size="md"></Text>
-              </Row>
+              </Stack>
 
               <Column
                 bg="black"
@@ -203,7 +218,7 @@ export default function EarnRedeemScreen() {
                       fontSize: '12px',
                       color: colors.grey12
                     }}>
-                    {poolTokenBalance?.asset.symbol} / {stokenBalance?.asset.symbol}
+                    {stokenBalance?.asset.symbol}/{poolTokenBalance?.asset.symbol}
                   </Typography>
                   <Typography
                     sx={{
@@ -226,7 +241,7 @@ export default function EarnRedeemScreen() {
                       fontSize: '12px',
                       color: colors.white
                     }}>
-                    {new BigNumber(withdrawAmount || '0').times(exchangeRate).toFixed(6)}&nbsp;
+                    {new BigNumber(withdrawAmount || '0').div(exchangeRate).toFixed(6)}&nbsp;
                     <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
                       {poolTokenBalance?.asset.symbol}
                     </small>

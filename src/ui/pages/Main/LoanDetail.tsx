@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
@@ -30,8 +31,9 @@ export default function LoanDetailScreen() {
   const currentAccount = useCurrentAccount();
   const { state } = useLocation();
   const { loan_id } = state as { loan_id: string };
+  const [isHover, setIsHover] = useState(false);
 
-  const { sideChain, SERVICE_BASE_URL, SIDE_BTC_EXPLORER } = useEnvironment();
+  const { sideChain, SERVICE_BASE_URL, SIDE_BTC_EXPLORER, SIDE_STATION_URL } = useEnvironment();
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
@@ -117,29 +119,38 @@ export default function LoanDetailScreen() {
                 bgcolor: colors.card_bgColor,
                 borderRadius: '100px',
                 padding: '4px 10px',
-                p: {
-                  color: colors.grey12
-                },
-                ':hover': {
-                  color: colors.white
-                }
-              }}>
+                p: {}
+              }}
+              onMouseOver={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}>
               <Typography
                 sx={{
                   fontSize: '12px',
                   fontWeight: 500,
-                  maxWidth: '200px',
+                  color: colors.grey12
+                }}>
+                Loan ID: &nbsp;
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: isHover ? colors.main : colors.grey12,
+                  maxWidth: '160px',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
-                  transition: '.4s'
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  window.open(`${SIDE_STATION_URL}/loan/${loan.vault_address}`);
                 }}>
-                Loan ID: {loan.vault_address}
+                {loan.vault_address}
               </Typography>
-              <CopyIcon text={loan.vault_address} onlyIcon />
+              <CopyIcon text={loan.vault_address} onlyIcon defaultColor={isHover ? 'white' : 'search_icon'} />
             </Stack>
           </Row>
-          <Row full justifyBetween itemsCenter>
+          <Row full itemsCenter>
             <Text
               style={{
                 fontSize: '18px',
@@ -176,7 +187,12 @@ export default function LoanDetailScreen() {
               }}>
               Amount
             </Text>
-            <Row justifyEnd itemsCenter gap="md">
+            <Row
+              justifyEnd
+              itemsCenter
+              style={{
+                gap: '2px'
+              }}>
               <Text
                 style={{
                   fontSize: '12px',
@@ -294,10 +310,11 @@ export default function LoanDetailScreen() {
           <Box
             sx={{
               height: '1px',
-              backgroundColor: colors.black_dark
+              backgroundColor: colors.black_dark,
+              my: '16px'
             }}
           />
-          <Row full justifyBetween itemsCenter>
+          <Row full itemsCenter>
             <Text
               style={{
                 fontSize: '18px',
@@ -449,7 +466,8 @@ export default function LoanDetailScreen() {
           <Box
             sx={{
               height: '1px',
-              backgroundColor: colors.black_dark
+              backgroundColor: colors.black_dark,
+              my: '16px'
             }}
           />
           <Row full justifyBetween itemsCenter>
@@ -580,7 +598,8 @@ export default function LoanDetailScreen() {
           <Box
             sx={{
               height: '1px',
-              backgroundColor: colors.black_dark
+              backgroundColor: colors.black_dark,
+              my: '16px'
             }}
           />
         </Column>
