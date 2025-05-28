@@ -211,7 +211,7 @@ export default function EarnSupplyScreen() {
                       verticalAlign: 'middle',
                       whiteSpace: 'nowrap'
                     }}
-                    text={poolTokenBalance?.formatAmount || '0'}
+                    text={getTruncate(poolTokenBalance?.formatAmount || '0', poolTokenBalance?.asset.precision || 6)}
                     size="xxs"
                     color="white_muted"></Text>
                 </Row>
@@ -219,11 +219,12 @@ export default function EarnSupplyScreen() {
               <Stack
                 direction="row"
                 alignItems="center"
+                gap="8px"
                 sx={{
                   bgcolor: colors.card_bgColor,
                   border: `1px solid ${colors.white20}`,
                   borderRadius: '10px',
-                  marginTop: '4px',
+                  marginTop: '-8px',
                   p: '8px 10px',
                   transition: '.4s',
                   ':hover': {
@@ -262,7 +263,11 @@ export default function EarnSupplyScreen() {
                           color: colors.grey12,
                           textDecoration: 'dotted underline',
                           textUnderlineOffset: '2px',
-                          cursor: 'pointer'
+                          cursor: 'pointer',
+                          transition: '.4s',
+                          ':hover': {
+                            color: colors.white
+                          }
                         }}>
                         {item.label}
                       </Typography>

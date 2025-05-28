@@ -10,7 +10,7 @@ import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import useWithdraw from '@/ui/hooks/useWithdraw';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
-import { useLocationState } from '@/ui/utils';
+import { getTruncate, useLocationState } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
 import { Stack, Typography } from '@mui/material';
 
@@ -158,7 +158,7 @@ export default function EarnRedeemScreen() {
                       verticalAlign: 'middle',
                       whiteSpace: 'nowrap'
                     }}
-                    text={stokenBalance?.formatAmount || '0'}
+                    text={getTruncate(stokenBalance?.formatAmount || '0', stokenBalance?.asset.precision || 6)}
                     size="xxs"
                     color="white_muted"></Text>
                 </Row>
@@ -166,11 +166,12 @@ export default function EarnRedeemScreen() {
               <Stack
                 direction="row"
                 alignItems="center"
+                gap="8px"
                 sx={{
                   bgcolor: colors.card_bgColor,
                   border: `1px solid ${colors.white20}`,
                   borderRadius: '10px',
-                  marginTop: '4px',
+                  marginTop: '-8px',
                   p: '8px 10px',
                   transition: '.4s',
                   ':hover': {
@@ -210,7 +211,6 @@ export default function EarnRedeemScreen() {
                 style={{
                   borderRadius: '10px'
                 }}
-                px="lg"
                 py="lg">
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography

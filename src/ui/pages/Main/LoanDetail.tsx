@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js';
-import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
@@ -31,7 +30,6 @@ export default function LoanDetailScreen() {
   const currentAccount = useCurrentAccount();
   const { state } = useLocation();
   const { loan_id } = state as { loan_id: string };
-  const [isHover, setIsHover] = useState(false);
 
   const { sideChain, SERVICE_BASE_URL, SIDE_BTC_EXPLORER, SIDE_STATION_URL } = useEnvironment();
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
@@ -120,9 +118,7 @@ export default function LoanDetailScreen() {
                 borderRadius: '100px',
                 padding: '4px 10px',
                 p: {}
-              }}
-              onMouseOver={() => setIsHover(true)}
-              onMouseLeave={() => setIsHover(false)}>
+              }}>
               <Typography
                 sx={{
                   fontSize: '12px',
@@ -135,19 +131,23 @@ export default function LoanDetailScreen() {
                 sx={{
                   fontSize: '12px',
                   fontWeight: 500,
-                  color: isHover ? colors.main : colors.grey12,
+                  color: colors.grey12,
                   maxWidth: '160px',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  transition: '.4s',
+                  ':hover': {
+                    color: colors.main
+                  }
                 }}
                 onClick={() => {
                   window.open(`${SIDE_STATION_URL}/loan/${loan.vault_address}`);
                 }}>
                 {loan.vault_address}
               </Typography>
-              <CopyIcon text={loan.vault_address} onlyIcon defaultColor={isHover ? 'white' : 'search_icon'} />
+              <CopyIcon text={loan.vault_address} onlyIcon size={12} />
             </Stack>
           </Row>
           <Row full itemsCenter>
@@ -244,7 +244,7 @@ export default function LoanDetailScreen() {
               Deposit Tx
             </Text>
             <Box>
-              {loan.authorizations[0] &&
+              {loan.authorizations[0] ? (
                 (loan.authorizations[0]?.deposit_txs || [])?.map((tx, index) => (
                   <Typography
                     key={index}
@@ -262,7 +262,10 @@ export default function LoanDetailScreen() {
                     }}>
                     {formatAddress(tx, 6)}
                   </Typography>
-                ))}
+                ))
+              ) : (
+                <Typography sx={{ fontSize: '12px', fontWeight: 500, color: colors.white }}>-</Typography>
+              )}
             </Box>
           </Row>
           <Row full justifyBetween itemsCenter>
@@ -287,7 +290,7 @@ export default function LoanDetailScreen() {
                 if (loan.status === 'Liquidated') return;
                 window.open(`${SIDE_BTC_EXPLORER}/tx/${loanDetailCex?.returnBtcTxhash}`);
               }}>
-              {loan.status !== 'Liquidated' ? formatAddress(loanDetailCex?.returnBtcTxhash || '', 6) : ''}
+              {loan.status !== 'Liquidated' ? formatAddress(loanDetailCex?.returnBtcTxhash || '', 6) : '-'}
             </Typography>
           </Row>
           <Row full justifyBetween itemsCenter>
@@ -584,7 +587,7 @@ export default function LoanDetailScreen() {
                 fontSize: '12px',
                 color: colors.grey12
               }}>
-              Liquidation Id
+              Liquidation ID
             </Text>
             <Text
               style={{
@@ -592,7 +595,7 @@ export default function LoanDetailScreen() {
                 fontWeight: 500,
                 color: colors.white
               }}>
-              {liquidation?.liquidation.id}
+              {liquidation?.liquidation.id || '-'}
             </Text>
           </Row>
           <Box

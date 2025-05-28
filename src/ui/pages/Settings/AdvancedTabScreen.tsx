@@ -26,7 +26,7 @@ interface Setting {
 const AdvancedList: Setting[] = [
   {
     label: 'Protection',
-    value: 'for Bitcion',
+    value: 'for Bitcoin',
     desc: '',
     action: 'protection',
     route: '/settings/protection',
@@ -143,8 +143,7 @@ export default function AdvancedTabScreen() {
                   }}
                   style={{
                     backgroundColor: 'transparent'
-                  }}
-                >
+                  }}>
                   <Row full justifyBetween>
                     <Text text={item.label || item.desc} preset="regular-bold" />
 

@@ -202,7 +202,14 @@ export default function LoanDepositScreen() {
               borderRadius: '6px',
               overflow: 'hidden'
             }}>
-            <QRCodeSVG value={toInfo.address} width={140} height={140} fgColor={'#000'} />
+            <QRCodeSVG
+              value={toInfo.address}
+              includeMargin
+              width={80}
+              height={80}
+              bgColor={colors.white}
+              fgColor={colors.black}
+            />
           </Box>
 
           <Stack
@@ -210,7 +217,7 @@ export default function LoanDepositScreen() {
             sx={{
               flex: 1,
               overflow: 'hidden',
-              mt: '32px'
+              mt: '12px'
             }}>
             <Box>
               <Typography
@@ -305,7 +312,7 @@ export default function LoanDepositScreen() {
             </Box>
           </Stack>
 
-          <Stack direction="row" justifyContent="center" alignItems="center" gap="4px" mt="32px" mb="8px">
+          <Stack direction="row" justifyContent="center" alignItems="center" gap="4px" mt="20px">
             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M5.754 5.2C5.89506 4.799 6.17349 4.46086 6.53997 4.24548C6.90645 4.0301 7.33734 3.95136 7.75631 4.02323C8.17527 4.09509 8.55529 4.31291 8.82905 4.63812C9.1028 4.96332 9.25263 5.37491 9.252 5.8C9.252 7 7.452 7.6 7.452 7.6M7.5 10H7.506M13.5 7C13.5 10.3137 10.8137 13 7.5 13C4.18629 13 1.5 10.3137 1.5 7C1.5 3.68629 4.18629 1 7.5 1C10.8137 1 13.5 3.68629 13.5 7Z"
@@ -414,7 +421,7 @@ export default function LoanDepositScreen() {
           <Row
             fullX
             style={{
-              marginTop: '16px'
+              marginTop: '12px'
             }}>
             <Button
               onClick={() => {

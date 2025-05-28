@@ -206,7 +206,11 @@ export default function LoanAuthorizeScreen() {
                           color: colors.grey12,
                           textDecoration: 'dotted underline',
                           textUnderlineOffset: '2px',
-                          cursor: 'pointer'
+                          cursor: 'pointer',
+                          transition: '.4s',
+                          ':hover': {
+                            color: colors.white
+                          }
                         }}>
                         {item.label}
                       </Typography>
@@ -227,22 +231,24 @@ export default function LoanAuthorizeScreen() {
                   </Stack>
                 ))}
 
-                <LightTooltip title={'xxx'} arrow placement="top">
-                  <Stack
-                    direction="row"
-                    justifyContent="start"
-                    alignItems="center"
-                    gap="4px"
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.grey12,
-                      textDecoration: 'dotted underline',
-                      textUnderlineOffset: '2px',
-                      cursor: 'pointer'
-                    }}>
-                    Collateral Refund Address
-                  </Stack>
-                </LightTooltip>
+                <Stack direction="row">
+                  <LightTooltip title={'xxx'} arrow placement="top">
+                    <Typography
+                      sx={{
+                        fontSize: '12px',
+                        color: colors.grey12,
+                        textDecoration: 'dotted underline',
+                        textUnderlineOffset: '2px',
+                        cursor: 'pointer',
+                        transition: '.4s',
+                        ':hover': {
+                          color: colors.white
+                        }
+                      }}>
+                      Collateral Refund Address
+                    </Typography>
+                  </LightTooltip>
+                </Stack>
                 <Stack
                   direction="row"
                   justifyContent="space-between"
@@ -325,9 +331,10 @@ export default function LoanAuthorizeScreen() {
                         cursor: 'pointer'
                       }}
                       onClick={() => {
-                        setRefundAddress('');
                         setIsEditRefundAddress(true);
-                        inputRef.current?.focus();
+                        setTimeout(() => {
+                          inputRef.current?.focus();
+                        }, 100);
                       }}>
                       <path
                         d="M9.16797 3.33332L3.33464 3.33332C2.89261 3.33332 2.46868 3.50891 2.15612 3.82147C1.84356 4.13403 1.66797 4.55796 1.66797 4.99999L1.66797 16.6667C1.66797 17.1087 1.84356 17.5326 2.15612 17.8452C2.46868 18.1577 2.89261 18.3333 3.33464 18.3333L15.0013 18.3333C15.4433 18.3333 15.8673 18.1577 16.1798 17.8452C16.4924 17.5326 16.668 17.1087 16.668 16.6667L16.668 10.8333M15.418 2.08332C15.7495 1.7518 16.1991 1.56555 16.668 1.56555C17.1368 1.56555 17.5864 1.7518 17.918 2.08332C18.2495 2.41484 18.4357 2.86448 18.4357 3.33332C18.4357 3.80216 18.2495 4.2518 17.918 4.58332L10.0013 12.5L6.66797 13.3333L7.5013 9.99999L15.418 2.08332Z"

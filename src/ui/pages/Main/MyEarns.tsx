@@ -75,7 +75,7 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
   const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: item.baseData.id || '' });
   const { depositedAmount } = useMemo(() => {
     const depositedAmount = new BigNumber(stokenBalance?.formatAmount || '0')
-      .multipliedBy(exchangeRate || 1)
+      .div(exchangeRate || 1)
       .toFixed(item.token.asset.precision);
     const expectedInterestDay = new BigNumber(item.token.formatAmount)
       .multipliedBy(item.supplyApy)

@@ -22,6 +22,6 @@ export function removeStartZero(value: string) {
 }
 
 export const formatAddress = (address: string, len: number) => {
-  if (!address) return '';
+  if (!address) return '-';
   return address?.slice(0, 6) + '...' + address?.slice(-len);
 };

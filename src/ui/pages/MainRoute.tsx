@@ -6,7 +6,6 @@ import { LoadingOutlined } from '@ant-design/icons';
 
 import { Content, Icon } from '../components';
 import BridgeSelectTokenScreen from '../components/Bridge/BridgeSelectToken';
-import LendingSelectTokenScreen from '../components/Lending/LendingSelectToken';
 import { accountActions } from '../state/accounts/reducer';
 import { environmentActions } from '../state/environment/reducer';
 import { useIsReady, useIsUnlocked } from '../state/global/hooks';
@@ -42,6 +41,7 @@ import EarnSupplyScreen from './Main/EarnSupplyScreen';
 import EarnTabScreen from './Main/EarnTabScreen';
 import ExploreTabScreen from './Main/ExploreTabScreen';
 import LendingPoolDetailScreen from './Main/LendingPoolDetail';
+import LendingSelectTokenScreen from './Main/LendingSelectToken';
 import LendingTabScreen from './Main/LendingTabScreen';
 import LoanAuthorizeScreen from './Main/LoanAuthorizeScreen';
 import LoanDepositScreen from './Main/LoanDepositScreen';

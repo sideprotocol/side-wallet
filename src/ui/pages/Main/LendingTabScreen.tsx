@@ -27,6 +27,7 @@ export default function LendingTanScreen() {
   const currentAccount = useCurrentAccount();
 
   const [collateralAmount, setcollateralAmount] = useState('');
+  const [isHover, setIsHover] = useState(false);
 
   const { poolTokenDenom, maturity } = useLendingState();
 
@@ -49,14 +50,13 @@ export default function LendingTanScreen() {
   const { data: poolsData } = useGetPoolsData();
 
   const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
+  const requestFeeToken = balanceList.find((item) => item.denom === poolData?.baseData.config.request_fee.denom);
 
   useEffect(() => {
     if (!poolData) return;
 
     dispatch(LendingActions.update({ maturity: poolData?.baseData.config.tranches[0].maturity }));
   }, [poolData]);
-
-  const requestFeeToken = balanceList.find((item) => item.denom === poolData?.baseData.config.request_fee.denom);
 
   const collateralValue = useMemo(() => {
     if (!collateralAmount || !satBalance) return '0';
@@ -287,7 +287,8 @@ export default function LendingTanScreen() {
       !+collateralAmount ||
       !+borrowAmount ||
       !liquidationEvent ||
-      (healthFactor !== '-' && +healthFactor < 1.2) ||
+      // (healthFactor !== '-' && +healthFactor < 1.2) ||
+      healthFactor === '-' ||
       +borrowAmount <
         +toReadableAmount(poolData?.baseData.config.origination_fee || '0', poolData?.token.asset.exponent || '6') ||
       dlcEvent?.event.has_triggered
@@ -396,8 +397,10 @@ export default function LendingTanScreen() {
                 amount: collateralAmount,
                 denom: 'sat'
               }}
+              max={satBalance?.formatAmount || '0'}
               onChange={(value) => {
                 setcollateralAmount(value);
+                setBorrowAmount('');
               }}
             />
             <Row
@@ -455,6 +458,7 @@ export default function LendingTanScreen() {
                 amount: borrowAmount,
                 denom: poolTokenBalance?.denom || 'uusdc'
               }}
+              max={borrowMaxAmount || '0'}
               onChange={(value) => {
                 setBorrowAmount(value);
               }}
@@ -467,10 +471,14 @@ export default function LendingTanScreen() {
               }}>
               <Typography
                 sx={{
-                  color: colors.main,
+                  color: colors.grey12,
                   fontSize: '12px',
                   fontWeight: 600,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  transition: '.4s',
+                  ':hover': {
+                    color: colors.white
+                  }
                 }}
                 onClick={() => {
                   if (!+borrowMaxAmount) {
@@ -485,26 +493,24 @@ export default function LendingTanScreen() {
                 alignItems="center"
                 gap="8px"
                 sx={{
-                  cursor: 'pointer',
-                  color: colors.white,
-                  ':hover': {
-                    color: colors.main
-                  }
+                  cursor: 'pointer'
                 }}
+                onMouseOver={() => setIsHover(true)}
+                onMouseLeave={() => setIsHover(false)}
                 onClick={() => {
                   navigator('LendingSelectTokenScreen', {
-                    poolsData,
-                    type: ''
+                    poolsData
                   });
                 }}>
                 <Image src={poolTokenBalance?.asset.logo} height={24} width={24}></Image>
                 <Typography
                   sx={{
-                    fontSize: '16px'
+                    fontSize: '16px',
+                    color: isHover ? colors.main : colors.white
                   }}>
                   {poolTokenBalance?.asset.symbol || 'USDC'}
                 </Typography>
-                <Icon icon="down" size={10}></Icon>
+                <Icon icon="down" size={10} color={isHover ? 'main' : 'white'}></Icon>
               </Stack>
             </Row>
           </Stack>
@@ -576,7 +582,11 @@ export default function LendingTanScreen() {
                         color: colors.grey12,
                         textDecoration: 'dotted underline',
                         textUnderlineOffset: '2px',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        transition: '.4s',
+                        ':hover': {
+                          color: colors.white
+                        }
                       }}>
                       {item.label}
                     </Stack>
@@ -613,7 +623,11 @@ export default function LendingTanScreen() {
               disabled={isDisabled}
               loading={loading}
               preset="primary"
-              text="Request Loan"
+              text={
+                +(requestFeeToken?.amount || '0') < +(poolData?.baseData.config.request_fee.amount || '0')
+                  ? 'No enough balance'
+                  : 'Request Loan'
+              }
               full></Button>
           </Row>
         </Content>
@@ -632,10 +646,12 @@ export default function LendingTanScreen() {
         }}
         sx={{
           '.MuiPaper-root': {
+            mt: '4px',
             p: '12px',
             backgroundColor: colors.card_bgColor,
             borderRadius: '10px',
-            width: '100%'
+            width: '100%',
+            border: `1px solid ${colors.white1}`
           }
         }}
         anchorEl={anchorEl}

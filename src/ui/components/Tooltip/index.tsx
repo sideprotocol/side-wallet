@@ -5,12 +5,12 @@ export const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: colors.green_success,
-    color: colors.white,
+    backgroundColor: colors.white,
+    color: colors.black,
     boxShadow: theme.shadows[1],
     fontSize: 11,
     '& .MuiTooltip-arrow': {
-      color: colors.green_success
+      color: colors.white
     }
   }
 }));

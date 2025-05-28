@@ -10,12 +10,14 @@ export function CopyIcon({
   text,
   onlyIcon = false,
   style,
-  defaultColor
+  defaultColor,
+  size = 20
 }: {
   text: string;
   onlyIcon?: boolean;
   style?: React.CSSProperties;
   defaultColor?: IconProps['color'];
+  size?: number;
 }) {
   const [isClickCopy, setIsClickCopy] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -47,7 +49,7 @@ export function CopyIcon({
       <Icon
         icon={isClickCopy ? 'check-circle-broken' : 'copy2'}
         color={isClickCopy ? 'primary' : isHovered ? 'white' : defaultColor || 'search_icon'}
-        size={20}
+        size={size}
       />
       {!onlyIcon && (
         <Text

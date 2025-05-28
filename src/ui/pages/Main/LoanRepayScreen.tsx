@@ -42,7 +42,7 @@ export default function RepayLoanScreen() {
   });
   const borrowToken = sideBalanceList.find((o) => o.denom === loan?.borrow_amount.denom);
   const collateralToken = bitcoinBalanceList.find((item) => item.denom === 'sat');
-  const { repay, loading, tx } = useRepay();
+  const { repay, tx, loading } = useRepay();
   if (!loan) return null;
 
   const noEnabled = new BigNumber(dayjs().unix()).minus(dayjs(loan.create_at).unix()).lt(loan.min_maturity);
@@ -98,6 +98,23 @@ export default function RepayLoanScreen() {
               collateralToken?.asset.precision || 6
             )}
           </Typography>
+          <Image
+            src={collateralToken?.asset.logo}
+            size={16}
+            style={{
+              width: '16px',
+              height: '16px',
+              borderRadius: '50%'
+            }}
+          />
+          <Typography
+            sx={{
+              fontSize: '14px',
+              fontWeight: 500,
+              color: colors.grey12
+            }}>
+            {collateralToken?.asset.symbol}
+          </Typography>
         </>
       )
     }
@@ -105,12 +122,7 @@ export default function RepayLoanScreen() {
 
   return (
     <Layout>
-      <Header
-        onBack={() => {
-          window.history.go(-1);
-        }}
-        title="Repay Loan"
-      />
+      <Header title="Repay Loan" />
       <Content
         style={{
           padding: '0 16px 70px',
@@ -274,7 +286,9 @@ export default function RepayLoanScreen() {
                     </Stack>
                     <Stack
                       direction="row"
+                      justifyContent="flex-end"
                       alignItems="center"
+                      gap="8px"
                       sx={{
                         fontSize: '14px',
                         color: colors.white
@@ -324,6 +338,7 @@ export default function RepayLoanScreen() {
           ) : (
             <Button
               preset="primary"
+              disabled={loading}
               onClick={() => {
                 repay({ loan_id: loan.vault_address });
               }}>

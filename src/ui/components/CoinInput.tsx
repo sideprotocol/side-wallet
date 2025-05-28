@@ -1,4 +1,6 @@
+import BigNumber from 'bignumber.js';
 import { NumericFormat } from 'react-number-format';
+import { SyntheticInputEvent } from 'react-number-format/types/types';
 
 import { Coin } from '@cosmjs/stargate';
 
@@ -8,10 +10,10 @@ export type CoinInputProps = {
   readOnly?: boolean;
   size?: number;
   color?: string;
-  onInput?: () => void;
   decimalScale?: number;
+  max?: string;
 };
-export function CoinInput({ coin, onChange, readOnly, onInput, size, color, decimalScale }: CoinInputProps) {
+export function CoinInput({ coin, onChange, readOnly, size, color, decimalScale, max }: CoinInputProps) {
   return (
     <NumericFormat
       type="text"
@@ -30,10 +32,17 @@ export function CoinInput({ coin, onChange, readOnly, onInput, size, color, deci
         resize: 'none'
       }}
       decimalScale={decimalScale || 6}
-      onInput={() => onInput?.()}
       valueIsNumericString
       thousandSeparator
       placeholder={'0'}
+      onInput={(event: SyntheticInputEvent) => {
+        if (max) {
+          const value = event.target.value.replace(/,/g, '');
+          if (new BigNumber(value).gt(max)) {
+            event.target.value = max;
+          }
+        }
+      }}
       onValueChange={({ value }) => {
         const targetValue = value;
         if (targetValue.startsWith('.')) {
