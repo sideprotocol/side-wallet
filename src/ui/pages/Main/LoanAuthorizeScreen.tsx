@@ -154,7 +154,7 @@ export default function LoanAuthorizeScreen() {
           <Button
             preset="default"
             onClick={() => {
-              window.history.go(-1);
+              window.history.go(-3);
             }}>
             Close
           </Button>

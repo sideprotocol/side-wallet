@@ -113,7 +113,6 @@ export default function LoanDepositScreen() {
   useEffect(() => {
     setError('');
     setDisabled(true);
-    console.log({ toSatoshis, toInfo, feeRate, bitcoinTx });
 
     if (!isValidAddress(toInfo.address)) {
       return;
