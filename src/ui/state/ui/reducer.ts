@@ -119,6 +119,7 @@ const slice = createSlice({
         };
       }
     ) {
+      console.log('updateTxCreateScreen', action.payload);
       if (action.payload.toInfo !== undefined) {
         state.uiTxCreateScreen.toInfo = action.payload.toInfo;
       }

@@ -4,7 +4,6 @@ import { forwardRef, useMemo, useState } from 'react';
 import { KEYRING_TYPE } from '@/shared/constant';
 import { Account } from '@/shared/types';
 import { Button, Column, Icon, Image, Input, Row, Text } from '@/ui/components';
-import { useTools } from '@/ui/components/ActionComponent';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { accountActions } from '@/ui/state/accounts/reducer';
@@ -32,11 +31,8 @@ export function MyItem({ account, autoNav }: MyItemProps, ref) {
   const wallet = useWallet();
   const dispatch = useAppDispatch();
   const keyring = useCurrentKeyring();
-  const tools = useTools();
   const [isHovered, setIsHovered] = useState(false);
   const [isClickCopy, setIsClickCopy] = useState(false);
-  console.log('account: ', account);
-  // debugger;
   if (!account) {
     return <div />;
   }

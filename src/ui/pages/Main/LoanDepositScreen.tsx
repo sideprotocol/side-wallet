@@ -23,20 +23,22 @@ import {
   useSafeBalance,
   useSpendUnavailableUtxos
 } from '@/ui/state/transactions/hooks';
-import { useUiTxCreateScreen } from '@/ui/state/ui/hooks';
+import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { colors } from '@/ui/theme/colors';
-import { amountToSatoshis, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
+import { amountToSatoshis, formatUnitAmount, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
 import { Box, Stack, Typography } from '@mui/material';
 
 interface LoanDepositLocationState {
   borrowAmount: string;
   collateralAmount: string;
   liquidationEvent: LiquidationEvent;
+  loanId: string;
 }
 
 export default function LoanDepositScreen() {
   const { SIDE_BTC_EXPLORER } = useEnvironment();
-  const { borrowAmount, collateralAmount, liquidationEvent } = useLocationState<LoanDepositLocationState>();
+  const setUiState = useUpdateUiTxCreateScreen();
+  const { borrowAmount, collateralAmount, liquidationEvent, loanId } = useLocationState<LoanDepositLocationState>();
 
   const safeBalance = useSafeBalance();
   const navigate = useNavigate();
@@ -52,12 +54,18 @@ export default function LoanDepositScreen() {
 
   const [error, setError] = useState('');
   const fetchUtxos = useFetchUtxosCallback();
-
   const [disabled, setDisabled] = useState(true);
-
   const tools = useTools();
+
   useEffect(() => {
     tools.showLoading(true);
+    setUiState({
+      toInfo: {
+        address: loanId,
+        domain: ''
+      },
+      inputAmount: formatUnitAmount(collateralAmount, 8)
+    });
     fetchUtxos().finally(() => {
       tools.showLoading(false);
     });
@@ -65,19 +73,12 @@ export default function LoanDepositScreen() {
 
   const prepareSendBTC = usePrepareSendBTCCallback();
 
-  const [isClickCopy, setIsClickCopy] = useState(false);
-
   const [errorMsg, setErrorMsg] = useState('');
-
-  const [isClickCopyAmount, setIsClickCopyAmount] = useState(false);
-
   const [temporaryLoading, setTemporaryLoading] = useState(false);
 
   const { refetch, depositTxs } = useGetDepositTx(toInfo.address, collateralAmount);
 
   useEffect(() => {
-    console.log({ depositTxs });
-
     if (depositTxs?.length) {
       navigate('LoanAuthorizeScreen', {
         loanId: toInfo.address,
@@ -112,6 +113,7 @@ export default function LoanDepositScreen() {
   useEffect(() => {
     setError('');
     setDisabled(true);
+    console.log({ toSatoshis, toInfo, feeRate, bitcoinTx });
 
     if (!isValidAddress(toInfo.address)) {
       return;
@@ -139,6 +141,7 @@ export default function LoanDepositScreen() {
       feeRate == bitcoinTx.feeRate &&
       enableRBF == bitcoinTx.enableRBF
     ) {
+      setError('');
       //Prevent repeated triggering caused by setAmount
       setDisabled(false);
       return;
@@ -200,7 +203,7 @@ export default function LoanDepositScreen() {
               borderRadius: '6px',
               overflow: 'hidden'
             }}>
-            <QRCodeSVG value={toInfo.address} marginSize={1} width={140} height={140} fgColor={'#000'} />
+            <QRCodeSVG value={toInfo.address} width={140} height={140} fgColor={'#000'} />
           </Box>
 
           <Stack
@@ -432,6 +435,7 @@ export default function LoanDepositScreen() {
               text="Deposit"
               preset="primary"></Button>
           </Row>
+          {error && <Text text={error} color={'red'} size="xs" textCenter></Text>}
         </Column>
       </Content>
       <Footer px="zero" py="zero">

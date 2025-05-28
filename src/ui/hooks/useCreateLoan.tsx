@@ -15,7 +15,6 @@ import { GetTxByHashResponse } from '../services/tx/types';
 import { useCurrentAccount } from '../state/accounts/hooks';
 import { useEnvironment } from '../state/environment/hooks';
 import { useUpdateUiTxCreateScreen } from '../state/ui/hooks';
-import { toReadableAmount } from '../utils/formatter';
 import { toXOnly } from '../wallet-sdk/utils';
 
 export default function useCreateLoan() {
@@ -108,20 +107,11 @@ export default function useCreateLoan() {
           </ToastView>
         ));
 
-        // navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
-
-        setUiState({
-          toInfo: {
-            address: loanId,
-            domain: ''
-          },
-          inputAmount: toReadableAmount(btcUnitAmount, 8)
-        });
-
         navigate('LoanDepositScreen', {
           borrowAmount: borrowAmount.amount,
           collateralAmount: btcUnitAmount,
-          liquidationEvent
+          liquidationEvent,
+          loanId
         });
       } else {
         toast.custom((t) => (

@@ -612,7 +612,8 @@ export default function LoanDetailScreen() {
             navigate('LoanDepositScreen', {
               borrowAmount: loan.borrow_amount.amount,
               collateralAmount: loan.collateral_amount || '0',
-              liquidationEvent
+              liquidationEvent,
+              loanId: loan.vault_address
             });
           }}>
           Deposit
