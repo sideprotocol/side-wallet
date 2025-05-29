@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 
 import { KEYRING_TYPE } from '@/shared/constant';
-import { Button, Column, Content, Footer, Header, Icon, Image, Layout, LightTooltip, Row } from '@/ui/components';
+import { Button, Column, Content, Footer, Header, Image, Layout, LightTooltip, Row } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
@@ -34,17 +34,23 @@ interface DetailRowItem {
 function DetailRow({ text, value, tooltip }: DetailRowItem) {
   return (
     <div className="flex text-sm items-center justify-between">
-      <span className="flex  flex-shrink-0 items-center gap-1 text-[#7D7D7D]">
-        {text}
-
-        {tooltip && (
-          <LightTooltip arrow title={tooltip} placement="top">
-            <span className="cursor-pointer">
-              <Icon icon="circle-info" size={14} color="grey12"></Icon>
-            </span>
-          </LightTooltip>
-        )}
-      </span>
+      <LightTooltip title={tooltip} arrow placement="top">
+        <Typography
+          sx={{
+            fontSize: '12px',
+            color: colors.grey12,
+            textDecoration: 'dotted underline',
+            textUnderlineOffset: '2px',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            transition: '.4s',
+            ':hover': {
+              color: colors.white
+            }
+          }}>
+          {text}
+        </Typography>
+      </LightTooltip>
       <span className={'flex  w-full justify-end items-center gap-1'}>{value}</span>
     </div>
   );

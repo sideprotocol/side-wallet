@@ -125,7 +125,7 @@ export default function LoanDetailScreen() {
                   fontWeight: 500,
                   color: colors.grey12
                 }}>
-                Loan ID: &nbsp;
+                Loan ID:&nbsp;
               </Typography>
               <Typography
                 sx={{

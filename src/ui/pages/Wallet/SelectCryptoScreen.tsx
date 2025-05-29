@@ -12,7 +12,7 @@ import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useResetUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { colors } from '@/ui/theme/colors';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -61,10 +61,13 @@ function BitAndRuneCrypto({ searchTerm }) {
 
   return (
     <>
-      {balanceList.map((token, index) => {
+      {balanceList.map((token) => {
         return (
-          <Row
-            classname={'bg-item-hover'}
+          <Stack
+            key={token.asset.symbol}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
             onClick={() => {
               if (type === 'receive') {
                 navigate('SelectAddressScreen', { ...state, token });
@@ -73,17 +76,18 @@ function BitAndRuneCrypto({ searchTerm }) {
                 navigate('TxCreateScreen', { ...state, token });
               }
             }}
-            full
-            key={token?.asset.symbol + index}
-            justifyBetween
-            style={{
-              cursor: 'pointer',
-              margin: '0 16px',
+            sx={{
               padding: '10px 16px',
-              height: '44px'
+              cursor: 'pointer',
+              backgroundColor: colors.card_bgColor,
+              borderRadius: '8px',
+              transition: '.4s',
+              ':hover': {
+                backgroundColor: colors.black_dark
+              }
             }}>
             <BtcItem token={token} />
-          </Row>
+          </Stack>
         );
       })}
     </>
@@ -163,8 +167,11 @@ function SideCrypto({ searchTerm }) {
     <>
       {balanceList.map((token) => {
         return (
-          <Row
-            classname={'bg-item-hover'}
+          <Stack
+            key={token.asset.symbol}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
             onClick={() => {
               if (type === 'receive') {
                 navigate('SelectAddressScreen', { chain, token });
@@ -173,17 +180,18 @@ function SideCrypto({ searchTerm }) {
                 navigate('TxCreateScreen', { chain, token });
               }
             }}
-            full
-            key={token.asset.symbol + token.asset.name}
-            justifyBetween
-            style={{
-              margin: '0 16px',
-              cursor: 'pointer',
+            sx={{
               padding: '10px 16px',
-              height: '44px'
+              cursor: 'pointer',
+              backgroundColor: colors.card_bgColor,
+              borderRadius: '8px',
+              transition: '.4s',
+              ':hover': {
+                backgroundColor: colors.black_dark
+              }
             }}>
             <SideCryptoItem token={token} />
-          </Row>
+          </Stack>
         );
       })}
     </>
@@ -210,15 +218,9 @@ export default function SelecCryptoScreen() {
           padding: 0,
           marginTop: '16px'
         }}>
-        <Column
-          style={{
-            padding: '0 16px'
-            // margin: '0 16px'
-          }}>
+        <Column px="xl" gap="md">
           <SearchInput value={searchTerm} onChange={setSearchTerm} />
-        </Column>
 
-        <Column>
           {chain === CHAINS_ENUM.SIDE ? (
             <SideCrypto searchTerm={searchTerm} />
           ) : (

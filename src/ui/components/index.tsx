@@ -17,6 +17,7 @@ import { LongPress } from './LongPress';
 import { Mask } from './Mask';
 import { Row } from './Row';
 import { StepBar } from './StepBar';
+import { SuccessAnimation } from './SuccessAnimation';
 import { Text } from './Text';
 import { TextArea } from './TextArea';
 import { LightTooltip } from './Tooltip';
@@ -42,6 +43,7 @@ export {
   Mask,
   Row,
   StepBar,
+  SuccessAnimation,
   Text,
   TextArea
 };

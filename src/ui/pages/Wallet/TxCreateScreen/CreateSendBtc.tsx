@@ -1,10 +1,9 @@
-import { Tooltip } from 'antd';
 import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
 
 import { COIN_DUST } from '@/shared/constant';
 import { BalanceItem, RawTxInfo } from '@/shared/types';
-import { Button, Column, Content, Header, Icon, Image, Input, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Header, Image, Input, Layout, LightTooltip, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import { RBFBar } from '@/ui/components/RBFBar';
@@ -21,8 +20,8 @@ import {
 } from '@/ui/state/transactions/hooks';
 import { useUiTxCreateScreen, useUpdateUiTxCreateScreen } from '@/ui/state/ui/hooks';
 import { colors } from '@/ui/theme/colors';
-import { fontSizes } from '@/ui/theme/font';
 import { amountToSatoshis, isValidAddress, satoshisToAmount, useLocationState } from '@/ui/utils';
+import { Typography } from '@mui/material';
 
 interface LocationState {
   base: string;
@@ -220,8 +219,14 @@ export default function CreateSendBtc() {
           />
           {error && <Text text={error} color="error" />}
 
-          <Row justifyBetween>
-            <Text text="Available" color="primary" />
+          <Row justifyBetween itemsCenter>
+            <Typography
+              sx={{
+                fontSize: '12px',
+                color: colors.main
+              }}>
+              Available
+            </Typography>
             {spendUnavailableSatoshis > 0 && (
               <Row>
                 <Text text={`${BigNumber(spendUnavailableAmount).toFormat()}`} size="sm" style={{ color: '#65D5F0' }} />
@@ -236,21 +241,28 @@ export default function CreateSendBtc() {
             </Row>
           </Row>
 
-          <Row justifyBetween>
-            <Tooltip
+          <Row justifyBetween itemsCenter>
+            <LightTooltip
               title={
                 'Includes Inscriptions, ARC20, Runes, and unconfirmed UTXO assets. Future versions will support spending these assets.'
               }
-              overlayStyle={{
-                fontSize: fontSizes.xs
-              }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Row itemsCenter>
-                  <Text text="Unavailable" color="textDim" />
-                  <Icon icon="circle-question" color="textDim" />
-                </Row>
-              </div>
-            </Tooltip>
+              arrow
+              placement="top">
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.grey12,
+                  textDecoration: 'dotted underline',
+                  textUnderlineOffset: '2px',
+                  cursor: 'pointer',
+                  transition: '.4s',
+                  ':hover': {
+                    color: colors.white
+                  }
+                }}>
+                Unavailable
+              </Typography>
+            </LightTooltip>
 
             {spendUnavailableSatoshis > 0 ? (
               <Row>
@@ -265,8 +277,14 @@ export default function CreateSendBtc() {
             )}
           </Row>
 
-          <Row justifyBetween>
-            <Text text="Total" color="textDim" />
+          <Row justifyBetween itemsCenter>
+            <Typography
+              sx={{
+                fontSize: '12px',
+                color: colors.grey12
+              }}>
+              Total
+            </Typography>
             <Row>
               <Text text={`${BigNumber(totalAmount).toFormat()}`} size="sm" color="white" />
               <Text text={token.asset.symbol} size="sm" color="textDim" />
@@ -275,7 +293,13 @@ export default function CreateSendBtc() {
         </Column>
 
         <Column mt="lg">
-          <Text text="Fee" color="white" />
+          <Typography
+            sx={{
+              fontSize: '14px',
+              color: colors.white
+            }}>
+            Fee
+          </Typography>
 
           <FeeRateBar
             onChange={(val) => {

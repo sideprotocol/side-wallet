@@ -5,7 +5,6 @@ import { HashRouter, Route, Routes, useNavigate as useNavigateOrigin } from 'rea
 import { LoadingOutlined } from '@ant-design/icons';
 
 import { Content, Icon } from '../components';
-import BridgeSelectTokenScreen from '../components/Bridge/BridgeSelectToken';
 import { accountActions } from '../state/accounts/reducer';
 import { environmentActions } from '../state/environment/reducer';
 import { useIsReady, useIsUnlocked } from '../state/global/hooks';
@@ -31,8 +30,8 @@ import AtomicalsNFTScreen from './Atomicals/AtomicalsNFTScreen';
 import SendArc20Screen from './Atomicals/SendArc20Screen';
 import SendAtomicalsInscriptionScreen from './Atomicals/SendAtomicalsNFTScreen';
 import BridgeConfirmTabScreen from './Bridge/BridgeConfirmTabScreen';
+import BridgeSelectTokenScreen from './Bridge/BridgeSelectToken';
 import AppTabScrren from './Main/AppTabScreen';
-import ApproveSuccessScreen from './Main/ApproveSuccessScreen';
 import BoostScreen from './Main/BoostScreen';
 import BridgeTabScreen from './Main/BridgeTabScreen';
 import DiscoverTabScreen from './Main/DiscoverTabScreen';
@@ -40,7 +39,6 @@ import EarnRedeemScreen from './Main/EarnRedeemScreen';
 import EarnSupplyScreen from './Main/EarnSupplyScreen';
 import EarnTabScreen from './Main/EarnTabScreen';
 import ExploreTabScreen from './Main/ExploreTabScreen';
-import LendingPoolDetailScreen from './Main/LendingPoolDetail';
 import LendingSelectTokenScreen from './Main/LendingSelectToken';
 import LendingTabScreen from './Main/LendingTabScreen';
 import LoanAuthorizeScreen from './Main/LoanAuthorizeScreen';
@@ -167,11 +165,6 @@ export const routes = {
     element: <EarnRedeemScreen />
   },
 
-  ApproveSuccessScreen: {
-    path: '/approve-success',
-    element: <ApproveSuccessScreen />
-  },
-
   MyLoansScreen: {
     path: '/my-loans',
     element: <MyLoansScreen />
@@ -195,11 +188,6 @@ export const routes = {
   LendingSelectTokenScreen: {
     path: '/lending-select-token',
     element: <LendingSelectTokenScreen />
-  },
-
-  LendingPoolDetailScreen: {
-    path: '/lending-pool-detail',
-    element: <LendingPoolDetailScreen />
   },
 
   BridgeConfirmTabScreen: {

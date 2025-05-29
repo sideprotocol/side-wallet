@@ -7,7 +7,7 @@ import { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { LendingActions } from '@/ui/state/lending/reducer';
 import { colors } from '@/ui/theme/colors';
-import { formatUnitAmount, getTruncate, useLocationState } from '@/ui/utils';
+import { getTruncate, useLocationState } from '@/ui/utils';
 import { Stack, Typography } from '@mui/material';
 
 interface LendingSelectTokenLocation {
@@ -32,7 +32,7 @@ export default function LendingSelectTokenScreen() {
           marginTop: 16,
           position: 'relative'
         }}>
-        <Column gap="md">
+        <Column gap="md" px="xl">
           {poolsData?.map((pool) => {
             return (
               <Fragment key={pool.baseData.id}>
@@ -53,9 +53,7 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
   const data = [
     {
       label: 'Available Liquidity',
-      value: +item.baseData.config.max_borrow_amount
-        ? getTruncate(formatUnitAmount(item.baseData.config.max_borrow_amount, 6), 6)
-        : '-',
+      value: getTruncate(new BigNumber(item.totalSupply).minus(item.totalBorrow).toString(), 6),
       tip: 'xxx'
     },
     {
