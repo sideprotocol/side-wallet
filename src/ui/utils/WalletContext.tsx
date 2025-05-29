@@ -404,6 +404,9 @@ export interface WalletController {
   setLastActiveTime(): Promise<void>;
 
   getEnvironment(): Promise<EnvironmentStore>;
+
+  getShowLoanNotice(): Promise<boolean>;
+  setShowLoanNotice(show: boolean): Promise<void>;
 }
 
 const WalletContext = createContext<{

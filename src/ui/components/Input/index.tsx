@@ -8,6 +8,7 @@ import { Inscription } from '@/shared/types';
 import { colors } from '@/ui/theme/colors';
 import { spacing } from '@/ui/theme/spacing';
 import { useWallet } from '@/ui/utils';
+import { Typography } from '@mui/material';
 
 import { AccordingInscription } from '../AccordingInscription';
 import { useTools } from '../ActionComponent';
@@ -200,18 +201,22 @@ function AmountInput(props: InputProps) {
         {...rest}
       />
       {enableMax ? (
-        <Text
+        <Typography
           onClick={() => {
             if (onMaxClick) onMaxClick();
           }}
-          text={'Max'}
-          color={'primary'}
-          size="sm"
-          style={{
-            padding: '8px',
-            borderRadius: '8px'
-          }}
-        />
+          sx={{
+            color: colors.grey12,
+            fontSize: '12px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            transition: '.4s',
+            ':hover': {
+              color: colors.white
+            }
+          }}>
+          Max
+        </Typography>
       ) : null}
     </div>
   );

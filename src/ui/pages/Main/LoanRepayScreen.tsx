@@ -54,33 +54,53 @@ export default function RepayLoanScreen() {
     {
       label: 'Principal',
       value: (
-        <Typography
-          sx={{
-            fontSize: '14px',
-            fontWeight: 500,
-            color: colors.white
-          }}>
-          {getTruncate(
-            formatUnitAmount(loan.borrow_amount.amount, borrowToken?.asset.exponent || 6),
-            borrowToken?.asset.precision || 6
-          )}
-        </Typography>
+        <>
+          <Typography
+            sx={{
+              fontSize: '14px',
+              fontWeight: 500,
+              color: colors.white
+            }}>
+            {getTruncate(
+              formatUnitAmount(loan.borrow_amount.amount, borrowToken?.asset.exponent || 6),
+              borrowToken?.asset.precision || 6
+            )}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: '14px',
+              fontWeight: 500,
+              color: colors.grey12
+            }}>
+            {borrowToken?.asset.symbol}
+          </Typography>
+        </>
       )
     },
     {
       label: 'Accrued Interest',
       value: (
-        <Typography
-          sx={{
-            fontSize: '14px',
-            fontWeight: 500,
-            color: colors.white
-          }}>
-          {getTruncate(
-            formatUnitAmount(realTimeInterest?.interest.amount || '0', borrowToken?.asset.exponent || 6),
-            borrowToken?.asset.precision || 6
-          )}
-        </Typography>
+        <>
+          <Typography
+            sx={{
+              fontSize: '14px',
+              fontWeight: 500,
+              color: colors.white
+            }}>
+            {getTruncate(
+              formatUnitAmount(realTimeInterest?.interest.amount || '0', borrowToken?.asset.exponent || 6),
+              borrowToken?.asset.precision || 6
+            )}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: '14px',
+              fontWeight: 500,
+              color: colors.grey12
+            }}>
+            {borrowToken?.asset.symbol}
+          </Typography>
+        </>
       )
     },
     {

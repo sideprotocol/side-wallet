@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
-import { Button, Column, Content, CopyIcon, Header, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, CopyIcon, Header, Layout, LightTooltip, Row, Text } from '@/ui/components';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
 import useGetDlcMeta from '@/ui/hooks/useGetDlcMeta';
@@ -95,6 +95,347 @@ export default function LoanDetailScreen() {
   const feeRate = uiState.feeRate;
 
   if (!loan) return null;
+  const dataCollateral = [
+    {
+      label: 'Amount',
+      value: (
+        <>
+          <Text
+            style={{
+              fontSize: '12px',
+              fontWeight: 500,
+              color: colors.white
+            }}>
+            {collateralAmount}
+          </Text>
+          <Text
+            style={{
+              fontSize: '12px',
+              fontWeight: 500,
+              color: colors.grey12
+            }}>
+            {collateralToken?.asset.symbol} (Bitcoin)
+          </Text>
+        </>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Vault',
+      value: (
+        <Typography
+          sx={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white,
+            cursor: 'pointer',
+            ':hover': {
+              color: colors.main
+            }
+          }}
+          onClick={() => {
+            window.open(`${SIDE_BTC_EXPLORER}/address/${loan.vault_address}`);
+          }}>
+          {formatAddress(loan.vault_address, 6)}
+        </Typography>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Deposit Tx',
+      value: (
+        <Box>
+          {loan.authorizations[0] ? (
+            (loan.authorizations[0]?.deposit_txs || [])?.map((tx, index) => (
+              <Typography
+                key={index}
+                sx={{
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: colors.white,
+                  cursor: 'pointer',
+                  ':hover': {
+                    color: colors.main
+                  }
+                }}
+                onClick={() => {
+                  window.open(`${SIDE_BTC_EXPLORER}/tx/${tx}`);
+                }}>
+                {formatAddress(tx, 6)}
+              </Typography>
+            ))
+          ) : (
+            <Typography sx={{ fontSize: '12px', fontWeight: 500, color: colors.white }}>-</Typography>
+          )}
+        </Box>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Withdraw Tx',
+      value: (
+        <Typography
+          sx={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white,
+            cursor: 'pointer',
+            ':hover': {
+              color: colors.main
+            }
+          }}
+          onClick={() => {
+            if (loan.status === 'Liquidated') return;
+            window.open(`${SIDE_BTC_EXPLORER}/tx/${loanDetailCex?.returnBtcTxhash}`);
+          }}>
+          {loan.status !== 'Liquidated' ? formatAddress(loanDetailCex?.returnBtcTxhash || '', 6) : '-'}
+        </Typography>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Unilateral Exit After',
+      value: (
+        <Text
+          style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white
+          }}>
+          {formatTimeWithUTC(+loan.final_timeout * 1000)}
+        </Text>
+      ),
+      tip: 'xxx'
+    }
+  ];
+
+  const dataLoan = [
+    {
+      label: 'Amount',
+      value: (
+        <>
+          <Text
+            style={{
+              fontSize: '12px',
+              fontWeight: 500,
+              color: colors.white
+            }}>
+            {borrowTokenAmount}
+          </Text>
+          <Text
+            style={{
+              fontSize: '12px',
+              fontWeight: 500,
+              color: colors.grey12
+            }}>
+            {borrowToken?.asset.symbol} ({sideChain.name})
+          </Text>
+        </>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Maturity Time',
+      value: (
+        <Text
+          style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white
+          }}>
+          {formatTimeWithUTC(+loan.maturity_time * 1000)}
+        </Text>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Accrued Interest',
+      value: (
+        <Text
+          style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white
+          }}>
+          {getTruncate(
+            formatUnitAmount(
+              `${loanDetailCex?.actualInterest || realTimeInterest?.interest.amount || 0}`,
+              borrowToken?.asset.exponent || 6
+            ),
+            borrowToken?.asset.precision || 6
+          )}
+        </Text>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Max Interest',
+      value: (
+        <Text
+          style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white
+          }}>
+          {getTruncate(
+            formatUnitAmount(loan.interest, borrowToken?.asset.exponent || 6),
+            borrowToken?.asset.precision || 6
+          )}
+        </Text>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Disburse Tx',
+      value: (
+        <Typography
+          sx={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white,
+            cursor: 'pointer',
+            ':hover': {
+              color: colors.main
+            }
+          }}
+          onClick={() => {
+            window.open(`${sideChain.explorerUrl}/tx/${loanDetailCex?.disbursementTxhash || ''}`);
+          }}>
+          {formatAddress(loanDetailCex?.disbursementTxhash || '', 6)}
+        </Typography>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Repay Tx',
+      value: (
+        <Typography
+          sx={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white,
+            cursor: 'pointer',
+            ':hover': {
+              color: colors.main
+            }
+          }}
+          onClick={() => {
+            window.open(`${sideChain.explorerUrl}/tx/${loanDetailCex?.repaymentTxhash || ''}`);
+          }}>
+          {formatAddress(loanDetailCex?.repaymentTxhash || '', 6)}
+        </Typography>
+      ),
+      tip: 'xxx'
+    }
+  ];
+
+  const dataLiquidation = [
+    {
+      label: 'Liquidation Price',
+      value: (
+        <Text
+          style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.main
+          }}>
+          {loan.status === 'Requested' ? '-' : getTruncate(loan.liquidation_price || liquidationEvent?.price || '0', 2)}
+        </Text>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Health Factor',
+      value: <HealthFactor loan={loan} />,
+      tip: 'xxx'
+    },
+    {
+      label: 'Current LTV',
+      value: <LoanLTV loan={loan} sx={{ fontSize: '12px', fontWeight: 500 }} />,
+      tip: 'xxx'
+    },
+    {
+      label: 'Liquidation LTV',
+      value: (
+        <Text
+          style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white
+          }}>
+          {`${lendingPool?.pool?.config?.liquidation_threshold || '-'}%`}
+        </Text>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Liquidation Penalty',
+      value: (
+        <Text
+          style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white
+          }}>
+          {`${(liquidationParams?.params.liquidation_bonus_factor || 0) / 10}%`}
+        </Text>
+      ),
+      tip: 'xxx'
+    },
+
+    {
+      label: 'Liquidated Collateral',
+      value: (
+        <Text
+          style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white
+          }}>
+          {!liquidation?.liquidation.liquidated_collateral_amount
+            ? '-'
+            : formatUnitAmount(
+                liquidation?.liquidation.liquidated_collateral_amount.amount || '0',
+                collateralToken?.asset?.exponent || 6
+              )}
+        </Text>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Unliquidated Collateral',
+      value: (
+        <Text
+          style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white
+          }}>
+          {!liquidation?.liquidation.liquidated_collateral_amount
+            ? '-'
+            : formatUnitAmount(
+                BigNumber(liquidation?.liquidation.unliquidated_collateral_amount.amount || '0').toFixed(),
+                collateralToken?.asset?.exponent || 6
+              )}
+        </Text>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'Liquidation ID',
+      value: (
+        <Text
+          style={{
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.white
+          }}>
+          {liquidation?.liquidation.id || '-'}
+        </Text>
+      ),
+      tip: 'xxx'
+    }
+  ];
   return (
     <Layout>
       <Header
@@ -150,7 +491,7 @@ export default function LoanDetailScreen() {
               <CopyIcon text={loan.vault_address} onlyIcon size={12} />
             </Stack>
           </Row>
-          <Row full itemsCenter>
+          <Row itemsCenter>
             <Text
               style={{
                 fontSize: '18px',
@@ -179,137 +520,36 @@ export default function LoanDetailScreen() {
                 : 'Request'}
             </Box>
           </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Amount
-            </Text>
-            <Row
-              justifyEnd
-              itemsCenter
-              style={{
-                gap: '2px'
-              }}>
-              <Text
-                style={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: colors.white
-                }}>
-                {collateralAmount}
-              </Text>
-              <Text
-                style={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: colors.grey12
-                }}>
-                {collateralToken?.asset.symbol} (Bitcoin)
-              </Text>
-            </Row>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Vault
-            </Text>
-            <Typography
-              sx={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white,
-                cursor: 'pointer',
-                ':hover': {
-                  color: colors.main
-                }
-              }}
-              onClick={() => {
-                window.open(`${SIDE_BTC_EXPLORER}/address/${loan.vault_address}`);
-              }}>
-              {formatAddress(loan.vault_address, 6)}
-            </Typography>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Deposit Tx
-            </Text>
-            <Box>
-              {loan.authorizations[0] ? (
-                (loan.authorizations[0]?.deposit_txs || [])?.map((tx, index) => (
+          {dataCollateral.map((item, index) => {
+            return (
+              <Row key={index} full justifyBetween itemsCenter>
+                <LightTooltip title={item.tip} arrow placement="top">
                   <Typography
-                    key={index}
                     sx={{
                       fontSize: '12px',
-                      fontWeight: 500,
-                      color: colors.white,
+                      color: colors.grey12,
+                      textDecoration: 'dotted underline',
+                      textUnderlineOffset: '2px',
                       cursor: 'pointer',
+                      transition: '.4s',
                       ':hover': {
-                        color: colors.main
+                        color: colors.white
                       }
-                    }}
-                    onClick={() => {
-                      window.open(`${SIDE_BTC_EXPLORER}/tx/${tx}`);
                     }}>
-                    {formatAddress(tx, 6)}
+                    {item.label}
                   </Typography>
-                ))
-              ) : (
-                <Typography sx={{ fontSize: '12px', fontWeight: 500, color: colors.white }}>-</Typography>
-              )}
-            </Box>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Withdraw Tx
-            </Text>
-            <Typography
-              sx={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white,
-                cursor: 'pointer',
-                ':hover': {
-                  color: colors.main
-                }
-              }}
-              onClick={() => {
-                if (loan.status === 'Liquidated') return;
-                window.open(`${SIDE_BTC_EXPLORER}/tx/${loanDetailCex?.returnBtcTxhash}`);
-              }}>
-              {loan.status !== 'Liquidated' ? formatAddress(loanDetailCex?.returnBtcTxhash || '', 6) : '-'}
-            </Typography>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Unilateral Exit After
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}>
-              {formatTimeWithUTC(+loan.final_timeout * 1000)}
-            </Text>
-          </Row>
+                </LightTooltip>
+                <Row
+                  justifyEnd
+                  itemsCenter
+                  style={{
+                    gap: '2px'
+                  }}>
+                  {item.value}
+                </Row>
+              </Row>
+            );
+          })}
           <Box
             sx={{
               height: '1px',
@@ -317,7 +557,7 @@ export default function LoanDetailScreen() {
               my: '16px'
             }}
           />
-          <Row full itemsCenter>
+          <Row itemsCenter>
             <Text
               style={{
                 fontSize: '18px',
@@ -339,133 +579,36 @@ export default function LoanDetailScreen() {
               </Box>
             ) : null}
           </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Amount
-            </Text>
-            <Row justifyEnd itemsCenter gap="xs">
-              <Text
-                style={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: colors.white
-                }}>
-                {borrowTokenAmount}
-              </Text>
-              <Text
-                style={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: colors.grey12
-                }}>
-                {borrowToken?.asset.symbol} ({sideChain.name})
-              </Text>
-            </Row>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Maturity Time
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}>
-              {formatTimeWithUTC(+loan.maturity_time * 1000)}
-            </Text>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Accrued Interest
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}>
-              {getTruncate(
-                formatUnitAmount(
-                  `${loanDetailCex?.actualInterest || realTimeInterest?.interest.amount || 0}`,
-                  borrowToken?.asset.exponent || 6
-                ),
-                borrowToken?.asset.precision || 6
-              )}
-            </Text>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Max Interest
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}>
-              {getTruncate(
-                formatUnitAmount(loan.interest, borrowToken?.asset.exponent || 6),
-                borrowToken?.asset.precision || 6
-              )}
-            </Text>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Disburse Tx
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}
-              onClick={() => {
-                window.open(`${sideChain.explorerUrl}/tx/${loanDetailCex?.disbursementTxhash || ''}`);
-              }}>
-              {formatAddress(loanDetailCex?.disbursementTxhash || '', 6)}
-            </Text>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Repay Tx
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}
-              onClick={() => {
-                window.open(`${sideChain.explorerUrl}/tx/${loanDetailCex?.repaymentTxhash || ''}`);
-              }}>
-              {formatAddress(loanDetailCex?.repaymentTxhash || '', 6)}
-            </Text>
-          </Row>
+          {dataLoan.map((item, index) => {
+            return (
+              <Row key={index} full justifyBetween itemsCenter>
+                <LightTooltip title={item.tip} arrow placement="top">
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      color: colors.grey12,
+                      textDecoration: 'dotted underline',
+                      textUnderlineOffset: '2px',
+                      cursor: 'pointer',
+                      transition: '.4s',
+                      ':hover': {
+                        color: colors.white
+                      }
+                    }}>
+                    {item.label}
+                  </Typography>
+                </LightTooltip>
+                <Row
+                  justifyEnd
+                  itemsCenter
+                  style={{
+                    gap: '2px'
+                  }}>
+                  {item.value}
+                </Row>
+              </Row>
+            );
+          })}
           <Box
             sx={{
               height: '1px',
@@ -473,7 +616,7 @@ export default function LoanDetailScreen() {
               my: '16px'
             }}
           />
-          <Row full justifyBetween itemsCenter>
+          <Row itemsCenter>
             <Text
               style={{
                 fontSize: '18px',
@@ -483,121 +626,36 @@ export default function LoanDetailScreen() {
               Liquidation
             </Text>
           </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Health Factor
-            </Text>
-            <HealthFactor loan={loan} />
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Current LTV
-            </Text>
-            <LoanLTV loan={loan} sx={{ fontSize: '12px', fontWeight: 500 }} />
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Liquidation LTV
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}>
-              {`${lendingPool?.pool?.config?.liquidation_threshold || '-'}%`}
-            </Text>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Liquidation Penalty
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}>
-              {`${(liquidationParams?.params.liquidation_bonus_factor || 0) / 10}%`}
-            </Text>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Liquidated Collateral
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}>
-              {!liquidation?.liquidation.liquidated_collateral_amount
-                ? '-'
-                : formatUnitAmount(
-                    liquidation?.liquidation.liquidated_collateral_amount.amount || '0',
-                    collateralToken?.asset?.exponent || 6
-                  )}
-            </Text>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Unliquidated Collateral
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}>
-              {!liquidation?.liquidation.liquidated_collateral_amount
-                ? '-'
-                : formatUnitAmount(
-                    BigNumber(liquidation?.liquidation.unliquidated_collateral_amount.amount || '0').toFixed(),
-                    collateralToken?.asset?.exponent || 6
-                  )}
-            </Text>
-          </Row>
-          <Row full justifyBetween itemsCenter>
-            <Text
-              style={{
-                fontSize: '12px',
-                color: colors.grey12
-              }}>
-              Liquidation ID
-            </Text>
-            <Text
-              style={{
-                fontSize: '12px',
-                fontWeight: 500,
-                color: colors.white
-              }}>
-              {liquidation?.liquidation.id || '-'}
-            </Text>
-          </Row>
+          {dataLiquidation.map((item, index) => {
+            return (
+              <Row key={index} full justifyBetween itemsCenter>
+                <LightTooltip title={item.tip} arrow placement="top">
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      color: colors.grey12,
+                      textDecoration: 'dotted underline',
+                      textUnderlineOffset: '2px',
+                      cursor: 'pointer',
+                      transition: '.4s',
+                      ':hover': {
+                        color: colors.white
+                      }
+                    }}>
+                    {item.label}
+                  </Typography>
+                </LightTooltip>
+                <Row
+                  justifyEnd
+                  itemsCenter
+                  style={{
+                    gap: '2px'
+                  }}>
+                  {item.value}
+                </Row>
+              </Row>
+            );
+          })}
           <Box
             sx={{
               height: '1px',

@@ -190,23 +190,13 @@ export default function LendingTanScreen() {
       label: 'Max Initial LTV',
       value: (
         <>
-          {new BigNumber(borrowAmount || 0)
-            .multipliedBy(borrow_apr)
-            .div(1000)
-            .div(365)
-            .multipliedBy(maturity || 0)
-            .div(60)
-            .div(60)
-            .div(24)
-            .toFixed(poolData?.token.asset.precision || 0)}
-          <small
-            style={{
-              fontSize: '100%',
-              color: colors.grey12,
-              marginLeft: '2px'
+          <Typography
+            sx={{
+              fontSize: '14px',
+              color: colors.grey12
             }}>
-            {poolData?.token.asset.symbol}
-          </small>
+            {`${poolData?.baseData.config.max_ltv}%`}
+          </Typography>
         </>
       ),
       tip: 'xxx'
@@ -294,6 +284,8 @@ export default function LendingTanScreen() {
       dlcEvent?.event.has_triggered
     );
   }, [loading, poolData, collateralAmount, borrowAmount, liquidationEvent, healthFactor, dlcEvent]);
+
+  const [isHoverMaturity, setIsHoverMaturity] = useState(false);
 
   return (
     <>
@@ -525,8 +517,13 @@ export default function LendingTanScreen() {
               cursor: 'pointer',
               bgcolor: colors.card_bgColor,
               transition: '.4s',
-              borderRadius: '8px'
+              borderRadius: '8px',
+              ':hover': {
+                bgcolor: colors.black_dark
+              }
             }}
+            onMouseOver={() => setIsHoverMaturity(true)}
+            onMouseLeave={() => setIsHoverMaturity(false)}
             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
               event.stopPropagation();
               setAnchorEl(event.currentTarget);
@@ -560,7 +557,7 @@ export default function LendingTanScreen() {
                     transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
                     transition: '.4s'
                   }}>
-                  <Icon icon="down" size={12}></Icon>
+                  <Icon icon="down" size={12} color={isHoverMaturity ? 'main' : 'white'}></Icon>
                 </Box>
               </Box>
             </Stack>

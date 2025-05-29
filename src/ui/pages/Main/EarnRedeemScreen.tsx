@@ -174,10 +174,14 @@ export default function EarnRedeemScreen() {
                 />
                 <Typography
                   sx={{
-                    color: colors.main,
+                    color: colors.grey12,
                     fontSize: '12px',
                     fontWeight: 600,
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    transition: '.4s',
+                    ':hover': {
+                      color: colors.white
+                    }
                   }}
                   onClick={() => {
                     setwithdrawAmount(stokenBalance?.formatAmount || '0');

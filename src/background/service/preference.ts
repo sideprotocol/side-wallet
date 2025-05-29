@@ -88,6 +88,7 @@ export interface PreferenceStore {
   addressFlags: { [key: string]: number };
   enableSignData: boolean;
   autoLockTime: number;
+  showLoanNotice: boolean;
 }
 
 const SUPPORT_LOCALES = ['en'];
@@ -132,7 +133,8 @@ class PreferenceService {
         showSafeNotice: true,
         addressFlags: {},
         enableSignData: false,
-        autoLockTime: DEFAULT_LOCKTIME
+        autoLockTime: DEFAULT_LOCKTIME,
+        showLoanNotice: true
       }
     });
     if (!this.store.locale || this.store.locale !== defaultLang) {
@@ -538,6 +540,14 @@ class PreferenceService {
       minutes = DEFAULT_LOCKTIME;
     }
     this.store.autoLockTime = minutes;
+  };
+
+  getShowLoanNotice = () => {
+    return this.store.showLoanNotice;
+  };
+
+  setShowLoanNotice = (showLoanNotice: boolean) => {
+    this.store.showLoanNotice = showLoanNotice;
   };
 
   reset = () => {

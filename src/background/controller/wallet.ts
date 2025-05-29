@@ -2099,6 +2099,14 @@ export class WalletController extends BaseController {
     this._resetTimeout();
   };
 
+  getShowLoanNotice = () => {
+    return preferenceService.getShowLoanNotice();
+  };
+
+  setShowLoanNotice = (show: boolean) => {
+    return preferenceService.setShowLoanNotice(show);
+  };
+
   _resetTimeout = async () => {
     if (this.timer) {
       clearTimeout(this.timer);

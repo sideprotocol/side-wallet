@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import 'swiper/css';
 
 import { NetworkType } from '@/shared/types';
@@ -7,13 +8,23 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
-import { Stack, Typography } from '@mui/material';
+import { useWallet } from '@/ui/utils';
+import { Checkbox, Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
 export default function LoansTabScreen() {
   const navigator = useNavigate();
   const networkType = useNetworkType();
+  const wallet = useWallet();
+  const [showLoanNotice, setShowLoanNotice] = useState(true);
+
+  useEffect(() => {
+    wallet.getShowLoanNotice().then((show) => {
+      setShowLoanNotice(show);
+    });
+  }, [wallet]);
+
   return (
     <Layout>
       <MainHeader title={''} />
@@ -114,6 +125,36 @@ export default function LoansTabScreen() {
                 text="Borrow Now"></Button>
             )}
           </Stack>
+          {networkType === NetworkType.TESTNET && (
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              className="animate__animated animate__fadeInUp animate__faster animate__delay-1s">
+              <Checkbox
+                checked={!showLoanNotice}
+                onChange={(e) => {
+                  setShowLoanNotice(!e.target.checked);
+                  wallet.setShowLoanNotice(!e.target.checked);
+                }}
+                size="small"
+                sx={{
+                  color: colors.white,
+                  padding: '0px',
+                  '&.Mui-checked': {
+                    color: colors.main
+                  }
+                }}
+              />
+              <Typography
+                sx={{
+                  color: colors.white,
+                  fontSize: '12px'
+                }}>
+                Don't show this again
+              </Typography>
+            </Stack>
+          )}
         </Column>
       </Content>
 

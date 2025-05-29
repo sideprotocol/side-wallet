@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { CHAINS_ENUM } from '@/shared/constant';
 import { BalanceItem } from '@/shared/types';
 import { Button, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
-import { sizes } from '@/ui/theme/spacing';
+import { colors } from '@/ui/theme/colors';
 import { copyToClipboard } from '@/ui/utils';
 
 import './index.less';
@@ -40,9 +40,11 @@ export default function ReceiveScreen() {
             style={{
               borderRadius: '10px'
             }}
+            includeMargin
+            bgColor={colors.white}
+            fgColor={colors.black}
             value={address || ''}
-            marginSize={1}
-            size={sizes.qrcode}></QRCodeSVG>
+            size={100}></QRCodeSVG>
 
           <Row itemsCenter mt="lg" mb="lg">
             <Text

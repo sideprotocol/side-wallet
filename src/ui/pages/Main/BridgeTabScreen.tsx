@@ -18,6 +18,7 @@ import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
+import { Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -274,37 +275,37 @@ export default function BridgeTabScreen() {
                 rounded={true}
                 style={{
                   height: '50px',
-                  background: colors.black
+                  background: colors.black,
+                  padding: '20px 10px',
+                  borderRadius: '100px'
                 }}>
-                <Row
-                  itemsCenter
-                  gap={'zero'}
-                  style={{
-                    height: '50px',
-                    borderRadius: '100px',
-                    padding: '20px 10px'
-                  }}>
-                  <CoinInput
-                    size={14}
-                    coin={{
-                      amount: bridgeAmount,
-                      denom: bridgeAsset?.denom || ''
-                    }}
-                    decimalScale={bridgeAsset ? +bridgeAsset.asset.exponent : 6}
-                    onChange={(value) => {
-                      dispatch(BridgeActions.update({ bridgeAmount: value }));
-                    }}
-                  />
-                  <div
-                    className={
-                      'absolute right-[10px] top-1/2 -translate-y-1/2 p-2 text-[#F7771A] text-sm  cursor-pointer rounded-lg hover:bg-[#F7771A1A]'
+                <CoinInput
+                  size={14}
+                  coin={{
+                    amount: bridgeAmount,
+                    denom: bridgeAsset?.denom || ''
+                  }}
+                  decimalScale={bridgeAsset ? +bridgeAsset.asset.exponent : 6}
+                  onChange={(value) => {
+                    dispatch(BridgeActions.update({ bridgeAmount: value }));
+                  }}
+                />
+                <Typography
+                  sx={{
+                    color: colors.grey12,
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: '.4s',
+                    ':hover': {
+                      color: colors.white
                     }
-                    onClick={() => {
-                      dispatch(BridgeActions.update({ bridgeAmount: balance }));
-                    }}>
-                    Max
-                  </div>
-                </Row>
+                  }}
+                  onClick={() => {
+                    dispatch(BridgeActions.update({ bridgeAmount: balance }));
+                  }}>
+                  Max
+                </Typography>
               </Row>
             </Column>
 

@@ -1,14 +1,17 @@
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 
+import { NetworkType } from '@/shared/types';
 import { useNavigate } from '@/ui/pages/MainRoute';
-import { useReadTab, useUnreadAppSummary } from '@/ui/state/accounts/hooks';
+import { useUnreadAppSummary } from '@/ui/state/accounts/hooks';
 import { TabOption } from '@/ui/state/global/reducer';
+import { useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
+import { useWallet } from '@/ui/utils';
 
 import { BaseView } from '../BaseView';
 import { Column } from '../Column';
 import { Grid } from '../Grid';
-import { Icon, IconTypes, lottieRegistry } from '../Icon';
+import { Icon, IconTypes } from '../Icon';
 
 export const NavTabBar = function NavTabBar({ tab }: { tab: TabOption }) {
   return (
@@ -34,10 +37,16 @@ const TabButton = function TabButton({
 }) {
   const navigate = useNavigate();
   const unreadApp = useUnreadAppSummary();
-  const readTab = useReadTab();
   const [isHover, setIsHover] = useState(false);
+  const [showLoanNotice, setShowLoanNotice] = useState(true);
+  const wallet = useWallet();
+  const networkType = useNetworkType();
 
-  const iconPathDynamic = lottieRegistry[icon];
+  useLayoutEffect(() => {
+    wallet.getShowLoanNotice().then((show) => {
+      setShowLoanNotice(show);
+    });
+  }, [wallet]);
 
   return (
     <Column
@@ -55,7 +64,11 @@ const TabButton = function TabButton({
         } else if (tabName === 'bridge') {
           navigate('BridgeTabScreen');
         } else if (tabName === 'loans') {
-          navigate('LoansTabScreen');
+          if (showLoanNotice || networkType === NetworkType.MAINNET) {
+            navigate('LoansTabScreen');
+          } else {
+            navigate('LendingTabScreen');
+          }
         } else if (tabName === 'earn') {
           navigate('EarnTabScreen');
         }
