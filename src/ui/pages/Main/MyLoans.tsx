@@ -23,14 +23,14 @@ export const loanStatusStyle: Record<
   }
 > = {
   Unspecified: { bgColor: '', color: '' },
-  Requested: { bgColor: colors.grey63, color: colors.grey62 },
-  Authorized: { bgColor: colors.grey63, color: colors.grey62 },
-  Rejected: { bgColor: colors.grey65, color: colors.grey64 },
+  Requested: { bgColor: colors.card_bgColor, color: colors.grey62 },
+  Authorized: { bgColor: colors.card_bgColor, color: colors.grey62 },
+  Rejected: { bgColor: colors.card_bgColor, color: colors.grey64 },
   Open: { bgColor: colors.green10, color: colors.green },
   Repaid: { bgColor: colors.green10, color: colors.green },
   Defaulted: { bgColor: colors.blue3, color: colors.main },
   Liquidated: { bgColor: colors.red11, color: colors.red },
-  Closed: { bgColor: colors.grey65, color: colors.grey64 }
+  Closed: { bgColor: colors.card_bgColor, color: colors.grey64 }
 };
 
 export default function MyLoansScreen() {

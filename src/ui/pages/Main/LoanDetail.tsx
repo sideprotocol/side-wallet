@@ -505,7 +505,7 @@ export default function LoanDetailScreen() {
                 padding: '4px 8px',
                 borderRadius: '4px',
                 fontSize: '12px',
-                backgroundColor: colors.grey65,
+                backgroundColor: colors.card_bgColor,
                 color: colors.grey64
               }}>
               {loan.status === 'Repaid'
@@ -566,13 +566,60 @@ export default function LoanDetailScreen() {
               }}>
               Loan
             </Text>
-            {['Repaid', 'Closed'].includes(loan.status) ? (
+            {loan.status === 'Requested' &&
+            dlcMetaData?.dlc_meta?.liquidation_cet?.borrower_adaptor_signatures &&
+            dlcMetaData?.dlc_meta?.liquidation_cet?.borrower_adaptor_signatures?.length > 0 ? (
+              <Stack
+                direction="row"
+                alignItems="center"
+                sx={{
+                  bgcolor: colors.white1,
+                  padding: '4px 8px',
+                  borderRadius: '4px'
+                }}>
+                <Typography
+                  sx={{
+                    fontSize: '10px',
+                    color: colors.white,
+                    fontWeight: 500,
+                    whiteSpace: 'nowrap'
+                  }}>
+                  Processing
+                </Typography>
+                <svg
+                  className="animate-[spin_3s_linear_infinite] inline-block ml-1"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 17 17"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M8.5 2V3.66667M8.5 12.5V15.1667M4.33333 8.5H2M14.6667 8.5H13.6667M12.8047 12.8047L12.3333 12.3333M12.9428 4.11052L12 5.05333M3.78105 13.219L5.66667 11.3333M3.91912 3.97245L5.33333 5.38667"
+                    stroke={colors.grey12}
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Stack>
+            ) : loan.status === 'Open' ? (
               <Box
                 sx={{
                   padding: '4px 8px',
                   borderRadius: '4px',
                   fontSize: '10px',
-                  backgroundColor: colors.grey65,
+                  backgroundColor: colors.card_bgColor,
+                  color: colors.grey64
+                }}>
+                Disbursed
+              </Box>
+            ) : ['Repaid', 'Closed'].includes(loan.status) ? (
+              <Box
+                sx={{
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  fontSize: '10px',
+                  backgroundColor: colors.card_bgColor,
                   color: colors.grey64
                 }}>
                 Repaid
