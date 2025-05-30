@@ -197,57 +197,88 @@ export default function LoanDepositScreen() {
           style={{
             gap: '0'
           }}>
-          <Box
+          <Stack
             sx={{
-              borderRadius: '6px',
+              width: '100%',
+              borderRadius: '12px',
               overflow: 'hidden'
             }}>
-            <QRCodeSVG
-              value={toInfo.address}
-              includeMargin
-              width={80}
-              height={80}
-              bgColor={colors.white}
-              fgColor={colors.black}
-            />
-          </Box>
-
-          <Stack
-            justifyContent="space-between"
-            sx={{
-              flex: 1,
-              overflow: 'hidden',
-              mt: '12px'
-            }}>
-            <Box>
-              <Typography
-                color={colors.grey12}
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              gap="8px"
+              sx={{
+                height: '64px',
+                bgcolor: colors.grey1
+              }}>
+              <Stack direction="row" alignItems="center" gap="4px">
+                <ImageIcon
+                  url={'/images/img/btc.png'}
+                  style={{
+                    width: '20px',
+                    height: '20px'
+                  }}
+                />
+                <Typography
+                  sx={{
+                    fontSize: '24px',
+                    fontWeight: 600
+                  }}>
+                  {+satoshisToAmount(+collateralAmount)}
+                </Typography>
+              </Stack>
+              <CopyIcon
+                size={16}
+                text={satoshisToAmount(+collateralAmount)}
+                onlyIcon
+                style={{
+                  cursor: 'pointer'
+                }}
+              />
+            </Stack>
+            <Stack
+              alignItems="center"
+              gap="12px"
+              sx={{
+                p: '12px 16px',
+                bgcolor: colors.card_bgColor
+              }}>
+              <Box
                 sx={{
-                  fontSize: '12px'
+                  borderRadius: '6px',
+                  overflow: 'hidden'
                 }}>
-                Collateral Vault Address
-              </Typography>
+                <QRCodeSVG
+                  value={toInfo.address}
+                  includeMargin
+                  width={130}
+                  height={130}
+                  bgColor={colors.white}
+                  fgColor={colors.black}
+                />
+              </Box>
               <Stack
                 direction="row"
                 justifyContent="space-between"
                 alignItems="center"
-                gap="8px"
+                gap="4px"
                 sx={{
-                  p: '16px',
-                  borderRadius: '10px',
-                  bgcolor: colors.card_bgColor,
-                  width: '100%',
-                  mt: '2px'
+                  width: '220px',
+                  position: 'relative'
                 }}>
                 <Typography
                   sx={{
                     fontSize: '12px',
                     fontWeight: 500,
                     wordBreak: 'break-all',
+                    color: colors.white,
                     cursor: 'pointer',
+                    transition: '.4s',
                     ':hover': {
                       textDecoration: 'dotted underline',
-                      textUnderlineOffset: '2px'
+                      textUnderlineOffset: '2px',
+                      color: colors.main
                     }
                   }}
                   onClick={() => {
@@ -256,63 +287,73 @@ export default function LoanDepositScreen() {
                   {toInfo.address}
                 </Typography>
                 <CopyIcon
+                  size={12}
                   text={toInfo.address}
                   onlyIcon
                   style={{
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    right: '30px',
+                    top: '22px'
                   }}
                 />
               </Stack>
-            </Box>
-            <Box>
+            </Stack>
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              gap="8px"
+              sx={{
+                height: '42px',
+                bgcolor: colors.grey1
+              }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20" fill="none">
+                <path
+                  d="M5.4987 9.58314L7.16536 11.2498L10.9154 7.49981M14.6654 9.99981C14.6654 14.0902 10.2037 17.0651 8.58036 18.0122C8.39586 18.1198 8.30362 18.1737 8.17343 18.2016C8.0724 18.2232 7.925 18.2232 7.82396 18.2016C7.69378 18.1737 7.60153 18.1198 7.41704 18.0122C5.79367 17.0651 1.33203 14.0902 1.33203 9.99981V6.01448C1.33203 5.34822 1.33203 5.01509 1.441 4.72873C1.53726 4.47576 1.69368 4.25004 1.89675 4.07109C2.12661 3.86851 2.43853 3.75154 3.06237 3.5176L7.53053 1.84204C7.70378 1.77707 7.7904 1.74459 7.87952 1.73171C7.95856 1.72029 8.03883 1.72029 8.11788 1.73171C8.20699 1.74459 8.29362 1.77707 8.46686 1.84204L12.935 3.5176C13.5589 3.75154 13.8708 3.86851 14.1006 4.07109C14.3037 4.25004 14.4601 4.47576 14.5564 4.72873C14.6654 5.01509 14.6654 5.34822 14.6654 6.01448V9.99981Z"
+                  stroke={colors.green_success}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
               <Typography
-                color={colors.grey12}
                 sx={{
-                  fontSize: '12px',
-                  mt: '16px'
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  color: colors.green_success
                 }}>
-                Collatearl Amount
+                Multisig 2 of 2
               </Typography>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                gap="8px"
-                sx={{
-                  p: '16px',
-                  borderRadius: '10px',
-                  bgcolor: colors.card_bgColor,
-                  width: '100%',
-                  mt: '2px'
-                }}>
-                <Stack direction="row" alignItems="center" gap="4px">
-                  <ImageIcon
-                    url={'/images/img/btc.png'}
-                    style={{
-                      width: '16px',
-                      height: '16px'
-                    }}
-                  />
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      fontWeight: 500
-                    }}>
-                    {satoshisToAmount(+collateralAmount)}
-                  </Typography>
-                </Stack>
-                <CopyIcon
-                  text={satoshisToAmount(+collateralAmount)}
-                  onlyIcon
-                  style={{
-                    cursor: 'pointer'
-                  }}
-                />
-              </Stack>
-            </Box>
+            </Stack>
           </Stack>
 
-          <Stack direction="row" justifyContent="center" alignItems="center" gap="4px" mt="20px">
+          <Row
+            fullX
+            style={{
+              marginTop: '12px'
+            }}>
+            <Button
+              onClick={() => {
+                navigate('TxConfirmScreen', {
+                  rawTxInfo,
+                  lendingState: {
+                    loanId: toInfo.address,
+                    borrowAmount,
+                    collateralAmount,
+                    feeRate,
+                    liquidationEvent
+                  }
+                });
+              }}
+              full
+              disabled={disabled}
+              text="Lock"
+              preset="primary"></Button>
+          </Row>
+          {error && <Text text={error} color={'red'} size="xs" textCenter></Text>}
+
+          <Stack direction="row" justifyContent="center" alignItems="center" gap="4px" mt="12px">
             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M5.754 5.2C5.89506 4.799 6.17349 4.46086 6.53997 4.24548C6.90645 4.0301 7.33734 3.95136 7.75631 4.02323C8.17527 4.09509 8.55529 4.31291 8.82905 4.63812C9.1028 4.96332 9.25263 5.37491 9.252 5.8C9.252 7 7.452 7.6 7.452 7.6M7.5 10H7.506M13.5 7C13.5 10.3137 10.8137 13 7.5 13C4.18629 13 1.5 10.3137 1.5 7C1.5 3.68629 4.18629 1 7.5 1C10.8137 1 13.5 3.68629 13.5 7Z"
@@ -416,32 +457,7 @@ export default function LoanDepositScreen() {
               </svg>
             </Stack>
           </Stack>
-
           {errorMsg && <Text text={errorMsg} color={'red'} size="xs" textCenter></Text>}
-          <Row
-            fullX
-            style={{
-              marginTop: '12px'
-            }}>
-            <Button
-              onClick={() => {
-                navigate('TxConfirmScreen', {
-                  rawTxInfo,
-                  lendingState: {
-                    loanId: toInfo.address,
-                    borrowAmount,
-                    collateralAmount,
-                    feeRate,
-                    liquidationEvent
-                  }
-                });
-              }}
-              full
-              disabled={disabled}
-              text="Deposit"
-              preset="primary"></Button>
-          </Row>
-          {error && <Text text={error} color={'red'} size="xs" textCenter></Text>}
         </Column>
       </Content>
       <Footer px="zero" py="zero">

@@ -73,6 +73,7 @@ export const colors = {
   swapBg: '#1D1D1F',
   backgroundChoose: '#F7771A4D',
   card_bgColor: '#17171C',
+  grey1: '#2A2A2F',
   grey62: '#808080',
   grey63: '#8080801A',
   grey64: '#505050',
