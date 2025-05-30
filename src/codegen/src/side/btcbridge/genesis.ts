@@ -1,14 +1,12 @@
 //@ts-nocheck
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
-import { BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType } from "./btcbridge";
+import { UTXO, UTXOAmino, UTXOSDKType, DKGRequest, DKGRequestAmino, DKGRequestSDKType } from "./btcbridge";
 import { BinaryReader, BinaryWriter } from "../../binary";
 /** GenesisState defines the btc bridge module's genesis state. */
 export interface GenesisState {
   params: Params;
-  /** the chain tip of the bitcoin chain */
-  bestBlockHeader?: BlockHeader;
-  blockHeaders: BlockHeader[];
   utxos: UTXO[];
+  dkgRequest?: DKGRequest;
 }
 export interface GenesisStateProtoMsg {
   typeUrl: "/side.btcbridge.GenesisState";
@@ -17,10 +15,8 @@ export interface GenesisStateProtoMsg {
 /** GenesisState defines the btc bridge module's genesis state. */
 export interface GenesisStateAmino {
   params?: ParamsAmino;
-  /** the chain tip of the bitcoin chain */
-  best_block_header?: BlockHeaderAmino;
-  block_headers?: BlockHeaderAmino[];
   utxos?: UTXOAmino[];
+  dkg_request?: DKGRequestAmino;
 }
 export interface GenesisStateAminoMsg {
   type: "/side.btcbridge.GenesisState";
@@ -29,16 +25,14 @@ export interface GenesisStateAminoMsg {
 /** GenesisState defines the btc bridge module's genesis state. */
 export interface GenesisStateSDKType {
   params: ParamsSDKType;
-  best_block_header?: BlockHeaderSDKType;
-  block_headers: BlockHeaderSDKType[];
   utxos: UTXOSDKType[];
+  dkg_request?: DKGRequestSDKType;
 }
 function createBaseGenesisState(): GenesisState {
   return {
     params: Params.fromPartial({}),
-    bestBlockHeader: undefined,
-    blockHeaders: [],
-    utxos: []
+    utxos: [],
+    dkgRequest: undefined
   };
 }
 export const GenesisState = {
@@ -47,14 +41,11 @@ export const GenesisState = {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
-    if (message.bestBlockHeader !== undefined) {
-      BlockHeader.encode(message.bestBlockHeader, writer.uint32(18).fork()).ldelim();
-    }
-    for (const v of message.blockHeaders) {
-      BlockHeader.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
     for (const v of message.utxos) {
-      UTXO.encode(v!, writer.uint32(34).fork()).ldelim();
+      UTXO.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.dkgRequest !== undefined) {
+      DKGRequest.encode(message.dkgRequest, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -69,13 +60,10 @@ export const GenesisState = {
           message.params = Params.decode(reader, reader.uint32());
           break;
         case 2:
-          message.bestBlockHeader = BlockHeader.decode(reader, reader.uint32());
+          message.utxos.push(UTXO.decode(reader, reader.uint32()));
           break;
         case 3:
-          message.blockHeaders.push(BlockHeader.decode(reader, reader.uint32()));
-          break;
-        case 4:
-          message.utxos.push(UTXO.decode(reader, reader.uint32()));
+          message.dkgRequest = DKGRequest.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -87,9 +75,8 @@ export const GenesisState = {
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
-    message.bestBlockHeader = object.bestBlockHeader !== undefined && object.bestBlockHeader !== null ? BlockHeader.fromPartial(object.bestBlockHeader) : undefined;
-    message.blockHeaders = object.blockHeaders?.map(e => BlockHeader.fromPartial(e)) || [];
     message.utxos = object.utxos?.map(e => UTXO.fromPartial(e)) || [];
+    message.dkgRequest = object.dkgRequest !== undefined && object.dkgRequest !== null ? DKGRequest.fromPartial(object.dkgRequest) : undefined;
     return message;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
@@ -97,27 +84,21 @@ export const GenesisState = {
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromAmino(object.params);
     }
-    if (object.best_block_header !== undefined && object.best_block_header !== null) {
-      message.bestBlockHeader = BlockHeader.fromAmino(object.best_block_header);
-    }
-    message.blockHeaders = object.block_headers?.map(e => BlockHeader.fromAmino(e)) || [];
     message.utxos = object.utxos?.map(e => UTXO.fromAmino(e)) || [];
+    if (object.dkg_request !== undefined && object.dkg_request !== null) {
+      message.dkgRequest = DKGRequest.fromAmino(object.dkg_request);
+    }
     return message;
   },
   toAmino(message: GenesisState): GenesisStateAmino {
     const obj: any = {};
     obj.params = message.params ? Params.toAmino(message.params) : undefined;
-    obj.best_block_header = message.bestBlockHeader ? BlockHeader.toAmino(message.bestBlockHeader) : undefined;
-    if (message.blockHeaders) {
-      obj.block_headers = message.blockHeaders.map(e => e ? BlockHeader.toAmino(e) : undefined);
-    } else {
-      obj.block_headers = message.blockHeaders;
-    }
     if (message.utxos) {
       obj.utxos = message.utxos.map(e => e ? UTXO.toAmino(e) : undefined);
     } else {
       obj.utxos = message.utxos;
     }
+    obj.dkg_request = message.dkgRequest ? DKGRequest.toAmino(message.dkgRequest) : undefined;
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {

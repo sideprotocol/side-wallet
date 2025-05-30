@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
-import { SigningStatus, DKGRequestStatus, WithdrawRequest, WithdrawRequestAmino, WithdrawRequestSDKType, SigningRequest, SigningRequestAmino, SigningRequestSDKType, BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, UTXO, UTXOAmino, UTXOSDKType, RuneBalance, RuneBalanceAmino, RuneBalanceSDKType, DKGRequest, DKGRequestAmino, DKGRequestSDKType, DKGCompletionRequest, DKGCompletionRequestAmino, DKGCompletionRequestSDKType } from "./btcbridge";
+import { SigningStatus, DKGRequestStatus, WithdrawRequest, WithdrawRequestAmino, WithdrawRequestSDKType, SigningRequest, SigningRequestAmino, SigningRequestSDKType, FeeRate, FeeRateAmino, FeeRateSDKType, UTXO, UTXOAmino, UTXOSDKType, RuneBalance, RuneBalanceAmino, RuneBalanceSDKType, DKGRequest, DKGRequestAmino, DKGRequestSDKType, DKGCompletionRequest, DKGCompletionRequestAmino, DKGCompletionRequestSDKType } from "./btcbridge";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../binary";
 /** QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method. */
@@ -131,6 +131,46 @@ export interface QueryPendingBtcWithdrawRequestsResponseAminoMsg {
 export interface QueryPendingBtcWithdrawRequestsResponseSDKType {
   requests: WithdrawRequestSDKType[];
   pagination?: PageResponseSDKType;
+}
+/** QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method. */
+export interface QuerySigningRequestRequest {
+  sequence: bigint;
+}
+export interface QuerySigningRequestRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QuerySigningRequestRequest";
+  value: Uint8Array;
+}
+/** QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method. */
+export interface QuerySigningRequestRequestAmino {
+  sequence?: string;
+}
+export interface QuerySigningRequestRequestAminoMsg {
+  type: "/side.btcbridge.QuerySigningRequestRequest";
+  value: QuerySigningRequestRequestAmino;
+}
+/** QuerySigningRequestRequest is request type for the Query/SigningRequest RPC method. */
+export interface QuerySigningRequestRequestSDKType {
+  sequence: bigint;
+}
+/** QuerySigningRequestResponse is response type for the Query/SigningRequest RPC method. */
+export interface QuerySigningRequestResponse {
+  request?: SigningRequest;
+}
+export interface QuerySigningRequestResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QuerySigningRequestResponse";
+  value: Uint8Array;
+}
+/** QuerySigningRequestResponse is response type for the Query/SigningRequest RPC method. */
+export interface QuerySigningRequestResponseAmino {
+  request?: SigningRequestAmino;
+}
+export interface QuerySigningRequestResponseAminoMsg {
+  type: "/side.btcbridge.QuerySigningRequestResponse";
+  value: QuerySigningRequestResponseAmino;
+}
+/** QuerySigningRequestResponse is response type for the Query/SigningRequest RPC method. */
+export interface QuerySigningRequestResponseSDKType {
+  request?: SigningRequestSDKType;
 }
 /** QuerySigningRequestsRequest is request type for the Query/SigningRequests RPC method. */
 export interface QuerySigningRequestsRequest {
@@ -280,7 +320,7 @@ export interface QueryFeeRateRequestAminoMsg {
 export interface QueryFeeRateRequestSDKType {}
 /** QueryFeeRateResponse is response type for the Query/FeeRate RPC method. */
 export interface QueryFeeRateResponse {
-  feeRate: bigint;
+  feeRate?: FeeRate;
 }
 export interface QueryFeeRateResponseProtoMsg {
   typeUrl: "/side.btcbridge.QueryFeeRateResponse";
@@ -288,7 +328,7 @@ export interface QueryFeeRateResponseProtoMsg {
 }
 /** QueryFeeRateResponse is response type for the Query/FeeRate RPC method. */
 export interface QueryFeeRateResponseAmino {
-  fee_rate?: string;
+  fee_rate?: FeeRateAmino;
 }
 export interface QueryFeeRateResponseAminoMsg {
   type: "/side.btcbridge.QueryFeeRateResponse";
@@ -296,7 +336,7 @@ export interface QueryFeeRateResponseAminoMsg {
 }
 /** QueryFeeRateResponse is response type for the Query/FeeRate RPC method. */
 export interface QueryFeeRateResponseSDKType {
-  fee_rate: bigint;
+  fee_rate?: FeeRateSDKType;
 }
 /** QueryWithdrawalNetworkFeeRequest is request type for the Query/WithdrawalNetworkFee RPC method. */
 export interface QueryWithdrawalNetworkFeeRequest {
@@ -382,123 +422,6 @@ export interface QueryParamsResponseAminoMsg {
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponseSDKType {
   params: ParamsSDKType;
-}
-/** QueryChainTipRequest is request type for the Query/ChainTip RPC method. */
-export interface QueryChainTipRequest {}
-export interface QueryChainTipRequestProtoMsg {
-  typeUrl: "/side.btcbridge.QueryChainTipRequest";
-  value: Uint8Array;
-}
-/** QueryChainTipRequest is request type for the Query/ChainTip RPC method. */
-export interface QueryChainTipRequestAmino {}
-export interface QueryChainTipRequestAminoMsg {
-  type: "/side.btcbridge.QueryChainTipRequest";
-  value: QueryChainTipRequestAmino;
-}
-/** QueryChainTipRequest is request type for the Query/ChainTip RPC method. */
-export interface QueryChainTipRequestSDKType {}
-/** QueryChainTipResponse is response type for the Query/ChainTip RPC method. */
-export interface QueryChainTipResponse {
-  hash: string;
-  height: bigint;
-}
-export interface QueryChainTipResponseProtoMsg {
-  typeUrl: "/side.btcbridge.QueryChainTipResponse";
-  value: Uint8Array;
-}
-/** QueryChainTipResponse is response type for the Query/ChainTip RPC method. */
-export interface QueryChainTipResponseAmino {
-  hash?: string;
-  height?: string;
-}
-export interface QueryChainTipResponseAminoMsg {
-  type: "/side.btcbridge.QueryChainTipResponse";
-  value: QueryChainTipResponseAmino;
-}
-/** QueryChainTipResponse is response type for the Query/ChainTip RPC method. */
-export interface QueryChainTipResponseSDKType {
-  hash: string;
-  height: bigint;
-}
-/** QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method. */
-export interface QueryBlockHeaderByHeightRequest {
-  height: bigint;
-}
-export interface QueryBlockHeaderByHeightRequestProtoMsg {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightRequest";
-  value: Uint8Array;
-}
-/** QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method. */
-export interface QueryBlockHeaderByHeightRequestAmino {
-  height?: string;
-}
-export interface QueryBlockHeaderByHeightRequestAminoMsg {
-  type: "/side.btcbridge.QueryBlockHeaderByHeightRequest";
-  value: QueryBlockHeaderByHeightRequestAmino;
-}
-/** QueryBlockHeaderByHeightRequest is the request type for the Query/BlockHeaderByHeight RPC method. */
-export interface QueryBlockHeaderByHeightRequestSDKType {
-  height: bigint;
-}
-/** QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method. */
-export interface QueryBlockHeaderByHeightResponse {
-  blockHeader?: BlockHeader;
-}
-export interface QueryBlockHeaderByHeightResponseProtoMsg {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightResponse";
-  value: Uint8Array;
-}
-/** QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method. */
-export interface QueryBlockHeaderByHeightResponseAmino {
-  block_header?: BlockHeaderAmino;
-}
-export interface QueryBlockHeaderByHeightResponseAminoMsg {
-  type: "/side.btcbridge.QueryBlockHeaderByHeightResponse";
-  value: QueryBlockHeaderByHeightResponseAmino;
-}
-/** QueryBlockHeaderByHeightResponse is the response type for the Query/BlockHeaderByHeight RPC method. */
-export interface QueryBlockHeaderByHeightResponseSDKType {
-  block_header?: BlockHeaderSDKType;
-}
-/** QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method. */
-export interface QueryBlockHeaderByHashRequest {
-  hash: string;
-}
-export interface QueryBlockHeaderByHashRequestProtoMsg {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashRequest";
-  value: Uint8Array;
-}
-/** QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method. */
-export interface QueryBlockHeaderByHashRequestAmino {
-  hash?: string;
-}
-export interface QueryBlockHeaderByHashRequestAminoMsg {
-  type: "/side.btcbridge.QueryBlockHeaderByHashRequest";
-  value: QueryBlockHeaderByHashRequestAmino;
-}
-/** QueryBlockHeaderByHashRequest is the request type for the Query/BlockHeaderByHash RPC method. */
-export interface QueryBlockHeaderByHashRequestSDKType {
-  hash: string;
-}
-/** QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method. */
-export interface QueryBlockHeaderByHashResponse {
-  blockHeader?: BlockHeader;
-}
-export interface QueryBlockHeaderByHashResponseProtoMsg {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashResponse";
-  value: Uint8Array;
-}
-/** QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method. */
-export interface QueryBlockHeaderByHashResponseAmino {
-  block_header?: BlockHeaderAmino;
-}
-export interface QueryBlockHeaderByHashResponseAminoMsg {
-  type: "/side.btcbridge.QueryBlockHeaderByHashResponse";
-  value: QueryBlockHeaderByHashResponseAmino;
-}
-/** QueryBlockHeaderByHashResponse is the response type for the Query/BlockHeaderByHash RPC method. */
-export interface QueryBlockHeaderByHashResponseSDKType {
-  block_header?: BlockHeaderSDKType;
 }
 /** QueryUTXOsRequest is the request type for the Query/UTXOs RPC method. */
 export interface QueryUTXOsRequest {}
@@ -1194,6 +1117,132 @@ export const QueryPendingBtcWithdrawRequestsResponse = {
     };
   }
 };
+function createBaseQuerySigningRequestRequest(): QuerySigningRequestRequest {
+  return {
+    sequence: BigInt(0)
+  };
+}
+export const QuerySigningRequestRequest = {
+  typeUrl: "/side.btcbridge.QuerySigningRequestRequest",
+  encode(message: QuerySigningRequestRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.sequence !== BigInt(0)) {
+      writer.uint32(8).uint64(message.sequence);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySigningRequestRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySigningRequestRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.sequence = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QuerySigningRequestRequest>): QuerySigningRequestRequest {
+    const message = createBaseQuerySigningRequestRequest();
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: QuerySigningRequestRequestAmino): QuerySigningRequestRequest {
+    const message = createBaseQuerySigningRequestRequest();
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = BigInt(object.sequence);
+    }
+    return message;
+  },
+  toAmino(message: QuerySigningRequestRequest): QuerySigningRequestRequestAmino {
+    const obj: any = {};
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySigningRequestRequestAminoMsg): QuerySigningRequestRequest {
+    return QuerySigningRequestRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySigningRequestRequestProtoMsg): QuerySigningRequestRequest {
+    return QuerySigningRequestRequest.decode(message.value);
+  },
+  toProto(message: QuerySigningRequestRequest): Uint8Array {
+    return QuerySigningRequestRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySigningRequestRequest): QuerySigningRequestRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QuerySigningRequestRequest",
+      value: QuerySigningRequestRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQuerySigningRequestResponse(): QuerySigningRequestResponse {
+  return {
+    request: undefined
+  };
+}
+export const QuerySigningRequestResponse = {
+  typeUrl: "/side.btcbridge.QuerySigningRequestResponse",
+  encode(message: QuerySigningRequestResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.request !== undefined) {
+      SigningRequest.encode(message.request, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QuerySigningRequestResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQuerySigningRequestResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.request = SigningRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QuerySigningRequestResponse>): QuerySigningRequestResponse {
+    const message = createBaseQuerySigningRequestResponse();
+    message.request = object.request !== undefined && object.request !== null ? SigningRequest.fromPartial(object.request) : undefined;
+    return message;
+  },
+  fromAmino(object: QuerySigningRequestResponseAmino): QuerySigningRequestResponse {
+    const message = createBaseQuerySigningRequestResponse();
+    if (object.request !== undefined && object.request !== null) {
+      message.request = SigningRequest.fromAmino(object.request);
+    }
+    return message;
+  },
+  toAmino(message: QuerySigningRequestResponse): QuerySigningRequestResponseAmino {
+    const obj: any = {};
+    obj.request = message.request ? SigningRequest.toAmino(message.request) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QuerySigningRequestResponseAminoMsg): QuerySigningRequestResponse {
+    return QuerySigningRequestResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QuerySigningRequestResponseProtoMsg): QuerySigningRequestResponse {
+    return QuerySigningRequestResponse.decode(message.value);
+  },
+  toProto(message: QuerySigningRequestResponse): Uint8Array {
+    return QuerySigningRequestResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QuerySigningRequestResponse): QuerySigningRequestResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QuerySigningRequestResponse",
+      value: QuerySigningRequestResponse.encode(message).finish()
+    };
+  }
+};
 function createBaseQuerySigningRequestsRequest(): QuerySigningRequestsRequest {
   return {
     status: 0,
@@ -1676,14 +1725,14 @@ export const QueryFeeRateRequest = {
 };
 function createBaseQueryFeeRateResponse(): QueryFeeRateResponse {
   return {
-    feeRate: BigInt(0)
+    feeRate: undefined
   };
 }
 export const QueryFeeRateResponse = {
   typeUrl: "/side.btcbridge.QueryFeeRateResponse",
   encode(message: QueryFeeRateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.feeRate !== BigInt(0)) {
-      writer.uint32(8).int64(message.feeRate);
+    if (message.feeRate !== undefined) {
+      FeeRate.encode(message.feeRate, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -1695,7 +1744,7 @@ export const QueryFeeRateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.feeRate = reader.int64();
+          message.feeRate = FeeRate.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1706,19 +1755,19 @@ export const QueryFeeRateResponse = {
   },
   fromPartial(object: Partial<QueryFeeRateResponse>): QueryFeeRateResponse {
     const message = createBaseQueryFeeRateResponse();
-    message.feeRate = object.feeRate !== undefined && object.feeRate !== null ? BigInt(object.feeRate.toString()) : BigInt(0);
+    message.feeRate = object.feeRate !== undefined && object.feeRate !== null ? FeeRate.fromPartial(object.feeRate) : undefined;
     return message;
   },
   fromAmino(object: QueryFeeRateResponseAmino): QueryFeeRateResponse {
     const message = createBaseQueryFeeRateResponse();
     if (object.fee_rate !== undefined && object.fee_rate !== null) {
-      message.feeRate = BigInt(object.fee_rate);
+      message.feeRate = FeeRate.fromAmino(object.fee_rate);
     }
     return message;
   },
   toAmino(message: QueryFeeRateResponse): QueryFeeRateResponseAmino {
     const obj: any = {};
-    obj.fee_rate = message.feeRate !== BigInt(0) ? message.feeRate.toString() : undefined;
+    obj.fee_rate = message.feeRate ? FeeRate.toAmino(message.feeRate) : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryFeeRateResponseAminoMsg): QueryFeeRateResponse {
@@ -2009,383 +2058,6 @@ export const QueryParamsResponse = {
     return {
       typeUrl: "/side.btcbridge.QueryParamsResponse",
       value: QueryParamsResponse.encode(message).finish()
-    };
-  }
-};
-function createBaseQueryChainTipRequest(): QueryChainTipRequest {
-  return {};
-}
-export const QueryChainTipRequest = {
-  typeUrl: "/side.btcbridge.QueryChainTipRequest",
-  encode(_: QueryChainTipRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryChainTipRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryChainTipRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(_: Partial<QueryChainTipRequest>): QueryChainTipRequest {
-    const message = createBaseQueryChainTipRequest();
-    return message;
-  },
-  fromAmino(_: QueryChainTipRequestAmino): QueryChainTipRequest {
-    const message = createBaseQueryChainTipRequest();
-    return message;
-  },
-  toAmino(_: QueryChainTipRequest): QueryChainTipRequestAmino {
-    const obj: any = {};
-    return obj;
-  },
-  fromAminoMsg(object: QueryChainTipRequestAminoMsg): QueryChainTipRequest {
-    return QueryChainTipRequest.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryChainTipRequestProtoMsg): QueryChainTipRequest {
-    return QueryChainTipRequest.decode(message.value);
-  },
-  toProto(message: QueryChainTipRequest): Uint8Array {
-    return QueryChainTipRequest.encode(message).finish();
-  },
-  toProtoMsg(message: QueryChainTipRequest): QueryChainTipRequestProtoMsg {
-    return {
-      typeUrl: "/side.btcbridge.QueryChainTipRequest",
-      value: QueryChainTipRequest.encode(message).finish()
-    };
-  }
-};
-function createBaseQueryChainTipResponse(): QueryChainTipResponse {
-  return {
-    hash: "",
-    height: BigInt(0)
-  };
-}
-export const QueryChainTipResponse = {
-  typeUrl: "/side.btcbridge.QueryChainTipResponse",
-  encode(message: QueryChainTipResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.hash !== "") {
-      writer.uint32(10).string(message.hash);
-    }
-    if (message.height !== BigInt(0)) {
-      writer.uint32(16).uint64(message.height);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryChainTipResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryChainTipResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.hash = reader.string();
-          break;
-        case 2:
-          message.height = reader.uint64();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<QueryChainTipResponse>): QueryChainTipResponse {
-    const message = createBaseQueryChainTipResponse();
-    message.hash = object.hash ?? "";
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
-    return message;
-  },
-  fromAmino(object: QueryChainTipResponseAmino): QueryChainTipResponse {
-    const message = createBaseQueryChainTipResponse();
-    if (object.hash !== undefined && object.hash !== null) {
-      message.hash = object.hash;
-    }
-    if (object.height !== undefined && object.height !== null) {
-      message.height = BigInt(object.height);
-    }
-    return message;
-  },
-  toAmino(message: QueryChainTipResponse): QueryChainTipResponseAmino {
-    const obj: any = {};
-    obj.hash = message.hash === "" ? undefined : message.hash;
-    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
-    return obj;
-  },
-  fromAminoMsg(object: QueryChainTipResponseAminoMsg): QueryChainTipResponse {
-    return QueryChainTipResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryChainTipResponseProtoMsg): QueryChainTipResponse {
-    return QueryChainTipResponse.decode(message.value);
-  },
-  toProto(message: QueryChainTipResponse): Uint8Array {
-    return QueryChainTipResponse.encode(message).finish();
-  },
-  toProtoMsg(message: QueryChainTipResponse): QueryChainTipResponseProtoMsg {
-    return {
-      typeUrl: "/side.btcbridge.QueryChainTipResponse",
-      value: QueryChainTipResponse.encode(message).finish()
-    };
-  }
-};
-function createBaseQueryBlockHeaderByHeightRequest(): QueryBlockHeaderByHeightRequest {
-  return {
-    height: BigInt(0)
-  };
-}
-export const QueryBlockHeaderByHeightRequest = {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightRequest",
-  encode(message: QueryBlockHeaderByHeightRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.height !== BigInt(0)) {
-      writer.uint32(8).uint64(message.height);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryBlockHeaderByHeightRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryBlockHeaderByHeightRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.height = reader.uint64();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<QueryBlockHeaderByHeightRequest>): QueryBlockHeaderByHeightRequest {
-    const message = createBaseQueryBlockHeaderByHeightRequest();
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
-    return message;
-  },
-  fromAmino(object: QueryBlockHeaderByHeightRequestAmino): QueryBlockHeaderByHeightRequest {
-    const message = createBaseQueryBlockHeaderByHeightRequest();
-    if (object.height !== undefined && object.height !== null) {
-      message.height = BigInt(object.height);
-    }
-    return message;
-  },
-  toAmino(message: QueryBlockHeaderByHeightRequest): QueryBlockHeaderByHeightRequestAmino {
-    const obj: any = {};
-    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
-    return obj;
-  },
-  fromAminoMsg(object: QueryBlockHeaderByHeightRequestAminoMsg): QueryBlockHeaderByHeightRequest {
-    return QueryBlockHeaderByHeightRequest.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryBlockHeaderByHeightRequestProtoMsg): QueryBlockHeaderByHeightRequest {
-    return QueryBlockHeaderByHeightRequest.decode(message.value);
-  },
-  toProto(message: QueryBlockHeaderByHeightRequest): Uint8Array {
-    return QueryBlockHeaderByHeightRequest.encode(message).finish();
-  },
-  toProtoMsg(message: QueryBlockHeaderByHeightRequest): QueryBlockHeaderByHeightRequestProtoMsg {
-    return {
-      typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightRequest",
-      value: QueryBlockHeaderByHeightRequest.encode(message).finish()
-    };
-  }
-};
-function createBaseQueryBlockHeaderByHeightResponse(): QueryBlockHeaderByHeightResponse {
-  return {
-    blockHeader: undefined
-  };
-}
-export const QueryBlockHeaderByHeightResponse = {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightResponse",
-  encode(message: QueryBlockHeaderByHeightResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.blockHeader !== undefined) {
-      BlockHeader.encode(message.blockHeader, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryBlockHeaderByHeightResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryBlockHeaderByHeightResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.blockHeader = BlockHeader.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<QueryBlockHeaderByHeightResponse>): QueryBlockHeaderByHeightResponse {
-    const message = createBaseQueryBlockHeaderByHeightResponse();
-    message.blockHeader = object.blockHeader !== undefined && object.blockHeader !== null ? BlockHeader.fromPartial(object.blockHeader) : undefined;
-    return message;
-  },
-  fromAmino(object: QueryBlockHeaderByHeightResponseAmino): QueryBlockHeaderByHeightResponse {
-    const message = createBaseQueryBlockHeaderByHeightResponse();
-    if (object.block_header !== undefined && object.block_header !== null) {
-      message.blockHeader = BlockHeader.fromAmino(object.block_header);
-    }
-    return message;
-  },
-  toAmino(message: QueryBlockHeaderByHeightResponse): QueryBlockHeaderByHeightResponseAmino {
-    const obj: any = {};
-    obj.block_header = message.blockHeader ? BlockHeader.toAmino(message.blockHeader) : undefined;
-    return obj;
-  },
-  fromAminoMsg(object: QueryBlockHeaderByHeightResponseAminoMsg): QueryBlockHeaderByHeightResponse {
-    return QueryBlockHeaderByHeightResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryBlockHeaderByHeightResponseProtoMsg): QueryBlockHeaderByHeightResponse {
-    return QueryBlockHeaderByHeightResponse.decode(message.value);
-  },
-  toProto(message: QueryBlockHeaderByHeightResponse): Uint8Array {
-    return QueryBlockHeaderByHeightResponse.encode(message).finish();
-  },
-  toProtoMsg(message: QueryBlockHeaderByHeightResponse): QueryBlockHeaderByHeightResponseProtoMsg {
-    return {
-      typeUrl: "/side.btcbridge.QueryBlockHeaderByHeightResponse",
-      value: QueryBlockHeaderByHeightResponse.encode(message).finish()
-    };
-  }
-};
-function createBaseQueryBlockHeaderByHashRequest(): QueryBlockHeaderByHashRequest {
-  return {
-    hash: ""
-  };
-}
-export const QueryBlockHeaderByHashRequest = {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashRequest",
-  encode(message: QueryBlockHeaderByHashRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.hash !== "") {
-      writer.uint32(10).string(message.hash);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryBlockHeaderByHashRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryBlockHeaderByHashRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.hash = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<QueryBlockHeaderByHashRequest>): QueryBlockHeaderByHashRequest {
-    const message = createBaseQueryBlockHeaderByHashRequest();
-    message.hash = object.hash ?? "";
-    return message;
-  },
-  fromAmino(object: QueryBlockHeaderByHashRequestAmino): QueryBlockHeaderByHashRequest {
-    const message = createBaseQueryBlockHeaderByHashRequest();
-    if (object.hash !== undefined && object.hash !== null) {
-      message.hash = object.hash;
-    }
-    return message;
-  },
-  toAmino(message: QueryBlockHeaderByHashRequest): QueryBlockHeaderByHashRequestAmino {
-    const obj: any = {};
-    obj.hash = message.hash === "" ? undefined : message.hash;
-    return obj;
-  },
-  fromAminoMsg(object: QueryBlockHeaderByHashRequestAminoMsg): QueryBlockHeaderByHashRequest {
-    return QueryBlockHeaderByHashRequest.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryBlockHeaderByHashRequestProtoMsg): QueryBlockHeaderByHashRequest {
-    return QueryBlockHeaderByHashRequest.decode(message.value);
-  },
-  toProto(message: QueryBlockHeaderByHashRequest): Uint8Array {
-    return QueryBlockHeaderByHashRequest.encode(message).finish();
-  },
-  toProtoMsg(message: QueryBlockHeaderByHashRequest): QueryBlockHeaderByHashRequestProtoMsg {
-    return {
-      typeUrl: "/side.btcbridge.QueryBlockHeaderByHashRequest",
-      value: QueryBlockHeaderByHashRequest.encode(message).finish()
-    };
-  }
-};
-function createBaseQueryBlockHeaderByHashResponse(): QueryBlockHeaderByHashResponse {
-  return {
-    blockHeader: undefined
-  };
-}
-export const QueryBlockHeaderByHashResponse = {
-  typeUrl: "/side.btcbridge.QueryBlockHeaderByHashResponse",
-  encode(message: QueryBlockHeaderByHashResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.blockHeader !== undefined) {
-      BlockHeader.encode(message.blockHeader, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryBlockHeaderByHashResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryBlockHeaderByHashResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.blockHeader = BlockHeader.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<QueryBlockHeaderByHashResponse>): QueryBlockHeaderByHashResponse {
-    const message = createBaseQueryBlockHeaderByHashResponse();
-    message.blockHeader = object.blockHeader !== undefined && object.blockHeader !== null ? BlockHeader.fromPartial(object.blockHeader) : undefined;
-    return message;
-  },
-  fromAmino(object: QueryBlockHeaderByHashResponseAmino): QueryBlockHeaderByHashResponse {
-    const message = createBaseQueryBlockHeaderByHashResponse();
-    if (object.block_header !== undefined && object.block_header !== null) {
-      message.blockHeader = BlockHeader.fromAmino(object.block_header);
-    }
-    return message;
-  },
-  toAmino(message: QueryBlockHeaderByHashResponse): QueryBlockHeaderByHashResponseAmino {
-    const obj: any = {};
-    obj.block_header = message.blockHeader ? BlockHeader.toAmino(message.blockHeader) : undefined;
-    return obj;
-  },
-  fromAminoMsg(object: QueryBlockHeaderByHashResponseAminoMsg): QueryBlockHeaderByHashResponse {
-    return QueryBlockHeaderByHashResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryBlockHeaderByHashResponseProtoMsg): QueryBlockHeaderByHashResponse {
-    return QueryBlockHeaderByHashResponse.decode(message.value);
-  },
-  toProto(message: QueryBlockHeaderByHashResponse): Uint8Array {
-    return QueryBlockHeaderByHashResponse.encode(message).finish();
-  },
-  toProtoMsg(message: QueryBlockHeaderByHashResponse): QueryBlockHeaderByHashResponseProtoMsg {
-    return {
-      typeUrl: "/side.btcbridge.QueryBlockHeaderByHashResponse",
-      value: QueryBlockHeaderByHashResponse.encode(message).finish()
     };
   }
 };

@@ -1,6 +1,6 @@
 //@ts-nocheck
-import { Timestamp } from "../../google/protobuf/timestamp";
 import { AssetType } from "./params";
+import { Timestamp } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { toTimestamp, fromTimestamp, bytesFromBase64, base64FromBytes } from "../../helpers";
 /** Bitcoin Signing Status */
@@ -114,54 +114,38 @@ export function dKGRequestStatusToJSON(object: DKGRequestStatus): string {
       return "UNRECOGNIZED";
   }
 }
-/** Bitcoin Block Header */
-export interface BlockHeader {
-  version: bigint;
-  hash: string;
+/** Fee rate */
+export interface FeeRate {
+  /** fee rate */
+  value: bigint;
+  /** block height at which the fee rate is submitted */
   height: bigint;
-  previousBlockHash: string;
-  merkleRoot: string;
-  nonce: bigint;
-  bits: string;
-  time: bigint;
-  ntx: bigint;
 }
-export interface BlockHeaderProtoMsg {
-  typeUrl: "/side.btcbridge.BlockHeader";
+export interface FeeRateProtoMsg {
+  typeUrl: "/side.btcbridge.FeeRate";
   value: Uint8Array;
 }
-/** Bitcoin Block Header */
-export interface BlockHeaderAmino {
-  version?: string;
-  hash?: string;
+/** Fee rate */
+export interface FeeRateAmino {
+  /** fee rate */
+  value?: string;
+  /** block height at which the fee rate is submitted */
   height?: string;
-  previous_block_hash?: string;
-  merkle_root?: string;
-  nonce?: string;
-  bits?: string;
-  time?: string;
-  ntx?: string;
 }
-export interface BlockHeaderAminoMsg {
-  type: "/side.btcbridge.BlockHeader";
-  value: BlockHeaderAmino;
+export interface FeeRateAminoMsg {
+  type: "/side.btcbridge.FeeRate";
+  value: FeeRateAmino;
 }
-/** Bitcoin Block Header */
-export interface BlockHeaderSDKType {
-  version: bigint;
-  hash: string;
+/** Fee rate */
+export interface FeeRateSDKType {
+  value: bigint;
   height: bigint;
-  previous_block_hash: string;
-  merkle_root: string;
-  nonce: bigint;
-  bits: string;
-  time: bigint;
-  ntx: bigint;
 }
 /** Bitcoin Signing Request */
 export interface SigningRequest {
   address: string;
   sequence: bigint;
+  type: AssetType;
   txid: string;
   psbt: string;
   creationTime: Date;
@@ -175,6 +159,7 @@ export interface SigningRequestProtoMsg {
 export interface SigningRequestAmino {
   address?: string;
   sequence?: string;
+  type?: AssetType;
   txid?: string;
   psbt?: string;
   creation_time?: string;
@@ -188,6 +173,7 @@ export interface SigningRequestAminoMsg {
 export interface SigningRequestSDKType {
   address: string;
   sequence: bigint;
+  type: AssetType;
   txid: string;
   psbt: string;
   creation_time: Date;
@@ -410,8 +396,8 @@ export interface DKGParticipant {
   moniker: string;
   /** the operator address of the corresponding validator */
   operatorAddress: string;
-  /** the consensus address of the corresponding validator */
-  consensusAddress: string;
+  /** the consensus public key of the corresponding validator */
+  consensusPubkey: string;
 }
 export interface DKGParticipantProtoMsg {
   typeUrl: "/side.btcbridge.DKGParticipant";
@@ -423,8 +409,8 @@ export interface DKGParticipantAmino {
   moniker?: string;
   /** the operator address of the corresponding validator */
   operator_address?: string;
-  /** the consensus address of the corresponding validator */
-  consensus_address?: string;
+  /** the consensus public key of the corresponding validator */
+  consensus_pubkey?: string;
 }
 export interface DKGParticipantAminoMsg {
   type: "/side.btcbridge.DKGParticipant";
@@ -434,7 +420,7 @@ export interface DKGParticipantAminoMsg {
 export interface DKGParticipantSDKType {
   moniker: string;
   operator_address: string;
-  consensus_address: string;
+  consensus_pubkey: string;
 }
 /** DKG Request */
 export interface DKGRequest {
@@ -446,14 +432,10 @@ export interface DKGRequest {
   threshold: number;
   /** asset types of vaults to be generated */
   vaultTypes: AssetType[];
-  /** indicates if disabling bridge deposit and withdrawal */
-  disableBridge: boolean;
   /** indicates if transferring assets to the newly generated vaults when the DKG request is completed */
   enableTransfer: boolean;
   /** target number of the UTXOs to be transferred each time */
   targetUtxoNum: number;
-  /** fee rate for vault transfer */
-  feeRate: string;
   /** expiration time */
   expiration?: Date;
   /** status */
@@ -473,14 +455,10 @@ export interface DKGRequestAmino {
   threshold?: number;
   /** asset types of vaults to be generated */
   vault_types?: AssetType[];
-  /** indicates if disabling bridge deposit and withdrawal */
-  disable_bridge?: boolean;
   /** indicates if transferring assets to the newly generated vaults when the DKG request is completed */
   enable_transfer?: boolean;
   /** target number of the UTXOs to be transferred each time */
   target_utxo_num?: number;
-  /** fee rate for vault transfer */
-  fee_rate?: string;
   /** expiration time */
   expiration?: string;
   /** status */
@@ -496,10 +474,8 @@ export interface DKGRequestSDKType {
   participants: DKGParticipantSDKType[];
   threshold: number;
   vault_types: AssetType[];
-  disable_bridge: boolean;
   enable_transfer: boolean;
   target_utxo_num: number;
-  fee_rate: string;
   expiration?: Date;
   status: DKGRequestStatus;
 }
@@ -545,84 +521,35 @@ export interface DKGCompletionRequestSDKType {
   consensus_address: string;
   signature: string;
 }
-function createBaseBlockHeader(): BlockHeader {
+function createBaseFeeRate(): FeeRate {
   return {
-    version: BigInt(0),
-    hash: "",
-    height: BigInt(0),
-    previousBlockHash: "",
-    merkleRoot: "",
-    nonce: BigInt(0),
-    bits: "",
-    time: BigInt(0),
-    ntx: BigInt(0)
+    value: BigInt(0),
+    height: BigInt(0)
   };
 }
-export const BlockHeader = {
-  typeUrl: "/side.btcbridge.BlockHeader",
-  encode(message: BlockHeader, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.version !== BigInt(0)) {
-      writer.uint32(8).uint64(message.version);
-    }
-    if (message.hash !== "") {
-      writer.uint32(18).string(message.hash);
+export const FeeRate = {
+  typeUrl: "/side.btcbridge.FeeRate",
+  encode(message: FeeRate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.value !== BigInt(0)) {
+      writer.uint32(8).int64(message.value);
     }
     if (message.height !== BigInt(0)) {
-      writer.uint32(24).uint64(message.height);
-    }
-    if (message.previousBlockHash !== "") {
-      writer.uint32(34).string(message.previousBlockHash);
-    }
-    if (message.merkleRoot !== "") {
-      writer.uint32(42).string(message.merkleRoot);
-    }
-    if (message.nonce !== BigInt(0)) {
-      writer.uint32(48).uint64(message.nonce);
-    }
-    if (message.bits !== "") {
-      writer.uint32(58).string(message.bits);
-    }
-    if (message.time !== BigInt(0)) {
-      writer.uint32(64).uint64(message.time);
-    }
-    if (message.ntx !== BigInt(0)) {
-      writer.uint32(72).uint64(message.ntx);
+      writer.uint32(16).int64(message.height);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): BlockHeader {
+  decode(input: BinaryReader | Uint8Array, length?: number): FeeRate {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseBlockHeader();
+    const message = createBaseFeeRate();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.version = reader.uint64();
+          message.value = reader.int64();
           break;
         case 2:
-          message.hash = reader.string();
-          break;
-        case 3:
-          message.height = reader.uint64();
-          break;
-        case 4:
-          message.previousBlockHash = reader.string();
-          break;
-        case 5:
-          message.merkleRoot = reader.string();
-          break;
-        case 6:
-          message.nonce = reader.uint64();
-          break;
-        case 7:
-          message.bits = reader.string();
-          break;
-        case 8:
-          message.time = reader.uint64();
-          break;
-        case 9:
-          message.ntx = reader.uint64();
+          message.height = reader.int64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -631,76 +558,41 @@ export const BlockHeader = {
     }
     return message;
   },
-  fromPartial(object: Partial<BlockHeader>): BlockHeader {
-    const message = createBaseBlockHeader();
-    message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
-    message.hash = object.hash ?? "";
+  fromPartial(object: Partial<FeeRate>): FeeRate {
+    const message = createBaseFeeRate();
+    message.value = object.value !== undefined && object.value !== null ? BigInt(object.value.toString()) : BigInt(0);
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
-    message.previousBlockHash = object.previousBlockHash ?? "";
-    message.merkleRoot = object.merkleRoot ?? "";
-    message.nonce = object.nonce !== undefined && object.nonce !== null ? BigInt(object.nonce.toString()) : BigInt(0);
-    message.bits = object.bits ?? "";
-    message.time = object.time !== undefined && object.time !== null ? BigInt(object.time.toString()) : BigInt(0);
-    message.ntx = object.ntx !== undefined && object.ntx !== null ? BigInt(object.ntx.toString()) : BigInt(0);
     return message;
   },
-  fromAmino(object: BlockHeaderAmino): BlockHeader {
-    const message = createBaseBlockHeader();
-    if (object.version !== undefined && object.version !== null) {
-      message.version = BigInt(object.version);
-    }
-    if (object.hash !== undefined && object.hash !== null) {
-      message.hash = object.hash;
+  fromAmino(object: FeeRateAmino): FeeRate {
+    const message = createBaseFeeRate();
+    if (object.value !== undefined && object.value !== null) {
+      message.value = BigInt(object.value);
     }
     if (object.height !== undefined && object.height !== null) {
       message.height = BigInt(object.height);
     }
-    if (object.previous_block_hash !== undefined && object.previous_block_hash !== null) {
-      message.previousBlockHash = object.previous_block_hash;
-    }
-    if (object.merkle_root !== undefined && object.merkle_root !== null) {
-      message.merkleRoot = object.merkle_root;
-    }
-    if (object.nonce !== undefined && object.nonce !== null) {
-      message.nonce = BigInt(object.nonce);
-    }
-    if (object.bits !== undefined && object.bits !== null) {
-      message.bits = object.bits;
-    }
-    if (object.time !== undefined && object.time !== null) {
-      message.time = BigInt(object.time);
-    }
-    if (object.ntx !== undefined && object.ntx !== null) {
-      message.ntx = BigInt(object.ntx);
-    }
     return message;
   },
-  toAmino(message: BlockHeader): BlockHeaderAmino {
+  toAmino(message: FeeRate): FeeRateAmino {
     const obj: any = {};
-    obj.version = message.version !== BigInt(0) ? message.version.toString() : undefined;
-    obj.hash = message.hash === "" ? undefined : message.hash;
+    obj.value = message.value !== BigInt(0) ? message.value.toString() : undefined;
     obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
-    obj.previous_block_hash = message.previousBlockHash === "" ? undefined : message.previousBlockHash;
-    obj.merkle_root = message.merkleRoot === "" ? undefined : message.merkleRoot;
-    obj.nonce = message.nonce !== BigInt(0) ? message.nonce.toString() : undefined;
-    obj.bits = message.bits === "" ? undefined : message.bits;
-    obj.time = message.time !== BigInt(0) ? message.time.toString() : undefined;
-    obj.ntx = message.ntx !== BigInt(0) ? message.ntx.toString() : undefined;
     return obj;
   },
-  fromAminoMsg(object: BlockHeaderAminoMsg): BlockHeader {
-    return BlockHeader.fromAmino(object.value);
+  fromAminoMsg(object: FeeRateAminoMsg): FeeRate {
+    return FeeRate.fromAmino(object.value);
   },
-  fromProtoMsg(message: BlockHeaderProtoMsg): BlockHeader {
-    return BlockHeader.decode(message.value);
+  fromProtoMsg(message: FeeRateProtoMsg): FeeRate {
+    return FeeRate.decode(message.value);
   },
-  toProto(message: BlockHeader): Uint8Array {
-    return BlockHeader.encode(message).finish();
+  toProto(message: FeeRate): Uint8Array {
+    return FeeRate.encode(message).finish();
   },
-  toProtoMsg(message: BlockHeader): BlockHeaderProtoMsg {
+  toProtoMsg(message: FeeRate): FeeRateProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.BlockHeader",
-      value: BlockHeader.encode(message).finish()
+      typeUrl: "/side.btcbridge.FeeRate",
+      value: FeeRate.encode(message).finish()
     };
   }
 };
@@ -708,6 +600,7 @@ function createBaseSigningRequest(): SigningRequest {
   return {
     address: "",
     sequence: BigInt(0),
+    type: 0,
     txid: "",
     psbt: "",
     creationTime: new Date(),
@@ -723,17 +616,20 @@ export const SigningRequest = {
     if (message.sequence !== BigInt(0)) {
       writer.uint32(16).uint64(message.sequence);
     }
+    if (message.type !== 0) {
+      writer.uint32(24).int32(message.type);
+    }
     if (message.txid !== "") {
-      writer.uint32(26).string(message.txid);
+      writer.uint32(34).string(message.txid);
     }
     if (message.psbt !== "") {
-      writer.uint32(34).string(message.psbt);
+      writer.uint32(42).string(message.psbt);
     }
     if (message.creationTime !== undefined) {
-      Timestamp.encode(toTimestamp(message.creationTime), writer.uint32(42).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.creationTime), writer.uint32(50).fork()).ldelim();
     }
     if (message.status !== 0) {
-      writer.uint32(48).int32(message.status);
+      writer.uint32(56).int32(message.status);
     }
     return writer;
   },
@@ -751,15 +647,18 @@ export const SigningRequest = {
           message.sequence = reader.uint64();
           break;
         case 3:
-          message.txid = reader.string();
+          message.type = reader.int32() as any;
           break;
         case 4:
-          message.psbt = reader.string();
+          message.txid = reader.string();
           break;
         case 5:
-          message.creationTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.psbt = reader.string();
           break;
         case 6:
+          message.creationTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 7:
           message.status = reader.int32() as any;
           break;
         default:
@@ -773,6 +672,7 @@ export const SigningRequest = {
     const message = createBaseSigningRequest();
     message.address = object.address ?? "";
     message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
+    message.type = object.type ?? 0;
     message.txid = object.txid ?? "";
     message.psbt = object.psbt ?? "";
     message.creationTime = object.creationTime ?? undefined;
@@ -786,6 +686,9 @@ export const SigningRequest = {
     }
     if (object.sequence !== undefined && object.sequence !== null) {
       message.sequence = BigInt(object.sequence);
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
     }
     if (object.txid !== undefined && object.txid !== null) {
       message.txid = object.txid;
@@ -805,6 +708,7 @@ export const SigningRequest = {
     const obj: any = {};
     obj.address = message.address === "" ? undefined : message.address;
     obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.type = message.type === 0 ? undefined : message.type;
     obj.txid = message.txid === "" ? undefined : message.txid;
     obj.psbt = message.psbt === "" ? undefined : message.psbt;
     obj.creation_time = message.creationTime ? Timestamp.toAmino(toTimestamp(message.creationTime)) : undefined;
@@ -1478,7 +1382,7 @@ function createBaseDKGParticipant(): DKGParticipant {
   return {
     moniker: "",
     operatorAddress: "",
-    consensusAddress: ""
+    consensusPubkey: ""
   };
 }
 export const DKGParticipant = {
@@ -1490,8 +1394,8 @@ export const DKGParticipant = {
     if (message.operatorAddress !== "") {
       writer.uint32(18).string(message.operatorAddress);
     }
-    if (message.consensusAddress !== "") {
-      writer.uint32(26).string(message.consensusAddress);
+    if (message.consensusPubkey !== "") {
+      writer.uint32(26).string(message.consensusPubkey);
     }
     return writer;
   },
@@ -1509,7 +1413,7 @@ export const DKGParticipant = {
           message.operatorAddress = reader.string();
           break;
         case 3:
-          message.consensusAddress = reader.string();
+          message.consensusPubkey = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1522,7 +1426,7 @@ export const DKGParticipant = {
     const message = createBaseDKGParticipant();
     message.moniker = object.moniker ?? "";
     message.operatorAddress = object.operatorAddress ?? "";
-    message.consensusAddress = object.consensusAddress ?? "";
+    message.consensusPubkey = object.consensusPubkey ?? "";
     return message;
   },
   fromAmino(object: DKGParticipantAmino): DKGParticipant {
@@ -1533,8 +1437,8 @@ export const DKGParticipant = {
     if (object.operator_address !== undefined && object.operator_address !== null) {
       message.operatorAddress = object.operator_address;
     }
-    if (object.consensus_address !== undefined && object.consensus_address !== null) {
-      message.consensusAddress = object.consensus_address;
+    if (object.consensus_pubkey !== undefined && object.consensus_pubkey !== null) {
+      message.consensusPubkey = object.consensus_pubkey;
     }
     return message;
   },
@@ -1542,7 +1446,7 @@ export const DKGParticipant = {
     const obj: any = {};
     obj.moniker = message.moniker === "" ? undefined : message.moniker;
     obj.operator_address = message.operatorAddress === "" ? undefined : message.operatorAddress;
-    obj.consensus_address = message.consensusAddress === "" ? undefined : message.consensusAddress;
+    obj.consensus_pubkey = message.consensusPubkey === "" ? undefined : message.consensusPubkey;
     return obj;
   },
   fromAminoMsg(object: DKGParticipantAminoMsg): DKGParticipant {
@@ -1567,10 +1471,8 @@ function createBaseDKGRequest(): DKGRequest {
     participants: [],
     threshold: 0,
     vaultTypes: [],
-    disableBridge: false,
     enableTransfer: false,
     targetUtxoNum: 0,
-    feeRate: "",
     expiration: undefined,
     status: 0
   };
@@ -1592,23 +1494,17 @@ export const DKGRequest = {
       writer.int32(v);
     }
     writer.ldelim();
-    if (message.disableBridge === true) {
-      writer.uint32(40).bool(message.disableBridge);
-    }
     if (message.enableTransfer === true) {
-      writer.uint32(48).bool(message.enableTransfer);
+      writer.uint32(40).bool(message.enableTransfer);
     }
     if (message.targetUtxoNum !== 0) {
-      writer.uint32(56).uint32(message.targetUtxoNum);
-    }
-    if (message.feeRate !== "") {
-      writer.uint32(66).string(message.feeRate);
+      writer.uint32(48).uint32(message.targetUtxoNum);
     }
     if (message.expiration !== undefined) {
-      Timestamp.encode(toTimestamp(message.expiration), writer.uint32(74).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.expiration), writer.uint32(58).fork()).ldelim();
     }
     if (message.status !== 0) {
-      writer.uint32(80).int32(message.status);
+      writer.uint32(64).int32(message.status);
     }
     return writer;
   },
@@ -1639,21 +1535,15 @@ export const DKGRequest = {
           }
           break;
         case 5:
-          message.disableBridge = reader.bool();
-          break;
-        case 6:
           message.enableTransfer = reader.bool();
           break;
-        case 7:
+        case 6:
           message.targetUtxoNum = reader.uint32();
           break;
-        case 8:
-          message.feeRate = reader.string();
-          break;
-        case 9:
+        case 7:
           message.expiration = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
-        case 10:
+        case 8:
           message.status = reader.int32() as any;
           break;
         default:
@@ -1669,10 +1559,8 @@ export const DKGRequest = {
     message.participants = object.participants?.map(e => DKGParticipant.fromPartial(e)) || [];
     message.threshold = object.threshold ?? 0;
     message.vaultTypes = object.vaultTypes?.map(e => e) || [];
-    message.disableBridge = object.disableBridge ?? false;
     message.enableTransfer = object.enableTransfer ?? false;
     message.targetUtxoNum = object.targetUtxoNum ?? 0;
-    message.feeRate = object.feeRate ?? "";
     message.expiration = object.expiration ?? undefined;
     message.status = object.status ?? 0;
     return message;
@@ -1687,17 +1575,11 @@ export const DKGRequest = {
       message.threshold = object.threshold;
     }
     message.vaultTypes = object.vault_types?.map(e => e) || [];
-    if (object.disable_bridge !== undefined && object.disable_bridge !== null) {
-      message.disableBridge = object.disable_bridge;
-    }
     if (object.enable_transfer !== undefined && object.enable_transfer !== null) {
       message.enableTransfer = object.enable_transfer;
     }
     if (object.target_utxo_num !== undefined && object.target_utxo_num !== null) {
       message.targetUtxoNum = object.target_utxo_num;
-    }
-    if (object.fee_rate !== undefined && object.fee_rate !== null) {
-      message.feeRate = object.fee_rate;
     }
     if (object.expiration !== undefined && object.expiration !== null) {
       message.expiration = fromTimestamp(Timestamp.fromAmino(object.expiration));
@@ -1721,10 +1603,8 @@ export const DKGRequest = {
     } else {
       obj.vault_types = message.vaultTypes;
     }
-    obj.disable_bridge = message.disableBridge === false ? undefined : message.disableBridge;
     obj.enable_transfer = message.enableTransfer === false ? undefined : message.enableTransfer;
     obj.target_utxo_num = message.targetUtxoNum === 0 ? undefined : message.targetUtxoNum;
-    obj.fee_rate = message.feeRate === "" ? undefined : message.feeRate;
     obj.expiration = message.expiration ? Timestamp.toAmino(toTimestamp(message.expiration)) : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
     return obj;

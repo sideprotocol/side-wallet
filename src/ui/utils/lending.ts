@@ -122,6 +122,8 @@ export async function prepareApply({
   // generate repayment cet
 
   const getRepaymentSignatureParams = async (refundAddress: string) => {
+    const repaymentPsbt = new bitcoin.Psbt({ network });
+
     const cetInfos = await services.lending.getCetInfo(
       {
         loan_id: collateralAddress!,
@@ -131,8 +133,6 @@ export async function prepareApply({
         baseURL: restUrl
       }
     );
-
-    const repaymentPsbt = new bitcoin.Psbt({ network });
 
     if (depositTxs?.length && depositTxIds) {
       depositTxs.forEach((depositTx, index) => {

@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
-import { LoanStatus, LendingPool, LendingPoolAmino, LendingPoolSDKType, CetInfo, CetInfoAmino, CetInfoSDKType, Loan, LoanAmino, LoanSDKType, DLCMeta, DLCMetaAmino, DLCMetaSDKType, Cancellation, CancellationAmino, CancellationSDKType, Repayment, RepaymentAmino, RepaymentSDKType } from "./lending";
+import { LoanStatus, LendingPool, LendingPoolAmino, LendingPoolSDKType, CetInfo, CetInfoAmino, CetInfoSDKType, Loan, LoanAmino, LoanSDKType, DLCMeta, DLCMetaAmino, DLCMetaSDKType, DepositLog, DepositLogAmino, DepositLogSDKType, AuthorizationStatus, Redemption, RedemptionAmino, RedemptionSDKType, Repayment, RepaymentAmino, RepaymentSDKType } from "./lending";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
@@ -474,45 +474,91 @@ export interface QueryLoanDlcMetaResponseAminoMsg {
 export interface QueryLoanDlcMetaResponseSDKType {
   dlc_meta?: DLCMetaSDKType;
 }
-/** QueryLoanCancellationRequest is request type for the Query/LoanCancellation RPC method. */
-export interface QueryLoanCancellationRequest {
+/** QueryLoanAuthorizationRequest is request type for the Query/LoanAuthorization RPC method. */
+export interface QueryLoanAuthorizationRequest {
   loanId: string;
+  id: bigint;
 }
-export interface QueryLoanCancellationRequestProtoMsg {
-  typeUrl: "/side.lending.QueryLoanCancellationRequest";
+export interface QueryLoanAuthorizationRequestProtoMsg {
+  typeUrl: "/side.lending.QueryLoanAuthorizationRequest";
   value: Uint8Array;
 }
-/** QueryLoanCancellationRequest is request type for the Query/LoanCancellation RPC method. */
-export interface QueryLoanCancellationRequestAmino {
+/** QueryLoanAuthorizationRequest is request type for the Query/LoanAuthorization RPC method. */
+export interface QueryLoanAuthorizationRequestAmino {
   loan_id?: string;
+  id?: string;
 }
-export interface QueryLoanCancellationRequestAminoMsg {
-  type: "/side.lending.QueryLoanCancellationRequest";
-  value: QueryLoanCancellationRequestAmino;
+export interface QueryLoanAuthorizationRequestAminoMsg {
+  type: "/side.lending.QueryLoanAuthorizationRequest";
+  value: QueryLoanAuthorizationRequestAmino;
 }
-/** QueryLoanCancellationRequest is request type for the Query/LoanCancellation RPC method. */
-export interface QueryLoanCancellationRequestSDKType {
+/** QueryLoanAuthorizationRequest is request type for the Query/LoanAuthorization RPC method. */
+export interface QueryLoanAuthorizationRequestSDKType {
   loan_id: string;
+  id: bigint;
 }
-/** QueryLoanCancellationResponse is response type for the Query/LoanCancellation RPC method. */
-export interface QueryLoanCancellationResponse {
-  cancellation?: Cancellation;
+/** QueryLoanAuthorizationResponse is response type for the Query/LoanAuthorization RPC method. */
+export interface QueryLoanAuthorizationResponse {
+  deposits: DepositLog[];
+  status: AuthorizationStatus;
 }
-export interface QueryLoanCancellationResponseProtoMsg {
-  typeUrl: "/side.lending.QueryLoanCancellationResponse";
+export interface QueryLoanAuthorizationResponseProtoMsg {
+  typeUrl: "/side.lending.QueryLoanAuthorizationResponse";
   value: Uint8Array;
 }
-/** QueryLoanCancellationResponse is response type for the Query/LoanCancellation RPC method. */
-export interface QueryLoanCancellationResponseAmino {
-  cancellation?: CancellationAmino;
+/** QueryLoanAuthorizationResponse is response type for the Query/LoanAuthorization RPC method. */
+export interface QueryLoanAuthorizationResponseAmino {
+  deposits?: DepositLogAmino[];
+  status?: AuthorizationStatus;
 }
-export interface QueryLoanCancellationResponseAminoMsg {
-  type: "/side.lending.QueryLoanCancellationResponse";
-  value: QueryLoanCancellationResponseAmino;
+export interface QueryLoanAuthorizationResponseAminoMsg {
+  type: "/side.lending.QueryLoanAuthorizationResponse";
+  value: QueryLoanAuthorizationResponseAmino;
 }
-/** QueryLoanCancellationResponse is response type for the Query/LoanCancellation RPC method. */
-export interface QueryLoanCancellationResponseSDKType {
-  cancellation?: CancellationSDKType;
+/** QueryLoanAuthorizationResponse is response type for the Query/LoanAuthorization RPC method. */
+export interface QueryLoanAuthorizationResponseSDKType {
+  deposits: DepositLogSDKType[];
+  status: AuthorizationStatus;
+}
+/** QueryRedemptionRequest is request type for the Query/Redemption RPC method. */
+export interface QueryRedemptionRequest {
+  id: bigint;
+}
+export interface QueryRedemptionRequestProtoMsg {
+  typeUrl: "/side.lending.QueryRedemptionRequest";
+  value: Uint8Array;
+}
+/** QueryRedemptionRequest is request type for the Query/Redemption RPC method. */
+export interface QueryRedemptionRequestAmino {
+  id?: string;
+}
+export interface QueryRedemptionRequestAminoMsg {
+  type: "/side.lending.QueryRedemptionRequest";
+  value: QueryRedemptionRequestAmino;
+}
+/** QueryRedemptionRequest is request type for the Query/Redemption RPC method. */
+export interface QueryRedemptionRequestSDKType {
+  id: bigint;
+}
+/** QueryRedemptionResponse is response type for the Query/Redemption RPC method. */
+export interface QueryRedemptionResponse {
+  redemption?: Redemption;
+}
+export interface QueryRedemptionResponseProtoMsg {
+  typeUrl: "/side.lending.QueryRedemptionResponse";
+  value: Uint8Array;
+}
+/** QueryRedemptionResponse is response type for the Query/Redemption RPC method. */
+export interface QueryRedemptionResponseAmino {
+  redemption?: RedemptionAmino;
+}
+export interface QueryRedemptionResponseAminoMsg {
+  type: "/side.lending.QueryRedemptionResponse";
+  value: QueryRedemptionResponseAmino;
+}
+/** QueryRedemptionResponse is response type for the Query/Redemption RPC method. */
+export interface QueryRedemptionResponseSDKType {
+  redemption?: RedemptionSDKType;
 }
 export interface QueryRepaymentRequest {
   loanId: string;
@@ -2217,29 +2263,36 @@ export const QueryLoanDlcMetaResponse = {
     };
   }
 };
-function createBaseQueryLoanCancellationRequest(): QueryLoanCancellationRequest {
+function createBaseQueryLoanAuthorizationRequest(): QueryLoanAuthorizationRequest {
   return {
-    loanId: ""
+    loanId: "",
+    id: BigInt(0)
   };
 }
-export const QueryLoanCancellationRequest = {
-  typeUrl: "/side.lending.QueryLoanCancellationRequest",
-  encode(message: QueryLoanCancellationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const QueryLoanAuthorizationRequest = {
+  typeUrl: "/side.lending.QueryLoanAuthorizationRequest",
+  encode(message: QueryLoanAuthorizationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.loanId !== "") {
       writer.uint32(10).string(message.loanId);
     }
+    if (message.id !== BigInt(0)) {
+      writer.uint32(16).uint64(message.id);
+    }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryLoanCancellationRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryLoanAuthorizationRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryLoanCancellationRequest();
+    const message = createBaseQueryLoanAuthorizationRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
           message.loanId = reader.string();
           break;
+        case 2:
+          message.id = reader.uint64();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2247,61 +2300,73 @@ export const QueryLoanCancellationRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryLoanCancellationRequest>): QueryLoanCancellationRequest {
-    const message = createBaseQueryLoanCancellationRequest();
+  fromPartial(object: Partial<QueryLoanAuthorizationRequest>): QueryLoanAuthorizationRequest {
+    const message = createBaseQueryLoanAuthorizationRequest();
     message.loanId = object.loanId ?? "";
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     return message;
   },
-  fromAmino(object: QueryLoanCancellationRequestAmino): QueryLoanCancellationRequest {
-    const message = createBaseQueryLoanCancellationRequest();
+  fromAmino(object: QueryLoanAuthorizationRequestAmino): QueryLoanAuthorizationRequest {
+    const message = createBaseQueryLoanAuthorizationRequest();
     if (object.loan_id !== undefined && object.loan_id !== null) {
       message.loanId = object.loan_id;
     }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
     return message;
   },
-  toAmino(message: QueryLoanCancellationRequest): QueryLoanCancellationRequestAmino {
+  toAmino(message: QueryLoanAuthorizationRequest): QueryLoanAuthorizationRequestAmino {
     const obj: any = {};
     obj.loan_id = message.loanId === "" ? undefined : message.loanId;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     return obj;
   },
-  fromAminoMsg(object: QueryLoanCancellationRequestAminoMsg): QueryLoanCancellationRequest {
-    return QueryLoanCancellationRequest.fromAmino(object.value);
+  fromAminoMsg(object: QueryLoanAuthorizationRequestAminoMsg): QueryLoanAuthorizationRequest {
+    return QueryLoanAuthorizationRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryLoanCancellationRequestProtoMsg): QueryLoanCancellationRequest {
-    return QueryLoanCancellationRequest.decode(message.value);
+  fromProtoMsg(message: QueryLoanAuthorizationRequestProtoMsg): QueryLoanAuthorizationRequest {
+    return QueryLoanAuthorizationRequest.decode(message.value);
   },
-  toProto(message: QueryLoanCancellationRequest): Uint8Array {
-    return QueryLoanCancellationRequest.encode(message).finish();
+  toProto(message: QueryLoanAuthorizationRequest): Uint8Array {
+    return QueryLoanAuthorizationRequest.encode(message).finish();
   },
-  toProtoMsg(message: QueryLoanCancellationRequest): QueryLoanCancellationRequestProtoMsg {
+  toProtoMsg(message: QueryLoanAuthorizationRequest): QueryLoanAuthorizationRequestProtoMsg {
     return {
-      typeUrl: "/side.lending.QueryLoanCancellationRequest",
-      value: QueryLoanCancellationRequest.encode(message).finish()
+      typeUrl: "/side.lending.QueryLoanAuthorizationRequest",
+      value: QueryLoanAuthorizationRequest.encode(message).finish()
     };
   }
 };
-function createBaseQueryLoanCancellationResponse(): QueryLoanCancellationResponse {
+function createBaseQueryLoanAuthorizationResponse(): QueryLoanAuthorizationResponse {
   return {
-    cancellation: undefined
+    deposits: [],
+    status: 0
   };
 }
-export const QueryLoanCancellationResponse = {
-  typeUrl: "/side.lending.QueryLoanCancellationResponse",
-  encode(message: QueryLoanCancellationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.cancellation !== undefined) {
-      Cancellation.encode(message.cancellation, writer.uint32(10).fork()).ldelim();
+export const QueryLoanAuthorizationResponse = {
+  typeUrl: "/side.lending.QueryLoanAuthorizationResponse",
+  encode(message: QueryLoanAuthorizationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.deposits) {
+      DepositLog.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== 0) {
+      writer.uint32(16).int32(message.status);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryLoanCancellationResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryLoanAuthorizationResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryLoanCancellationResponse();
+    const message = createBaseQueryLoanAuthorizationResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.cancellation = Cancellation.decode(reader, reader.uint32());
+          message.deposits.push(DepositLog.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.status = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);
@@ -2310,36 +2375,169 @@ export const QueryLoanCancellationResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryLoanCancellationResponse>): QueryLoanCancellationResponse {
-    const message = createBaseQueryLoanCancellationResponse();
-    message.cancellation = object.cancellation !== undefined && object.cancellation !== null ? Cancellation.fromPartial(object.cancellation) : undefined;
+  fromPartial(object: Partial<QueryLoanAuthorizationResponse>): QueryLoanAuthorizationResponse {
+    const message = createBaseQueryLoanAuthorizationResponse();
+    message.deposits = object.deposits?.map(e => DepositLog.fromPartial(e)) || [];
+    message.status = object.status ?? 0;
     return message;
   },
-  fromAmino(object: QueryLoanCancellationResponseAmino): QueryLoanCancellationResponse {
-    const message = createBaseQueryLoanCancellationResponse();
-    if (object.cancellation !== undefined && object.cancellation !== null) {
-      message.cancellation = Cancellation.fromAmino(object.cancellation);
+  fromAmino(object: QueryLoanAuthorizationResponseAmino): QueryLoanAuthorizationResponse {
+    const message = createBaseQueryLoanAuthorizationResponse();
+    message.deposits = object.deposits?.map(e => DepositLog.fromAmino(e)) || [];
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
     }
     return message;
   },
-  toAmino(message: QueryLoanCancellationResponse): QueryLoanCancellationResponseAmino {
+  toAmino(message: QueryLoanAuthorizationResponse): QueryLoanAuthorizationResponseAmino {
     const obj: any = {};
-    obj.cancellation = message.cancellation ? Cancellation.toAmino(message.cancellation) : undefined;
+    if (message.deposits) {
+      obj.deposits = message.deposits.map(e => e ? DepositLog.toAmino(e) : undefined);
+    } else {
+      obj.deposits = message.deposits;
+    }
+    obj.status = message.status === 0 ? undefined : message.status;
     return obj;
   },
-  fromAminoMsg(object: QueryLoanCancellationResponseAminoMsg): QueryLoanCancellationResponse {
-    return QueryLoanCancellationResponse.fromAmino(object.value);
+  fromAminoMsg(object: QueryLoanAuthorizationResponseAminoMsg): QueryLoanAuthorizationResponse {
+    return QueryLoanAuthorizationResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryLoanCancellationResponseProtoMsg): QueryLoanCancellationResponse {
-    return QueryLoanCancellationResponse.decode(message.value);
+  fromProtoMsg(message: QueryLoanAuthorizationResponseProtoMsg): QueryLoanAuthorizationResponse {
+    return QueryLoanAuthorizationResponse.decode(message.value);
   },
-  toProto(message: QueryLoanCancellationResponse): Uint8Array {
-    return QueryLoanCancellationResponse.encode(message).finish();
+  toProto(message: QueryLoanAuthorizationResponse): Uint8Array {
+    return QueryLoanAuthorizationResponse.encode(message).finish();
   },
-  toProtoMsg(message: QueryLoanCancellationResponse): QueryLoanCancellationResponseProtoMsg {
+  toProtoMsg(message: QueryLoanAuthorizationResponse): QueryLoanAuthorizationResponseProtoMsg {
     return {
-      typeUrl: "/side.lending.QueryLoanCancellationResponse",
-      value: QueryLoanCancellationResponse.encode(message).finish()
+      typeUrl: "/side.lending.QueryLoanAuthorizationResponse",
+      value: QueryLoanAuthorizationResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRedemptionRequest(): QueryRedemptionRequest {
+  return {
+    id: BigInt(0)
+  };
+}
+export const QueryRedemptionRequest = {
+  typeUrl: "/side.lending.QueryRedemptionRequest",
+  encode(message: QueryRedemptionRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
+      writer.uint32(8).uint64(message.id);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRedemptionRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRedemptionRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRedemptionRequest>): QueryRedemptionRequest {
+    const message = createBaseQueryRedemptionRequest();
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: QueryRedemptionRequestAmino): QueryRedemptionRequest {
+    const message = createBaseQueryRedemptionRequest();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    return message;
+  },
+  toAmino(message: QueryRedemptionRequest): QueryRedemptionRequestAmino {
+    const obj: any = {};
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRedemptionRequestAminoMsg): QueryRedemptionRequest {
+    return QueryRedemptionRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRedemptionRequestProtoMsg): QueryRedemptionRequest {
+    return QueryRedemptionRequest.decode(message.value);
+  },
+  toProto(message: QueryRedemptionRequest): Uint8Array {
+    return QueryRedemptionRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRedemptionRequest): QueryRedemptionRequestProtoMsg {
+    return {
+      typeUrl: "/side.lending.QueryRedemptionRequest",
+      value: QueryRedemptionRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRedemptionResponse(): QueryRedemptionResponse {
+  return {
+    redemption: undefined
+  };
+}
+export const QueryRedemptionResponse = {
+  typeUrl: "/side.lending.QueryRedemptionResponse",
+  encode(message: QueryRedemptionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.redemption !== undefined) {
+      Redemption.encode(message.redemption, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRedemptionResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRedemptionResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.redemption = Redemption.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRedemptionResponse>): QueryRedemptionResponse {
+    const message = createBaseQueryRedemptionResponse();
+    message.redemption = object.redemption !== undefined && object.redemption !== null ? Redemption.fromPartial(object.redemption) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryRedemptionResponseAmino): QueryRedemptionResponse {
+    const message = createBaseQueryRedemptionResponse();
+    if (object.redemption !== undefined && object.redemption !== null) {
+      message.redemption = Redemption.fromAmino(object.redemption);
+    }
+    return message;
+  },
+  toAmino(message: QueryRedemptionResponse): QueryRedemptionResponseAmino {
+    const obj: any = {};
+    obj.redemption = message.redemption ? Redemption.toAmino(message.redemption) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRedemptionResponseAminoMsg): QueryRedemptionResponse {
+    return QueryRedemptionResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRedemptionResponseProtoMsg): QueryRedemptionResponse {
+    return QueryRedemptionResponse.decode(message.value);
+  },
+  toProto(message: QueryRedemptionResponse): Uint8Array {
+    return QueryRedemptionResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRedemptionResponse): QueryRedemptionResponseProtoMsg {
+    return {
+      typeUrl: "/side.lending.QueryRedemptionResponse",
+      value: QueryRedemptionResponse.encode(message).finish()
     };
   }
 };

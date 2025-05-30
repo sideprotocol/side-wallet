@@ -8,8 +8,6 @@ export interface MsgCreatePool {
   authority: string;
   /** pool id */
   id: string;
-  /** lending asset */
-  lendingAsset: string;
   /** pool config */
   config: PoolConfig;
 }
@@ -22,8 +20,6 @@ export interface MsgCreatePoolAmino {
   authority?: string;
   /** pool id */
   id?: string;
-  /** lending asset */
-  lending_asset?: string;
   /** pool config */
   config?: PoolConfigAmino;
 }
@@ -34,7 +30,6 @@ export interface MsgCreatePoolAminoMsg {
 export interface MsgCreatePoolSDKType {
   authority: string;
   id: string;
-  lending_asset: string;
   config: PoolConfigSDKType;
 }
 export interface MsgCreatePoolResponse {}
@@ -319,145 +314,43 @@ export interface MsgApproveResponseAminoMsg {
   value: MsgApproveResponseAmino;
 }
 export interface MsgApproveResponseSDKType {}
-export interface MsgCancel {
+export interface MsgRedeem {
   borrower: string;
   loanId: string;
   tx: string;
   signatures: string[];
 }
-export interface MsgCancelProtoMsg {
-  typeUrl: "/side.lending.MsgCancel";
+export interface MsgRedeemProtoMsg {
+  typeUrl: "/side.lending.MsgRedeem";
   value: Uint8Array;
 }
-export interface MsgCancelAmino {
+export interface MsgRedeemAmino {
   borrower?: string;
   loan_id?: string;
   tx?: string;
   signatures?: string[];
 }
-export interface MsgCancelAminoMsg {
-  type: "/side.lending.MsgCancel";
-  value: MsgCancelAmino;
+export interface MsgRedeemAminoMsg {
+  type: "/side.lending.MsgRedeem";
+  value: MsgRedeemAmino;
 }
-export interface MsgCancelSDKType {
+export interface MsgRedeemSDKType {
   borrower: string;
   loan_id: string;
   tx: string;
   signatures: string[];
 }
-export interface MsgCancelResponse {}
-export interface MsgCancelResponseProtoMsg {
-  typeUrl: "/side.lending.MsgCancelResponse";
+export interface MsgRedeemResponse {}
+export interface MsgRedeemResponseProtoMsg {
+  typeUrl: "/side.lending.MsgRedeemResponse";
   value: Uint8Array;
 }
-export interface MsgCancelResponseAmino {}
-export interface MsgCancelResponseAminoMsg {
-  type: "/side.lending.MsgCancelResponse";
-  value: MsgCancelResponseAmino;
+export interface MsgRedeemResponseAmino {}
+export interface MsgRedeemResponseAminoMsg {
+  type: "/side.lending.MsgRedeemResponse";
+  value: MsgRedeemResponseAmino;
 }
-export interface MsgCancelResponseSDKType {}
-export interface MsgSubmitCancellationSignatures {
-  sender: string;
-  loanId: string;
-  signatures: string[];
-}
-export interface MsgSubmitCancellationSignaturesProtoMsg {
-  typeUrl: "/side.lending.MsgSubmitCancellationSignatures";
-  value: Uint8Array;
-}
-export interface MsgSubmitCancellationSignaturesAmino {
-  sender?: string;
-  loan_id?: string;
-  signatures?: string[];
-}
-export interface MsgSubmitCancellationSignaturesAminoMsg {
-  type: "/side.lending.MsgSubmitCancellationSignatures";
-  value: MsgSubmitCancellationSignaturesAmino;
-}
-export interface MsgSubmitCancellationSignaturesSDKType {
-  sender: string;
-  loan_id: string;
-  signatures: string[];
-}
-export interface MsgSubmitCancellationSignaturesResponse {}
-export interface MsgSubmitCancellationSignaturesResponseProtoMsg {
-  typeUrl: "/side.lending.MsgSubmitCancellationSignaturesResponse";
-  value: Uint8Array;
-}
-export interface MsgSubmitCancellationSignaturesResponseAmino {}
-export interface MsgSubmitCancellationSignaturesResponseAminoMsg {
-  type: "/side.lending.MsgSubmitCancellationSignaturesResponse";
-  value: MsgSubmitCancellationSignaturesResponseAmino;
-}
-export interface MsgSubmitCancellationSignaturesResponseSDKType {}
-export interface MsgSubmitRepaymentAdaptorSignatures {
-  sender: string;
-  loanId: string;
-  adaptorSignatures: string[];
-}
-export interface MsgSubmitRepaymentAdaptorSignaturesProtoMsg {
-  typeUrl: "/side.lending.MsgSubmitRepaymentAdaptorSignatures";
-  value: Uint8Array;
-}
-export interface MsgSubmitRepaymentAdaptorSignaturesAmino {
-  sender?: string;
-  loan_id?: string;
-  adaptor_signatures?: string[];
-}
-export interface MsgSubmitRepaymentAdaptorSignaturesAminoMsg {
-  type: "/side.lending.MsgSubmitRepaymentAdaptorSignatures";
-  value: MsgSubmitRepaymentAdaptorSignaturesAmino;
-}
-export interface MsgSubmitRepaymentAdaptorSignaturesSDKType {
-  sender: string;
-  loan_id: string;
-  adaptor_signatures: string[];
-}
-export interface MsgSubmitRepaymentAdaptorSignaturesResponse {}
-export interface MsgSubmitRepaymentAdaptorSignaturesResponseProtoMsg {
-  typeUrl: "/side.lending.MsgSubmitRepaymentAdaptorSignaturesResponse";
-  value: Uint8Array;
-}
-export interface MsgSubmitRepaymentAdaptorSignaturesResponseAmino {}
-export interface MsgSubmitRepaymentAdaptorSignaturesResponseAminoMsg {
-  type: "/side.lending.MsgSubmitRepaymentAdaptorSignaturesResponse";
-  value: MsgSubmitRepaymentAdaptorSignaturesResponseAmino;
-}
-export interface MsgSubmitRepaymentAdaptorSignaturesResponseSDKType {}
-export interface MsgSubmitLiquidationSignatures {
-  sender: string;
-  loanId: string;
-  signatures: string[];
-}
-export interface MsgSubmitLiquidationSignaturesProtoMsg {
-  typeUrl: "/side.lending.MsgSubmitLiquidationSignatures";
-  value: Uint8Array;
-}
-export interface MsgSubmitLiquidationSignaturesAmino {
-  sender?: string;
-  loan_id?: string;
-  signatures?: string[];
-}
-export interface MsgSubmitLiquidationSignaturesAminoMsg {
-  type: "/side.lending.MsgSubmitLiquidationSignatures";
-  value: MsgSubmitLiquidationSignaturesAmino;
-}
-export interface MsgSubmitLiquidationSignaturesSDKType {
-  sender: string;
-  loan_id: string;
-  signatures: string[];
-}
-export interface MsgSubmitLiquidationSignaturesResponse {}
-export interface MsgSubmitLiquidationSignaturesResponseProtoMsg {
-  typeUrl: "/side.lending.MsgSubmitLiquidationSignaturesResponse";
-  value: Uint8Array;
-}
-export interface MsgSubmitLiquidationSignaturesResponseAmino {}
-export interface MsgSubmitLiquidationSignaturesResponseAminoMsg {
-  type: "/side.lending.MsgSubmitLiquidationSignaturesResponse";
-  value: MsgSubmitLiquidationSignaturesResponseAmino;
-}
-export interface MsgSubmitLiquidationSignaturesResponseSDKType {}
+export interface MsgRedeemResponseSDKType {}
 export interface MsgSubmitPrice {
   sender: string;
   price: string;
@@ -566,7 +459,6 @@ function createBaseMsgCreatePool(): MsgCreatePool {
   return {
     authority: "",
     id: "",
-    lendingAsset: "",
     config: PoolConfig.fromPartial({})
   };
 }
@@ -579,11 +471,8 @@ export const MsgCreatePool = {
     if (message.id !== "") {
       writer.uint32(18).string(message.id);
     }
-    if (message.lendingAsset !== "") {
-      writer.uint32(26).string(message.lendingAsset);
-    }
     if (message.config !== undefined) {
-      PoolConfig.encode(message.config, writer.uint32(34).fork()).ldelim();
+      PoolConfig.encode(message.config, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -601,9 +490,6 @@ export const MsgCreatePool = {
           message.id = reader.string();
           break;
         case 3:
-          message.lendingAsset = reader.string();
-          break;
-        case 4:
           message.config = PoolConfig.decode(reader, reader.uint32());
           break;
         default:
@@ -617,7 +503,6 @@ export const MsgCreatePool = {
     const message = createBaseMsgCreatePool();
     message.authority = object.authority ?? "";
     message.id = object.id ?? "";
-    message.lendingAsset = object.lendingAsset ?? "";
     message.config = object.config !== undefined && object.config !== null ? PoolConfig.fromPartial(object.config) : undefined;
     return message;
   },
@@ -629,9 +514,6 @@ export const MsgCreatePool = {
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     }
-    if (object.lending_asset !== undefined && object.lending_asset !== null) {
-      message.lendingAsset = object.lending_asset;
-    }
     if (object.config !== undefined && object.config !== null) {
       message.config = PoolConfig.fromAmino(object.config);
     }
@@ -641,7 +523,6 @@ export const MsgCreatePool = {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
     obj.id = message.id === "" ? undefined : message.id;
-    obj.lending_asset = message.lendingAsset === "" ? undefined : message.lendingAsset;
     obj.config = message.config ? PoolConfig.toAmino(message.config) : undefined;
     return obj;
   },
@@ -1788,7 +1669,7 @@ export const MsgApproveResponse = {
     };
   }
 };
-function createBaseMsgCancel(): MsgCancel {
+function createBaseMsgRedeem(): MsgRedeem {
   return {
     borrower: "",
     loanId: "",
@@ -1796,9 +1677,9 @@ function createBaseMsgCancel(): MsgCancel {
     signatures: []
   };
 }
-export const MsgCancel = {
-  typeUrl: "/side.lending.MsgCancel",
-  encode(message: MsgCancel, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const MsgRedeem = {
+  typeUrl: "/side.lending.MsgRedeem",
+  encode(message: MsgRedeem, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.borrower !== "") {
       writer.uint32(10).string(message.borrower);
     }
@@ -1813,10 +1694,10 @@ export const MsgCancel = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancel {
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeem {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgCancel();
+    const message = createBaseMsgRedeem();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1839,16 +1720,16 @@ export const MsgCancel = {
     }
     return message;
   },
-  fromPartial(object: Partial<MsgCancel>): MsgCancel {
-    const message = createBaseMsgCancel();
+  fromPartial(object: Partial<MsgRedeem>): MsgRedeem {
+    const message = createBaseMsgRedeem();
     message.borrower = object.borrower ?? "";
     message.loanId = object.loanId ?? "";
     message.tx = object.tx ?? "";
     message.signatures = object.signatures?.map(e => e) || [];
     return message;
   },
-  fromAmino(object: MsgCancelAmino): MsgCancel {
-    const message = createBaseMsgCancel();
+  fromAmino(object: MsgRedeemAmino): MsgRedeem {
+    const message = createBaseMsgRedeem();
     if (object.borrower !== undefined && object.borrower !== null) {
       message.borrower = object.borrower;
     }
@@ -1861,7 +1742,7 @@ export const MsgCancel = {
     message.signatures = object.signatures?.map(e => e) || [];
     return message;
   },
-  toAmino(message: MsgCancel): MsgCancelAmino {
+  toAmino(message: MsgRedeem): MsgRedeemAmino {
     const obj: any = {};
     obj.borrower = message.borrower === "" ? undefined : message.borrower;
     obj.loan_id = message.loanId === "" ? undefined : message.loanId;
@@ -1873,34 +1754,34 @@ export const MsgCancel = {
     }
     return obj;
   },
-  fromAminoMsg(object: MsgCancelAminoMsg): MsgCancel {
-    return MsgCancel.fromAmino(object.value);
+  fromAminoMsg(object: MsgRedeemAminoMsg): MsgRedeem {
+    return MsgRedeem.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCancelProtoMsg): MsgCancel {
-    return MsgCancel.decode(message.value);
+  fromProtoMsg(message: MsgRedeemProtoMsg): MsgRedeem {
+    return MsgRedeem.decode(message.value);
   },
-  toProto(message: MsgCancel): Uint8Array {
-    return MsgCancel.encode(message).finish();
+  toProto(message: MsgRedeem): Uint8Array {
+    return MsgRedeem.encode(message).finish();
   },
-  toProtoMsg(message: MsgCancel): MsgCancelProtoMsg {
+  toProtoMsg(message: MsgRedeem): MsgRedeemProtoMsg {
     return {
-      typeUrl: "/side.lending.MsgCancel",
-      value: MsgCancel.encode(message).finish()
+      typeUrl: "/side.lending.MsgRedeem",
+      value: MsgRedeem.encode(message).finish()
     };
   }
 };
-function createBaseMsgCancelResponse(): MsgCancelResponse {
+function createBaseMsgRedeemResponse(): MsgRedeemResponse {
   return {};
 }
-export const MsgCancelResponse = {
-  typeUrl: "/side.lending.MsgCancelResponse",
-  encode(_: MsgCancelResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const MsgRedeemResponse = {
+  typeUrl: "/side.lending.MsgRedeemResponse",
+  encode(_: MsgRedeemResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgCancelResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRedeemResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgCancelResponse();
+    const message = createBaseMsgRedeemResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1911,448 +1792,31 @@ export const MsgCancelResponse = {
     }
     return message;
   },
-  fromPartial(_: Partial<MsgCancelResponse>): MsgCancelResponse {
-    const message = createBaseMsgCancelResponse();
+  fromPartial(_: Partial<MsgRedeemResponse>): MsgRedeemResponse {
+    const message = createBaseMsgRedeemResponse();
     return message;
   },
-  fromAmino(_: MsgCancelResponseAmino): MsgCancelResponse {
-    const message = createBaseMsgCancelResponse();
+  fromAmino(_: MsgRedeemResponseAmino): MsgRedeemResponse {
+    const message = createBaseMsgRedeemResponse();
     return message;
   },
-  toAmino(_: MsgCancelResponse): MsgCancelResponseAmino {
+  toAmino(_: MsgRedeemResponse): MsgRedeemResponseAmino {
     const obj: any = {};
     return obj;
   },
-  fromAminoMsg(object: MsgCancelResponseAminoMsg): MsgCancelResponse {
-    return MsgCancelResponse.fromAmino(object.value);
+  fromAminoMsg(object: MsgRedeemResponseAminoMsg): MsgRedeemResponse {
+    return MsgRedeemResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgCancelResponseProtoMsg): MsgCancelResponse {
-    return MsgCancelResponse.decode(message.value);
+  fromProtoMsg(message: MsgRedeemResponseProtoMsg): MsgRedeemResponse {
+    return MsgRedeemResponse.decode(message.value);
   },
-  toProto(message: MsgCancelResponse): Uint8Array {
-    return MsgCancelResponse.encode(message).finish();
+  toProto(message: MsgRedeemResponse): Uint8Array {
+    return MsgRedeemResponse.encode(message).finish();
   },
-  toProtoMsg(message: MsgCancelResponse): MsgCancelResponseProtoMsg {
+  toProtoMsg(message: MsgRedeemResponse): MsgRedeemResponseProtoMsg {
     return {
-      typeUrl: "/side.lending.MsgCancelResponse",
-      value: MsgCancelResponse.encode(message).finish()
-    };
-  }
-};
-function createBaseMsgSubmitCancellationSignatures(): MsgSubmitCancellationSignatures {
-  return {
-    sender: "",
-    loanId: "",
-    signatures: []
-  };
-}
-export const MsgSubmitCancellationSignatures = {
-  typeUrl: "/side.lending.MsgSubmitCancellationSignatures",
-  encode(message: MsgSubmitCancellationSignatures, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.sender !== "") {
-      writer.uint32(10).string(message.sender);
-    }
-    if (message.loanId !== "") {
-      writer.uint32(18).string(message.loanId);
-    }
-    for (const v of message.signatures) {
-      writer.uint32(26).string(v!);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitCancellationSignatures {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSubmitCancellationSignatures();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.sender = reader.string();
-          break;
-        case 2:
-          message.loanId = reader.string();
-          break;
-        case 3:
-          message.signatures.push(reader.string());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<MsgSubmitCancellationSignatures>): MsgSubmitCancellationSignatures {
-    const message = createBaseMsgSubmitCancellationSignatures();
-    message.sender = object.sender ?? "";
-    message.loanId = object.loanId ?? "";
-    message.signatures = object.signatures?.map(e => e) || [];
-    return message;
-  },
-  fromAmino(object: MsgSubmitCancellationSignaturesAmino): MsgSubmitCancellationSignatures {
-    const message = createBaseMsgSubmitCancellationSignatures();
-    if (object.sender !== undefined && object.sender !== null) {
-      message.sender = object.sender;
-    }
-    if (object.loan_id !== undefined && object.loan_id !== null) {
-      message.loanId = object.loan_id;
-    }
-    message.signatures = object.signatures?.map(e => e) || [];
-    return message;
-  },
-  toAmino(message: MsgSubmitCancellationSignatures): MsgSubmitCancellationSignaturesAmino {
-    const obj: any = {};
-    obj.sender = message.sender === "" ? undefined : message.sender;
-    obj.loan_id = message.loanId === "" ? undefined : message.loanId;
-    if (message.signatures) {
-      obj.signatures = message.signatures.map(e => e);
-    } else {
-      obj.signatures = message.signatures;
-    }
-    return obj;
-  },
-  fromAminoMsg(object: MsgSubmitCancellationSignaturesAminoMsg): MsgSubmitCancellationSignatures {
-    return MsgSubmitCancellationSignatures.fromAmino(object.value);
-  },
-  fromProtoMsg(message: MsgSubmitCancellationSignaturesProtoMsg): MsgSubmitCancellationSignatures {
-    return MsgSubmitCancellationSignatures.decode(message.value);
-  },
-  toProto(message: MsgSubmitCancellationSignatures): Uint8Array {
-    return MsgSubmitCancellationSignatures.encode(message).finish();
-  },
-  toProtoMsg(message: MsgSubmitCancellationSignatures): MsgSubmitCancellationSignaturesProtoMsg {
-    return {
-      typeUrl: "/side.lending.MsgSubmitCancellationSignatures",
-      value: MsgSubmitCancellationSignatures.encode(message).finish()
-    };
-  }
-};
-function createBaseMsgSubmitCancellationSignaturesResponse(): MsgSubmitCancellationSignaturesResponse {
-  return {};
-}
-export const MsgSubmitCancellationSignaturesResponse = {
-  typeUrl: "/side.lending.MsgSubmitCancellationSignaturesResponse",
-  encode(_: MsgSubmitCancellationSignaturesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitCancellationSignaturesResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSubmitCancellationSignaturesResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(_: Partial<MsgSubmitCancellationSignaturesResponse>): MsgSubmitCancellationSignaturesResponse {
-    const message = createBaseMsgSubmitCancellationSignaturesResponse();
-    return message;
-  },
-  fromAmino(_: MsgSubmitCancellationSignaturesResponseAmino): MsgSubmitCancellationSignaturesResponse {
-    const message = createBaseMsgSubmitCancellationSignaturesResponse();
-    return message;
-  },
-  toAmino(_: MsgSubmitCancellationSignaturesResponse): MsgSubmitCancellationSignaturesResponseAmino {
-    const obj: any = {};
-    return obj;
-  },
-  fromAminoMsg(object: MsgSubmitCancellationSignaturesResponseAminoMsg): MsgSubmitCancellationSignaturesResponse {
-    return MsgSubmitCancellationSignaturesResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: MsgSubmitCancellationSignaturesResponseProtoMsg): MsgSubmitCancellationSignaturesResponse {
-    return MsgSubmitCancellationSignaturesResponse.decode(message.value);
-  },
-  toProto(message: MsgSubmitCancellationSignaturesResponse): Uint8Array {
-    return MsgSubmitCancellationSignaturesResponse.encode(message).finish();
-  },
-  toProtoMsg(message: MsgSubmitCancellationSignaturesResponse): MsgSubmitCancellationSignaturesResponseProtoMsg {
-    return {
-      typeUrl: "/side.lending.MsgSubmitCancellationSignaturesResponse",
-      value: MsgSubmitCancellationSignaturesResponse.encode(message).finish()
-    };
-  }
-};
-function createBaseMsgSubmitRepaymentAdaptorSignatures(): MsgSubmitRepaymentAdaptorSignatures {
-  return {
-    sender: "",
-    loanId: "",
-    adaptorSignatures: []
-  };
-}
-export const MsgSubmitRepaymentAdaptorSignatures = {
-  typeUrl: "/side.lending.MsgSubmitRepaymentAdaptorSignatures",
-  encode(message: MsgSubmitRepaymentAdaptorSignatures, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.sender !== "") {
-      writer.uint32(10).string(message.sender);
-    }
-    if (message.loanId !== "") {
-      writer.uint32(18).string(message.loanId);
-    }
-    for (const v of message.adaptorSignatures) {
-      writer.uint32(26).string(v!);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitRepaymentAdaptorSignatures {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSubmitRepaymentAdaptorSignatures();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.sender = reader.string();
-          break;
-        case 2:
-          message.loanId = reader.string();
-          break;
-        case 3:
-          message.adaptorSignatures.push(reader.string());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<MsgSubmitRepaymentAdaptorSignatures>): MsgSubmitRepaymentAdaptorSignatures {
-    const message = createBaseMsgSubmitRepaymentAdaptorSignatures();
-    message.sender = object.sender ?? "";
-    message.loanId = object.loanId ?? "";
-    message.adaptorSignatures = object.adaptorSignatures?.map(e => e) || [];
-    return message;
-  },
-  fromAmino(object: MsgSubmitRepaymentAdaptorSignaturesAmino): MsgSubmitRepaymentAdaptorSignatures {
-    const message = createBaseMsgSubmitRepaymentAdaptorSignatures();
-    if (object.sender !== undefined && object.sender !== null) {
-      message.sender = object.sender;
-    }
-    if (object.loan_id !== undefined && object.loan_id !== null) {
-      message.loanId = object.loan_id;
-    }
-    message.adaptorSignatures = object.adaptor_signatures?.map(e => e) || [];
-    return message;
-  },
-  toAmino(message: MsgSubmitRepaymentAdaptorSignatures): MsgSubmitRepaymentAdaptorSignaturesAmino {
-    const obj: any = {};
-    obj.sender = message.sender === "" ? undefined : message.sender;
-    obj.loan_id = message.loanId === "" ? undefined : message.loanId;
-    if (message.adaptorSignatures) {
-      obj.adaptor_signatures = message.adaptorSignatures.map(e => e);
-    } else {
-      obj.adaptor_signatures = message.adaptorSignatures;
-    }
-    return obj;
-  },
-  fromAminoMsg(object: MsgSubmitRepaymentAdaptorSignaturesAminoMsg): MsgSubmitRepaymentAdaptorSignatures {
-    return MsgSubmitRepaymentAdaptorSignatures.fromAmino(object.value);
-  },
-  fromProtoMsg(message: MsgSubmitRepaymentAdaptorSignaturesProtoMsg): MsgSubmitRepaymentAdaptorSignatures {
-    return MsgSubmitRepaymentAdaptorSignatures.decode(message.value);
-  },
-  toProto(message: MsgSubmitRepaymentAdaptorSignatures): Uint8Array {
-    return MsgSubmitRepaymentAdaptorSignatures.encode(message).finish();
-  },
-  toProtoMsg(message: MsgSubmitRepaymentAdaptorSignatures): MsgSubmitRepaymentAdaptorSignaturesProtoMsg {
-    return {
-      typeUrl: "/side.lending.MsgSubmitRepaymentAdaptorSignatures",
-      value: MsgSubmitRepaymentAdaptorSignatures.encode(message).finish()
-    };
-  }
-};
-function createBaseMsgSubmitRepaymentAdaptorSignaturesResponse(): MsgSubmitRepaymentAdaptorSignaturesResponse {
-  return {};
-}
-export const MsgSubmitRepaymentAdaptorSignaturesResponse = {
-  typeUrl: "/side.lending.MsgSubmitRepaymentAdaptorSignaturesResponse",
-  encode(_: MsgSubmitRepaymentAdaptorSignaturesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitRepaymentAdaptorSignaturesResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSubmitRepaymentAdaptorSignaturesResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(_: Partial<MsgSubmitRepaymentAdaptorSignaturesResponse>): MsgSubmitRepaymentAdaptorSignaturesResponse {
-    const message = createBaseMsgSubmitRepaymentAdaptorSignaturesResponse();
-    return message;
-  },
-  fromAmino(_: MsgSubmitRepaymentAdaptorSignaturesResponseAmino): MsgSubmitRepaymentAdaptorSignaturesResponse {
-    const message = createBaseMsgSubmitRepaymentAdaptorSignaturesResponse();
-    return message;
-  },
-  toAmino(_: MsgSubmitRepaymentAdaptorSignaturesResponse): MsgSubmitRepaymentAdaptorSignaturesResponseAmino {
-    const obj: any = {};
-    return obj;
-  },
-  fromAminoMsg(object: MsgSubmitRepaymentAdaptorSignaturesResponseAminoMsg): MsgSubmitRepaymentAdaptorSignaturesResponse {
-    return MsgSubmitRepaymentAdaptorSignaturesResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: MsgSubmitRepaymentAdaptorSignaturesResponseProtoMsg): MsgSubmitRepaymentAdaptorSignaturesResponse {
-    return MsgSubmitRepaymentAdaptorSignaturesResponse.decode(message.value);
-  },
-  toProto(message: MsgSubmitRepaymentAdaptorSignaturesResponse): Uint8Array {
-    return MsgSubmitRepaymentAdaptorSignaturesResponse.encode(message).finish();
-  },
-  toProtoMsg(message: MsgSubmitRepaymentAdaptorSignaturesResponse): MsgSubmitRepaymentAdaptorSignaturesResponseProtoMsg {
-    return {
-      typeUrl: "/side.lending.MsgSubmitRepaymentAdaptorSignaturesResponse",
-      value: MsgSubmitRepaymentAdaptorSignaturesResponse.encode(message).finish()
-    };
-  }
-};
-function createBaseMsgSubmitLiquidationSignatures(): MsgSubmitLiquidationSignatures {
-  return {
-    sender: "",
-    loanId: "",
-    signatures: []
-  };
-}
-export const MsgSubmitLiquidationSignatures = {
-  typeUrl: "/side.lending.MsgSubmitLiquidationSignatures",
-  encode(message: MsgSubmitLiquidationSignatures, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.sender !== "") {
-      writer.uint32(10).string(message.sender);
-    }
-    if (message.loanId !== "") {
-      writer.uint32(18).string(message.loanId);
-    }
-    for (const v of message.signatures) {
-      writer.uint32(26).string(v!);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitLiquidationSignatures {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSubmitLiquidationSignatures();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.sender = reader.string();
-          break;
-        case 2:
-          message.loanId = reader.string();
-          break;
-        case 3:
-          message.signatures.push(reader.string());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<MsgSubmitLiquidationSignatures>): MsgSubmitLiquidationSignatures {
-    const message = createBaseMsgSubmitLiquidationSignatures();
-    message.sender = object.sender ?? "";
-    message.loanId = object.loanId ?? "";
-    message.signatures = object.signatures?.map(e => e) || [];
-    return message;
-  },
-  fromAmino(object: MsgSubmitLiquidationSignaturesAmino): MsgSubmitLiquidationSignatures {
-    const message = createBaseMsgSubmitLiquidationSignatures();
-    if (object.sender !== undefined && object.sender !== null) {
-      message.sender = object.sender;
-    }
-    if (object.loan_id !== undefined && object.loan_id !== null) {
-      message.loanId = object.loan_id;
-    }
-    message.signatures = object.signatures?.map(e => e) || [];
-    return message;
-  },
-  toAmino(message: MsgSubmitLiquidationSignatures): MsgSubmitLiquidationSignaturesAmino {
-    const obj: any = {};
-    obj.sender = message.sender === "" ? undefined : message.sender;
-    obj.loan_id = message.loanId === "" ? undefined : message.loanId;
-    if (message.signatures) {
-      obj.signatures = message.signatures.map(e => e);
-    } else {
-      obj.signatures = message.signatures;
-    }
-    return obj;
-  },
-  fromAminoMsg(object: MsgSubmitLiquidationSignaturesAminoMsg): MsgSubmitLiquidationSignatures {
-    return MsgSubmitLiquidationSignatures.fromAmino(object.value);
-  },
-  fromProtoMsg(message: MsgSubmitLiquidationSignaturesProtoMsg): MsgSubmitLiquidationSignatures {
-    return MsgSubmitLiquidationSignatures.decode(message.value);
-  },
-  toProto(message: MsgSubmitLiquidationSignatures): Uint8Array {
-    return MsgSubmitLiquidationSignatures.encode(message).finish();
-  },
-  toProtoMsg(message: MsgSubmitLiquidationSignatures): MsgSubmitLiquidationSignaturesProtoMsg {
-    return {
-      typeUrl: "/side.lending.MsgSubmitLiquidationSignatures",
-      value: MsgSubmitLiquidationSignatures.encode(message).finish()
-    };
-  }
-};
-function createBaseMsgSubmitLiquidationSignaturesResponse(): MsgSubmitLiquidationSignaturesResponse {
-  return {};
-}
-export const MsgSubmitLiquidationSignaturesResponse = {
-  typeUrl: "/side.lending.MsgSubmitLiquidationSignaturesResponse",
-  encode(_: MsgSubmitLiquidationSignaturesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitLiquidationSignaturesResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSubmitLiquidationSignaturesResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(_: Partial<MsgSubmitLiquidationSignaturesResponse>): MsgSubmitLiquidationSignaturesResponse {
-    const message = createBaseMsgSubmitLiquidationSignaturesResponse();
-    return message;
-  },
-  fromAmino(_: MsgSubmitLiquidationSignaturesResponseAmino): MsgSubmitLiquidationSignaturesResponse {
-    const message = createBaseMsgSubmitLiquidationSignaturesResponse();
-    return message;
-  },
-  toAmino(_: MsgSubmitLiquidationSignaturesResponse): MsgSubmitLiquidationSignaturesResponseAmino {
-    const obj: any = {};
-    return obj;
-  },
-  fromAminoMsg(object: MsgSubmitLiquidationSignaturesResponseAminoMsg): MsgSubmitLiquidationSignaturesResponse {
-    return MsgSubmitLiquidationSignaturesResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: MsgSubmitLiquidationSignaturesResponseProtoMsg): MsgSubmitLiquidationSignaturesResponse {
-    return MsgSubmitLiquidationSignaturesResponse.decode(message.value);
-  },
-  toProto(message: MsgSubmitLiquidationSignaturesResponse): Uint8Array {
-    return MsgSubmitLiquidationSignaturesResponse.encode(message).finish();
-  },
-  toProtoMsg(message: MsgSubmitLiquidationSignaturesResponse): MsgSubmitLiquidationSignaturesResponseProtoMsg {
-    return {
-      typeUrl: "/side.lending.MsgSubmitLiquidationSignaturesResponse",
-      value: MsgSubmitLiquidationSignaturesResponse.encode(message).finish()
+      typeUrl: "/side.lending.MsgRedeemResponse",
+      value: MsgRedeemResponse.encode(message).finish()
     };
   }
 };

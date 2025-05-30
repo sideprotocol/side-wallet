@@ -53,6 +53,17 @@ export type DlcOracleStatus =
   | 'Oracle_status_Enable'
   | 'Oracle_status_Disable';
 
+export type AuthorizationsStatus =
+  | 'AUTHORIZATION_STATUS_PENDING'
+  | 'AUTHORIZATION_STATUS_AUTHORIZED'
+  | 'AUTHORIZATION_STATUS_REJECTED';
+
+export type DepositStatus =
+  | 'DEPOSIT_STATUS_PENDING'
+  | 'DEPOSIT_STATUS_VERIFIED'
+  | 'DEPOSIT_STATUS_REDEEMING'
+  | 'DEPOSIT_STATUS_REDEEMED';
+
 export interface DlcOracle {
   desc: string;
   id: string;
@@ -94,11 +105,6 @@ export enum LiquidationStatusEnum {
 
 export type LoanStatus = keyof typeof LoanStatusEnum;
 export type LiquidationStatus = keyof typeof LiquidationStatusEnum;
-
-export type AuthorizationsStatus =
-  | 'AUTHORIZATION_STATUS_PENDING'
-  | 'AUTHORIZATION_STATUS_AUTHORIZED'
-  | 'AUTHORIZATION_STATUS_REJECTED';
 
 export interface Loan {
   borrow_amount: {
@@ -779,4 +785,15 @@ export interface GetLoanInterestResponse {
     amount: string;
     denom: string;
   };
+}
+
+export interface GetLoanAuthorizationResponse {
+  deposits: {
+    txid: string;
+    vault_address: string;
+    authorization_id: string;
+    deposit_tx: string;
+    status: DepositStatus;
+  }[];
+  status: AuthorizationsStatus;
 }

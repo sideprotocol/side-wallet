@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgSubmitBlockHeaders, MsgSubmitDepositTransaction, MsgSubmitWithdrawTransaction, MsgSubmitFeeRate, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedOracles, MsgWithdrawToBitcoin, MsgSubmitSignatures, MsgConsolidateVaults, MsgInitiateDKG, MsgCompleteDKG, MsgTransferVault, MsgUpdateParams } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/side.btcbridge.MsgSubmitBlockHeaders", MsgSubmitBlockHeaders], ["/side.btcbridge.MsgSubmitDepositTransaction", MsgSubmitDepositTransaction], ["/side.btcbridge.MsgSubmitWithdrawTransaction", MsgSubmitWithdrawTransaction], ["/side.btcbridge.MsgSubmitFeeRate", MsgSubmitFeeRate], ["/side.btcbridge.MsgUpdateTrustedNonBtcRelayers", MsgUpdateTrustedNonBtcRelayers], ["/side.btcbridge.MsgUpdateTrustedOracles", MsgUpdateTrustedOracles], ["/side.btcbridge.MsgWithdrawToBitcoin", MsgWithdrawToBitcoin], ["/side.btcbridge.MsgSubmitSignatures", MsgSubmitSignatures], ["/side.btcbridge.MsgConsolidateVaults", MsgConsolidateVaults], ["/side.btcbridge.MsgInitiateDKG", MsgInitiateDKG], ["/side.btcbridge.MsgCompleteDKG", MsgCompleteDKG], ["/side.btcbridge.MsgTransferVault", MsgTransferVault], ["/side.btcbridge.MsgUpdateParams", MsgUpdateParams]];
+import { MsgSubmitDepositTransaction, MsgSubmitWithdrawTransaction, MsgSubmitFeeRate, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedFeeProviders, MsgWithdrawToBitcoin, MsgSubmitSignatures, MsgConsolidateVaults, MsgInitiateDKG, MsgCompleteDKG, MsgTransferVault, MsgUpdateParams } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/side.btcbridge.MsgSubmitDepositTransaction", MsgSubmitDepositTransaction], ["/side.btcbridge.MsgSubmitWithdrawTransaction", MsgSubmitWithdrawTransaction], ["/side.btcbridge.MsgSubmitFeeRate", MsgSubmitFeeRate], ["/side.btcbridge.MsgUpdateTrustedNonBtcRelayers", MsgUpdateTrustedNonBtcRelayers], ["/side.btcbridge.MsgUpdateTrustedFeeProviders", MsgUpdateTrustedFeeProviders], ["/side.btcbridge.MsgWithdrawToBitcoin", MsgWithdrawToBitcoin], ["/side.btcbridge.MsgSubmitSignatures", MsgSubmitSignatures], ["/side.btcbridge.MsgConsolidateVaults", MsgConsolidateVaults], ["/side.btcbridge.MsgInitiateDKG", MsgInitiateDKG], ["/side.btcbridge.MsgCompleteDKG", MsgCompleteDKG], ["/side.btcbridge.MsgTransferVault", MsgTransferVault], ["/side.btcbridge.MsgUpdateParams", MsgUpdateParams]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -9,12 +9,6 @@ export const load = (protoRegistry: Registry) => {
 };
 export const MessageComposer = {
   encoded: {
-    submitBlockHeaders(value: MsgSubmitBlockHeaders) {
-      return {
-        typeUrl: "/side.btcbridge.MsgSubmitBlockHeaders",
-        value: MsgSubmitBlockHeaders.encode(value).finish()
-      };
-    },
     submitDepositTransaction(value: MsgSubmitDepositTransaction) {
       return {
         typeUrl: "/side.btcbridge.MsgSubmitDepositTransaction",
@@ -39,10 +33,10 @@ export const MessageComposer = {
         value: MsgUpdateTrustedNonBtcRelayers.encode(value).finish()
       };
     },
-    updateTrustedOracles(value: MsgUpdateTrustedOracles) {
+    updateTrustedFeeProviders(value: MsgUpdateTrustedFeeProviders) {
       return {
-        typeUrl: "/side.btcbridge.MsgUpdateTrustedOracles",
-        value: MsgUpdateTrustedOracles.encode(value).finish()
+        typeUrl: "/side.btcbridge.MsgUpdateTrustedFeeProviders",
+        value: MsgUpdateTrustedFeeProviders.encode(value).finish()
       };
     },
     withdrawToBitcoin(value: MsgWithdrawToBitcoin) {
@@ -89,12 +83,6 @@ export const MessageComposer = {
     }
   },
   withTypeUrl: {
-    submitBlockHeaders(value: MsgSubmitBlockHeaders) {
-      return {
-        typeUrl: "/side.btcbridge.MsgSubmitBlockHeaders",
-        value
-      };
-    },
     submitDepositTransaction(value: MsgSubmitDepositTransaction) {
       return {
         typeUrl: "/side.btcbridge.MsgSubmitDepositTransaction",
@@ -119,9 +107,9 @@ export const MessageComposer = {
         value
       };
     },
-    updateTrustedOracles(value: MsgUpdateTrustedOracles) {
+    updateTrustedFeeProviders(value: MsgUpdateTrustedFeeProviders) {
       return {
-        typeUrl: "/side.btcbridge.MsgUpdateTrustedOracles",
+        typeUrl: "/side.btcbridge.MsgUpdateTrustedFeeProviders",
         value
       };
     },
@@ -169,12 +157,6 @@ export const MessageComposer = {
     }
   },
   fromPartial: {
-    submitBlockHeaders(value: MsgSubmitBlockHeaders) {
-      return {
-        typeUrl: "/side.btcbridge.MsgSubmitBlockHeaders",
-        value: MsgSubmitBlockHeaders.fromPartial(value)
-      };
-    },
     submitDepositTransaction(value: MsgSubmitDepositTransaction) {
       return {
         typeUrl: "/side.btcbridge.MsgSubmitDepositTransaction",
@@ -199,10 +181,10 @@ export const MessageComposer = {
         value: MsgUpdateTrustedNonBtcRelayers.fromPartial(value)
       };
     },
-    updateTrustedOracles(value: MsgUpdateTrustedOracles) {
+    updateTrustedFeeProviders(value: MsgUpdateTrustedFeeProviders) {
       return {
-        typeUrl: "/side.btcbridge.MsgUpdateTrustedOracles",
-        value: MsgUpdateTrustedOracles.fromPartial(value)
+        typeUrl: "/side.btcbridge.MsgUpdateTrustedFeeProviders",
+        value: MsgUpdateTrustedFeeProviders.fromPartial(value)
       };
     },
     withdrawToBitcoin(value: MsgWithdrawToBitcoin) {

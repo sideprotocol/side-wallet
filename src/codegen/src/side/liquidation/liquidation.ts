@@ -4,32 +4,6 @@ import { Timestamp } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { Decimal } from "@cosmjs/math";
 import { toTimestamp, fromTimestamp } from "../../helpers";
-export enum AssetType {
-  ASSET_TYPE_BITCOIN = 0,
-  UNRECOGNIZED = -1,
-}
-export const AssetTypeSDKType = AssetType;
-export const AssetTypeAmino = AssetType;
-export function assetTypeFromJSON(object: any): AssetType {
-  switch (object) {
-    case 0:
-    case "ASSET_TYPE_BITCOIN":
-      return AssetType.ASSET_TYPE_BITCOIN;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return AssetType.UNRECOGNIZED;
-  }
-}
-export function assetTypeToJSON(object: AssetType): string {
-  switch (object) {
-    case AssetType.ASSET_TYPE_BITCOIN:
-      return "ASSET_TYPE_BITCOIN";
-    case AssetType.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
 export enum LiquidationStatus {
   LIQUIDATION_STATUS_UNSPECIFIED = 0,
   LIQUIDATION_STATUS_LIQUIDATING = 1,
@@ -80,6 +54,59 @@ export function liquidationStatusToJSON(object: LiquidationStatus): string {
       return "UNRECOGNIZED";
   }
 }
+/** Signing intent */
+export enum SigningIntent {
+  SIGNING_INTENT_DEFAULT = 0,
+  UNRECOGNIZED = -1,
+}
+export const SigningIntentSDKType = SigningIntent;
+export const SigningIntentAmino = SigningIntent;
+export function signingIntentFromJSON(object: any): SigningIntent {
+  switch (object) {
+    case 0:
+    case "SIGNING_INTENT_DEFAULT":
+      return SigningIntent.SIGNING_INTENT_DEFAULT;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return SigningIntent.UNRECOGNIZED;
+  }
+}
+export function signingIntentToJSON(object: SigningIntent): string {
+  switch (object) {
+    case SigningIntent.SIGNING_INTENT_DEFAULT:
+      return "SIGNING_INTENT_DEFAULT";
+    case SigningIntent.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+export interface AssetMetadata {
+  denom: string;
+  symbol: string;
+  priceSymbol: string;
+  decimals: number;
+}
+export interface AssetMetadataProtoMsg {
+  typeUrl: "/side.liquidation.AssetMetadata";
+  value: Uint8Array;
+}
+export interface AssetMetadataAmino {
+  denom?: string;
+  symbol?: string;
+  price_symbol?: string;
+  decimals?: number;
+}
+export interface AssetMetadataAminoMsg {
+  type: "/side.liquidation.AssetMetadata";
+  value: AssetMetadataAmino;
+}
+export interface AssetMetadataSDKType {
+  denom: string;
+  symbol: string;
+  price_symbol: string;
+  decimals: number;
+}
 export interface Liquidation {
   id: bigint;
   loanId: string;
@@ -88,8 +115,10 @@ export interface Liquidation {
   collateralAmount: Coin;
   actualCollateralAmount: Coin;
   debtAmount: Coin;
-  liquidatedPrice: string;
-  liquidatedTime: Date;
+  collateralAsset: AssetMetadata;
+  debtAsset: AssetMetadata;
+  liquidationPrice: string;
+  liquidationTime: Date;
   liquidatedCollateralAmount: Coin;
   liquidatedDebtAmount: Coin;
   liquidationBonusAmount: Coin;
@@ -112,8 +141,10 @@ export interface LiquidationAmino {
   collateral_amount?: CoinAmino;
   actual_collateral_amount?: CoinAmino;
   debt_amount?: CoinAmino;
-  liquidated_price?: string;
-  liquidated_time?: string;
+  collateral_asset?: AssetMetadataAmino;
+  debt_asset?: AssetMetadataAmino;
+  liquidation_price?: string;
+  liquidation_time?: string;
   liquidated_collateral_amount?: CoinAmino;
   liquidated_debt_amount?: CoinAmino;
   liquidation_bonus_amount?: CoinAmino;
@@ -136,8 +167,10 @@ export interface LiquidationSDKType {
   collateral_amount: CoinSDKType;
   actual_collateral_amount: CoinSDKType;
   debt_amount: CoinSDKType;
-  liquidated_price: string;
-  liquidated_time: Date;
+  collateral_asset: AssetMetadataSDKType;
+  debt_asset: AssetMetadataSDKType;
+  liquidation_price: string;
+  liquidation_time: Date;
   liquidated_collateral_amount: CoinSDKType;
   liquidated_debt_amount: CoinSDKType;
   liquidation_bonus_amount: CoinSDKType;
@@ -183,6 +216,105 @@ export interface LiquidationRecordSDKType {
   bonus_amount: CoinSDKType;
   time: Date;
 }
+function createBaseAssetMetadata(): AssetMetadata {
+  return {
+    denom: "",
+    symbol: "",
+    priceSymbol: "",
+    decimals: 0
+  };
+}
+export const AssetMetadata = {
+  typeUrl: "/side.liquidation.AssetMetadata",
+  encode(message: AssetMetadata, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.denom !== "") {
+      writer.uint32(10).string(message.denom);
+    }
+    if (message.symbol !== "") {
+      writer.uint32(18).string(message.symbol);
+    }
+    if (message.priceSymbol !== "") {
+      writer.uint32(26).string(message.priceSymbol);
+    }
+    if (message.decimals !== 0) {
+      writer.uint32(32).int32(message.decimals);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): AssetMetadata {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAssetMetadata();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.denom = reader.string();
+          break;
+        case 2:
+          message.symbol = reader.string();
+          break;
+        case 3:
+          message.priceSymbol = reader.string();
+          break;
+        case 4:
+          message.decimals = reader.int32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<AssetMetadata>): AssetMetadata {
+    const message = createBaseAssetMetadata();
+    message.denom = object.denom ?? "";
+    message.symbol = object.symbol ?? "";
+    message.priceSymbol = object.priceSymbol ?? "";
+    message.decimals = object.decimals ?? 0;
+    return message;
+  },
+  fromAmino(object: AssetMetadataAmino): AssetMetadata {
+    const message = createBaseAssetMetadata();
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom;
+    }
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = object.symbol;
+    }
+    if (object.price_symbol !== undefined && object.price_symbol !== null) {
+      message.priceSymbol = object.price_symbol;
+    }
+    if (object.decimals !== undefined && object.decimals !== null) {
+      message.decimals = object.decimals;
+    }
+    return message;
+  },
+  toAmino(message: AssetMetadata): AssetMetadataAmino {
+    const obj: any = {};
+    obj.denom = message.denom === "" ? undefined : message.denom;
+    obj.symbol = message.symbol === "" ? undefined : message.symbol;
+    obj.price_symbol = message.priceSymbol === "" ? undefined : message.priceSymbol;
+    obj.decimals = message.decimals === 0 ? undefined : message.decimals;
+    return obj;
+  },
+  fromAminoMsg(object: AssetMetadataAminoMsg): AssetMetadata {
+    return AssetMetadata.fromAmino(object.value);
+  },
+  fromProtoMsg(message: AssetMetadataProtoMsg): AssetMetadata {
+    return AssetMetadata.decode(message.value);
+  },
+  toProto(message: AssetMetadata): Uint8Array {
+    return AssetMetadata.encode(message).finish();
+  },
+  toProtoMsg(message: AssetMetadata): AssetMetadataProtoMsg {
+    return {
+      typeUrl: "/side.liquidation.AssetMetadata",
+      value: AssetMetadata.encode(message).finish()
+    };
+  }
+};
 function createBaseLiquidation(): Liquidation {
   return {
     id: BigInt(0),
@@ -192,8 +324,10 @@ function createBaseLiquidation(): Liquidation {
     collateralAmount: Coin.fromPartial({}),
     actualCollateralAmount: Coin.fromPartial({}),
     debtAmount: Coin.fromPartial({}),
-    liquidatedPrice: "",
-    liquidatedTime: new Date(),
+    collateralAsset: AssetMetadata.fromPartial({}),
+    debtAsset: AssetMetadata.fromPartial({}),
+    liquidationPrice: "",
+    liquidationTime: new Date(),
     liquidatedCollateralAmount: Coin.fromPartial({}),
     liquidatedDebtAmount: Coin.fromPartial({}),
     liquidationBonusAmount: Coin.fromPartial({}),
@@ -229,38 +363,44 @@ export const Liquidation = {
     if (message.debtAmount !== undefined) {
       Coin.encode(message.debtAmount, writer.uint32(58).fork()).ldelim();
     }
-    if (message.liquidatedPrice !== "") {
-      writer.uint32(66).string(Decimal.fromUserInput(message.liquidatedPrice, 18).atomics);
+    if (message.collateralAsset !== undefined) {
+      AssetMetadata.encode(message.collateralAsset, writer.uint32(66).fork()).ldelim();
     }
-    if (message.liquidatedTime !== undefined) {
-      Timestamp.encode(toTimestamp(message.liquidatedTime), writer.uint32(74).fork()).ldelim();
+    if (message.debtAsset !== undefined) {
+      AssetMetadata.encode(message.debtAsset, writer.uint32(74).fork()).ldelim();
+    }
+    if (message.liquidationPrice !== "") {
+      writer.uint32(82).string(Decimal.fromUserInput(message.liquidationPrice, 18).atomics);
+    }
+    if (message.liquidationTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.liquidationTime), writer.uint32(90).fork()).ldelim();
     }
     if (message.liquidatedCollateralAmount !== undefined) {
-      Coin.encode(message.liquidatedCollateralAmount, writer.uint32(82).fork()).ldelim();
+      Coin.encode(message.liquidatedCollateralAmount, writer.uint32(98).fork()).ldelim();
     }
     if (message.liquidatedDebtAmount !== undefined) {
-      Coin.encode(message.liquidatedDebtAmount, writer.uint32(90).fork()).ldelim();
+      Coin.encode(message.liquidatedDebtAmount, writer.uint32(106).fork()).ldelim();
     }
     if (message.liquidationBonusAmount !== undefined) {
-      Coin.encode(message.liquidationBonusAmount, writer.uint32(98).fork()).ldelim();
+      Coin.encode(message.liquidationBonusAmount, writer.uint32(114).fork()).ldelim();
     }
     if (message.protocolLiquidationFee !== undefined) {
-      Coin.encode(message.protocolLiquidationFee, writer.uint32(106).fork()).ldelim();
+      Coin.encode(message.protocolLiquidationFee, writer.uint32(122).fork()).ldelim();
     }
     if (message.unliquidatedCollateralAmount !== undefined) {
-      Coin.encode(message.unliquidatedCollateralAmount, writer.uint32(114).fork()).ldelim();
+      Coin.encode(message.unliquidatedCollateralAmount, writer.uint32(130).fork()).ldelim();
     }
     if (message.liquidationCet !== "") {
-      writer.uint32(122).string(message.liquidationCet);
+      writer.uint32(138).string(message.liquidationCet);
     }
     if (message.settlementTx !== "") {
-      writer.uint32(130).string(message.settlementTx);
+      writer.uint32(146).string(message.settlementTx);
     }
     if (message.settlementTxId !== "") {
-      writer.uint32(138).string(message.settlementTxId);
+      writer.uint32(154).string(message.settlementTxId);
     }
     if (message.status !== 0) {
-      writer.uint32(144).int32(message.status);
+      writer.uint32(160).int32(message.status);
     }
     return writer;
   },
@@ -293,36 +433,42 @@ export const Liquidation = {
           message.debtAmount = Coin.decode(reader, reader.uint32());
           break;
         case 8:
-          message.liquidatedPrice = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.collateralAsset = AssetMetadata.decode(reader, reader.uint32());
           break;
         case 9:
-          message.liquidatedTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.debtAsset = AssetMetadata.decode(reader, reader.uint32());
           break;
         case 10:
-          message.liquidatedCollateralAmount = Coin.decode(reader, reader.uint32());
+          message.liquidationPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 11:
-          message.liquidatedDebtAmount = Coin.decode(reader, reader.uint32());
+          message.liquidationTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 12:
-          message.liquidationBonusAmount = Coin.decode(reader, reader.uint32());
+          message.liquidatedCollateralAmount = Coin.decode(reader, reader.uint32());
           break;
         case 13:
-          message.protocolLiquidationFee = Coin.decode(reader, reader.uint32());
+          message.liquidatedDebtAmount = Coin.decode(reader, reader.uint32());
           break;
         case 14:
-          message.unliquidatedCollateralAmount = Coin.decode(reader, reader.uint32());
+          message.liquidationBonusAmount = Coin.decode(reader, reader.uint32());
           break;
         case 15:
-          message.liquidationCet = reader.string();
+          message.protocolLiquidationFee = Coin.decode(reader, reader.uint32());
           break;
         case 16:
-          message.settlementTx = reader.string();
+          message.unliquidatedCollateralAmount = Coin.decode(reader, reader.uint32());
           break;
         case 17:
-          message.settlementTxId = reader.string();
+          message.liquidationCet = reader.string();
           break;
         case 18:
+          message.settlementTx = reader.string();
+          break;
+        case 19:
+          message.settlementTxId = reader.string();
+          break;
+        case 20:
           message.status = reader.int32() as any;
           break;
         default:
@@ -341,8 +487,10 @@ export const Liquidation = {
     message.collateralAmount = object.collateralAmount !== undefined && object.collateralAmount !== null ? Coin.fromPartial(object.collateralAmount) : undefined;
     message.actualCollateralAmount = object.actualCollateralAmount !== undefined && object.actualCollateralAmount !== null ? Coin.fromPartial(object.actualCollateralAmount) : undefined;
     message.debtAmount = object.debtAmount !== undefined && object.debtAmount !== null ? Coin.fromPartial(object.debtAmount) : undefined;
-    message.liquidatedPrice = object.liquidatedPrice ?? "";
-    message.liquidatedTime = object.liquidatedTime ?? undefined;
+    message.collateralAsset = object.collateralAsset !== undefined && object.collateralAsset !== null ? AssetMetadata.fromPartial(object.collateralAsset) : undefined;
+    message.debtAsset = object.debtAsset !== undefined && object.debtAsset !== null ? AssetMetadata.fromPartial(object.debtAsset) : undefined;
+    message.liquidationPrice = object.liquidationPrice ?? "";
+    message.liquidationTime = object.liquidationTime ?? undefined;
     message.liquidatedCollateralAmount = object.liquidatedCollateralAmount !== undefined && object.liquidatedCollateralAmount !== null ? Coin.fromPartial(object.liquidatedCollateralAmount) : undefined;
     message.liquidatedDebtAmount = object.liquidatedDebtAmount !== undefined && object.liquidatedDebtAmount !== null ? Coin.fromPartial(object.liquidatedDebtAmount) : undefined;
     message.liquidationBonusAmount = object.liquidationBonusAmount !== undefined && object.liquidationBonusAmount !== null ? Coin.fromPartial(object.liquidationBonusAmount) : undefined;
@@ -377,11 +525,17 @@ export const Liquidation = {
     if (object.debt_amount !== undefined && object.debt_amount !== null) {
       message.debtAmount = Coin.fromAmino(object.debt_amount);
     }
-    if (object.liquidated_price !== undefined && object.liquidated_price !== null) {
-      message.liquidatedPrice = object.liquidated_price;
+    if (object.collateral_asset !== undefined && object.collateral_asset !== null) {
+      message.collateralAsset = AssetMetadata.fromAmino(object.collateral_asset);
     }
-    if (object.liquidated_time !== undefined && object.liquidated_time !== null) {
-      message.liquidatedTime = fromTimestamp(Timestamp.fromAmino(object.liquidated_time));
+    if (object.debt_asset !== undefined && object.debt_asset !== null) {
+      message.debtAsset = AssetMetadata.fromAmino(object.debt_asset);
+    }
+    if (object.liquidation_price !== undefined && object.liquidation_price !== null) {
+      message.liquidationPrice = object.liquidation_price;
+    }
+    if (object.liquidation_time !== undefined && object.liquidation_time !== null) {
+      message.liquidationTime = fromTimestamp(Timestamp.fromAmino(object.liquidation_time));
     }
     if (object.liquidated_collateral_amount !== undefined && object.liquidated_collateral_amount !== null) {
       message.liquidatedCollateralAmount = Coin.fromAmino(object.liquidated_collateral_amount);
@@ -421,8 +575,10 @@ export const Liquidation = {
     obj.collateral_amount = message.collateralAmount ? Coin.toAmino(message.collateralAmount) : undefined;
     obj.actual_collateral_amount = message.actualCollateralAmount ? Coin.toAmino(message.actualCollateralAmount) : undefined;
     obj.debt_amount = message.debtAmount ? Coin.toAmino(message.debtAmount) : undefined;
-    obj.liquidated_price = message.liquidatedPrice === "" ? undefined : message.liquidatedPrice;
-    obj.liquidated_time = message.liquidatedTime ? Timestamp.toAmino(toTimestamp(message.liquidatedTime)) : undefined;
+    obj.collateral_asset = message.collateralAsset ? AssetMetadata.toAmino(message.collateralAsset) : undefined;
+    obj.debt_asset = message.debtAsset ? AssetMetadata.toAmino(message.debtAsset) : undefined;
+    obj.liquidation_price = message.liquidationPrice === "" ? undefined : message.liquidationPrice;
+    obj.liquidation_time = message.liquidationTime ? Timestamp.toAmino(toTimestamp(message.liquidationTime)) : undefined;
     obj.liquidated_collateral_amount = message.liquidatedCollateralAmount ? Coin.toAmino(message.liquidatedCollateralAmount) : undefined;
     obj.liquidated_debt_amount = message.liquidatedDebtAmount ? Coin.toAmino(message.liquidatedDebtAmount) : undefined;
     obj.liquidation_bonus_amount = message.liquidationBonusAmount ? Coin.toAmino(message.liquidationBonusAmount) : undefined;

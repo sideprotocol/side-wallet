@@ -2,7 +2,7 @@
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryPoolRequest, QueryPoolResponse, QueryPoolsRequest, QueryPoolsResponse, QueryPoolExchangeRateRequest, QueryPoolExchangeRateResponse, QueryCollateralAddressRequest, QueryCollateralAddressResponse, QueryLiquidationEventRequest, QueryLiquidationEventResponse, QueryLoanRequest, QueryLoanResponse, QueryLoansRequest, QueryLoansResponse, QueryLoansByAddressRequest, QueryLoansByAddressResponse, QueryLoanCetInfosRequest, QueryLoanCetInfosResponse, QueryLoanDlcMetaRequest, QueryLoanDlcMetaResponse, QueryLoanCancellationRequest, QueryLoanCancellationResponse, QueryRepaymentRequest, QueryRepaymentResponse, QueryCurrentInterestRequest, QueryCurrentInterestResponse, QueryPriceRequest, QueryPriceResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryPoolRequest, QueryPoolResponse, QueryPoolsRequest, QueryPoolsResponse, QueryPoolExchangeRateRequest, QueryPoolExchangeRateResponse, QueryCollateralAddressRequest, QueryCollateralAddressResponse, QueryLiquidationEventRequest, QueryLiquidationEventResponse, QueryLoanRequest, QueryLoanResponse, QueryLoansRequest, QueryLoansResponse, QueryLoansByAddressRequest, QueryLoansByAddressResponse, QueryLoanCetInfosRequest, QueryLoanCetInfosResponse, QueryLoanDlcMetaRequest, QueryLoanDlcMetaResponse, QueryLoanAuthorizationRequest, QueryLoanAuthorizationResponse, QueryRedemptionRequest, QueryRedemptionResponse, QueryRepaymentRequest, QueryRepaymentResponse, QueryCurrentInterestRequest, QueryCurrentInterestResponse, QueryPriceRequest, QueryPriceResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Params queries the parameters of the module. */
@@ -17,7 +17,8 @@ export interface Query {
   loansByAddress(request: QueryLoansByAddressRequest): Promise<QueryLoansByAddressResponse>;
   loanCetInfos(request: QueryLoanCetInfosRequest): Promise<QueryLoanCetInfosResponse>;
   loanDlcMeta(request: QueryLoanDlcMetaRequest): Promise<QueryLoanDlcMetaResponse>;
-  loanCancellation(request: QueryLoanCancellationRequest): Promise<QueryLoanCancellationResponse>;
+  loanAuthorization(request: QueryLoanAuthorizationRequest): Promise<QueryLoanAuthorizationResponse>;
+  redemption(request: QueryRedemptionRequest): Promise<QueryRedemptionResponse>;
   repayment(request: QueryRepaymentRequest): Promise<QueryRepaymentResponse>;
   currentInterest(request: QueryCurrentInterestRequest): Promise<QueryCurrentInterestResponse>;
   /** Price queries the current price by the given pair. */
@@ -38,7 +39,8 @@ export class QueryClientImpl implements Query {
     this.loansByAddress = this.loansByAddress.bind(this);
     this.loanCetInfos = this.loanCetInfos.bind(this);
     this.loanDlcMeta = this.loanDlcMeta.bind(this);
-    this.loanCancellation = this.loanCancellation.bind(this);
+    this.loanAuthorization = this.loanAuthorization.bind(this);
+    this.redemption = this.redemption.bind(this);
     this.repayment = this.repayment.bind(this);
     this.currentInterest = this.currentInterest.bind(this);
     this.price = this.price.bind(this);
@@ -100,10 +102,15 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("side.lending.Query", "LoanDlcMeta", data);
     return promise.then(data => QueryLoanDlcMetaResponse.decode(new BinaryReader(data)));
   }
-  loanCancellation(request: QueryLoanCancellationRequest): Promise<QueryLoanCancellationResponse> {
-    const data = QueryLoanCancellationRequest.encode(request).finish();
-    const promise = this.rpc.request("side.lending.Query", "LoanCancellation", data);
-    return promise.then(data => QueryLoanCancellationResponse.decode(new BinaryReader(data)));
+  loanAuthorization(request: QueryLoanAuthorizationRequest): Promise<QueryLoanAuthorizationResponse> {
+    const data = QueryLoanAuthorizationRequest.encode(request).finish();
+    const promise = this.rpc.request("side.lending.Query", "LoanAuthorization", data);
+    return promise.then(data => QueryLoanAuthorizationResponse.decode(new BinaryReader(data)));
+  }
+  redemption(request: QueryRedemptionRequest): Promise<QueryRedemptionResponse> {
+    const data = QueryRedemptionRequest.encode(request).finish();
+    const promise = this.rpc.request("side.lending.Query", "Redemption", data);
+    return promise.then(data => QueryRedemptionResponse.decode(new BinaryReader(data)));
   }
   repayment(request: QueryRepaymentRequest): Promise<QueryRepaymentResponse> {
     const data = QueryRepaymentRequest.encode(request).finish();
@@ -158,8 +165,11 @@ export const createRpcQueryExtension = (base: QueryClient) => {
     loanDlcMeta(request: QueryLoanDlcMetaRequest): Promise<QueryLoanDlcMetaResponse> {
       return queryService.loanDlcMeta(request);
     },
-    loanCancellation(request: QueryLoanCancellationRequest): Promise<QueryLoanCancellationResponse> {
-      return queryService.loanCancellation(request);
+    loanAuthorization(request: QueryLoanAuthorizationRequest): Promise<QueryLoanAuthorizationResponse> {
+      return queryService.loanAuthorization(request);
+    },
+    redemption(request: QueryRedemptionRequest): Promise<QueryRedemptionResponse> {
+      return queryService.redemption(request);
     },
     repayment(request: QueryRepaymentRequest): Promise<QueryRepaymentResponse> {
       return queryService.repayment(request);

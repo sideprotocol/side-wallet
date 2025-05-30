@@ -1,9 +1,10 @@
 //@ts-nocheck
 import { Duration, DurationAmino, DurationSDKType } from "../../google/protobuf/duration";
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 export interface PriceInterval {
   pricePair: string;
-  interval: number;
+  interval: string;
 }
 export interface PriceIntervalProtoMsg {
   typeUrl: "/side.dlc.PriceInterval";
@@ -11,7 +12,7 @@ export interface PriceIntervalProtoMsg {
 }
 export interface PriceIntervalAmino {
   price_pair?: string;
-  interval?: number;
+  interval?: string;
 }
 export interface PriceIntervalAminoMsg {
   type: "/side.dlc.PriceInterval";
@@ -19,7 +20,7 @@ export interface PriceIntervalAminoMsg {
 }
 export interface PriceIntervalSDKType {
   price_pair: string;
-  interval: number;
+  interval: string;
 }
 /** Params defines the parameters for the module. */
 export interface Params {
@@ -28,7 +29,9 @@ export interface Params {
   dateEventNonceQueueSize: number;
   dateInterval: Duration;
   lendingEventNonceQueueSize: number;
-  dkgTimeoutPeriod: Duration;
+  oracleParticipantBaseNum: number;
+  oracleParticipantNum: number;
+  nonceGenerationBatchSize: number;
 }
 export interface ParamsProtoMsg {
   typeUrl: "/side.dlc.Params";
@@ -41,7 +44,9 @@ export interface ParamsAmino {
   date_event_nonce_queue_size?: number;
   date_interval?: DurationAmino;
   lending_event_nonce_queue_size?: number;
-  dkg_timeout_period?: DurationAmino;
+  oracle_participant_base_num?: number;
+  oracle_participant_num?: number;
+  nonce_generation_batch_size?: number;
 }
 export interface ParamsAminoMsg {
   type: "/side.dlc.Params";
@@ -54,12 +59,14 @@ export interface ParamsSDKType {
   date_event_nonce_queue_size: number;
   date_interval: DurationSDKType;
   lending_event_nonce_queue_size: number;
-  dkg_timeout_period: DurationSDKType;
+  oracle_participant_base_num: number;
+  oracle_participant_num: number;
+  nonce_generation_batch_size: number;
 }
 function createBasePriceInterval(): PriceInterval {
   return {
     pricePair: "",
-    interval: 0
+    interval: ""
   };
 }
 export const PriceInterval = {
@@ -68,8 +75,8 @@ export const PriceInterval = {
     if (message.pricePair !== "") {
       writer.uint32(10).string(message.pricePair);
     }
-    if (message.interval !== 0) {
-      writer.uint32(16).int32(message.interval);
+    if (message.interval !== "") {
+      writer.uint32(18).string(Decimal.fromUserInput(message.interval, 18).atomics);
     }
     return writer;
   },
@@ -84,7 +91,7 @@ export const PriceInterval = {
           message.pricePair = reader.string();
           break;
         case 2:
-          message.interval = reader.int32();
+          message.interval = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         default:
           reader.skipType(tag & 7);
@@ -96,7 +103,7 @@ export const PriceInterval = {
   fromPartial(object: Partial<PriceInterval>): PriceInterval {
     const message = createBasePriceInterval();
     message.pricePair = object.pricePair ?? "";
-    message.interval = object.interval ?? 0;
+    message.interval = object.interval ?? "";
     return message;
   },
   fromAmino(object: PriceIntervalAmino): PriceInterval {
@@ -112,7 +119,7 @@ export const PriceInterval = {
   toAmino(message: PriceInterval): PriceIntervalAmino {
     const obj: any = {};
     obj.price_pair = message.pricePair === "" ? undefined : message.pricePair;
-    obj.interval = message.interval === 0 ? undefined : message.interval;
+    obj.interval = message.interval === "" ? undefined : message.interval;
     return obj;
   },
   fromAminoMsg(object: PriceIntervalAminoMsg): PriceInterval {
@@ -138,7 +145,9 @@ function createBaseParams(): Params {
     dateEventNonceQueueSize: 0,
     dateInterval: Duration.fromPartial({}),
     lendingEventNonceQueueSize: 0,
-    dkgTimeoutPeriod: Duration.fromPartial({})
+    oracleParticipantBaseNum: 0,
+    oracleParticipantNum: 0,
+    nonceGenerationBatchSize: 0
   };
 }
 export const Params = {
@@ -159,8 +168,14 @@ export const Params = {
     if (message.lendingEventNonceQueueSize !== 0) {
       writer.uint32(40).uint32(message.lendingEventNonceQueueSize);
     }
-    if (message.dkgTimeoutPeriod !== undefined) {
-      Duration.encode(message.dkgTimeoutPeriod, writer.uint32(50).fork()).ldelim();
+    if (message.oracleParticipantBaseNum !== 0) {
+      writer.uint32(48).uint32(message.oracleParticipantBaseNum);
+    }
+    if (message.oracleParticipantNum !== 0) {
+      writer.uint32(56).uint32(message.oracleParticipantNum);
+    }
+    if (message.nonceGenerationBatchSize !== 0) {
+      writer.uint32(64).uint32(message.nonceGenerationBatchSize);
     }
     return writer;
   },
@@ -187,7 +202,13 @@ export const Params = {
           message.lendingEventNonceQueueSize = reader.uint32();
           break;
         case 6:
-          message.dkgTimeoutPeriod = Duration.decode(reader, reader.uint32());
+          message.oracleParticipantBaseNum = reader.uint32();
+          break;
+        case 7:
+          message.oracleParticipantNum = reader.uint32();
+          break;
+        case 8:
+          message.nonceGenerationBatchSize = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -203,7 +224,9 @@ export const Params = {
     message.dateEventNonceQueueSize = object.dateEventNonceQueueSize ?? 0;
     message.dateInterval = object.dateInterval !== undefined && object.dateInterval !== null ? Duration.fromPartial(object.dateInterval) : undefined;
     message.lendingEventNonceQueueSize = object.lendingEventNonceQueueSize ?? 0;
-    message.dkgTimeoutPeriod = object.dkgTimeoutPeriod !== undefined && object.dkgTimeoutPeriod !== null ? Duration.fromPartial(object.dkgTimeoutPeriod) : undefined;
+    message.oracleParticipantBaseNum = object.oracleParticipantBaseNum ?? 0;
+    message.oracleParticipantNum = object.oracleParticipantNum ?? 0;
+    message.nonceGenerationBatchSize = object.nonceGenerationBatchSize ?? 0;
     return message;
   },
   fromAmino(object: ParamsAmino): Params {
@@ -221,8 +244,14 @@ export const Params = {
     if (object.lending_event_nonce_queue_size !== undefined && object.lending_event_nonce_queue_size !== null) {
       message.lendingEventNonceQueueSize = object.lending_event_nonce_queue_size;
     }
-    if (object.dkg_timeout_period !== undefined && object.dkg_timeout_period !== null) {
-      message.dkgTimeoutPeriod = Duration.fromAmino(object.dkg_timeout_period);
+    if (object.oracle_participant_base_num !== undefined && object.oracle_participant_base_num !== null) {
+      message.oracleParticipantBaseNum = object.oracle_participant_base_num;
+    }
+    if (object.oracle_participant_num !== undefined && object.oracle_participant_num !== null) {
+      message.oracleParticipantNum = object.oracle_participant_num;
+    }
+    if (object.nonce_generation_batch_size !== undefined && object.nonce_generation_batch_size !== null) {
+      message.nonceGenerationBatchSize = object.nonce_generation_batch_size;
     }
     return message;
   },
@@ -237,7 +266,9 @@ export const Params = {
     obj.date_event_nonce_queue_size = message.dateEventNonceQueueSize === 0 ? undefined : message.dateEventNonceQueueSize;
     obj.date_interval = message.dateInterval ? Duration.toAmino(message.dateInterval) : undefined;
     obj.lending_event_nonce_queue_size = message.lendingEventNonceQueueSize === 0 ? undefined : message.lendingEventNonceQueueSize;
-    obj.dkg_timeout_period = message.dkgTimeoutPeriod ? Duration.toAmino(message.dkgTimeoutPeriod) : undefined;
+    obj.oracle_participant_base_num = message.oracleParticipantBaseNum === 0 ? undefined : message.oracleParticipantBaseNum;
+    obj.oracle_participant_num = message.oracleParticipantNum === 0 ? undefined : message.oracleParticipantNum;
+    obj.nonce_generation_batch_size = message.nonceGenerationBatchSize === 0 ? undefined : message.nonceGenerationBatchSize;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

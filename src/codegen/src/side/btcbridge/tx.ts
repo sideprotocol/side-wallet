@@ -1,44 +1,7 @@
 //@ts-nocheck
-import { BlockHeader, BlockHeaderAmino, BlockHeaderSDKType, BtcConsolidation, BtcConsolidationAmino, BtcConsolidationSDKType, RunesConsolidation, RunesConsolidationAmino, RunesConsolidationSDKType, DKGParticipant, DKGParticipantAmino, DKGParticipantSDKType } from "./btcbridge";
+import { BtcConsolidation, BtcConsolidationAmino, BtcConsolidationSDKType, RunesConsolidation, RunesConsolidationAmino, RunesConsolidationSDKType, DKGParticipant, DKGParticipantAmino, DKGParticipantSDKType } from "./btcbridge";
 import { AssetType, Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../binary";
-/** MsgSubmitBlockHeaders defines the Msg/SubmitBlockHeaders request type. */
-export interface MsgSubmitBlockHeaders {
-  sender: string;
-  blockHeaders: BlockHeader[];
-}
-export interface MsgSubmitBlockHeadersProtoMsg {
-  typeUrl: "/side.btcbridge.MsgSubmitBlockHeaders";
-  value: Uint8Array;
-}
-/** MsgSubmitBlockHeaders defines the Msg/SubmitBlockHeaders request type. */
-export interface MsgSubmitBlockHeadersAmino {
-  sender?: string;
-  block_headers?: BlockHeaderAmino[];
-}
-export interface MsgSubmitBlockHeadersAminoMsg {
-  type: "/side.btcbridge.MsgSubmitBlockHeaders";
-  value: MsgSubmitBlockHeadersAmino;
-}
-/** MsgSubmitBlockHeaders defines the Msg/SubmitBlockHeaders request type. */
-export interface MsgSubmitBlockHeadersSDKType {
-  sender: string;
-  block_headers: BlockHeaderSDKType[];
-}
-/** MsgSubmitBlockHeadersResponse defines the Msg/SubmitBlockHeaders response type. */
-export interface MsgSubmitBlockHeadersResponse {}
-export interface MsgSubmitBlockHeadersResponseProtoMsg {
-  typeUrl: "/side.btcbridge.MsgSubmitBlockHeadersResponse";
-  value: Uint8Array;
-}
-/** MsgSubmitBlockHeadersResponse defines the Msg/SubmitBlockHeaders response type. */
-export interface MsgSubmitBlockHeadersResponseAmino {}
-export interface MsgSubmitBlockHeadersResponseAminoMsg {
-  type: "/side.btcbridge.MsgSubmitBlockHeadersResponse";
-  value: MsgSubmitBlockHeadersResponseAmino;
-}
-/** MsgSubmitBlockHeadersResponse defines the Msg/SubmitBlockHeaders response type. */
-export interface MsgSubmitBlockHeadersResponseSDKType {}
 /** MsgSubmitDepositTransaction defines the Msg/SubmitDepositTransaction request type. */
 export interface MsgSubmitDepositTransaction {
   /** this is the relayer address who submits the bitcoin transaction to the side chain */
@@ -218,43 +181,43 @@ export interface MsgUpdateTrustedNonBtcRelayersResponseAminoMsg {
 }
 /** MsgUpdateTrustedNonBtcRelayersResponse defines the Msg/UpdateTrustedNonBtcRelayers response type. */
 export interface MsgUpdateTrustedNonBtcRelayersResponseSDKType {}
-/** MsgUpdateTrustedOracles defines the Msg/UpdateTrustedOracles request type. */
-export interface MsgUpdateTrustedOracles {
+/** MsgUpdateTrustedFeeProviders defines the Msg/UpdateTrustedFeeProviders request type. */
+export interface MsgUpdateTrustedFeeProviders {
   sender: string;
-  oracles: string[];
+  feeProviders: string[];
 }
-export interface MsgUpdateTrustedOraclesProtoMsg {
-  typeUrl: "/side.btcbridge.MsgUpdateTrustedOracles";
+export interface MsgUpdateTrustedFeeProvidersProtoMsg {
+  typeUrl: "/side.btcbridge.MsgUpdateTrustedFeeProviders";
   value: Uint8Array;
 }
-/** MsgUpdateTrustedOracles defines the Msg/UpdateTrustedOracles request type. */
-export interface MsgUpdateTrustedOraclesAmino {
+/** MsgUpdateTrustedFeeProviders defines the Msg/UpdateTrustedFeeProviders request type. */
+export interface MsgUpdateTrustedFeeProvidersAmino {
   sender?: string;
-  oracles?: string[];
+  FeeProviders?: string[];
 }
-export interface MsgUpdateTrustedOraclesAminoMsg {
-  type: "/side.btcbridge.MsgUpdateTrustedOracles";
-  value: MsgUpdateTrustedOraclesAmino;
+export interface MsgUpdateTrustedFeeProvidersAminoMsg {
+  type: "/side.btcbridge.MsgUpdateTrustedFeeProviders";
+  value: MsgUpdateTrustedFeeProvidersAmino;
 }
-/** MsgUpdateTrustedOracles defines the Msg/UpdateTrustedOracles request type. */
-export interface MsgUpdateTrustedOraclesSDKType {
+/** MsgUpdateTrustedFeeProviders defines the Msg/UpdateTrustedFeeProviders request type. */
+export interface MsgUpdateTrustedFeeProvidersSDKType {
   sender: string;
-  oracles: string[];
+  FeeProviders: string[];
 }
-/** MsgUpdateTrustedOraclesResponse defines the Msg/UpdateTrustedOracles response type. */
-export interface MsgUpdateTrustedOraclesResponse {}
-export interface MsgUpdateTrustedOraclesResponseProtoMsg {
-  typeUrl: "/side.btcbridge.MsgUpdateTrustedOraclesResponse";
+/** MsgUpdateTrustedFeeProvidersResponse defines the Msg/UpdateTrustedFeeProviders response type. */
+export interface MsgUpdateTrustedFeeProvidersResponse {}
+export interface MsgUpdateTrustedFeeProvidersResponseProtoMsg {
+  typeUrl: "/side.btcbridge.MsgUpdateTrustedFeeProvidersResponse";
   value: Uint8Array;
 }
-/** MsgUpdateTrustedOraclesResponse defines the Msg/UpdateTrustedOracles response type. */
-export interface MsgUpdateTrustedOraclesResponseAmino {}
-export interface MsgUpdateTrustedOraclesResponseAminoMsg {
-  type: "/side.btcbridge.MsgUpdateTrustedOraclesResponse";
-  value: MsgUpdateTrustedOraclesResponseAmino;
+/** MsgUpdateTrustedFeeProvidersResponse defines the Msg/UpdateTrustedFeeProviders response type. */
+export interface MsgUpdateTrustedFeeProvidersResponseAmino {}
+export interface MsgUpdateTrustedFeeProvidersResponseAminoMsg {
+  type: "/side.btcbridge.MsgUpdateTrustedFeeProvidersResponse";
+  value: MsgUpdateTrustedFeeProvidersResponseAmino;
 }
-/** MsgUpdateTrustedOraclesResponse defines the Msg/UpdateTrustedOracles response type. */
-export interface MsgUpdateTrustedOraclesResponseSDKType {}
+/** MsgUpdateTrustedFeeProvidersResponse defines the Msg/UpdateTrustedFeeProviders response type. */
+export interface MsgUpdateTrustedFeeProvidersResponseSDKType {}
 /** MsgWithdrawToBitcoin defines the Msg/WithdrawToBitcoin request type. */
 export interface MsgWithdrawToBitcoin {
   sender: string;
@@ -298,7 +261,7 @@ export interface MsgWithdrawToBitcoinResponseSDKType {}
 export interface MsgSubmitSignatures {
   sender: string;
   txid: string;
-  psbt: string;
+  signatures: string[];
 }
 export interface MsgSubmitSignaturesProtoMsg {
   typeUrl: "/side.btcbridge.MsgSubmitSignatures";
@@ -308,7 +271,7 @@ export interface MsgSubmitSignaturesProtoMsg {
 export interface MsgSubmitSignaturesAmino {
   sender?: string;
   txid?: string;
-  psbt?: string;
+  signatures?: string[];
 }
 export interface MsgSubmitSignaturesAminoMsg {
   type: "/side.btcbridge.MsgSubmitSignatures";
@@ -318,7 +281,7 @@ export interface MsgSubmitSignaturesAminoMsg {
 export interface MsgSubmitSignaturesSDKType {
   sender: string;
   txid: string;
-  psbt: string;
+  signatures: string[];
 }
 /** MsgSubmitSignaturesResponse defines the Msg/SubmitSignatures response type. */
 export interface MsgSubmitSignaturesResponse {}
@@ -340,8 +303,6 @@ export interface MsgConsolidateVaults {
   authority: string;
   /** vault version */
   vaultVersion: bigint;
-  /** fee rate */
-  feeRate: bigint;
   /** btc consolidation */
   btcConsolidation?: BtcConsolidation;
   /** runes consolidations */
@@ -357,8 +318,6 @@ export interface MsgConsolidateVaultsAmino {
   authority?: string;
   /** vault version */
   vault_version?: string;
-  /** fee rate */
-  fee_rate?: string;
   /** btc consolidation */
   btc_consolidation?: BtcConsolidationAmino;
   /** runes consolidations */
@@ -372,7 +331,6 @@ export interface MsgConsolidateVaultsAminoMsg {
 export interface MsgConsolidateVaultsSDKType {
   authority: string;
   vault_version: bigint;
-  fee_rate: bigint;
   btc_consolidation?: BtcConsolidationSDKType;
   runes_consolidations: RunesConsolidationSDKType[];
 }
@@ -400,14 +358,10 @@ export interface MsgInitiateDKG {
   threshold: number;
   /** asset types of vaults to be generated */
   vaultTypes: AssetType[];
-  /** indicates if disabling bridge functionalities including deposit and withdrawal */
-  disableBridge: boolean;
   /** indicates if transferring the current vaults to the newly generated vaults when the DKG request is completed */
   enableTransfer: boolean;
   /** target number of the UTXOs to be transferred each time */
   targetUtxoNum: number;
-  /** fee rate for vault transfer */
-  feeRate: string;
 }
 export interface MsgInitiateDKGProtoMsg {
   typeUrl: "/side.btcbridge.MsgInitiateDKG";
@@ -423,14 +377,10 @@ export interface MsgInitiateDKGAmino {
   threshold?: number;
   /** asset types of vaults to be generated */
   vault_types?: AssetType[];
-  /** indicates if disabling bridge functionalities including deposit and withdrawal */
-  disable_bridge?: boolean;
   /** indicates if transferring the current vaults to the newly generated vaults when the DKG request is completed */
   enable_transfer?: boolean;
   /** target number of the UTXOs to be transferred each time */
   target_utxo_num?: number;
-  /** fee rate for vault transfer */
-  fee_rate?: string;
 }
 export interface MsgInitiateDKGAminoMsg {
   type: "/side.btcbridge.MsgInitiateDKG";
@@ -442,10 +392,8 @@ export interface MsgInitiateDKGSDKType {
   participants: DKGParticipantSDKType[];
   threshold: number;
   vault_types: AssetType[];
-  disable_bridge: boolean;
   enable_transfer: boolean;
   target_utxo_num: number;
-  fee_rate: string;
 }
 /** MsgInitiateDKGResponse defines the Msg/InitiateDKG response type. */
 export interface MsgInitiateDKGResponse {}
@@ -531,8 +479,6 @@ export interface MsgTransferVault {
   psbts: string[];
   /** target number of the UTXOs to be transferred; only take effect when psbt not provided */
   targetUtxoNum: number;
-  /** fee rate; only take effect when psbt not provided */
-  feeRate: string;
 }
 export interface MsgTransferVaultProtoMsg {
   typeUrl: "/side.btcbridge.MsgTransferVault";
@@ -552,8 +498,6 @@ export interface MsgTransferVaultAmino {
   psbts?: string[];
   /** target number of the UTXOs to be transferred; only take effect when psbt not provided */
   target_utxo_num?: number;
-  /** fee rate; only take effect when psbt not provided */
-  fee_rate?: string;
 }
 export interface MsgTransferVaultAminoMsg {
   type: "/side.btcbridge.MsgTransferVault";
@@ -567,7 +511,6 @@ export interface MsgTransferVaultSDKType {
   asset_type: AssetType;
   psbts: string[];
   target_utxo_num: number;
-  fee_rate: string;
 }
 /** MsgTransferVaultResponse defines the Msg/TransferVault response type. */
 export interface MsgTransferVaultResponse {}
@@ -656,133 +599,6 @@ export interface MsgUpdateParamsResponseAminoMsg {
  * Since: cosmos-sdk 0.47
  */
 export interface MsgUpdateParamsResponseSDKType {}
-function createBaseMsgSubmitBlockHeaders(): MsgSubmitBlockHeaders {
-  return {
-    sender: "",
-    blockHeaders: []
-  };
-}
-export const MsgSubmitBlockHeaders = {
-  typeUrl: "/side.btcbridge.MsgSubmitBlockHeaders",
-  encode(message: MsgSubmitBlockHeaders, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.sender !== "") {
-      writer.uint32(10).string(message.sender);
-    }
-    for (const v of message.blockHeaders) {
-      BlockHeader.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitBlockHeaders {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSubmitBlockHeaders();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.sender = reader.string();
-          break;
-        case 2:
-          message.blockHeaders.push(BlockHeader.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<MsgSubmitBlockHeaders>): MsgSubmitBlockHeaders {
-    const message = createBaseMsgSubmitBlockHeaders();
-    message.sender = object.sender ?? "";
-    message.blockHeaders = object.blockHeaders?.map(e => BlockHeader.fromPartial(e)) || [];
-    return message;
-  },
-  fromAmino(object: MsgSubmitBlockHeadersAmino): MsgSubmitBlockHeaders {
-    const message = createBaseMsgSubmitBlockHeaders();
-    if (object.sender !== undefined && object.sender !== null) {
-      message.sender = object.sender;
-    }
-    message.blockHeaders = object.block_headers?.map(e => BlockHeader.fromAmino(e)) || [];
-    return message;
-  },
-  toAmino(message: MsgSubmitBlockHeaders): MsgSubmitBlockHeadersAmino {
-    const obj: any = {};
-    obj.sender = message.sender === "" ? undefined : message.sender;
-    if (message.blockHeaders) {
-      obj.block_headers = message.blockHeaders.map(e => e ? BlockHeader.toAmino(e) : undefined);
-    } else {
-      obj.block_headers = message.blockHeaders;
-    }
-    return obj;
-  },
-  fromAminoMsg(object: MsgSubmitBlockHeadersAminoMsg): MsgSubmitBlockHeaders {
-    return MsgSubmitBlockHeaders.fromAmino(object.value);
-  },
-  fromProtoMsg(message: MsgSubmitBlockHeadersProtoMsg): MsgSubmitBlockHeaders {
-    return MsgSubmitBlockHeaders.decode(message.value);
-  },
-  toProto(message: MsgSubmitBlockHeaders): Uint8Array {
-    return MsgSubmitBlockHeaders.encode(message).finish();
-  },
-  toProtoMsg(message: MsgSubmitBlockHeaders): MsgSubmitBlockHeadersProtoMsg {
-    return {
-      typeUrl: "/side.btcbridge.MsgSubmitBlockHeaders",
-      value: MsgSubmitBlockHeaders.encode(message).finish()
-    };
-  }
-};
-function createBaseMsgSubmitBlockHeadersResponse(): MsgSubmitBlockHeadersResponse {
-  return {};
-}
-export const MsgSubmitBlockHeadersResponse = {
-  typeUrl: "/side.btcbridge.MsgSubmitBlockHeadersResponse",
-  encode(_: MsgSubmitBlockHeadersResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitBlockHeadersResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSubmitBlockHeadersResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(_: Partial<MsgSubmitBlockHeadersResponse>): MsgSubmitBlockHeadersResponse {
-    const message = createBaseMsgSubmitBlockHeadersResponse();
-    return message;
-  },
-  fromAmino(_: MsgSubmitBlockHeadersResponseAmino): MsgSubmitBlockHeadersResponse {
-    const message = createBaseMsgSubmitBlockHeadersResponse();
-    return message;
-  },
-  toAmino(_: MsgSubmitBlockHeadersResponse): MsgSubmitBlockHeadersResponseAmino {
-    const obj: any = {};
-    return obj;
-  },
-  fromAminoMsg(object: MsgSubmitBlockHeadersResponseAminoMsg): MsgSubmitBlockHeadersResponse {
-    return MsgSubmitBlockHeadersResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: MsgSubmitBlockHeadersResponseProtoMsg): MsgSubmitBlockHeadersResponse {
-    return MsgSubmitBlockHeadersResponse.decode(message.value);
-  },
-  toProto(message: MsgSubmitBlockHeadersResponse): Uint8Array {
-    return MsgSubmitBlockHeadersResponse.encode(message).finish();
-  },
-  toProtoMsg(message: MsgSubmitBlockHeadersResponse): MsgSubmitBlockHeadersResponseProtoMsg {
-    return {
-      typeUrl: "/side.btcbridge.MsgSubmitBlockHeadersResponse",
-      value: MsgSubmitBlockHeadersResponse.encode(message).finish()
-    };
-  }
-};
 function createBaseMsgSubmitDepositTransaction(): MsgSubmitDepositTransaction {
   return {
     sender: "",
@@ -1349,27 +1165,27 @@ export const MsgUpdateTrustedNonBtcRelayersResponse = {
     };
   }
 };
-function createBaseMsgUpdateTrustedOracles(): MsgUpdateTrustedOracles {
+function createBaseMsgUpdateTrustedFeeProviders(): MsgUpdateTrustedFeeProviders {
   return {
     sender: "",
-    oracles: []
+    feeProviders: []
   };
 }
-export const MsgUpdateTrustedOracles = {
-  typeUrl: "/side.btcbridge.MsgUpdateTrustedOracles",
-  encode(message: MsgUpdateTrustedOracles, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const MsgUpdateTrustedFeeProviders = {
+  typeUrl: "/side.btcbridge.MsgUpdateTrustedFeeProviders",
+  encode(message: MsgUpdateTrustedFeeProviders, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.sender !== "") {
       writer.uint32(10).string(message.sender);
     }
-    for (const v of message.oracles) {
+    for (const v of message.feeProviders) {
       writer.uint32(18).string(v!);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateTrustedOracles {
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateTrustedFeeProviders {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgUpdateTrustedOracles();
+    const message = createBaseMsgUpdateTrustedFeeProviders();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1377,7 +1193,7 @@ export const MsgUpdateTrustedOracles = {
           message.sender = reader.string();
           break;
         case 2:
-          message.oracles.push(reader.string());
+          message.feeProviders.push(reader.string());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1386,58 +1202,58 @@ export const MsgUpdateTrustedOracles = {
     }
     return message;
   },
-  fromPartial(object: Partial<MsgUpdateTrustedOracles>): MsgUpdateTrustedOracles {
-    const message = createBaseMsgUpdateTrustedOracles();
+  fromPartial(object: Partial<MsgUpdateTrustedFeeProviders>): MsgUpdateTrustedFeeProviders {
+    const message = createBaseMsgUpdateTrustedFeeProviders();
     message.sender = object.sender ?? "";
-    message.oracles = object.oracles?.map(e => e) || [];
+    message.feeProviders = object.feeProviders?.map(e => e) || [];
     return message;
   },
-  fromAmino(object: MsgUpdateTrustedOraclesAmino): MsgUpdateTrustedOracles {
-    const message = createBaseMsgUpdateTrustedOracles();
+  fromAmino(object: MsgUpdateTrustedFeeProvidersAmino): MsgUpdateTrustedFeeProviders {
+    const message = createBaseMsgUpdateTrustedFeeProviders();
     if (object.sender !== undefined && object.sender !== null) {
       message.sender = object.sender;
     }
-    message.oracles = object.oracles?.map(e => e) || [];
+    message.feeProviders = object.FeeProviders?.map(e => e) || [];
     return message;
   },
-  toAmino(message: MsgUpdateTrustedOracles): MsgUpdateTrustedOraclesAmino {
+  toAmino(message: MsgUpdateTrustedFeeProviders): MsgUpdateTrustedFeeProvidersAmino {
     const obj: any = {};
     obj.sender = message.sender === "" ? undefined : message.sender;
-    if (message.oracles) {
-      obj.oracles = message.oracles.map(e => e);
+    if (message.feeProviders) {
+      obj.FeeProviders = message.feeProviders.map(e => e);
     } else {
-      obj.oracles = message.oracles;
+      obj.FeeProviders = message.feeProviders;
     }
     return obj;
   },
-  fromAminoMsg(object: MsgUpdateTrustedOraclesAminoMsg): MsgUpdateTrustedOracles {
-    return MsgUpdateTrustedOracles.fromAmino(object.value);
+  fromAminoMsg(object: MsgUpdateTrustedFeeProvidersAminoMsg): MsgUpdateTrustedFeeProviders {
+    return MsgUpdateTrustedFeeProviders.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateTrustedOraclesProtoMsg): MsgUpdateTrustedOracles {
-    return MsgUpdateTrustedOracles.decode(message.value);
+  fromProtoMsg(message: MsgUpdateTrustedFeeProvidersProtoMsg): MsgUpdateTrustedFeeProviders {
+    return MsgUpdateTrustedFeeProviders.decode(message.value);
   },
-  toProto(message: MsgUpdateTrustedOracles): Uint8Array {
-    return MsgUpdateTrustedOracles.encode(message).finish();
+  toProto(message: MsgUpdateTrustedFeeProviders): Uint8Array {
+    return MsgUpdateTrustedFeeProviders.encode(message).finish();
   },
-  toProtoMsg(message: MsgUpdateTrustedOracles): MsgUpdateTrustedOraclesProtoMsg {
+  toProtoMsg(message: MsgUpdateTrustedFeeProviders): MsgUpdateTrustedFeeProvidersProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.MsgUpdateTrustedOracles",
-      value: MsgUpdateTrustedOracles.encode(message).finish()
+      typeUrl: "/side.btcbridge.MsgUpdateTrustedFeeProviders",
+      value: MsgUpdateTrustedFeeProviders.encode(message).finish()
     };
   }
 };
-function createBaseMsgUpdateTrustedOraclesResponse(): MsgUpdateTrustedOraclesResponse {
+function createBaseMsgUpdateTrustedFeeProvidersResponse(): MsgUpdateTrustedFeeProvidersResponse {
   return {};
 }
-export const MsgUpdateTrustedOraclesResponse = {
-  typeUrl: "/side.btcbridge.MsgUpdateTrustedOraclesResponse",
-  encode(_: MsgUpdateTrustedOraclesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const MsgUpdateTrustedFeeProvidersResponse = {
+  typeUrl: "/side.btcbridge.MsgUpdateTrustedFeeProvidersResponse",
+  encode(_: MsgUpdateTrustedFeeProvidersResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateTrustedOraclesResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateTrustedFeeProvidersResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgUpdateTrustedOraclesResponse();
+    const message = createBaseMsgUpdateTrustedFeeProvidersResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1448,31 +1264,31 @@ export const MsgUpdateTrustedOraclesResponse = {
     }
     return message;
   },
-  fromPartial(_: Partial<MsgUpdateTrustedOraclesResponse>): MsgUpdateTrustedOraclesResponse {
-    const message = createBaseMsgUpdateTrustedOraclesResponse();
+  fromPartial(_: Partial<MsgUpdateTrustedFeeProvidersResponse>): MsgUpdateTrustedFeeProvidersResponse {
+    const message = createBaseMsgUpdateTrustedFeeProvidersResponse();
     return message;
   },
-  fromAmino(_: MsgUpdateTrustedOraclesResponseAmino): MsgUpdateTrustedOraclesResponse {
-    const message = createBaseMsgUpdateTrustedOraclesResponse();
+  fromAmino(_: MsgUpdateTrustedFeeProvidersResponseAmino): MsgUpdateTrustedFeeProvidersResponse {
+    const message = createBaseMsgUpdateTrustedFeeProvidersResponse();
     return message;
   },
-  toAmino(_: MsgUpdateTrustedOraclesResponse): MsgUpdateTrustedOraclesResponseAmino {
+  toAmino(_: MsgUpdateTrustedFeeProvidersResponse): MsgUpdateTrustedFeeProvidersResponseAmino {
     const obj: any = {};
     return obj;
   },
-  fromAminoMsg(object: MsgUpdateTrustedOraclesResponseAminoMsg): MsgUpdateTrustedOraclesResponse {
-    return MsgUpdateTrustedOraclesResponse.fromAmino(object.value);
+  fromAminoMsg(object: MsgUpdateTrustedFeeProvidersResponseAminoMsg): MsgUpdateTrustedFeeProvidersResponse {
+    return MsgUpdateTrustedFeeProvidersResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgUpdateTrustedOraclesResponseProtoMsg): MsgUpdateTrustedOraclesResponse {
-    return MsgUpdateTrustedOraclesResponse.decode(message.value);
+  fromProtoMsg(message: MsgUpdateTrustedFeeProvidersResponseProtoMsg): MsgUpdateTrustedFeeProvidersResponse {
+    return MsgUpdateTrustedFeeProvidersResponse.decode(message.value);
   },
-  toProto(message: MsgUpdateTrustedOraclesResponse): Uint8Array {
-    return MsgUpdateTrustedOraclesResponse.encode(message).finish();
+  toProto(message: MsgUpdateTrustedFeeProvidersResponse): Uint8Array {
+    return MsgUpdateTrustedFeeProvidersResponse.encode(message).finish();
   },
-  toProtoMsg(message: MsgUpdateTrustedOraclesResponse): MsgUpdateTrustedOraclesResponseProtoMsg {
+  toProtoMsg(message: MsgUpdateTrustedFeeProvidersResponse): MsgUpdateTrustedFeeProvidersResponseProtoMsg {
     return {
-      typeUrl: "/side.btcbridge.MsgUpdateTrustedOraclesResponse",
-      value: MsgUpdateTrustedOraclesResponse.encode(message).finish()
+      typeUrl: "/side.btcbridge.MsgUpdateTrustedFeeProvidersResponse",
+      value: MsgUpdateTrustedFeeProvidersResponse.encode(message).finish()
     };
   }
 };
@@ -1605,7 +1421,7 @@ function createBaseMsgSubmitSignatures(): MsgSubmitSignatures {
   return {
     sender: "",
     txid: "",
-    psbt: ""
+    signatures: []
   };
 }
 export const MsgSubmitSignatures = {
@@ -1617,8 +1433,8 @@ export const MsgSubmitSignatures = {
     if (message.txid !== "") {
       writer.uint32(18).string(message.txid);
     }
-    if (message.psbt !== "") {
-      writer.uint32(26).string(message.psbt);
+    for (const v of message.signatures) {
+      writer.uint32(26).string(v!);
     }
     return writer;
   },
@@ -1636,7 +1452,7 @@ export const MsgSubmitSignatures = {
           message.txid = reader.string();
           break;
         case 3:
-          message.psbt = reader.string();
+          message.signatures.push(reader.string());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1649,7 +1465,7 @@ export const MsgSubmitSignatures = {
     const message = createBaseMsgSubmitSignatures();
     message.sender = object.sender ?? "";
     message.txid = object.txid ?? "";
-    message.psbt = object.psbt ?? "";
+    message.signatures = object.signatures?.map(e => e) || [];
     return message;
   },
   fromAmino(object: MsgSubmitSignaturesAmino): MsgSubmitSignatures {
@@ -1660,16 +1476,18 @@ export const MsgSubmitSignatures = {
     if (object.txid !== undefined && object.txid !== null) {
       message.txid = object.txid;
     }
-    if (object.psbt !== undefined && object.psbt !== null) {
-      message.psbt = object.psbt;
-    }
+    message.signatures = object.signatures?.map(e => e) || [];
     return message;
   },
   toAmino(message: MsgSubmitSignatures): MsgSubmitSignaturesAmino {
     const obj: any = {};
     obj.sender = message.sender === "" ? undefined : message.sender;
     obj.txid = message.txid === "" ? undefined : message.txid;
-    obj.psbt = message.psbt === "" ? undefined : message.psbt;
+    if (message.signatures) {
+      obj.signatures = message.signatures.map(e => e);
+    } else {
+      obj.signatures = message.signatures;
+    }
     return obj;
   },
   fromAminoMsg(object: MsgSubmitSignaturesAminoMsg): MsgSubmitSignatures {
@@ -1742,7 +1560,6 @@ function createBaseMsgConsolidateVaults(): MsgConsolidateVaults {
   return {
     authority: "",
     vaultVersion: BigInt(0),
-    feeRate: BigInt(0),
     btcConsolidation: undefined,
     runesConsolidations: []
   };
@@ -1756,14 +1573,11 @@ export const MsgConsolidateVaults = {
     if (message.vaultVersion !== BigInt(0)) {
       writer.uint32(16).uint64(message.vaultVersion);
     }
-    if (message.feeRate !== BigInt(0)) {
-      writer.uint32(24).int64(message.feeRate);
-    }
     if (message.btcConsolidation !== undefined) {
-      BtcConsolidation.encode(message.btcConsolidation, writer.uint32(34).fork()).ldelim();
+      BtcConsolidation.encode(message.btcConsolidation, writer.uint32(26).fork()).ldelim();
     }
     for (const v of message.runesConsolidations) {
-      RunesConsolidation.encode(v!, writer.uint32(42).fork()).ldelim();
+      RunesConsolidation.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -1781,12 +1595,9 @@ export const MsgConsolidateVaults = {
           message.vaultVersion = reader.uint64();
           break;
         case 3:
-          message.feeRate = reader.int64();
-          break;
-        case 4:
           message.btcConsolidation = BtcConsolidation.decode(reader, reader.uint32());
           break;
-        case 5:
+        case 4:
           message.runesConsolidations.push(RunesConsolidation.decode(reader, reader.uint32()));
           break;
         default:
@@ -1800,7 +1611,6 @@ export const MsgConsolidateVaults = {
     const message = createBaseMsgConsolidateVaults();
     message.authority = object.authority ?? "";
     message.vaultVersion = object.vaultVersion !== undefined && object.vaultVersion !== null ? BigInt(object.vaultVersion.toString()) : BigInt(0);
-    message.feeRate = object.feeRate !== undefined && object.feeRate !== null ? BigInt(object.feeRate.toString()) : BigInt(0);
     message.btcConsolidation = object.btcConsolidation !== undefined && object.btcConsolidation !== null ? BtcConsolidation.fromPartial(object.btcConsolidation) : undefined;
     message.runesConsolidations = object.runesConsolidations?.map(e => RunesConsolidation.fromPartial(e)) || [];
     return message;
@@ -1813,9 +1623,6 @@ export const MsgConsolidateVaults = {
     if (object.vault_version !== undefined && object.vault_version !== null) {
       message.vaultVersion = BigInt(object.vault_version);
     }
-    if (object.fee_rate !== undefined && object.fee_rate !== null) {
-      message.feeRate = BigInt(object.fee_rate);
-    }
     if (object.btc_consolidation !== undefined && object.btc_consolidation !== null) {
       message.btcConsolidation = BtcConsolidation.fromAmino(object.btc_consolidation);
     }
@@ -1826,7 +1633,6 @@ export const MsgConsolidateVaults = {
     const obj: any = {};
     obj.authority = message.authority === "" ? undefined : message.authority;
     obj.vault_version = message.vaultVersion !== BigInt(0) ? message.vaultVersion.toString() : undefined;
-    obj.fee_rate = message.feeRate !== BigInt(0) ? message.feeRate.toString() : undefined;
     obj.btc_consolidation = message.btcConsolidation ? BtcConsolidation.toAmino(message.btcConsolidation) : undefined;
     if (message.runesConsolidations) {
       obj.runes_consolidations = message.runesConsolidations.map(e => e ? RunesConsolidation.toAmino(e) : undefined);
@@ -1907,10 +1713,8 @@ function createBaseMsgInitiateDKG(): MsgInitiateDKG {
     participants: [],
     threshold: 0,
     vaultTypes: [],
-    disableBridge: false,
     enableTransfer: false,
-    targetUtxoNum: 0,
-    feeRate: ""
+    targetUtxoNum: 0
   };
 }
 export const MsgInitiateDKG = {
@@ -1930,17 +1734,11 @@ export const MsgInitiateDKG = {
       writer.int32(v);
     }
     writer.ldelim();
-    if (message.disableBridge === true) {
-      writer.uint32(40).bool(message.disableBridge);
-    }
     if (message.enableTransfer === true) {
-      writer.uint32(48).bool(message.enableTransfer);
+      writer.uint32(40).bool(message.enableTransfer);
     }
     if (message.targetUtxoNum !== 0) {
-      writer.uint32(56).uint32(message.targetUtxoNum);
-    }
-    if (message.feeRate !== "") {
-      writer.uint32(66).string(message.feeRate);
+      writer.uint32(48).uint32(message.targetUtxoNum);
     }
     return writer;
   },
@@ -1971,16 +1769,10 @@ export const MsgInitiateDKG = {
           }
           break;
         case 5:
-          message.disableBridge = reader.bool();
-          break;
-        case 6:
           message.enableTransfer = reader.bool();
           break;
-        case 7:
+        case 6:
           message.targetUtxoNum = reader.uint32();
-          break;
-        case 8:
-          message.feeRate = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1995,10 +1787,8 @@ export const MsgInitiateDKG = {
     message.participants = object.participants?.map(e => DKGParticipant.fromPartial(e)) || [];
     message.threshold = object.threshold ?? 0;
     message.vaultTypes = object.vaultTypes?.map(e => e) || [];
-    message.disableBridge = object.disableBridge ?? false;
     message.enableTransfer = object.enableTransfer ?? false;
     message.targetUtxoNum = object.targetUtxoNum ?? 0;
-    message.feeRate = object.feeRate ?? "";
     return message;
   },
   fromAmino(object: MsgInitiateDKGAmino): MsgInitiateDKG {
@@ -2011,17 +1801,11 @@ export const MsgInitiateDKG = {
       message.threshold = object.threshold;
     }
     message.vaultTypes = object.vault_types?.map(e => e) || [];
-    if (object.disable_bridge !== undefined && object.disable_bridge !== null) {
-      message.disableBridge = object.disable_bridge;
-    }
     if (object.enable_transfer !== undefined && object.enable_transfer !== null) {
       message.enableTransfer = object.enable_transfer;
     }
     if (object.target_utxo_num !== undefined && object.target_utxo_num !== null) {
       message.targetUtxoNum = object.target_utxo_num;
-    }
-    if (object.fee_rate !== undefined && object.fee_rate !== null) {
-      message.feeRate = object.fee_rate;
     }
     return message;
   },
@@ -2039,10 +1823,8 @@ export const MsgInitiateDKG = {
     } else {
       obj.vault_types = message.vaultTypes;
     }
-    obj.disable_bridge = message.disableBridge === false ? undefined : message.disableBridge;
     obj.enable_transfer = message.enableTransfer === false ? undefined : message.enableTransfer;
     obj.target_utxo_num = message.targetUtxoNum === 0 ? undefined : message.targetUtxoNum;
-    obj.fee_rate = message.feeRate === "" ? undefined : message.feeRate;
     return obj;
   },
   fromAminoMsg(object: MsgInitiateDKGAminoMsg): MsgInitiateDKG {
@@ -2281,8 +2063,7 @@ function createBaseMsgTransferVault(): MsgTransferVault {
     destVersion: BigInt(0),
     assetType: 0,
     psbts: [],
-    targetUtxoNum: 0,
-    feeRate: ""
+    targetUtxoNum: 0
   };
 }
 export const MsgTransferVault = {
@@ -2305,9 +2086,6 @@ export const MsgTransferVault = {
     }
     if (message.targetUtxoNum !== 0) {
       writer.uint32(48).uint32(message.targetUtxoNum);
-    }
-    if (message.feeRate !== "") {
-      writer.uint32(58).string(message.feeRate);
     }
     return writer;
   },
@@ -2336,9 +2114,6 @@ export const MsgTransferVault = {
         case 6:
           message.targetUtxoNum = reader.uint32();
           break;
-        case 7:
-          message.feeRate = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -2354,7 +2129,6 @@ export const MsgTransferVault = {
     message.assetType = object.assetType ?? 0;
     message.psbts = object.psbts?.map(e => e) || [];
     message.targetUtxoNum = object.targetUtxoNum ?? 0;
-    message.feeRate = object.feeRate ?? "";
     return message;
   },
   fromAmino(object: MsgTransferVaultAmino): MsgTransferVault {
@@ -2375,9 +2149,6 @@ export const MsgTransferVault = {
     if (object.target_utxo_num !== undefined && object.target_utxo_num !== null) {
       message.targetUtxoNum = object.target_utxo_num;
     }
-    if (object.fee_rate !== undefined && object.fee_rate !== null) {
-      message.feeRate = object.fee_rate;
-    }
     return message;
   },
   toAmino(message: MsgTransferVault): MsgTransferVaultAmino {
@@ -2392,7 +2163,6 @@ export const MsgTransferVault = {
       obj.psbts = message.psbts;
     }
     obj.target_utxo_num = message.targetUtxoNum === 0 ? undefined : message.targetUtxoNum;
-    obj.fee_rate = message.feeRate === "" ? undefined : message.feeRate;
     return obj;
   },
   fromAminoMsg(object: MsgTransferVaultAminoMsg): MsgTransferVault {

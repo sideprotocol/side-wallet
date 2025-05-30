@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgCreatePool, MsgAddLiquidity, MsgRemoveLiquidity, MsgUpdatePoolConfig, MsgApply, MsgSubmitCets, MsgApprove, MsgSubmitRepaymentAdaptorSignatures, MsgCancel, MsgSubmitCancellationSignatures, MsgRepay, MsgSubmitLiquidationSignatures, MsgSubmitPrice, MsgUpdateParams } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/side.lending.MsgCreatePool", MsgCreatePool], ["/side.lending.MsgAddLiquidity", MsgAddLiquidity], ["/side.lending.MsgRemoveLiquidity", MsgRemoveLiquidity], ["/side.lending.MsgUpdatePoolConfig", MsgUpdatePoolConfig], ["/side.lending.MsgApply", MsgApply], ["/side.lending.MsgSubmitCets", MsgSubmitCets], ["/side.lending.MsgApprove", MsgApprove], ["/side.lending.MsgSubmitRepaymentAdaptorSignatures", MsgSubmitRepaymentAdaptorSignatures], ["/side.lending.MsgCancel", MsgCancel], ["/side.lending.MsgSubmitCancellationSignatures", MsgSubmitCancellationSignatures], ["/side.lending.MsgRepay", MsgRepay], ["/side.lending.MsgSubmitLiquidationSignatures", MsgSubmitLiquidationSignatures], ["/side.lending.MsgSubmitPrice", MsgSubmitPrice], ["/side.lending.MsgUpdateParams", MsgUpdateParams]];
+import { MsgCreatePool, MsgAddLiquidity, MsgRemoveLiquidity, MsgUpdatePoolConfig, MsgApply, MsgSubmitCets, MsgApprove, MsgRedeem, MsgRepay, MsgSubmitPrice, MsgUpdateParams } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/side.lending.MsgCreatePool", MsgCreatePool], ["/side.lending.MsgAddLiquidity", MsgAddLiquidity], ["/side.lending.MsgRemoveLiquidity", MsgRemoveLiquidity], ["/side.lending.MsgUpdatePoolConfig", MsgUpdatePoolConfig], ["/side.lending.MsgApply", MsgApply], ["/side.lending.MsgSubmitCets", MsgSubmitCets], ["/side.lending.MsgApprove", MsgApprove], ["/side.lending.MsgRedeem", MsgRedeem], ["/side.lending.MsgRepay", MsgRepay], ["/side.lending.MsgSubmitPrice", MsgSubmitPrice], ["/side.lending.MsgUpdateParams", MsgUpdateParams]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -51,34 +51,16 @@ export const MessageComposer = {
         value: MsgApprove.encode(value).finish()
       };
     },
-    submitRepaymentAdaptorSignatures(value: MsgSubmitRepaymentAdaptorSignatures) {
+    redeem(value: MsgRedeem) {
       return {
-        typeUrl: "/side.lending.MsgSubmitRepaymentAdaptorSignatures",
-        value: MsgSubmitRepaymentAdaptorSignatures.encode(value).finish()
-      };
-    },
-    cancel(value: MsgCancel) {
-      return {
-        typeUrl: "/side.lending.MsgCancel",
-        value: MsgCancel.encode(value).finish()
-      };
-    },
-    submitCancellationSignatures(value: MsgSubmitCancellationSignatures) {
-      return {
-        typeUrl: "/side.lending.MsgSubmitCancellationSignatures",
-        value: MsgSubmitCancellationSignatures.encode(value).finish()
+        typeUrl: "/side.lending.MsgRedeem",
+        value: MsgRedeem.encode(value).finish()
       };
     },
     repay(value: MsgRepay) {
       return {
         typeUrl: "/side.lending.MsgRepay",
         value: MsgRepay.encode(value).finish()
-      };
-    },
-    submitLiquidationSignatures(value: MsgSubmitLiquidationSignatures) {
-      return {
-        typeUrl: "/side.lending.MsgSubmitLiquidationSignatures",
-        value: MsgSubmitLiquidationSignatures.encode(value).finish()
       };
     },
     submitPrice(value: MsgSubmitPrice) {
@@ -137,33 +119,15 @@ export const MessageComposer = {
         value
       };
     },
-    submitRepaymentAdaptorSignatures(value: MsgSubmitRepaymentAdaptorSignatures) {
+    redeem(value: MsgRedeem) {
       return {
-        typeUrl: "/side.lending.MsgSubmitRepaymentAdaptorSignatures",
-        value
-      };
-    },
-    cancel(value: MsgCancel) {
-      return {
-        typeUrl: "/side.lending.MsgCancel",
-        value
-      };
-    },
-    submitCancellationSignatures(value: MsgSubmitCancellationSignatures) {
-      return {
-        typeUrl: "/side.lending.MsgSubmitCancellationSignatures",
+        typeUrl: "/side.lending.MsgRedeem",
         value
       };
     },
     repay(value: MsgRepay) {
       return {
         typeUrl: "/side.lending.MsgRepay",
-        value
-      };
-    },
-    submitLiquidationSignatures(value: MsgSubmitLiquidationSignatures) {
-      return {
-        typeUrl: "/side.lending.MsgSubmitLiquidationSignatures",
         value
       };
     },
@@ -223,34 +187,16 @@ export const MessageComposer = {
         value: MsgApprove.fromPartial(value)
       };
     },
-    submitRepaymentAdaptorSignatures(value: MsgSubmitRepaymentAdaptorSignatures) {
+    redeem(value: MsgRedeem) {
       return {
-        typeUrl: "/side.lending.MsgSubmitRepaymentAdaptorSignatures",
-        value: MsgSubmitRepaymentAdaptorSignatures.fromPartial(value)
-      };
-    },
-    cancel(value: MsgCancel) {
-      return {
-        typeUrl: "/side.lending.MsgCancel",
-        value: MsgCancel.fromPartial(value)
-      };
-    },
-    submitCancellationSignatures(value: MsgSubmitCancellationSignatures) {
-      return {
-        typeUrl: "/side.lending.MsgSubmitCancellationSignatures",
-        value: MsgSubmitCancellationSignatures.fromPartial(value)
+        typeUrl: "/side.lending.MsgRedeem",
+        value: MsgRedeem.fromPartial(value)
       };
     },
     repay(value: MsgRepay) {
       return {
         typeUrl: "/side.lending.MsgRepay",
         value: MsgRepay.fromPartial(value)
-      };
-    },
-    submitLiquidationSignatures(value: MsgSubmitLiquidationSignatures) {
-      return {
-        typeUrl: "/side.lending.MsgSubmitLiquidationSignatures",
-        value: MsgSubmitLiquidationSignatures.fromPartial(value)
       };
     },
     submitPrice(value: MsgSubmitPrice) {

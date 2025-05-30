@@ -19,7 +19,7 @@ import { LendingActions } from '@/ui/state/lending/reducer';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
-import { Box, Popover, Stack, Typography } from '@mui/material';
+import { Box, Checkbox, Popover, Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -187,7 +187,7 @@ export default function LendingTanScreen() {
       tip: 'xxx'
     },
     {
-      label: 'Max Initial LTV',
+      label: 'Max LTV',
       value: (
         <>
           <Typography
@@ -271,20 +271,21 @@ export default function LendingTanScreen() {
 
   const { dlcEvent } = useGetDlcEventById(liquidationEvent?.event_id);
 
+  const [isChecked, setIsChecked] = useState(false);
+  const [isHoverMaturity, setIsHoverMaturity] = useState(false);
+
   const isDisabled = useMemo(() => {
     return (
       loading ||
       !+collateralAmount ||
       !+borrowAmount ||
       !liquidationEvent ||
-      (healthFactor !== '-' && +healthFactor < 1.2) ||
+      (healthFactor !== '-' && +healthFactor < 1.2 && !isChecked) ||
       +borrowAmount <
         +toReadableAmount(poolData?.baseData.config.origination_fee || '0', poolData?.token.asset.exponent || '6') ||
       dlcEvent?.event.has_triggered
     );
-  }, [loading, poolData, collateralAmount, borrowAmount, liquidationEvent, healthFactor, dlcEvent]);
-
-  const [isHoverMaturity, setIsHoverMaturity] = useState(false);
+  }, [loading, poolData, collateralAmount, borrowAmount, liquidationEvent, healthFactor, dlcEvent, isChecked]);
 
   return (
     <>
@@ -454,57 +455,63 @@ export default function LendingTanScreen() {
                 setBorrowAmount(value);
               }}
             />
-            <Row
-              itemsCenter
-              gap="md"
-              style={{
-                flexShrink: 0
+            <Stack
+              direction="row"
+              alignItems="center"
+              flexShrink={0}
+              gap="8px"
+              sx={{
+                cursor: 'pointer'
+              }}
+              onMouseOver={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
+              onClick={() => {
+                navigator('LendingSelectTokenScreen', {
+                  poolsData
+                });
               }}>
+              <Image src={poolTokenBalance?.asset.logo} height={24} width={24}></Image>
               <Typography
                 sx={{
-                  color: colors.grey12,
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  transition: '.4s',
-                  ':hover': {
-                    color: colors.white
-                  }
-                }}
-                onClick={() => {
-                  if (!+borrowMaxAmount) {
-                    return;
-                  }
-                  setBorrowAmount(borrowMaxAmount || '0');
+                  fontSize: '16px',
+                  color: isHover ? colors.main : colors.white
                 }}>
-                Max
+                {poolTokenBalance?.asset.symbol || 'USDC'}
               </Typography>
-              <Stack
-                direction="row"
-                alignItems="center"
-                gap="8px"
-                sx={{
-                  cursor: 'pointer'
-                }}
-                onMouseOver={() => setIsHover(true)}
-                onMouseLeave={() => setIsHover(false)}
-                onClick={() => {
-                  navigator('LendingSelectTokenScreen', {
-                    poolsData
-                  });
-                }}>
-                <Image src={poolTokenBalance?.asset.logo} height={24} width={24}></Image>
-                <Typography
-                  sx={{
-                    fontSize: '16px',
-                    color: isHover ? colors.main : colors.white
-                  }}>
-                  {poolTokenBalance?.asset.symbol || 'USDC'}
-                </Typography>
-                <Icon icon="down" size={10} color={isHover ? 'main' : 'white'}></Icon>
-              </Stack>
-            </Row>
+              <Icon icon="down" size={10} color={isHover ? 'main' : 'white'}></Icon>
+            </Stack>
           </Stack>
+          {healthFactor !== '-' && +healthFactor < 1.2 && (
+            <Stack
+              direction="row"
+              alignItems="flex-start"
+              gap="2px"
+              sx={{
+                mt: '16px',
+                p: '14px 10px',
+                borderRadius: '10px',
+                bgcolor: colors.red1,
+                fontSize: '12px'
+              }}>
+              <Checkbox
+                sx={{
+                  p: '4px',
+                  color: colors.white,
+                  '&.Mui-checked': {
+                    color: colors.red
+                  }
+                }}
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}></Checkbox>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.red
+                }}>
+                I acknowledge that borrowing at this LTV increases my risk of liquidation.
+              </Typography>
+            </Stack>
+          )}
           <Box
             sx={{
               px: '12px',

@@ -47,7 +47,7 @@ async function buildPsbtFromTxHex(txid: string, SIDE_BTC_EXPLORER: string, netwo
   return psbt;
 }
 
-export default function useGetDepositTx(collateralAddress: string, collateralUnitAmount: string) {
+export default function useGetDepositTx(collateralAddress = '', collateralUnitAmount = '0') {
   const networkType = useNetworkType();
   const { SIDE_BTC_EXPLORER } = useEnvironment();
   const {
@@ -90,7 +90,8 @@ export default function useGetDepositTx(collateralAddress: string, collateralUni
     refetchInterval: (data) => {
       return data ? false : 4000;
     },
-    refetchIntervalInBackground: true
+    refetchIntervalInBackground: true,
+    enabled: !!collateralAddress
   });
 
   return {

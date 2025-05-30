@@ -36,6 +36,7 @@ export const colors = {
   red: '#ED334B',
   red_light: '#f05266',
   red_disconnect: '#FF4545',
+  red1: '#FF29291A',
   blue: '#1872F6',
   blue_light: '#c6dcfd',
   orange_dark: '#d9691c',

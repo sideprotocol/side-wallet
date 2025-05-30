@@ -41,6 +41,7 @@ import {
   GetLiquidationRecordsResponse,
   GetLiquidationsRequest,
   GetLiquidationsResponse,
+  GetLoanAuthorizationResponse,
   GetLoanBaseDataRequest,
   GetLoanBaseDataResponse,
   GetLoanByIdCexResponse,
@@ -243,5 +244,10 @@ export default class LendingService {
   async getLiquidationRecords(data: GetLiquidationRecordsRequest, config: AxiosRequestConfig) {
     const queryParams = getQueryParams(data as any);
     return this.apiClient.get<GetLiquidationRecordsResponse>(`/lending/liquidation/records?${queryParams}`, config);
+  }
+
+  async getLoanAuthorization(data: { loan_id: string; id: string }, config: AxiosRequestConfig) {
+    const queryParams = getQueryParams(data as any);
+    return this.apiClient.get<GetLoanAuthorizationResponse>(`/side/lending/loan/authorization?${queryParams}`, config);
   }
 }

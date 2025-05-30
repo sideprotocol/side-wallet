@@ -1,11 +1,6 @@
 //@ts-nocheck
-import { MsgSubmitBlockHeaders, MsgSubmitDepositTransaction, MsgSubmitWithdrawTransaction, MsgSubmitFeeRate, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedOracles, MsgWithdrawToBitcoin, MsgSubmitSignatures, MsgConsolidateVaults, MsgInitiateDKG, MsgCompleteDKG, MsgTransferVault, MsgUpdateParams } from "./tx";
+import { MsgSubmitDepositTransaction, MsgSubmitWithdrawTransaction, MsgSubmitFeeRate, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedFeeProviders, MsgWithdrawToBitcoin, MsgSubmitSignatures, MsgConsolidateVaults, MsgInitiateDKG, MsgCompleteDKG, MsgTransferVault, MsgUpdateParams } from "./tx";
 export const AminoConverter = {
-  "/side.btcbridge.MsgSubmitBlockHeaders": {
-    aminoType: "/side.btcbridge.MsgSubmitBlockHeaders",
-    toAmino: MsgSubmitBlockHeaders.toAmino,
-    fromAmino: MsgSubmitBlockHeaders.fromAmino
-  },
   "/side.btcbridge.MsgSubmitDepositTransaction": {
     aminoType: "/side.btcbridge.MsgSubmitDepositTransaction",
     toAmino: MsgSubmitDepositTransaction.toAmino,
@@ -26,10 +21,10 @@ export const AminoConverter = {
     toAmino: MsgUpdateTrustedNonBtcRelayers.toAmino,
     fromAmino: MsgUpdateTrustedNonBtcRelayers.fromAmino
   },
-  "/side.btcbridge.MsgUpdateTrustedOracles": {
-    aminoType: "/side.btcbridge.MsgUpdateTrustedOracles",
-    toAmino: MsgUpdateTrustedOracles.toAmino,
-    fromAmino: MsgUpdateTrustedOracles.fromAmino
+  "/side.btcbridge.MsgUpdateTrustedFeeProviders": {
+    aminoType: "/side.btcbridge.MsgUpdateTrustedFeeProviders",
+    toAmino: MsgUpdateTrustedFeeProviders.toAmino,
+    fromAmino: MsgUpdateTrustedFeeProviders.fromAmino
   },
   "/side.btcbridge.MsgWithdrawToBitcoin": {
     aminoType: "/side.btcbridge.MsgWithdrawToBitcoin",

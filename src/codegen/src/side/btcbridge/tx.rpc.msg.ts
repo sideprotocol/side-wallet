@@ -1,12 +1,9 @@
 //@ts-nocheck
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
-import { MsgSubmitBlockHeaders, MsgSubmitBlockHeadersResponse, MsgSubmitDepositTransaction, MsgSubmitDepositTransactionResponse, MsgSubmitWithdrawTransaction, MsgSubmitWithdrawTransactionResponse, MsgSubmitFeeRate, MsgSubmitFeeRateResponse, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedNonBtcRelayersResponse, MsgUpdateTrustedOracles, MsgUpdateTrustedOraclesResponse, MsgWithdrawToBitcoin, MsgWithdrawToBitcoinResponse, MsgSubmitSignatures, MsgSubmitSignaturesResponse, MsgConsolidateVaults, MsgConsolidateVaultsResponse, MsgInitiateDKG, MsgInitiateDKGResponse, MsgCompleteDKG, MsgCompleteDKGResponse, MsgTransferVault, MsgTransferVaultResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
+import { MsgSubmitDepositTransaction, MsgSubmitDepositTransactionResponse, MsgSubmitWithdrawTransaction, MsgSubmitWithdrawTransactionResponse, MsgSubmitFeeRate, MsgSubmitFeeRateResponse, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedNonBtcRelayersResponse, MsgUpdateTrustedFeeProviders, MsgUpdateTrustedFeeProvidersResponse, MsgWithdrawToBitcoin, MsgWithdrawToBitcoinResponse, MsgSubmitSignatures, MsgSubmitSignaturesResponse, MsgConsolidateVaults, MsgConsolidateVaultsResponse, MsgInitiateDKG, MsgInitiateDKGResponse, MsgCompleteDKG, MsgCompleteDKGResponse, MsgTransferVault, MsgTransferVaultResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
-  /** SubmitBlockHeaders submits bitcoin block headers to the side chain. */
-  submitBlockHeaders(request: MsgSubmitBlockHeaders): Promise<MsgSubmitBlockHeadersResponse>;
-  /** SubmitDepositTransaction submits the bitcoin deposit transaction to the side chain. */
   submitDepositTransaction(request: MsgSubmitDepositTransaction): Promise<MsgSubmitDepositTransactionResponse>;
   /** SubmitWithdrawalTransaction submits the bitcoin withdrawal transaction to the side chain. */
   submitWithdrawTransaction(request: MsgSubmitWithdrawTransaction): Promise<MsgSubmitWithdrawTransactionResponse>;
@@ -14,8 +11,8 @@ export interface Msg {
   submitFeeRate(request: MsgSubmitFeeRate): Promise<MsgSubmitFeeRateResponse>;
   /** UpdateTrustedNonBtcRelayers updates the trusted non-btc asset relayers. */
   updateTrustedNonBtcRelayers(request: MsgUpdateTrustedNonBtcRelayers): Promise<MsgUpdateTrustedNonBtcRelayersResponse>;
-  /** UpdateTrustedOracles updates the trusted oracles. */
-  updateTrustedOracles(request: MsgUpdateTrustedOracles): Promise<MsgUpdateTrustedOraclesResponse>;
+  /** UpdateTrustedFeeProviders updates the trusted fee providers. */
+  updateTrustedFeeProviders(request: MsgUpdateTrustedFeeProviders): Promise<MsgUpdateTrustedFeeProvidersResponse>;
   /** WithdrawToBitcoin withdraws the asset to bitcoin. */
   withdrawToBitcoin(request: MsgWithdrawToBitcoin): Promise<MsgWithdrawToBitcoinResponse>;
   /** SubmitSignatures submits the signatures of the signing request to the side chain. */
@@ -40,12 +37,11 @@ export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
     this.rpc = rpc;
-    this.submitBlockHeaders = this.submitBlockHeaders.bind(this);
     this.submitDepositTransaction = this.submitDepositTransaction.bind(this);
     this.submitWithdrawTransaction = this.submitWithdrawTransaction.bind(this);
     this.submitFeeRate = this.submitFeeRate.bind(this);
     this.updateTrustedNonBtcRelayers = this.updateTrustedNonBtcRelayers.bind(this);
-    this.updateTrustedOracles = this.updateTrustedOracles.bind(this);
+    this.updateTrustedFeeProviders = this.updateTrustedFeeProviders.bind(this);
     this.withdrawToBitcoin = this.withdrawToBitcoin.bind(this);
     this.submitSignatures = this.submitSignatures.bind(this);
     this.consolidateVaults = this.consolidateVaults.bind(this);
@@ -53,11 +49,6 @@ export class MsgClientImpl implements Msg {
     this.completeDKG = this.completeDKG.bind(this);
     this.transferVault = this.transferVault.bind(this);
     this.updateParams = this.updateParams.bind(this);
-  }
-  submitBlockHeaders(request: MsgSubmitBlockHeaders): Promise<MsgSubmitBlockHeadersResponse> {
-    const data = MsgSubmitBlockHeaders.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Msg", "SubmitBlockHeaders", data);
-    return promise.then(data => MsgSubmitBlockHeadersResponse.decode(new BinaryReader(data)));
   }
   submitDepositTransaction(request: MsgSubmitDepositTransaction): Promise<MsgSubmitDepositTransactionResponse> {
     const data = MsgSubmitDepositTransaction.encode(request).finish();
@@ -79,10 +70,10 @@ export class MsgClientImpl implements Msg {
     const promise = this.rpc.request("side.btcbridge.Msg", "UpdateTrustedNonBtcRelayers", data);
     return promise.then(data => MsgUpdateTrustedNonBtcRelayersResponse.decode(new BinaryReader(data)));
   }
-  updateTrustedOracles(request: MsgUpdateTrustedOracles): Promise<MsgUpdateTrustedOraclesResponse> {
-    const data = MsgUpdateTrustedOracles.encode(request).finish();
-    const promise = this.rpc.request("side.btcbridge.Msg", "UpdateTrustedOracles", data);
-    return promise.then(data => MsgUpdateTrustedOraclesResponse.decode(new BinaryReader(data)));
+  updateTrustedFeeProviders(request: MsgUpdateTrustedFeeProviders): Promise<MsgUpdateTrustedFeeProvidersResponse> {
+    const data = MsgUpdateTrustedFeeProviders.encode(request).finish();
+    const promise = this.rpc.request("side.btcbridge.Msg", "UpdateTrustedFeeProviders", data);
+    return promise.then(data => MsgUpdateTrustedFeeProvidersResponse.decode(new BinaryReader(data)));
   }
   withdrawToBitcoin(request: MsgWithdrawToBitcoin): Promise<MsgWithdrawToBitcoinResponse> {
     const data = MsgWithdrawToBitcoin.encode(request).finish();

@@ -52,8 +52,12 @@ export function assetTypeToJSON(object: AssetType): string {
 }
 /** Params defines the parameters for the module. */
 export interface Params {
-  /** The minimum number of confirmations required for a block to be accepted */
-  confirmations: number;
+  /** The minimum number of confirmations required for the deposit transactions */
+  depositConfirmationDepth: number;
+  /** The minimum number of confirmations required for the withdrawal transactions */
+  withdrawConfirmationDepth: number;
+  /** The allowed maximum depth for bitcoin block reorganization */
+  maxReorgDepth: number;
   /** Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance. */
   maxAcceptableBlockDepth: bigint;
   /** The denomination of the voucher */
@@ -64,8 +68,10 @@ export interface Params {
   withdrawEnabled: boolean;
   /** Trusted relayers for non-btc asset deposit */
   trustedNonBtcRelayers: string[];
-  /** Trusted oracles for providing offchain data, e.g. bitcoin fee rate */
-  trustedOracles: string[];
+  /** Trusted fee providers to submit bitcoin fee rate */
+  trustedFeeProviders: string[];
+  /** Period of validity for the fee rate */
+  feeRateValidityPeriod: bigint;
   /** Asset vaults */
   vaults: Vault[];
   /** Withdrawal params */
@@ -83,8 +89,12 @@ export interface ParamsProtoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsAmino {
-  /** The minimum number of confirmations required for a block to be accepted */
-  confirmations?: number;
+  /** The minimum number of confirmations required for the deposit transactions */
+  deposit_confirmation_depth?: number;
+  /** The minimum number of confirmations required for the withdrawal transactions */
+  withdraw_confirmation_depth?: number;
+  /** The allowed maximum depth for bitcoin block reorganization */
+  max_reorg_depth?: number;
   /** Indicates the maximum depth or distance from the latest block up to which transactions are considered for acceptance. */
   max_acceptable_block_depth?: string;
   /** The denomination of the voucher */
@@ -95,8 +105,10 @@ export interface ParamsAmino {
   withdraw_enabled?: boolean;
   /** Trusted relayers for non-btc asset deposit */
   trusted_non_btc_relayers?: string[];
-  /** Trusted oracles for providing offchain data, e.g. bitcoin fee rate */
-  trusted_oracles?: string[];
+  /** Trusted fee providers to submit bitcoin fee rate */
+  trusted_fee_providers?: string[];
+  /** Period of validity for the fee rate */
+  fee_rate_validity_period?: string;
   /** Asset vaults */
   vaults?: VaultAmino[];
   /** Withdrawal params */
@@ -114,13 +126,16 @@ export interface ParamsAminoMsg {
 }
 /** Params defines the parameters for the module. */
 export interface ParamsSDKType {
-  confirmations: number;
+  deposit_confirmation_depth: number;
+  withdraw_confirmation_depth: number;
+  max_reorg_depth: number;
   max_acceptable_block_depth: bigint;
   btc_voucher_denom: string;
   deposit_enabled: boolean;
   withdraw_enabled: boolean;
   trusted_non_btc_relayers: string[];
-  trusted_oracles: string[];
+  trusted_fee_providers: string[];
+  fee_rate_validity_period: bigint;
   vaults: VaultSDKType[];
   withdraw_params: WithdrawParamsSDKType;
   protocol_limits: ProtocolLimitsSDKType;
@@ -286,13 +301,16 @@ export interface TSSParamsSDKType {
 }
 function createBaseParams(): Params {
   return {
-    confirmations: 0,
+    depositConfirmationDepth: 0,
+    withdrawConfirmationDepth: 0,
+    maxReorgDepth: 0,
     maxAcceptableBlockDepth: BigInt(0),
     btcVoucherDenom: "",
     depositEnabled: false,
     withdrawEnabled: false,
     trustedNonBtcRelayers: [],
-    trustedOracles: [],
+    trustedFeeProviders: [],
+    feeRateValidityPeriod: BigInt(0),
     vaults: [],
     withdrawParams: WithdrawParams.fromPartial({}),
     protocolLimits: ProtocolLimits.fromPartial({}),
@@ -303,41 +321,50 @@ function createBaseParams(): Params {
 export const Params = {
   typeUrl: "/side.btcbridge.Params",
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.confirmations !== 0) {
-      writer.uint32(8).int32(message.confirmations);
+    if (message.depositConfirmationDepth !== 0) {
+      writer.uint32(8).int32(message.depositConfirmationDepth);
+    }
+    if (message.withdrawConfirmationDepth !== 0) {
+      writer.uint32(16).int32(message.withdrawConfirmationDepth);
+    }
+    if (message.maxReorgDepth !== 0) {
+      writer.uint32(24).int32(message.maxReorgDepth);
     }
     if (message.maxAcceptableBlockDepth !== BigInt(0)) {
-      writer.uint32(16).uint64(message.maxAcceptableBlockDepth);
+      writer.uint32(32).uint64(message.maxAcceptableBlockDepth);
     }
     if (message.btcVoucherDenom !== "") {
-      writer.uint32(26).string(message.btcVoucherDenom);
+      writer.uint32(42).string(message.btcVoucherDenom);
     }
     if (message.depositEnabled === true) {
-      writer.uint32(32).bool(message.depositEnabled);
+      writer.uint32(48).bool(message.depositEnabled);
     }
     if (message.withdrawEnabled === true) {
-      writer.uint32(40).bool(message.withdrawEnabled);
+      writer.uint32(56).bool(message.withdrawEnabled);
     }
     for (const v of message.trustedNonBtcRelayers) {
-      writer.uint32(50).string(v!);
+      writer.uint32(66).string(v!);
     }
-    for (const v of message.trustedOracles) {
-      writer.uint32(58).string(v!);
+    for (const v of message.trustedFeeProviders) {
+      writer.uint32(74).string(v!);
+    }
+    if (message.feeRateValidityPeriod !== BigInt(0)) {
+      writer.uint32(80).int64(message.feeRateValidityPeriod);
     }
     for (const v of message.vaults) {
-      Vault.encode(v!, writer.uint32(66).fork()).ldelim();
+      Vault.encode(v!, writer.uint32(90).fork()).ldelim();
     }
     if (message.withdrawParams !== undefined) {
-      WithdrawParams.encode(message.withdrawParams, writer.uint32(74).fork()).ldelim();
+      WithdrawParams.encode(message.withdrawParams, writer.uint32(98).fork()).ldelim();
     }
     if (message.protocolLimits !== undefined) {
-      ProtocolLimits.encode(message.protocolLimits, writer.uint32(82).fork()).ldelim();
+      ProtocolLimits.encode(message.protocolLimits, writer.uint32(106).fork()).ldelim();
     }
     if (message.protocolFees !== undefined) {
-      ProtocolFees.encode(message.protocolFees, writer.uint32(90).fork()).ldelim();
+      ProtocolFees.encode(message.protocolFees, writer.uint32(114).fork()).ldelim();
     }
     if (message.tssParams !== undefined) {
-      TSSParams.encode(message.tssParams, writer.uint32(98).fork()).ldelim();
+      TSSParams.encode(message.tssParams, writer.uint32(122).fork()).ldelim();
     }
     return writer;
   },
@@ -349,39 +376,48 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.confirmations = reader.int32();
+          message.depositConfirmationDepth = reader.int32();
           break;
         case 2:
-          message.maxAcceptableBlockDepth = reader.uint64();
+          message.withdrawConfirmationDepth = reader.int32();
           break;
         case 3:
-          message.btcVoucherDenom = reader.string();
+          message.maxReorgDepth = reader.int32();
           break;
         case 4:
-          message.depositEnabled = reader.bool();
+          message.maxAcceptableBlockDepth = reader.uint64();
           break;
         case 5:
-          message.withdrawEnabled = reader.bool();
+          message.btcVoucherDenom = reader.string();
           break;
         case 6:
-          message.trustedNonBtcRelayers.push(reader.string());
+          message.depositEnabled = reader.bool();
           break;
         case 7:
-          message.trustedOracles.push(reader.string());
+          message.withdrawEnabled = reader.bool();
           break;
         case 8:
-          message.vaults.push(Vault.decode(reader, reader.uint32()));
+          message.trustedNonBtcRelayers.push(reader.string());
           break;
         case 9:
-          message.withdrawParams = WithdrawParams.decode(reader, reader.uint32());
+          message.trustedFeeProviders.push(reader.string());
           break;
         case 10:
-          message.protocolLimits = ProtocolLimits.decode(reader, reader.uint32());
+          message.feeRateValidityPeriod = reader.int64();
           break;
         case 11:
-          message.protocolFees = ProtocolFees.decode(reader, reader.uint32());
+          message.vaults.push(Vault.decode(reader, reader.uint32()));
           break;
         case 12:
+          message.withdrawParams = WithdrawParams.decode(reader, reader.uint32());
+          break;
+        case 13:
+          message.protocolLimits = ProtocolLimits.decode(reader, reader.uint32());
+          break;
+        case 14:
+          message.protocolFees = ProtocolFees.decode(reader, reader.uint32());
+          break;
+        case 15:
           message.tssParams = TSSParams.decode(reader, reader.uint32());
           break;
         default:
@@ -393,13 +429,16 @@ export const Params = {
   },
   fromPartial(object: Partial<Params>): Params {
     const message = createBaseParams();
-    message.confirmations = object.confirmations ?? 0;
+    message.depositConfirmationDepth = object.depositConfirmationDepth ?? 0;
+    message.withdrawConfirmationDepth = object.withdrawConfirmationDepth ?? 0;
+    message.maxReorgDepth = object.maxReorgDepth ?? 0;
     message.maxAcceptableBlockDepth = object.maxAcceptableBlockDepth !== undefined && object.maxAcceptableBlockDepth !== null ? BigInt(object.maxAcceptableBlockDepth.toString()) : BigInt(0);
     message.btcVoucherDenom = object.btcVoucherDenom ?? "";
     message.depositEnabled = object.depositEnabled ?? false;
     message.withdrawEnabled = object.withdrawEnabled ?? false;
     message.trustedNonBtcRelayers = object.trustedNonBtcRelayers?.map(e => e) || [];
-    message.trustedOracles = object.trustedOracles?.map(e => e) || [];
+    message.trustedFeeProviders = object.trustedFeeProviders?.map(e => e) || [];
+    message.feeRateValidityPeriod = object.feeRateValidityPeriod !== undefined && object.feeRateValidityPeriod !== null ? BigInt(object.feeRateValidityPeriod.toString()) : BigInt(0);
     message.vaults = object.vaults?.map(e => Vault.fromPartial(e)) || [];
     message.withdrawParams = object.withdrawParams !== undefined && object.withdrawParams !== null ? WithdrawParams.fromPartial(object.withdrawParams) : undefined;
     message.protocolLimits = object.protocolLimits !== undefined && object.protocolLimits !== null ? ProtocolLimits.fromPartial(object.protocolLimits) : undefined;
@@ -409,8 +448,14 @@ export const Params = {
   },
   fromAmino(object: ParamsAmino): Params {
     const message = createBaseParams();
-    if (object.confirmations !== undefined && object.confirmations !== null) {
-      message.confirmations = object.confirmations;
+    if (object.deposit_confirmation_depth !== undefined && object.deposit_confirmation_depth !== null) {
+      message.depositConfirmationDepth = object.deposit_confirmation_depth;
+    }
+    if (object.withdraw_confirmation_depth !== undefined && object.withdraw_confirmation_depth !== null) {
+      message.withdrawConfirmationDepth = object.withdraw_confirmation_depth;
+    }
+    if (object.max_reorg_depth !== undefined && object.max_reorg_depth !== null) {
+      message.maxReorgDepth = object.max_reorg_depth;
     }
     if (object.max_acceptable_block_depth !== undefined && object.max_acceptable_block_depth !== null) {
       message.maxAcceptableBlockDepth = BigInt(object.max_acceptable_block_depth);
@@ -425,7 +470,10 @@ export const Params = {
       message.withdrawEnabled = object.withdraw_enabled;
     }
     message.trustedNonBtcRelayers = object.trusted_non_btc_relayers?.map(e => e) || [];
-    message.trustedOracles = object.trusted_oracles?.map(e => e) || [];
+    message.trustedFeeProviders = object.trusted_fee_providers?.map(e => e) || [];
+    if (object.fee_rate_validity_period !== undefined && object.fee_rate_validity_period !== null) {
+      message.feeRateValidityPeriod = BigInt(object.fee_rate_validity_period);
+    }
     message.vaults = object.vaults?.map(e => Vault.fromAmino(e)) || [];
     if (object.withdraw_params !== undefined && object.withdraw_params !== null) {
       message.withdrawParams = WithdrawParams.fromAmino(object.withdraw_params);
@@ -443,7 +491,9 @@ export const Params = {
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};
-    obj.confirmations = message.confirmations === 0 ? undefined : message.confirmations;
+    obj.deposit_confirmation_depth = message.depositConfirmationDepth === 0 ? undefined : message.depositConfirmationDepth;
+    obj.withdraw_confirmation_depth = message.withdrawConfirmationDepth === 0 ? undefined : message.withdrawConfirmationDepth;
+    obj.max_reorg_depth = message.maxReorgDepth === 0 ? undefined : message.maxReorgDepth;
     obj.max_acceptable_block_depth = message.maxAcceptableBlockDepth !== BigInt(0) ? message.maxAcceptableBlockDepth.toString() : undefined;
     obj.btc_voucher_denom = message.btcVoucherDenom === "" ? undefined : message.btcVoucherDenom;
     obj.deposit_enabled = message.depositEnabled === false ? undefined : message.depositEnabled;
@@ -453,11 +503,12 @@ export const Params = {
     } else {
       obj.trusted_non_btc_relayers = message.trustedNonBtcRelayers;
     }
-    if (message.trustedOracles) {
-      obj.trusted_oracles = message.trustedOracles.map(e => e);
+    if (message.trustedFeeProviders) {
+      obj.trusted_fee_providers = message.trustedFeeProviders.map(e => e);
     } else {
-      obj.trusted_oracles = message.trustedOracles;
+      obj.trusted_fee_providers = message.trustedFeeProviders;
     }
+    obj.fee_rate_validity_period = message.feeRateValidityPeriod !== BigInt(0) ? message.feeRateValidityPeriod.toString() : undefined;
     if (message.vaults) {
       obj.vaults = message.vaults.map(e => e ? Vault.toAmino(e) : undefined);
     } else {
