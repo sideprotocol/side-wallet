@@ -454,6 +454,7 @@ export default function LoanDetailScreen() {
             <Stack
               direction="row"
               alignItems="center"
+              gap="4px"
               sx={{
                 bgcolor: colors.card_bgColor,
                 borderRadius: '100px',
@@ -486,12 +487,12 @@ export default function LoanDetailScreen() {
                 onClick={() => {
                   window.open(`${SIDE_STATION_URL}/loan/${loan.vault_address}`);
                 }}>
-                {loan.vault_address}
+                {formatAddress(loan.vault_address, 6)}
               </Typography>
               <CopyIcon text={loan.vault_address} onlyIcon size={12} />
             </Stack>
           </Row>
-          <Row itemsCenter>
+          <Row itemsCenter justifyBetween>
             <Text
               style={{
                 fontSize: '18px',
@@ -557,7 +558,7 @@ export default function LoanDetailScreen() {
               my: '16px'
             }}
           />
-          <Row itemsCenter>
+          <Row itemsCenter justifyBetween>
             <Text
               style={{
                 fontSize: '18px',

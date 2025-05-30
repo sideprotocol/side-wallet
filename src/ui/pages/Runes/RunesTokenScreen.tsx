@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { runesUtils } from '@/shared/lib/runes-utils';
 import { AddressRunesTokenSummary } from '@/shared/types';
-import { Column, Content, Header, Icon, Layout, Row } from '@/ui/components';
+import { Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import InscriptionPreview from '@/ui/components/InscriptionPreview';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -160,9 +160,15 @@ export default function RunesTokenScreen() {
                 {tokenSummary?.runeInfo?.spacedRune}
               </div>
 
-              <div className="w-ull flex text-[12px] items-center justify-center gap-[6px]">
-                <Icon icon={'wallet-icon'} size={14} color={'search_icon'}></Icon>
-                {runesUtils.toDecimalAmount(tokenSummary.runeBalance.amount, tokenSummary.runeBalance.divisibility)}
+              <div className="w-ull flex text-[12px] items-center justify-center gap-[4px]">
+                <Icon icon={'wallet-icon'} size={12} color="white_muted"></Icon>
+                <Text
+                  color="white_muted"
+                  size="xs"
+                  text={runesUtils.toDecimalAmount(
+                    tokenSummary.runeBalance.amount,
+                    tokenSummary.runeBalance.divisibility
+                  )}></Text>
               </div>
 
               <div className=" w-full px-[10px] h-[1px] py-[16px]">

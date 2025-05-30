@@ -23,6 +23,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useSwapState } from '@/ui/state/swap/hook';
 import { SwapActions } from '@/ui/state/swap/reducer';
+import { colors } from '@/ui/theme/colors';
 import { removeStartZero } from '@/ui/utils/format';
 import { Coin } from '@cosmjs/stargate';
 
@@ -99,18 +100,16 @@ const NativeBalance = () => {
       <div />
 
       {connected && (
-        <div className={' gap-[3px] flex items-center cursor-pointer'} style={{}}>
-          <Icon icon={'wallet-icon'} size={14} color={!isDisabled() ? 'white' : 'search_icon'}></Icon>
+        <div className={' gap-[4px] flex items-center cursor-pointer'} style={{}}>
+          <Icon icon={'wallet-icon'} size={12} color="white_muted"></Icon>
           <div
             style={{
-              color: 'rgb(125, 125, 125)',
+              color: colors.grey12,
               fontSize: '14px',
               display: 'flex',
               alignItems: 'center',
               gap: '4px'
             }}>
-            {' '}
-            {/*<WalletIcon></WalletIcon>*/}
             {BigNumber(nativeBalance)
               .toFormat(assetNativeIcon?.asset?.precision || 8, BigNumber.ROUND_CEIL)
               .replace(/\.?0+$/, '')}
@@ -206,12 +205,12 @@ const RemoteBalance = () => {
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
-            gap: '3px'
+            gap: '4px'
           }}>
-          <Icon icon={'wallet-icon'} size={14} color={'search_icon'}></Icon>
+          <Icon icon={'wallet-icon'} size={12} color="white_muted"></Icon>
           <div
             style={{
-              color: 'rgb(125, 125, 125)',
+              color: colors.grey12,
               fontSize: '14px',
               display: 'flex',
               alignItems: 'center',

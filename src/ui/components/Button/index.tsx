@@ -231,11 +231,10 @@ export function Button(props: ButtonProps) {
           {LeftAccessory && <div style={$leftAccessoryStyle}>{LeftAccessory}</div>}
           {icon}
           <Column justifyCenter gap="zero">
-            {text && <Text text={text} style={$textStyle} />}
+            {(text || typeof children === 'string') && <Text text={text || children} style={$textStyle} />}
             {subText && <Text text={subText} style={$subTextStyle} />}
           </Column>
-
-          {children}
+          {typeof children === 'string' ? null : children}
         </Row>
 
         {RightAccessory && <div style={$rightAccessoryStyle}>{RightAccessory}</div>}
@@ -279,16 +278,18 @@ export function Button(props: ButtonProps) {
           />
         </svg>
       ) : (
-        text && (
-          <Text
-            style={$textStyle}
-            text={text}
-            preset="regular-bold"
-            classname={preset === 'ghost' ? 'group-hover:!text-[#000]' : ''}
-          />
-        )
+        <>
+          {(text || typeof children === 'string') && (
+            <Text
+              style={$textStyle}
+              text={text || children}
+              preset="regular-bold"
+              classname={preset === 'ghost' ? 'group-hover:!text-[#000]' : ''}
+            />
+          )}
+        </>
       )}
-      {children}
+      {typeof children === 'string' ? null : children}
       {RightAccessory && <div style={$rightAccessoryStyle}>{RightAccessory}</div>}
     </div>
   );

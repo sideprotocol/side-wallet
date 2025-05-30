@@ -199,7 +199,7 @@ export default function EarnSupplyScreen() {
                     flexShrink: 0
                   }}
                   itemsCenter
-                  gap="md">
+                  gap="sm">
                   <Icon color="white_muted" icon="wallet-icon" size={12}></Icon>
                   <Text
                     style={{
@@ -233,21 +233,46 @@ export default function EarnSupplyScreen() {
                     denom: poolTokenBalance?.denom || 'uusdc'
                   }}
                   decimalScale={poolTokenBalance?.asset.precision || 6}
+                  max={poolTokenBalance?.formatAmount || '0'}
                   onChange={(value) => {
                     setsupplyAmount(value);
                   }}
                 />
-                <Image src={poolTokenBalance?.asset.logo} height={28} width={28}></Image>
-                <Text text={poolTokenBalance?.asset.symbol} color="white" size="md"></Text>
+                <Row
+                  itemsCenter
+                  gap="md"
+                  style={{
+                    flexShrink: 0
+                  }}>
+                  <Typography
+                    sx={{
+                      color: colors.grey12,
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: '.4s',
+                      ':hover': {
+                        color: colors.white
+                      }
+                    }}
+                    onClick={() => {
+                      if (!poolTokenBalance) {
+                        return;
+                      }
+                      setsupplyAmount(poolTokenBalance.formatAmount);
+                    }}>
+                    Max
+                  </Typography>
+                  <Image src={poolTokenBalance?.asset.logo} height={28} width={28}></Image>
+                  <Text text={poolTokenBalance?.asset.symbol} color="white" size="md"></Text>
+                </Row>
               </Stack>
-
               <Box
                 sx={{
                   height: '1px',
                   backgroundColor: colors.black_dark
                 }}
               />
-
               <Column bg="black">
                 {data.map((item) => (
                   <Stack direction="row" justifyContent="space-between" alignItems="center" key={item.label}>

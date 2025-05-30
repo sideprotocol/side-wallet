@@ -236,7 +236,7 @@ export default function SwapSideScreen() {
               You need to pay
             </Text>
 
-            <Row itemsCenter>
+            <Row itemsCenter gap="sm">
               <Icon icon="wallet-icon" size={12} color="white_muted"></Icon>
               <Text color="white_muted" size="xs" text={BigNumber(satBalance?.formatAmount || '0').toFormat()}></Text>
             </Row>

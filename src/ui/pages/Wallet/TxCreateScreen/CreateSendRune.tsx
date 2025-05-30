@@ -3,8 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { runesUtils } from '@/shared/lib/runes-utils';
 import { AddressRunesTokenSummary, BalanceItem, RawTxInfo } from '@/shared/types';
-import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
-import { Button, Column, Content, Header, Input, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import { FeeRateBar } from '@/ui/components/FeeRateBar';
 import InscriptionPreview from '@/ui/components/InscriptionPreview';
@@ -238,14 +237,9 @@ export default function CreateSendRune() {
           <Row full justifyBetween>
             <Text text="Balance" preset="regular" color="white" />
 
-            <Row
-              gap="sm"
-              style={{
-                fontSize: '12px'
-              }}>
-              <img src={WalletIcon} alt={'WalletIcon'} />
-
-              <div>{runeBalance?.toString()}</div>
+            <Row itemsCenter gap="sm">
+              <Icon icon="wallet-icon" size={12} color="white_muted"></Icon>
+              <Text color="white_muted" size="xs" text={runeBalance?.toString()}></Text>
             </Row>
           </Row>
           <Input

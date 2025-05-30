@@ -1,14 +1,14 @@
 import BigNumber from 'bignumber.js';
 import { Fragment, useMemo, useState } from 'react';
 
-import { Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import useGetPoolExchangeRate from '@/ui/hooks/useGetPoolExchangeRate';
 import useGetPoolsData, { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate } from '@/ui/utils';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -34,8 +34,8 @@ export default function MyEarnsScreen() {
       />
       <Content
         style={{
-          padding: '0 16px',
-          marginTop: 16
+          marginTop: 16,
+          padding: 0
         }}>
         {data?.length > 0 ? (
           <>
@@ -89,9 +89,9 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
   }, [item, exchangeRate]);
 
   return (
-    <Column
+    <Stack
       key={item.baseData.id}
-      gap={'md'}
+      gap="8px"
       onMouseOver={() => {
         setIsHover(true);
       }}
@@ -100,6 +100,14 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
       }}
       onClick={() => {
         navigate('EarnRedeemScreen', { poolData: item });
+      }}
+      sx={{
+        padding: '16px 16px 0',
+        borderRadius: '8px',
+        transition: '.4s',
+        ':hover': {
+          bgcolor: colors.black_dark
+        }
       }}>
       <Row full justifyBetween itemsCenter>
         <Row itemsCenter gap="md">
@@ -121,7 +129,7 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
             fontSize: '12px',
             color: colors.grey12
           }}>
-          Deposited Amount
+          Total Claimable
         </Text>
         <Text
           style={{
@@ -138,7 +146,7 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
             fontSize: '12px',
             color: colors.grey12
           }}>
-          s{item.token.asset.symbol} Amount
+          s{item.token.asset.symbol} Holding
         </Text>
         <Text
           style={{
@@ -149,29 +157,12 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
           {getTruncate(stokenBalance?.formatAmount || '0', item.token?.asset.precision || 6)}
         </Text>
       </Row>
-      {/* <Row full justifyBetween itemsCenter>
-        <Text
-          style={{
-            fontSize: '12px',
-            color: colors.grey12
-          }}>
-          Cumulative Interest
-        </Text>
-        <Text
-          style={{
-            fontSize: '12px',
-            fontWeight: 500,
-            color: colors.white
-          }}>
-          -
-        </Text>
-      </Row> */}
       <Box
         sx={{
           height: '1px',
           backgroundColor: colors.black_dark
         }}
       />
-    </Column>
+    </Stack>
   );
 }

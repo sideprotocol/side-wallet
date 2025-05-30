@@ -1,8 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 
-import WalletIcon from '@/ui/assets/icons/wallet-icon.svg';
-import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/components';
+import { Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
 import ImageIcon from '@/ui/components/ImageIcon';
@@ -260,12 +259,9 @@ export default function BridgeTabScreen() {
                   Amount
                 </div>
 
-                <div className={'flex gap-[5px] items-center'}>
-                  <img className={'w-[14px] h-[14px]'} src={WalletIcon} alt="" />
-
-                  <Text size="xs" color="white_muted">
-                    {BigNumber(balance).toFormat()}
-                  </Text>
+                <div className={'flex gap-[4px] items-center'}>
+                  <Icon color="white_muted" icon="wallet-icon" size={12}></Icon>
+                  <Text size="xs" color="white_muted" text={BigNumber(balance).toFormat()}></Text>
                 </div>
               </Row>
 

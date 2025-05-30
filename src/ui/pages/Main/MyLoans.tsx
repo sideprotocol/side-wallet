@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useMemo, useState } from 'react';
 
-import { Column, Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import useGetLoansData from '@/ui/hooks/useGetLoansData';
 import useGetPoolDataById from '@/ui/hooks/useGetPoolDataById';
@@ -11,7 +11,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { formatTimeWithUTC } from '@/ui/utils/formatter';
-import { Box, BoxProps, Typography } from '@mui/material';
+import { Box, BoxProps, Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -53,7 +53,6 @@ export default function MyLoansScreen() {
       />
       <Content
         style={{
-          padding: '0 16px',
           marginTop: 16
         }}>
         {data?.length > 0 ? (
@@ -65,9 +64,9 @@ export default function MyLoansScreen() {
               const borrowTokenAmount = formatUnitAmount(item.borrow_amount.amount, borrowToken?.asset.exponent || 6);
 
               return (
-                <Column
+                <Stack
                   key={item.create_at}
-                  gap={'md'}
+                  gap="8px"
                   onMouseOver={() => {
                     setIsHoverId(item.vault_address);
                   }}
@@ -76,6 +75,14 @@ export default function MyLoansScreen() {
                   }}
                   onClick={() => {
                     navigate('LoanDetailScreen', { loan_id: item.vault_address });
+                  }}
+                  sx={{
+                    padding: '16px 16px 0',
+                    borderRadius: '8px',
+                    transition: '.4s',
+                    ':hover': {
+                      bgcolor: colors.black_dark
+                    }
                   }}>
                   <Row full justifyBetween itemsCenter>
                     <Row itemsCenter gap="md">
@@ -190,7 +197,7 @@ export default function MyLoansScreen() {
                       backgroundColor: colors.black_dark
                     }}
                   />
-                </Column>
+                </Stack>
               );
             })}
             <Text

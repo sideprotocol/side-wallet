@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
-import { Button, Column, Content, Header, Image, Layout, SuccessAnimation } from '@/ui/components';
+import { Button, Column, Content, Header, Image, Layout, LightTooltip, SuccessAnimation } from '@/ui/components';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import useGetLoanCurrentInterest from '@/ui/hooks/useGetLoanCurrentInterest';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
@@ -75,7 +75,8 @@ export default function RepayLoanScreen() {
             {borrowToken?.asset.symbol}
           </Typography>
         </>
-      )
+      ),
+      tip: 'xxx'
     },
     {
       label: 'Accrued Interest',
@@ -101,7 +102,8 @@ export default function RepayLoanScreen() {
             {borrowToken?.asset.symbol}
           </Typography>
         </>
-      )
+      ),
+      tip: 'xxx'
     },
     {
       label: 'You will receive',
@@ -136,13 +138,19 @@ export default function RepayLoanScreen() {
             {collateralToken?.asset.symbol}
           </Typography>
         </>
-      )
+      ),
+      tip: 'xxx'
     }
   ];
 
   return (
     <Layout>
-      <Header title="Repay Loan" />
+      <Header
+        title="Repay Loan"
+        onBack={() => {
+          window.history.go(-1);
+        }}
+      />
       <Content
         style={{
           padding: '0 16px 70px',
@@ -279,14 +287,22 @@ export default function RepayLoanScreen() {
                 }}>
                 {list.map((item, index) => (
                   <Stack key={index} direction="row" justifyContent="space-between" alignItems="center">
-                    <Stack
-                      direction="row"
-                      sx={{
-                        fontSize: '14px',
-                        color: colors.grey12
-                      }}>
-                      {item.label}
-                    </Stack>
+                    <LightTooltip title={item.tip} arrow placement="top">
+                      <Typography
+                        sx={{
+                          fontSize: '14px',
+                          color: colors.grey12,
+                          textDecoration: 'dotted underline',
+                          textUnderlineOffset: '2px',
+                          cursor: 'pointer',
+                          transition: '.4s',
+                          ':hover': {
+                            color: colors.white
+                          }
+                        }}>
+                        {item.label}
+                      </Typography>
+                    </LightTooltip>
                     <Stack
                       direction="row"
                       justifyContent="flex-end"

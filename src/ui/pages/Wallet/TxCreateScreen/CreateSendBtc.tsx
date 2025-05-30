@@ -222,7 +222,7 @@ export default function CreateSendBtc() {
           <Row justifyBetween itemsCenter>
             <Typography
               sx={{
-                fontSize: '12px',
+                fontSize: '14px',
                 color: colors.main
               }}>
               Available
@@ -250,7 +250,7 @@ export default function CreateSendBtc() {
               placement="top">
               <Typography
                 sx={{
-                  fontSize: '12px',
+                  fontSize: '14px',
                   color: colors.grey12,
                   textDecoration: 'dotted underline',
                   textUnderlineOffset: '2px',
@@ -280,7 +280,7 @@ export default function CreateSendBtc() {
           <Row justifyBetween itemsCenter>
             <Typography
               sx={{
-                fontSize: '12px',
+                fontSize: '14px',
                 color: colors.grey12
               }}>
               Total

@@ -277,8 +277,7 @@ export default function LendingTanScreen() {
       !+collateralAmount ||
       !+borrowAmount ||
       !liquidationEvent ||
-      // (healthFactor !== '-' && +healthFactor < 1.2) ||
-      healthFactor === '-' ||
+      (healthFactor !== '-' && +healthFactor < 1.2) ||
       +borrowAmount <
         +toReadableAmount(poolData?.baseData.config.origination_fee || '0', poolData?.token.asset.exponent || '6') ||
       dlcEvent?.event.has_triggered
@@ -364,8 +363,8 @@ export default function LendingTanScreen() {
               ) : null}
             </Row>
 
-            <Row itemsCenter>
-              <Icon color="white_muted" icon="wallet-icon" size={16} />
+            <Row itemsCenter gap="sm">
+              <Icon color="white_muted" icon="wallet-icon" size={12} />
               <Text text={BigNumber(satBalance?.formatAmount || '0').toFormat()} color="white_muted" size="xs"></Text>
             </Row>
           </Row>
@@ -422,8 +421,8 @@ export default function LendingTanScreen() {
                 </Text>
               ) : null}
             </Row>
-            <Row itemsCenter>
-              <Icon icon="wallet-icon" color="white_muted" size={16} />
+            <Row itemsCenter gap="sm">
+              <Icon icon="wallet-icon" color="white_muted" size={12} />
               <Text
                 text={BigNumber(poolTokenBalance?.formatAmount || '0').toFormat()}
                 color="white_muted"

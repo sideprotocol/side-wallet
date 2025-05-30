@@ -2,7 +2,19 @@ import { BigNumber } from 'bignumber.js';
 import { useMemo, useState } from 'react';
 import 'swiper/css';
 
-import { Button, Column, Content, Header, Icon, Image, Layout, Row, SuccessAnimation, Text } from '@/ui/components';
+import {
+  Button,
+  Column,
+  Content,
+  Header,
+  Icon,
+  Image,
+  Layout,
+  LightTooltip,
+  Row,
+  SuccessAnimation,
+  Text
+} from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
 import useGetPoolExchangeRate from '@/ui/hooks/useGetPoolExchangeRate';
 import { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
@@ -12,7 +24,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate, useLocationState } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
 export default function EarnRedeemScreen() {
   const { poolData } = useLocationState<{
@@ -57,6 +69,41 @@ export default function EarnRedeemScreen() {
     if (!stokenBalance) return true;
     return loading || +withdrawAmount > (+stokenBalance.formatAmount || 0);
   }, [loading, withdrawAmount]);
+
+  const data = [
+    {
+      label: `${stokenBalance?.asset.symbol}/${poolTokenBalance?.asset.symbol}`,
+      value: (
+        <Typography
+          sx={{
+            fontSize: '12px',
+            color: colors.white
+          }}>
+          {' '}
+          {+exchangeRate}
+        </Typography>
+      ),
+      tip: 'xxx'
+    },
+    {
+      label: 'You will receive',
+      value: (
+        <>
+          <Typography
+            sx={{
+              fontSize: '12px',
+              color: colors.white
+            }}>
+            {new BigNumber(withdrawAmount || '0').div(exchangeRate).toFixed(6)}&nbsp;
+            <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
+              {poolTokenBalance?.asset.symbol}
+            </small>
+          </Typography>
+        </>
+      ),
+      tip: 'xxx'
+    }
+  ];
 
   return (
     <Layout>
@@ -116,17 +163,6 @@ export default function EarnRedeemScreen() {
               padding: '0 16px 70px'
             }}>
             <Column gap="lg" px="lg" py="md">
-              <Row full justifyCenter itemsCenter gap="sm" mt="lg">
-                <Image
-                  src={stokenBalance?.asset.logo}
-                  size={32}
-                  height={32}
-                  width={32}
-                  style={{
-                    borderRadius: '50%'
-                  }}></Image>
-                <Text text={stokenBalance?.asset.symbol} size="md" color="white"></Text>
-              </Row>
               <Row justifyBetween itemsCenter>
                 <Text text="Amount" size="xs" color="white"></Text>
                 <Row
@@ -134,7 +170,7 @@ export default function EarnRedeemScreen() {
                     flexShrink: 0
                   }}
                   itemsCenter
-                  gap="md">
+                  gap="sm">
                   <Icon color="white_muted" icon="wallet-icon" size={12}></Icon>
                   <Text
                     style={{
@@ -167,6 +203,7 @@ export default function EarnRedeemScreen() {
                     amount: withdrawAmount,
                     denom: stokenBalance?.denom || ''
                   }}
+                  max={stokenBalance?.formatAmount || '0'}
                   decimalScale={stokenBalance?.asset.precision || 6}
                   onChange={(value) => {
                     setwithdrawAmount(value);
@@ -192,48 +229,36 @@ export default function EarnRedeemScreen() {
 
                 <Text text={stokenBalance?.asset.symbol} color="white" size="md"></Text>
               </Stack>
-
-              <Column
-                bg="black"
-                style={{
-                  borderRadius: '10px'
+              <Box
+                sx={{
+                  height: '1px',
+                  backgroundColor: colors.black_dark
                 }}
-                py="lg">
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.grey12
-                    }}>
-                    {stokenBalance?.asset.symbol}/{poolTokenBalance?.asset.symbol}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.white
-                    }}>
-                    {+exchangeRate}
-                  </Typography>
-                </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.grey12
-                    }}>
-                    You will receive
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.white
-                    }}>
-                    {new BigNumber(withdrawAmount || '0').div(exchangeRate).toFixed(6)}&nbsp;
-                    <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-                      {poolTokenBalance?.asset.symbol}
-                    </small>
-                  </Typography>
-                </Stack>
+              />
+              <Column bg="black">
+                {data.map((item) => (
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" key={item.label}>
+                    <LightTooltip title={item.tip} placement="top" arrow>
+                      <Typography
+                        sx={{
+                          fontSize: '12px',
+                          color: colors.grey12,
+                          textDecoration: 'dotted underline',
+                          textUnderlineOffset: '2px',
+                          cursor: 'pointer',
+                          transition: '.4s',
+                          ':hover': {
+                            color: colors.white
+                          }
+                        }}>
+                        {item.label}
+                      </Typography>
+                    </LightTooltip>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center">
+                      {item.value}
+                    </Stack>
+                  </Stack>
+                ))}
               </Column>
 
               {withdrawExceed && (

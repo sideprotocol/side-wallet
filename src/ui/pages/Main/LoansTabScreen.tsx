@@ -130,29 +130,61 @@ export default function LoansTabScreen() {
               direction="row"
               justifyContent="center"
               alignItems="center"
+              gap="4px"
               className="animate__animated animate__fadeInUp animate__faster animate__delay-1s">
-              <Checkbox
-                checked={!showLoanNotice}
-                onChange={(e) => {
-                  setShowLoanNotice(!e.target.checked);
-                  wallet.setShowLoanNotice(!e.target.checked);
-                }}
-                size="small"
+              <Stack
+                direction="row"
+                gap="4px"
                 sx={{
-                  color: colors.white,
-                  padding: '0px',
-                  '&.Mui-checked': {
-                    color: colors.main
+                  span: {
+                    color: colors.grey12
+                  },
+                  p: {
+                    color: colors.grey12
+                  },
+                  ':hover': {
+                    span: {
+                      color: colors.white
+                    },
+                    p: {
+                      color: colors.white
+                    }
                   }
-                }}
-              />
-              <Typography
-                sx={{
-                  color: colors.white,
-                  fontSize: '12px'
                 }}>
-                Don't show this again
-              </Typography>
+                <Checkbox
+                  checked={!showLoanNotice}
+                  onChange={(e) => {
+                    setShowLoanNotice(!e.target.checked);
+                    wallet.setShowLoanNotice(!e.target.checked);
+                  }}
+                  sx={{
+                    width: '16px',
+                    height: '16px',
+                    color: colors.white,
+                    padding: '0px',
+                    transition: '.4s',
+                    '&.Mui-checked': {
+                      color: colors.main
+                    },
+                    svg: {
+                      width: '14px',
+                      height: '14px'
+                    }
+                  }}
+                />
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    transition: '.4s'
+                  }}
+                  onClick={() => {
+                    setShowLoanNotice(!showLoanNotice);
+                    wallet.setShowLoanNotice(!showLoanNotice);
+                  }}>
+                  Don't show this again
+                </Typography>
+              </Stack>
             </Stack>
           )}
         </Column>
