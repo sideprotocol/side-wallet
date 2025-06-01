@@ -35,7 +35,7 @@ export default function MyEarnsScreen() {
       <Content
         style={{
           marginTop: 16,
-          padding: 0
+          padding: '0 16px'
         }}>
         {data?.length > 0 ? (
           <>
@@ -104,6 +104,7 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
       sx={{
         padding: '16px 16px 0',
         borderRadius: '8px',
+        cursor: 'pointer',
         transition: '.4s',
         ':hover': {
           bgcolor: colors.black_dark

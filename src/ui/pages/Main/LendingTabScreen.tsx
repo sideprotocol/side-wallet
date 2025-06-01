@@ -120,12 +120,29 @@ export default function LendingTanScreen() {
 
   const borrow_apr = poolData?.baseData.config.tranches.find((item) => item.maturity === maturity)?.borrow_apr || 0;
 
+  const currentLtv = useMemo(
+    () =>
+      new BigNumber(borrowAmount || 0)
+        .multipliedBy(poolData?.token.denomPrice || 0)
+        .div(+collateralAmount || 1)
+        .div(+(satBalance?.denomPrice || '0') || '1')
+        .multipliedBy(100)
+        .toFixed(2),
+    [borrowAmount, collateralAmount, poolData?.token.denomPrice, satBalance?.denomPrice]
+  );
+
   const data = [
     {
       label: 'Health Factor',
       value: (
         <Stack direction="row" alignItems="center" gap="8px">
-          <Typography color={colors.green}>∞</Typography>
+          <Typography
+            color={colors.green}
+            sx={{
+              fontSize: '12px'
+            }}>
+            ∞
+          </Typography>
           {healthFactor !== '-' && (
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -140,7 +157,7 @@ export default function LendingTanScreen() {
           {healthFactor !== '-' && (
             <Typography
               sx={{
-                fontSize: '14px',
+                fontSize: '12px',
                 color:
                   healthFactor === '-'
                     ? colors.white
@@ -164,7 +181,7 @@ export default function LendingTanScreen() {
       value: (
         <Typography
           sx={{
-            fontSize: '14px',
+            fontSize: '12px',
             color:
               healthFactor === '-'
                 ? colors.white
@@ -176,12 +193,7 @@ export default function LendingTanScreen() {
                 ? colors.yellow
                 : colors.main
           }}>
-          {`${new BigNumber(borrowAmount || 0)
-            .multipliedBy(poolData?.token.denomPrice || 0)
-            .div(+collateralAmount || 1)
-            .div(+(satBalance?.denomPrice || '0') || '1')
-            .multipliedBy(100)
-            .toFixed(2)}%`}
+          {`${currentLtv}%`}
         </Typography>
       ),
       tip: 'xxx'
@@ -192,7 +204,7 @@ export default function LendingTanScreen() {
         <>
           <Typography
             sx={{
-              fontSize: '14px',
+              fontSize: '12px',
               color: colors.grey12
             }}>
             {`${poolData?.baseData.config.max_ltv}%`}
@@ -206,7 +218,7 @@ export default function LendingTanScreen() {
       value: (
         <Typography
           sx={{
-            fontSize: '14px',
+            fontSize: '12px',
             color: colors.grey12
           }}>
           {!poolData ? '-' : `${poolData?.baseData.config.liquidation_threshold}%`}
@@ -280,7 +292,9 @@ export default function LendingTanScreen() {
       !+collateralAmount ||
       !+borrowAmount ||
       !liquidationEvent ||
-      (healthFactor !== '-' && +healthFactor < 1.2 && !isChecked) ||
+      healthFactor === '-' ||
+      (+healthFactor <= 1.2 && !isChecked) ||
+      +currentLtv >= 80 ||
       +borrowAmount <
         +toReadableAmount(poolData?.baseData.config.origination_fee || '0', poolData?.token.asset.exponent || '6') ||
       dlcEvent?.event.has_triggered
@@ -292,11 +306,10 @@ export default function LendingTanScreen() {
       <Layout>
         <MainHeader title="" />
         <Content
-          mt="xl"
           style={{
             gap: '0'
           }}>
-          <Row full justifyBetween itemsCenter>
+          <Row full justifyBetween itemsCenter mt="lg">
             <Text
               color="white"
               size="lg"
@@ -344,7 +357,7 @@ export default function LendingTanScreen() {
               <Icon icon="arrow-right" color="white_muted" size={16} />
             </Stack>
           </Row>
-          <Row full justifyBetween itemsCenter mt="md">
+          <Row full justifyBetween itemsCenter mt="lg">
             <Row itemsCenter>
               <Text color="white" size="xs">
                 Collateral
@@ -481,7 +494,7 @@ export default function LendingTanScreen() {
               <Icon icon="down" size={10} color={isHover ? 'main' : 'white'}></Icon>
             </Stack>
           </Stack>
-          {healthFactor !== '-' && +healthFactor < 1.2 && (
+          {healthFactor !== '-' && +healthFactor <= 1.2 && (
             <Stack
               direction="row"
               alignItems="flex-start"

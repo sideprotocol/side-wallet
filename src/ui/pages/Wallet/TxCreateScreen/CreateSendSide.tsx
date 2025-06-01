@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { BalanceItem, TxType } from '@/shared/types';
-import { Button, Column, Header, Image, Input, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useNavigate } from '@/ui/pages/MainRoute';
@@ -188,12 +188,14 @@ export default function CreateSendSide() {
             <Row
               style={{
                 alignItems: 'center'
-              }}>
-              <Image src="./images/icons/wallet-04.svg" size={14} />
+              }}
+              gap="sm">
+              <Icon icon="wallet-icon" color="white_muted" size={12} />
               <Text
                 text={BigNumber(available).toFormat()}
+                color="white_muted"
+                size="xs"
                 style={{
-                  fontSize: '14px',
                   lineHeight: '24px'
                 }}
               />

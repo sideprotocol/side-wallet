@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
-import { useQuery } from 'react-query';
+import { useEffect } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
 
 import { NetworkType } from '@/shared/types';
 import services from '@/ui/services';
@@ -50,6 +51,8 @@ async function buildPsbtFromTxHex(txid: string, SIDE_BTC_EXPLORER: string, netwo
 export default function useGetDepositTx(collateralAddress = '', collateralUnitAmount = '0') {
   const networkType = useNetworkType();
   const { SIDE_BTC_EXPLORER } = useEnvironment();
+  const queryClient = useQueryClient();
+
   const {
     data,
     isLoading: loading,
@@ -90,9 +93,18 @@ export default function useGetDepositTx(collateralAddress = '', collateralUnitAm
     refetchInterval: (data) => {
       return data ? false : 4000;
     },
-    refetchIntervalInBackground: true,
+    refetchIntervalInBackground: false,
     enabled: !!collateralAddress
   });
+
+  useEffect(() => {
+    return () => {
+      queryClient.cancelQueries([
+        'getDepositTxByCollateralAddress',
+        { collateralAddress, collateralUnitAmount, SIDE_BTC_EXPLORER }
+      ]);
+    };
+  }, [queryClient, collateralAddress, collateralUnitAmount, SIDE_BTC_EXPLORER]);
 
   return {
     loading,

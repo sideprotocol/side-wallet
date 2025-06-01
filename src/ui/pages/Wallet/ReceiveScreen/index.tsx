@@ -44,7 +44,7 @@ export default function ReceiveScreen() {
             bgColor={colors.white}
             fgColor={colors.black}
             value={address || ''}
-            size={100}></QRCodeSVG>
+            size={140}></QRCodeSVG>
 
           <Row itemsCenter mt="lg" mb="lg">
             <Text

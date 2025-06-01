@@ -158,7 +158,7 @@ export default function LoanDetailScreen() {
       tip: 'xxx'
     },
     {
-      label: 'Deposit Tx',
+      label: 'Lock Tx',
       value: (
         <Box>
           {loan.authorizations[0] ? (
@@ -188,7 +188,7 @@ export default function LoanDetailScreen() {
       tip: 'xxx'
     },
     {
-      label: 'Withdraw Tx',
+      label: 'Unlock Tx',
       value: (
         <Typography
           sx={{
@@ -377,7 +377,7 @@ export default function LoanDetailScreen() {
           style={{
             fontSize: '12px',
             fontWeight: 500,
-            color: colors.white
+            color: colors.grey12
           }}>
           {`${lendingPool?.pool?.config?.liquidation_threshold || '-'}%`}
         </Text>
@@ -391,7 +391,7 @@ export default function LoanDetailScreen() {
           style={{
             fontSize: '12px',
             fontWeight: 500,
-            color: colors.white
+            color: colors.grey12
           }}>
           {`${(liquidationParams?.params.liquidation_bonus_factor || 0) / 10}%`}
         </Text>
@@ -551,7 +551,12 @@ export default function LoanDetailScreen() {
                   <CopyIcon text={loan.vault_address} onlyIcon size={12} />
                 </Stack>
               </Row>
-              <Row itemsCenter justifyBetween>
+              <Row
+                itemsCenter
+                justifyBetween
+                style={{
+                  marginTop: '2px'
+                }}>
                 <Text
                   style={{
                     fontSize: '18px',

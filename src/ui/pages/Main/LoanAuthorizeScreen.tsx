@@ -18,7 +18,7 @@ import { useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
 import { getTruncate, satoshisToAmount, useLocationState } from '@/ui/utils';
 import { formatTimeWithUTC, toReadableAmount } from '@/ui/utils/formatter';
-import { Box, Input, Stack, Typography } from '@mui/material';
+import { Input, Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
 
@@ -189,7 +189,7 @@ export default function LoanAuthorizeScreen() {
                     sx={{
                       p: '16px',
                       borderRadius: '10px',
-                      bgcolor: colors.grey1
+                      bgcolor: colors.card_bgColor
                     }}>
                     <LightTooltip title={item.tip} arrow placement="top">
                       <Typography
@@ -227,7 +227,7 @@ export default function LoanAuthorizeScreen() {
                   sx={{
                     p: '16px',
                     borderRadius: '10px',
-                    bgcolor: colors.grey1
+                    bgcolor: colors.card_bgColor
                   }}>
                   <LightTooltip title={'xxx'} arrow placement="top">
                     <Typography
@@ -253,10 +253,13 @@ export default function LoanAuthorizeScreen() {
                       py: '12px',
                       px: '12px',
                       borderRadius: '10px',
-                      bgcolor: isEditRefundAddress ? colors.black : colors.card_bgColor,
                       width: '100%',
                       mt: '8px',
-                      border: `1px solid ${isEditRefundAddress ? colors.white : colors.card_bgColor}`
+                      border: `1px solid ${colors.white20}`,
+                      transition: '.4s',
+                      ':hover': {
+                        border: `1px solid ${colors.white_4}`
+                      }
                     }}>
                     <Input
                       onChange={(event) => {
@@ -277,13 +280,13 @@ export default function LoanAuthorizeScreen() {
                         textAlign: 'left',
                         bgcolor: 'transparent',
                         p: '0',
-                        width: '240px',
+                        width: '250px',
                         height: '20px',
                         border: 'none',
                         outline: 'none',
                         input: {
                           '&:disabled': {
-                            WebkitTextFillColor: colors.white
+                            WebkitTextFillColor: colors.grey12
                           }
                         }
                       }}
@@ -311,8 +314,8 @@ export default function LoanAuthorizeScreen() {
                       {isEditRefundAddress ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          width="18"
-                          height="18"
+                          width="14"
+                          height="14"
                           viewBox="0 0 18 18"
                           fill="none"
                           onClick={() => {
@@ -336,8 +339,8 @@ export default function LoanAuthorizeScreen() {
                       ) : (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
+                          width="14"
+                          height="14"
                           viewBox="0 0 20 20"
                           fill="none"
                           onClick={() => {
@@ -366,57 +369,6 @@ export default function LoanAuthorizeScreen() {
                     {editRefundAddressError}
                   </Typography>
                 )}
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '1px',
-                    bgcolor: colors.white1
-                  }}
-                />
-                <Stack
-                  gap="4px"
-                  sx={{
-                    borderRadius: '10px',
-                    bgcolor: colors.green_success15,
-                    p: '16px'
-                  }}>
-                  <Stack direction="row" alignItems="center" gap="4px">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="22"
-                      viewBox="0 0 18 22"
-                      fill="none"
-                      style={{
-                        flexShrink: 0
-                      }}>
-                      <path
-                        d="M8.30201 20.6149C8.5234 20.744 8.6341 20.8086 8.79032 20.8421C8.91156 20.8681 9.08844 20.8681 9.20968 20.8421C9.3659 20.8086 9.4766 20.744 9.69799 20.6149C11.646 19.4784 17 15.9084 17 11V6.21759C17 5.41808 17 5.01833 16.8692 4.6747C16.7537 4.37113 16.566 4.10027 16.3223 3.88552C16.0465 3.64243 15.6722 3.50207 14.9236 3.22134L9.5618 1.21067C9.3539 1.13271 9.24995 1.09373 9.14302 1.07827C9.04816 1.06457 8.95184 1.06457 8.85698 1.07827C8.75005 1.09373 8.6461 1.13271 8.4382 1.21067L3.0764 3.22134C2.3278 3.50207 1.9535 3.64243 1.67766 3.88552C1.43398 4.10027 1.24627 4.37113 1.13076 4.6747C1 5.01833 1 5.41808 1 6.21759V11C1 15.9084 6.35396 19.4784 8.30201 20.6149Z"
-                        stroke="#48BB78"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    <Typography
-                      sx={{
-                        color: colors.green,
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        whiteSpace: 'nowrap'
-                      }}>
-                      Securely Locked, Non-Custodial Collateral
-                    </Typography>
-                  </Stack>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.white
-                    }}>
-                    You’re about to sign a transaction authorizing your collateral to be used only for liquidation under
-                    specific conditions. No other party can access your funds otherwise.
-                  </Typography>
-                </Stack>
               </Column>
 
               <Row fullX mt="md">

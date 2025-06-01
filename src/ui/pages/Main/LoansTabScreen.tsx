@@ -6,7 +6,9 @@ import { Column, Content, Footer, Image, Layout, Row, Text } from '@/ui/componen
 import { Button } from '@/ui/components/Button';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-import { useNetworkType } from '@/ui/state/settings/hooks';
+import { useReloadAccounts } from '@/ui/state/accounts/hooks';
+import { useChangeEnvironmentCallback } from '@/ui/state/environment/hooks';
+import { useChangeNetworkTypeCallback, useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
 import { useWallet } from '@/ui/utils';
 import { Checkbox, Stack, Typography } from '@mui/material';
@@ -14,10 +16,13 @@ import { Checkbox, Stack, Typography } from '@mui/material';
 import { useNavigate } from '../MainRoute';
 
 export default function LoansTabScreen() {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const networkType = useNetworkType();
   const wallet = useWallet();
   const [showLoanNotice, setShowLoanNotice] = useState(true);
+  const changeEnvironment = useChangeEnvironmentCallback();
+  const changeNetworkType = useChangeNetworkTypeCallback();
+  const reloadAccounts = useReloadAccounts();
 
   useEffect(() => {
     wallet.getShowLoanNotice().then((show) => {
@@ -114,11 +119,20 @@ export default function LoansTabScreen() {
               mt: '20px'
             }}>
             {networkType === NetworkType.MAINNET ? (
-              <Button full preset="primary" text="COMING SOON"></Button>
+              <Button
+                full
+                preset="default"
+                text="Switch to testnet"
+                onClick={() => {
+                  changeEnvironment(NetworkType.TESTNET);
+                  changeNetworkType(NetworkType.TESTNET);
+                  reloadAccounts();
+                  navigate('MainScreen');
+                }}></Button>
             ) : (
               <Button
                 onClick={() => {
-                  navigator('LendingTabScreen');
+                  navigate('LendingTabScreen');
                 }}
                 full
                 preset="primary"

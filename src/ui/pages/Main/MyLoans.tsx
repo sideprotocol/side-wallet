@@ -53,7 +53,8 @@ export default function MyLoansScreen() {
       />
       <Content
         style={{
-          marginTop: 16
+          marginTop: 16,
+          padding: '0 16px'
         }}>
         {data?.length > 0 ? (
           <>
@@ -79,6 +80,7 @@ export default function MyLoansScreen() {
                   sx={{
                     padding: '16px 16px 0',
                     borderRadius: '8px',
+                    cursor: 'pointer',
                     transition: '.4s',
                     ':hover': {
                       bgcolor: colors.black_dark

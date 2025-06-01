@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ADDRESS_TYPES, KEYRING_TYPE, NETWORK_TYPES } from '@/shared/constant';
+import { ADDRESS_TYPES, KEYRING_TYPE } from '@/shared/constant';
+import { NetworkType } from '@/shared/types';
 import { Card, Column, Content, Header, Layout, Row, Text } from '@/ui/components';
-import { useTools } from '@/ui/components/ActionComponent';
 import { Button } from '@/ui/components/Button';
 import { IconTypes, Icon as ImageIcon } from '@/ui/components/Icon';
 import { Icon } from '@/ui/components/TokenCurrent';
 import { getCurrentTab, useExtensionIsInTab, useOpenExtensionInTab } from '@/ui/features/browser/tabs';
-import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
+import { useNetworkType } from '@/ui/state/settings/hooks';
 import { spacing } from '@/ui/theme/spacing';
 import { useWallet } from '@/ui/utils';
 
@@ -24,97 +24,17 @@ interface Setting {
   right: boolean;
 }
 
-const SettingList: Setting[] = [
-  {
-    label: 'Address Type',
-    value: 'Taproot',
-    icon: 'setting-address',
-    desc: '',
-    action: 'addressType',
-    route: '/settings/address-type',
-    right: true
-  },
-
-  {
-    label: 'Network',
-    value: 'TESTNET',
-    icon: 'setting-network',
-    desc: '',
-    action: 'networkType',
-    route: '/settings/network-type',
-    right: true
-  },
-
-  {
-    label: 'General',
-    value: '',
-    icon: 'general',
-    desc: '',
-    action: 'general',
-    route: '/settings/general',
-    right: true
-  },
-
-  {
-    label: 'Advance',
-    value: '',
-    icon: 'advance',
-    desc: '',
-    action: 'advanced',
-    route: '/settings/advanced',
-    right: true
-  },
-
-  {
-    label: 'Security',
-    value: '',
-    icon: 'security',
-    desc: '',
-    action: 'security',
-    route: '/settings/security',
-    right: true
-  },
-
-  {
-    label: 'About',
-    value: '',
-    icon: 'about',
-    desc: '',
-    action: 'about',
-    route: '/settings/about',
-
-    right: true
-  },
-  {
-    label: '',
-    value: '',
-    desc: ' Expand View',
-    action: 'expand-view',
-    route: '/settings/export-privatekey',
-    right: false,
-    icon: 'expand'
-  },
-  {
-    label: '',
-    value: '',
-    desc: 'Lock',
-    icon: 'lock',
-    action: 'lock-wallet',
-    route: '',
-    right: false
-  }
-];
-
 export default function SettingsTabScreen() {
   const navigate = useNavigate();
+  const networkType = useNetworkType();
 
   const isInTab = useExtensionIsInTab();
 
   const [connected, setConnected] = useState(false);
 
   const currentKeyring = useCurrentKeyring();
-  const currentAccount = useCurrentAccount();
   const wallet = useWallet();
+
   useEffect(() => {
     const run = async () => {
       const res = await getCurrentTab();
@@ -127,6 +47,87 @@ export default function SettingsTabScreen() {
     run();
   }, []);
 
+  const SettingList: Setting[] = [
+    {
+      label: 'Address Type',
+      value: 'Taproot',
+      icon: 'setting-address',
+      desc: '',
+      action: 'addressType',
+      route: '/settings/address-type',
+      right: true
+    },
+
+    {
+      label: 'Network',
+      value: networkType === NetworkType.MAINNET ? 'Mainnet' : 'Testnet',
+      icon: 'setting-network',
+      desc: '',
+      action: 'networkType',
+      route: '/settings/network-type',
+      right: true
+    },
+
+    {
+      label: 'General',
+      value: '',
+      icon: 'general',
+      desc: '',
+      action: 'general',
+      route: '/settings/general',
+      right: true
+    },
+
+    {
+      label: 'Advance',
+      value: '',
+      icon: 'advance',
+      desc: '',
+      action: 'advanced',
+      route: '/settings/advanced',
+      right: true
+    },
+
+    {
+      label: 'Security',
+      value: '',
+      icon: 'security',
+      desc: '',
+      action: 'security',
+      route: '/settings/security',
+      right: true
+    },
+
+    {
+      label: 'About',
+      value: '',
+      icon: 'about',
+      desc: '',
+      action: 'about',
+      route: '/settings/about',
+
+      right: true
+    },
+    {
+      label: '',
+      value: '',
+      desc: ' Expand View',
+      action: 'expand-view',
+      route: '/settings/export-privatekey',
+      right: false,
+      icon: 'expand'
+    },
+    {
+      label: '',
+      value: '',
+      desc: 'Lock',
+      icon: 'lock',
+      action: 'lock-wallet',
+      route: '',
+      right: false
+    }
+  ];
+
   const toRenderSettings = SettingList.filter((v) => {
     if (v.action == 'manage-wallet') {
       v.value = currentKeyring.alianName;
@@ -136,10 +137,6 @@ export default function SettingsTabScreen() {
       v.value = connected ? 'Connected' : 'Not connected';
     }
 
-    if (v.action == 'networkType') {
-      v.value = NETWORK_TYPES[0].label;
-    }
-
     if (v.action == 'addressType') {
       const item = ADDRESS_TYPES[currentKeyring.addressType];
 
@@ -147,7 +144,8 @@ export default function SettingsTabScreen() {
       if (currentKeyring.type === KEYRING_TYPE.SimpleKeyring) {
         v.value = `${item.name}`;
       } else {
-        v.value = `${item.name} (${hdPath}/${currentAccount.index})`;
+        // v.value = `${item.name} (${hdPath}/${currentAccount.index})`;
+        v.value = `${item.name}`;
       }
     }
 
@@ -160,7 +158,6 @@ export default function SettingsTabScreen() {
     return true;
   });
 
-  const tools = useTools();
   const openExtensionInTab = useOpenExtensionInTab();
 
   return (
@@ -184,16 +181,6 @@ export default function SettingsTabScreen() {
                   key={item.action}
                   mt="lg"
                   onClick={(e) => {
-                    if (item.action == 'addressType') {
-                      // if (isCustomHdPath) {
-                      //   tools.showTip(
-                      //     'The wallet currently uses a custom HD path and does not support switching address types.'
-                      //   );
-                      //   return;
-                      // }
-                      navigate('/settings/address-type');
-                      return;
-                    }
                     navigate(item.route);
                   }}
                   style={{
@@ -204,11 +191,11 @@ export default function SettingsTabScreen() {
                   <Row full justifyBetween>
                     <Row itemsCenter>
                       <ImageIcon size={24} icon={item.icon}></ImageIcon>
-                      <Text text={item.label || item.desc} preset="regular" />
+                      <Text text={item.label || item.desc} preset="regular" style={{ whiteSpace: 'nowrap' }} />
                     </Row>
 
-                    <Column justifyCenter>
-                      {/*{item.right && <span className={'iconRight'}><RightOutlined style={{ fontSize: 14, color: 'rgb(107,107,107)' }} /></span>}*/}
+                    <Row justifyEnd itemsCenter>
+                      <Text text={item.value} preset="regular" size="xs" style={{ opacity: 0.5, textAlign: 'right' }} />
                       {item.right && (
                         <Icon
                           type="side-down"
@@ -219,7 +206,7 @@ export default function SettingsTabScreen() {
                           }}
                         />
                       )}
-                    </Column>
+                    </Row>
                   </Row>
                 </Card>
               );

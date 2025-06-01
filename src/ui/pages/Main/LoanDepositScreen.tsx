@@ -210,7 +210,7 @@ export default function LoanDepositScreen() {
               gap="8px"
               sx={{
                 height: '64px',
-                bgcolor: colors.grey1
+                bgcolor: colors.card_bgColor
               }}>
               <Stack direction="row" alignItems="center" gap="4px">
                 <ImageIcon
@@ -242,7 +242,7 @@ export default function LoanDepositScreen() {
               gap="12px"
               sx={{
                 p: '12px 16px',
-                bgcolor: colors.card_bgColor
+                bgcolor: colors.black
               }}>
               <Box
                 sx={{
@@ -293,8 +293,8 @@ export default function LoanDepositScreen() {
                   style={{
                     cursor: 'pointer',
                     position: 'absolute',
-                    right: '30px',
-                    top: '22px'
+                    right: '34px',
+                    top: '21px'
                   }}
                 />
               </Stack>
@@ -306,7 +306,7 @@ export default function LoanDepositScreen() {
               gap="8px"
               sx={{
                 height: '42px',
-                bgcolor: colors.grey1
+                bgcolor: colors.card_bgColor
               }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20" fill="none">
                 <path

@@ -49,7 +49,7 @@ export default function NetworkTypeScreen() {
               navigate('MainScreen');
             }}>
             <Row itemsCenter>
-              <Text text={`${SIDE_CHAIN_MAINNET.name} & Bitcoin (mainnet)`} />
+              <Text text={`${SIDE_CHAIN_MAINNET.name} & Bitcoin (Mainnet)`} />
             </Row>
             {networkType === NetworkType.MAINNET && (
               <Column>
@@ -77,7 +77,7 @@ export default function NetworkTypeScreen() {
               navigate('MainScreen');
             }}>
             <Row itemsCenter>
-              <Text text={`${SIDE_CHAIN_TESTNET.name} & Bitcoin (testnet)`} />
+              <Text text={`${SIDE_CHAIN_TESTNET.name} & Bitcoin (Testnet)`} />
             </Row>
             {networkType === NetworkType.TESTNET && (
               <Column>
