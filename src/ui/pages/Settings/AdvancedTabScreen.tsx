@@ -148,7 +148,7 @@ export default function AdvancedTabScreen() {
                     <Text text={item.label || item.desc} preset="regular-bold" />
 
                     <Row itemsCenter>
-                      <Text text={item.value} preset="regular" style={{ opacity: 0.5 }} />
+                      <Text text={item.value} preset="regular" size="xs" style={{ opacity: 0.5 }} />
                       {item.right && (
                         <Icon
                           type="side-down"

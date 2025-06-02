@@ -17,7 +17,6 @@ import {
 import useClaimCollateral from '@/ui/hooks/useClaimCollateral';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
-import useGetDlcMeta from '@/ui/hooks/useGetDlcMeta';
 import useGetLiquidationById from '@/ui/hooks/useGetLiquidationById';
 import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
 import useGetLiquidationParams from '@/ui/hooks/useGetLiquidationParams';
@@ -87,7 +86,6 @@ export default function LoanDetailScreen() {
     enabled: loan?.status === 'Liquidated'
   });
 
-  const { dlcMetaData } = useGetDlcMeta(loan?.vault_address);
   const { depositTxs } = useGetDepositTx(loan?.vault_address || '', loan?.collateral_amount || '0');
 
   const borrowToken = sideBalanceList.find((o) => o.denom === loan?.borrow_amount.denom);
@@ -566,7 +564,7 @@ export default function LoanDetailScreen() {
                   Collateral
                 </Text>
 
-                {loan.status === 'Open' ? (
+                {loan.status === 'Authorized' || loan.status === 'Open' ? (
                   <Box
                     sx={{
                       padding: '4px 8px',
@@ -575,7 +573,7 @@ export default function LoanDetailScreen() {
                       backgroundColor: colors.card_bgColor,
                       color: colors.grey64
                     }}>
-                    Deposited
+                    Locked
                   </Box>
                 ) : loan.status === 'Repaid' ? (
                   <Box
@@ -586,7 +584,7 @@ export default function LoanDetailScreen() {
                       backgroundColor: colors.card_bgColor,
                       color: colors.grey64
                     }}>
-                    Returning
+                    Unlocking
                   </Box>
                 ) : loan.status === 'Closed' ? (
                   <Box
@@ -597,7 +595,7 @@ export default function LoanDetailScreen() {
                       backgroundColor: colors.card_bgColor,
                       color: colors.grey64
                     }}>
-                    Returned
+                    Unlocked
                   </Box>
                 ) : loan.status === 'Liquidated' ? (
                   <Box
@@ -609,6 +607,17 @@ export default function LoanDetailScreen() {
                       color: colors.grey64
                     }}>
                     Liquidated
+                  </Box>
+                ) : loan.status === 'Rejected' && loanDetailCex?.returnBtcTxhash ? (
+                  <Box
+                    sx={{
+                      padding: '4px 8px',
+                      borderRadius: '4px',
+                      fontSize: '12px',
+                      backgroundColor: colors.card_bgColor,
+                      color: colors.grey64
+                    }}>
+                    Claimed
                   </Box>
                 ) : null}
               </Row>
@@ -702,17 +711,6 @@ export default function LoanDetailScreen() {
                       color: colors.grey64
                     }}>
                     Repaid
-                  </Box>
-                ) : loan.status === 'Rejected' && loanDetailCex?.returnBtcTxhash ? (
-                  <Box
-                    sx={{
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '10px',
-                      backgroundColor: colors.card_bgColor,
-                      color: colors.grey64
-                    }}>
-                    Claimed
                   </Box>
                 ) : null}
               </Row>
@@ -817,7 +815,7 @@ export default function LoanDetailScreen() {
               loanId: loan.vault_address
             });
           }}>
-          Deposit
+          Lock
         </Button>
       ) : depositTxs?.length && loan.status === 'Requested' ? (
         <Button

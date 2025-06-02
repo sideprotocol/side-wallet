@@ -13,9 +13,12 @@ body,
 div,
 span,
 applet,
+p,
+small,
 object,
-iframe {
-  font-family: 'Saira';
+iframe,
+* {
+  font-family: Saira !important;
 }
 
 .popover-container {

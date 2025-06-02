@@ -259,44 +259,35 @@ export default function LoanDepositScreen() {
                 />
               </Box>
               <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                gap="4px"
                 sx={{
-                  width: '220px',
-                  position: 'relative'
+                  cursor: 'pointer',
+                  ':hover': {
+                    p: {
+                      color: colors.main,
+                      textDecorationLine: 'underline'
+                    }
+                  }
+                }}
+                onClick={() => {
+                  window.open(`${SIDE_BTC_EXPLORER}/address/${toInfo.address}`);
                 }}>
                 <Typography
                   sx={{
                     fontSize: '12px',
-                    fontWeight: 500,
-                    wordBreak: 'break-all',
-                    color: colors.white,
-                    cursor: 'pointer',
-                    transition: '.4s',
-                    ':hover': {
-                      textDecoration: 'dotted underline',
-                      textUnderlineOffset: '2px',
-                      color: colors.main
-                    }
-                  }}
-                  onClick={() => {
-                    window.open(`${SIDE_BTC_EXPLORER}/address/${toInfo.address}`);
+                    fontWeight: 500
                   }}>
-                  {toInfo.address}
+                  {toInfo.address.slice(0, 40)}
                 </Typography>
-                <CopyIcon
-                  size={12}
-                  text={toInfo.address}
-                  onlyIcon
-                  style={{
-                    cursor: 'pointer',
-                    position: 'absolute',
-                    right: '34px',
-                    top: '21px'
-                  }}
-                />
+                <Stack direction="row" gap="4px" justifyContent="center" alignItems="center">
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      fontWeight: 500
+                    }}>
+                    {toInfo.address.slice(40)}
+                  </Typography>
+                  <CopyIcon text={toInfo.address} onlyIcon size={12} />
+                </Stack>
               </Stack>
             </Stack>
             <Stack

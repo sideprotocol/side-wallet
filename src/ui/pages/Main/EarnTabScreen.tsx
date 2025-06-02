@@ -253,27 +253,27 @@ export default function EarnTabScreen() {
               alignItems="center"
               sx={{
                 position: 'absolute',
-                right: '48px',
-                top: '40px',
+                right: '41px',
+                top: '37px',
                 zIndex: 10,
                 borderRadius: '20px',
-                height: '22px',
-                width: '64px',
-                fontSize: '8px',
+                height: '28px',
+                width: '80px',
+                fontSize: '12px',
                 fontWeight: 600,
                 color: colors.white,
                 border: `1px solid ${colors.white1}`,
                 cursor: 'pointer',
                 transition: '.4s',
                 ':hover': {
-                  background: colors.white,
-                  color: colors.main
+                  background: colors.main,
+                  color: colors.black
                 }
               }}
               onClick={() => {
                 window.open('https://go.skip.build/');
               }}>
-              Borrow Here
+              Bridge Here
             </Stack>
           </Row>
           <SearchInput value={value} onChange={setValue} />
@@ -288,7 +288,7 @@ export default function EarnTabScreen() {
               Assets
             </Text>
 
-            <Text color="white" size="sm">
+            <Text color="white_muted" size="sm">
               Est.APR
             </Text>
           </Row>

@@ -41,10 +41,11 @@ export default function SearchInput({
           onChange(event.target.value.trim());
         }}
         containerStyle={{
+          minHeight: '38px',
           width: '100%',
           border: 'none',
           padding: '0',
-          fontSize: '14px',
+          fontSize: '12px',
           fontWeight: 400,
           color: colors.white,
           backgroundColor: 'transparent'

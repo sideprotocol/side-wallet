@@ -42,6 +42,7 @@ export function CopyIcon({
       onMouseLeave={handleMouseLeave}
       justifyCenter
       onClick={(e) => {
+        e.stopPropagation();
         copy(text);
         setIsClickCopy(true);
       }}
