@@ -139,7 +139,7 @@ export default function LendingTanScreen() {
           <Typography
             color={colors.green}
             sx={{
-              fontSize: '12px'
+              fontSize: '14px'
             }}>
             ∞
           </Typography>
@@ -259,7 +259,7 @@ export default function LendingTanScreen() {
       )
     },
     {
-      label: 'Request fee',
+      label: 'Request fees',
       value: (
         <>
           {toReadableAmount(
@@ -698,7 +698,7 @@ export default function LendingTanScreen() {
                   fontSize: '14px'
                 }}
                 color={colors.white}>
-                {new BigNumber(item.maturity).div(3600).div(24).toFixed(0)} days &nbsp;
+                {new BigNumber(item.maturity).div(3600).div(24).toFixed(0)} days&nbsp;
                 <small
                   style={{
                     color: colors.main,

@@ -15,6 +15,7 @@ export interface TxConfirmLocationState {
     collateralAmount: string;
     feeRate: number;
     liquidationEvent: LiquidationEvent;
+    from?: string;
   };
 }
 

@@ -111,7 +111,8 @@ export default function useCreateLoan() {
           borrowAmount: borrowAmount.amount,
           collateralAmount: btcUnitAmount,
           liquidationEvent,
-          loanId
+          loanId,
+          from: 'createLoan'
         });
       } else {
         toast.custom((t) => (

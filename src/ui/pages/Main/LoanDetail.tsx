@@ -41,7 +41,7 @@ export default function LoanDetailScreen() {
   const navigate = useNavigate();
   const currentAccount = useCurrentAccount();
   const { state } = useLocation();
-  const { loan_id } = state as { loan_id: string };
+  const { loan_id, from } = state as { loan_id: string; from?: string };
 
   const { sideChain, SERVICE_BASE_URL, SIDE_BTC_EXPLORER, SIDE_STATION_URL } = useEnvironment();
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
@@ -497,6 +497,10 @@ export default function LoanDetailScreen() {
         <>
           <Header
             onBack={() => {
+              if (from === 'createLoan') {
+                window.history.go(-4);
+                return;
+              }
               window.history.go(-1);
             }}
             title="Loan Detail"

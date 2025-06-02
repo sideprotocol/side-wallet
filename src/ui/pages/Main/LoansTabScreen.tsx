@@ -81,7 +81,7 @@ export default function LoansTabScreen() {
               'Non-custodial. No rehypothecation',
               'No wrapping. No bridging',
               'Secure and trust-minimized',
-              'Powered by Side Lending'
+              'Powered by Discreet Log Contracts'
             ].map((item, index) => (
               <Stack
                 direction="row"

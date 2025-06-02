@@ -33,12 +33,14 @@ interface LoanDepositLocationState {
   collateralAmount: string;
   liquidationEvent: LiquidationEvent;
   loanId: string;
+  from?: string;
 }
 
 export default function LoanDepositScreen() {
   const { SIDE_BTC_EXPLORER } = useEnvironment();
   const setUiState = useUpdateUiTxCreateScreen();
-  const { borrowAmount, collateralAmount, liquidationEvent, loanId } = useLocationState<LoanDepositLocationState>();
+  const { borrowAmount, collateralAmount, liquidationEvent, loanId, from } =
+    useLocationState<LoanDepositLocationState>();
 
   const safeBalance = useSafeBalance();
   const navigate = useNavigate();
@@ -76,10 +78,10 @@ export default function LoanDepositScreen() {
   const [errorMsg, setErrorMsg] = useState('');
   const [temporaryLoading, setTemporaryLoading] = useState(false);
 
-  const { refetch, depositTxs } = useGetDepositTx(toInfo.address, collateralAmount);
+  const { refetch, depositTxs, address } = useGetDepositTx(loanId, collateralAmount);
 
   useEffect(() => {
-    if (depositTxs?.length) {
+    if (address === loanId && depositTxs?.length) {
       navigate('LoanAuthorizeScreen', {
         loanId: toInfo.address,
         borrowAmount,
@@ -88,7 +90,7 @@ export default function LoanDepositScreen() {
         liquidationEvent
       });
     }
-  }, [depositTxs]);
+  }, [depositTxs, loanId]);
 
   const avaiableSatoshis = useMemo(() => {
     return amountToSatoshis(safeBalance);
@@ -209,7 +211,7 @@ export default function LoanDepositScreen() {
               alignItems="center"
               gap="8px"
               sx={{
-                height: '64px',
+                height: '50px',
                 bgcolor: colors.card_bgColor
               }}>
               <Stack direction="row" alignItems="center" gap="4px">
@@ -314,7 +316,7 @@ export default function LoanDepositScreen() {
                   fontWeight: 500,
                   color: colors.green_success
                 }}>
-                Multisig 2 of 2
+                Non-custodial (multisig 2 of 2)
               </Typography>
             </Stack>
           </Stack>
@@ -333,7 +335,8 @@ export default function LoanDepositScreen() {
                     borrowAmount,
                     collateralAmount,
                     feeRate,
-                    liquidationEvent
+                    liquidationEvent,
+                    from
                   }
                 });
               }}
@@ -354,10 +357,9 @@ export default function LoanDepositScreen() {
                 strokeLinejoin="round"
               />
             </svg>
-
             <Typography
               sx={{
-                fontSize: '14px',
+                fontSize: '12px',
                 fontWeight: 500,
                 color: colors.grey12,
                 small: {}
@@ -416,7 +418,7 @@ export default function LoanDepositScreen() {
               }}>
               <Typography
                 sx={{
-                  fontSize: '14px',
+                  fontSize: '12px',
                   fontWeight: 500,
                   transition: '.4s'
                 }}>

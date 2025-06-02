@@ -87,7 +87,7 @@ export default function useGetDepositTx(collateralAddress = '', collateralUnitAm
 
         const txids = txs.map((tx) => tx.txid);
 
-        return { txBase64s, txids, value };
+        return { txBase64s, txids, value, collateralAddress };
       }
     },
     refetchInterval: (data) => {
@@ -99,16 +99,14 @@ export default function useGetDepositTx(collateralAddress = '', collateralUnitAm
 
   useEffect(() => {
     return () => {
-      queryClient.cancelQueries([
-        'getDepositTxByCollateralAddress',
-        { collateralAddress, collateralUnitAmount, SIDE_BTC_EXPLORER }
-      ]);
+      queryClient.cancelQueries(['getDepositTxByCollateralAddress']);
     };
-  }, [queryClient, collateralAddress, collateralUnitAmount, SIDE_BTC_EXPLORER]);
+  }, []);
 
   return {
     loading,
     depositTxs: data?.txBase64s,
+    address: data?.collateralAddress,
     txids: data?.txids,
     value: data?.value,
     refetch

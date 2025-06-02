@@ -333,9 +333,9 @@ export default function EarnTabScreen() {
               </Text>
               <Text
                 color="white_muted"
-                size="sm"
+                size="xs"
                 style={{
-                  fontWeight: 600,
+                  fontWeight: 400,
                   cursor: 'pointer',
                   textDecoration: 'dashed underline',
                   textUnderlineOffset: '2px'

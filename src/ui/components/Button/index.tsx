@@ -157,7 +157,7 @@ const $baseTextStyle: CSSProperties = {
 };
 
 const $textPresets: Record<Presets, CSSProperties> = {
-  default: Object.assign({}, $baseTextStyle, { color: colors.grey12 }),
+  default: Object.assign({}, $baseTextStyle, { color: colors.white }),
   primary: Object.assign({}, $baseTextStyle, { color: colors.black }),
   approval: Object.assign({}, $baseTextStyle, { color: colors.white }),
   danger: Object.assign({}, $baseTextStyle, { color: colors.white }),

@@ -29,6 +29,7 @@ export interface LoanAuthorizeLocationState {
   feeRate: number;
   liquidationEvent: LiquidationEvent;
   isWalletDeposit?: boolean;
+  from?: string;
 }
 
 export default function LoanAuthorizeScreen() {
@@ -38,7 +39,8 @@ export default function LoanAuthorizeScreen() {
     borrowAmount,
     collateralAmount,
     isWalletDeposit,
-    liquidationEvent: LiquidationEventExact
+    liquidationEvent: LiquidationEventExact,
+    from
   } = useLocationState<LoanAuthorizeLocationState>();
   const currentAccount = useCurrentAccount();
   const networkType = useNetworkType();
@@ -129,7 +131,8 @@ export default function LoanAuthorizeScreen() {
             }}
             onClick={() => {
               navigate('LoanDetailScreen', {
-                loan_id: loanId
+                loan_id: loanId,
+                from
               });
             }}>
             View Loan
