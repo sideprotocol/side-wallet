@@ -300,25 +300,25 @@ export default function EarnSupplyScreen() {
               </Column>
             </Column>
           </Content>
+          <Row mt="md" mb="lg">
+            <Button
+              onClick={() => {
+                if (tx) {
+                  window.history.go(-1);
+                } else {
+                  onSupply();
+                }
+              }}
+              loading={loading}
+              disabled={isDisabled}
+              preset="primary"
+              text={'Supply'}
+              full
+              style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
+            />
+          </Row>
         </>
       )}
-      <Row mt="md" mb="lg">
-        <Button
-          onClick={() => {
-            if (tx) {
-              window.history.go(-1);
-            } else {
-              onSupply();
-            }
-          }}
-          loading={loading}
-          disabled={isDisabled}
-          preset="primary"
-          text={tx ? 'Close' : 'Supply'}
-          full
-          style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
-        />
-      </Row>
     </Layout>
   );
 }

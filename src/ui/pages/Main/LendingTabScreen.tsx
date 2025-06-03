@@ -259,7 +259,7 @@ export default function LendingTanScreen() {
       )
     },
     {
-      label: 'Request fees',
+      label: 'Request Fees',
       value: (
         <>
           {toReadableAmount(

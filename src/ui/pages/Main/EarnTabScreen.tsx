@@ -331,21 +331,25 @@ export default function EarnTabScreen() {
                 }}>
                 {item.token.asset.symbol}
               </Text>
-              <Text
-                color="white_muted"
-                size="xs"
-                style={{
+              <Typography
+                sx={{
+                  fontSize: '12px',
                   fontWeight: 400,
+                  color: colors.grey12,
                   cursor: 'pointer',
                   textDecoration: 'dashed underline',
-                  textUnderlineOffset: '2px'
+                  textUnderlineOffset: '2px',
+                  transition: '.4s',
+                  ':hover': {
+                    color: colors.main
+                  }
                 }}
                 onClick={(event) => {
                   event.stopPropagation();
                   window.open(`${SIDE_STATION_URL}/lendingPool/${item.baseData.id}`, '_blank');
                 }}>
                 Details
-              </Text>
+              </Typography>
 
               <Text
                 size="md"
