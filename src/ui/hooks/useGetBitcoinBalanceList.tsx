@@ -119,6 +119,7 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
           const { price } = await services.lending.getDlcPrice(symbol, { baseURL: sideChain?.restUrl });
           bitcoinPrice = price;
         } catch (error) {
+          bitcoinPrice = priceMap['sat'];
           console.error(error);
         }
         const btcBalance = formatBitcoinItem(btcAmount.toString(), bitcoinPrice);

@@ -1,8 +1,8 @@
-import { SIDE_CHAIN_MAINNET, SIDE_CHAIN_TESTNET } from '@/shared/constant';
+import { SIDE_CHAIN_MAINNET } from '@/shared/constant';
 import { NetworkType } from '@/shared/types';
 import { Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import { useReloadAccounts } from '@/ui/state/accounts/hooks';
-import { useChangeEnvironmentCallback, useEnvironment } from '@/ui/state/environment/hooks';
+import { useChangeEnvironmentCallback } from '@/ui/state/environment/hooks';
 import { useChangeNetworkTypeCallback, useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
 
@@ -14,7 +14,6 @@ export default function NetworkTypeScreen() {
   const changeNetworkType = useChangeNetworkTypeCallback();
   const reloadAccounts = useReloadAccounts();
   const navigate = useNavigate();
-  const { sideChain } = useEnvironment();
   return (
     <Layout>
       <Header
@@ -77,7 +76,7 @@ export default function NetworkTypeScreen() {
               navigate('MainScreen');
             }}>
             <Row itemsCenter>
-              <Text text={`${SIDE_CHAIN_TESTNET.name} & Bitcoin (Testnet)`} />
+              <Text text={`${SIDE_CHAIN_MAINNET.name} & Bitcoin (Testnet)`} />
             </Row>
             {networkType === NetworkType.TESTNET && (
               <Column>

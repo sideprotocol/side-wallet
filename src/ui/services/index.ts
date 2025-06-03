@@ -7,6 +7,7 @@ import BaseService from './base';
 import BridgeService from './bridge';
 import BTCStoreService from './btc-store';
 import DexService from './dex';
+import EnvironmentService from './environment';
 import LendingService from './lending';
 import NodeService from './node';
 import SignetService from './signet-index';
@@ -25,6 +26,7 @@ class Services {
   bitcoin: BitcoinService;
   lending: LendingService;
   btcStore: BTCStoreService;
+  environment: EnvironmentService;
   constructor() {
     const apiClient = new ApiConfiguration({ baseURL: '' });
     this.tx = new TxService(new ApiClient(apiClient));
@@ -38,6 +40,7 @@ class Services {
     this.signet = new SignetService(new ApiClient(apiClient));
     this.btcStore = new BTCStoreService(new ApiClient(apiClient));
     this.lending = new LendingService(new ApiClient(apiClient));
+    this.environment = new EnvironmentService(new ApiClient(apiClient));
   }
 }
 
