@@ -1,0 +1,23 @@
+{
+  "DEX_CONTRACT": "tb1pwkwy0xh89ksdgj9hr347dyd2dw7zesmtrue6kfzyml4vdtz6e5ws93fqnh",
+  "DEX_ROUTER_CONTRACT": "tb1p7p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgscc4xdz",
+  "UNISAT_RUNE_URL": "https://api-t2.unisat.io/icon-v1/icon/runes",
+  "UNISAT_SERVICE_ENDPOINT": "https://wallet-api-testnet.unisat.io",
+  "OPENAPI_URL": "https://wallet-api-testnet.unisat.io/v5",
+  "SIDE_BTC_EXPLORER": "https://mempool.space/testnet",
+  "SIDE_STATION_URL": "https://devnet.side.one",
+  "SIDE_BRIDGEEXPLORER_URL": "https://devnet.side.one/bridge/explorer",
+  "SIDE_CHAIN": {
+    "chainID": "devnet",
+    "name": "Side Chain",
+    "prefix": "tb",
+    "rpcUrl": "https://devnet-rpc.side.one",
+    "restUrl": "https://devnet-rest.side.one",
+    "denom": "uside",
+    "hdPath": "m/44'/118/0'/0/0",
+    "logo": "https://api.side.one/static/token/logo/side.png",
+    "faucetUrl": "https://faucet.side.exchange",
+    "explorerUrl": "https://devnet.side.one/explorer"
+  },
+  "UNISAT_IO_API": "https://devnet-rest.side.one/side/btcbridge"
+}
