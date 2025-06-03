@@ -3,7 +3,6 @@ import bigInt from 'big-integer';
 import BigNumber from 'bignumber.js';
 import { Buffer } from 'buffer';
 
-// import { Account, DepositBTCBridge } from '../web3-wallet';
 import { ToSignInput, UTXO_DUST, UnspentOutput } from '@unisat/wallet-sdk';
 import { ECPair, bitcoin, ecc } from '@unisat/wallet-sdk/lib/bitcoin-core';
 import { ErrorCodes, WalletUtilsError } from '@unisat/wallet-sdk/lib/error';

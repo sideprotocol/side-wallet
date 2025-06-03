@@ -1,7 +1,7 @@
 import { keyBy } from 'lodash';
 
 import browser from '@/background/webapi/browser';
-import { AddressFlagType, BITCOIN_CHAINS_MAP, CHAINS, ChainType, NETWORK_TYPES } from '@/shared/constant';
+import { AddressFlagType, BITCOIN_CHAINS_MAP, ChainType, NETWORK_TYPES } from '@/shared/constant';
 
 import BroadcastChannelMessage from './message/broadcastChannelMessage';
 import PortMessage from './message/portMessage';
@@ -21,7 +21,7 @@ const format = (str, ...args) => {
   return args.reduce((m, n) => m.replace('_s_', n), str);
 };
 
-export { Message, format, t };
+export { format, Message, t };
 
 const chainsDict = keyBy(CHAINS, 'serverId');
 export const getChain = (chainId?: string) => {

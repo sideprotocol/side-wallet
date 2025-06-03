@@ -9,6 +9,7 @@ export const colors = {
   black: '#000000',
   black_muted: 'rgba(0, 0, 0, 0.5)',
   black_muted2: 'rgba(0, 0, 0, 0.1)',
+  black1: '#0F0F0F',
   grey: '#7D7D7D',
   grey2: '#6C7080',
   main: '#F7771A',

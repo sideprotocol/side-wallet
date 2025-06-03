@@ -22,7 +22,7 @@ import { useAppDispatch, useAppSelector } from '../hooks';
 import { useNetworkType } from '../settings/hooks';
 import { useSafeBalance, useUtxos } from '../transactions/hooks';
 import { useSignAndBroadcastTxRaw } from '../transactions/hooks/cosmos';
-import { BridgeActions, DepositBTCBridge } from './reducer';
+import { BridgeActions } from './reducer';
 
 function compareAmount(a: string, b: string) {
   return new BigNumber(a || '0').comparedTo(new BigNumber(b || '0'));
@@ -411,7 +411,7 @@ export const useBridge = () => {
     return txid;
   }
 
-  async function estimateNetworkFee(params: DepositBTCBridge) {
+  async function estimateNetworkFee(params: { amount: number; fee: number; to?: string; isSign?: boolean }) {
     if (!btcVault) {
       throw new Error('No valid vault address found.');
     }

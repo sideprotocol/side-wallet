@@ -835,26 +835,10 @@ export class WalletController extends BaseController {
 
   getNetworkType = () => {
     const chainType = this.getChainType();
-    // console.log(`chainType: `, chainType);
     return BITCOIN_CHAINS_MAP[chainType]?.networkType ?? '';
   };
 
   setNetworkType = async (networkType: NetworkType) => {
-    // preferenceService.setNetworkType(networkType);
-    // if (networkType === NetworkType.MAINNET) {
-    //   this.openapi.setHost(OPENAPI_URL_MAINNET);
-    // } else if (networkType === NetworkType.TESTNET) {
-    //   this.openapi.setHost(OPENAPI_URL_TESTNET);
-    // }
-    // const network = this.getNetworkName();
-    // sessionService.broadcastEvent('networkChanged', {
-    //   network
-    // });
-    //
-    // const currentAccount = await this.getCurrentAccount();
-    // const keyring = await this.getCurrentKeyring();
-    // if (!keyring) throw new Error('no current keyring');
-    // this.changeKeyring(keyring, currentAccount?.index);
     if (networkType === NetworkType.MAINNET) {
       this.setChainType(ChainType.BITCOIN_MAINNET);
     } else {

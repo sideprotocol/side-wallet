@@ -10,27 +10,6 @@ export interface ChainItem {
   logo: string;
 }
 
-export interface DepositBTCBridge {
-  amount: number;
-  fee: number;
-  to?: string;
-  isSign?: boolean;
-}
-
-interface Status {
-  confirmed: boolean;
-  block_height: number;
-  block_hash: string;
-  block_time: number;
-}
-
-export interface UTXOAddress {
-  txid: string;
-  vout: number;
-  status: Status;
-  value: number;
-}
-
 export interface BridgeState {
   base: string;
   exponent: number;
