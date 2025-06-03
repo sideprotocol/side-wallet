@@ -1,5 +1,3 @@
-import { keyBy } from 'lodash';
-
 import browser from '@/background/webapi/browser';
 import { AddressFlagType, BITCOIN_CHAINS_MAP, ChainType, NETWORK_TYPES } from '@/shared/constant';
 
@@ -22,14 +20,6 @@ const format = (str, ...args) => {
 };
 
 export { format, Message, t };
-
-const chainsDict = keyBy(CHAINS, 'serverId');
-export const getChain = (chainId?: string) => {
-  if (!chainId) {
-    return null;
-  }
-  return chainsDict[chainId];
-};
 
 // Check if address flag is enabled
 export const checkAddressFlag = (currentFlag: number, flag: AddressFlagType): boolean => {
