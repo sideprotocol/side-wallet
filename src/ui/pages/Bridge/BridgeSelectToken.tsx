@@ -10,6 +10,7 @@ import { useGetAllBridgeChains } from '@/ui/hooks/bridge';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
@@ -24,9 +25,10 @@ export default function BridgeSelectTokenScreen() {
   const currentAccount = useCurrentAccount();
   const dispatch = useAppDispatch();
   const { state } = useLocation();
-  const { type } = state as { type: 'from' | 'to' };
+  const { type } = state as { type: 'from' | 'to'; fromAsset?: BalanceItem; toAsset?: BalanceItem };
   const allBridgeChains = useGetAllBridgeChains();
   const { sideChain } = useEnvironment();
+  const { fromAsset, fromChain } = useBridgeState();
 
   let { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   let { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
@@ -44,6 +46,29 @@ export default function BridgeSelectTokenScreen() {
       ...sideBalanceList.map((item) => ({ ...item, chainType: 'sidechain' }))
     ];
     assetList = allAssetList.filter((item) => {
+      return item.denom === 'sat' || item.denom.includes('rune');
+    });
+
+    if (type === 'to') {
+      if (fromAsset?.denom === 'sat') {
+        if (fromChain?.isBitcoin) {
+          assetList = assetList.filter((item) => {
+            return item.chainType === 'sidechain' && item.denom === fromAsset.denom;
+          });
+        } else {
+          assetList = assetList.filter((item) => {
+            return item.denom === fromAsset.denom;
+          });
+          const sideSbtcAsset = assetList.find((item) => item.denom === 'sat');
+          if (!sideSbtcAsset?.asset.ibcData) {
+            assetList = assetList.filter((item) => {
+              return item.denom === fromAsset.denom && item.chainType === 'bitcoin';
+            });
+          }
+        }
+      }
+    }
+    assetList = assetList.filter((item) => {
       return item?.asset.symbol?.toLocaleLowerCase().includes(searchValue?.trim());
     });
 
@@ -55,8 +80,6 @@ export default function BridgeSelectTokenScreen() {
   const { chainList } = useMemo(() => {
     let chainList: IChain[] = [];
     if (selectedAsset) {
-      console.log(allBridgeChains);
-      console.log(selectedAsset);
       const bitcoinChain = allBridgeChains.find((item) => item.isBitcoin)!;
       if (selectedAsset.denom === 'sat') {
         if (selectedAsset?.chainType === 'bitcoin') {
@@ -78,6 +101,10 @@ export default function BridgeSelectTokenScreen() {
           chainList.unshift(bitcoinChain);
         }
       }
+    }
+
+    if (type === 'to') {
+      chainList = chainList.filter((chain) => chain.chainID !== fromChain?.chainID);
     }
 
     return {
@@ -178,10 +205,26 @@ export default function BridgeSelectTokenScreen() {
                       gap="8px"
                       onClick={() => {
                         if (type === 'from') {
+                          const bitcoinChain = allBridgeChains.find((item) => item.isBitcoin)!;
+                          let toChain: IChain | null = null,
+                            toAsset: BalanceItem | undefined = undefined;
+
+                          if (selectedAsset.denom === 'sat' || selectedAsset.denom.includes('rune')) {
+                            if (chain.isBitcoin) {
+                              toChain = sideChain;
+                              toAsset = sideBalanceList.find((item) => item.denom === selectedAsset.denom);
+                            } else {
+                              toChain = bitcoinChain;
+                              toAsset = bitcoinBalanceList.find((item) => item.denom === selectedAsset.denom);
+                            }
+                          }
+
                           dispatch(
                             BridgeActions.update({
                               fromChain: chain,
                               fromAsset: selectedAsset,
+                              toChain,
+                              toAsset,
                               bridgeAmount: '',
                               balance: selectedAsset.formatAmount
                             })
