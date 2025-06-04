@@ -20,7 +20,16 @@ import { formatUnitAmount, parseUnitAmount } from '@/ui/utils';
 import { formatAddress } from '@/ui/utils/format';
 import { Box, Input, Typography } from '@mui/material';
 
-function DetailRow({ text, value, tooltip }: { text: ReactNode; tooltip?: ReactNode; value: ReactNode; id?: string }) {
+export function DetailRow({
+  text,
+  value,
+  tooltip
+}: {
+  text: ReactNode;
+  tooltip?: ReactNode;
+  value: ReactNode;
+  id?: string;
+}) {
   return (
     <div className="flex text-sm items-center justify-between">
       <LightTooltip title={tooltip} arrow placement="top">
@@ -82,6 +91,7 @@ export default function BridgeBtcConfirmScreen() {
   const protocolFee = isDeposit
     ? params?.params?.protocol_fees?.deposit_fee
     : params?.params?.protocol_fees?.withdraw_fee;
+
   const yourReceive = formatUnitAmount(
     BigNumber(parseUnitAmount(bridgeAmount || '0', fromAsset?.asset.exponent || 8))
       .minus(protocolFee || '0')
@@ -90,6 +100,7 @@ export default function BridgeBtcConfirmScreen() {
   );
   const bitcoinFeeInfo = btcBalanceList.find((item) => item.denom === 'sat');
   const sideFeeInfo = sideBalanceList.find((item) => item.denom === 'sat');
+  const feePrice = sideFeeInfo?.denomPrice || bitcoinFeeInfo?.denomPrice || '0';
 
   const isDisabled =
     BigNumber(parseUnitAmount(bridgeAmount || '0', 8)).lt(fee) ||
@@ -97,8 +108,6 @@ export default function BridgeBtcConfirmScreen() {
     Number(fee) === 0 ||
     !withdrawFee ||
     !tx.length;
-
-  const feePrice = sideFeeInfo?.denomPrice || bitcoinFeeInfo?.denomPrice || '0';
 
   const depositDetailItems = (
     <>

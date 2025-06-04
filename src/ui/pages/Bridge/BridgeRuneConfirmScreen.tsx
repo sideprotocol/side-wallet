@@ -1,165 +1,62 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 
-import { KEYRING_TYPE } from '@/shared/constant';
-import { Button, Column, Content, Footer, Header, Image, Layout, LightTooltip, Row } from '@/ui/components';
+import { Button, Column, Content, Footer, Layout, Row } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
-import AccountSelect from '@/ui/pages/Account/AccountSelect';
+import MainHeader from '@/ui/pages/Main/MainHeader';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBridge, useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
-import { useCurrentKeyring } from '@/ui/state/keyrings/hooks';
 import { colors } from '@/ui/theme/colors';
-import { fontSizes } from '@/ui/theme/font';
-import { parseUnitAmount } from '@/ui/utils';
-import { formatAddress } from '@/ui/utils/format';
-import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
+import { formatUnitAmount, parseUnitAmount } from '@/ui/utils';
 import { Box, Input, Typography } from '@mui/material';
 
-import { useNavigate } from '../MainRoute';
-
-interface DetailRowItem {
-  text: string | JSX.Element;
-  tooltip?: string | JSX.Element;
-  value: string | JSX.Element;
-  id?: string;
-}
-
-function DetailRow({ text, value, tooltip }: DetailRowItem) {
-  return (
-    <div className="flex text-sm items-center justify-between">
-      <LightTooltip title={tooltip} arrow placement="top">
-        <Typography
-          sx={{
-            fontSize: '12px',
-            color: colors.grey12,
-            textDecoration: 'dotted underline',
-            textUnderlineOffset: '2px',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-            transition: '.4s',
-            ':hover': {
-              color: colors.white
-            }
-          }}>
-          {text}
-        </Typography>
-      </LightTooltip>
-      <span className={'flex  w-full justify-end items-center gap-1'}>{value}</span>
-    </div>
-  );
-}
-
-export interface CacheUTXO {
-  txid: string;
-  vout: number;
-  satoshis: number;
-  scriptPk: string;
-  pubkey: string;
-  inscriptions: any[];
-  atomicals: any[];
-  addressType: number;
-}
+import { DetailRow } from './BridgeBtcConfirmScreen';
 
 export default function BridgeTabScreen() {
-  const navigate = useNavigate();
-  const { SIDE_BTC_EXPLORER, sideChain } = useEnvironment();
-
-  const currentKeyring = useCurrentKeyring();
-
-  const { bridge, bridgeRune, estimateNetworkFee } = useBridge();
-
-  const { bridgeAmount, loading, base, fee, feeSummary, isDeposit, params } = useBridgeState();
+  const currentAccount = useCurrentAccount();
   const dispatch = useAppDispatch();
 
-  const [networkFee, setNetworkFee] = useState<number>(0);
+  const { sideChain } = useEnvironment();
+  const { bridgeAmount, fee, feeSummary, params, fromChain, fromAsset, toAsset } = useBridgeState();
+  const { bridgeRune, loading } = useBridge();
 
-  const [tx, setTx] = useState<CacheUTXO[]>([]);
-
-  const [getTxLoading, setGetTxLoading] = useState(false);
-
-  const [withdrawFee, setWithdrawFee] = useState<string>('-');
-
-  const [openEditId, setOpenEditId] = useState('');
-
-  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, 8)).toNumber();
-
-  const currentAccount = useCurrentAccount();
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount.address);
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount.address);
 
-  const assets = isDeposit ? btcBalanceList : sideBalanceList;
-  const balanceList = assets?.filter((item) => {
-    return item?.denom.includes('rune') || item?.denom.includes('sat');
-  });
-  const isBtcBridge = base === 'sat';
-  const bridgeAsset = balanceList.find((item) => item.denom === base);
-  const runeId = bridgeAsset?.denom.split('/')[1];
+  const [withdrawFee, setWithdrawFee] = useState<string>('-');
+  const [openEditId, setOpenEditId] = useState('');
 
+  useEffect(() => {
+    const bridgeUnitAmount = +parseUnitAmount(bridgeAmount, fromAsset?.asset.exponent || 8);
+    const runeId = fromAsset?.denom.split('/')[1];
+    services.bridge
+      .getBridgeWithdrawFee(currentAccount.address, `${bridgeUnitAmount}runes/${runeId}`, sideChain.restUrl)
+      .then((result) => {
+        setWithdrawFee(formatUnitAmount(result, fromAsset?.asset.exponent || 8));
+      });
+  }, []);
+
+  const isDeposit = !!fromChain?.isBitcoin;
   const confirmations = isDeposit
     ? params?.params?.deposit_confirmation_depth
     : params?.params?.withdraw_confirmation_depth;
-
   const protocolFee = isDeposit
     ? params?.params?.protocol_fees?.deposit_fee
     : params?.params?.protocol_fees?.withdraw_fee;
 
-  const yourReceive = toReadableAmount(
-    BigNumber(toUnitAmount(bridgeAmount || '0', 8))
-      .minus(bridgeAsset?.asset?.rune ? 0 : protocolFee || '0')
-      .toFixed(),
-    8
-  );
-
-  const bitcoinAssetInfo = btcBalanceList.find((item) => item.denom === bridgeAsset?.denom);
-  const sideAssetInfo = sideBalanceList.find((item) => item.denom === bridgeAsset?.denom);
+  const yourReceive = bridgeAmount;
   const bitcoinFeeInfo = btcBalanceList.find((item) => item.denom === 'sat');
   const sideFeeInfo = sideBalanceList.find((item) => item.denom === 'sat');
+  const feePrice = sideFeeInfo?.denomPrice || bitcoinFeeInfo?.denomPrice || '0';
 
-  useEffect(() => {
-    setNetworkFee(fee || 20);
-  }, [fee]);
-
-  useEffect(() => {
-    if (!isBtcBridge) return;
-    setGetTxLoading(true);
-    estimateNetworkFee({ amount: unitAmount, fee })
-      .then((res) => {
-        if (res) {
-          setTx(res.walletInputs || []);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setGetTxLoading(false);
-      });
-  }, [isDeposit, bridgeAmount, fee, isBtcBridge]);
-
-  const getWithdrawFee = async (address: string, amount: string) => {
-    const result = await services.bridge.getBridgeWithdrawFee(address, amount, sideChain.restUrl);
-
-    setWithdrawFee(toReadableAmount(result, 8));
-  };
-
-  useEffect(() => {
-    const amount =
-      toUnitAmount(bridgeAmount, bridgeAsset?.asset.exponent || 8) + (!isBtcBridge ? 'runes/' + runeId : 'sat');
-
-    getWithdrawFee(currentAccount.address, amount);
-  }, [currentAccount]);
-
-  const isDisabled =
-    BigNumber(toUnitAmount(bridgeAmount || '0', 8)).lt(networkFee) || loading || Number(fee) === 0 || getTxLoading;
-
-  const satPrice = sideFeeInfo?.denomPrice || bitcoinFeeInfo?.denomPrice || '0';
+  const isDisabled = loading || Number(fee) === 0 || !withdrawFee;
 
   const depositDetailItems = (
     <>
@@ -167,7 +64,7 @@ export default function BridgeTabScreen() {
         text={'Fee Rate'}
         value={
           <>
-            {networkFee ? networkFee : fee} sats/vB
+            {fee} sats/vB
             <div
               className="cursor-pointer "
               onClick={() => {
@@ -247,12 +144,12 @@ export default function BridgeTabScreen() {
           <>
             <Typography fontSize={'14px'} color={colors.grey12}>
               (~$
-              {BigNumber(satPrice)
-                .multipliedBy(toReadableAmount(protocolFee || '0', bitcoinFeeInfo?.asset.exponent || 8))
+              {BigNumber(feePrice)
+                .multipliedBy(formatUnitAmount(protocolFee || '0', bitcoinFeeInfo?.asset.exponent || 8))
                 .toFixed(2, BigNumber.ROUND_CEIL)}
               )
             </Typography>
-            {`${toReadableAmount(protocolFee || '0', bitcoinFeeInfo?.asset.exponent || 8)} ${
+            {`${formatUnitAmount(protocolFee || '0', bitcoinFeeInfo?.asset.exponent || 8)} ${
               bitcoinFeeInfo?.asset.symbol
             }`}
 
@@ -277,11 +174,9 @@ export default function BridgeTabScreen() {
                 overflow: 'hidden',
                 whiteSpace: 'nowrap'
               }}>
-              {yourReceive} {bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.symbol : bridgeAsset?.asset.symbol}
+              {yourReceive} {toAsset?.asset.symbol}
             </Box>
-            <ImageIcon
-              url={bridgeAsset?.denom === 'sat' ? sideAssetInfo?.asset?.logo : bridgeAsset?.asset.logo}
-              style={{ width: 20, height: 20, borderRadius: 100 }}></ImageIcon>
+            <ImageIcon url={toAsset?.asset.logo} style={{ width: 20, height: 20, borderRadius: 100 }}></ImageIcon>
           </>
         }
         tooltip={
@@ -308,12 +203,12 @@ export default function BridgeTabScreen() {
           <>
             <Typography fontSize={'14px'} color={colors.grey12}>
               (~$
-              {BigNumber(satPrice)
-                .multipliedBy(toReadableAmount(protocolFee || '0', sideFeeInfo?.asset.exponent || 8))
+              {BigNumber(feePrice)
+                .multipliedBy(formatUnitAmount(protocolFee || '0', sideFeeInfo?.asset.exponent || 8))
                 .toFixed(2, BigNumber.ROUND_CEIL)}
               )
             </Typography>
-            {`${toReadableAmount(protocolFee || '0', sideFeeInfo?.asset.exponent || 8)} ${sideFeeInfo?.asset.symbol}`}
+            {`${formatUnitAmount(protocolFee || '0', sideFeeInfo?.asset.exponent || 8)} ${sideFeeInfo?.asset.symbol}`}
 
             <ImageIcon url={sideFeeInfo?.asset.logo} style={{ width: 20, height: 20, marginLeft: '4px' }}></ImageIcon>
           </>
@@ -334,12 +229,9 @@ export default function BridgeTabScreen() {
                 overflow: 'hidden',
                 whiteSpace: 'nowrap'
               }}>
-              {yourReceive}{' '}
-              {bridgeAsset?.denom === 'sat' ? bitcoinAssetInfo?.asset?.symbol : sideAssetInfo?.asset.symbol}
+              {yourReceive} {toAsset?.asset.symbol}
             </Box>
-            <ImageIcon
-              url={bridgeAsset?.denom === 'sat' ? bitcoinAssetInfo?.asset?.logo : bridgeAsset?.asset.logo}
-              style={{ width: 20, height: 20, marginLeft: '4px' }}></ImageIcon>
+            <ImageIcon url={toAsset?.asset.logo} style={{ width: 20, height: 20, marginLeft: '4px' }}></ImageIcon>
           </>
         }></DetailRow>
     </>
@@ -347,27 +239,7 @@ export default function BridgeTabScreen() {
 
   return (
     <Layout>
-      <Header
-        LeftComponent={
-          <>
-            <Image
-              onClick={() => {
-                navigate('SettingsTabScreen');
-              }}
-              src="/images/icons/main/menu-icon.svg"
-              size={fontSizes.xxl}
-            />
-          </>
-        }
-        title={
-          currentKeyring.type === KEYRING_TYPE.HdKeyring || currentKeyring.type === KEYRING_TYPE.KeystoneKeyring ? (
-            <AccountSelect />
-          ) : (
-            ''
-          )
-        }
-        RightComponent={''}
-      />
+      <MainHeader title={''} />
       <Content classname={'hide-scrollbar'}>
         <Row full relative mt="lg" rounded={true}>
           <Column
@@ -376,80 +248,6 @@ export default function BridgeTabScreen() {
             style={{
               gap: '12px'
             }}>
-            {isBtcBridge && (
-              <Column
-                relative
-                rounded
-                style={{
-                  fontSize: '14px',
-                  padding: '8px',
-                  background: colors.card_bgColor,
-                  border: `1px solid ${colors.main}`,
-                  display: isDeposit ? 'flex' : 'none'
-                }}>
-                <Row relative full justifyBetween color={'grey12'}>
-                  <Typography color={colors.grey12} fontSize={'14px'} className="w-1/3 text-left">
-                    Tx
-                  </Typography>
-
-                  <Typography color={colors.grey12} fontSize={'14px'} className="w-1/3">
-                    Index
-                  </Typography>
-                  <Typography color={colors.grey12} fontSize={'14px'} className="text-right">
-                    Amount
-                  </Typography>
-                </Row>
-
-                {tx.map((item) => {
-                  return (
-                    <Row key={item.txid} relative full justifyBetween color={'white'}>
-                      <a
-                        target="_blank"
-                        className="underline text-white w-1/3 text-left hover:text-white"
-                        href={`${SIDE_BTC_EXPLORER}/tx/${item?.txid}`}
-                        rel="noreferrer">
-                        {formatAddress(item.txid || '-', 6)}
-                      </a>
-
-                      <Typography fontSize={'14px'} className="w-1/3 text-center">
-                        {item.vout}
-                      </Typography>
-                      <Typography fontSize={'14px'} className="w-1/3 text-right">
-                        {toReadableAmount(item.satoshis.toString() || '0', 8)}
-                      </Typography>
-                    </Row>
-                  );
-                })}
-              </Column>
-            )}
-            {isBtcBridge && (
-              <Column relative classname="bg-[#F0B622] p-3 px-2 bg-opacity-30 " rounded>
-                <div className="flex items-start gap-1">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M11.9978 8.99632V12.9963M11.9978 16.9963H12.0078M10.6131 3.88805L2.38823 18.0947C1.93203 18.8827 1.70393 19.2767 1.73764 19.6C1.76705 19.8821 1.91482 20.1384 2.14417 20.3051C2.40713 20.4963 2.86239 20.4963 3.77292 20.4963H20.2227C21.1332 20.4963 21.5885 20.4963 21.8514 20.3051C22.0808 20.1384 22.2286 19.8821 22.258 19.6C22.2917 19.2767 22.0636 18.8827 21.6074 18.0947L13.3825 3.88804C12.9279 3.10288 12.7006 2.7103 12.4041 2.57845C12.1454 2.46343 11.8502 2.46343 11.5915 2.57845C11.295 2.7103 11.0677 3.10288 10.6131 3.88805Z"
-                      stroke="#F0B622"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-
-                  <div className="font-semibold text-sm text-[#F0B622]">
-                    {!isDeposit
-                      ? ' Your sBTC tokens on the Side Chain will be burnt'
-                      : 'Make sure above UTXO carries no inscripted assets'}
-                  </div>
-                </div>
-
-                <div className="text-white text-xs font-normal pl-6">
-                  {!isDeposit
-                    ? 'In return, you will receive native BTC on the Bitcoin network. Ensure you have noted this change and take any necessary actions to secure your assets.'
-                    : 'This transaction will use the above Inputs. Please double check and confirm that these Inputs do not carry other assets including Ordinals and Runes.'}
-                </div>
-              </Column>
-            )}
-
             <Column relative rounded bg={'card_bgColor'} classname=" p-2 py-3">
               {isDeposit ? depositDetailItems : withdrawDetailItems}
             </Column>
@@ -457,13 +255,12 @@ export default function BridgeTabScreen() {
             <Row full itemsCenter>
               <Button
                 text="Last"
+                preset="default"
                 full
                 onClick={() => {
-                  navigate('BridgeTabScreen');
+                  window.history.go(-1);
                 }}
-                style={{
-                  fontSize: '14px'
-                }}></Button>
+              />
 
               <Button
                 full
@@ -475,12 +272,9 @@ export default function BridgeTabScreen() {
                   fontSize: '14px'
                 }}
                 onClick={() => {
-                  if (base?.includes('rune')) {
-                    bridgeRune(base?.split('/')[1]);
-                  } else {
-                    bridge();
-                  }
-                }}></Button>
+                  bridgeRune(fromAsset?.denom.split('/')[1]);
+                }}
+              />
             </Row>
           </Column>
         </Row>
