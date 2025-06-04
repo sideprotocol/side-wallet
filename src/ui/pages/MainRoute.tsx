@@ -29,7 +29,8 @@ import { InscribeTransferScreen } from './Approval/components/InscribeTransfer';
 import AtomicalsNFTScreen from './Atomicals/AtomicalsNFTScreen';
 import SendArc20Screen from './Atomicals/SendArc20Screen';
 import SendAtomicalsInscriptionScreen from './Atomicals/SendAtomicalsNFTScreen';
-import BridgeConfirmTabScreen from './Bridge/BridgeConfirmTabScreen';
+import BridgeBtcConfirmScreen from './Bridge/BridgeBtcConfirmScreen';
+import BridgeRuneConfirmScreen from './Bridge/BridgeRuneConfirmScreen';
 import BridgeSelectTokenScreen from './Bridge/BridgeSelectToken';
 import BridgeTabScreen from './Bridge/BridgeTabScreen';
 import EarnRedeemScreen from './Lending/EarnRedeemScreen';
@@ -190,9 +191,14 @@ export const routes = {
     element: <LendingSelectTokenScreen />
   },
 
-  BridgeConfirmTabScreen: {
+  BridgeRuneConfirmScreen: {
     path: '/bridge-confirm',
-    element: <BridgeConfirmTabScreen />
+    element: <BridgeRuneConfirmScreen />
+  },
+
+  BridgeBtcConfirmScreen: {
+    path: '/bridge-btc-confirm',
+    element: <BridgeBtcConfirmScreen />
   },
 
   SwapTabScreen: {

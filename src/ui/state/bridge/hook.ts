@@ -11,17 +11,17 @@ import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { useChainType } from '@/ui/state/settings/hooks';
 import { parseUnitAmount, useWallet } from '@/ui/utils';
+import { toUnitAmount } from '@/ui/utils/formatter';
 import { satoshisToAmount, sendAllBTC, sendBTC, sendRunesWithBTC } from '@/ui/wallet-sdk/utils';
 import { UnspentOutput } from '@unisat/wallet-sdk';
 
 import { AppState } from '..';
 import { useCurrentAccount } from '../accounts/hooks';
 import { useEnvironment } from '../environment/hooks';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppSelector } from '../hooks';
 import { useNetworkType } from '../settings/hooks';
 import { useSafeBalance, useUtxos } from '../transactions/hooks';
 import { useSignAndBroadcastTxRaw } from '../transactions/hooks/cosmos';
-import { BridgeActions } from './reducer';
 
 function compareAmount(a: string, b: string) {
   return new BigNumber(a || '0').comparedTo(new BigNumber(b || '0'));
@@ -96,28 +96,22 @@ export const useBitcoinRuneBalance = (base: string) => {
 };
 
 export const useBridge = () => {
-  const { UNISAT_IO_API } = useEnvironment();
-  const { bridgeAmount, fee, exponent } = useBridgeState();
-  const dispatch = useAppDispatch();
-
   const currentAccount = useCurrentAccount();
-
-  const navigate = useNavigate();
-
-  const tools = useTools();
-
-  const safeBalance = useSafeBalance();
-
-  const _utxos = useUtxos();
-
   const networkType = useNetworkType();
   const wallet = useWallet();
-  const { UNISAT_SERVICE_ENDPOINT, SERVICE_BASE_URL } = useEnvironment();
-  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, exponent)).toNumber();
+  const navigate = useNavigate();
+  const tools = useTools();
+  const _utxos = useUtxos();
+
+  const [loading, setLoading] = useState(false);
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
+  const { UNISAT_SERVICE_ENDPOINT, SERVICE_BASE_URL, UNISAT_IO_API } = useEnvironment();
+  const { bridgeAmount, fee, fromChain, fromAsset, params } = useBridgeState();
+  const safeBalance = useSafeBalance();
+  const unitAmount = BigNumber(parseUnitAmount(bridgeAmount, fromAsset?.asset.exponent || 8)).toNumber();
 
-  const { params, isDeposit } = useBridgeState();
+  const isDeposit = !!fromChain?.isBitcoin;
 
   const btcVault = params?.params?.vaults
     .filter((vault) => vault.asset_type === 'ASSET_TYPE_BTC')
@@ -132,7 +126,7 @@ export const useBridge = () => {
     });
 
   const bridge = async () => {
-    dispatch(BridgeActions.update({ loading: true }));
+    setLoading(true);
 
     if (isDeposit) {
       try {
@@ -146,15 +140,14 @@ export const useBridge = () => {
             }
           })
           .catch((err) => {
-            console.log('err: ', err);
             tools.toastError(err.message);
           })
           .finally(() => {
-            dispatch(BridgeActions.update({ loading: false }));
+            setLoading(false);
           });
       } catch (error) {
         tools.toastError('Deposit Failed! ');
-        dispatch(BridgeActions.update({ loading: false }));
+        setLoading(false);
       }
     } else {
       const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
@@ -170,21 +163,20 @@ export const useBridge = () => {
             navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE, type: 'bridge' });
           })
           .catch((err) => {
-            console.log('err: ', err);
             tools.toastError(err.message);
           })
           .finally(() => {
-            dispatch(BridgeActions.update({ loading: false }));
+            setLoading(false);
           });
       } catch (error) {
         tools.toastError('Deposit Failed! ');
-        dispatch(BridgeActions.update({ loading: false }));
+        setLoading(false);
       }
     }
   };
 
   const bridgeRune = async (runeId) => {
-    dispatch(BridgeActions.update({ loading: true }));
+    setLoading(true);
 
     if (isDeposit) {
       try {
@@ -203,11 +195,11 @@ export const useBridge = () => {
             tools.toastError(err.message);
           })
           .finally(() => {
-            dispatch(BridgeActions.update({ loading: false }));
+            setLoading(false);
           });
       } catch (error) {
         tools.toastError('Deposit Failed! ');
-        dispatch(BridgeActions.update({ loading: false }));
+        setLoading(false);
       }
     } else {
       const txMsg = MessageComposer.withTypeUrl.withdrawToBitcoin({
@@ -220,8 +212,6 @@ export const useBridge = () => {
           messages: [txMsg]
         })
           .then((result) => {
-            // tools.toastSuccess('Withdraw Successful!');
-
             navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
           })
           .catch((err) => {
@@ -229,11 +219,11 @@ export const useBridge = () => {
             tools.toastError(err.message);
           })
           .finally(() => {
-            dispatch(BridgeActions.update({ loading: false }));
+            setLoading(false);
           });
       } catch (error) {
         tools.toastError('Deposit Failed! ');
-        dispatch(BridgeActions.update({ loading: false }));
+        setLoading(false);
       }
     }
   };
@@ -298,7 +288,7 @@ export const useBridge = () => {
     const pbk = currentAccount.pubkey;
 
     const { runeId, fee } = params;
-    const runeAmount = runesUtils.fromDecimalAmount(bridgeAmount, exponent);
+    const runeAmount = toUnitAmount(bridgeAmount, fromAsset?.asset.exponent || 8);
 
     const bridgeParams = await services.bridge.getBridgeParams(UNISAT_IO_API);
 
@@ -456,5 +446,5 @@ export const useBridge = () => {
     return { networkFee, walletInputs };
   }
 
-  return { bridge, bridgeRune, estimateNetworkFee };
+  return { bridge, bridgeRune, estimateNetworkFee, loading };
 };

@@ -241,7 +241,11 @@ export default function BridgeTabScreen() {
             <Row mt={'xl'}>
               <Button
                 onClick={() => {
-                  navigate('BridgeConfirmTabScreen');
+                  if (fromAsset?.asset.rune) {
+                    navigate('BridgeRuneConfirmScreen');
+                    return;
+                  }
+                  navigate('BridgeBtcConfirmScreen');
                 }}
                 disabled={isDisabled}
                 full

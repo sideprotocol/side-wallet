@@ -604,3 +604,14 @@ export interface IChain {
   isBitcoin?: boolean;
   isCosmos?: boolean;
 }
+
+export interface CacheUTXO {
+  txid: string;
+  vout: number;
+  satoshis: number;
+  scriptPk: string;
+  pubkey: string;
+  inscriptions: any[];
+  atomicals: any[];
+  addressType: number;
+}
