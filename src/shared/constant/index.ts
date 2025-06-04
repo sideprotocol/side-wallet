@@ -356,7 +356,7 @@ export const BITCOIN_CHAINS_MAP: { [key: string]: TypeChain } = {
   [ChainType.BITCOIN_TESTNET]: {
     enum: ChainType.BITCOIN_TESTNET,
     label: 'Bitcoin Testnet',
-    icon: './images/artifacts/bitcoin-testnet.svg',
+    icon: 'https://api.side.one/static/token/logo/btc.svg',
     unit: 'tBTC',
     networkType: NetworkType.TESTNET,
     endpoints: ['https://wallet-api-testnet.unisat.io'],
@@ -370,7 +370,7 @@ export const BITCOIN_CHAINS_MAP: { [key: string]: TypeChain } = {
   [ChainType.BITCOIN_MAINNET]: {
     enum: ChainType.BITCOIN_MAINNET,
     label: 'Bitcoin Mainnet',
-    icon: './images/artifacts/bitcoin-mainnet.png',
+    icon: 'https://api.side.one/static/token/logo/btc.svg',
     unit: 'BTC',
     networkType: NetworkType.MAINNET,
     endpoints: ['https://wallet-api.unisat.io'],

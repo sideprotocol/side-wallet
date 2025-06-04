@@ -33,6 +33,7 @@ import BridgeBtcConfirmScreen from './Bridge/BridgeBtcConfirmScreen';
 import BridgeRuneConfirmScreen from './Bridge/BridgeRuneConfirmScreen';
 import BridgeSelectTokenScreen from './Bridge/BridgeSelectToken';
 import BridgeTabScreen from './Bridge/BridgeTabScreen';
+import BridgeTargetAddress from './Bridge/BridgeTargetAddress';
 import EarnRedeemScreen from './Lending/EarnRedeemScreen';
 import EarnSupplyScreen from './Lending/EarnSupplyScreen';
 import EarnTabScreen from './Lending/EarnTabScreen';
@@ -199,6 +200,11 @@ export const routes = {
   BridgeBtcConfirmScreen: {
     path: '/bridge-btc-confirm',
     element: <BridgeBtcConfirmScreen />
+  },
+
+  BridgeTargetAddress: {
+    path: '/bridge-target-address',
+    element: <BridgeTargetAddress />
   },
 
   SwapTabScreen: {

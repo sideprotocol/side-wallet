@@ -17,6 +17,8 @@ import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
 import { Stack } from '@mui/material';
 
+import { useNavigate } from '../MainRoute';
+
 interface SelectAsset extends BalanceItem {
   chainType: string;
 }
@@ -24,6 +26,7 @@ interface SelectAsset extends BalanceItem {
 export default function BridgeSelectTokenScreen() {
   const currentAccount = useCurrentAccount();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { state } = useLocation();
   const { type } = state as { type: 'from' | 'to'; fromAsset?: BalanceItem; toAsset?: BalanceItem };
   const allBridgeChains = useGetAllBridgeChains();
@@ -46,7 +49,7 @@ export default function BridgeSelectTokenScreen() {
       ...sideBalanceList.map((item) => ({ ...item, chainType: 'sidechain' }))
     ];
     assetList = allAssetList.filter((item) => {
-      return item.denom === 'sat' || item.denom.includes('rune');
+      return item.denom === 'sat';
     });
 
     if (type === 'to') {
@@ -111,6 +114,7 @@ export default function BridgeSelectTokenScreen() {
       chainList
     };
   }, [allBridgeChains, selectedAsset, searchValue]);
+  console.log(chainList);
 
   return (
     <Layout>
@@ -126,198 +130,199 @@ export default function BridgeSelectTokenScreen() {
           padding: 0,
           marginTop: 16
         }}>
-        <Column>
-          <Column px="xl" gap="md">
-            <Stack
-              direction="row"
-              alignItems="center"
-              sx={[
-                {
-                  border: `1px solid ${colors.white20}`,
-                  px: '10px',
-                  borderRadius: '10px',
-                  bgcolor: colors.card_bgColor,
-                  position: 'relative',
-                  gap: '8px',
-                  ':hover': {
-                    border: `1px solid ${colors.white_4}`
-                  }
+        <Column px="xl" gap="md">
+          <Stack
+            direction="row"
+            alignItems="center"
+            sx={[
+              {
+                border: `1px solid ${colors.white20}`,
+                px: '10px',
+                borderRadius: '10px',
+                bgcolor: colors.card_bgColor,
+                position: 'relative',
+                gap: '8px',
+                ':hover': {
+                  border: `1px solid ${colors.white_4}`
                 }
-              ]}>
-              <Icon icon="search" color={'search_icon'} size={20} />
-              {selectedAsset && (
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  gap="4px"
-                  sx={{
-                    borderRadius: '8px',
-                    flexShrink: '0',
-                    padding: '4px 7px',
-                    bgcolor: colors.grey12
-                  }}>
-                  <ImageIcon url={selectedAsset.asset.logo} style={{ width: '14px', height: '14px' }} />
-                  <Text preset="regular" size="xs" text={selectedAsset.asset.name} color="white"></Text>
-                </Stack>
-              )}
-              <Input
-                value={searchValue}
-                onChange={(event) => {
-                  setSearchValue(event.target.value.trim());
-                }}
-                containerStyle={{
-                  minHeight: '38px',
-                  width: '100%',
-                  border: 'none',
-                  padding: '0',
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  color: colors.white,
-                  backgroundColor: 'transparent'
-                }}
-                placeholder={selectedAsset ? 'Search chain' : 'Search crypto'}
-              />
-              <div
-                onClick={() => {
-                  setSearchValue('');
-                }}
-                onMouseEnter={() => setIsHover(true)}
-                onMouseLeave={() => setIsHover(false)}
-                style={{
-                  position: 'absolute',
-                  right: '10px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  cursor: 'pointer',
-                  display: searchValue ? 'block' : 'none'
+              }
+            ]}>
+            <Icon icon="search" color={'search_icon'} size={20} />
+            {selectedAsset && (
+              <Stack
+                direction="row"
+                alignItems="center"
+                gap="4px"
+                sx={{
+                  borderRadius: '8px',
+                  flexShrink: '0',
+                  padding: '4px 7px',
+                  bgcolor: colors.grey12
                 }}>
-                <Icon icon="clear" color={isHover ? 'white' : 'search_icon'} size={20}></Icon>
-              </div>
-            </Stack>
-            {selectedAsset ? (
-              <>
-                {chainList?.map((chain) => {
-                  return (
-                    <Stack
-                      key={chain.name}
-                      direction="row"
-                      alignItems="center"
-                      gap="8px"
-                      onClick={() => {
-                        if (type === 'from') {
-                          const bitcoinChain = allBridgeChains.find((item) => item.isBitcoin)!;
-                          let toChain: IChain | null = null,
-                            toAsset: BalanceItem | undefined = undefined;
+                <ImageIcon url={selectedAsset.asset.logo} style={{ width: '14px', height: '14px' }} />
+                <Text preset="regular" size="xs" text={selectedAsset.asset.name} color="white"></Text>
+              </Stack>
+            )}
+            <Input
+              value={searchValue}
+              onChange={(event) => {
+                setSearchValue(event.target.value.trim());
+              }}
+              containerStyle={{
+                minHeight: '38px',
+                width: '100%',
+                border: 'none',
+                padding: '0',
+                fontSize: '12px',
+                fontWeight: 400,
+                color: colors.white,
+                backgroundColor: 'transparent'
+              }}
+              placeholder={selectedAsset ? 'Search chain' : 'Search crypto'}
+            />
+            <div
+              onClick={() => {
+                setSearchValue('');
+              }}
+              onMouseEnter={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                cursor: 'pointer',
+                display: searchValue ? 'block' : 'none'
+              }}>
+              <Icon icon="clear" color={isHover ? 'white' : 'search_icon'} size={20}></Icon>
+            </div>
+          </Stack>
+          {selectedAsset ? (
+            <>
+              {chainList?.map((chain) => {
+                return (
+                  <Stack
+                    key={chain.name}
+                    direction="row"
+                    alignItems="center"
+                    gap="8px"
+                    onClick={() => {
+                      if (type === 'from') {
+                        const bitcoinChain = allBridgeChains.find((item) => item.isBitcoin)!;
+                        let toChain: IChain | null = null,
+                          toAsset: BalanceItem | undefined = undefined;
 
-                          if (selectedAsset.denom === 'sat' || selectedAsset.denom.includes('rune')) {
-                            if (chain.isBitcoin) {
-                              toChain = sideChain;
-                              toAsset = sideBalanceList.find((item) => item.denom === selectedAsset.denom);
-                            } else {
-                              toChain = bitcoinChain;
-                              toAsset = bitcoinBalanceList.find((item) => item.denom === selectedAsset.denom);
-                            }
+                        if (selectedAsset.denom === 'sat' || selectedAsset.denom.includes('rune')) {
+                          if (chain.isBitcoin) {
+                            toChain = sideChain;
+                            toAsset = sideBalanceList.find((item) => item.denom === selectedAsset.denom);
+                          } else {
+                            toChain = bitcoinChain;
+                            toAsset = bitcoinBalanceList.find((item) => item.denom === selectedAsset.denom);
                           }
+                        }
 
-                          dispatch(
-                            BridgeActions.update({
-                              fromChain: chain,
-                              fromAsset: selectedAsset,
-                              toChain,
-                              toAsset,
-                              bridgeAmount: '',
-                              balance: selectedAsset.formatAmount
-                            })
-                          );
-                        } else {
-                          dispatch(
-                            BridgeActions.update({
-                              toChain: chain,
-                              toAsset: selectedAsset,
-                              bridgeAmount: '',
-                              balance: selectedAsset.formatAmount
-                            })
-                          );
+                        dispatch(
+                          BridgeActions.update({
+                            fromChain: chain,
+                            fromAsset: selectedAsset,
+                            toChain,
+                            toAsset,
+                            bridgeAmount: '',
+                            balance: selectedAsset.formatAmount
+                          })
+                        );
+                      } else {
+                        dispatch(
+                          BridgeActions.update({
+                            toChain: chain,
+                            toAsset: selectedAsset,
+                            bridgeAmount: '',
+                            balance: selectedAsset.formatAmount
+                          })
+                        );
+                        if (chain.isCosmos) {
+                          navigate('BridgeTargetAddress');
                         }
-                        window.history.go(-1);
+                      }
+                      window.history.go(-1);
+                    }}
+                    sx={{
+                      padding: '10px 16px',
+                      cursor: 'pointer',
+                      backgroundColor: colors.card_bgColor,
+                      borderRadius: '8px',
+                      transition: '.4s',
+                      ':hover': {
+                        backgroundColor: colors.black_dark
+                      }
+                    }}>
+                    <ImageIcon
+                      url={chain.logo}
+                      style={{
+                        width: '38px',
+                        height: '38px',
+                        borderRadius: '50%'
                       }}
-                      sx={{
-                        padding: '10px 16px',
-                        cursor: 'pointer',
-                        backgroundColor: colors.card_bgColor,
-                        borderRadius: '8px',
-                        transition: '.4s',
-                        ':hover': {
-                          backgroundColor: colors.black_dark
-                        }
-                      }}>
+                    />
+                    <Text preset="regular" text={chain.name}></Text>
+                  </Stack>
+                );
+              })}
+            </>
+          ) : (
+            <>
+              {assetList?.map((asset) => {
+                return (
+                  <Stack
+                    key={asset.asset.symbol}
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    onClick={() => {
+                      setSelectedAsset(asset);
+                      setSearchValue('');
+                    }}
+                    sx={{
+                      padding: '10px 16px',
+                      cursor: 'pointer',
+                      backgroundColor: colors.card_bgColor,
+                      borderRadius: '8px',
+                      transition: '.4s',
+                      ':hover': {
+                        backgroundColor: colors.black_dark
+                      }
+                    }}>
+                    <Row>
                       <ImageIcon
-                        url={chain.logo}
+                        url={asset.asset.logo}
                         style={{
                           width: '38px',
                           height: '38px',
                           borderRadius: '50%'
                         }}
                       />
-                      <Text preset="regular" text={chain.name}></Text>
-                    </Stack>
-                  );
-                })}
-              </>
-            ) : (
-              <>
-                {assetList?.map((asset) => {
-                  return (
-                    <Stack
-                      key={asset.asset.symbol}
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      onClick={() => {
-                        setSelectedAsset(asset);
-                        setSearchValue('');
-                      }}
-                      sx={{
-                        padding: '10px 16px',
-                        cursor: 'pointer',
-                        backgroundColor: colors.card_bgColor,
-                        borderRadius: '8px',
-                        transition: '.4s',
-                        ':hover': {
-                          backgroundColor: colors.black_dark
-                        }
-                      }}>
-                      <Row>
-                        <ImageIcon
-                          url={asset.asset.logo}
-                          style={{
-                            width: '38px',
-                            height: '38px',
-                            borderRadius: '50%'
-                          }}
-                        />
-                        <Column
-                          style={{
-                            gap: '0px'
-                          }}>
-                          <Text preset="regular" text={asset.asset.symbol}></Text>
-                          <Text preset="sub" text={asset.asset.name}></Text>
-                        </Column>
-                      </Row>
-
                       <Column
                         style={{
                           gap: '0px'
                         }}>
-                        <Text preset="regular" textEnd text={BigNumber(asset.formatAmount).toFormat()}></Text>
-                        <Text preset="sub" textEnd text={`$${BigNumber(asset.totalValue).toFormat(2)}`}></Text>
+                        <Text preset="regular" text={asset.asset.symbol}></Text>
+                        <Text preset="sub" text={asset.asset.name}></Text>
                       </Column>
-                    </Stack>
-                  );
-                })}
-              </>
-            )}
-          </Column>
+                    </Row>
+
+                    <Column
+                      style={{
+                        gap: '0px'
+                      }}>
+                      <Text preset="regular" textEnd text={BigNumber(asset.formatAmount).toFormat()}></Text>
+                      <Text preset="sub" textEnd text={`$${BigNumber(asset.totalValue).toFormat(2)}`}></Text>
+                    </Column>
+                  </Stack>
+                );
+              })}
+            </>
+          )}
         </Column>
       </Content>
     </Layout>

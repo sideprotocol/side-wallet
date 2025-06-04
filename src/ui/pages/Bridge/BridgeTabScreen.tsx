@@ -12,6 +12,7 @@ import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
+import { formatUnitAmount, parseUnitAmount } from '@/ui/utils';
 import { Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
@@ -25,9 +26,21 @@ export default function BridgeTabScreen() {
 
   useInitBridge();
 
-  const { fromAsset, toAsset, fromChain, toChain, bridgeAmount, balance } = useBridgeState();
+  const { fromAsset, toAsset, fromChain, toChain, bridgeAmount, balance, toAddress, params } = useBridgeState();
 
   const { isDisabled, buttonTips } = useGetBridgeButtonTips();
+
+  const isDeposit = !!fromChain?.isBitcoin;
+  const protocolFee = isDeposit
+    ? params?.params?.protocol_fees?.deposit_fee
+    : params?.params?.protocol_fees?.withdraw_fee;
+
+  const yourReceive = formatUnitAmount(
+    BigNumber(parseUnitAmount(bridgeAmount || '0', fromAsset?.asset.exponent || 8))
+      .minus(fromAsset?.denom === 'sat' ? protocolFee || '0' : '0')
+      .toFixed(),
+    fromAsset?.asset.exponent || 8
+  );
 
   return (
     <Layout>
@@ -195,7 +208,7 @@ export default function BridgeTabScreen() {
                   <Text text={toChain?.name || ''} size="xs" color="white" />
                 </Row>
                 <Row itemsCenter gap="sm">
-                  <Text size="xs" color="white_muted" text={'xxxx'} />
+                  <Text size="xs" color="white_muted" text={toAddress} />
                 </Row>
               </Row>
 
@@ -204,7 +217,7 @@ export default function BridgeTabScreen() {
                   size={14}
                   readOnly
                   coin={{
-                    amount: bridgeAmount,
+                    amount: isDisabled ? '0' : yourReceive,
                     denom: toAsset?.denom || ''
                   }}
                 />
