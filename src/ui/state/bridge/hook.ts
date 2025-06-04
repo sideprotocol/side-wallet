@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import * as bitcoin from 'bitcoinjs-lib';
 import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
 
 import { MessageComposer } from '@/codegen/src/side/btcbridge/tx.registry';
 import { CHAINS_ENUM } from '@/shared/constant';
@@ -459,21 +458,3 @@ export const useBridge = () => {
 
   return { bridge, bridgeRune, estimateNetworkFee };
 };
-
-export function useBridgeParams() {
-  const dispatch = useAppDispatch();
-  const { UNISAT_IO_API } = useEnvironment();
-
-  const { data: params, isLoading } = useQuery({
-    queryKey: ['bridgeParams', { UNISAT_IO_API }],
-    queryFn: async () => {
-      const params = await services.bridge.getBridgeParams(UNISAT_IO_API);
-
-      dispatch(BridgeActions.update({ params }));
-
-      return params;
-    }
-  });
-
-  return { params, loading: isLoading };
-}

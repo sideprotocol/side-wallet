@@ -1,5 +1,6 @@
 import { createPersistStore } from '@/background/utils';
 import { ChainType, SERVICE_BASE_URL_MAINNET, SERVICE_BASE_URL_TESTNET, SIDE_CHAIN_MAINNET } from '@/shared/constant';
+import { IChain } from '@/shared/types';
 import services from '@/ui/services';
 
 export type EnvironmentStore = {
@@ -12,7 +13,8 @@ export type EnvironmentStore = {
   UNISAT_IO_API: string;
   SIDE_STATION_URL: string;
   SIDE_BRIDGEEXPLORER_URL: string;
-  sideChain: typeof SIDE_CHAIN_MAINNET;
+  sideChain: IChain;
+  chains: IChain[];
 };
 
 class EnvironmentService {
@@ -31,11 +33,14 @@ class EnvironmentService {
         UNISAT_IO_API: '',
         SIDE_STATION_URL: '',
         SIDE_BRIDGEEXPLORER_URL: '',
-        sideChain: SIDE_CHAIN_MAINNET
+        sideChain: SIDE_CHAIN_MAINNET,
+        chains: []
       }
     });
     try {
-      const config = await services.environment.getWalletConfig({ baseURL: this.store.SERVICE_BASE_URL });
+      const { config, chains } = await services.environment.getWalletParams({
+        baseURL: this.store.SERVICE_BASE_URL
+      });
       if (this.store.UNISAT_RUNE_URL !== config.UNISAT_RUNE_URL) {
         this.store.UNISAT_RUNE_URL = config.UNISAT_RUNE_URL;
       }
@@ -60,9 +65,8 @@ class EnvironmentService {
       if (this.store.SIDE_BRIDGEEXPLORER_URL !== config.SIDE_BRIDGEEXPLORER_URL) {
         this.store.SIDE_BRIDGEEXPLORER_URL = config.SIDE_BRIDGEEXPLORER_URL;
       }
-      if (this.store.sideChain?.chainID !== config.SIDE_CHAIN.chainID) {
-        this.store.sideChain = config.SIDE_CHAIN;
-      }
+      this.store.sideChain = config.SIDE_CHAIN;
+      this.store.chains = chains;
     } catch (err) {
       console.error(err);
     }
@@ -73,7 +77,7 @@ class EnvironmentService {
     if (chainType === ChainType.BITCOIN_TESTNET) {
       baseURL = SERVICE_BASE_URL_TESTNET;
     }
-    const config = await services.environment.getWalletConfig({ baseURL });
+    const { config, chains } = await services.environment.getWalletParams({ baseURL });
     this.store.UNISAT_RUNE_URL = config.UNISAT_RUNE_URL;
     this.store.DEX_CONTRACT = config.DEX_CONTRACT;
     this.store.DEX_ROUTER_CONTRACT = config.DEX_ROUTER_CONTRACT;
@@ -83,6 +87,7 @@ class EnvironmentService {
     this.store.SIDE_STATION_URL = config.SIDE_STATION_URL;
     this.store.SIDE_BRIDGEEXPLORER_URL = config.SIDE_BRIDGEEXPLORER_URL;
     this.store.sideChain = config.SIDE_CHAIN;
+    this.store.chains = chains;
     this.store.SERVICE_BASE_URL = baseURL;
   };
 
@@ -97,7 +102,8 @@ class EnvironmentService {
       UNISAT_IO_API: this.store.UNISAT_IO_API,
       SIDE_STATION_URL: this.store.SIDE_STATION_URL,
       SIDE_BRIDGEEXPLORER_URL: this.store.SIDE_BRIDGEEXPLORER_URL,
-      sideChain: this.store.sideChain
+      sideChain: this.store.sideChain,
+      chains: this.store.chains
     };
   };
 }

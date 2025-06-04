@@ -18,7 +18,6 @@ const defaultBtcBalance: BalanceItem = {
   amount: '0',
   asset: {
     denom: 'sat',
-    chain: CHAINS_ENUM.BTC,
     exponent: '8',
     logo: 'https://api.side.one/static/token/logo/btc.svg',
     name: 'Bitcoin',
@@ -50,16 +49,15 @@ function formatBitcoinItem(balance: string, denomPrice: string): BalanceItem {
   } as BalanceItem;
 }
 
-export default function useGetBitcoinBalanceList(address?: string, flag?: boolean) {
+export default function useGetBitcoinBalanceList(address?: string) {
   const fetchUtxos = useFetchUtxosCallback();
   const { UNISAT_RUNE_URL, UNISAT_SERVICE_ENDPOINT, SERVICE_BASE_URL, sideChain } = useEnvironment();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: [
       'getBitcoinBalanceList',
       {
         address,
-        flag,
         SERVICE_BASE_URL,
         UNISAT_SERVICE_ENDPOINT,
         UNISAT_RUNE_URL
@@ -130,13 +128,14 @@ export default function useGetBitcoinBalanceList(address?: string, flag?: boolea
       }
       return [defaultBtcBalance];
     },
-    enabled: !!address || !!flag,
+    enabled: !!address,
     refetchInterval: 600000,
     refetchIntervalInBackground: true
   });
 
   return {
     balanceList: data || [defaultBtcBalance],
-    loading: isLoading
+    loading: isLoading,
+    refetch
   };
 }

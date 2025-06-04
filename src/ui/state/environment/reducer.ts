@@ -1,15 +1,5 @@
-import {
-  DEX_CONTRACT_MAINNET,
-  DEX_ROUTER_CONTRACT_MAINNET,
-  SERVICE_BASE_URL_MAINNET,
-  SIDE_BRIDGEEXPLORER_URL_MAINNET,
-  SIDE_BTC_EXPLORER_MAINNET,
-  SIDE_CHAIN_MAINNET,
-  SIDE_STATION_URL_MAINNET,
-  UNISAT_IO_API_MAINNET,
-  UNISAT_RUNE_URL_MAINNET,
-  UNISAT_SERVICE_ENDPOINT_MAINNET
-} from '@/shared/constant';
+import { SERVICE_BASE_URL_MAINNET, SIDE_CHAIN_MAINNET } from '@/shared/constant';
+import { IChain } from '@/shared/types';
 import { createSlice } from '@reduxjs/toolkit';
 
 import { updateVersion } from '../global/actions';
@@ -24,20 +14,22 @@ export interface EnvironmentState {
   UNISAT_IO_API: string;
   SIDE_STATION_URL: string;
   SIDE_BRIDGEEXPLORER_URL: string;
-  sideChain: typeof SIDE_CHAIN_MAINNET;
+  sideChain: IChain;
+  chains: IChain[];
 }
 
 export const initialState: EnvironmentState = {
-  UNISAT_RUNE_URL: UNISAT_RUNE_URL_MAINNET,
-  DEX_CONTRACT: DEX_CONTRACT_MAINNET,
-  DEX_ROUTER_CONTRACT: DEX_ROUTER_CONTRACT_MAINNET,
+  UNISAT_RUNE_URL: '',
+  DEX_CONTRACT: '',
+  DEX_ROUTER_CONTRACT: '',
   SERVICE_BASE_URL: SERVICE_BASE_URL_MAINNET,
-  SIDE_BTC_EXPLORER: SIDE_BTC_EXPLORER_MAINNET,
-  UNISAT_SERVICE_ENDPOINT: UNISAT_SERVICE_ENDPOINT_MAINNET,
-  UNISAT_IO_API: UNISAT_IO_API_MAINNET,
-  SIDE_STATION_URL: SIDE_STATION_URL_MAINNET,
-  SIDE_BRIDGEEXPLORER_URL: SIDE_BRIDGEEXPLORER_URL_MAINNET,
-  sideChain: SIDE_CHAIN_MAINNET
+  SIDE_BTC_EXPLORER: '',
+  UNISAT_SERVICE_ENDPOINT: '',
+  UNISAT_IO_API: '',
+  SIDE_STATION_URL: '',
+  SIDE_BRIDGEEXPLORER_URL: '',
+  sideChain: SIDE_CHAIN_MAINNET,
+  chains: []
 };
 
 const slice = createSlice({
@@ -60,7 +52,8 @@ const slice = createSlice({
           UNISAT_IO_API?: string;
           SIDE_STATION_URL?: string;
           SIDE_BRIDGEEXPLORER_URL?: string;
-          sideChain?: typeof SIDE_CHAIN_MAINNET;
+          sideChain?: IChain;
+          chains?: IChain[];
         };
       }
     ) {

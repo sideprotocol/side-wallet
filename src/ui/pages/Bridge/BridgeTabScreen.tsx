@@ -1,16 +1,12 @@
 import BigNumber from 'bignumber.js';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import { Button } from '@/ui/components/Button';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import { useGetBridgeButtonTips } from '@/ui/hooks/bridge';
-import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
+import { useGetBridgeButtonTips, useInitBridge } from '@/ui/hooks/bridge';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-import services from '@/ui/services';
-import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useEnvironment } from '@/ui/state/environment/hooks';
@@ -22,69 +18,16 @@ import { useNavigate } from '../MainRoute';
 
 export default function BridgeTabScreen() {
   const navigate = useNavigate();
-  const { sideChain, UNISAT_SERVICE_ENDPOINT, SIDE_STATION_URL } = useEnvironment();
-  const currentAccount = useCurrentAccount();
-  const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
-  const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
-
-  const { bridgeAmount, from, to, base, hoverExchange, isDeposit } = useBridgeState();
-
   const dispatch = useAppDispatch();
-
-  const assets = isDeposit ? btcBalanceList : sideBalanceList;
-
-  const bridgeAsset = assets.find((a) => a?.denom === `${base}`);
-
-  const balance = bridgeAsset?.formatAmount || '';
-
-  const { isDisabled, buttonTips } = useGetBridgeButtonTips();
-
-  useEffect(() => {
-    const from = isDeposit
-      ? {
-          id: 'mainnet',
-          name: 'Bitcoin',
-          logo: '/images/icons/btc.svg'
-        }
-      : {
-          id: sideChain.chainID,
-          name: sideChain.name,
-          logo: sideChain.logo
-        };
-
-    const to = isDeposit
-      ? {
-          id: sideChain.chainID,
-          name: sideChain.name,
-          logo: sideChain.logo
-        }
-      : {
-          id: 'mainnet',
-          name: 'Bitcoin',
-          logo: '/images/icons/btc.svg'
-        };
-
-    dispatch(
-      BridgeActions.update({
-        from,
-        to
-      })
-    );
-  }, [isDeposit]);
-
-  useEffect(() => {
-    services.unisat.getFeeSummary(UNISAT_SERVICE_ENDPOINT).then((res) => {
-      const rcFee = res.list[2].feeRate;
-      dispatch(BridgeActions.update({ fee: +rcFee, feeSummary: res.list }));
-    });
-  }, []);
-
-  useEffect(() => {
-    dispatch(BridgeActions.update({ balance: balance, bridgeAsset: bridgeAsset }));
-  }, [balance, bridgeAsset]);
-
+  const { SIDE_STATION_URL } = useEnvironment();
   const [isFromHover, setIsFromHover] = useState(false);
   const [isToHover, setIsToHover] = useState(false);
+
+  useInitBridge();
+
+  const { fromAsset, toAsset, fromChain, toChain, bridgeAmount, balance } = useBridgeState();
+
+  const { isDisabled, buttonTips } = useGetBridgeButtonTips();
 
   return (
     <Layout>
@@ -156,7 +99,7 @@ export default function BridgeTabScreen() {
               <Row justifyBetween itemsCenter>
                 <Row itemsCenter gap="sm">
                   <Text text="From" size="xs" color="white_muted" />
-                  <Text text="Bitcoin" size="xs" color="white" />
+                  <Text text={fromChain?.name} size="xs" color="white" />
                 </Row>
                 <Row itemsCenter gap="sm">
                   <Icon color="white_muted" icon="wallet-icon" size={12} />
@@ -169,9 +112,10 @@ export default function BridgeTabScreen() {
                   size={14}
                   coin={{
                     amount: bridgeAmount,
-                    denom: bridgeAsset?.denom || ''
+                    denom: fromAsset?.denom || ''
                   }}
-                  decimalScale={bridgeAsset ? +bridgeAsset.asset.exponent : 6}
+                  max={balance}
+                  decimalScale={fromAsset ? +fromAsset.asset.exponent : 6}
                   onChange={(value) => {
                     dispatch(BridgeActions.update({ bridgeAmount: value }));
                   }}
@@ -198,9 +142,9 @@ export default function BridgeTabScreen() {
                       borderRadius: '20px'
                     }}
                     size={24}
-                    src={bridgeAsset?.asset?.logo}
+                    src={fromAsset?.asset?.logo}
                   />
-                  <Text text={bridgeAsset?.asset?.symbol} size="md" color={isFromHover ? 'main' : 'white'} />
+                  <Text text={fromAsset?.asset?.symbol} size="md" color={isFromHover ? 'main' : 'white'} />
                   <Icon icon="down" size={12} color={isFromHover ? 'main' : 'white'} />
                 </Row>
               </Row>
@@ -248,7 +192,7 @@ export default function BridgeTabScreen() {
               <Row justifyBetween itemsCenter>
                 <Row itemsCenter gap="sm">
                   <Text text="To" size="xs" color="white_muted" />
-                  <Text text="Cosmos Hub" size="xs" color="white" />
+                  <Text text={toChain?.name || ''} size="xs" color="white" />
                 </Row>
                 <Row itemsCenter gap="sm">
                   <Text size="xs" color="white_muted" text={'xxxx'} />
@@ -258,13 +202,10 @@ export default function BridgeTabScreen() {
               <Row justifyBetween itemsCenter gap="sm">
                 <CoinInput
                   size={14}
+                  readOnly
                   coin={{
                     amount: bridgeAmount,
-                    denom: bridgeAsset?.denom || ''
-                  }}
-                  decimalScale={bridgeAsset ? +bridgeAsset.asset.exponent : 6}
-                  onChange={(value) => {
-                    dispatch(BridgeActions.update({ bridgeAmount: value }));
+                    denom: toAsset?.denom || ''
                   }}
                 />
                 <Row
@@ -289,9 +230,9 @@ export default function BridgeTabScreen() {
                       borderRadius: '20px'
                     }}
                     size={24}
-                    src={bridgeAsset?.asset?.logo}
+                    src={toAsset?.asset?.logo}
                   />
-                  <Text text={bridgeAsset?.asset?.symbol} size="md" color={isToHover ? 'main' : 'white'} />
+                  <Text text={toAsset?.asset?.symbol} size="md" color={isToHover ? 'main' : 'white'} />
                   <Icon icon="down" size={12} color={isToHover ? 'main' : 'white'} />
                 </Row>
               </Row>

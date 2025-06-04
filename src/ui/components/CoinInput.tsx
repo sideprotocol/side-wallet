@@ -6,7 +6,7 @@ import { Coin } from '@cosmjs/stargate';
 
 export type CoinInputProps = {
   coin: Coin;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   readOnly?: boolean;
   size?: number;
   color?: string;
@@ -52,7 +52,7 @@ export function CoinInput({ coin, onChange, readOnly, size, color, decimalScale,
           return;
         }
         const amount = targetValue.replace(/^0+/, '0'); // remove prefix zeros
-        onChange(amount);
+        onChange?.(amount);
       }}
       value={coin.amount}
     />

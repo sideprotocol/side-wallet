@@ -14,7 +14,7 @@ export default class EnvironmentService {
     this.apiClient = apiClient;
   }
 
-  async getWalletConfig(config: AxiosRequestConfig): Promise<GetConstantsResponse> {
+  async getWalletParams(config: AxiosRequestConfig): Promise<GetConstantsResponse> {
     return new Promise((resolve) => {
       setTimeout(() => {
         if (config.baseURL === SERVICE_BASE_URL_TESTNET) {

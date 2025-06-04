@@ -1,9 +1,10 @@
 import { AxiosRequestConfig } from 'axios';
 
-import { IAsset } from '@/shared/types';
+import { IAsset, IAssetItem } from '@/shared/types';
 import ApiClient from '@/ui/services/network/ApiClient';
 
 import { getQueryParams } from '../getQueryParams';
+import { addIbcInformation } from './ibcData';
 import {
   IGetChartDataRequest,
   IGetChartDataResponse,
@@ -125,7 +126,7 @@ export default class DexService {
   }
 
   async getSideAssets(config: AxiosRequestConfig): Promise<IAsset[]> {
-    const result = await this.apiClient.get<IAsset[]>('/asset/assets', config);
-    return result;
+    const result = await this.apiClient.get<IAssetItem[]>('/asset/assets', config);
+    return addIbcInformation(result);
   }
 }

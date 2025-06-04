@@ -8,7 +8,7 @@ export enum AddressType {
   P2TR,
   P2SH_P2WPKH,
   M44_P2WPKH,
-  M44_P2TR,
+  M44_P2TR
 }
 
 export interface UTXO {
@@ -118,11 +118,11 @@ export interface getRunesInfoListResponse {
 }
 
 export interface FeeSummary {
-  list: {
+  list: Array<{
     title: string;
     desc: string;
     feeRate: number;
-  }[];
+  }>;
 }
 
 export interface AddressSummary {

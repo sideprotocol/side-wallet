@@ -540,7 +540,6 @@ export interface IAsset {
   precision: number;
   rune: boolean;
   symbol: string;
-  chain?: CHAINS_ENUM;
   runeData?: {
     runeid: string;
     rune: string;
@@ -564,7 +563,7 @@ export interface IAsset {
     supply: string;
     mintable: boolean;
     remaining: string;
-  };
+  } | null;
   ibcData?: Array<{
     oppositeChainId: string;
     oppositeChainDenom: string;
@@ -572,6 +571,13 @@ export interface IAsset {
     sideChainChannelId: string;
     portId: string;
   }> | null;
+}
+
+export interface IAssetItem extends IAsset {
+  sidePrice: string;
+  bitcoinPrice: string;
+  holdersCount: number;
+  totalSupplyOnSideChain: number;
 }
 
 export interface BalanceItem {
@@ -583,7 +589,7 @@ export interface BalanceItem {
   asset: IAsset; // asset info
 }
 
-export interface CosmosChain {
+export interface IChain {
   chainID: string;
   name: string;
   prefix: string;
@@ -594,4 +600,7 @@ export interface CosmosChain {
   logo: string;
   faucetUrl: string;
   explorerUrl: string;
+  isEvm?: boolean;
+  isBitcoin?: boolean;
+  isCosmos?: boolean;
 }

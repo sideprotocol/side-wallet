@@ -1,7 +1,7 @@
 /* eslint-disable quotes */
 
 /* constants pool */
-import { AddressType, NetworkType, RestoreWalletType } from '../types';
+import { AddressType, IChain, NetworkType, RestoreWalletType } from '../types';
 
 export enum CHAINS_ENUM {
   BTC = 'BTC',
@@ -392,7 +392,7 @@ export const SERVICE_BASE_URL_TESTNET = 'https://api.side.one/indexer-station-de
 
 // MAINNET
 export const SERVICE_BASE_URL_MAINNET = 'https://api.side.one/indexer-station-mainnet';
-export const SIDE_CHAIN_MAINNET = {
+export const SIDE_CHAIN_MAINNET: IChain = {
   chainID: 'sidechain-1',
   name: 'Side Chain',
   prefix: 'bc',

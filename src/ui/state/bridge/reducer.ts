@@ -1,4 +1,4 @@
-import { BalanceItem } from '@/shared/types';
+import { BalanceItem, FeeSummary, IChain } from '@/shared/types';
 import { SideBridgeParams } from '@/ui/services/bridge';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -11,37 +11,27 @@ export interface ChainItem {
 }
 
 export interface BridgeState {
-  base: string;
-  exponent: number;
+  fromChain: IChain | null;
+  toChain: IChain | null;
+  fromAsset: BalanceItem | null;
+  toAsset: BalanceItem | null;
   bridgeAmount: string;
-  from: ChainItem;
-  to: ChainItem;
   balance: string;
+  params: SideBridgeParams | null;
   fee: number;
-  feeSummary: any[];
-  loading: boolean;
-  selectTokenModalShow: boolean;
-  hoverExchange: boolean;
-  isDeposit: boolean;
-  params: SideBridgeParams;
-  bridgeAsset: BalanceItem;
+  feeSummary: FeeSummary['list'];
 }
 
 export const initialState: BridgeState = {
-  base: 'sat',
-  exponent: 8,
+  fromChain: null,
+  toChain: null,
+  fromAsset: null,
+  toAsset: null,
   bridgeAmount: '',
-  from: {} as ChainItem,
-  to: {} as ChainItem,
-  balance: '',
+  balance: '0',
+  params: null,
   fee: 20,
-  isDeposit: true,
-  feeSummary: [],
-  loading: false,
-  selectTokenModalShow: false,
-  hoverExchange: false,
-  params: {} as SideBridgeParams,
-  bridgeAsset: {} as BalanceItem
+  feeSummary: []
 };
 
 const slice = createSlice({
@@ -55,20 +45,15 @@ const slice = createSlice({
       state,
       action: {
         payload: {
-          base?: string;
-          exponent?: number;
+          fromChain?: IChain | null;
+          toChain?: IChain | null;
+          fromAsset?: BalanceItem | null;
+          toAsset?: BalanceItem | null;
           bridgeAmount?: string;
-          from?: ChainItem;
-          to?: ChainItem;
           balance?: string;
+          params?: SideBridgeParams | null;
           fee?: number;
-          feeSummary?: any[];
-          loading?: boolean;
-          selectTokenModalShow?: boolean;
-          hoverExchange?: boolean;
-          isDeposit?: boolean;
-          params?: SideBridgeParams;
-          bridgeAsset?: BalanceItem;
+          feeSummary?: FeeSummary['list'];
         };
       }
     ) {

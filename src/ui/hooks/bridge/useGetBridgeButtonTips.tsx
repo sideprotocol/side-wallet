@@ -5,7 +5,7 @@ import { useDebounce } from 'use-debounce';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
 import { useCurrentAccount } from '../../state/accounts/hooks';
-import { useBridgeParams, useBridgeState } from '../../state/bridge/hook';
+import { useBridgeState } from '../../state/bridge/hook';
 import { useNetworkType } from '../../state/settings/hooks';
 import { useUtxos } from '../../state/transactions/hooks';
 import { estimateNetworkFeeHelper } from '../../wallet-sdk/utils';
@@ -13,21 +13,20 @@ import useGetBitcoinBalanceList from '../useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '../useGetSideBalanceList';
 
 export function useGetBridgeButtonTips() {
-  const { isDeposit, balance, bridgeAmount, bridgeAsset, fee } = useBridgeState();
+  const { balance, bridgeAmount, fromAsset, fee, fromChain, params } = useBridgeState();
 
   const currentAccount = useCurrentAccount();
   const networkType = useNetworkType();
 
-  const { params } = useBridgeParams();
-
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
-  const { balanceList } = useGetSideBalanceList(currentAccount?.address);
+  const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
 
   const [btcTransferGasError, setBtcTransferGasError] = useState<string | undefined>(undefined);
   const [debouncedBridgeAmount] = useDebounce(bridgeAmount, 300);
 
   const _utxos = useUtxos();
+  const isDeposit = fromChain?.isBitcoin;
 
   // 校验比特币跨链的网络费用
   async function estimateNetworkFee() {
@@ -38,9 +37,9 @@ export function useGetBridgeButtonTips() {
     try {
       await estimateNetworkFeeHelper(
         {
-          amount: bridgeAsset?.asset.rune
+          amount: fromAsset?.asset.rune
             ? +(params?.params.protocol_fees.deposit_fee || '0')
-            : +toUnitAmount(debouncedBridgeAmount || '0', bridgeAsset?.asset?.exponent || 8),
+            : +toUnitAmount(debouncedBridgeAmount || '0', fromAsset?.asset?.exponent || 8),
           fee: fee
         },
         params,
@@ -48,8 +47,7 @@ export function useGetBridgeButtonTips() {
         currentAccount,
         networkType
       )
-        .then((res) => {
-          console.log({ res, fee });
+        .then(() => {
           setBtcTransferGasError(undefined);
         })
         .catch((error) => {
@@ -62,10 +60,9 @@ export function useGetBridgeButtonTips() {
 
   useEffect(() => {
     estimateNetworkFee();
-  }, [bridgeAsset, debouncedBridgeAmount, params, balance, fee]);
+  }, [fromAsset, debouncedBridgeAmount, params, balance, fee]);
 
   const { transferBtcDisabled, transferBtcButtonTips } = useMemo(() => {
-    // 未链接钱包 + 未输入
     if (!bridgeAmount || !params) {
       return {
         transferBtcDisabled: true,
@@ -110,12 +107,12 @@ export function useGetBridgeButtonTips() {
 
     // 计算跨链需要的费用
     const bitcoinFeeInfo = bitcoinBalanceList.find((item) => item.denom === 'sat');
-    const sideFeeInfo = balanceList.find((item) => item.denom === 'sat');
+    const sideFeeInfo = sideBalanceList.find((item) => item.denom === 'sat');
     const bridgeFeeAssetInfo = isDeposit ? bitcoinFeeInfo : sideFeeInfo;
 
     // 判断deposit情况： 非rune，输入是小于 min_deposit + deposit_fee
-    if (isDeposit && !bridgeAsset?.asset?.rune) {
-      const lessThanMinSatDeposit = BigNumber(toUnitAmount(bridgeAmount || '0', bridgeAsset.asset.exponent || 8)).lt(
+    if (isDeposit && !fromAsset?.asset?.rune) {
+      const lessThanMinSatDeposit = BigNumber(toUnitAmount(bridgeAmount || '0', fromAsset?.asset.exponent || 8)).lt(
         BigNumber(params?.params.protocol_limits?.btc_min_deposit || 0).plus(
           params?.params.protocol_fees?.deposit_fee || 0
         )
@@ -128,14 +125,14 @@ export function useGetBridgeButtonTips() {
               .plus(params?.params.protocol_fees?.deposit_fee || '0')
               .toFixed(),
             8
-          )} ${bridgeAsset?.asset.symbol}`
+          )} ${fromAsset?.asset.symbol}`
         };
       }
     }
 
     // 判断withdraw情况： 非rune，输入是否小于 min_withdraw + withdraw_fee
-    if (!isDeposit && !bridgeAsset?.asset?.rune) {
-      const lessThanMinSatWithdraw = BigNumber(toUnitAmount(bridgeAmount || '0', bridgeAsset?.asset.exponent || 8)).lt(
+    if (!isDeposit && !fromAsset?.asset?.rune) {
+      const lessThanMinSatWithdraw = BigNumber(toUnitAmount(bridgeAmount || '0', fromAsset?.asset.exponent || 8)).lt(
         BigNumber(params?.params.protocol_limits?.btc_min_withdraw || 0).plus(
           params?.params.protocol_fees?.withdraw_fee || 0
         )
@@ -148,7 +145,7 @@ export function useGetBridgeButtonTips() {
               .plus(params?.params.protocol_fees?.withdraw_fee || '0')
               .toFixed(),
             8
-          )} ${bridgeAsset?.asset.symbol}`
+          )} ${fromAsset?.asset.symbol}`
         };
       }
     }
@@ -160,7 +157,7 @@ export function useGetBridgeButtonTips() {
       };
     }
 
-    if (bridgeAsset?.denom === bridgeFeeAssetInfo?.denom && +bridgeAmount === +balance) {
+    if (fromAsset?.denom === bridgeFeeAssetInfo?.denom && +bridgeAmount === +balance) {
       return {
         transferBtcDisabled: true,
         transferBtcButtonTips: 'Please reserve sufficient funds for network and bridge fees.'
@@ -170,7 +167,7 @@ export function useGetBridgeButtonTips() {
       transferBtcDisabled: false,
       transferBtcButtonTips: 'Next'
     };
-  }, [params, bridgeAmount, bridgeAsset, bitcoinBalanceList, balanceList, balance, btcTransferGasError]);
+  }, [params, bridgeAmount, fromAsset, bitcoinBalanceList, sideBalanceList, balance, btcTransferGasError]);
 
   return {
     isDisabled: transferBtcDisabled,

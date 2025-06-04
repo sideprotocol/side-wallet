@@ -25,7 +25,7 @@ export function useChangeEnvironmentCallback() {
       if (networkType === NetworkType.TESTNET) {
         baseURL = SERVICE_BASE_URL_TESTNET;
       }
-      const config = await services.environment.getWalletConfig({ baseURL });
+      const { config, chains } = await services.environment.getWalletParams({ baseURL });
 
       dispatch(
         environmentActions.updateEnvironment({
@@ -38,6 +38,7 @@ export function useChangeEnvironmentCallback() {
           SIDE_STATION_URL: config.SIDE_STATION_URL,
           SIDE_BRIDGEEXPLORER_URL: config.SIDE_BRIDGEEXPLORER_URL,
           sideChain: config.SIDE_CHAIN,
+          chains,
           SERVICE_BASE_URL: baseURL
         })
       );

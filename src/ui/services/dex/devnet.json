@@ -1,0 +1,61 @@
+{
+  "data": [
+    {
+      "denom": "ibc/8E27BA2D5493AF5636760E354E46004562C46AB7EC0CC4C1CA14E9E20E2545B5",
+      "symbol": "n.USDC",
+      "name": "Noble USDC",
+      "exponent": "6",
+      "precision": 6,
+      "logo": "https://api.side.one/static/token/logo/usdc.svg",
+      "runeData": null,
+      "rune": false,
+      "ibcData": [
+        {
+          "oppositeChainId": "grand-1",
+          "oppositeChainDenom": "uusdc",
+          "oppositeChainChannelId": "channel-0",
+          "sideChainChannelId": "channel-230",
+          "portId": "transfer"
+        }
+      ]
+    },
+    {
+      "denom": "uside",
+      "symbol": "SIDE",
+      "name": "Side Protocol",
+      "exponent": "6",
+      "precision": 6,
+      "logo": "",
+      "rune": false,
+      "runeData": null,
+      "ibcData": [
+        {
+          "oppositeChainId": "osmo-test-5",
+          "oppositeChainDenom": "ibc/4EAF60811AAF4AE75EF8F07FBFE24B13E78BA6D92FAD77AE18E081AA5F034753",
+          "oppositeChainChannelId": "channel-0",
+          "sideChainChannelId": "channel-10458",
+          "portId": "transfer"
+        }
+      ]
+    },
+    {
+      "denom": "sat",
+      "symbol": "sBTC",
+      "name": "Bitcoin",
+      "exponent": "8",
+      "precision": 8,
+      "logo": "https://api.side.one/static/token/logo/sBTC.svg",
+      "rune": false,
+      "runeData": null,
+      "ibcData": [
+        {
+          "oppositeChainId": "osmo-test-5",
+          "oppositeChainDenom": "ibc/BBEE895FB4FCA53BC1C5F979F0EF3E37AAE33D357491FDE6B83F9524EAE56A45",
+          "oppositeChainChannelId": "channel-0",
+          "sideChainChannelId": "channel-10458",
+          "portId": "transfer"
+        }
+      ]
+    }
+  ]
+}
