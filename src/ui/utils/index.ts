@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom';
 
 export * from './hooks';
@@ -233,6 +234,30 @@ export function getTruncate(num: string, demicals = 2) {
   const formatNum = BigNumber(num).toFormat(demicals, BigNumber.ROUND_DOWN, fmt);
 
   return removeTrailingZeroes(formatNum);
+}
+
+export function showFromTime(timestamp: number | string) {
+  timestamp = dayjs(timestamp).valueOf();
+  const curTime = dayjs().valueOf();
+  const distance = new BigNumber(new BigNumber(curTime).minus(timestamp)).div(1000).toNumber();
+  const monthTotalTimeStamp = 2592000; // 30* 24* 60* 60
+  const weekTotalTimeStamp = 604800; // 7* 24* 60* 60
+  const dayTotalTimeStamp = 86400; // 24* 60* 60
+  const hourTotalTimeStamp = 3600; // 1* 60* 60
+  const minuteTotalTimeStamp = 60; // 1* 60
+  if (distance >= monthTotalTimeStamp) {
+    return `${formatWithDP(`${distance / monthTotalTimeStamp}`, 0)}M ago`;
+  } else if (distance >= weekTotalTimeStamp) {
+    return `${formatWithDP(`${distance / weekTotalTimeStamp}`, 0)}W ago`;
+  } else if (distance >= dayTotalTimeStamp) {
+    return `${formatWithDP(`${distance / dayTotalTimeStamp}`, 0)}D ago`;
+  } else if (distance >= hourTotalTimeStamp) {
+    return `${formatWithDP(`${distance / hourTotalTimeStamp}`, 0)}h ago`;
+  } else if (distance >= minuteTotalTimeStamp) {
+    return `${formatWithDP(`${distance / minuteTotalTimeStamp}`, 0)}m ago`;
+  } else {
+    return `${formatWithDP(`${distance < 0 ? 0 : distance}`, 0)}s ago`;
+  }
 }
 
 BigNumber.config({ EXPONENTIAL_AT: 1e9, DECIMAL_PLACES: 38 });

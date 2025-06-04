@@ -45,7 +45,7 @@ export default function BridgeTargetAddress() {
             sx={{
               height: '1px',
               width: '100%',
-              bgcolor: colors.white1
+              bgcolor: colors.black_dark
             }}
           />
           <Text textCenter text="Target Address" size="xs" color="white_muted" />

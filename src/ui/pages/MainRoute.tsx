@@ -30,6 +30,8 @@ import AtomicalsNFTScreen from './Atomicals/AtomicalsNFTScreen';
 import SendArc20Screen from './Atomicals/SendArc20Screen';
 import SendAtomicalsInscriptionScreen from './Atomicals/SendAtomicalsNFTScreen';
 import BridgeBtcConfirmScreen from './Bridge/BridgeBtcConfirmScreen';
+import BridgeDetail from './Bridge/BridgeDetail';
+import BridgeHistory from './Bridge/BridgeHistory';
 import BridgeRuneConfirmScreen from './Bridge/BridgeRuneConfirmScreen';
 import BridgeSelectTokenScreen from './Bridge/BridgeSelectToken';
 import BridgeTabScreen from './Bridge/BridgeTabScreen';
@@ -138,6 +140,11 @@ export const routes = {
     element: <LendingTabScreen />
   },
 
+  LendingSelectTokenScreen: {
+    path: '/lending-select-token',
+    element: <LendingSelectTokenScreen />
+  },
+
   LoanDepositScreen: {
     path: '/loan-deposit',
     element: <LoanDepositScreen />
@@ -187,9 +194,14 @@ export const routes = {
     element: <BridgeSelectTokenScreen />
   },
 
-  LendingSelectTokenScreen: {
-    path: '/lending-select-token',
-    element: <LendingSelectTokenScreen />
+  BridgeHistory: {
+    path: '/bridge-history',
+    element: <BridgeHistory />
+  },
+
+  BridgeDetail: {
+    path: '/bridge-detail',
+    element: <BridgeDetail />
   },
 
   BridgeRuneConfirmScreen: {

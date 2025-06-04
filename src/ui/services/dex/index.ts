@@ -6,6 +6,9 @@ import ApiClient from '@/ui/services/network/ApiClient';
 import { getQueryParams } from '../getQueryParams';
 import { addIbcInformation } from './ibcData';
 import {
+  IGetBridgeActivitiesRequest,
+  IGetBridgeActivitiesResponse,
+  IGetBridgeActivity,
   IGetChartDataRequest,
   IGetChartDataResponse,
   IGetMarketListItem,
@@ -128,5 +131,17 @@ export default class DexService {
   async getSideAssets(config: AxiosRequestConfig): Promise<IAsset[]> {
     const result = await this.apiClient.get<IAssetItem[]>('/asset/assets', config);
     return addIbcInformation(result);
+  }
+
+  async getBridgeActivities(
+    data: IGetBridgeActivitiesRequest,
+    config: AxiosRequestConfig
+  ): Promise<IGetBridgeActivitiesResponse> {
+    const queryParams = getQueryParams(data as any);
+    return this.apiClient.get<IGetBridgeActivitiesResponse>(`/explorer/bridge/activities?${queryParams}`, config);
+  }
+
+  async getBridgeDetail(hash: string, config: AxiosRequestConfig): Promise<IGetBridgeActivity> {
+    return this.apiClient.get<IGetBridgeActivity>(`/explorer/bridge/activity/detailByHash?hash=${hash}`, config);
   }
 }

@@ -87,6 +87,9 @@ export default function BridgeTabScreen() {
                     }
                   }
                 }
+              }}
+              onClick={() => {
+                navigate('BridgeHistory');
               }}>
               <Typography
                 sx={{

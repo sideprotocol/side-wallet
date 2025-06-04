@@ -418,3 +418,46 @@ export interface IGetMarketListItem {
   tvl: string;
   marketCap: string;
 }
+
+export interface IGetBridgeActivitiesRequest {
+  pageNumber?: number;
+  pageSize?: number;
+  direction?: string;
+  type?: string;
+  tokenDenom?: string;
+  orderByTime?: string;
+  userAddress?: string;
+  statusText?: string;
+}
+
+export interface IGetBridgeActivity {
+  id: string;
+  direction: string;
+  type: string;
+  user: string;
+  txhash: string;
+  btcTxhash: string;
+  time: number;
+  tokenDenom: string;
+  tokenAmount: string;
+  tokenSymbol: string;
+  tokenName: string;
+  tokenExponent: string;
+  tokenPrecision: number;
+  tokenLogo: string;
+  runeData: {
+    empty: boolean;
+    additionalProp1: {};
+    additionalProp2: {};
+    additionalProp3: {};
+  };
+  rune: true;
+  status: 'Pending' | 'Completed' | 'Failed';
+  sideTxFeeAmount: string;
+  sideTxFeeDenom: string;
+  btcTxFeeAmount: string;
+}
+
+export interface IGetBridgeActivitiesResponse extends IPoolTranscationResponse {
+  content: Array<IGetBridgeActivity>;
+}
