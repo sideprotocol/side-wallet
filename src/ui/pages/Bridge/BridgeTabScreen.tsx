@@ -133,7 +133,7 @@ export default function BridgeTabScreen() {
                   onMouseOver={() => setIsFromHover(true)}
                   onMouseLeave={() => setIsFromHover(false)}
                   onClick={() => {
-                    navigate('BridgeSelectTokenScreen');
+                    navigate('BridgeSelectTokenScreen', { type: 'from' });
                   }}>
                   <Image
                     style={{
@@ -221,7 +221,7 @@ export default function BridgeTabScreen() {
                   onMouseOver={() => setIsToHover(true)}
                   onMouseLeave={() => setIsToHover(false)}
                   onClick={() => {
-                    navigate('BridgeSelectTokenScreen');
+                    navigate('BridgeSelectTokenScreen', { type: 'to' });
                   }}>
                   <Image
                     style={{
