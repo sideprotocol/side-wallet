@@ -5,6 +5,7 @@ import { CacheUTXO } from '@/shared/types';
 import { Button, Column, Content, Footer, Layout, LightTooltip, Row } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
+import { useEstimateNetworkFee } from '@/ui/hooks/bridge';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
@@ -50,7 +51,8 @@ export default function BridgeBtcConfirmScreen() {
 
   const { SIDE_BTC_EXPLORER, sideChain } = useEnvironment();
   const { bridgeAmount, fee, feeSummary, params, fromChain, fromAsset, toAsset } = useBridgeState();
-  const { bridge, estimateNetworkFee, loading } = useBridge();
+  const { bridge, loading } = useBridge();
+  const { estimateNetworkFee } = useEstimateNetworkFee();
 
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount.address);
   const { balanceList: btcBalanceList } = useGetBitcoinBalanceList(currentAccount.address);
