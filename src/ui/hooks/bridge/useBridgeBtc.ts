@@ -48,7 +48,7 @@ export const useBridgeBtc = () => {
     if (isDeposit) {
       try {
         abstractDepositBTC({
-          amount: bridgeUnitAmount,
+          amount: +bridgeUnitAmount,
           fee: Number(fee || '200')
         })
           .then((res) => {
@@ -57,6 +57,7 @@ export const useBridgeBtc = () => {
             }
           })
           .catch((err) => {
+            console.log(err);
             tools.toastError(err.message);
           })
           .finally(() => {

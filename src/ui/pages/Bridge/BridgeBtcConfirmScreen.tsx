@@ -5,13 +5,13 @@ import { CacheUTXO } from '@/shared/types';
 import { Button, Column, Content, Footer, Layout, LightTooltip, Row } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import { useEstimateNetworkFee } from '@/ui/hooks/bridge';
+import { useBridgeBtc, useEstimateNetworkFee } from '@/ui/hooks/bridge';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useBridge, useBridgeState } from '@/ui/state/bridge/hook';
+import { useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
@@ -51,7 +51,7 @@ export default function BridgeBtcConfirmScreen() {
 
   const { SIDE_BTC_EXPLORER, sideChain } = useEnvironment();
   const { bridgeAmount, fee, feeSummary, params, fromChain, fromAsset, toAsset } = useBridgeState();
-  const { bridge, loading } = useBridge();
+  const { bridge, loading } = useBridgeBtc();
   const { estimateNetworkFee } = useEstimateNetworkFee();
 
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount.address);
