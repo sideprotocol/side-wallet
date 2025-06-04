@@ -11,9 +11,14 @@ import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
 import { Stack } from '@mui/material';
+
+interface SelectAsset extends BalanceItem {
+  chainType: string;
+}
 
 export default function BridgeSelectTokenScreen() {
   const currentAccount = useCurrentAccount();
@@ -21,6 +26,7 @@ export default function BridgeSelectTokenScreen() {
   const { state } = useLocation();
   const { type } = state as { type: 'from' | 'to' };
   const allBridgeChains = useGetAllBridgeChains();
+  const { sideChain } = useEnvironment();
 
   let { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   let { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
@@ -28,26 +34,51 @@ export default function BridgeSelectTokenScreen() {
   // list, onSearch
   const [isHover, setIsHover] = useState(false);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [selectedAsset, setSelectedAsset] = useState<BalanceItem | null>(null);
+  const [selectedAsset, setSelectedAsset] = useState<SelectAsset | null>(null);
 
   const { assetList } = useMemo(() => {
-    let assetList: BalanceItem[] = [];
+    let assetList: SelectAsset[] = [];
 
-    const allAssetList = [...sideBalanceList, ...bitcoinBalanceList];
+    const allAssetList = [
+      ...bitcoinBalanceList.map((item) => ({ ...item, chainType: 'bitcoin' })),
+      ...sideBalanceList.map((item) => ({ ...item, chainType: 'sidechain' }))
+    ];
     assetList = allAssetList.filter((item) => {
       return item?.asset.symbol?.toLocaleLowerCase().includes(searchValue?.trim());
     });
 
     return {
-      assetList,
-      chainList
+      assetList
     };
   }, [sideBalanceList, bitcoinBalanceList, searchValue]);
 
   const { chainList } = useMemo(() => {
-    let chainList: IChain[] = allBridgeChains;
-    // console.log(allBridgeChains);
-    // console.log(searchValue);
+    let chainList: IChain[] = [];
+    if (selectedAsset) {
+      console.log(allBridgeChains);
+      console.log(selectedAsset);
+      const bitcoinChain = allBridgeChains.find((item) => item.isBitcoin)!;
+      if (selectedAsset.denom === 'sat') {
+        if (selectedAsset?.chainType === 'bitcoin') {
+          chainList = [bitcoinChain];
+        } else {
+          chainList = [sideChain];
+        }
+      } else {
+        chainList = [sideChain];
+        if (selectedAsset.asset.ibcData) {
+          selectedAsset.asset.ibcData.forEach((item) => {
+            const chain = allBridgeChains.find((chain) => chain.chainID === item.oppositeChainId);
+            if (chain) {
+              chainList.push(chain);
+            }
+          });
+        }
+        if (selectedAsset.denom.includes('rune')) {
+          chainList.unshift(bitcoinChain);
+        }
+      }
+    }
 
     return {
       chainList
@@ -152,7 +183,7 @@ export default function BridgeSelectTokenScreen() {
                               fromChain: chain,
                               fromAsset: selectedAsset,
                               bridgeAmount: '',
-                              balance: ''
+                              balance: selectedAsset.formatAmount
                             })
                           );
                         } else {
@@ -161,7 +192,7 @@ export default function BridgeSelectTokenScreen() {
                               toChain: chain,
                               toAsset: selectedAsset,
                               bridgeAmount: '',
-                              balance: ''
+                              balance: selectedAsset.formatAmount
                             })
                           );
                         }
@@ -177,17 +208,15 @@ export default function BridgeSelectTokenScreen() {
                           backgroundColor: colors.black_dark
                         }
                       }}>
-                      <Row>
-                        <ImageIcon
-                          url={chain.logo}
-                          style={{
-                            width: '38px',
-                            height: '38px',
-                            borderRadius: '50%'
-                          }}
-                        />
-                        <Text preset="regular" text={chain.name}></Text>
-                      </Row>
+                      <ImageIcon
+                        url={chain.logo}
+                        style={{
+                          width: '38px',
+                          height: '38px',
+                          borderRadius: '50%'
+                        }}
+                      />
+                      <Text preset="regular" text={chain.name}></Text>
                     </Stack>
                   );
                 })}
@@ -228,8 +257,8 @@ export default function BridgeSelectTokenScreen() {
                           style={{
                             gap: '0px'
                           }}>
-                          <Text preset="regular" text={asset.asset.name}></Text>
-                          <Text preset="sub" text={asset.asset.symbol}></Text>
+                          <Text preset="regular" text={asset.asset.symbol}></Text>
+                          <Text preset="sub" text={asset.asset.name}></Text>
                         </Column>
                       </Row>
 
