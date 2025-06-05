@@ -177,7 +177,7 @@ export default function BridgeDetail() {
       label: 'Transaction Fees',
       value: (
         <Stack>
-          <Stack direction="row" gap="2px">
+          <Stack direction="row" justifyContent="flex-end" gap="2px">
             <Text
               style={{
                 fontSize: '12px',
@@ -195,7 +195,7 @@ export default function BridgeDetail() {
               {sideTxInfo?.asset.symbol} (Side Chain)
             </Text>
           </Stack>
-          <Stack direction="row" gap="2px">
+          <Stack direction="row" justifyContent="flex-end" gap="2px">
             <Text
               style={{
                 fontSize: '12px',
@@ -405,7 +405,7 @@ export default function BridgeDetail() {
               my: '16px'
             }}
           />
-          <Row itemsCenter justifyBetween>
+          <Row itemsCenter justifyBetween style={{ display: 'none' }}>
             <Text
               style={{
                 fontSize: '18px',
@@ -417,7 +417,7 @@ export default function BridgeDetail() {
           </Row>
           {routingData.map((item, index) => {
             return (
-              <Row key={index} full justifyBetween itemsCenter>
+              <Row key={index} full justifyBetween itemsCenter style={{ display: 'none' }}>
                 <LightTooltip title={item.tip} arrow placement="top">
                   <Typography
                     sx={{
@@ -440,6 +440,7 @@ export default function BridgeDetail() {
           })}
           <Box
             sx={{
+              display: 'none',
               height: '1px',
               backgroundColor: colors.black_dark,
               my: '16px'

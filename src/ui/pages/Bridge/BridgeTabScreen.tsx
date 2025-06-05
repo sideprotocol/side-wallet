@@ -113,10 +113,29 @@ export default function BridgeTabScreen() {
               style={{
                 padding: '16px'
               }}>
-              <Row justifyBetween itemsCenter>
+              <Row
+                justifyBetween
+                itemsCenter
+                style={{
+                  overflow: 'hidden'
+                }}>
                 <Row itemsCenter gap="sm">
-                  <Text text="From" size="xs" color="white_muted" />
-                  <Text text={fromChain?.name} size="xs" color="white" />
+                  <Text text="From" size="sm" color="white_muted" />
+                  <Text
+                    text={fromChain?.name}
+                    size="sm"
+                    color="white"
+                    style={{
+                      whiteSpace: 'nowrap'
+                    }}
+                  />
+                  {bridgeAmount && (
+                    <Text
+                      text={`~$${new BigNumber(bridgeAmount).multipliedBy(fromAsset?.denomPrice || '0').toFormat(2)}`}
+                      size="sm"
+                      color="white_muted"
+                    />
+                  )}
                 </Row>
                 <Row itemsCenter gap="sm">
                   <Icon color="white_muted" icon="wallet-icon" size={12} />
@@ -208,8 +227,8 @@ export default function BridgeTabScreen() {
               }}>
               <Row justifyBetween itemsCenter>
                 <Row itemsCenter gap="sm">
-                  <Text text="To" size="xs" color="white_muted" />
-                  <Text text={toChain?.name || ''} size="xs" color="white" />
+                  <Text text="To" size="sm" color="white_muted" />
+                  <Text text={toChain?.name || ''} size="sm" color="white" />
                 </Row>
                 {toAddress && (
                   <Typography
@@ -235,7 +254,7 @@ export default function BridgeTabScreen() {
                   size={14}
                   readOnly
                   coin={{
-                    amount: isDisabled ? '0' : yourReceive,
+                    amount: isDisabled ? '' : yourReceive,
                     denom: toAsset?.denom || ''
                   }}
                 />
@@ -286,14 +305,21 @@ export default function BridgeTabScreen() {
             </Row>
 
             <Row justifyCenter mt="md">
-              <Text
-                text="Bridge on web app"
-                size="sm"
-                color="white_muted"
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  color: colors.grey12,
+                  transition: '.4s',
+                  cursor: 'pointer',
+                  ':hover': {
+                    color: colors.white
+                  }
+                }}
                 onClick={() => {
                   window.open(`${SIDE_STATION_URL}/bridge`);
-                }}
-              />
+                }}>
+                Bridge on web app
+              </Typography>
             </Row>
           </Column>
         </Column>

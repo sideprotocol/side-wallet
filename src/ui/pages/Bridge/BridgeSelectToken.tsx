@@ -89,7 +89,6 @@ export default function BridgeSelectTokenScreen() {
 
   const { chainList } = useMemo(() => {
     let chainList: IChain[] = [];
-    console.log(selectedAsset);
     if (selectedAsset) {
       const bitcoinChain = allBridgeChains.find((item) => item.isBitcoin)!;
 
@@ -135,7 +134,7 @@ export default function BridgeSelectTokenScreen() {
         onBack={() => {
           window.history.go(-1);
         }}
-        title="Select crypto and chain"
+        title="Select asset and network"
       />
       <Content
         style={{
@@ -191,7 +190,7 @@ export default function BridgeSelectTokenScreen() {
                 color: colors.white,
                 backgroundColor: 'transparent'
               }}
-              placeholder={selectedAsset ? 'Search chain' : 'Search crypto'}
+              placeholder={selectedAsset ? 'Search network' : 'Search asset'}
             />
             <div
               onClick={() => {

@@ -28,7 +28,10 @@ export default function BridgeHistory() {
   const { data, isLoading: loading } = useQuery({
     queryKey: ['getBridgeActivities', { userAddress: currentAccount.address }],
     queryFn: async () => {
-      return services.dex.getBridgeActivities({ userAddress: currentAccount.address }, { baseURL: SERVICE_BASE_URL });
+      return services.dex.getBridgeActivities(
+        { userAddress: currentAccount.address, pageNumber: 0, pageSize: 100 },
+        { baseURL: SERVICE_BASE_URL }
+      );
     }
   });
   return (

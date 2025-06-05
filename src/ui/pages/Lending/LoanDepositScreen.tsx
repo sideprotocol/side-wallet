@@ -295,7 +295,6 @@ export default function LoanDepositScreen() {
             <Stack
               direction="row"
               justifyContent="center"
-              alignItems="center"
               gap="8px"
               sx={{
                 height: '42px',
@@ -316,7 +315,8 @@ export default function LoanDepositScreen() {
                   fontWeight: 500,
                   color: colors.green_success
                 }}>
-                Non-custodial (multisig 2 of 2)
+                Your bitcoin is secured in a 2-of-2 multisig vault. Your key is required to authorize any spending,
+                ensuring no one can move your funds without your approval
               </Typography>
             </Stack>
           </Stack>
