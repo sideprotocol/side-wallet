@@ -304,3 +304,12 @@ interface Prevout {
   scriptpubkey_address: string;
   value: number;
 }
+
+export interface IGetBtcBridgeDepositIbcScriptRequest {
+  channel_id: string;
+  recipient_address: string;
+}
+
+export interface IGetBtcBridgeDepositIbcScriptResponse {
+  script: string;
+}

@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { ReactNode, useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 
 import { CacheUTXO } from '@/shared/types';
 import { Button, Column, Content, Footer, Layout, LightTooltip, Row } from '@/ui/components';
@@ -59,7 +60,7 @@ export default function BridgeBtcConfirmScreen() {
   const dispatch = useAppDispatch();
 
   const { SIDE_BTC_EXPLORER, sideChain } = useEnvironment();
-  const { bridgeAmount, fee, feeSummary, params, fromChain, fromAsset, toAsset } = useBridgeState();
+  const { bridgeAmount, fee, feeSummary, params, fromChain, toChain, fromAsset, toAsset, toAddress } = useBridgeState();
   const { bridge, loading } = useBridgeBtc();
   const { estimateNetworkFee } = useEstimateNetworkFee();
 
@@ -84,6 +85,34 @@ export default function BridgeBtcConfirmScreen() {
     });
   }, []);
 
+  const { data: btcBridgeDepositIbcScript, isLoading: getDepositIbcScriptLoading } = useQuery({
+    queryKey: [
+      'btcBridgeDepositIbcScript',
+      {
+        toChain,
+        toAddress,
+        toAsset
+      }
+    ],
+    queryFn: async () => {
+      const channel_id = toAsset?.asset.ibcData?.find(
+        (item) => item.oppositeChainId === toChain?.chainID
+      )?.oppositeChainChannelId;
+      if (!channel_id) {
+        return '';
+      }
+      const result = await services.bridge.getBtcBridgeDepositIbcScript(
+        {
+          channel_id,
+          recipient_address: toAddress
+        },
+        sideChain.restUrl
+      );
+      return result.script;
+    },
+    enabled: fromChain?.isBitcoin && toChain?.isCosmos
+  });
+
   const isDeposit = !!fromChain?.isBitcoin;
   const confirmations = isDeposit
     ? params?.params?.deposit_confirmation_depth
@@ -107,7 +136,8 @@ export default function BridgeBtcConfirmScreen() {
     loading ||
     Number(fee) === 0 ||
     !withdrawFee ||
-    !tx.length;
+    !tx.length ||
+    getDepositIbcScriptLoading;
 
   const depositDetailItems = (
     <>
@@ -388,7 +418,7 @@ export default function BridgeBtcConfirmScreen() {
                 text="Confirm"
                 disabled={isDisabled}
                 onClick={() => {
-                  bridge();
+                  bridge(btcBridgeDepositIbcScript);
                 }}
               />
             </Row>

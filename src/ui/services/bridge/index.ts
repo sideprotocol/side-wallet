@@ -2,7 +2,16 @@ import '@/shared/constant';
 import ApiClient from '@/ui/services/network/ApiClient';
 
 import { getQueryParams } from '../getQueryParams';
-import { AddressInfo, GetBridgeWithdrawFeeReponse, Params, UTXOAddress, UTXOBridge, WithdrawRequest } from './types';
+import {
+  AddressInfo,
+  GetBridgeWithdrawFeeReponse,
+  IGetBtcBridgeDepositIbcScriptRequest,
+  IGetBtcBridgeDepositIbcScriptResponse,
+  Params,
+  UTXOAddress,
+  UTXOBridge,
+  WithdrawRequest
+} from './types';
 
 export interface Protocolfees {
   deposit_fee: string;
@@ -86,5 +95,18 @@ export default class BridgeService {
     return this.apiClient.get<AddressInfo>(`/api/address/${address}`, {
       baseURL: SIDE_BTC_EXPLORER
     });
+  }
+
+  async getBtcBridgeDepositIbcScript(
+    data: IGetBtcBridgeDepositIbcScriptRequest,
+    restUrl: string
+  ): Promise<IGetBtcBridgeDepositIbcScriptResponse> {
+    const queryParams = getQueryParams(data as any);
+    return this.apiClient.get<IGetBtcBridgeDepositIbcScriptResponse>(
+      `/side/btcbridge/deposit/ibc_script?${queryParams}`,
+      {
+        baseURL: restUrl
+      }
+    );
   }
 }

@@ -41,7 +41,7 @@ export const useBridgeBtc = () => {
       return BigInt(current.version) > BigInt(max.version) ? current : max;
     });
 
-  const bridge = async () => {
+  const bridge = async (btcBridgeDepositIbcScript?: string) => {
     const isDeposit = !!fromChain?.isBitcoin;
     setLoading(true);
 
@@ -49,7 +49,8 @@ export const useBridgeBtc = () => {
       try {
         abstractDepositBTC({
           amount: +bridgeUnitAmount,
-          fee: Number(fee || '200')
+          fee: Number(fee || '200'),
+          btcBridgeDepositIbcScript
         })
           .then((res) => {
             if (res) {
@@ -95,8 +96,13 @@ export const useBridgeBtc = () => {
     }
   };
 
-  async function abstractDepositBTC(params) {
-    const { amount, fee: feeRate } = params;
+  async function abstractDepositBTC(params: {
+    amount: number;
+    fee: number;
+    runeId?: string;
+    btcBridgeDepositIbcScript?: string;
+  }) {
+    const { amount, fee: feeRate, btcBridgeDepositIbcScript } = params;
 
     const senderAddress = currentAccount?.address;
 
@@ -128,7 +134,8 @@ export const useBridgeBtc = () => {
             toAddress: btcVault.address,
             networkType,
             feeRate: feeRate,
-            enableRBF: true
+            enableRBF: true,
+            btcBridgeDepositIbcScript
           })
         : await sendBTC({
             btcUtxos: btcUtxos,
@@ -138,7 +145,8 @@ export const useBridgeBtc = () => {
             feeRate: feeRate,
             enableRBF: true,
             memo: undefined,
-            memos: undefined
+            memos: undefined,
+            btcBridgeDepositIbcScript
           });
     const signedTx = await wallet.signPsbtWithHex(psbt.toHex(), toSignInputs, true);
 

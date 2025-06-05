@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { Buffer } from 'buffer';
 
 import { ToSignInput, UTXO_DUST, UnspentOutput } from '@unisat/wallet-sdk';
-import { ECPair, bitcoin, ecc } from '@unisat/wallet-sdk/lib/bitcoin-core';
+import { ECPair, bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 import { ErrorCodes, WalletUtilsError } from '@unisat/wallet-sdk/lib/error';
 import { NetworkType } from '@unisat/wallet-sdk/lib/network';
 import { varint } from '@unisat/wallet-sdk/lib/runes';
@@ -12,34 +12,6 @@ import { RuneId } from '@unisat/wallet-sdk/lib/runes/rund_id';
 import { Transaction, utxoHelper } from '@unisat/wallet-sdk/lib/transaction';
 
 export const toXOnly = (pubKey: Buffer) => (pubKey.length === 32 ? pubKey : pubKey.slice(1, 33));
-
-function tapTweakHash(pubKey: Buffer, h: Buffer | undefined): Buffer {
-  return bitcoin.crypto.taggedHash('TapTweak', Buffer.concat(h ? [pubKey, h] : [pubKey]));
-}
-
-/**
- * Transform raw private key to taproot address private key
- */
-export function tweakSigner(signer: bitcoin.Signer, opts: any = {}): bitcoin.Signer {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  let privateKey: Uint8Array | undefined = signer.privateKey!;
-  if (!privateKey) {
-    throw new Error('Private key is required for tweaking signer!');
-  }
-  if (signer.publicKey[0] === 3) {
-    privateKey = ecc.privateNegate(privateKey);
-  }
-
-  const tweakedPrivateKey = ecc.privateAdd(privateKey, tapTweakHash(toXOnly(signer.publicKey), opts.tweakHash));
-  if (!tweakedPrivateKey) {
-    throw new Error('Invalid tweaked private key!');
-  }
-
-  return ECPair.fromPrivateKey(Buffer.from(tweakedPrivateKey), {
-    network: opts.network
-  });
-}
 
 /**
  * ECDSA signature validator
@@ -154,13 +126,15 @@ export async function sendAllBTC({
   toAddress,
   networkType,
   feeRate,
-  enableRBF = true
+  enableRBF = true,
+  btcBridgeDepositIbcScript
 }: {
   btcUtxos: UnspentOutput[];
   toAddress: string;
   networkType: NetworkType;
   feeRate: number;
   enableRBF?: boolean;
+  btcBridgeDepositIbcScript?: string;
 }) {
   if (utxoHelper.hasAnyAssets(btcUtxos)) {
     throw new WalletUtilsError(ErrorCodes.NOT_SAFE_UTXOS);
@@ -171,6 +145,10 @@ export async function sendAllBTC({
   tx.setFeeRate(feeRate);
   tx.setEnableRBF(enableRBF);
   tx.addOutput(toAddress, UTXO_DUST);
+
+  if (btcBridgeDepositIbcScript) {
+    tx.addScriptOutput(Buffer.from(btcBridgeDepositIbcScript, 'hex'), 0);
+  }
 
   const toSignInputs: ToSignInput[] = [];
   btcUtxos.forEach((v, index) => {
@@ -210,7 +188,8 @@ export async function sendBTC({
   feeRate,
   enableRBF = true,
   memo,
-  memos
+  memos,
+  btcBridgeDepositIbcScript
 }: {
   btcUtxos: UnspentOutput[];
   tos: {
@@ -223,6 +202,7 @@ export async function sendBTC({
   enableRBF?: boolean;
   memo?: string;
   memos?: string[];
+  btcBridgeDepositIbcScript?: string;
 }) {
   if (utxoHelper.hasAnyAssets(btcUtxos)) {
     throw new WalletUtilsError(ErrorCodes.NOT_SAFE_UTXOS);
@@ -237,6 +217,10 @@ export async function sendBTC({
   tos.forEach((v) => {
     tx.addOutput(v.address, v.satoshis);
   });
+
+  if (btcBridgeDepositIbcScript) {
+    tx.addScriptOutput(Buffer.from(btcBridgeDepositIbcScript, 'hex'), 0);
+  }
 
   if (memo) {
     if (Buffer.from(memo, 'hex').toString('hex') === memo) {

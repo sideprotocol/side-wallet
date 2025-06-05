@@ -35,7 +35,6 @@ export default function BridgeSelectTokenScreen() {
 
   let { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   let { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
-  console.log(sideBalanceList);
 
   // list, onSearch
   const [isHover, setIsHover] = useState(false);
@@ -174,7 +173,7 @@ export default function BridgeSelectTokenScreen() {
                   bgcolor: colors.grey12
                 }}>
                 <ImageIcon url={selectedAsset.asset.logo} style={{ width: '14px', height: '14px' }} />
-                <Text preset="regular" size="xs" text={selectedAsset.asset.name} color="white"></Text>
+                <Text preset="regular" size="xs" text={selectedAsset.asset.symbol} color="white"></Text>
               </Stack>
             )}
             <Input

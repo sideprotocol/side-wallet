@@ -22,6 +22,7 @@
     },
     "UNISAT_IO_API": "https://devnet-rest.side.one/side/btcbridge"
   },
+  "version": "1.0.0",
   "chains": [
     {
       "chainID": "grand-1",
