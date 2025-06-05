@@ -35,6 +35,7 @@ export default function BridgeSelectTokenScreen() {
 
   let { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   let { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
+  console.log(sideBalanceList);
 
   // list, onSearch
   const [isHover, setIsHover] = useState(false);
@@ -44,33 +45,40 @@ export default function BridgeSelectTokenScreen() {
   const { assetList } = useMemo(() => {
     let assetList: SelectAsset[] = [];
 
+    // 所有资产
     const allAssetList = [
       ...bitcoinBalanceList.map((item) => ({ ...item, chainType: 'bitcoin' })),
       ...sideBalanceList.map((item) => ({ ...item, chainType: 'sidechain' }))
     ];
+
+    // 只展示 btc /sbtc资产
     assetList = allAssetList.filter((item) => {
       return item.denom === 'sat';
     });
 
     if (type === 'to') {
-      if (fromAsset?.denom === 'sat') {
-        if (fromChain?.isBitcoin) {
+      if (fromChain?.isBitcoin) {
+        // 如果 fromAsset 是 btc，则只展示 sbtc
+        assetList = assetList.filter((item) => {
+          return item.chainType === 'sidechain' && item.denom === fromAsset?.denom;
+        });
+      } else {
+        // 如果 fromAsset 是 sbtc，则展示 btc 和 sbtc
+        assetList = assetList.filter((item) => {
+          return item.denom === fromAsset?.denom;
+        });
+
+        // 判断sbtc是否有ibc
+        const sideSbtcAsset = assetList.find((item) => item.denom === 'sat');
+        if (sideSbtcAsset?.asset.ibcData) {
           assetList = assetList.filter((item) => {
-            return item.chainType === 'sidechain' && item.denom === fromAsset.denom;
+            return item.chainType === 'bitcoin';
           });
-        } else {
-          assetList = assetList.filter((item) => {
-            return item.denom === fromAsset.denom;
-          });
-          const sideSbtcAsset = assetList.find((item) => item.denom === 'sat');
-          if (!sideSbtcAsset?.asset.ibcData) {
-            assetList = assetList.filter((item) => {
-              return item.denom === fromAsset.denom && item.chainType === 'bitcoin';
-            });
-          }
         }
       }
     }
+
+    // 筛选
     assetList = assetList.filter((item) => {
       return item?.asset.symbol?.toLocaleLowerCase().includes(searchValue?.trim());
     });
@@ -82,12 +90,17 @@ export default function BridgeSelectTokenScreen() {
 
   const { chainList } = useMemo(() => {
     let chainList: IChain[] = [];
+    console.log(selectedAsset);
     if (selectedAsset) {
       const bitcoinChain = allBridgeChains.find((item) => item.isBitcoin)!;
-      if (selectedAsset.denom === 'sat' && selectedAsset?.chainType === 'bitcoin') {
+
+      // 如果选中是 btc，则只展示 bitcoin
+      if (selectedAsset?.chainType === 'bitcoin') {
         chainList = [bitcoinChain];
       } else {
+        // 如果选中是 sbtc，必须展示 sidechain
         chainList = [sideChain];
+        // 如果选中有 ibc，则需要展示 ibc链
         if (selectedAsset.asset.ibcData) {
           selectedAsset.asset.ibcData.forEach((item) => {
             const chain = allBridgeChains.find((chain) => chain.chainID === item.oppositeChainId);
@@ -96,22 +109,26 @@ export default function BridgeSelectTokenScreen() {
             }
           });
         }
-        if (selectedAsset.denom.includes('rune')) {
-          chainList.unshift(bitcoinChain);
-        }
       }
     }
+
     if (type === 'from') {
+      // fromChain暂时不能为cosmos链
       chainList = chainList.filter((chain) => !chain.isCosmos);
     } else {
+      // toChain不能为fromChain
       chainList = chainList.filter((chain) => chain.chainID !== fromChain?.chainID);
     }
+
+    // 筛选
+    chainList = chainList.filter((item) => {
+      return item?.name?.toLocaleLowerCase().includes(searchValue?.trim());
+    });
 
     return {
       chainList
     };
   }, [allBridgeChains, selectedAsset, searchValue]);
-  console.log(selectedAsset);
 
   return (
     <Layout>
