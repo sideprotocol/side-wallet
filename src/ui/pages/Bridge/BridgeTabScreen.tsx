@@ -12,7 +12,8 @@ import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
-import { formatUnitAmount, parseUnitAmount } from '@/ui/utils';
+import { copyToClipboard, formatUnitAmount, parseUnitAmount } from '@/ui/utils';
+import { formatAddress } from '@/ui/utils/format';
 import { Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
@@ -210,9 +211,23 @@ export default function BridgeTabScreen() {
                   <Text text="To" size="xs" color="white_muted" />
                   <Text text={toChain?.name || ''} size="xs" color="white" />
                 </Row>
-                <Row itemsCenter gap="sm">
-                  <Text size="xs" color="white_muted" text={toAddress} />
-                </Row>
+                {toAddress && (
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      color: colors.grey12,
+                      cursor: 'pointer',
+                      transition: '.4s',
+                      ':hover': {
+                        color: colors.main
+                      }
+                    }}
+                    onClick={() => {
+                      copyToClipboard(toAddress);
+                    }}>
+                    {formatAddress(toAddress, 6)}
+                  </Typography>
+                )}
               </Row>
 
               <Row justifyBetween itemsCenter gap="sm">

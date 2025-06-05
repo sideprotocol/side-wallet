@@ -114,7 +114,6 @@ export default function BridgeSelectTokenScreen() {
       chainList
     };
   }, [allBridgeChains, selectedAsset, searchValue]);
-  console.log(chainList);
 
   return (
     <Layout>
@@ -236,9 +235,7 @@ export default function BridgeSelectTokenScreen() {
                         dispatch(
                           BridgeActions.update({
                             toChain: chain,
-                            toAsset: selectedAsset,
-                            bridgeAmount: '',
-                            balance: selectedAsset.formatAmount
+                            toAsset: selectedAsset
                           })
                         );
                         if (chain.isCosmos) {
