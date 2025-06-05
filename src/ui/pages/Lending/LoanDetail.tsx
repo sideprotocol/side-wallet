@@ -132,7 +132,7 @@ export default function LoanDetailScreen() {
           </Text>
         </>
       ),
-      tip: 'xxx'
+      tip: 'The total amount of collateral you’ve locked'
     },
     {
       label: 'Vault',
@@ -153,7 +153,7 @@ export default function LoanDetailScreen() {
           {formatAddress(loan.vault_address, 6)}
         </Typography>
       ),
-      tip: 'xxx'
+      tip: 'The address of the non-custodial multisig (2-of-2) vault holding your collateral. Your key is required to authorize any spending, ensuring no one can move your funds without your approval'
     },
     {
       label: 'Lock Tx',
@@ -183,7 +183,7 @@ export default function LoanDetailScreen() {
           )}
         </Box>
       ),
-      tip: 'xxx'
+      tip: 'The Bitcoin transaction that deposited your collateral into the vault'
     },
     {
       label: 'Unlock Tx',
@@ -205,7 +205,7 @@ export default function LoanDetailScreen() {
           {loan.status !== 'Liquidated' ? formatAddress(loanDetailCex?.returnBtcTxhash || '', 6) : '-'}
         </Typography>
       ),
-      tip: 'xxx'
+      tip: 'The Bitcoin transaction that returns your collateral'
     },
     {
       label: 'Unilateral Exit After',
@@ -219,7 +219,7 @@ export default function LoanDetailScreen() {
           {formatTimeWithUTC(+loan.final_timeout * 1000)}
         </Text>
       ),
-      tip: 'xxx'
+      tip: 'The time after which you can reclaim your collateral unilaterally if the system is inactive'
     }
   ];
 
@@ -246,7 +246,7 @@ export default function LoanDetailScreen() {
           </Text>
         </>
       ),
-      tip: 'xxx'
+      tip: 'The borrowed amount disbursed to you'
     },
     {
       label: 'Maturity Time',
@@ -260,7 +260,7 @@ export default function LoanDetailScreen() {
           {formatTimeWithUTC(+loan.maturity_time * 1000)}
         </Text>
       ),
-      tip: 'xxx'
+      tip: 'The date and time your loan must be repaid'
     },
     {
       label: 'Accrued Interest',
@@ -280,7 +280,7 @@ export default function LoanDetailScreen() {
           )}
         </Text>
       ),
-      tip: 'xxx'
+      tip: 'The interest accumulated so far'
     },
     {
       label: 'Max Interest',
@@ -297,7 +297,7 @@ export default function LoanDetailScreen() {
           )}
         </Text>
       ),
-      tip: 'xxx'
+      tip: 'The maximum interest that can be charged over the full loan term'
     },
     {
       label: 'Disburse Tx',
@@ -318,7 +318,7 @@ export default function LoanDetailScreen() {
           {formatAddress(loanDetailCex?.disbursementTxhash || '', 6)}
         </Typography>
       ),
-      tip: 'xxx'
+      tip: 'The transaction (on Side Chain) that delivered the loan amount to your wallet'
     },
     {
       label: 'Repay Tx',
@@ -339,7 +339,7 @@ export default function LoanDetailScreen() {
           {formatAddress(loanDetailCex?.repaymentTxhash || '', 6)}
         </Typography>
       ),
-      tip: 'xxx'
+      tip: 'The transaction (on Side Chain) you used to repay the loan'
     }
   ];
 
@@ -356,17 +356,17 @@ export default function LoanDetailScreen() {
           {loan.status === 'Requested' ? '-' : getTruncate(loan.liquidation_price || liquidationEvent?.price || '0', 2)}
         </Text>
       ),
-      tip: 'xxx'
+      tip: 'The collateral price at which liquidation would be triggered'
     },
     {
       label: 'Health Factor',
       value: <HealthFactor loan={loan} />,
-      tip: 'xxx'
+      tip: 'A measure of your loan safety. Liquidation may occur if it falls below 1.0'
     },
     {
       label: 'Current LTV',
       value: <LoanLTV loan={loan} sx={{ fontSize: '12px', fontWeight: 500 }} />,
-      tip: 'xxx'
+      tip: 'The current loan-to-value ratio of your position'
     },
     {
       label: 'Liquidation LTV',
@@ -380,7 +380,7 @@ export default function LoanDetailScreen() {
           {`${lendingPool?.pool?.config?.liquidation_threshold || '-'}%`}
         </Text>
       ),
-      tip: 'xxx'
+      tip: 'The LTV threshold at which your position can be liquidated'
     },
     {
       label: 'Liquidation Penalty',
@@ -394,7 +394,7 @@ export default function LoanDetailScreen() {
           {`${(liquidationParams?.params.liquidation_bonus_factor || 0) / 10}%`}
         </Text>
       ),
-      tip: 'xxx'
+      tip: 'The amount of collateral taken as penalty upon liquidation to reward liquidators'
     },
 
     {
@@ -414,7 +414,7 @@ export default function LoanDetailScreen() {
               )}
         </Text>
       ),
-      tip: 'xxx'
+      tip: 'The amount of collateral sold during liquidation'
     },
     {
       label: 'Unliquidated Collateral',
@@ -433,7 +433,7 @@ export default function LoanDetailScreen() {
               )}
         </Text>
       ),
-      tip: 'xxx'
+      tip: 'The remaining collateral not affected by liquidation, which will be returned to you'
     },
     {
       label: 'Liquidation ID',
@@ -447,7 +447,7 @@ export default function LoanDetailScreen() {
           {liquidation?.liquidation.id || '-'}
         </Text>
       ),
-      tip: 'xxx'
+      tip: 'A unique identifier for the liquidation event'
     }
   ];
   return (

@@ -174,7 +174,7 @@ export default function LendingTanScreen() {
           )}
         </Stack>
       ),
-      tip: 'xxx'
+      tip: 'A measure of how safe your loan is. A value above 1.0 means you’re safe from liquidation'
     },
     {
       label: 'Current LTV',
@@ -196,7 +196,7 @@ export default function LendingTanScreen() {
           {`${currentLtv}%`}
         </Typography>
       ),
-      tip: 'xxx'
+      tip: 'The ratio between your input borrow amount and your collateral value'
     },
     {
       label: 'Max LTV',
@@ -211,7 +211,7 @@ export default function LendingTanScreen() {
           </Typography>
         </>
       ),
-      tip: 'xxx'
+      tip: 'The maximum loan-to-value ratio you’re allowed to borrow'
     },
     {
       label: 'Liquidation LTV',
@@ -224,15 +224,17 @@ export default function LendingTanScreen() {
           {!poolData ? '-' : `${poolData?.baseData.config.liquidation_threshold}%`}
         </Typography>
       ),
-      tip: 'xxx'
+      tip: 'The LTV threshold at which your position becomes eligible for liquidation'
     },
     {
       label: `Liquidation Price (BTC/${poolTokenBalance?.asset.symbol})`,
-      value: `${getTruncate(liquidationEvent?.price || '0', 2)}`
+      value: `${getTruncate(liquidationEvent?.price || '0', 2)}`,
+      tip: 'The collateral price at which liquidation would be triggered'
     },
     {
       label: 'Interest Rate',
-      value: `${new BigNumber(borrow_apr).div(10).toFixed(2)}%`
+      value: `${new BigNumber(borrow_apr).div(10).toFixed(2)}%`,
+      tip: 'The annual percentage rate (APR) applied to your loan'
     },
     {
       label: 'Max Interest',
@@ -256,7 +258,8 @@ export default function LendingTanScreen() {
             {poolData?.token.asset.symbol}
           </small>
         </>
-      )
+      ),
+      tip: 'The maximum interest that can accrue on your loan'
     },
     {
       label: 'Request Fees',
@@ -275,7 +278,8 @@ export default function LendingTanScreen() {
             {requestFeeToken?.asset.symbol}
           </small>
         </>
-      )
+      ),
+      tip: 'Upfront fees required to initiate the loan'
     }
   ];
 
