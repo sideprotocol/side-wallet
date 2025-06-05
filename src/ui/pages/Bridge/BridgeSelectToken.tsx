@@ -84,12 +84,8 @@ export default function BridgeSelectTokenScreen() {
     let chainList: IChain[] = [];
     if (selectedAsset) {
       const bitcoinChain = allBridgeChains.find((item) => item.isBitcoin)!;
-      if (selectedAsset.denom === 'sat') {
-        if (selectedAsset?.chainType === 'bitcoin') {
-          chainList = [bitcoinChain];
-        } else {
-          chainList = [sideChain];
-        }
+      if (selectedAsset.denom === 'sat' && selectedAsset?.chainType === 'bitcoin') {
+        chainList = [bitcoinChain];
       } else {
         chainList = [sideChain];
         if (selectedAsset.asset.ibcData) {
@@ -105,8 +101,9 @@ export default function BridgeSelectTokenScreen() {
         }
       }
     }
-
-    if (type === 'to') {
+    if (type === 'from') {
+      chainList = chainList.filter((chain) => !chain.isCosmos);
+    } else {
       chainList = chainList.filter((chain) => chain.chainID !== fromChain?.chainID);
     }
 
@@ -114,6 +111,7 @@ export default function BridgeSelectTokenScreen() {
       chainList
     };
   }, [allBridgeChains, selectedAsset, searchValue]);
+  console.log(selectedAsset);
 
   return (
     <Layout>
@@ -199,12 +197,14 @@ export default function BridgeSelectTokenScreen() {
           {selectedAsset ? (
             <>
               {chainList?.map((chain) => {
+                const ibcChannel = selectedAsset.asset.ibcData?.find(
+                  (item) => item.oppositeChainId === chain.chainID
+                )?.sideChainChannelId;
                 return (
                   <Stack
                     key={chain.name}
                     direction="row"
                     alignItems="center"
-                    gap="8px"
                     onClick={() => {
                       if (type === 'from') {
                         const bitcoinChain = allBridgeChains.find((item) => item.isBitcoin)!;
@@ -231,6 +231,7 @@ export default function BridgeSelectTokenScreen() {
                             balance: selectedAsset.formatAmount
                           })
                         );
+                        window.history.go(-1);
                       } else {
                         dispatch(
                           BridgeActions.update({
@@ -239,10 +240,16 @@ export default function BridgeSelectTokenScreen() {
                           })
                         );
                         if (chain.isCosmos) {
-                          navigate('BridgeTargetAddress');
+                          dispatch(
+                            BridgeActions.update({
+                              toAddress: ''
+                            })
+                          );
+                          navigate('BridgeTargetAddress', { ibcChannel });
+                        } else {
+                          window.history.go(-1);
                         }
                       }
-                      window.history.go(-1);
                     }}
                     sx={{
                       padding: '10px 16px',
@@ -262,7 +269,25 @@ export default function BridgeSelectTokenScreen() {
                         borderRadius: '50%'
                       }}
                     />
-                    <Text preset="regular" text={chain.name}></Text>
+                    <Text
+                      size="sm"
+                      color="white"
+                      text={chain.name}
+                      style={{
+                        fontWeight: 600,
+                        marginLeft: '8px'
+                      }}
+                    />
+                    {ibcChannel && (
+                      <Text
+                        size="sm"
+                        color="white_muted"
+                        text={`/${ibcChannel}`}
+                        style={{
+                          fontWeight: 600
+                        }}
+                      />
+                    )}
                   </Stack>
                 );
               })}

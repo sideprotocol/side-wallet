@@ -15,6 +15,7 @@ export interface BridgeState {
   toChain: IChain | null;
   fromAsset: BalanceItem | null;
   toAsset: BalanceItem | null;
+  fromAddress: string;
   toAddress: string;
   bridgeAmount: string;
   balance: string;
@@ -28,6 +29,7 @@ export const initialState: BridgeState = {
   toChain: null,
   fromAsset: null,
   toAsset: null,
+  fromAddress: '',
   toAddress: '',
   bridgeAmount: '',
   balance: '0',
@@ -51,6 +53,7 @@ const slice = createSlice({
           toChain?: IChain | null;
           fromAsset?: BalanceItem | null;
           toAsset?: BalanceItem | null;
+          fromAddress?: string;
           toAddress?: string;
           bridgeAmount?: string;
           balance?: string;
