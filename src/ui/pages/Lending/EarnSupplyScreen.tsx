@@ -97,7 +97,7 @@ export default function EarnSupplyScreen() {
           {poolData?.supplyApy}%
         </Typography>
       ),
-      tip: 'xxx'
+      tip: 'Your estimated annual return, based on pool utilization and including token incentives if applicable'
     },
     {
       label: 'You will receive',
@@ -113,7 +113,7 @@ export default function EarnSupplyScreen() {
           </small>
         </Typography>
       ),
-      tip: 'xxx'
+      tip: 'The amount of sToken you’ll receive in exchange for your deposited tokens'
     },
     {
       label: 'Expected Interests / day',
@@ -129,7 +129,7 @@ export default function EarnSupplyScreen() {
           </small>
         </Typography>
       ),
-      tip: 'xxx'
+      tip: 'he estimated daily interest you’ll earn, calculated based on current rates'
     }
   ];
 

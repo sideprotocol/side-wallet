@@ -54,7 +54,7 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
     {
       label: 'Available Liquidity',
       value: getTruncate(new BigNumber(item.totalSupply).minus(item.totalBorrow).toString(), 6),
-      tip: 'xxx'
+      tip: 'The total amount of tokens available for borrowing'
     },
     {
       label: 'Borrow APR',
@@ -63,12 +63,12 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
       )
         .div(10)
         .toFixed(2)}%`,
-      tip: 'xxx'
+      tip: 'The annual percentage rate (APR) applied to your loan'
     },
     {
       label: 'Max LTV',
       value: `${item?.baseData.config?.max_ltv || '-'}%`,
-      tip: 'xxx'
+      tip: 'The maximum interest that can accrue on your loan'
     }
   ];
 

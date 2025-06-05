@@ -75,8 +75,7 @@ export default function RepayLoanScreen() {
             {borrowToken?.asset.symbol}
           </Typography>
         </>
-      ),
-      tip: 'xxx'
+      )
     },
     {
       label: 'Accrued Interest',
@@ -103,7 +102,7 @@ export default function RepayLoanScreen() {
           </Typography>
         </>
       ),
-      tip: 'xxx'
+      tip: 'The interest accumulated so far'
     },
     {
       label: 'You will receive',
@@ -139,7 +138,7 @@ export default function RepayLoanScreen() {
           </Typography>
         </>
       ),
-      tip: 'xxx'
+      tip: 'The amount of collateral you’ll receive back after repaying your loan'
     }
   ];
 

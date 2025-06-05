@@ -80,12 +80,12 @@ export default function LoanAuthorizeScreen() {
     {
       label: 'Liquidation Price (BTC/USDC)',
       value: liquidationEvent ? getTruncate(liquidationEvent?.price || '0', 2) : '-',
-      tip: 'xxx',
+      tip: 'The collateral price at which liquidation would be triggered',
       valueTip: 'Price will update if multiple deposits are detected. Please wait.'
     },
     {
       label: 'Maturity Date',
-      tip: 'xxx',
+      tip: 'The date when your loan term ends and repayment is due. If not repaid by this date, your collateral will be liquidated',
       value: !loan ? '-' : formatTimeWithUTC(+loan.loan.maturity_time * 1000)
     }
   ];
@@ -232,7 +232,10 @@ export default function LoanAuthorizeScreen() {
                     borderRadius: '10px',
                     bgcolor: colors.card_bgColor
                   }}>
-                  <LightTooltip title={'xxx'} arrow placement="top">
+                  <LightTooltip
+                    title={'The Bitcoin address where your collateral will be returned once the loan is fully repaid'}
+                    arrow
+                    placement="top">
                     <Typography
                       sx={{
                         fontSize: '12px',
