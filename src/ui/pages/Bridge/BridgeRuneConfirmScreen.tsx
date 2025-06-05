@@ -1,12 +1,11 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 
-import { Button, Column, Content, Footer, Layout, Row } from '@/ui/components';
+import { Button, Column, Content, Footer, Header, Layout, Row } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
-import MainHeader from '@/ui/pages/Main/MainHeader';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useBridge, useBridgeState } from '@/ui/state/bridge/hook';
@@ -239,7 +238,12 @@ export default function BridgeTabScreen() {
 
   return (
     <Layout>
-      <MainHeader title={''} />
+      <Header
+        title={'Review Transaction'}
+        onBack={() => {
+          window.history.go(-1);
+        }}
+      />
       <Content classname={'hide-scrollbar'}>
         <Row full relative mt="lg" rounded={true}>
           <Column

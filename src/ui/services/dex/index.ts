@@ -130,7 +130,7 @@ export default class DexService {
 
   async getSideAssets(config: AxiosRequestConfig): Promise<IAsset[]> {
     const result = await this.apiClient.get<IAssetItem[]>('/asset/assets', config);
-    return addIbcInformation(result);
+    return addIbcInformation(result, config.baseURL);
   }
 
   async getBridgeActivities(

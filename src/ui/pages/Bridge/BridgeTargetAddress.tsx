@@ -9,7 +9,7 @@ import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
 import { Box } from '@mui/material';
 
-function createCosmosAddressRegex(prefix) {
+export function createCosmosAddressRegex(prefix) {
   const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const regex = new RegExp(`^${escapedPrefix}1[a-zA-Z0-9]{38,44}$`);
   return regex;

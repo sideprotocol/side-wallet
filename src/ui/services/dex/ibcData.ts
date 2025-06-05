@@ -1,13 +1,14 @@
+// import testnetData from './testnet.json';
+import { SERVICE_BASE_URL_MAINNET } from '@/shared/constant';
 import { IAsset, IAssetItem } from '@/shared/types';
 
-// import mainnetData from './mainnet.json';
-// import testnetData from './testnet.json';
 import devnetData from './devnet.json';
+import mainnetData from './mainnet.json';
 
-export function addIbcInformation(initData: IAssetItem[]): IAssetItem[] {
+export function addIbcInformation(initData: IAssetItem[], baseURL?: string): IAssetItem[] {
   const initDataMap = new Map<string, IAssetItem>(),
     ibcDataMap = new Map<string, IAsset>();
-  devnetData.data.forEach((item) => {
+  (baseURL === SERVICE_BASE_URL_MAINNET ? mainnetData : devnetData).data.forEach((item) => {
     ibcDataMap.set(item.denom, item);
   });
   initData.forEach((item) => {
