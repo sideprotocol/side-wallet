@@ -223,6 +223,20 @@ export interface LeadingPool {
       maturity: string;
       min_maturity_factor: number;
     }>;
+    collateral_asset: {
+      decimals: number;
+      denom: string;
+      is_base_price_asset: boolean;
+      price_symbol: string;
+      symbol: string;
+    };
+    lending_asset: {
+      decimals: number;
+      denom: string;
+      is_base_price_asset: boolean;
+      price_symbol: string;
+      symbol: string;
+    };
   };
   id: string;
   reserve_amount: string;
@@ -235,6 +249,7 @@ export interface LeadingPool {
     total_borrowed: string;
   }>;
 }
+
 export type LendingPool = {
   poolId: string;
   tokenDenom: string;

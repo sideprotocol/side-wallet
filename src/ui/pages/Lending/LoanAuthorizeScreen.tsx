@@ -78,7 +78,7 @@ export default function LoanAuthorizeScreen() {
 
   const data = [
     {
-      label: 'Liquidation Price (BTC/USDC)',
+      label: `Liquidation Price (${poolData?.baseData.config.collateral_asset.price_symbol}/${poolData?.baseData.config.lending_asset.price_symbol})`,
       value: liquidationEvent ? getTruncate(liquidationEvent?.price || '0', 2) : '-',
       tip: 'The collateral price at which liquidation would be triggered',
       valueTip: 'Price will update if multiple deposits are detected. Please wait.'

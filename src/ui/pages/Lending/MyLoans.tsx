@@ -3,8 +3,10 @@ import { useMemo, useState } from 'react';
 
 import { Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
+import useGetDlcPrice from '@/ui/hooks/useGetDlcPrice';
 import useGetLoansData from '@/ui/hooks/useGetLoansData';
 import useGetPoolDataById from '@/ui/hooks/useGetPoolDataById';
+import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { Loan, LoanStatus } from '@/ui/services/lending/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -232,6 +234,12 @@ export function HealthFactor({ loan }: { loan: Loan }) {
   const collateralAmount = formatUnitAmount(loan.collateral_amount, collateralToken?.asset.exponent || 6);
   const borrowTokenAmount = formatUnitAmount(loan.borrow_amount.amount, borrowToken?.asset.exponent || 6);
 
+  const { data: poolsData } = useGetPoolsData();
+
+  const poolData = poolsData.find((p) => p.token.denom === loan.borrow_amount?.denom);
+  const { dlcPrice } = useGetDlcPrice(poolData?.baseData.config);
+
+  // 健康因子: 比特币数量 * 比特币相对价格(BTC/xx) * 清算LTV / 借入数量
   const { healthFactor } = useMemo(() => {
     if (
       BigNumber(collateralAmount || 0).eq(0) ||
@@ -244,10 +252,10 @@ export function HealthFactor({ loan }: { loan: Loan }) {
     }
     return {
       healthFactor: new BigNumber(collateralAmount)
-        .times(collateralToken?.denomPrice || 0)
+        .times(dlcPrice || 0)
         .times(lendingPool?.pool?.config?.liquidation_threshold || 0)
         .div(100)
-        .div(new BigNumber(borrowTokenAmount || 1).times(borrowToken?.denomPrice || 0))
+        .div(borrowTokenAmount || 1)
         .toFixed(2)
     };
   }, [borrowTokenAmount, collateralAmount, borrowToken?.denomPrice, collateralToken?.denomPrice, lendingPool]);
@@ -278,6 +286,7 @@ export function LoanLTV({ loan, sx }: { loan: Loan; sx?: BoxProps['sx'] }) {
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
 
   const { data: lendingPool } = useGetPoolDataById({ poolId: loan.pool_id });
+  const { dlcPrice } = useGetDlcPrice(lendingPool?.pool.config);
 
   const borrowToken = balanceList.find((item) => item.denom === loan.borrow_amount.denom);
   const bitcoinToken = bitcoinBalanceList.find((item) => item.denom === 'sat');
@@ -292,13 +301,13 @@ export function LoanLTV({ loan, sx }: { loan: Loan; sx?: BoxProps['sx'] }) {
     }
     return {
       healthFactor: new BigNumber(bitcoinAmount)
-        .times(bitcoinToken?.denomPrice || 0)
+        .times(dlcPrice)
         .times(lendingPool?.pool?.config?.liquidation_threshold || 0)
         .div(100)
-        .div(new BigNumber(borrowTokenAmount || 1).times(borrowToken?.denomPrice || 0))
+        .div(borrowTokenAmount || 1)
         .toFixed(2)
     };
-  }, [loan.vault_address, lendingPool, bitcoinAmount, borrowTokenAmount, borrowToken, bitcoinToken?.denomPrice]);
+  }, [loan.vault_address, lendingPool, bitcoinAmount, borrowTokenAmount, borrowToken]);
 
   if (+bitcoinAmount && +borrowTokenAmount && bitcoinToken?.denomPrice && ['Requested', 'Open'].includes(loan.status)) {
     return (
@@ -317,9 +326,8 @@ export function LoanLTV({ loan, sx }: { loan: Loan; sx?: BoxProps['sx'] }) {
           ...sx
         }}>
         {new BigNumber(borrowTokenAmount || 0)
-          .multipliedBy(borrowToken?.denomPrice || 0)
           .div(bitcoinAmount || 1)
-          .div(bitcoinToken?.denomPrice || '1')
+          .div(dlcPrice || '1')
           .times(100)
           .toFixed(2) + '%'}
       </Typography>

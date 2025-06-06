@@ -8,6 +8,7 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import useCreateLoan from '@/ui/hooks/useCreateLoan';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import useGetDlcEventById from '@/ui/hooks/useGetDlcEventById';
+import useGetDlcPrice from '@/ui/hooks/useGetDlcPrice';
 import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
 import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
@@ -17,7 +18,7 @@ import { useAppDispatch } from '@/ui/state/hooks';
 import { useLendingState } from '@/ui/state/lending/hook';
 import { LendingActions } from '@/ui/state/lending/reducer';
 import { colors } from '@/ui/theme/colors';
-import { getTruncate } from '@/ui/utils';
+import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 import { Box, Checkbox, Popover, Stack, Typography } from '@mui/material';
 
@@ -79,22 +80,9 @@ export default function LendingTanScreen() {
     maturity: maturity
   });
 
-  const { healthFactor } = useMemo(() => {
-    if (BigNumber(collateralAmount || 0).eq(0) || BigNumber(borrowAmount || 0).eq(0) || !poolData?.baseData.config) {
-      return {
-        healthFactor: '-'
-      };
-    }
-    return {
-      healthFactor: new BigNumber(collateralAmount)
-        .times(satBalance?.denomPrice || 0)
-        .times(poolData?.baseData.config.liquidation_threshold || 0)
-        .div(100)
-        .div(new BigNumber(borrowAmount || 1).times(poolData?.token.denomPrice || 0))
-        .toFixed(2)
-    };
-  }, [borrowAmount, poolTokenBalance, collateralAmount, satBalance, poolData]);
+  const { dlcPrice } = useGetDlcPrice(poolData?.baseData.config);
 
+  // 最大可借数量: 比特币数量 * 比特币相对价格(BTC/xx) * 最大LTV
   const { borrowMaxAmount } = useMemo(() => {
     let borrowMaxAmount = '0';
     try {
@@ -104,10 +92,9 @@ export default function LendingTanScreen() {
         };
       }
       borrowMaxAmount = new BigNumber(collateralAmount || '0')
-        .multipliedBy(satBalance.denomPrice || '0')
+        .multipliedBy(dlcPrice || '0')
         .multipliedBy(poolData.baseData.config.max_ltv)
         .div(100)
-        .div(+poolData.token.denomPrice || '1')
         .toFixed(+poolData.token.asset.precision, BigNumber.ROUND_DOWN);
     } catch (error) {
       return {
@@ -118,17 +105,33 @@ export default function LendingTanScreen() {
     return { borrowMaxAmount };
   }, [collateralAmount, borrowAmount, poolData, satBalance, poolTokenBalance]);
 
+  // 健康因子: 比特币数量 * 比特币相对价格(BTC/xx) * 清算LTV / 借入数量
+  const { healthFactor } = useMemo(() => {
+    if (BigNumber(collateralAmount || 0).eq(0) || BigNumber(borrowAmount || 0).eq(0) || !poolData?.baseData.config) {
+      return {
+        healthFactor: '-'
+      };
+    }
+    return {
+      healthFactor: new BigNumber(collateralAmount)
+        .times(dlcPrice || 0)
+        .times(poolData?.baseData.config.liquidation_threshold || 0)
+        .div(100)
+        .div(borrowAmount || 1)
+        .toFixed(2)
+    };
+  }, [borrowAmount, poolTokenBalance, collateralAmount, poolData]);
+
   const borrow_apr = poolData?.baseData.config.tranches.find((item) => item.maturity === maturity)?.borrow_apr || 0;
 
   const currentLtv = useMemo(
     () =>
       new BigNumber(borrowAmount || 0)
-        .multipliedBy(poolData?.token.denomPrice || 0)
         .div(+collateralAmount || 1)
-        .div(+(satBalance?.denomPrice || '0') || '1')
+        .div(dlcPrice || '1')
         .multipliedBy(100)
         .toFixed(2),
-    [borrowAmount, collateralAmount, poolData?.token.denomPrice, satBalance?.denomPrice]
+    [borrowAmount, collateralAmount, dlcPrice]
   );
 
   const data = [
@@ -193,7 +196,11 @@ export default function LendingTanScreen() {
                 ? colors.yellow
                 : colors.main
           }}>
-          {`${currentLtv}%`}
+          {`${new BigNumber(borrowAmount || 0)
+            .div(+collateralAmount || 1)
+            .div(dlcPrice || '1')
+            .multipliedBy(100)
+            .toFixed(2)}%`}
         </Typography>
       ),
       tip: 'The ratio between your input borrow amount and your collateral value'
@@ -227,7 +234,7 @@ export default function LendingTanScreen() {
       tip: 'The LTV threshold at which your position becomes eligible for liquidation'
     },
     {
-      label: `Liquidation Price (BTC/${poolTokenBalance?.asset.symbol})`,
+      label: `Liquidation Price (${poolData?.baseData.config.collateral_asset.price_symbol}/${poolData?.baseData.config.lending_asset.price_symbol})`,
       value: `${getTruncate(liquidationEvent?.price || '0', 2)}`,
       tip: 'The collateral price at which liquidation would be triggered'
     },
@@ -265,7 +272,7 @@ export default function LendingTanScreen() {
       label: 'Request Fees',
       value: (
         <>
-          {toReadableAmount(
+          {formatUnitAmount(
             poolData?.baseData.config.request_fee.amount || '0',
             requestFeeToken?.asset.exponent || '6'
           )}
