@@ -249,6 +249,7 @@ export default function BridgeSelectTokenScreen() {
                             fromAsset: selectedAsset,
                             toChain,
                             toAsset,
+                            toAddress: '',
                             bridgeAmount: '',
                             balance: selectedAsset.formatAmount
                           })
