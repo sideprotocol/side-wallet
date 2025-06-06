@@ -298,7 +298,6 @@ export default function BridgeBtcConfirmScreen() {
                   px: '12px',
                   borderRadius: '10px',
                   width: '100%',
-                  mt: '8px',
                   border: `1px solid ${isEditError ? colors.red : colors.white20}`,
                   transition: '.4s',
                   ':hover': {

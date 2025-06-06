@@ -12,7 +12,7 @@ import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { colors } from '@/ui/theme/colors';
-import { copyToClipboard, formatUnitAmount, parseUnitAmount } from '@/ui/utils';
+import { formatUnitAmount, parseUnitAmount } from '@/ui/utils';
 import { formatAddress } from '@/ui/utils/format';
 import { Stack, Typography } from '@mui/material';
 
@@ -242,7 +242,7 @@ export default function BridgeTabScreen() {
                       }
                     }}
                     onClick={() => {
-                      copyToClipboard(toAddress);
+                      window.open(`${toChain?.explorerUrl}/address/${toAddress}`, '_blank');
                     }}>
                     {formatAddress(toAddress, 6)}
                   </Typography>
