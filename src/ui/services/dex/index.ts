@@ -4,7 +4,6 @@ import { IAsset, IAssetItem } from '@/shared/types';
 import ApiClient from '@/ui/services/network/ApiClient';
 
 import { getQueryParams } from '../getQueryParams';
-import { addIbcInformation } from './ibcData';
 import {
   IGetBridgeActivitiesRequest,
   IGetBridgeActivitiesResponse,
@@ -129,8 +128,7 @@ export default class DexService {
   }
 
   async getSideAssets(config: AxiosRequestConfig): Promise<IAsset[]> {
-    const result = await this.apiClient.get<IAssetItem[]>('/asset/assets', config);
-    return addIbcInformation(result, config.baseURL);
+    return this.apiClient.get<IAssetItem[]>('/asset/assets', config);
   }
 
   async getBridgeActivities(

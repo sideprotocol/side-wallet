@@ -4,14 +4,10 @@ import { updateVersion } from '../global/actions';
 
 export interface LendingState {
   poolTokenDenom: string;
-  operationTab: 'supply' | 'withdraw';
-  maturity: string | undefined;
 }
 
 export const initialState: LendingState = {
-  poolTokenDenom: 'uusdc',
-  operationTab: 'supply',
-  maturity: undefined
+  poolTokenDenom: 'uusdc'
 };
 
 const slice = createSlice({
@@ -26,8 +22,6 @@ const slice = createSlice({
       action: {
         payload: {
           poolTokenDenom?: string;
-          operationTab?: 'supply' | 'withdraw';
-          maturity?: string;
         };
       }
     ) {

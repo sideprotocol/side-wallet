@@ -13,5 +13,6 @@ export interface GetConstantsResponse {
     SIDE_CHAIN: IChain;
     UNISAT_IO_API: string;
   };
+  version: string;
   chains: IChain[];
 }

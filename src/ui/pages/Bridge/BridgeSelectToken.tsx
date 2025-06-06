@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { BalanceItem, IChain } from '@/shared/types';
+import { BalanceItem, IChain, NetworkType } from '@/shared/types';
 import { Column, Content, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useGetAllBridgeChains } from '@/ui/hooks/bridge';
@@ -14,6 +14,7 @@ import { useBridgeState } from '@/ui/state/bridge/hook';
 import { BridgeActions } from '@/ui/state/bridge/reducer';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
+import { useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
 import { Stack } from '@mui/material';
 
@@ -27,6 +28,7 @@ export default function BridgeSelectTokenScreen() {
   const currentAccount = useCurrentAccount();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const networkType = useNetworkType();
   const { state } = useLocation();
   const { type } = state as { type: 'from' | 'to'; fromAsset?: BalanceItem; toAsset?: BalanceItem };
   const allBridgeChains = useGetAllBridgeChains();
@@ -116,6 +118,11 @@ export default function BridgeSelectTokenScreen() {
     } else {
       // toChain不能为fromChain
       chainList = chainList.filter((chain) => chain.chainID !== fromChain?.chainID);
+
+      // 主网 toChain暂时不展示cosmos链
+      if (networkType === NetworkType.MAINNET) {
+        chainList = chainList.filter((chain) => !chain.isCosmos);
+      }
     }
 
     // 筛选

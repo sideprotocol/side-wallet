@@ -1,10 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 
-import { SERVICE_BASE_URL_TESTNET } from '@/shared/constant';
 import ApiClient from '@/ui/services/network/ApiClient';
 
-import mainnetData from './mainnet.json';
-import testnetData from './testnet.json';
 import { GetConstantsResponse } from './types';
 
 export default class EnvironmentService {
@@ -14,15 +11,18 @@ export default class EnvironmentService {
     this.apiClient = apiClient;
   }
 
+  // async getWalletParams(config: AxiosRequestConfig): Promise<GetConstantsResponse> {
+  //   //
+  //   return this.apiClient.get<GetConstantsResponse>('/wallet/config', config);
+  // }
+
   async getWalletParams(config: AxiosRequestConfig): Promise<GetConstantsResponse> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (config.baseURL === SERVICE_BASE_URL_TESTNET) {
-          resolve(testnetData);
-        } else {
-          resolve(mainnetData);
-        }
-      }, 1000);
-    });
+    const response = await fetch(`${config.baseURL}/wallet/config`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
   }
 }

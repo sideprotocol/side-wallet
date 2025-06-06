@@ -355,7 +355,7 @@ type TypeChain = {
 export const BITCOIN_CHAINS_MAP: { [key: string]: TypeChain } = {
   [ChainType.BITCOIN_TESTNET]: {
     enum: ChainType.BITCOIN_TESTNET,
-    label: 'Bitcoin Testnet',
+    label: 'Bitcoin',
     icon: 'https://api.side.one/static/token/logo/btc.svg',
     unit: 'tBTC',
     networkType: NetworkType.TESTNET,
@@ -369,7 +369,7 @@ export const BITCOIN_CHAINS_MAP: { [key: string]: TypeChain } = {
   },
   [ChainType.BITCOIN_MAINNET]: {
     enum: ChainType.BITCOIN_MAINNET,
-    label: 'Bitcoin Mainnet',
+    label: 'Bitcoin',
     icon: 'https://api.side.one/static/token/logo/btc.svg',
     unit: 'BTC',
     networkType: NetworkType.MAINNET,

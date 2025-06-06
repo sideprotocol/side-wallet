@@ -132,7 +132,7 @@ export default function BridgeTabScreen() {
                   {bridgeAmount && (
                     <Text
                       text={`~$${new BigNumber(bridgeAmount).multipliedBy(fromAsset?.denomPrice || '0').toFormat(2)}`}
-                      size="sm"
+                      size="xs"
                       color="white_muted"
                     />
                   )}
@@ -145,7 +145,7 @@ export default function BridgeTabScreen() {
 
               <Row justifyBetween itemsCenter gap="sm">
                 <CoinInput
-                  size={14}
+                  size={20}
                   coin={{
                     amount: bridgeAmount,
                     denom: fromAsset?.denom || ''
@@ -251,7 +251,7 @@ export default function BridgeTabScreen() {
 
               <Row justifyBetween itemsCenter gap="sm">
                 <CoinInput
-                  size={14}
+                  size={20}
                   readOnly
                   coin={{
                     amount: isDisabled ? '' : yourReceive,

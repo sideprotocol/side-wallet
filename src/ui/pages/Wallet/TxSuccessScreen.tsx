@@ -1,5 +1,7 @@
+import { useState } from 'react';
+
 import { CHAINS_ENUM } from '@/shared/constant';
-import { Button, Column, Content, Footer, Icon, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Footer, Icon, Layout, Row, SuccessAnimation, Text } from '@/ui/components';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
@@ -19,13 +21,14 @@ export default function TxSuccessScreen() {
   const navigate = useNavigate();
   const { SIDE_BRIDGEEXPLORER_URL } = useEnvironment();
   const blockstream = useBlockstreamUrl(chain);
+  const [isHover, setIsHover] = useState(false);
 
   return (
     <Layout>
       <Content style={{ gap: spacing.small, marginTop: '50px' }}>
         <Column justifyCenter mt="xxl" gap="xl">
           <Row justifyCenter>
-            <img width={'105px'} src="/images/icons/main/correct.gif" alt="" />
+            <SuccessAnimation />
           </Row>
 
           <Text preset="title" text="Transaction completed!" textCenter />
@@ -33,6 +36,16 @@ export default function TxSuccessScreen() {
           <Row
             itemsCenter
             justifyCenter
+            gap="sm"
+            style={{
+              cursor: 'pointer'
+            }}
+            onMouseOver={() => {
+              setIsHover(true);
+            }}
+            onMouseLeave={() => {
+              setIsHover(false);
+            }}
             onClick={() => {
               window.open(type === 'bridge' ? `${SIDE_BRIDGEEXPLORER_URL}/${txid}` : `${blockstream}/tx/${txid}`);
             }}>
@@ -40,15 +53,13 @@ export default function TxSuccessScreen() {
               sx={{
                 fontSize: '14px',
                 fontWeight: '500',
-                color: colors.grey12,
-                ':hover': {
-                  color: colors.white
-                }
+                transition: '.4s',
+                color: isHover ? colors.white : colors.grey12
               }}>
               {type === 'bridge' ? 'View on Side Station' : 'View on Block Explorer'}
             </Typography>
 
-            <Icon icon="link" color="white" size={20} />
+            <Icon icon="link" color={isHover ? 'white' : 'white_muted'} size={14} />
           </Row>
         </Column>
       </Content>
@@ -56,9 +67,8 @@ export default function TxSuccessScreen() {
         <Button
           preset={'primary'}
           full
-          text="Finish"
+          text="Done"
           onClick={() => {
-            // window.history.go(-1);
             navigate('MainScreen');
           }}
         />

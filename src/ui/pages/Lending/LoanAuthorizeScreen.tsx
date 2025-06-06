@@ -55,7 +55,7 @@ export default function LoanAuthorizeScreen() {
 
   const { approveLoan, loading, tx } = useApproveLoan(loanId, collateralAmount);
 
-  const { poolTokenDenom, maturity } = useLendingState();
+  const { poolTokenDenom } = useLendingState();
 
   const [refundAddress, setRefundAddress] = useState(currentAccount.address);
 
@@ -71,7 +71,7 @@ export default function LoanAuthorizeScreen() {
     borrowToken: poolData?.token,
     borrowTokenAmount: toReadableAmount(borrowAmount, poolData?.token.asset.exponent || 6),
     poolId: poolData?.baseData.id || '',
-    maturity: maturity
+    maturity: loan?.loan.maturity
   });
 
   const liquidationEvent = isWalletDeposit ? LiquidationEventExact : liquidationEventCalc;

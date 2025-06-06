@@ -494,7 +494,13 @@ export default function BridgeBtcConfirmScreen() {
                   Tx
                 </Typography>
 
-                <Typography color={colors.grey12} fontSize={'14px'} className="w-1/3">
+                <Typography
+                  color={colors.grey12}
+                  fontSize={'14px'}
+                  className="w-1/3"
+                  sx={{
+                    flexShrink: '0'
+                  }}>
                   Index
                 </Typography>
                 <Typography color={colors.grey12} fontSize={'14px'} className="text-right">
@@ -519,7 +525,7 @@ export default function BridgeBtcConfirmScreen() {
                       onClick={() => {
                         window.open(`${SIDE_BTC_EXPLORER}/tx/${item?.txid}`, '_blank');
                       }}>
-                      {formatAddress(item.txid || '-', 6)}
+                      {formatAddress(item.txid || '-', 3)}
                     </Typography>
 
                     <Typography fontSize={'14px'} className="w-1/3 text-center">
@@ -538,15 +544,6 @@ export default function BridgeBtcConfirmScreen() {
             </Column>
 
             <Row full itemsCenter>
-              <Button
-                preset="default"
-                text="Last"
-                full
-                onClick={() => {
-                  window.history.go(-1);
-                }}
-              />
-
               <Button
                 full
                 preset="primary"

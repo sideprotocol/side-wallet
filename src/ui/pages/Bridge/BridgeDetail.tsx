@@ -70,14 +70,33 @@ export default function BridgeDetail() {
     {
       label: 'Status',
       value: (
-        <Typography
-          sx={{
-            fontSize: '12px',
-            fontWeight: 500,
-            color: colors.white
-          }}>
-          {data.status}
-        </Typography>
+        <>
+          <Text
+            style={{
+              fontSize: '12px',
+              fontWeight: 500,
+              color: colors.white
+            }}>
+            {data.status}
+          </Text>
+          {data.status === 'Pending' && (
+            <svg
+              className="animate-[spin_3s_linear_infinite] inline-block ml-1"
+              width="17"
+              height="17"
+              viewBox="0 0 17 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M8.5 2V3.66667M8.5 12.5V15.1667M4.33333 8.5H2M14.6667 8.5H13.6667M12.8047 12.8047L12.3333 12.3333M12.9428 4.11052L12 5.05333M3.78105 13.219L5.66667 11.3333M3.91912 3.97245L5.33333 5.38667"
+                stroke={colors.white}
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </>
       ),
       tip: 'xxx'
     },

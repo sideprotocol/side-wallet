@@ -11,7 +11,10 @@ export default function useGetDlcPrice(poolConfig?: PoolDataItem['baseData']['co
   const { data, isLoading: loading } = useQuery({
     queryKey: ['getDlcPrice', { priceSymbol: poolConfig?.lending_asset.price_symbol }],
     queryFn: async () => {
-      const symbol = `${poolConfig?.collateral_asset.price_symbol}${poolConfig?.lending_asset.price_symbol}`;
+      let symbol = `${poolConfig?.collateral_asset.price_symbol}${poolConfig?.lending_asset.price_symbol}`;
+      if (poolConfig?.lending_asset.is_base_price_asset) {
+        symbol = `${poolConfig?.lending_asset.price_symbol}${poolConfig?.collateral_asset.price_symbol}`;
+      }
       const { price } = await services.lending.getDlcPrice(symbol, { baseURL: sideChain?.restUrl });
       let _price = price;
       if (poolConfig?.lending_asset.is_base_price_asset) {

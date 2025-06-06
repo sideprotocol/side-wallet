@@ -14,9 +14,7 @@ import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useAppDispatch } from '@/ui/state/hooks';
 import { useLendingState } from '@/ui/state/lending/hook';
-import { LendingActions } from '@/ui/state/lending/reducer';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
 import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
@@ -29,10 +27,9 @@ export default function LendingTanScreen() {
 
   const [collateralAmount, setcollateralAmount] = useState('');
   const [isHover, setIsHover] = useState(false);
+  const [maturity, setmaturity] = useState('');
 
-  const { poolTokenDenom, maturity } = useLendingState();
-
-  const dispatch = useAppDispatch();
+  const { poolTokenDenom } = useLendingState();
 
   const navigator = useNavigate();
 
@@ -56,7 +53,7 @@ export default function LendingTanScreen() {
   useEffect(() => {
     if (!poolData) return;
 
-    dispatch(LendingActions.update({ maturity: poolData?.baseData.config.tranches[0].maturity }));
+    setmaturity(poolData?.baseData.config.tranches[0].maturity);
   }, [poolData]);
 
   const collateralValue = useMemo(() => {
@@ -701,7 +698,7 @@ export default function LendingTanScreen() {
                 position: 'relative'
               }}
               onClick={() => {
-                dispatch(LendingActions.update({ maturity: item.maturity }));
+                setmaturity(item.maturity);
                 setAnchorEl(null);
               }}>
               <Typography

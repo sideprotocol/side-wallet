@@ -67,16 +67,6 @@ export class OpenApiService {
     if (!this.store.deviceId) {
       this.store.deviceId = randomstring.generate(12);
     }
-
-    try {
-      const config = await this.getWalletConfig();
-      this.config = config;
-      if (config.endpoint && config.endpoint !== this.endpoint) {
-        this.endpoint = config.endpoint;
-      }
-    } catch (e) {
-      console.error(e);
-    }
   };
 
   setClientAddress = async (token: string, flag: number) => {

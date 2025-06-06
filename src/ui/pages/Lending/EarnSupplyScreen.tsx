@@ -21,7 +21,6 @@ import { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import useSupply from '@/ui/hooks/useSupply';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useLendingState } from '@/ui/state/lending/hook';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate, useLocationState } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
@@ -35,13 +34,11 @@ export default function EarnSupplyScreen() {
   const currentAccount = useCurrentAccount();
   const [supplyAmount, setsupplyAmount] = useState('');
 
-  const { poolTokenDenom } = useLendingState();
-
   const { supply, loading, tx } = useSupply();
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
-  const poolTokenBalance = balanceList.find((b) => b.denom == poolTokenDenom);
+  const poolTokenBalance = balanceList.find((b) => b.denom == poolData.token.denom);
 
   const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: poolData?.baseData?.id || '' });
 
