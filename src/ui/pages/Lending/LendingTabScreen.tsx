@@ -17,7 +17,7 @@ import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useLendingState } from '@/ui/state/lending/hook';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate } from '@/ui/utils';
-import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
+import { toUnitAmount } from '@/ui/utils/formatter';
 import { Box, Checkbox, Popover, Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
@@ -294,19 +294,47 @@ export default function LendingTanScreen() {
   const [isChecked, setIsChecked] = useState(false);
   const [isHoverMaturity, setIsHoverMaturity] = useState(false);
 
-  const isDisabled = useMemo(() => {
-    return (
-      loading ||
-      !+collateralAmount ||
-      !+borrowAmount ||
-      !liquidationEvent ||
-      healthFactor === '-' ||
-      (+healthFactor <= 1.2 && !isChecked) ||
-      +currentLtv >= 80 ||
+  const { isDisabled, buttonText } = useMemo(() => {
+    let isDisabled = false,
+      buttonText = 'Request Loan';
+    if (loading) {
+      isDisabled = true;
+    } else if (!+collateralAmount || !+borrowAmount) {
+      isDisabled = true;
+    } else if (!liquidationEvent) {
+      isDisabled = true;
+      buttonText = 'Liquidation event does not exist';
+    } else if (healthFactor === '-' || (+healthFactor <= 1.2 && !isChecked) || +currentLtv >= 80) {
+      isDisabled = true;
+    } else if (
       +borrowAmount <
-        +toReadableAmount(poolData?.baseData.config.origination_fee || '0', poolData?.token.asset.exponent || '6') ||
-      dlcEvent?.event.has_triggered
-    );
+      +formatUnitAmount(poolData?.baseData.config.min_borrow_amount || '0', poolData?.token.asset.exponent || '6')
+    ) {
+      isDisabled = true;
+      buttonText = `Min borrow amount: ${formatUnitAmount(
+        poolData?.baseData.config.min_borrow_amount || '0',
+        poolData?.token.asset.exponent || '6'
+      )}`;
+    } else if (
+      +borrowAmount >
+      +formatUnitAmount(poolData?.baseData.config.max_borrow_amount || '0', poolData?.token.asset.exponent || '6')
+    ) {
+      isDisabled = true;
+      buttonText = `Max borrow amount: ${formatUnitAmount(
+        poolData?.baseData.config.min_borrow_amount || '0',
+        poolData?.token.asset.exponent || '6'
+      )}`;
+    } else if (dlcEvent?.event.has_triggered) {
+      isDisabled = true;
+      buttonText = 'Dlc event has triggered';
+    } else if (+(requestFeeToken?.amount || '0') < +(poolData?.baseData.config.request_fee.amount || '0')) {
+      isDisabled = true;
+      buttonText = 'No enough balance';
+    }
+    return {
+      isDisabled,
+      buttonText
+    };
   }, [loading, poolData, collateralAmount, borrowAmount, liquidationEvent, healthFactor, dlcEvent, isChecked]);
 
   return (
@@ -647,11 +675,7 @@ export default function LendingTanScreen() {
               disabled={isDisabled}
               loading={loading}
               preset="primary"
-              text={
-                +(requestFeeToken?.amount || '0') < +(poolData?.baseData.config.request_fee.amount || '0')
-                  ? 'No enough balance'
-                  : 'Request Loan'
-              }
+              text={buttonText}
               full></Button>
           </Row>
         </Content>

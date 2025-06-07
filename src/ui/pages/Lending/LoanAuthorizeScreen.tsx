@@ -350,6 +350,7 @@ export default function LoanAuthorizeScreen() {
                           viewBox="0 0 20 20"
                           fill="none"
                           onClick={() => {
+                            if (loading) return;
                             setIsEditRefundAddress(true);
                             setTimeout(() => {
                               inputRef.current?.focus();
