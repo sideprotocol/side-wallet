@@ -5,7 +5,7 @@ import 'swiper/css';
 
 import { COIN_DUST } from '@/shared/constant';
 import { RawTxInfo } from '@/shared/types';
-import { Button, Column, Content, CopyIcon, Footer, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, CopyIcon, Footer, Layout, LightTooltip, Row, Text } from '@/ui/components';
 import { useTools } from '@/ui/components/ActionComponent';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
@@ -319,15 +319,22 @@ export default function LoanDepositScreen() {
                   strokeLinejoin="round"
                 />
               </svg>
-              <Typography
-                sx={{
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  color: colors.green_success
-                }}>
-                Your bitcoin is secured in a 2-of-2 multisig vault. Your key is required to authorize any spending,
-                ensuring no one can move your funds without your approval
-              </Typography>
+              <LightTooltip
+                arrow
+                placement="top"
+                title={
+                  'Your bitcoin is secured in a 2-of-2 multisig vault. Your key is required to authorize any spending, ensuring no one can move your funds without your approval'
+                }>
+                <Typography
+                  sx={{
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    color: colors.green_success,
+                    cursor: 'pointer'
+                  }}>
+                  Non-custodial (multisig 2 of 2)
+                </Typography>
+              </LightTooltip>
             </Stack>
           </Stack>
 

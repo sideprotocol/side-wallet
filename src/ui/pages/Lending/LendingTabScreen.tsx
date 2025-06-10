@@ -131,6 +131,16 @@ export default function LendingTanScreen() {
     [borrowAmount, collateralAmount, dlcPrice]
   );
 
+  const liquidationPriceSymbol = `${
+    poolData?.baseData.config.lending_asset.is_base_price_asset
+      ? poolData?.baseData.config.lending_asset.price_symbol
+      : poolData?.baseData.config.collateral_asset.price_symbol
+  }/${
+    poolData?.baseData.config.lending_asset.is_base_price_asset
+      ? poolData?.baseData.config.collateral_asset.price_symbol
+      : poolData?.baseData.config.lending_asset.price_symbol
+  }`;
+
   const data = [
     {
       label: 'Health Factor',
@@ -231,8 +241,8 @@ export default function LendingTanScreen() {
       tip: 'The LTV threshold at which your position becomes eligible for liquidation'
     },
     {
-      label: `Liquidation Price (${poolData?.baseData.config.collateral_asset.price_symbol}/${poolData?.baseData.config.lending_asset.price_symbol})`,
-      value: `${getTruncate(liquidationEvent?.price || '0', 2)}`,
+      label: `Liquidation Price (${liquidationPriceSymbol})`,
+      value: `${getTruncate(liquidationEvent?.price || '0', 3)}`,
       tip: 'The collateral price at which liquidation would be triggered'
     },
     {

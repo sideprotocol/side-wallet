@@ -343,9 +343,19 @@ export default function LoanDetailScreen() {
     }
   ];
 
+  const liquidationPriceSymbol = `${
+    lendingPool?.pool?.config.lending_asset.is_base_price_asset
+      ? lendingPool?.pool?.config.lending_asset.price_symbol
+      : lendingPool?.pool?.config.collateral_asset.price_symbol
+  }/${
+    lendingPool?.pool?.config.lending_asset.is_base_price_asset
+      ? lendingPool?.pool?.config.collateral_asset.price_symbol
+      : lendingPool?.pool?.config.lending_asset.price_symbol
+  }`;
+
   const dataLiquidation = [
     {
-      label: 'Liquidation Price',
+      label: `Liquidation Price (${liquidationPriceSymbol})`,
       value: (
         <Text
           style={{

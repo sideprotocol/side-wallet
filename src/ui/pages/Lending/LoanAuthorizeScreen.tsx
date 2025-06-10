@@ -76,10 +76,20 @@ export default function LoanAuthorizeScreen() {
 
   const liquidationEvent = isWalletDeposit ? LiquidationEventExact : liquidationEventCalc;
 
+  const liquidationPriceSymbol = `${
+    poolData?.baseData.config.lending_asset.is_base_price_asset
+      ? poolData?.baseData.config.lending_asset.price_symbol
+      : poolData?.baseData.config.collateral_asset.price_symbol
+  }/${
+    poolData?.baseData.config.lending_asset.is_base_price_asset
+      ? poolData?.baseData.config.collateral_asset.price_symbol
+      : poolData?.baseData.config.lending_asset.price_symbol
+  }`;
+
   const data = [
     {
-      label: `Liquidation Price (${poolData?.baseData.config.collateral_asset.price_symbol}/${poolData?.baseData.config.lending_asset.price_symbol})`,
-      value: liquidationEvent ? getTruncate(liquidationEvent?.price || '0', 2) : '-',
+      label: `Liquidation Price (${liquidationPriceSymbol})`,
+      value: liquidationEvent ? getTruncate(liquidationEvent?.price || '0', 3) : '-',
       tip: 'The collateral price at which liquidation would be triggered',
       valueTip: 'Price will update if multiple deposits are detected. Please wait.'
     },
