@@ -20,7 +20,7 @@ export default function useGetDlcPrice(poolConfig?: PoolDataItem['baseData']['co
       if (poolConfig?.lending_asset.is_base_price_asset) {
         _price = new BigNumber(1).div(price).toString();
       }
-      console.log(`${poolConfig?.collateral_asset.price_symbol}${poolConfig?.lending_asset.price_symbol}`, _price);
+      // console.log(`${poolConfig?.collateral_asset.price_symbol}${poolConfig?.lending_asset.price_symbol}`, _price);
       return _price;
     },
     enabled: !!poolConfig

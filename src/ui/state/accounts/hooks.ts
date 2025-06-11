@@ -7,7 +7,6 @@ import { AppState } from '..';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { useCurrentKeyring } from '../keyrings/hooks';
 import { keyringsActions } from '../keyrings/reducer';
-import { settingsActions } from '../settings/reducer';
 import { accountActions } from './reducer';
 
 export function useAccountsState(): AppState['accounts'] {
@@ -232,9 +231,5 @@ export function useReloadAccounts() {
 
     dispatch(accountActions.expireBalance());
     dispatch(accountActions.expireInscriptions());
-
-    wallet.getWalletConfig().then((data) => {
-      dispatch(settingsActions.updateSettings({ walletConfig: data }));
-    });
   }, [dispatch, wallet]);
 }

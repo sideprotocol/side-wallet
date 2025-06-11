@@ -91,7 +91,22 @@ class EnvironmentService {
     this.store.SERVICE_BASE_URL = baseURL;
   };
 
-  getEnvironment = () => {
+  getEnvironment = async () => {
+    try {
+      const { config, chains } = await services.environment.getWalletParams({ baseURL: this.store.SERVICE_BASE_URL });
+      this.store.UNISAT_RUNE_URL = config.UNISAT_RUNE_URL;
+      this.store.DEX_CONTRACT = config.DEX_CONTRACT;
+      this.store.DEX_ROUTER_CONTRACT = config.DEX_ROUTER_CONTRACT;
+      this.store.SIDE_BTC_EXPLORER = config.SIDE_BTC_EXPLORER;
+      this.store.UNISAT_SERVICE_ENDPOINT = config.UNISAT_SERVICE_ENDPOINT;
+      this.store.UNISAT_IO_API = config.UNISAT_IO_API;
+      this.store.SIDE_STATION_URL = config.SIDE_STATION_URL;
+      this.store.SIDE_BRIDGEEXPLORER_URL = config.SIDE_BRIDGEEXPLORER_URL;
+      this.store.sideChain = config.SIDE_CHAIN;
+      this.store.chains = chains;
+    } catch (err) {
+      console.error(err);
+    }
     return {
       UNISAT_RUNE_URL: this.store.UNISAT_RUNE_URL,
       DEX_CONTRACT: this.store.DEX_CONTRACT,

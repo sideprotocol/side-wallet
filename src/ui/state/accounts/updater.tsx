@@ -28,11 +28,7 @@ export default function AccountUpdater() {
     if (isUnlocked && currentAccount && currentAccount.key != self.preAccountKey) {
       self.preAccountKey = currentAccount.key;
 
-      // setLoading(true);
-
       reloadAccounts();
-
-      // setLoading(false);
     }
   }, [dispatch, currentAccount, wallet, isUnlocked]);
 
