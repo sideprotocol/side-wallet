@@ -135,7 +135,7 @@ export default function MyLoansScreen() {
                           fontWeight: 500,
                           color: colors.white
                         }}>
-                        {collateralAmount}
+                        {+collateralAmount > 0 ? collateralAmount : '-'}
                       </Text>
                       <Text
                         style={{

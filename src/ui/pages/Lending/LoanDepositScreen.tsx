@@ -323,7 +323,7 @@ export default function LoanDepositScreen() {
                 arrow
                 placement="top"
                 title={
-                  'Your bitcoin is secured in a 2-of-2 multisig vault. Your key is required to authorize any spending, ensuring no one can move your funds without your approval'
+                  'Your BTC is secured in a 2-of-2 multisig where your key is required to authorize any transaction, ensuring no one can move your funds without your approval.'
                 }>
                 <Typography
                   sx={{

@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
@@ -16,6 +17,7 @@ import {
 } from '@/ui/components';
 import useClaimCollateral from '@/ui/hooks/useClaimCollateral';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
+import { useGetBitcoinConfirms } from '@/ui/hooks/useGetBitcoinConfirms';
 import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
 import useGetLiquidationById from '@/ui/hooks/useGetLiquidationById';
 import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
@@ -72,7 +74,7 @@ export default function LoanDetailScreen() {
       return data?.loan.status === 'Closed' ? false : 30000;
     },
     refetchIntervalInBackground: true,
-    enabled: !!loanDetailCex
+    enabled: !!(loanDetailCex?.expectedCollateralAmount || loanDetailCex?.collateralAmount)
   });
   const loan = data?.loan;
   const { data: lendingPool } = useGetPoolDataById({ poolId: loan?.pool_id });
@@ -86,7 +88,7 @@ export default function LoanDetailScreen() {
     enabled: loan?.status === 'Liquidated'
   });
 
-  const { depositTxs } = useGetDepositTx(loan?.vault_address || '', loan?.collateral_amount || '0');
+  const { depositTxs, txids } = useGetDepositTx(loan?.vault_address || '', loan?.collateral_amount || '0');
 
   const borrowToken = sideBalanceList.find((o) => o.denom === loan?.borrow_amount.denom);
   const collateralToken = bitcoinBalanceList.find((item) => item.denom === 'sat');
@@ -107,6 +109,16 @@ export default function LoanDetailScreen() {
 
   const { canClaim } = useGetLoanAuthorization(loan);
   const { claim, loading: claimLoading, tx } = useClaimCollateral(loan?.vault_address);
+
+  const fundingTx = txids?.[0];
+
+  const [getTxDisabled, setGetTxDisabled] = useState(false);
+  const { confirms } = useGetBitcoinConfirms(fundingTx || '', getTxDisabled);
+  useEffect(() => {
+    if (+confirms <= 6) {
+      setGetTxDisabled(true);
+    }
+  }, [confirms]);
 
   if (!loan) return null;
   const dataCollateral = [
@@ -158,30 +170,44 @@ export default function LoanDetailScreen() {
     {
       label: 'Lock Tx',
       value: (
-        <Box>
-          {loan.authorizations[0] ? (
-            (loan.authorizations[0]?.deposit_txs || [])?.map((tx, index) => (
-              <Typography
-                key={index}
-                sx={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: colors.white,
-                  cursor: 'pointer',
-                  ':hover': {
-                    color: colors.main
-                  }
-                }}
-                onClick={() => {
-                  window.open(`${SIDE_BTC_EXPLORER}/tx/${tx}`);
-                }}>
-                {formatAddress(tx, 6)}
-              </Typography>
-            ))
-          ) : (
-            <Typography sx={{ fontSize: '12px', fontWeight: 500, color: colors.white }}>-</Typography>
+        <>
+          {fundingTx && +confirms <= 6 && (
+            <Box
+              sx={{
+                fontSize: '10px',
+                p: '1px 6px',
+                borderRadius: '4px',
+                backgroundColor: colors.white1,
+                color: colors.white
+              }}>
+              {confirms > 0 ? `${confirms} Confirmed` : 'Not Confirmed'}
+            </Box>
           )}
-        </Box>
+          <Box>
+            {loan.authorizations[0] ? (
+              (loan.authorizations[0]?.deposit_txs || [])?.map((tx, index) => (
+                <Typography
+                  key={index}
+                  sx={{
+                    fontSize: '12px',
+                    fontWeight: 500,
+                    color: colors.white,
+                    cursor: 'pointer',
+                    ':hover': {
+                      color: colors.main
+                    }
+                  }}
+                  onClick={() => {
+                    window.open(`${SIDE_BTC_EXPLORER}/tx/${tx}`);
+                  }}>
+                  {formatAddress(tx, 6)}
+                </Typography>
+              ))
+            ) : (
+              <Typography sx={{ fontSize: '12px', fontWeight: 500, color: colors.white }}>-</Typography>
+            )}
+          </Box>
+        </>
       ),
       tip: 'The Bitcoin transaction that deposited your collateral into the vault'
     },
@@ -583,9 +609,9 @@ export default function LoanDetailScreen() {
                     sx={{
                       padding: '4px 8px',
                       borderRadius: '4px',
-                      fontSize: '12px',
-                      backgroundColor: colors.card_bgColor,
-                      color: colors.grey64
+                      fontSize: '10px',
+                      backgroundColor: colors.white1,
+                      color: colors.white
                     }}>
                     Locked
                   </Box>
@@ -594,6 +620,7 @@ export default function LoanDetailScreen() {
                     direction="row"
                     alignItems="center"
                     sx={{
+                      height: '30px',
                       bgcolor: colors.white1,
                       padding: '4px 8px',
                       borderRadius: '4px'
@@ -628,9 +655,9 @@ export default function LoanDetailScreen() {
                     sx={{
                       padding: '4px 8px',
                       borderRadius: '4px',
-                      fontSize: '12px',
-                      backgroundColor: colors.card_bgColor,
-                      color: colors.grey64
+                      fontSize: '10px',
+                      backgroundColor: colors.white1,
+                      color: colors.white
                     }}>
                     Unlocked
                   </Box>
@@ -639,9 +666,9 @@ export default function LoanDetailScreen() {
                     sx={{
                       padding: '4px 8px',
                       borderRadius: '4px',
-                      fontSize: '12px',
-                      backgroundColor: colors.card_bgColor,
-                      color: colors.grey64
+                      fontSize: '10px',
+                      backgroundColor: colors.white1,
+                      color: colors.white
                     }}>
                     Liquidated
                   </Box>
@@ -650,9 +677,9 @@ export default function LoanDetailScreen() {
                     sx={{
                       padding: '4px 8px',
                       borderRadius: '4px',
-                      fontSize: '12px',
-                      backgroundColor: colors.card_bgColor,
-                      color: colors.grey64
+                      fontSize: '10px',
+                      backgroundColor: colors.white1,
+                      color: colors.white
                     }}>
                     Claimed
                   </Box>
@@ -709,6 +736,7 @@ export default function LoanDetailScreen() {
                     direction="row"
                     alignItems="center"
                     sx={{
+                      height: '30px',
                       bgcolor: colors.white1,
                       padding: '4px 8px',
                       borderRadius: '4px'
@@ -744,8 +772,8 @@ export default function LoanDetailScreen() {
                       padding: '4px 8px',
                       borderRadius: '4px',
                       fontSize: '10px',
-                      backgroundColor: colors.card_bgColor,
-                      color: colors.grey64
+                      backgroundColor: colors.white1,
+                      color: colors.white
                     }}>
                     Repaid
                   </Box>
@@ -883,7 +911,7 @@ export default function LoanDetailScreen() {
         <Button
           preset="primary"
           disabled={claimLoading}
-          style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
+          style={{ display: tx ? 'none' : 'flex', position: 'fixed', bottom: 16, left: 16, right: 16 }}
           onClick={() => {
             if (!liquidationEvent) return;
             claim({

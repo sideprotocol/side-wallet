@@ -109,4 +109,20 @@ export default class BridgeService {
       }
     );
   }
+
+  async getTx(txid: string, baseURL: string): Promise<UTXOBridge | null> {
+    return this.apiClient
+      .get<UTXOBridge>(`/api/tx/${txid}`, {
+        baseURL
+      })
+      .catch(() => {
+        return null;
+      });
+  }
+
+  async getBlockHeight(baseURL: string): Promise<number> {
+    return this.apiClient.get<number>('/api/blocks/tip/height', {
+      baseURL
+    });
+  }
 }
