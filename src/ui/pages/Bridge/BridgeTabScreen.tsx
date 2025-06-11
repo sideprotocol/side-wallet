@@ -36,12 +36,15 @@ export default function BridgeTabScreen() {
     ? params?.params?.protocol_fees?.deposit_fee
     : params?.params?.protocol_fees?.withdraw_fee;
 
-  const yourReceive = formatUnitAmount(
-    BigNumber(parseUnitAmount(bridgeAmount || '0', fromAsset?.asset.exponent || 8))
-      .minus(fromAsset?.denom === 'sat' ? protocolFee || '0' : '0')
-      .toFixed(),
-    fromAsset?.asset.exponent || 8
-  );
+  const yourReceive =
+    !fromChain?.isBitcoin && toChain?.isCosmos
+      ? bridgeAmount
+      : formatUnitAmount(
+          BigNumber(parseUnitAmount(bridgeAmount || '0', fromAsset?.asset.exponent || 8))
+            .minus(fromAsset?.denom === 'sat' ? protocolFee || '0' : '0')
+            .toFixed(),
+          fromAsset?.asset.exponent || 8
+        );
 
   return (
     <Layout>
@@ -293,9 +296,11 @@ export default function BridgeTabScreen() {
                 onClick={() => {
                   if (fromAsset?.asset.rune) {
                     navigate('BridgeRuneConfirmScreen');
-                    return;
+                  } else if (fromChain?.isBitcoin && toChain?.isCosmos) {
+                    navigate('BridgeBtcConfirmScreen');
+                  } else if (!fromChain?.isBitcoin && toChain?.isCosmos) {
+                    navigate('BridgeIbcConfirmScreen');
                   }
-                  navigate('BridgeBtcConfirmScreen');
                 }}
                 disabled={isDisabled}
                 full

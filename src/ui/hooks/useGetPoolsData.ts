@@ -58,8 +58,8 @@ export default function useGetPoolsData() {
     }
 
     lendingPools.pools.forEach((item) => {
-      let token = balanceList.find((o) => o.denom === item.supply.denom)!;
-      const lendingPoolBase = lendingPoolsBase.content.find((o) => o.tokenDenom === item.supply.denom);
+      let token = balanceList.find((o) => o.denom === item.config.lending_asset.denom)!;
+      const lendingPoolBase = lendingPoolsBase.content.find((o) => o.tokenDenom === item.config.lending_asset.denom);
       if (!token) {
         return;
       }

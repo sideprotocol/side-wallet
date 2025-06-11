@@ -32,6 +32,7 @@ import SendAtomicalsInscriptionScreen from './Atomicals/SendAtomicalsNFTScreen';
 import BridgeBtcConfirmScreen from './Bridge/BridgeBtcConfirmScreen';
 import BridgeDetail from './Bridge/BridgeDetail';
 import BridgeHistory from './Bridge/BridgeHistory';
+import BridgeIbcConfirmScreen from './Bridge/BridgeIbcConfirmScreen';
 import BridgeRuneConfirmScreen from './Bridge/BridgeRuneConfirmScreen';
 import BridgeSelectTokenScreen from './Bridge/BridgeSelectToken';
 import BridgeTabScreen from './Bridge/BridgeTabScreen';
@@ -217,6 +218,11 @@ export const routes = {
   BridgeTargetAddress: {
     path: '/bridge-target-address',
     element: <BridgeTargetAddress />
+  },
+
+  BridgeIbcConfirmScreen: {
+    path: '/bridge-ibc-confirm',
+    element: <BridgeIbcConfirmScreen />
   },
 
   SwapTabScreen: {

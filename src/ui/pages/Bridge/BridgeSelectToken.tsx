@@ -64,9 +64,9 @@ export default function BridgeSelectTokenScreen() {
           return item.chainType === 'sidechain' && item.denom === fromAsset?.denom;
         });
       } else {
-        // 如果 fromAsset 是 sbtc，则展示 btc 和 sbtc (暂时只展示btc)
+        // 如果 fromAsset 是 sbtc，则展示 btc 和 sbtc
         assetList = assetList.filter((item) => {
-          return item.denom === fromAsset?.denom && item.chainType === 'bitcoin';
+          return item.denom === fromAsset?.denom;
         });
 
         // 判断sbtc是否有ibc
