@@ -89,7 +89,7 @@ export default function LoanAuthorizeScreen() {
   const data = [
     {
       label: `Liquidation Price (${liquidationPriceSymbol})`,
-      value: liquidationEvent ? getTruncate(liquidationEvent?.price || '0', 3) : '-',
+      value: liquidationEvent ? getTruncate(liquidationEvent?.price || '0', 8) : '-',
       tip: 'The collateral price at which liquidation would be triggered',
       valueTip: 'Price will update if multiple deposits are detected. Please wait.'
     },

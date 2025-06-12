@@ -180,7 +180,7 @@ export default function LoanDetailScreen() {
                 backgroundColor: colors.white1,
                 color: colors.white
               }}>
-              {confirms > 0 ? `${confirms} Confirmed` : 'Not Confirmed'}
+              {confirms > 0 ? `${confirms} Confirmed` : 'Unconfirmed'}
             </Box>
           )}
           <Box>
@@ -389,7 +389,7 @@ export default function LoanDetailScreen() {
             fontWeight: 500,
             color: colors.main
           }}>
-          {loan.status === 'Requested' ? '-' : getTruncate(loan.liquidation_price || liquidationEvent?.price || '0', 2)}
+          {loan.status === 'Requested' ? '-' : getTruncate(loan.liquidation_price || liquidationEvent?.price || '0', 8)}
         </Text>
       ),
       tip: 'The collateral price at which liquidation would be triggered'

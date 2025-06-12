@@ -242,7 +242,7 @@ export default function LendingTanScreen() {
     },
     {
       label: `Liquidation Price (${liquidationPriceSymbol})`,
-      value: `${getTruncate(liquidationEvent?.price || '0', 3)}`,
+      value: `${getTruncate(liquidationEvent?.price || '0', 8)}`,
       tip: 'The collateral price at which liquidation would be triggered'
     },
     {

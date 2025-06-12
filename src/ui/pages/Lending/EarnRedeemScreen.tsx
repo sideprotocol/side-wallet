@@ -72,7 +72,7 @@ export default function EarnRedeemScreen() {
 
   const data = [
     {
-      label: `${stokenBalance?.asset.symbol}/${poolTokenBalance?.asset.symbol}`,
+      label: `${poolTokenBalance?.asset.symbol}/${stokenBalance?.asset.symbol}`,
       value: (
         <Typography
           sx={{
@@ -93,7 +93,7 @@ export default function EarnRedeemScreen() {
               fontSize: '12px',
               color: colors.white
             }}>
-            {new BigNumber(withdrawAmount || '0').div(exchangeRate).toFixed(6)}&nbsp;
+            {new BigNumber(withdrawAmount || '0').multipliedBy(exchangeRate).toFixed(6)}&nbsp;
             <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
               {poolTokenBalance?.asset.symbol}
             </small>
