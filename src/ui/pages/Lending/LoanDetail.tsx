@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js';
-import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
@@ -15,9 +14,9 @@ import {
   SuccessAnimation,
   Text
 } from '@/ui/components';
+import { useGetBitcoinTxsConfirms } from '@/ui/hooks/lending';
 import useClaimCollateral from '@/ui/hooks/useClaimCollateral';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
-import { useGetBitcoinConfirms } from '@/ui/hooks/useGetBitcoinConfirms';
 import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
 import useGetLiquidationById from '@/ui/hooks/useGetLiquidationById';
 import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
@@ -110,15 +109,7 @@ export default function LoanDetailScreen() {
   const { canClaim } = useGetLoanAuthorization(loan);
   const { claim, loading: claimLoading, tx } = useClaimCollateral(loan?.vault_address);
 
-  const fundingTx = txids?.[0];
-
-  const [getTxDisabled, setGetTxDisabled] = useState(false);
-  const { confirms } = useGetBitcoinConfirms(fundingTx || '', getTxDisabled);
-  useEffect(() => {
-    if (+confirms <= 6) {
-      setGetTxDisabled(true);
-    }
-  }, [confirms]);
+  const { txsConfirms } = useGetBitcoinTxsConfirms(txids);
 
   if (!loan) return null;
   const dataCollateral = [
@@ -169,23 +160,25 @@ export default function LoanDetailScreen() {
     },
     {
       label: 'Lock Tx',
+
       value: (
         <>
-          {fundingTx && +confirms <= 6 && (
-            <Box
-              sx={{
-                fontSize: '10px',
-                p: '1px 6px',
-                borderRadius: '4px',
-                backgroundColor: colors.white1,
-                color: colors.white
-              }}>
-              {confirms > 0 ? `${confirms} Confirmed` : 'Unconfirmed'}
-            </Box>
-          )}
-          <Box>
-            {loan.authorizations[0] ? (
-              (loan.authorizations[0]?.deposit_txs || [])?.map((tx, index) => (
+          <Stack gap="4px">
+            {(txsConfirms || [])?.map((item, index) => (
+              <Stack key={index} direction="row" justifyContent="flex-end" alignItems="center" gap="4px">
+                {item.confirms <= 6 && (
+                  <Box
+                    sx={{
+                      fontSize: '10px',
+                      p: '1px 6px',
+                      borderRadius: '4px',
+                      backgroundColor: colors.white1,
+                      color: colors.white
+                    }}>
+                    {item.confirms > 0 ? `${item.confirms} Confirmed` : 'Unconfirmed'}
+                  </Box>
+                )}
+
                 <Typography
                   key={index}
                   sx={{
@@ -198,15 +191,13 @@ export default function LoanDetailScreen() {
                     }
                   }}
                   onClick={() => {
-                    window.open(`${SIDE_BTC_EXPLORER}/tx/${tx}`);
+                    window.open(`${SIDE_BTC_EXPLORER}/tx/${item.tx}`);
                   }}>
-                  {formatAddress(tx, 6)}
+                  {formatAddress(item.tx, 6)}
                 </Typography>
-              ))
-            ) : (
-              <Typography sx={{ fontSize: '12px', fontWeight: 500, color: colors.white }}>-</Typography>
-            )}
-          </Box>
+              </Stack>
+            ))}
+          </Stack>
         </>
       ),
       tip: 'The Bitcoin transaction that deposited your collateral into the vault'
