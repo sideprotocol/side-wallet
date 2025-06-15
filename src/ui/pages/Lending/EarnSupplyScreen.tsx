@@ -126,7 +126,7 @@ export default function EarnSupplyScreen() {
           </small>
         </Typography>
       ),
-      tip: 'he estimated daily interest you’ll earn, calculated based on current rates'
+      tip: 'The estimated daily interest you’ll earn, calculated based on current rates'
     }
   ];
 
