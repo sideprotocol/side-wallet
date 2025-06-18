@@ -18,6 +18,11 @@ export function useGetBitcoinTxsConfirms(txs?: string[]) {
             tx,
             confirms: btcBlockHeight - txInfo.status.block_height + 1
           });
+        } else {
+          txsConfirms.push({
+            tx,
+            confirms: 0
+          });
         }
       }
       return txsConfirms;
