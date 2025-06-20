@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgCreatePool, MsgAddLiquidity, MsgRemoveLiquidity, MsgUpdatePoolConfig, MsgApply, MsgSubmitCets, MsgApprove, MsgRedeem, MsgRepay, MsgSubmitPrice, MsgUpdateParams } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/side.lending.MsgCreatePool", MsgCreatePool], ["/side.lending.MsgAddLiquidity", MsgAddLiquidity], ["/side.lending.MsgRemoveLiquidity", MsgRemoveLiquidity], ["/side.lending.MsgUpdatePoolConfig", MsgUpdatePoolConfig], ["/side.lending.MsgApply", MsgApply], ["/side.lending.MsgSubmitCets", MsgSubmitCets], ["/side.lending.MsgApprove", MsgApprove], ["/side.lending.MsgRedeem", MsgRedeem], ["/side.lending.MsgRepay", MsgRepay], ["/side.lending.MsgSubmitPrice", MsgSubmitPrice], ["/side.lending.MsgUpdateParams", MsgUpdateParams]];
+import { MsgCreatePool, MsgAddLiquidity, MsgRemoveLiquidity, MsgUpdatePoolConfig, MsgApply, MsgSubmitCets, MsgSubmitDepositTransaction, MsgRedeem, MsgRepay, MsgUpdateParams } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/side.lending.MsgCreatePool", MsgCreatePool], ["/side.lending.MsgAddLiquidity", MsgAddLiquidity], ["/side.lending.MsgRemoveLiquidity", MsgRemoveLiquidity], ["/side.lending.MsgUpdatePoolConfig", MsgUpdatePoolConfig], ["/side.lending.MsgApply", MsgApply], ["/side.lending.MsgSubmitCets", MsgSubmitCets], ["/side.lending.MsgSubmitDepositTransaction", MsgSubmitDepositTransaction], ["/side.lending.MsgRedeem", MsgRedeem], ["/side.lending.MsgRepay", MsgRepay], ["/side.lending.MsgUpdateParams", MsgUpdateParams]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -45,10 +45,10 @@ export const MessageComposer = {
         value: MsgSubmitCets.encode(value).finish()
       };
     },
-    approve(value: MsgApprove) {
+    submitDepositTransaction(value: MsgSubmitDepositTransaction) {
       return {
-        typeUrl: "/side.lending.MsgApprove",
-        value: MsgApprove.encode(value).finish()
+        typeUrl: "/side.lending.MsgSubmitDepositTransaction",
+        value: MsgSubmitDepositTransaction.encode(value).finish()
       };
     },
     redeem(value: MsgRedeem) {
@@ -61,12 +61,6 @@ export const MessageComposer = {
       return {
         typeUrl: "/side.lending.MsgRepay",
         value: MsgRepay.encode(value).finish()
-      };
-    },
-    submitPrice(value: MsgSubmitPrice) {
-      return {
-        typeUrl: "/side.lending.MsgSubmitPrice",
-        value: MsgSubmitPrice.encode(value).finish()
       };
     },
     updateParams(value: MsgUpdateParams) {
@@ -113,9 +107,9 @@ export const MessageComposer = {
         value
       };
     },
-    approve(value: MsgApprove) {
+    submitDepositTransaction(value: MsgSubmitDepositTransaction) {
       return {
-        typeUrl: "/side.lending.MsgApprove",
+        typeUrl: "/side.lending.MsgSubmitDepositTransaction",
         value
       };
     },
@@ -128,12 +122,6 @@ export const MessageComposer = {
     repay(value: MsgRepay) {
       return {
         typeUrl: "/side.lending.MsgRepay",
-        value
-      };
-    },
-    submitPrice(value: MsgSubmitPrice) {
-      return {
-        typeUrl: "/side.lending.MsgSubmitPrice",
         value
       };
     },
@@ -181,10 +169,10 @@ export const MessageComposer = {
         value: MsgSubmitCets.fromPartial(value)
       };
     },
-    approve(value: MsgApprove) {
+    submitDepositTransaction(value: MsgSubmitDepositTransaction) {
       return {
-        typeUrl: "/side.lending.MsgApprove",
-        value: MsgApprove.fromPartial(value)
+        typeUrl: "/side.lending.MsgSubmitDepositTransaction",
+        value: MsgSubmitDepositTransaction.fromPartial(value)
       };
     },
     redeem(value: MsgRedeem) {
@@ -197,12 +185,6 @@ export const MessageComposer = {
       return {
         typeUrl: "/side.lending.MsgRepay",
         value: MsgRepay.fromPartial(value)
-      };
-    },
-    submitPrice(value: MsgSubmitPrice) {
-      return {
-        typeUrl: "/side.lending.MsgSubmitPrice",
-        value: MsgSubmitPrice.fromPartial(value)
       };
     },
     updateParams(value: MsgUpdateParams) {

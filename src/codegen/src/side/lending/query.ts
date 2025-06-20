@@ -227,6 +227,7 @@ export interface QueryLoanCetInfosResponseSDKType {
 }
 export interface QueryCollateralAddressRequest {
   borrowerPubkey: string;
+  borrowerAuthPubkey: string;
   dcmPubkey: string;
   maturityTime: bigint;
 }
@@ -236,6 +237,7 @@ export interface QueryCollateralAddressRequestProtoMsg {
 }
 export interface QueryCollateralAddressRequestAmino {
   borrower_pubkey?: string;
+  borrower_auth_pubkey?: string;
   dcm_pubkey?: string;
   maturity_time?: string;
 }
@@ -245,6 +247,7 @@ export interface QueryCollateralAddressRequestAminoMsg {
 }
 export interface QueryCollateralAddressRequestSDKType {
   borrower_pubkey: string;
+  borrower_auth_pubkey: string;
   dcm_pubkey: string;
   maturity_time: bigint;
 }
@@ -627,46 +630,6 @@ export interface QueryCurrentInterestResponseAminoMsg {
 }
 export interface QueryCurrentInterestResponseSDKType {
   interest: CoinSDKType;
-}
-/** QueryPriceRequest is request type for the Query/Price RPC method. */
-export interface QueryPriceRequest {
-  pair: string;
-}
-export interface QueryPriceRequestProtoMsg {
-  typeUrl: "/side.lending.QueryPriceRequest";
-  value: Uint8Array;
-}
-/** QueryPriceRequest is request type for the Query/Price RPC method. */
-export interface QueryPriceRequestAmino {
-  pair?: string;
-}
-export interface QueryPriceRequestAminoMsg {
-  type: "/side.lending.QueryPriceRequest";
-  value: QueryPriceRequestAmino;
-}
-/** QueryPriceRequest is request type for the Query/Price RPC method. */
-export interface QueryPriceRequestSDKType {
-  pair: string;
-}
-/** QueryPriceResponse is response type for the Query/Price RPC method. */
-export interface QueryPriceResponse {
-  price: string;
-}
-export interface QueryPriceResponseProtoMsg {
-  typeUrl: "/side.lending.QueryPriceResponse";
-  value: Uint8Array;
-}
-/** QueryPriceResponse is response type for the Query/Price RPC method. */
-export interface QueryPriceResponseAmino {
-  price?: string;
-}
-export interface QueryPriceResponseAminoMsg {
-  type: "/side.lending.QueryPriceResponse";
-  value: QueryPriceResponseAmino;
-}
-/** QueryPriceResponse is response type for the Query/Price RPC method. */
-export interface QueryPriceResponseSDKType {
-  price: string;
 }
 function createBaseQueryPoolRequest(): QueryPoolRequest {
   return {
@@ -1435,6 +1398,7 @@ export const QueryLoanCetInfosResponse = {
 function createBaseQueryCollateralAddressRequest(): QueryCollateralAddressRequest {
   return {
     borrowerPubkey: "",
+    borrowerAuthPubkey: "",
     dcmPubkey: "",
     maturityTime: BigInt(0)
   };
@@ -1445,11 +1409,14 @@ export const QueryCollateralAddressRequest = {
     if (message.borrowerPubkey !== "") {
       writer.uint32(10).string(message.borrowerPubkey);
     }
+    if (message.borrowerAuthPubkey !== "") {
+      writer.uint32(18).string(message.borrowerAuthPubkey);
+    }
     if (message.dcmPubkey !== "") {
-      writer.uint32(18).string(message.dcmPubkey);
+      writer.uint32(26).string(message.dcmPubkey);
     }
     if (message.maturityTime !== BigInt(0)) {
-      writer.uint32(24).uint64(message.maturityTime);
+      writer.uint32(32).uint64(message.maturityTime);
     }
     return writer;
   },
@@ -1464,9 +1431,12 @@ export const QueryCollateralAddressRequest = {
           message.borrowerPubkey = reader.string();
           break;
         case 2:
-          message.dcmPubkey = reader.string();
+          message.borrowerAuthPubkey = reader.string();
           break;
         case 3:
+          message.dcmPubkey = reader.string();
+          break;
+        case 4:
           message.maturityTime = reader.uint64();
           break;
         default:
@@ -1479,6 +1449,7 @@ export const QueryCollateralAddressRequest = {
   fromPartial(object: Partial<QueryCollateralAddressRequest>): QueryCollateralAddressRequest {
     const message = createBaseQueryCollateralAddressRequest();
     message.borrowerPubkey = object.borrowerPubkey ?? "";
+    message.borrowerAuthPubkey = object.borrowerAuthPubkey ?? "";
     message.dcmPubkey = object.dcmPubkey ?? "";
     message.maturityTime = object.maturityTime !== undefined && object.maturityTime !== null ? BigInt(object.maturityTime.toString()) : BigInt(0);
     return message;
@@ -1487,6 +1458,9 @@ export const QueryCollateralAddressRequest = {
     const message = createBaseQueryCollateralAddressRequest();
     if (object.borrower_pubkey !== undefined && object.borrower_pubkey !== null) {
       message.borrowerPubkey = object.borrower_pubkey;
+    }
+    if (object.borrower_auth_pubkey !== undefined && object.borrower_auth_pubkey !== null) {
+      message.borrowerAuthPubkey = object.borrower_auth_pubkey;
     }
     if (object.dcm_pubkey !== undefined && object.dcm_pubkey !== null) {
       message.dcmPubkey = object.dcm_pubkey;
@@ -1499,6 +1473,7 @@ export const QueryCollateralAddressRequest = {
   toAmino(message: QueryCollateralAddressRequest): QueryCollateralAddressRequestAmino {
     const obj: any = {};
     obj.borrower_pubkey = message.borrowerPubkey === "" ? undefined : message.borrowerPubkey;
+    obj.borrower_auth_pubkey = message.borrowerAuthPubkey === "" ? undefined : message.borrowerAuthPubkey;
     obj.dcm_pubkey = message.dcmPubkey === "" ? undefined : message.dcmPubkey;
     obj.maturity_time = message.maturityTime !== BigInt(0) ? message.maturityTime.toString() : undefined;
     return obj;
@@ -2790,132 +2765,6 @@ export const QueryCurrentInterestResponse = {
     return {
       typeUrl: "/side.lending.QueryCurrentInterestResponse",
       value: QueryCurrentInterestResponse.encode(message).finish()
-    };
-  }
-};
-function createBaseQueryPriceRequest(): QueryPriceRequest {
-  return {
-    pair: ""
-  };
-}
-export const QueryPriceRequest = {
-  typeUrl: "/side.lending.QueryPriceRequest",
-  encode(message: QueryPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.pair !== "") {
-      writer.uint32(10).string(message.pair);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryPriceRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.pair = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<QueryPriceRequest>): QueryPriceRequest {
-    const message = createBaseQueryPriceRequest();
-    message.pair = object.pair ?? "";
-    return message;
-  },
-  fromAmino(object: QueryPriceRequestAmino): QueryPriceRequest {
-    const message = createBaseQueryPriceRequest();
-    if (object.pair !== undefined && object.pair !== null) {
-      message.pair = object.pair;
-    }
-    return message;
-  },
-  toAmino(message: QueryPriceRequest): QueryPriceRequestAmino {
-    const obj: any = {};
-    obj.pair = message.pair === "" ? undefined : message.pair;
-    return obj;
-  },
-  fromAminoMsg(object: QueryPriceRequestAminoMsg): QueryPriceRequest {
-    return QueryPriceRequest.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryPriceRequestProtoMsg): QueryPriceRequest {
-    return QueryPriceRequest.decode(message.value);
-  },
-  toProto(message: QueryPriceRequest): Uint8Array {
-    return QueryPriceRequest.encode(message).finish();
-  },
-  toProtoMsg(message: QueryPriceRequest): QueryPriceRequestProtoMsg {
-    return {
-      typeUrl: "/side.lending.QueryPriceRequest",
-      value: QueryPriceRequest.encode(message).finish()
-    };
-  }
-};
-function createBaseQueryPriceResponse(): QueryPriceResponse {
-  return {
-    price: ""
-  };
-}
-export const QueryPriceResponse = {
-  typeUrl: "/side.lending.QueryPriceResponse",
-  encode(message: QueryPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.price !== "") {
-      writer.uint32(10).string(message.price);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryPriceResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryPriceResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.price = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<QueryPriceResponse>): QueryPriceResponse {
-    const message = createBaseQueryPriceResponse();
-    message.price = object.price ?? "";
-    return message;
-  },
-  fromAmino(object: QueryPriceResponseAmino): QueryPriceResponse {
-    const message = createBaseQueryPriceResponse();
-    if (object.price !== undefined && object.price !== null) {
-      message.price = object.price;
-    }
-    return message;
-  },
-  toAmino(message: QueryPriceResponse): QueryPriceResponseAmino {
-    const obj: any = {};
-    obj.price = message.price === "" ? undefined : message.price;
-    return obj;
-  },
-  fromAminoMsg(object: QueryPriceResponseAminoMsg): QueryPriceResponse {
-    return QueryPriceResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: QueryPriceResponseProtoMsg): QueryPriceResponse {
-    return QueryPriceResponse.decode(message.value);
-  },
-  toProto(message: QueryPriceResponse): Uint8Array {
-    return QueryPriceResponse.encode(message).finish();
-  },
-  toProtoMsg(message: QueryPriceResponse): QueryPriceResponseProtoMsg {
-    return {
-      typeUrl: "/side.lending.QueryPriceResponse",
-      value: QueryPriceResponse.encode(message).finish()
     };
   }
 };

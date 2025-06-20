@@ -388,7 +388,7 @@ export const BITCOIN_CHAINS = Object.values(BITCOIN_CHAINS_MAP);
 export const DEFAULT_LOCKTIME = 5;
 
 // TESTNET
-export const SERVICE_BASE_URL_TESTNET = 'https://api.side.one/indexer-station-testnet';
+export const SERVICE_BASE_URL_TESTNET = 'https://api.side.one/indexer-station-devnet';
 
 // MAINNET
 export const SERVICE_BASE_URL_MAINNET = 'https://api.side.one/indexer-station-mainnet';

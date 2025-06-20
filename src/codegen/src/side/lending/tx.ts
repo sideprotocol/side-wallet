@@ -182,6 +182,7 @@ export interface MsgRemoveLiquidityResponseSDKType {}
 export interface MsgApply {
   borrower: string;
   borrowerPubkey: string;
+  borrowerAuthPubkey: string;
   poolId: string;
   borrowAmount: Coin;
   maturity: bigint;
@@ -195,6 +196,7 @@ export interface MsgApplyProtoMsg {
 export interface MsgApplyAmino {
   borrower?: string;
   borrower_pubkey?: string;
+  borrower_auth_pubkey?: string;
   pool_id?: string;
   borrow_amount?: CoinAmino;
   maturity?: string;
@@ -208,6 +210,7 @@ export interface MsgApplyAminoMsg {
 export interface MsgApplySDKType {
   borrower: string;
   borrower_pubkey: string;
+  borrower_auth_pubkey: string;
   pool_id: string;
   borrow_amount: CoinSDKType;
   maturity: bigint;
@@ -274,46 +277,46 @@ export interface MsgSubmitCetsResponseAminoMsg {
   value: MsgSubmitCetsResponseAmino;
 }
 export interface MsgSubmitCetsResponseSDKType {}
-export interface MsgApprove {
+export interface MsgSubmitDepositTransaction {
   relayer: string;
   vault: string;
   depositTx: string;
   blockHash: string;
   proof: string[];
 }
-export interface MsgApproveProtoMsg {
-  typeUrl: "/side.lending.MsgApprove";
+export interface MsgSubmitDepositTransactionProtoMsg {
+  typeUrl: "/side.lending.MsgSubmitDepositTransaction";
   value: Uint8Array;
 }
-export interface MsgApproveAmino {
+export interface MsgSubmitDepositTransactionAmino {
   relayer?: string;
   vault?: string;
   deposit_tx?: string;
   block_hash?: string;
   proof?: string[];
 }
-export interface MsgApproveAminoMsg {
-  type: "/side.lending.MsgApprove";
-  value: MsgApproveAmino;
+export interface MsgSubmitDepositTransactionAminoMsg {
+  type: "/side.lending.MsgSubmitDepositTransaction";
+  value: MsgSubmitDepositTransactionAmino;
 }
-export interface MsgApproveSDKType {
+export interface MsgSubmitDepositTransactionSDKType {
   relayer: string;
   vault: string;
   deposit_tx: string;
   block_hash: string;
   proof: string[];
 }
-export interface MsgApproveResponse {}
-export interface MsgApproveResponseProtoMsg {
-  typeUrl: "/side.lending.MsgApproveResponse";
+export interface MsgSubmitDepositTransactionResponse {}
+export interface MsgSubmitDepositTransactionResponseProtoMsg {
+  typeUrl: "/side.lending.MsgSubmitDepositTransactionResponse";
   value: Uint8Array;
 }
-export interface MsgApproveResponseAmino {}
-export interface MsgApproveResponseAminoMsg {
-  type: "/side.lending.MsgApproveResponse";
-  value: MsgApproveResponseAmino;
+export interface MsgSubmitDepositTransactionResponseAmino {}
+export interface MsgSubmitDepositTransactionResponseAminoMsg {
+  type: "/side.lending.MsgSubmitDepositTransactionResponse";
+  value: MsgSubmitDepositTransactionResponseAmino;
 }
-export interface MsgApproveResponseSDKType {}
+export interface MsgSubmitDepositTransactionResponseSDKType {}
 export interface MsgRedeem {
   borrower: string;
   loanId: string;
@@ -351,37 +354,6 @@ export interface MsgRedeemResponseAminoMsg {
   value: MsgRedeemResponseAmino;
 }
 export interface MsgRedeemResponseSDKType {}
-export interface MsgSubmitPrice {
-  sender: string;
-  price: string;
-}
-export interface MsgSubmitPriceProtoMsg {
-  typeUrl: "/side.lending.MsgSubmitPrice";
-  value: Uint8Array;
-}
-export interface MsgSubmitPriceAmino {
-  sender?: string;
-  price?: string;
-}
-export interface MsgSubmitPriceAminoMsg {
-  type: "/side.lending.MsgSubmitPrice";
-  value: MsgSubmitPriceAmino;
-}
-export interface MsgSubmitPriceSDKType {
-  sender: string;
-  price: string;
-}
-export interface MsgSubmitPriceResponse {}
-export interface MsgSubmitPriceResponseProtoMsg {
-  typeUrl: "/side.lending.MsgSubmitPriceResponse";
-  value: Uint8Array;
-}
-export interface MsgSubmitPriceResponseAmino {}
-export interface MsgSubmitPriceResponseAminoMsg {
-  type: "/side.lending.MsgSubmitPriceResponse";
-  value: MsgSubmitPriceResponseAmino;
-}
-export interface MsgSubmitPriceResponseSDKType {}
 /**
  * MsgUpdateParams is the Msg/UpdateParams request type.
  * 
@@ -1120,6 +1092,7 @@ function createBaseMsgApply(): MsgApply {
   return {
     borrower: "",
     borrowerPubkey: "",
+    borrowerAuthPubkey: "",
     poolId: "",
     borrowAmount: Coin.fromPartial({}),
     maturity: BigInt(0),
@@ -1136,20 +1109,23 @@ export const MsgApply = {
     if (message.borrowerPubkey !== "") {
       writer.uint32(18).string(message.borrowerPubkey);
     }
+    if (message.borrowerAuthPubkey !== "") {
+      writer.uint32(26).string(message.borrowerAuthPubkey);
+    }
     if (message.poolId !== "") {
-      writer.uint32(26).string(message.poolId);
+      writer.uint32(34).string(message.poolId);
     }
     if (message.borrowAmount !== undefined) {
-      Coin.encode(message.borrowAmount, writer.uint32(34).fork()).ldelim();
+      Coin.encode(message.borrowAmount, writer.uint32(42).fork()).ldelim();
     }
     if (message.maturity !== BigInt(0)) {
-      writer.uint32(40).int64(message.maturity);
+      writer.uint32(48).int64(message.maturity);
     }
     if (message.dcmId !== BigInt(0)) {
-      writer.uint32(48).uint64(message.dcmId);
+      writer.uint32(56).uint64(message.dcmId);
     }
     if (message.referrer !== "") {
-      writer.uint32(58).string(message.referrer);
+      writer.uint32(66).string(message.referrer);
     }
     return writer;
   },
@@ -1167,18 +1143,21 @@ export const MsgApply = {
           message.borrowerPubkey = reader.string();
           break;
         case 3:
-          message.poolId = reader.string();
+          message.borrowerAuthPubkey = reader.string();
           break;
         case 4:
-          message.borrowAmount = Coin.decode(reader, reader.uint32());
+          message.poolId = reader.string();
           break;
         case 5:
-          message.maturity = reader.int64();
+          message.borrowAmount = Coin.decode(reader, reader.uint32());
           break;
         case 6:
-          message.dcmId = reader.uint64();
+          message.maturity = reader.int64();
           break;
         case 7:
+          message.dcmId = reader.uint64();
+          break;
+        case 8:
           message.referrer = reader.string();
           break;
         default:
@@ -1192,6 +1171,7 @@ export const MsgApply = {
     const message = createBaseMsgApply();
     message.borrower = object.borrower ?? "";
     message.borrowerPubkey = object.borrowerPubkey ?? "";
+    message.borrowerAuthPubkey = object.borrowerAuthPubkey ?? "";
     message.poolId = object.poolId ?? "";
     message.borrowAmount = object.borrowAmount !== undefined && object.borrowAmount !== null ? Coin.fromPartial(object.borrowAmount) : undefined;
     message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
@@ -1206,6 +1186,9 @@ export const MsgApply = {
     }
     if (object.borrower_pubkey !== undefined && object.borrower_pubkey !== null) {
       message.borrowerPubkey = object.borrower_pubkey;
+    }
+    if (object.borrower_auth_pubkey !== undefined && object.borrower_auth_pubkey !== null) {
+      message.borrowerAuthPubkey = object.borrower_auth_pubkey;
     }
     if (object.pool_id !== undefined && object.pool_id !== null) {
       message.poolId = object.pool_id;
@@ -1228,6 +1211,7 @@ export const MsgApply = {
     const obj: any = {};
     obj.borrower = message.borrower === "" ? undefined : message.borrower;
     obj.borrower_pubkey = message.borrowerPubkey === "" ? undefined : message.borrowerPubkey;
+    obj.borrower_auth_pubkey = message.borrowerAuthPubkey === "" ? undefined : message.borrowerAuthPubkey;
     obj.pool_id = message.poolId === "" ? undefined : message.poolId;
     obj.borrow_amount = message.borrowAmount ? Coin.toAmino(message.borrowAmount) : undefined;
     obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
@@ -1506,7 +1490,7 @@ export const MsgSubmitCetsResponse = {
     };
   }
 };
-function createBaseMsgApprove(): MsgApprove {
+function createBaseMsgSubmitDepositTransaction(): MsgSubmitDepositTransaction {
   return {
     relayer: "",
     vault: "",
@@ -1515,9 +1499,9 @@ function createBaseMsgApprove(): MsgApprove {
     proof: []
   };
 }
-export const MsgApprove = {
-  typeUrl: "/side.lending.MsgApprove",
-  encode(message: MsgApprove, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const MsgSubmitDepositTransaction = {
+  typeUrl: "/side.lending.MsgSubmitDepositTransaction",
+  encode(message: MsgSubmitDepositTransaction, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.relayer !== "") {
       writer.uint32(10).string(message.relayer);
     }
@@ -1535,10 +1519,10 @@ export const MsgApprove = {
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgApprove {
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitDepositTransaction {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgApprove();
+    const message = createBaseMsgSubmitDepositTransaction();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1564,8 +1548,8 @@ export const MsgApprove = {
     }
     return message;
   },
-  fromPartial(object: Partial<MsgApprove>): MsgApprove {
-    const message = createBaseMsgApprove();
+  fromPartial(object: Partial<MsgSubmitDepositTransaction>): MsgSubmitDepositTransaction {
+    const message = createBaseMsgSubmitDepositTransaction();
     message.relayer = object.relayer ?? "";
     message.vault = object.vault ?? "";
     message.depositTx = object.depositTx ?? "";
@@ -1573,8 +1557,8 @@ export const MsgApprove = {
     message.proof = object.proof?.map(e => e) || [];
     return message;
   },
-  fromAmino(object: MsgApproveAmino): MsgApprove {
-    const message = createBaseMsgApprove();
+  fromAmino(object: MsgSubmitDepositTransactionAmino): MsgSubmitDepositTransaction {
+    const message = createBaseMsgSubmitDepositTransaction();
     if (object.relayer !== undefined && object.relayer !== null) {
       message.relayer = object.relayer;
     }
@@ -1590,7 +1574,7 @@ export const MsgApprove = {
     message.proof = object.proof?.map(e => e) || [];
     return message;
   },
-  toAmino(message: MsgApprove): MsgApproveAmino {
+  toAmino(message: MsgSubmitDepositTransaction): MsgSubmitDepositTransactionAmino {
     const obj: any = {};
     obj.relayer = message.relayer === "" ? undefined : message.relayer;
     obj.vault = message.vault === "" ? undefined : message.vault;
@@ -1603,34 +1587,34 @@ export const MsgApprove = {
     }
     return obj;
   },
-  fromAminoMsg(object: MsgApproveAminoMsg): MsgApprove {
-    return MsgApprove.fromAmino(object.value);
+  fromAminoMsg(object: MsgSubmitDepositTransactionAminoMsg): MsgSubmitDepositTransaction {
+    return MsgSubmitDepositTransaction.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgApproveProtoMsg): MsgApprove {
-    return MsgApprove.decode(message.value);
+  fromProtoMsg(message: MsgSubmitDepositTransactionProtoMsg): MsgSubmitDepositTransaction {
+    return MsgSubmitDepositTransaction.decode(message.value);
   },
-  toProto(message: MsgApprove): Uint8Array {
-    return MsgApprove.encode(message).finish();
+  toProto(message: MsgSubmitDepositTransaction): Uint8Array {
+    return MsgSubmitDepositTransaction.encode(message).finish();
   },
-  toProtoMsg(message: MsgApprove): MsgApproveProtoMsg {
+  toProtoMsg(message: MsgSubmitDepositTransaction): MsgSubmitDepositTransactionProtoMsg {
     return {
-      typeUrl: "/side.lending.MsgApprove",
-      value: MsgApprove.encode(message).finish()
+      typeUrl: "/side.lending.MsgSubmitDepositTransaction",
+      value: MsgSubmitDepositTransaction.encode(message).finish()
     };
   }
 };
-function createBaseMsgApproveResponse(): MsgApproveResponse {
+function createBaseMsgSubmitDepositTransactionResponse(): MsgSubmitDepositTransactionResponse {
   return {};
 }
-export const MsgApproveResponse = {
-  typeUrl: "/side.lending.MsgApproveResponse",
-  encode(_: MsgApproveResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+export const MsgSubmitDepositTransactionResponse = {
+  typeUrl: "/side.lending.MsgSubmitDepositTransactionResponse",
+  encode(_: MsgSubmitDepositTransactionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgApproveResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitDepositTransactionResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgApproveResponse();
+    const message = createBaseMsgSubmitDepositTransactionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1641,31 +1625,31 @@ export const MsgApproveResponse = {
     }
     return message;
   },
-  fromPartial(_: Partial<MsgApproveResponse>): MsgApproveResponse {
-    const message = createBaseMsgApproveResponse();
+  fromPartial(_: Partial<MsgSubmitDepositTransactionResponse>): MsgSubmitDepositTransactionResponse {
+    const message = createBaseMsgSubmitDepositTransactionResponse();
     return message;
   },
-  fromAmino(_: MsgApproveResponseAmino): MsgApproveResponse {
-    const message = createBaseMsgApproveResponse();
+  fromAmino(_: MsgSubmitDepositTransactionResponseAmino): MsgSubmitDepositTransactionResponse {
+    const message = createBaseMsgSubmitDepositTransactionResponse();
     return message;
   },
-  toAmino(_: MsgApproveResponse): MsgApproveResponseAmino {
+  toAmino(_: MsgSubmitDepositTransactionResponse): MsgSubmitDepositTransactionResponseAmino {
     const obj: any = {};
     return obj;
   },
-  fromAminoMsg(object: MsgApproveResponseAminoMsg): MsgApproveResponse {
-    return MsgApproveResponse.fromAmino(object.value);
+  fromAminoMsg(object: MsgSubmitDepositTransactionResponseAminoMsg): MsgSubmitDepositTransactionResponse {
+    return MsgSubmitDepositTransactionResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: MsgApproveResponseProtoMsg): MsgApproveResponse {
-    return MsgApproveResponse.decode(message.value);
+  fromProtoMsg(message: MsgSubmitDepositTransactionResponseProtoMsg): MsgSubmitDepositTransactionResponse {
+    return MsgSubmitDepositTransactionResponse.decode(message.value);
   },
-  toProto(message: MsgApproveResponse): Uint8Array {
-    return MsgApproveResponse.encode(message).finish();
+  toProto(message: MsgSubmitDepositTransactionResponse): Uint8Array {
+    return MsgSubmitDepositTransactionResponse.encode(message).finish();
   },
-  toProtoMsg(message: MsgApproveResponse): MsgApproveResponseProtoMsg {
+  toProtoMsg(message: MsgSubmitDepositTransactionResponse): MsgSubmitDepositTransactionResponseProtoMsg {
     return {
-      typeUrl: "/side.lending.MsgApproveResponse",
-      value: MsgApproveResponse.encode(message).finish()
+      typeUrl: "/side.lending.MsgSubmitDepositTransactionResponse",
+      value: MsgSubmitDepositTransactionResponse.encode(message).finish()
     };
   }
 };
@@ -1817,131 +1801,6 @@ export const MsgRedeemResponse = {
     return {
       typeUrl: "/side.lending.MsgRedeemResponse",
       value: MsgRedeemResponse.encode(message).finish()
-    };
-  }
-};
-function createBaseMsgSubmitPrice(): MsgSubmitPrice {
-  return {
-    sender: "",
-    price: ""
-  };
-}
-export const MsgSubmitPrice = {
-  typeUrl: "/side.lending.MsgSubmitPrice",
-  encode(message: MsgSubmitPrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.sender !== "") {
-      writer.uint32(10).string(message.sender);
-    }
-    if (message.price !== "") {
-      writer.uint32(18).string(message.price);
-    }
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitPrice {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSubmitPrice();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.sender = reader.string();
-          break;
-        case 2:
-          message.price = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(object: Partial<MsgSubmitPrice>): MsgSubmitPrice {
-    const message = createBaseMsgSubmitPrice();
-    message.sender = object.sender ?? "";
-    message.price = object.price ?? "";
-    return message;
-  },
-  fromAmino(object: MsgSubmitPriceAmino): MsgSubmitPrice {
-    const message = createBaseMsgSubmitPrice();
-    if (object.sender !== undefined && object.sender !== null) {
-      message.sender = object.sender;
-    }
-    if (object.price !== undefined && object.price !== null) {
-      message.price = object.price;
-    }
-    return message;
-  },
-  toAmino(message: MsgSubmitPrice): MsgSubmitPriceAmino {
-    const obj: any = {};
-    obj.sender = message.sender === "" ? undefined : message.sender;
-    obj.price = message.price === "" ? undefined : message.price;
-    return obj;
-  },
-  fromAminoMsg(object: MsgSubmitPriceAminoMsg): MsgSubmitPrice {
-    return MsgSubmitPrice.fromAmino(object.value);
-  },
-  fromProtoMsg(message: MsgSubmitPriceProtoMsg): MsgSubmitPrice {
-    return MsgSubmitPrice.decode(message.value);
-  },
-  toProto(message: MsgSubmitPrice): Uint8Array {
-    return MsgSubmitPrice.encode(message).finish();
-  },
-  toProtoMsg(message: MsgSubmitPrice): MsgSubmitPriceProtoMsg {
-    return {
-      typeUrl: "/side.lending.MsgSubmitPrice",
-      value: MsgSubmitPrice.encode(message).finish()
-    };
-  }
-};
-function createBaseMsgSubmitPriceResponse(): MsgSubmitPriceResponse {
-  return {};
-}
-export const MsgSubmitPriceResponse = {
-  typeUrl: "/side.lending.MsgSubmitPriceResponse",
-  encode(_: MsgSubmitPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    return writer;
-  },
-  decode(input: BinaryReader | Uint8Array, length?: number): MsgSubmitPriceResponse {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseMsgSubmitPriceResponse();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromPartial(_: Partial<MsgSubmitPriceResponse>): MsgSubmitPriceResponse {
-    const message = createBaseMsgSubmitPriceResponse();
-    return message;
-  },
-  fromAmino(_: MsgSubmitPriceResponseAmino): MsgSubmitPriceResponse {
-    const message = createBaseMsgSubmitPriceResponse();
-    return message;
-  },
-  toAmino(_: MsgSubmitPriceResponse): MsgSubmitPriceResponseAmino {
-    const obj: any = {};
-    return obj;
-  },
-  fromAminoMsg(object: MsgSubmitPriceResponseAminoMsg): MsgSubmitPriceResponse {
-    return MsgSubmitPriceResponse.fromAmino(object.value);
-  },
-  fromProtoMsg(message: MsgSubmitPriceResponseProtoMsg): MsgSubmitPriceResponse {
-    return MsgSubmitPriceResponse.decode(message.value);
-  },
-  toProto(message: MsgSubmitPriceResponse): Uint8Array {
-    return MsgSubmitPriceResponse.encode(message).finish();
-  },
-  toProtoMsg(message: MsgSubmitPriceResponse): MsgSubmitPriceResponseProtoMsg {
-    return {
-      typeUrl: "/side.lending.MsgSubmitPriceResponse",
-      value: MsgSubmitPriceResponse.encode(message).finish()
     };
   }
 };

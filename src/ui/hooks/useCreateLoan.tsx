@@ -14,7 +14,6 @@ import { LiquidationEvent } from '../services/lending/types';
 import { GetTxByHashResponse } from '../services/tx/types';
 import { useCurrentAccount } from '../state/accounts/hooks';
 import { useEnvironment } from '../state/environment/hooks';
-import { useUpdateUiTxCreateScreen } from '../state/ui/hooks';
 import { toXOnly } from '../wallet-sdk/utils';
 
 export default function useCreateLoan() {
@@ -29,8 +28,6 @@ export default function useCreateLoan() {
   const currentAccount = useCurrentAccount();
 
   const navigate = useNavigate();
-
-  const setUiState = useUpdateUiTxCreateScreen();
 
   const createLoan = async ({
     borrowAmount,
@@ -60,7 +57,8 @@ export default function useCreateLoan() {
         borrowerPubkey: toXOnly(Buffer.from(fromHex(currentAccount.pubkey))).toString('hex'),
         maturity: BigInt(maturityTime),
         poolId: poolId,
-        referrer: ''
+        referrer: '',
+        borrowerAuthPubkey: toXOnly(Buffer.from(fromHex(currentAccount.pubkey))).toString('hex')
       });
       const result = await signAndBroadcastTxRaw({
         messages: [msg],

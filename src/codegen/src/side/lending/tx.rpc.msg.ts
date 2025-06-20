@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
-import { MsgCreatePool, MsgCreatePoolResponse, MsgAddLiquidity, MsgAddLiquidityResponse, MsgRemoveLiquidity, MsgRemoveLiquidityResponse, MsgUpdatePoolConfig, MsgUpdatePoolConfigResponse, MsgApply, MsgApplyResponse, MsgSubmitCets, MsgSubmitCetsResponse, MsgApprove, MsgApproveResponse, MsgRedeem, MsgRedeemResponse, MsgRepay, MsgRepayResponse, MsgSubmitPrice, MsgSubmitPriceResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
+import { MsgCreatePool, MsgCreatePoolResponse, MsgAddLiquidity, MsgAddLiquidityResponse, MsgRemoveLiquidity, MsgRemoveLiquidityResponse, MsgUpdatePoolConfig, MsgUpdatePoolConfigResponse, MsgApply, MsgApplyResponse, MsgSubmitCets, MsgSubmitCetsResponse, MsgSubmitDepositTransaction, MsgSubmitDepositTransactionResponse, MsgRedeem, MsgRedeemResponse, MsgRepay, MsgRepayResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   createPool(request: MsgCreatePool): Promise<MsgCreatePoolResponse>;
@@ -10,11 +10,9 @@ export interface Msg {
   updatePoolConfig(request: MsgUpdatePoolConfig): Promise<MsgUpdatePoolConfigResponse>;
   apply(request: MsgApply): Promise<MsgApplyResponse>;
   submitCets(request: MsgSubmitCets): Promise<MsgSubmitCetsResponse>;
-  approve(request: MsgApprove): Promise<MsgApproveResponse>;
+  submitDepositTransaction(request: MsgSubmitDepositTransaction): Promise<MsgSubmitDepositTransactionResponse>;
   redeem(request: MsgRedeem): Promise<MsgRedeemResponse>;
   repay(request: MsgRepay): Promise<MsgRepayResponse>;
-  /** SubmitPrice submits the price for testing */
-  submitPrice(request: MsgSubmitPrice): Promise<MsgSubmitPriceResponse>;
   /**
    * UpdateParams defines a governance operation for updating the x/lending module
    * parameters. The authority defaults to the x/gov module account.
@@ -33,10 +31,9 @@ export class MsgClientImpl implements Msg {
     this.updatePoolConfig = this.updatePoolConfig.bind(this);
     this.apply = this.apply.bind(this);
     this.submitCets = this.submitCets.bind(this);
-    this.approve = this.approve.bind(this);
+    this.submitDepositTransaction = this.submitDepositTransaction.bind(this);
     this.redeem = this.redeem.bind(this);
     this.repay = this.repay.bind(this);
-    this.submitPrice = this.submitPrice.bind(this);
     this.updateParams = this.updateParams.bind(this);
   }
   createPool(request: MsgCreatePool): Promise<MsgCreatePoolResponse> {
@@ -69,10 +66,10 @@ export class MsgClientImpl implements Msg {
     const promise = this.rpc.request("side.lending.Msg", "SubmitCets", data);
     return promise.then(data => MsgSubmitCetsResponse.decode(new BinaryReader(data)));
   }
-  approve(request: MsgApprove): Promise<MsgApproveResponse> {
-    const data = MsgApprove.encode(request).finish();
-    const promise = this.rpc.request("side.lending.Msg", "Approve", data);
-    return promise.then(data => MsgApproveResponse.decode(new BinaryReader(data)));
+  submitDepositTransaction(request: MsgSubmitDepositTransaction): Promise<MsgSubmitDepositTransactionResponse> {
+    const data = MsgSubmitDepositTransaction.encode(request).finish();
+    const promise = this.rpc.request("side.lending.Msg", "SubmitDepositTransaction", data);
+    return promise.then(data => MsgSubmitDepositTransactionResponse.decode(new BinaryReader(data)));
   }
   redeem(request: MsgRedeem): Promise<MsgRedeemResponse> {
     const data = MsgRedeem.encode(request).finish();
@@ -83,11 +80,6 @@ export class MsgClientImpl implements Msg {
     const data = MsgRepay.encode(request).finish();
     const promise = this.rpc.request("side.lending.Msg", "Repay", data);
     return promise.then(data => MsgRepayResponse.decode(new BinaryReader(data)));
-  }
-  submitPrice(request: MsgSubmitPrice): Promise<MsgSubmitPriceResponse> {
-    const data = MsgSubmitPrice.encode(request).finish();
-    const promise = this.rpc.request("side.lending.Msg", "SubmitPrice", data);
-    return promise.then(data => MsgSubmitPriceResponse.decode(new BinaryReader(data)));
   }
   updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();

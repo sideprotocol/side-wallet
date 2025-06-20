@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { MsgCreatePool, MsgAddLiquidity, MsgRemoveLiquidity, MsgUpdatePoolConfig, MsgApply, MsgSubmitCets, MsgApprove, MsgRedeem, MsgRepay, MsgSubmitPrice, MsgUpdateParams } from "./tx";
+import { MsgCreatePool, MsgAddLiquidity, MsgRemoveLiquidity, MsgUpdatePoolConfig, MsgApply, MsgSubmitCets, MsgSubmitDepositTransaction, MsgRedeem, MsgRepay, MsgUpdateParams } from "./tx";
 export const AminoConverter = {
   "/side.lending.MsgCreatePool": {
     aminoType: "/side.lending.MsgCreatePool",
@@ -31,10 +31,10 @@ export const AminoConverter = {
     toAmino: MsgSubmitCets.toAmino,
     fromAmino: MsgSubmitCets.fromAmino
   },
-  "/side.lending.MsgApprove": {
-    aminoType: "/side.lending.MsgApprove",
-    toAmino: MsgApprove.toAmino,
-    fromAmino: MsgApprove.fromAmino
+  "/side.lending.MsgSubmitDepositTransaction": {
+    aminoType: "/side.lending.MsgSubmitDepositTransaction",
+    toAmino: MsgSubmitDepositTransaction.toAmino,
+    fromAmino: MsgSubmitDepositTransaction.fromAmino
   },
   "/side.lending.MsgRedeem": {
     aminoType: "/side.lending.MsgRedeem",
@@ -45,11 +45,6 @@ export const AminoConverter = {
     aminoType: "/side.lending.MsgRepay",
     toAmino: MsgRepay.toAmino,
     fromAmino: MsgRepay.fromAmino
-  },
-  "/side.lending.MsgSubmitPrice": {
-    aminoType: "/side.lending.MsgSubmitPrice",
-    toAmino: MsgSubmitPrice.toAmino,
-    fromAmino: MsgSubmitPrice.fromAmino
   },
   "/side.lending.MsgUpdateParams": {
     aminoType: "/side.lending.MsgUpdateParams",

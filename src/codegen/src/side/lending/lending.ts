@@ -297,31 +297,37 @@ export function signingIntentToJSON(object: SigningIntent): string {
       return "UNRECOGNIZED";
   }
 }
+/** Asset metadata */
 export interface AssetMetadata {
   denom: string;
   symbol: string;
-  priceSymbol: string;
   decimals: number;
+  priceSymbol: string;
+  isBasePriceAsset: boolean;
 }
 export interface AssetMetadataProtoMsg {
   typeUrl: "/side.lending.AssetMetadata";
   value: Uint8Array;
 }
+/** Asset metadata */
 export interface AssetMetadataAmino {
   denom?: string;
   symbol?: string;
-  price_symbol?: string;
   decimals?: number;
+  price_symbol?: string;
+  is_base_price_asset?: boolean;
 }
 export interface AssetMetadataAminoMsg {
   type: "/side.lending.AssetMetadata";
   value: AssetMetadataAmino;
 }
+/** Asset metadata */
 export interface AssetMetadataSDKType {
   denom: string;
   symbol: string;
-  price_symbol: string;
   decimals: number;
+  price_symbol: string;
+  is_base_price_asset: boolean;
 }
 /** Pool tranche config */
 export interface PoolTrancheConfig {
@@ -557,6 +563,7 @@ export interface Loan {
   vaultAddress: string;
   borrower: string;
   borrowerPubKey: string;
+  borrowerAuthPubKey: string;
   dcm: string;
   maturityTime: bigint;
   finalTimeout: bigint;
@@ -591,6 +598,7 @@ export interface LoanAmino {
   vault_address?: string;
   borrower?: string;
   borrowerPubKey?: string;
+  borrowerAuthPubKey?: string;
   dcm?: string;
   maturity_time?: string;
   final_timeout?: string;
@@ -624,6 +632,7 @@ export interface LoanSDKType {
   vault_address: string;
   borrower: string;
   borrowerPubKey: string;
+  borrowerAuthPubKey: string;
   dcm: string;
   maturity_time: bigint;
   final_timeout: bigint;
@@ -740,7 +749,8 @@ export interface DLCMeta {
   timeoutRefundTx: string;
   vaultUtxos: UTXO[];
   internalKey: string;
-  multisigScript: string;
+  liquidationScript: string;
+  repaymentScript: string;
   timeoutRefundScript: string;
 }
 export interface DLCMetaProtoMsg {
@@ -754,7 +764,8 @@ export interface DLCMetaAmino {
   timeout_refund_tx?: string;
   vault_utxos?: UTXOAmino[];
   internal_key?: string;
-  multisig_script?: string;
+  liquidation_script?: string;
+  repayment_script?: string;
   timeout_refund_script?: string;
 }
 export interface DLCMetaAminoMsg {
@@ -768,7 +779,8 @@ export interface DLCMetaSDKType {
   timeout_refund_tx: string;
   vault_utxos: UTXOSDKType[];
   internal_key: string;
-  multisig_script: string;
+  liquidation_script: string;
+  repayment_script: string;
   timeout_refund_script: string;
 }
 export interface DepositLog {
@@ -862,8 +874,9 @@ function createBaseAssetMetadata(): AssetMetadata {
   return {
     denom: "",
     symbol: "",
+    decimals: 0,
     priceSymbol: "",
-    decimals: 0
+    isBasePriceAsset: false
   };
 }
 export const AssetMetadata = {
@@ -875,11 +888,14 @@ export const AssetMetadata = {
     if (message.symbol !== "") {
       writer.uint32(18).string(message.symbol);
     }
-    if (message.priceSymbol !== "") {
-      writer.uint32(26).string(message.priceSymbol);
-    }
     if (message.decimals !== 0) {
-      writer.uint32(32).int32(message.decimals);
+      writer.uint32(24).int32(message.decimals);
+    }
+    if (message.priceSymbol !== "") {
+      writer.uint32(34).string(message.priceSymbol);
+    }
+    if (message.isBasePriceAsset === true) {
+      writer.uint32(40).bool(message.isBasePriceAsset);
     }
     return writer;
   },
@@ -897,10 +913,13 @@ export const AssetMetadata = {
           message.symbol = reader.string();
           break;
         case 3:
-          message.priceSymbol = reader.string();
+          message.decimals = reader.int32();
           break;
         case 4:
-          message.decimals = reader.int32();
+          message.priceSymbol = reader.string();
+          break;
+        case 5:
+          message.isBasePriceAsset = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -913,8 +932,9 @@ export const AssetMetadata = {
     const message = createBaseAssetMetadata();
     message.denom = object.denom ?? "";
     message.symbol = object.symbol ?? "";
-    message.priceSymbol = object.priceSymbol ?? "";
     message.decimals = object.decimals ?? 0;
+    message.priceSymbol = object.priceSymbol ?? "";
+    message.isBasePriceAsset = object.isBasePriceAsset ?? false;
     return message;
   },
   fromAmino(object: AssetMetadataAmino): AssetMetadata {
@@ -925,11 +945,14 @@ export const AssetMetadata = {
     if (object.symbol !== undefined && object.symbol !== null) {
       message.symbol = object.symbol;
     }
+    if (object.decimals !== undefined && object.decimals !== null) {
+      message.decimals = object.decimals;
+    }
     if (object.price_symbol !== undefined && object.price_symbol !== null) {
       message.priceSymbol = object.price_symbol;
     }
-    if (object.decimals !== undefined && object.decimals !== null) {
-      message.decimals = object.decimals;
+    if (object.is_base_price_asset !== undefined && object.is_base_price_asset !== null) {
+      message.isBasePriceAsset = object.is_base_price_asset;
     }
     return message;
   },
@@ -937,8 +960,9 @@ export const AssetMetadata = {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.symbol = message.symbol === "" ? undefined : message.symbol;
-    obj.price_symbol = message.priceSymbol === "" ? undefined : message.priceSymbol;
     obj.decimals = message.decimals === 0 ? undefined : message.decimals;
+    obj.price_symbol = message.priceSymbol === "" ? undefined : message.priceSymbol;
+    obj.is_base_price_asset = message.isBasePriceAsset === false ? undefined : message.isBasePriceAsset;
     return obj;
   },
   fromAminoMsg(object: AssetMetadataAminoMsg): AssetMetadata {
@@ -1643,6 +1667,7 @@ function createBaseLoan(): Loan {
     vaultAddress: "",
     borrower: "",
     borrowerPubKey: "",
+    borrowerAuthPubKey: "",
     dcm: "",
     maturityTime: BigInt(0),
     finalTimeout: BigInt(0),
@@ -1681,77 +1706,80 @@ export const Loan = {
     if (message.borrowerPubKey !== "") {
       writer.uint32(26).string(message.borrowerPubKey);
     }
+    if (message.borrowerAuthPubKey !== "") {
+      writer.uint32(34).string(message.borrowerAuthPubKey);
+    }
     if (message.dcm !== "") {
-      writer.uint32(34).string(message.dcm);
+      writer.uint32(42).string(message.dcm);
     }
     if (message.maturityTime !== BigInt(0)) {
-      writer.uint32(40).int64(message.maturityTime);
+      writer.uint32(48).int64(message.maturityTime);
     }
     if (message.finalTimeout !== BigInt(0)) {
-      writer.uint32(48).int64(message.finalTimeout);
+      writer.uint32(56).int64(message.finalTimeout);
     }
     if (message.poolId !== "") {
-      writer.uint32(58).string(message.poolId);
+      writer.uint32(66).string(message.poolId);
     }
     if (message.borrowAmount !== undefined) {
-      Coin.encode(message.borrowAmount, writer.uint32(66).fork()).ldelim();
+      Coin.encode(message.borrowAmount, writer.uint32(74).fork()).ldelim();
     }
     if (message.requestFee !== undefined) {
-      Coin.encode(message.requestFee, writer.uint32(74).fork()).ldelim();
+      Coin.encode(message.requestFee, writer.uint32(82).fork()).ldelim();
     }
     if (message.originationFee !== "") {
-      writer.uint32(82).string(message.originationFee);
+      writer.uint32(90).string(message.originationFee);
     }
     if (message.interest !== "") {
-      writer.uint32(90).string(message.interest);
+      writer.uint32(98).string(message.interest);
     }
     if (message.protocolFee !== "") {
-      writer.uint32(98).string(message.protocolFee);
+      writer.uint32(106).string(message.protocolFee);
     }
     if (message.maturity !== BigInt(0)) {
-      writer.uint32(104).int64(message.maturity);
+      writer.uint32(112).int64(message.maturity);
     }
     if (message.borrowApr !== 0) {
-      writer.uint32(112).uint32(message.borrowApr);
+      writer.uint32(120).uint32(message.borrowApr);
     }
     if (message.minMaturity !== BigInt(0)) {
-      writer.uint32(120).int64(message.minMaturity);
+      writer.uint32(128).int64(message.minMaturity);
     }
     if (message.startBorrowIndex !== "") {
-      writer.uint32(130).string(Decimal.fromUserInput(message.startBorrowIndex, 18).atomics);
+      writer.uint32(138).string(Decimal.fromUserInput(message.startBorrowIndex, 18).atomics);
     }
     if (message.liquidationPrice !== "") {
-      writer.uint32(138).string(Decimal.fromUserInput(message.liquidationPrice, 18).atomics);
+      writer.uint32(146).string(Decimal.fromUserInput(message.liquidationPrice, 18).atomics);
     }
     if (message.liquidationEventId !== BigInt(0)) {
-      writer.uint32(144).uint64(message.liquidationEventId);
+      writer.uint32(152).uint64(message.liquidationEventId);
     }
     if (message.defaultLiquidationEventId !== BigInt(0)) {
-      writer.uint32(152).uint64(message.defaultLiquidationEventId);
+      writer.uint32(160).uint64(message.defaultLiquidationEventId);
     }
     if (message.repaymentEventId !== BigInt(0)) {
-      writer.uint32(160).uint64(message.repaymentEventId);
+      writer.uint32(168).uint64(message.repaymentEventId);
     }
     for (const v of message.authorizations) {
-      Authorization.encode(v!, writer.uint32(170).fork()).ldelim();
+      Authorization.encode(v!, writer.uint32(178).fork()).ldelim();
     }
     if (message.collateralAmount !== "") {
-      writer.uint32(178).string(message.collateralAmount);
+      writer.uint32(186).string(message.collateralAmount);
     }
     if (message.liquidationId !== BigInt(0)) {
-      writer.uint32(184).uint64(message.liquidationId);
+      writer.uint32(192).uint64(message.liquidationId);
     }
     if (message.referrer !== "") {
-      writer.uint32(194).string(message.referrer);
+      writer.uint32(202).string(message.referrer);
     }
     if (message.createAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createAt), writer.uint32(202).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.createAt), writer.uint32(210).fork()).ldelim();
     }
     if (message.disburseAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.disburseAt), writer.uint32(210).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.disburseAt), writer.uint32(218).fork()).ldelim();
     }
     if (message.status !== 0) {
-      writer.uint32(216).int32(message.status);
+      writer.uint32(224).int32(message.status);
     }
     return writer;
   },
@@ -1772,75 +1800,78 @@ export const Loan = {
           message.borrowerPubKey = reader.string();
           break;
         case 4:
-          message.dcm = reader.string();
+          message.borrowerAuthPubKey = reader.string();
           break;
         case 5:
-          message.maturityTime = reader.int64();
+          message.dcm = reader.string();
           break;
         case 6:
-          message.finalTimeout = reader.int64();
+          message.maturityTime = reader.int64();
           break;
         case 7:
-          message.poolId = reader.string();
+          message.finalTimeout = reader.int64();
           break;
         case 8:
-          message.borrowAmount = Coin.decode(reader, reader.uint32());
+          message.poolId = reader.string();
           break;
         case 9:
-          message.requestFee = Coin.decode(reader, reader.uint32());
+          message.borrowAmount = Coin.decode(reader, reader.uint32());
           break;
         case 10:
-          message.originationFee = reader.string();
+          message.requestFee = Coin.decode(reader, reader.uint32());
           break;
         case 11:
-          message.interest = reader.string();
+          message.originationFee = reader.string();
           break;
         case 12:
-          message.protocolFee = reader.string();
+          message.interest = reader.string();
           break;
         case 13:
-          message.maturity = reader.int64();
+          message.protocolFee = reader.string();
           break;
         case 14:
-          message.borrowApr = reader.uint32();
+          message.maturity = reader.int64();
           break;
         case 15:
-          message.minMaturity = reader.int64();
+          message.borrowApr = reader.uint32();
           break;
         case 16:
-          message.startBorrowIndex = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.minMaturity = reader.int64();
           break;
         case 17:
-          message.liquidationPrice = Decimal.fromAtomics(reader.string(), 18).toString();
+          message.startBorrowIndex = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 18:
-          message.liquidationEventId = reader.uint64();
+          message.liquidationPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 19:
-          message.defaultLiquidationEventId = reader.uint64();
+          message.liquidationEventId = reader.uint64();
           break;
         case 20:
-          message.repaymentEventId = reader.uint64();
+          message.defaultLiquidationEventId = reader.uint64();
           break;
         case 21:
-          message.authorizations.push(Authorization.decode(reader, reader.uint32()));
+          message.repaymentEventId = reader.uint64();
           break;
         case 22:
-          message.collateralAmount = reader.string();
+          message.authorizations.push(Authorization.decode(reader, reader.uint32()));
           break;
         case 23:
-          message.liquidationId = reader.uint64();
+          message.collateralAmount = reader.string();
           break;
         case 24:
-          message.referrer = reader.string();
+          message.liquidationId = reader.uint64();
           break;
         case 25:
-          message.createAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.referrer = reader.string();
           break;
         case 26:
-          message.disburseAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.createAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 27:
+          message.disburseAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 28:
           message.status = reader.int32() as any;
           break;
         default:
@@ -1855,6 +1886,7 @@ export const Loan = {
     message.vaultAddress = object.vaultAddress ?? "";
     message.borrower = object.borrower ?? "";
     message.borrowerPubKey = object.borrowerPubKey ?? "";
+    message.borrowerAuthPubKey = object.borrowerAuthPubKey ?? "";
     message.dcm = object.dcm ?? "";
     message.maturityTime = object.maturityTime !== undefined && object.maturityTime !== null ? BigInt(object.maturityTime.toString()) : BigInt(0);
     message.finalTimeout = object.finalTimeout !== undefined && object.finalTimeout !== null ? BigInt(object.finalTimeout.toString()) : BigInt(0);
@@ -1891,6 +1923,9 @@ export const Loan = {
     }
     if (object.borrowerPubKey !== undefined && object.borrowerPubKey !== null) {
       message.borrowerPubKey = object.borrowerPubKey;
+    }
+    if (object.borrowerAuthPubKey !== undefined && object.borrowerAuthPubKey !== null) {
+      message.borrowerAuthPubKey = object.borrowerAuthPubKey;
     }
     if (object.dcm !== undefined && object.dcm !== null) {
       message.dcm = object.dcm;
@@ -1969,6 +2004,7 @@ export const Loan = {
     obj.vault_address = message.vaultAddress === "" ? undefined : message.vaultAddress;
     obj.borrower = message.borrower === "" ? undefined : message.borrower;
     obj.borrowerPubKey = message.borrowerPubKey === "" ? undefined : message.borrowerPubKey;
+    obj.borrowerAuthPubKey = message.borrowerAuthPubKey === "" ? undefined : message.borrowerAuthPubKey;
     obj.dcm = message.dcm === "" ? undefined : message.dcm;
     obj.maturity_time = message.maturityTime !== BigInt(0) ? message.maturityTime.toString() : undefined;
     obj.final_timeout = message.finalTimeout !== BigInt(0) ? message.finalTimeout.toString() : undefined;
@@ -2356,7 +2392,8 @@ function createBaseDLCMeta(): DLCMeta {
     timeoutRefundTx: "",
     vaultUtxos: [],
     internalKey: "",
-    multisigScript: "",
+    liquidationScript: "",
+    repaymentScript: "",
     timeoutRefundScript: ""
   };
 }
@@ -2381,11 +2418,14 @@ export const DLCMeta = {
     if (message.internalKey !== "") {
       writer.uint32(50).string(message.internalKey);
     }
-    if (message.multisigScript !== "") {
-      writer.uint32(58).string(message.multisigScript);
+    if (message.liquidationScript !== "") {
+      writer.uint32(58).string(message.liquidationScript);
+    }
+    if (message.repaymentScript !== "") {
+      writer.uint32(66).string(message.repaymentScript);
     }
     if (message.timeoutRefundScript !== "") {
-      writer.uint32(66).string(message.timeoutRefundScript);
+      writer.uint32(74).string(message.timeoutRefundScript);
     }
     return writer;
   },
@@ -2415,9 +2455,12 @@ export const DLCMeta = {
           message.internalKey = reader.string();
           break;
         case 7:
-          message.multisigScript = reader.string();
+          message.liquidationScript = reader.string();
           break;
         case 8:
+          message.repaymentScript = reader.string();
+          break;
+        case 9:
           message.timeoutRefundScript = reader.string();
           break;
         default:
@@ -2435,7 +2478,8 @@ export const DLCMeta = {
     message.timeoutRefundTx = object.timeoutRefundTx ?? "";
     message.vaultUtxos = object.vaultUtxos?.map(e => UTXO.fromPartial(e)) || [];
     message.internalKey = object.internalKey ?? "";
-    message.multisigScript = object.multisigScript ?? "";
+    message.liquidationScript = object.liquidationScript ?? "";
+    message.repaymentScript = object.repaymentScript ?? "";
     message.timeoutRefundScript = object.timeoutRefundScript ?? "";
     return message;
   },
@@ -2457,8 +2501,11 @@ export const DLCMeta = {
     if (object.internal_key !== undefined && object.internal_key !== null) {
       message.internalKey = object.internal_key;
     }
-    if (object.multisig_script !== undefined && object.multisig_script !== null) {
-      message.multisigScript = object.multisig_script;
+    if (object.liquidation_script !== undefined && object.liquidation_script !== null) {
+      message.liquidationScript = object.liquidation_script;
+    }
+    if (object.repayment_script !== undefined && object.repayment_script !== null) {
+      message.repaymentScript = object.repayment_script;
     }
     if (object.timeout_refund_script !== undefined && object.timeout_refund_script !== null) {
       message.timeoutRefundScript = object.timeout_refund_script;
@@ -2477,7 +2524,8 @@ export const DLCMeta = {
       obj.vault_utxos = message.vaultUtxos;
     }
     obj.internal_key = message.internalKey === "" ? undefined : message.internalKey;
-    obj.multisig_script = message.multisigScript === "" ? undefined : message.multisigScript;
+    obj.liquidation_script = message.liquidationScript === "" ? undefined : message.liquidationScript;
+    obj.repayment_script = message.repaymentScript === "" ? undefined : message.repaymentScript;
     obj.timeout_refund_script = message.timeoutRefundScript === "" ? undefined : message.timeoutRefundScript;
     return obj;
   },
