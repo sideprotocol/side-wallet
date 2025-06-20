@@ -3,10 +3,9 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 
 import services from '@/ui/services';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
-import { useEnvironment } from '../state/environment/hooks';
-
-export default function useGetLoansData() {
+export function useGetLoansData() {
   const [pageSize, setPageSize] = useState(10);
   const [pageNum, setPageNum] = useState(0);
   const { sideChain } = useEnvironment();

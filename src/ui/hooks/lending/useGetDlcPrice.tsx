@@ -2,11 +2,11 @@ import BigNumber from 'bignumber.js';
 import { useQuery } from 'react-query';
 
 import services from '@/ui/services';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
-import { useEnvironment } from '../state/environment/hooks';
 import { PoolDataItem } from './useGetPoolsData';
 
-export default function useGetDlcPrice(poolConfig?: PoolDataItem['baseData']['config']) {
+export function useGetDlcPrice(poolConfig?: PoolDataItem['baseData']['config']) {
   const { sideChain } = useEnvironment();
   const { data, isLoading: loading } = useQuery({
     queryKey: ['getDlcPrice', { priceSymbol: poolConfig?.lending_asset.price_symbol }],

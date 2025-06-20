@@ -2,13 +2,12 @@ import { useState } from 'react';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
 import services from '@/ui/services';
+import { GetTxByHashResponse } from '@/ui/services/tx/types';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
+import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 
-import { GetTxByHashResponse } from '../services/tx/types';
-import { useCurrentAccount } from '../state/accounts/hooks';
-import { useEnvironment } from '../state/environment/hooks';
-import { useSignAndBroadcastTxRaw } from '../state/transactions/hooks/cosmos';
-
-export default function useRepay() {
+export function useRepay() {
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
   const currentAccount = useCurrentAccount();
   const [loading, setLoading] = useState(false);

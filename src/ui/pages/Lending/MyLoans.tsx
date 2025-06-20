@@ -2,11 +2,8 @@ import BigNumber from 'bignumber.js';
 import { useMemo, useState } from 'react';
 
 import { Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
+import { useGetDlcPrice, useGetLoansData, useGetPoolDataById, useGetPoolsData } from '@/ui/hooks/lending';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
-import useGetDlcPrice from '@/ui/hooks/useGetDlcPrice';
-import useGetLoansData from '@/ui/hooks/useGetLoansData';
-import useGetPoolDataById from '@/ui/hooks/useGetPoolDataById';
-import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { Loan, LoanStatus } from '@/ui/services/lending/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';

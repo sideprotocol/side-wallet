@@ -5,12 +5,14 @@ import 'swiper/css';
 import { Button, Column, Content, Footer, Icon, Image, Layout, LightTooltip, Row, Text } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import useCreateLoan from '@/ui/hooks/useCreateLoan';
+import {
+  useCreateLoan,
+  useGetDlcEventById,
+  useGetDlcPrice,
+  useGetLiquidationEvent,
+  useGetPoolsData
+} from '@/ui/hooks/lending';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
-import useGetDlcEventById from '@/ui/hooks/useGetDlcEventById';
-import useGetDlcPrice from '@/ui/hooks/useGetDlcPrice';
-import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
-import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';

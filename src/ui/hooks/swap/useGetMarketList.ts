@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import services from '@/ui/services';
-
-import { useEnvironment } from '../state/environment/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
 export interface IGetMarketListItem {
   tokenDenom: string;
@@ -19,7 +18,7 @@ export interface IGetMarketListItem {
   tvl: string;
   marketCap: string;
 }
-export default function useGetMarketList() {
+export function useGetMarketList() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<IGetMarketListItem[]>([]);
   const { SERVICE_BASE_URL } = useEnvironment();

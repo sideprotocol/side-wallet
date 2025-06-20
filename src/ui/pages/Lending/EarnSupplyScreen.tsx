@@ -16,10 +16,8 @@ import {
   Text
 } from '@/ui/components';
 import { CoinInput } from '@/ui/components/CoinInput';
-import useGetPoolExchangeRate from '@/ui/hooks/useGetPoolExchangeRate';
-import { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
+import { PoolDataItem, useGetPoolExchangeRate, useSupply } from '@/ui/hooks/lending';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
-import useSupply from '@/ui/hooks/useSupply';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
 import { formatUnitAmount, getTruncate, useLocationState } from '@/ui/utils';

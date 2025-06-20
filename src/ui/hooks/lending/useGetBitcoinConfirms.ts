@@ -1,8 +1,7 @@
 import { useQuery } from 'react-query';
 
 import services from '@/ui/services';
-
-import { useEnvironment } from '../state/environment/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
 export function useGetBitcoinConfirms(tx: string, disabled?: boolean) {
   const { SIDE_BTC_EXPLORER } = useEnvironment();

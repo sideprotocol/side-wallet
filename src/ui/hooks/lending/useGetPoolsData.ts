@@ -3,14 +3,14 @@ import { useMemo } from 'react';
 import { useQuery } from 'react-query';
 
 import { BalanceItem } from '@/shared/types';
+import services from '@/ui/services';
+import { GetLeadingParamsResponse, LeadingPool } from '@/ui/services/lending/types';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
+import { formatUnitAmount } from '@/ui/utils';
 
-import services from '../services';
-import { GetLeadingParamsResponse, LeadingPool } from '../services/lending/types';
-import { useCurrentAccount } from '../state/accounts/hooks';
-import { useEnvironment } from '../state/environment/hooks';
-import { formatUnitAmount } from '../utils';
-import useGetLendingParams from './useGetLendingParams';
-import { useGetSideBalanceList } from './useGetSideBalanceList';
+import { useGetSideBalanceList } from '../useGetSideBalanceList';
+import { useGetLendingParams } from './useGetLendingParams';
 
 export interface PoolDataItem {
   totalSupply: string;
@@ -31,7 +31,7 @@ export interface PoolDataItem {
   tranches: Array<{ maturity: string; total_borrowed: string }>;
 }
 
-export default function useGetPoolsData() {
+export function useGetPoolsData() {
   const currentAccount = useCurrentAccount();
   const { sideChain, SERVICE_BASE_URL } = useEnvironment();
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);

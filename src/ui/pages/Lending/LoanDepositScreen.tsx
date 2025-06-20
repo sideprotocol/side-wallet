@@ -10,7 +10,7 @@ import { useTools } from '@/ui/components/ActionComponent';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import ToastView from '@/ui/components/ToastView';
-import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
+import { useGetDepositTx } from '@/ui/hooks/lending';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { LiquidationEvent } from '@/ui/services/lending/types';

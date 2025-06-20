@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
 
-import services from '../services';
-import { useEnvironment } from '../state/environment/hooks';
+import services from '@/ui/services';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
-export default function useGetLoanById({ loanId }: { loanId: string }) {
+export function useGetLoanById({ loanId }: { loanId: string }) {
   const { sideChain } = useEnvironment();
   const { data } = useQuery({
     queryKey: ['getLoanById', { loanId, sideChain }],

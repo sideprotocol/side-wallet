@@ -5,7 +5,7 @@ import services from '@/ui/services';
 import { Loan } from '@/ui/services/lending/types';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 
-export default function useGetLoanAuthorization(loan?: Loan) {
+export function useGetLoanAuthorization(loan?: Loan) {
   const { sideChain } = useEnvironment();
   const { data: loanAuthorization, isLoading: loading } = useQuery({
     queryKey: ['getLoanAuthorization', { loan_id: loan?.vault_address, loan_status: loan?.status }],

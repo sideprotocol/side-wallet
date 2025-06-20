@@ -4,11 +4,10 @@ import { useQuery, useQueryClient } from 'react-query';
 
 import { NetworkType } from '@/shared/types';
 import services from '@/ui/services';
+import { useEnvironment } from '@/ui/state/environment/hooks';
+import { useNetworkType } from '@/ui/state/settings/hooks';
+import { formatUnitAmount } from '@/ui/utils';
 import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
-
-import { useEnvironment } from '../state/environment/hooks';
-import { useNetworkType } from '../state/settings/hooks';
-import { formatUnitAmount } from '../utils';
 
 async function buildPsbtFromTxHex(txid: string, SIDE_BTC_EXPLORER: string, networkType: NetworkType) {
   const txHex = await services.bridge.getTxHex(txid, SIDE_BTC_EXPLORER);
@@ -48,7 +47,7 @@ async function buildPsbtFromTxHex(txid: string, SIDE_BTC_EXPLORER: string, netwo
   return psbt;
 }
 
-export default function useGetDepositTx(collateralAddress = '', collateralUnitAmount = '0') {
+export function useGetDepositTx(collateralAddress = '', collateralUnitAmount = '0') {
   const networkType = useNetworkType();
   const { SIDE_BTC_EXPLORER } = useEnvironment();
   const queryClient = useQueryClient();

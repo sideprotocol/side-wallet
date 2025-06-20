@@ -1,14 +1,14 @@
 import { useQuery } from 'react-query';
 
 import { BalanceItem } from '@/shared/types';
+import services from '@/ui/services';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
+import { toUnitAmount } from '@/ui/utils/formatter';
 
-import services from '../services';
-import { useCurrentAccount } from '../state/accounts/hooks';
-import { useEnvironment } from '../state/environment/hooks';
-import { toUnitAmount } from '../utils/formatter';
-import useGetBitcoinBalanceList from './useGetBitcoinBalanceList';
+import useGetBitcoinBalanceList from '../useGetBitcoinBalanceList';
 
-export default function useGetLiquidationEvent({
+export function useGetLiquidationEvent({
   bitcoinAmount,
   borrowToken,
   borrowTokenAmount,

@@ -5,7 +5,7 @@ import { NetworkType } from '@/shared/types';
 import { Column, Content, Footer, Icon, Image, Layout, Row, Text } from '@/ui/components';
 import SearchInput from '@/ui/components/Input/Search';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
+import { useGetPoolsData } from '@/ui/hooks/lending';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useReloadAccounts } from '@/ui/state/accounts/hooks';
 import { useChangeEnvironmentCallback, useEnvironment } from '@/ui/state/environment/hooks';

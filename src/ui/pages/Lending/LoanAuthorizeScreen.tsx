@@ -4,11 +4,13 @@ import 'swiper/css';
 import { NetworkType } from '@/shared/types';
 import { Button, Column, Content, Footer, Layout, LightTooltip, Row, SuccessAnimation, Text } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import useApproveLoan from '@/ui/hooks/useApproveLoan';
-import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
-import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
-import useGetLoanById from '@/ui/hooks/useGetLoanById';
-import useGetPoolsData from '@/ui/hooks/useGetPoolsData';
+import {
+  useApproveLoan,
+  useGetDepositTx,
+  useGetLiquidationEvent,
+  useGetLoanById,
+  useGetPoolsData
+} from '@/ui/hooks/lending';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { LiquidationEvent } from '@/ui/services/lending/types';

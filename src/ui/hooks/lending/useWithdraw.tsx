@@ -3,15 +3,14 @@ import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
+import ToastView from '@/ui/components/ToastView';
+import services from '@/ui/services';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
+import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { Box } from '@mui/material';
 
-import ToastView from '../components/ToastView';
-import services from '../services';
-import { useCurrentAccount } from '../state/accounts/hooks';
-import { useEnvironment } from '../state/environment/hooks';
-import { useSignAndBroadcastTxRaw } from '../state/transactions/hooks/cosmos';
-
-export default function useWithdraw() {
+export function useWithdraw() {
   const [loading, setLoading] = useState(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
   const { sideChain } = useEnvironment();

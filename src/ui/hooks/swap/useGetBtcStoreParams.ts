@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
 
-import services from '../services';
-import { useEnvironment } from '../state/environment/hooks';
+import services from '@/ui/services';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
-export default function useGetBtcStoreParams() {
+export function useGetBtcStoreParams() {
   const { SERVICE_BASE_URL } = useEnvironment();
   const { data, isLoading } = useQuery({
     queryKey: ['btcStoreParams', { SERVICE_BASE_URL }],

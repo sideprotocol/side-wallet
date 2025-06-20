@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
 
-import services from '../services';
-import { useEnvironment } from '../state/environment/hooks';
+import services from '@/ui/services';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
-export default function useGetPoolDataById({ poolId }: { poolId?: string }) {
+export function useGetPoolDataById({ poolId }: { poolId?: string }) {
   const { sideChain } = useEnvironment();
   const { data: lendingPool, isLoading: loading } = useQuery({
     queryKey: ['getLendingPoolsData', { poolId, sideChain }],

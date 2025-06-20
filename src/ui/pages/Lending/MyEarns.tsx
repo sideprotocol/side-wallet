@@ -2,8 +2,7 @@ import BigNumber from 'bignumber.js';
 import { Fragment, useMemo, useState } from 'react';
 
 import { Content, Header, Icon, Image, Layout, Row, Text } from '@/ui/components';
-import useGetPoolExchangeRate from '@/ui/hooks/useGetPoolExchangeRate';
-import useGetPoolsData, { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
+import { PoolDataItem, useGetPoolExchangeRate, useGetPoolsData } from '@/ui/hooks/lending';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';

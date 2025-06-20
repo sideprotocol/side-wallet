@@ -1,16 +1,9 @@
 import { useQuery } from 'react-query';
 
 import services from '@/ui/services';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
-import { useEnvironment } from '../state/environment/hooks';
-
-export default function useGetLiquidationById({
-  liquidation_id,
-  enabled
-}: {
-  liquidation_id?: string;
-  enabled?: boolean;
-}) {
+export function useGetLiquidationById({ liquidation_id, enabled }: { liquidation_id?: string; enabled?: boolean }) {
   const { sideChain } = useEnvironment();
 
   const { data, isLoading: loading } = useQuery({

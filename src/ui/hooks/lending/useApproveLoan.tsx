@@ -3,22 +3,22 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
+import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
+import services from '@/ui/services';
+import { LiquidationEvent } from '@/ui/services/lending/types';
+import { GetTxByHashResponse } from '@/ui/services/tx/types';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
+import { useNetworkType } from '@/ui/state/settings/hooks';
+import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
+import { useWallet } from '@/ui/utils';
+import { prepareApply } from '@/ui/utils/lending';
 import { Box } from '@mui/material';
 
-import ToastView from '../components/ToastView';
-import services from '../services';
-import { LiquidationEvent } from '../services/lending/types';
-import { GetTxByHashResponse } from '../services/tx/types';
-import { useCurrentAccount } from '../state/accounts/hooks';
-import { useEnvironment } from '../state/environment/hooks';
-import { useNetworkType } from '../state/settings/hooks';
-import { useSignAndBroadcastTxRaw } from '../state/transactions/hooks/cosmos';
-import { useWallet } from '../utils';
-import { prepareApply } from '../utils/lending';
-import useGetDepositTx from './useGetDepositTx';
+import { useGetDepositTx } from './useGetDepositTx';
 
-export default function useApproveLoan(loan_id: string, collateralAmount: string) {
+export function useApproveLoan(loan_id: string, collateralAmount: string) {
   const [loading, setLoading] = useState(false);
   const [tx, setTx] = useState('');
 

@@ -14,16 +14,18 @@ import {
   SuccessAnimation,
   Text
 } from '@/ui/components';
-import { useGetBitcoinTxsConfirms } from '@/ui/hooks/lending';
-import useClaimCollateral from '@/ui/hooks/useClaimCollateral';
+import {
+  useClaimCollateral,
+  useGetBitcoinTxsConfirms,
+  useGetDepositTx,
+  useGetLiquidationById,
+  useGetLiquidationEvent,
+  useGetLiquidationParams,
+  useGetLoanAuthorization,
+  useGetLoanCurrentInterest,
+  useGetPoolDataById
+} from '@/ui/hooks/lending';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
-import useGetDepositTx from '@/ui/hooks/useGetDepositTx';
-import useGetLiquidationById from '@/ui/hooks/useGetLiquidationById';
-import useGetLiquidationEvent from '@/ui/hooks/useGetLiquidationEvent';
-import useGetLiquidationParams from '@/ui/hooks/useGetLiquidationParams';
-import useGetLoanAuthorization from '@/ui/hooks/useGetLoanAuthorization';
-import useGetLoanCurrentInterest from '@/ui/hooks/useGetLoanCurrentInterest';
-import useGetPoolDataById from '@/ui/hooks/useGetPoolDataById';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';

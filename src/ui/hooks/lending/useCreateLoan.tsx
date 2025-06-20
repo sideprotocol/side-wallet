@@ -4,19 +4,18 @@ import toast from 'react-hot-toast';
 import { sideLendingMessageComposer } from '@/codegen/src';
 import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
+import services from '@/ui/services';
+import { LiquidationEvent } from '@/ui/services/lending/types';
+import { GetTxByHashResponse } from '@/ui/services/tx/types';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
+import { toXOnly } from '@/ui/wallet-sdk/utils';
 import { Coin } from '@cosmjs/amino';
 import { fromHex } from '@cosmjs/encoding';
 import { Box } from '@mui/material';
 
-import services from '../services';
-import { LiquidationEvent } from '../services/lending/types';
-import { GetTxByHashResponse } from '../services/tx/types';
-import { useCurrentAccount } from '../state/accounts/hooks';
-import { useEnvironment } from '../state/environment/hooks';
-import { toXOnly } from '../wallet-sdk/utils';
-
-export default function useCreateLoan() {
+export function useCreateLoan() {
   const { sideChain, SERVICE_BASE_URL } = useEnvironment();
 
   const [loading, setLoading] = useState(false);

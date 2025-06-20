@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 
 import services from '@/ui/services';
+import { GetLoanInterestResponse, LoanStatus } from '@/ui/services/lending/types';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 
-import { GetLoanInterestResponse, LoanStatus } from '../services/lending/types';
-import { useEnvironment } from '../state/environment/hooks';
-
-export default function useGetLoanCurrentInterest({
+export function useGetLoanCurrentInterest({
   loan_id,
   loanStatus,
   tag

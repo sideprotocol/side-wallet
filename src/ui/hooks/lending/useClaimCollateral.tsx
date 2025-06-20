@@ -3,18 +3,18 @@ import { useState } from 'react';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
 import services from '@/ui/services';
+import { LiquidationEvent } from '@/ui/services/lending/types';
 import { GetTxByHashResponse } from '@/ui/services/tx/types';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
+import { useNetworkType } from '@/ui/state/settings/hooks';
+import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
+import { useWallet } from '@/ui/utils';
+import { prepareApply } from '@/ui/utils/lending';
 
-import { LiquidationEvent } from '../services/lending/types';
-import { useCurrentAccount } from '../state/accounts/hooks';
-import { useEnvironment } from '../state/environment/hooks';
-import { useNetworkType } from '../state/settings/hooks';
-import { useSignAndBroadcastTxRaw } from '../state/transactions/hooks/cosmos';
-import { useWallet } from '../utils';
-import { prepareApply } from '../utils/lending';
-import useGetDepositTx from './useGetDepositTx';
+import { useGetDepositTx } from './useGetDepositTx';
 
-export default function useClaimCollateral(loan_id?: string) {
+export function useClaimCollateral(loan_id?: string) {
   const currentAccount = useCurrentAccount();
   const [loading, setLoading] = useState(false);
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();

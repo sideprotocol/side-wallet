@@ -4,10 +4,9 @@ import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
 import { Button, Column, Content, Header, Image, Layout, LightTooltip, SuccessAnimation } from '@/ui/components';
+import { useGetLoanCurrentInterest, useRepay } from '@/ui/hooks/lending';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
-import useGetLoanCurrentInterest from '@/ui/hooks/useGetLoanCurrentInterest';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
-import useRepay from '@/ui/hooks/useRepay';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useEnvironment } from '@/ui/state/environment/hooks';

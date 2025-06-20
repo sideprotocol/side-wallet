@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { Fragment } from 'react/jsx-runtime';
 
 import { Column, Content, Header, Image, Layout, LightTooltip } from '@/ui/components';
-import { PoolDataItem } from '@/ui/hooks/useGetPoolsData';
+import { PoolDataItem } from '@/ui/hooks/lending';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { LendingActions } from '@/ui/state/lending/reducer';
 import { colors } from '@/ui/theme/colors';

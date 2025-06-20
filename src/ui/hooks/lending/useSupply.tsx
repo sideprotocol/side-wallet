@@ -3,23 +3,20 @@ import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
 import ToastView from '@/ui/components/ToastView';
-import { useNavigate } from '@/ui/pages/MainRoute';
+import services from '@/ui/services';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { Coin } from '@cosmjs/amino';
 import { Box } from '@mui/material';
 
-import services from '../services';
-import { useCurrentAccount } from '../state/accounts/hooks';
-import { useEnvironment } from '../state/environment/hooks';
-
-export default function useSupply() {
+export function useSupply() {
   const { sideChain } = useEnvironment();
 
   const [loading, setLoading] = useState(false);
   const timer = useRef<NodeJS.Timeout | null>(null);
   const [supplyTokenAmount, setSupplyTokenAmount] = useState('0');
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
-  const navigate = useNavigate();
   const [tx, setTx] = useState('');
 
   const currentAccount = useCurrentAccount();
