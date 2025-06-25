@@ -16,22 +16,43 @@ export function useGetLoanAuthorization(loan?: Loan) {
       );
     },
 
-    refetchIntervalInBackground: true,
-    enabled: loan && loan.authorizations.length > 0
+    enabled: loan && loan.status === 'Rejected'
   });
 
-  const canClaim = useMemo(() => {
-    return (
-      !loading &&
+  const { data: loanDeposits } = useQuery({
+    queryKey: ['getLoanDeposits', { loan_id: loan?.vault_address, loan_status: loan?.status }],
+    queryFn: async () => {
+      return services.lending.getLoanDeposits(loan!.vault_address, { baseURL: sideChain.restUrl });
+    },
+    enabled: loan && loan.status === 'Requested'
+  });
+
+  const { hasAuthorizedCanClaim, noAuthorizeCanClaim } = useMemo(() => {
+    let hasAuthorizedCanClaim = false;
+    let noAuthorizeCanClaim = false;
+    if (
       loanAuthorization &&
       loanAuthorization.status === 'AUTHORIZATION_STATUS_REJECTED' &&
       loanAuthorization.deposits.every((deposit) => deposit.status == 'DEPOSIT_STATUS_VERIFIED')
-    );
-  }, [loading, loanAuthorization]);
+    ) {
+      hasAuthorizedCanClaim = true;
+    } else if (
+      loanDeposits &&
+      loanDeposits.deposits.length &&
+      loanDeposits.deposits.every((deposit) => deposit.status == 'DEPOSIT_STATUS_VERIFIED')
+    ) {
+      noAuthorizeCanClaim = true;
+    }
+    return {
+      hasAuthorizedCanClaim,
+      noAuthorizeCanClaim
+    };
+  }, [loanAuthorization, loanDeposits]);
 
   return {
     loading,
     loanAuthorization,
-    canClaim
+    hasAuthorizedCanClaim,
+    noAuthorizeCanClaim
   };
 }

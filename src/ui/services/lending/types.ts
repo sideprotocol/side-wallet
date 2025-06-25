@@ -812,3 +812,13 @@ export interface GetLoanAuthorizationResponse {
   }[];
   status: AuthorizationsStatus;
 }
+
+export interface GetLoanDepositsResponse {
+  deposits: Array<{
+    txid: string;
+    vault_address: string;
+    authorization_id: string;
+    deposit_tx: string;
+    status: DepositStatus;
+  }>;
+}

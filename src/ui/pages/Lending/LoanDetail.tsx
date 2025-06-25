@@ -108,7 +108,7 @@ export default function LoanDetailScreen() {
 
   const feeRate = uiState.feeRate;
 
-  const { canClaim } = useGetLoanAuthorization(loan);
+  const { hasAuthorizedCanClaim, noAuthorizeCanClaim } = useGetLoanAuthorization(loan);
   const { claim, loading: claimLoading, tx } = useClaimCollateral(loan?.vault_address);
 
   const { txsConfirms } = useGetBitcoinTxsConfirms(txids);
@@ -601,7 +601,7 @@ export default function LoanDetailScreen() {
 
                 {loan.status === 'Rejected' ? (
                   <>
-                    {canClaim ? (
+                    {hasAuthorizedCanClaim || noAuthorizeCanClaim ? (
                       <></>
                     ) : loanDetailCex?.returnBtcTxhash ? (
                       <StatusWithToExplorer text="Claimed" />
@@ -775,21 +775,44 @@ export default function LoanDetailScreen() {
           Lock
         </Button>
       ) : depositTxs?.length && loan.status === 'Requested' ? (
-        <Button
-          preset="primary"
-          style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
-          onClick={() => {
-            navigate('LoanAuthorizeScreen', {
-              loanId: loan.vault_address,
-              borrowAmount: loan.borrow_amount.amount,
-              collateralAmount: loan.collateral_amount || '0',
-              feeRate,
-              liquidationEvent,
-              isWalletDeposit: true
-            });
-          }}>
-          Authorize
-        </Button>
+        <Row style={{ display: tx ? 'none' : 'flex', position: 'fixed', bottom: 16, left: 16, right: 16, gap: '16px' }}>
+          {noAuthorizeCanClaim && (
+            <Button
+              preset="primary"
+              disabled={claimLoading}
+              style={{ flex: 1 }}
+              onClick={() => {
+                if (!liquidationEvent) return;
+                claim({
+                  loanId: loan.vault_address,
+                  borrowAmount: loan.borrow_amount,
+                  collateralAmount: {
+                    amount: loan.collateral_amount,
+                    denom: 'sat'
+                  },
+                  liquidationEvent: liquidationEvent,
+                  feeRate
+                });
+              }}>
+              Claim
+            </Button>
+          )}
+          <Button
+            preset="primary"
+            style={{ flex: 1 }}
+            onClick={() => {
+              navigate('LoanAuthorizeScreen', {
+                loanId: loan.vault_address,
+                borrowAmount: loan.borrow_amount.amount,
+                collateralAmount: loan.collateral_amount || '0',
+                feeRate,
+                liquidationEvent,
+                isWalletDeposit: true
+              });
+            }}>
+            Authorize
+          </Button>
+        </Row>
       ) : loan.status === 'Open' ? (
         <Button
           preset="primary"
@@ -799,7 +822,7 @@ export default function LoanDetailScreen() {
           }}>
           Repay
         </Button>
-      ) : canClaim ? (
+      ) : hasAuthorizedCanClaim ? (
         <Button
           preset="primary"
           disabled={claimLoading}
