@@ -555,7 +555,7 @@ export interface GetLoanByIdCexResponse {
   referrer: string;
   disburseAt: string;
   disbursementTime: string;
-  disbursementTxhash: string;
+  disbursementBlockHeight: number;
   repaymentTime: string;
   repaymentTxhash: string;
   actualInterest: number;

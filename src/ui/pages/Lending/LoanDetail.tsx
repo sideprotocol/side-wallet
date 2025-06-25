@@ -319,7 +319,7 @@ export default function LoanDetailScreen() {
       tip: 'The maximum interest that can be charged over the full loan term'
     },
     {
-      label: 'Disburse Tx',
+      label: 'Disburse Block',
       value: (
         <Typography
           sx={{
@@ -332,9 +332,11 @@ export default function LoanDetailScreen() {
             }
           }}
           onClick={() => {
-            window.open(`${sideChain.explorerUrl}/tx/${loanDetailCex?.disbursementTxhash || ''}`);
+            if (loanDetailCex?.disbursementBlockHeight) {
+              window.open(`${sideChain?.explorerUrl}/block/${loanDetailCex?.disbursementBlockHeight}`);
+            }
           }}>
-          {formatAddress(loanDetailCex?.disbursementTxhash || '', 6)}
+          {loanDetailCex?.disbursementBlockHeight || '-'}
         </Typography>
       ),
       tip: 'The transaction (on Side Chain) that delivered the loan amount to your wallet'
@@ -423,7 +425,7 @@ export default function LoanDetailScreen() {
           {`${(liquidationParams?.params.liquidation_bonus_factor || 0) / 10}%`}
         </Text>
       ),
-      tip: 'The amount of collateral taken as penalty upon liquidation to reward liquidators'
+      tip: 'The portion of collateral allocated as a reward to liquidators during liquidation'
     },
 
     {
@@ -597,85 +599,24 @@ export default function LoanDetailScreen() {
                   Collateral
                 </Text>
 
-                {loan.status === 'Authorized' || loan.status === 'Open' ? (
-                  <Box
-                    sx={{
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '10px',
-                      backgroundColor: colors.white1,
-                      color: colors.white
-                    }}>
-                    Locked
-                  </Box>
+                {loan.status === 'Rejected' ? (
+                  <>
+                    {canClaim ? (
+                      <></>
+                    ) : loanDetailCex?.returnBtcTxhash ? (
+                      <StatusWithToExplorer text="Claimed" />
+                    ) : (
+                      <StatusWithPending text="Unlocking" />
+                    )}
+                  </>
+                ) : loan.status === 'Authorized' || loan.status === 'Open' ? (
+                  <StatusWithToExplorer text="Locked" />
                 ) : loan.status === 'Repaid' ? (
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    sx={{
-                      height: '30px',
-                      bgcolor: colors.white1,
-                      padding: '4px 8px',
-                      borderRadius: '4px'
-                    }}>
-                    <Typography
-                      sx={{
-                        fontSize: '10px',
-                        color: colors.white,
-                        fontWeight: 500,
-                        whiteSpace: 'nowrap'
-                      }}>
-                      Unlocking
-                    </Typography>
-                    <svg
-                      className="animate-[spin_3s_linear_infinite] inline-block ml-1"
-                      width="17"
-                      height="17"
-                      viewBox="0 0 17 17"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M8.5 2V3.66667M8.5 12.5V15.1667M4.33333 8.5H2M14.6667 8.5H13.6667M12.8047 12.8047L12.3333 12.3333M12.9428 4.11052L12 5.05333M3.78105 13.219L5.66667 11.3333M3.91912 3.97245L5.33333 5.38667"
-                        stroke={colors.grey12}
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Stack>
+                  <StatusWithPending text="Unlocking" />
                 ) : loan.status === 'Closed' ? (
-                  <Box
-                    sx={{
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '10px',
-                      backgroundColor: colors.white1,
-                      color: colors.white
-                    }}>
-                    Unlocked
-                  </Box>
+                  <StatusWithToExplorer text="Unlocked" />
                 ) : loan.status === 'Liquidated' ? (
-                  <Box
-                    sx={{
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '10px',
-                      backgroundColor: colors.white1,
-                      color: colors.white
-                    }}>
-                    Liquidated
-                  </Box>
-                ) : loan.status === 'Rejected' && loanDetailCex?.returnBtcTxhash ? (
-                  <Box
-                    sx={{
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '10px',
-                      backgroundColor: colors.white1,
-                      color: colors.white
-                    }}>
-                    Claimed
-                  </Box>
+                  <StatusWithToExplorer text="Liquidated" />
                 ) : null}
               </Row>
               {dataCollateral.map((item, index) => {
@@ -725,51 +666,9 @@ export default function LoanDetailScreen() {
                   Loan
                 </Text>
                 {loan.status === 'Authorized' ? (
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    sx={{
-                      height: '30px',
-                      bgcolor: colors.white1,
-                      padding: '4px 8px',
-                      borderRadius: '4px'
-                    }}>
-                    <Typography
-                      sx={{
-                        fontSize: '10px',
-                        color: colors.white,
-                        fontWeight: 500,
-                        whiteSpace: 'nowrap'
-                      }}>
-                      Pending
-                    </Typography>
-                    <svg
-                      className="animate-[spin_3s_linear_infinite] inline-block ml-1"
-                      width="17"
-                      height="17"
-                      viewBox="0 0 17 17"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg">
-                      <path
-                        d="M8.5 2V3.66667M8.5 12.5V15.1667M4.33333 8.5H2M14.6667 8.5H13.6667M12.8047 12.8047L12.3333 12.3333M12.9428 4.11052L12 5.05333M3.78105 13.219L5.66667 11.3333M3.91912 3.97245L5.33333 5.38667"
-                        stroke={colors.grey12}
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </Stack>
+                  <StatusWithPending text="Pending" />
                 ) : ['Repaid', 'Closed'].includes(loan.status) ? (
-                  <Box
-                    sx={{
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      fontSize: '10px',
-                      backgroundColor: colors.white1,
-                      color: colors.white
-                    }}>
-                    Repaid
-                  </Box>
+                  <StatusWithToExplorer text="Repaid" />
                 ) : null}
               </Row>
               {dataLoan.map((item, index) => {
@@ -922,5 +821,59 @@ export default function LoanDetailScreen() {
         </Button>
       ) : null}
     </Layout>
+  );
+}
+
+function StatusWithToExplorer({ text }: { text: string; url?: string }) {
+  return (
+    <Box
+      sx={{
+        padding: '4px 8px',
+        borderRadius: '4px',
+        fontSize: '10px',
+        backgroundColor: colors.white1,
+        color: colors.white
+      }}>
+      {text}
+    </Box>
+  );
+}
+
+function StatusWithPending({ text }: { text: string }) {
+  return (
+    <Stack
+      direction="row"
+      alignItems="center"
+      sx={{
+        height: '30px',
+        bgcolor: colors.white1,
+        padding: '4px 8px',
+        borderRadius: '4px'
+      }}>
+      <Typography
+        sx={{
+          fontSize: '10px',
+          color: colors.white,
+          fontWeight: 500,
+          whiteSpace: 'nowrap'
+        }}>
+        {text}
+      </Typography>
+      <svg
+        className="animate-[spin_3s_linear_infinite] inline-block ml-1"
+        width="17"
+        height="17"
+        viewBox="0 0 17 17"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M8.5 2V3.66667M8.5 12.5V15.1667M4.33333 8.5H2M14.6667 8.5H13.6667M12.8047 12.8047L12.3333 12.3333M12.9428 4.11052L12 5.05333M3.78105 13.219L5.66667 11.3333M3.91912 3.97245L5.33333 5.38667"
+          stroke={colors.grey12}
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </Stack>
   );
 }
