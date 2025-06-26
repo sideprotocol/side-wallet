@@ -7,9 +7,9 @@ import { CoinInput } from '@/ui/components/CoinInput';
 import { NavTabBar } from '@/ui/components/NavTabBar';
 import {
   useCreateLoan,
-  useGetDlcEventById,
+  useGetDlcEventCount,
   useGetDlcPrice,
-  useGetLiquidationEvent,
+  useGetLiquidationPrice,
   useGetPoolsData
 } from '@/ui/hooks/lending';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
@@ -71,13 +71,15 @@ export default function LendingTanScreen() {
     return value;
   }, [borrowAmount, poolTokenBalance]);
 
-  const { liquidationEvent } = useGetLiquidationEvent({
+  const { liquidationPrice } = useGetLiquidationPrice({
     bitcoinAmount: collateralAmount,
     borrowToken: poolData?.token,
     borrowTokenAmount: borrowAmount,
     poolId: poolData?.baseData.id || '',
     maturity: maturity
   });
+
+  const { data: dlcEventCount } = useGetDlcEventCount();
 
   const { dlcPrice } = useGetDlcPrice(poolData?.baseData.config);
 
@@ -132,16 +134,6 @@ export default function LendingTanScreen() {
         .toFixed(2),
     [borrowAmount, collateralAmount, dlcPrice]
   );
-
-  const liquidationPriceSymbol = `${
-    poolData?.baseData.config.lending_asset.is_base_price_asset
-      ? poolData?.baseData.config.lending_asset.price_symbol
-      : poolData?.baseData.config.collateral_asset.price_symbol
-  }/${
-    poolData?.baseData.config.lending_asset.is_base_price_asset
-      ? poolData?.baseData.config.collateral_asset.price_symbol
-      : poolData?.baseData.config.lending_asset.price_symbol
-  }`;
 
   const data = [
     {
@@ -243,8 +235,8 @@ export default function LendingTanScreen() {
       tip: 'The LTV threshold at which your position becomes eligible for liquidation'
     },
     {
-      label: `Liquidation Price (${liquidationPriceSymbol})`,
-      value: `${getTruncate(liquidationEvent?.price || '0', 8)}`,
+      label: `Liquidation Price (${liquidationPrice?.pair})`,
+      value: `${getTruncate(liquidationPrice?.price || '0', 8)}`,
       tip: 'The collateral price at which liquidation would be triggered'
     },
     {
@@ -301,8 +293,6 @@ export default function LendingTanScreen() {
 
   const { loading, createLoan } = useCreateLoan();
 
-  const { dlcEvent } = useGetDlcEventById(liquidationEvent?.event_id);
-
   const [isChecked, setIsChecked] = useState(false);
   const [isHoverMaturity, setIsHoverMaturity] = useState(false);
 
@@ -313,9 +303,9 @@ export default function LendingTanScreen() {
       isDisabled = true;
     } else if (!+collateralAmount || !+borrowAmount) {
       isDisabled = true;
-    } else if (!liquidationEvent) {
+    } else if (!dlcEventCount || +dlcEventCount?.count === 0) {
       isDisabled = true;
-      buttonText = 'Liquidation event does not exist';
+      buttonText = 'No available DLC events';
     } else if (healthFactor === '-' || (+healthFactor <= 1.2 && !isChecked) || +currentLtv >= 80) {
       isDisabled = true;
     } else if (
@@ -336,9 +326,6 @@ export default function LendingTanScreen() {
         poolData?.baseData.config.min_borrow_amount || '0',
         poolData?.token.asset.exponent || '6'
       )}`;
-    } else if (dlcEvent?.event.has_triggered) {
-      isDisabled = true;
-      buttonText = 'Dlc event has triggered';
     } else if (+(requestFeeToken?.amount || '0') < +(poolData?.baseData.config.request_fee.amount || '0')) {
       isDisabled = true;
       buttonText = 'No enough balance';
@@ -347,7 +334,7 @@ export default function LendingTanScreen() {
       isDisabled,
       buttonText
     };
-  }, [loading, poolData, collateralAmount, borrowAmount, liquidationEvent, healthFactor, dlcEvent, isChecked]);
+  }, [loading, poolData, collateralAmount, borrowAmount, dlcEventCount, healthFactor, isChecked]);
 
   return (
     <>
@@ -670,7 +657,7 @@ export default function LendingTanScreen() {
           <Row mt="lg" mb="lg">
             <Button
               onClick={() => {
-                if (!liquidationEvent || !poolData || !maturity) {
+                if (!poolData || !maturity) {
                   return;
                 }
                 createLoan({
@@ -680,8 +667,7 @@ export default function LendingTanScreen() {
                   },
                   maturityTime: maturity || '0',
                   poolId: poolData.baseData.id,
-                  btcUnitAmount: toUnitAmount(collateralAmount, satBalance?.asset.exponent || 8),
-                  liquidationEvent
+                  btcUnitAmount: toUnitAmount(collateralAmount, satBalance?.asset.exponent || 8)
                 });
               }}
               disabled={isDisabled}

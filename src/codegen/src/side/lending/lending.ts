@@ -578,9 +578,7 @@ export interface Loan {
   minMaturity: bigint;
   startBorrowIndex: string;
   liquidationPrice: string;
-  liquidationEventId: bigint;
-  defaultLiquidationEventId: bigint;
-  repaymentEventId: bigint;
+  dlcEventId: bigint;
   authorizations: Authorization[];
   collateralAmount: string;
   liquidationId: bigint;
@@ -613,9 +611,7 @@ export interface LoanAmino {
   min_maturity?: string;
   start_borrow_index?: string;
   liquidation_price?: string;
-  liquidation_event_id?: string;
-  default_liquidation_event_id?: string;
-  repayment_event_id?: string;
+  dlc_event_id?: string;
   authorizations?: AuthorizationAmino[];
   collateral_amount?: string;
   liquidation_id?: string;
@@ -647,9 +643,7 @@ export interface LoanSDKType {
   min_maturity: bigint;
   start_borrow_index: string;
   liquidation_price: string;
-  liquidation_event_id: bigint;
-  default_liquidation_event_id: bigint;
-  repayment_event_id: bigint;
+  dlc_event_id: bigint;
   authorizations: AuthorizationSDKType[];
   collateral_amount: string;
   liquidation_id: bigint;
@@ -658,11 +652,34 @@ export interface LoanSDKType {
   disburse_at: Date;
   status: LoanStatus;
 }
+/** LeafScript defines the tap leaf script */
+export interface LeafScript {
+  script: string;
+  controlBlock: string;
+}
+export interface LeafScriptProtoMsg {
+  typeUrl: "/side.lending.LeafScript";
+  value: Uint8Array;
+}
+/** LeafScript defines the tap leaf script */
+export interface LeafScriptAmino {
+  script?: string;
+  control_block?: string;
+}
+export interface LeafScriptAminoMsg {
+  type: "/side.lending.LeafScript";
+  value: LeafScriptAmino;
+}
+/** LeafScript defines the tap leaf script */
+export interface LeafScriptSDKType {
+  script: string;
+  control_block: string;
+}
 export interface CetInfo {
   eventId: bigint;
   outcomeIndex: number;
   signaturePoint: string;
-  script: string;
+  script: LeafScript;
 }
 export interface CetInfoProtoMsg {
   typeUrl: "/side.lending.CetInfo";
@@ -672,7 +689,7 @@ export interface CetInfoAmino {
   event_id?: string;
   outcome_index?: number;
   signature_point?: string;
-  script?: string;
+  script?: LeafScriptAmino;
 }
 export interface CetInfoAminoMsg {
   type: "/side.lending.CetInfo";
@@ -682,7 +699,7 @@ export interface CetInfoSDKType {
   event_id: bigint;
   outcome_index: number;
   signature_point: string;
-  script: string;
+  script: LeafScriptSDKType;
 }
 export interface LiquidationCet {
   tx: string;
@@ -749,9 +766,9 @@ export interface DLCMeta {
   timeoutRefundTx: string;
   vaultUtxos: UTXO[];
   internalKey: string;
-  liquidationScript: string;
-  repaymentScript: string;
-  timeoutRefundScript: string;
+  liquidationScript: LeafScript;
+  repaymentScript: LeafScript;
+  timeoutRefundScript: LeafScript;
 }
 export interface DLCMetaProtoMsg {
   typeUrl: "/side.lending.DLCMeta";
@@ -764,9 +781,9 @@ export interface DLCMetaAmino {
   timeout_refund_tx?: string;
   vault_utxos?: UTXOAmino[];
   internal_key?: string;
-  liquidation_script?: string;
-  repayment_script?: string;
-  timeout_refund_script?: string;
+  liquidation_script?: LeafScriptAmino;
+  repayment_script?: LeafScriptAmino;
+  timeout_refund_script?: LeafScriptAmino;
 }
 export interface DLCMetaAminoMsg {
   type: "/side.lending.DLCMeta";
@@ -779,9 +796,9 @@ export interface DLCMetaSDKType {
   timeout_refund_tx: string;
   vault_utxos: UTXOSDKType[];
   internal_key: string;
-  liquidation_script: string;
-  repayment_script: string;
-  timeout_refund_script: string;
+  liquidation_script: LeafScriptSDKType;
+  repayment_script: LeafScriptSDKType;
+  timeout_refund_script: LeafScriptSDKType;
 }
 export interface DepositLog {
   txid: string;
@@ -1682,9 +1699,7 @@ function createBaseLoan(): Loan {
     minMaturity: BigInt(0),
     startBorrowIndex: "",
     liquidationPrice: "",
-    liquidationEventId: BigInt(0),
-    defaultLiquidationEventId: BigInt(0),
-    repaymentEventId: BigInt(0),
+    dlcEventId: BigInt(0),
     authorizations: [],
     collateralAmount: "",
     liquidationId: BigInt(0),
@@ -1751,35 +1766,29 @@ export const Loan = {
     if (message.liquidationPrice !== "") {
       writer.uint32(146).string(Decimal.fromUserInput(message.liquidationPrice, 18).atomics);
     }
-    if (message.liquidationEventId !== BigInt(0)) {
-      writer.uint32(152).uint64(message.liquidationEventId);
-    }
-    if (message.defaultLiquidationEventId !== BigInt(0)) {
-      writer.uint32(160).uint64(message.defaultLiquidationEventId);
-    }
-    if (message.repaymentEventId !== BigInt(0)) {
-      writer.uint32(168).uint64(message.repaymentEventId);
+    if (message.dlcEventId !== BigInt(0)) {
+      writer.uint32(152).uint64(message.dlcEventId);
     }
     for (const v of message.authorizations) {
-      Authorization.encode(v!, writer.uint32(178).fork()).ldelim();
+      Authorization.encode(v!, writer.uint32(162).fork()).ldelim();
     }
     if (message.collateralAmount !== "") {
-      writer.uint32(186).string(message.collateralAmount);
+      writer.uint32(170).string(message.collateralAmount);
     }
     if (message.liquidationId !== BigInt(0)) {
-      writer.uint32(192).uint64(message.liquidationId);
+      writer.uint32(176).uint64(message.liquidationId);
     }
     if (message.referrer !== "") {
-      writer.uint32(202).string(message.referrer);
+      writer.uint32(186).string(message.referrer);
     }
     if (message.createAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createAt), writer.uint32(210).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.createAt), writer.uint32(194).fork()).ldelim();
     }
     if (message.disburseAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.disburseAt), writer.uint32(218).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.disburseAt), writer.uint32(202).fork()).ldelim();
     }
     if (message.status !== 0) {
-      writer.uint32(224).int32(message.status);
+      writer.uint32(208).int32(message.status);
     }
     return writer;
   },
@@ -1845,33 +1854,27 @@ export const Loan = {
           message.liquidationPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
         case 19:
-          message.liquidationEventId = reader.uint64();
+          message.dlcEventId = reader.uint64();
           break;
         case 20:
-          message.defaultLiquidationEventId = reader.uint64();
-          break;
-        case 21:
-          message.repaymentEventId = reader.uint64();
-          break;
-        case 22:
           message.authorizations.push(Authorization.decode(reader, reader.uint32()));
           break;
-        case 23:
+        case 21:
           message.collateralAmount = reader.string();
           break;
-        case 24:
+        case 22:
           message.liquidationId = reader.uint64();
           break;
-        case 25:
+        case 23:
           message.referrer = reader.string();
           break;
-        case 26:
+        case 24:
           message.createAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
-        case 27:
+        case 25:
           message.disburseAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
-        case 28:
+        case 26:
           message.status = reader.int32() as any;
           break;
         default:
@@ -1901,9 +1904,7 @@ export const Loan = {
     message.minMaturity = object.minMaturity !== undefined && object.minMaturity !== null ? BigInt(object.minMaturity.toString()) : BigInt(0);
     message.startBorrowIndex = object.startBorrowIndex ?? "";
     message.liquidationPrice = object.liquidationPrice ?? "";
-    message.liquidationEventId = object.liquidationEventId !== undefined && object.liquidationEventId !== null ? BigInt(object.liquidationEventId.toString()) : BigInt(0);
-    message.defaultLiquidationEventId = object.defaultLiquidationEventId !== undefined && object.defaultLiquidationEventId !== null ? BigInt(object.defaultLiquidationEventId.toString()) : BigInt(0);
-    message.repaymentEventId = object.repaymentEventId !== undefined && object.repaymentEventId !== null ? BigInt(object.repaymentEventId.toString()) : BigInt(0);
+    message.dlcEventId = object.dlcEventId !== undefined && object.dlcEventId !== null ? BigInt(object.dlcEventId.toString()) : BigInt(0);
     message.authorizations = object.authorizations?.map(e => Authorization.fromPartial(e)) || [];
     message.collateralAmount = object.collateralAmount ?? "";
     message.liquidationId = object.liquidationId !== undefined && object.liquidationId !== null ? BigInt(object.liquidationId.toString()) : BigInt(0);
@@ -1969,14 +1970,8 @@ export const Loan = {
     if (object.liquidation_price !== undefined && object.liquidation_price !== null) {
       message.liquidationPrice = object.liquidation_price;
     }
-    if (object.liquidation_event_id !== undefined && object.liquidation_event_id !== null) {
-      message.liquidationEventId = BigInt(object.liquidation_event_id);
-    }
-    if (object.default_liquidation_event_id !== undefined && object.default_liquidation_event_id !== null) {
-      message.defaultLiquidationEventId = BigInt(object.default_liquidation_event_id);
-    }
-    if (object.repayment_event_id !== undefined && object.repayment_event_id !== null) {
-      message.repaymentEventId = BigInt(object.repayment_event_id);
+    if (object.dlc_event_id !== undefined && object.dlc_event_id !== null) {
+      message.dlcEventId = BigInt(object.dlc_event_id);
     }
     message.authorizations = object.authorizations?.map(e => Authorization.fromAmino(e)) || [];
     if (object.collateral_amount !== undefined && object.collateral_amount !== null) {
@@ -2019,9 +2014,7 @@ export const Loan = {
     obj.min_maturity = message.minMaturity !== BigInt(0) ? message.minMaturity.toString() : undefined;
     obj.start_borrow_index = message.startBorrowIndex === "" ? undefined : message.startBorrowIndex;
     obj.liquidation_price = message.liquidationPrice === "" ? undefined : message.liquidationPrice;
-    obj.liquidation_event_id = message.liquidationEventId !== BigInt(0) ? message.liquidationEventId.toString() : undefined;
-    obj.default_liquidation_event_id = message.defaultLiquidationEventId !== BigInt(0) ? message.defaultLiquidationEventId.toString() : undefined;
-    obj.repayment_event_id = message.repaymentEventId !== BigInt(0) ? message.repaymentEventId.toString() : undefined;
+    obj.dlc_event_id = message.dlcEventId !== BigInt(0) ? message.dlcEventId.toString() : undefined;
     if (message.authorizations) {
       obj.authorizations = message.authorizations.map(e => e ? Authorization.toAmino(e) : undefined);
     } else {
@@ -2051,12 +2044,87 @@ export const Loan = {
     };
   }
 };
+function createBaseLeafScript(): LeafScript {
+  return {
+    script: "",
+    controlBlock: ""
+  };
+}
+export const LeafScript = {
+  typeUrl: "/side.lending.LeafScript",
+  encode(message: LeafScript, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.script !== "") {
+      writer.uint32(10).string(message.script);
+    }
+    if (message.controlBlock !== "") {
+      writer.uint32(18).string(message.controlBlock);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): LeafScript {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseLeafScript();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.script = reader.string();
+          break;
+        case 2:
+          message.controlBlock = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<LeafScript>): LeafScript {
+    const message = createBaseLeafScript();
+    message.script = object.script ?? "";
+    message.controlBlock = object.controlBlock ?? "";
+    return message;
+  },
+  fromAmino(object: LeafScriptAmino): LeafScript {
+    const message = createBaseLeafScript();
+    if (object.script !== undefined && object.script !== null) {
+      message.script = object.script;
+    }
+    if (object.control_block !== undefined && object.control_block !== null) {
+      message.controlBlock = object.control_block;
+    }
+    return message;
+  },
+  toAmino(message: LeafScript): LeafScriptAmino {
+    const obj: any = {};
+    obj.script = message.script === "" ? undefined : message.script;
+    obj.control_block = message.controlBlock === "" ? undefined : message.controlBlock;
+    return obj;
+  },
+  fromAminoMsg(object: LeafScriptAminoMsg): LeafScript {
+    return LeafScript.fromAmino(object.value);
+  },
+  fromProtoMsg(message: LeafScriptProtoMsg): LeafScript {
+    return LeafScript.decode(message.value);
+  },
+  toProto(message: LeafScript): Uint8Array {
+    return LeafScript.encode(message).finish();
+  },
+  toProtoMsg(message: LeafScript): LeafScriptProtoMsg {
+    return {
+      typeUrl: "/side.lending.LeafScript",
+      value: LeafScript.encode(message).finish()
+    };
+  }
+};
 function createBaseCetInfo(): CetInfo {
   return {
     eventId: BigInt(0),
     outcomeIndex: 0,
     signaturePoint: "",
-    script: ""
+    script: LeafScript.fromPartial({})
   };
 }
 export const CetInfo = {
@@ -2071,8 +2139,8 @@ export const CetInfo = {
     if (message.signaturePoint !== "") {
       writer.uint32(26).string(message.signaturePoint);
     }
-    if (message.script !== "") {
-      writer.uint32(34).string(message.script);
+    if (message.script !== undefined) {
+      LeafScript.encode(message.script, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -2093,7 +2161,7 @@ export const CetInfo = {
           message.signaturePoint = reader.string();
           break;
         case 4:
-          message.script = reader.string();
+          message.script = LeafScript.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -2107,7 +2175,7 @@ export const CetInfo = {
     message.eventId = object.eventId !== undefined && object.eventId !== null ? BigInt(object.eventId.toString()) : BigInt(0);
     message.outcomeIndex = object.outcomeIndex ?? 0;
     message.signaturePoint = object.signaturePoint ?? "";
-    message.script = object.script ?? "";
+    message.script = object.script !== undefined && object.script !== null ? LeafScript.fromPartial(object.script) : undefined;
     return message;
   },
   fromAmino(object: CetInfoAmino): CetInfo {
@@ -2122,7 +2190,7 @@ export const CetInfo = {
       message.signaturePoint = object.signature_point;
     }
     if (object.script !== undefined && object.script !== null) {
-      message.script = object.script;
+      message.script = LeafScript.fromAmino(object.script);
     }
     return message;
   },
@@ -2131,7 +2199,7 @@ export const CetInfo = {
     obj.event_id = message.eventId !== BigInt(0) ? message.eventId.toString() : undefined;
     obj.outcome_index = message.outcomeIndex === 0 ? undefined : message.outcomeIndex;
     obj.signature_point = message.signaturePoint === "" ? undefined : message.signaturePoint;
-    obj.script = message.script === "" ? undefined : message.script;
+    obj.script = message.script ? LeafScript.toAmino(message.script) : undefined;
     return obj;
   },
   fromAminoMsg(object: CetInfoAminoMsg): CetInfo {
@@ -2392,9 +2460,9 @@ function createBaseDLCMeta(): DLCMeta {
     timeoutRefundTx: "",
     vaultUtxos: [],
     internalKey: "",
-    liquidationScript: "",
-    repaymentScript: "",
-    timeoutRefundScript: ""
+    liquidationScript: LeafScript.fromPartial({}),
+    repaymentScript: LeafScript.fromPartial({}),
+    timeoutRefundScript: LeafScript.fromPartial({})
   };
 }
 export const DLCMeta = {
@@ -2418,14 +2486,14 @@ export const DLCMeta = {
     if (message.internalKey !== "") {
       writer.uint32(50).string(message.internalKey);
     }
-    if (message.liquidationScript !== "") {
-      writer.uint32(58).string(message.liquidationScript);
+    if (message.liquidationScript !== undefined) {
+      LeafScript.encode(message.liquidationScript, writer.uint32(58).fork()).ldelim();
     }
-    if (message.repaymentScript !== "") {
-      writer.uint32(66).string(message.repaymentScript);
+    if (message.repaymentScript !== undefined) {
+      LeafScript.encode(message.repaymentScript, writer.uint32(66).fork()).ldelim();
     }
-    if (message.timeoutRefundScript !== "") {
-      writer.uint32(74).string(message.timeoutRefundScript);
+    if (message.timeoutRefundScript !== undefined) {
+      LeafScript.encode(message.timeoutRefundScript, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -2455,13 +2523,13 @@ export const DLCMeta = {
           message.internalKey = reader.string();
           break;
         case 7:
-          message.liquidationScript = reader.string();
+          message.liquidationScript = LeafScript.decode(reader, reader.uint32());
           break;
         case 8:
-          message.repaymentScript = reader.string();
+          message.repaymentScript = LeafScript.decode(reader, reader.uint32());
           break;
         case 9:
-          message.timeoutRefundScript = reader.string();
+          message.timeoutRefundScript = LeafScript.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -2478,9 +2546,9 @@ export const DLCMeta = {
     message.timeoutRefundTx = object.timeoutRefundTx ?? "";
     message.vaultUtxos = object.vaultUtxos?.map(e => UTXO.fromPartial(e)) || [];
     message.internalKey = object.internalKey ?? "";
-    message.liquidationScript = object.liquidationScript ?? "";
-    message.repaymentScript = object.repaymentScript ?? "";
-    message.timeoutRefundScript = object.timeoutRefundScript ?? "";
+    message.liquidationScript = object.liquidationScript !== undefined && object.liquidationScript !== null ? LeafScript.fromPartial(object.liquidationScript) : undefined;
+    message.repaymentScript = object.repaymentScript !== undefined && object.repaymentScript !== null ? LeafScript.fromPartial(object.repaymentScript) : undefined;
+    message.timeoutRefundScript = object.timeoutRefundScript !== undefined && object.timeoutRefundScript !== null ? LeafScript.fromPartial(object.timeoutRefundScript) : undefined;
     return message;
   },
   fromAmino(object: DLCMetaAmino): DLCMeta {
@@ -2502,13 +2570,13 @@ export const DLCMeta = {
       message.internalKey = object.internal_key;
     }
     if (object.liquidation_script !== undefined && object.liquidation_script !== null) {
-      message.liquidationScript = object.liquidation_script;
+      message.liquidationScript = LeafScript.fromAmino(object.liquidation_script);
     }
     if (object.repayment_script !== undefined && object.repayment_script !== null) {
-      message.repaymentScript = object.repayment_script;
+      message.repaymentScript = LeafScript.fromAmino(object.repayment_script);
     }
     if (object.timeout_refund_script !== undefined && object.timeout_refund_script !== null) {
-      message.timeoutRefundScript = object.timeout_refund_script;
+      message.timeoutRefundScript = LeafScript.fromAmino(object.timeout_refund_script);
     }
     return message;
   },
@@ -2524,9 +2592,9 @@ export const DLCMeta = {
       obj.vault_utxos = message.vaultUtxos;
     }
     obj.internal_key = message.internalKey === "" ? undefined : message.internalKey;
-    obj.liquidation_script = message.liquidationScript === "" ? undefined : message.liquidationScript;
-    obj.repayment_script = message.repaymentScript === "" ? undefined : message.repaymentScript;
-    obj.timeout_refund_script = message.timeoutRefundScript === "" ? undefined : message.timeoutRefundScript;
+    obj.liquidation_script = message.liquidationScript ? LeafScript.toAmino(message.liquidationScript) : undefined;
+    obj.repayment_script = message.repaymentScript ? LeafScript.toAmino(message.repaymentScript) : undefined;
+    obj.timeout_refund_script = message.timeoutRefundScript ? LeafScript.toAmino(message.timeoutRefundScript) : undefined;
     return obj;
   },
   fromAminoMsg(object: DLCMetaAminoMsg): DLCMeta {

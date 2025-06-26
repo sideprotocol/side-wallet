@@ -127,64 +127,36 @@ export interface QueryPoolExchangeRateResponseAminoMsg {
 export interface QueryPoolExchangeRateResponseSDKType {
   exchange_rate: string;
 }
-export interface QueryLiquidationEventRequest {
-  poolId: string;
-  collateralAmount: string;
-  borrowAmount: string;
-  maturity: bigint;
-}
-export interface QueryLiquidationEventRequestProtoMsg {
-  typeUrl: "/side.lending.QueryLiquidationEventRequest";
+export interface QueryDlcEventCountRequest {}
+export interface QueryDlcEventCountRequestProtoMsg {
+  typeUrl: "/side.lending.QueryDlcEventCountRequest";
   value: Uint8Array;
 }
-export interface QueryLiquidationEventRequestAmino {
-  pool_id?: string;
-  collateral_amount?: string;
-  borrow_amount?: string;
-  maturity?: string;
+export interface QueryDlcEventCountRequestAmino {}
+export interface QueryDlcEventCountRequestAminoMsg {
+  type: "/side.lending.QueryDlcEventCountRequest";
+  value: QueryDlcEventCountRequestAmino;
 }
-export interface QueryLiquidationEventRequestAminoMsg {
-  type: "/side.lending.QueryLiquidationEventRequest";
-  value: QueryLiquidationEventRequestAmino;
+export interface QueryDlcEventCountRequestSDKType {}
+export interface QueryDlcEventCountResponse {
+  count: bigint;
 }
-export interface QueryLiquidationEventRequestSDKType {
-  pool_id: string;
-  collateral_amount: string;
-  borrow_amount: string;
-  maturity: bigint;
-}
-export interface QueryLiquidationEventResponse {
-  eventId: bigint;
-  oraclePubkey: string;
-  nonce: string;
-  price: string;
-  signaturePoint: string;
-}
-export interface QueryLiquidationEventResponseProtoMsg {
-  typeUrl: "/side.lending.QueryLiquidationEventResponse";
+export interface QueryDlcEventCountResponseProtoMsg {
+  typeUrl: "/side.lending.QueryDlcEventCountResponse";
   value: Uint8Array;
 }
-export interface QueryLiquidationEventResponseAmino {
-  event_id?: string;
-  oracle_pubkey?: string;
-  nonce?: string;
-  price?: string;
-  signature_point?: string;
+export interface QueryDlcEventCountResponseAmino {
+  count?: string;
 }
-export interface QueryLiquidationEventResponseAminoMsg {
-  type: "/side.lending.QueryLiquidationEventResponse";
-  value: QueryLiquidationEventResponseAmino;
+export interface QueryDlcEventCountResponseAminoMsg {
+  type: "/side.lending.QueryDlcEventCountResponse";
+  value: QueryDlcEventCountResponseAmino;
 }
-export interface QueryLiquidationEventResponseSDKType {
-  event_id: bigint;
-  oracle_pubkey: string;
-  nonce: string;
-  price: string;
-  signature_point: string;
+export interface QueryDlcEventCountResponseSDKType {
+  count: bigint;
 }
 export interface QueryLoanCetInfosRequest {
   loanId: string;
-  collateralAmount: string;
 }
 export interface QueryLoanCetInfosRequestProtoMsg {
   typeUrl: "/side.lending.QueryLoanCetInfosRequest";
@@ -192,7 +164,6 @@ export interface QueryLoanCetInfosRequestProtoMsg {
 }
 export interface QueryLoanCetInfosRequestAmino {
   loan_id?: string;
-  collateral_amount?: string;
 }
 export interface QueryLoanCetInfosRequestAminoMsg {
   type: "/side.lending.QueryLoanCetInfosRequest";
@@ -200,7 +171,6 @@ export interface QueryLoanCetInfosRequestAminoMsg {
 }
 export interface QueryLoanCetInfosRequestSDKType {
   loan_id: string;
-  collateral_amount: string;
 }
 export interface QueryLoanCetInfosResponse {
   liquidationCetInfo?: CetInfo;
@@ -522,6 +492,40 @@ export interface QueryLoanAuthorizationResponseAminoMsg {
 export interface QueryLoanAuthorizationResponseSDKType {
   deposits: DepositLogSDKType[];
   status: AuthorizationStatus;
+}
+export interface QueryLoanDepositsRequest {
+  loanId: string;
+}
+export interface QueryLoanDepositsRequestProtoMsg {
+  typeUrl: "/side.lending.QueryLoanDepositsRequest";
+  value: Uint8Array;
+}
+export interface QueryLoanDepositsRequestAmino {
+  loan_id?: string;
+}
+export interface QueryLoanDepositsRequestAminoMsg {
+  type: "/side.lending.QueryLoanDepositsRequest";
+  value: QueryLoanDepositsRequestAmino;
+}
+export interface QueryLoanDepositsRequestSDKType {
+  loan_id: string;
+}
+export interface QueryLoanDepositsResponse {
+  deposits: DepositLog[];
+}
+export interface QueryLoanDepositsResponseProtoMsg {
+  typeUrl: "/side.lending.QueryLoanDepositsResponse";
+  value: Uint8Array;
+}
+export interface QueryLoanDepositsResponseAmino {
+  deposits?: DepositLogAmino[];
+}
+export interface QueryLoanDepositsResponseAminoMsg {
+  type: "/side.lending.QueryLoanDepositsResponse";
+  value: QueryLoanDepositsResponseAmino;
+}
+export interface QueryLoanDepositsResponseSDKType {
+  deposits: DepositLogSDKType[];
 }
 /** QueryRedemptionRequest is request type for the Query/Redemption RPC method. */
 export interface QueryRedemptionRequest {
@@ -1023,50 +1027,21 @@ export const QueryPoolExchangeRateResponse = {
     };
   }
 };
-function createBaseQueryLiquidationEventRequest(): QueryLiquidationEventRequest {
-  return {
-    poolId: "",
-    collateralAmount: "",
-    borrowAmount: "",
-    maturity: BigInt(0)
-  };
+function createBaseQueryDlcEventCountRequest(): QueryDlcEventCountRequest {
+  return {};
 }
-export const QueryLiquidationEventRequest = {
-  typeUrl: "/side.lending.QueryLiquidationEventRequest",
-  encode(message: QueryLiquidationEventRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.poolId !== "") {
-      writer.uint32(10).string(message.poolId);
-    }
-    if (message.collateralAmount !== "") {
-      writer.uint32(18).string(message.collateralAmount);
-    }
-    if (message.borrowAmount !== "") {
-      writer.uint32(26).string(message.borrowAmount);
-    }
-    if (message.maturity !== BigInt(0)) {
-      writer.uint32(32).int64(message.maturity);
-    }
+export const QueryDlcEventCountRequest = {
+  typeUrl: "/side.lending.QueryDlcEventCountRequest",
+  encode(_: QueryDlcEventCountRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryLiquidationEventRequest {
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDlcEventCountRequest {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryLiquidationEventRequest();
+    const message = createBaseQueryDlcEventCountRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          message.poolId = reader.string();
-          break;
-        case 2:
-          message.collateralAmount = reader.string();
-          break;
-        case 3:
-          message.borrowAmount = reader.string();
-          break;
-        case 4:
-          message.maturity = reader.int64();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1074,104 +1049,56 @@ export const QueryLiquidationEventRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryLiquidationEventRequest>): QueryLiquidationEventRequest {
-    const message = createBaseQueryLiquidationEventRequest();
-    message.poolId = object.poolId ?? "";
-    message.collateralAmount = object.collateralAmount ?? "";
-    message.borrowAmount = object.borrowAmount ?? "";
-    message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
+  fromPartial(_: Partial<QueryDlcEventCountRequest>): QueryDlcEventCountRequest {
+    const message = createBaseQueryDlcEventCountRequest();
     return message;
   },
-  fromAmino(object: QueryLiquidationEventRequestAmino): QueryLiquidationEventRequest {
-    const message = createBaseQueryLiquidationEventRequest();
-    if (object.pool_id !== undefined && object.pool_id !== null) {
-      message.poolId = object.pool_id;
-    }
-    if (object.collateral_amount !== undefined && object.collateral_amount !== null) {
-      message.collateralAmount = object.collateral_amount;
-    }
-    if (object.borrow_amount !== undefined && object.borrow_amount !== null) {
-      message.borrowAmount = object.borrow_amount;
-    }
-    if (object.maturity !== undefined && object.maturity !== null) {
-      message.maturity = BigInt(object.maturity);
-    }
+  fromAmino(_: QueryDlcEventCountRequestAmino): QueryDlcEventCountRequest {
+    const message = createBaseQueryDlcEventCountRequest();
     return message;
   },
-  toAmino(message: QueryLiquidationEventRequest): QueryLiquidationEventRequestAmino {
+  toAmino(_: QueryDlcEventCountRequest): QueryDlcEventCountRequestAmino {
     const obj: any = {};
-    obj.pool_id = message.poolId === "" ? undefined : message.poolId;
-    obj.collateral_amount = message.collateralAmount === "" ? undefined : message.collateralAmount;
-    obj.borrow_amount = message.borrowAmount === "" ? undefined : message.borrowAmount;
-    obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
     return obj;
   },
-  fromAminoMsg(object: QueryLiquidationEventRequestAminoMsg): QueryLiquidationEventRequest {
-    return QueryLiquidationEventRequest.fromAmino(object.value);
+  fromAminoMsg(object: QueryDlcEventCountRequestAminoMsg): QueryDlcEventCountRequest {
+    return QueryDlcEventCountRequest.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryLiquidationEventRequestProtoMsg): QueryLiquidationEventRequest {
-    return QueryLiquidationEventRequest.decode(message.value);
+  fromProtoMsg(message: QueryDlcEventCountRequestProtoMsg): QueryDlcEventCountRequest {
+    return QueryDlcEventCountRequest.decode(message.value);
   },
-  toProto(message: QueryLiquidationEventRequest): Uint8Array {
-    return QueryLiquidationEventRequest.encode(message).finish();
+  toProto(message: QueryDlcEventCountRequest): Uint8Array {
+    return QueryDlcEventCountRequest.encode(message).finish();
   },
-  toProtoMsg(message: QueryLiquidationEventRequest): QueryLiquidationEventRequestProtoMsg {
+  toProtoMsg(message: QueryDlcEventCountRequest): QueryDlcEventCountRequestProtoMsg {
     return {
-      typeUrl: "/side.lending.QueryLiquidationEventRequest",
-      value: QueryLiquidationEventRequest.encode(message).finish()
+      typeUrl: "/side.lending.QueryDlcEventCountRequest",
+      value: QueryDlcEventCountRequest.encode(message).finish()
     };
   }
 };
-function createBaseQueryLiquidationEventResponse(): QueryLiquidationEventResponse {
+function createBaseQueryDlcEventCountResponse(): QueryDlcEventCountResponse {
   return {
-    eventId: BigInt(0),
-    oraclePubkey: "",
-    nonce: "",
-    price: "",
-    signaturePoint: ""
+    count: BigInt(0)
   };
 }
-export const QueryLiquidationEventResponse = {
-  typeUrl: "/side.lending.QueryLiquidationEventResponse",
-  encode(message: QueryLiquidationEventResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.eventId !== BigInt(0)) {
-      writer.uint32(8).uint64(message.eventId);
-    }
-    if (message.oraclePubkey !== "") {
-      writer.uint32(18).string(message.oraclePubkey);
-    }
-    if (message.nonce !== "") {
-      writer.uint32(26).string(message.nonce);
-    }
-    if (message.price !== "") {
-      writer.uint32(34).string(message.price);
-    }
-    if (message.signaturePoint !== "") {
-      writer.uint32(42).string(message.signaturePoint);
+export const QueryDlcEventCountResponse = {
+  typeUrl: "/side.lending.QueryDlcEventCountResponse",
+  encode(message: QueryDlcEventCountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.count !== BigInt(0)) {
+      writer.uint32(8).uint64(message.count);
     }
     return writer;
   },
-  decode(input: BinaryReader | Uint8Array, length?: number): QueryLiquidationEventResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryDlcEventCountResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryLiquidationEventResponse();
+    const message = createBaseQueryDlcEventCountResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.eventId = reader.uint64();
-          break;
-        case 2:
-          message.oraclePubkey = reader.string();
-          break;
-        case 3:
-          message.nonce = reader.string();
-          break;
-        case 4:
-          message.price = reader.string();
-          break;
-        case 5:
-          message.signaturePoint = reader.string();
+          message.count = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1180,63 +1107,42 @@ export const QueryLiquidationEventResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryLiquidationEventResponse>): QueryLiquidationEventResponse {
-    const message = createBaseQueryLiquidationEventResponse();
-    message.eventId = object.eventId !== undefined && object.eventId !== null ? BigInt(object.eventId.toString()) : BigInt(0);
-    message.oraclePubkey = object.oraclePubkey ?? "";
-    message.nonce = object.nonce ?? "";
-    message.price = object.price ?? "";
-    message.signaturePoint = object.signaturePoint ?? "";
+  fromPartial(object: Partial<QueryDlcEventCountResponse>): QueryDlcEventCountResponse {
+    const message = createBaseQueryDlcEventCountResponse();
+    message.count = object.count !== undefined && object.count !== null ? BigInt(object.count.toString()) : BigInt(0);
     return message;
   },
-  fromAmino(object: QueryLiquidationEventResponseAmino): QueryLiquidationEventResponse {
-    const message = createBaseQueryLiquidationEventResponse();
-    if (object.event_id !== undefined && object.event_id !== null) {
-      message.eventId = BigInt(object.event_id);
-    }
-    if (object.oracle_pubkey !== undefined && object.oracle_pubkey !== null) {
-      message.oraclePubkey = object.oracle_pubkey;
-    }
-    if (object.nonce !== undefined && object.nonce !== null) {
-      message.nonce = object.nonce;
-    }
-    if (object.price !== undefined && object.price !== null) {
-      message.price = object.price;
-    }
-    if (object.signature_point !== undefined && object.signature_point !== null) {
-      message.signaturePoint = object.signature_point;
+  fromAmino(object: QueryDlcEventCountResponseAmino): QueryDlcEventCountResponse {
+    const message = createBaseQueryDlcEventCountResponse();
+    if (object.count !== undefined && object.count !== null) {
+      message.count = BigInt(object.count);
     }
     return message;
   },
-  toAmino(message: QueryLiquidationEventResponse): QueryLiquidationEventResponseAmino {
+  toAmino(message: QueryDlcEventCountResponse): QueryDlcEventCountResponseAmino {
     const obj: any = {};
-    obj.event_id = message.eventId !== BigInt(0) ? message.eventId.toString() : undefined;
-    obj.oracle_pubkey = message.oraclePubkey === "" ? undefined : message.oraclePubkey;
-    obj.nonce = message.nonce === "" ? undefined : message.nonce;
-    obj.price = message.price === "" ? undefined : message.price;
-    obj.signature_point = message.signaturePoint === "" ? undefined : message.signaturePoint;
+    obj.count = message.count !== BigInt(0) ? message.count.toString() : undefined;
     return obj;
   },
-  fromAminoMsg(object: QueryLiquidationEventResponseAminoMsg): QueryLiquidationEventResponse {
-    return QueryLiquidationEventResponse.fromAmino(object.value);
+  fromAminoMsg(object: QueryDlcEventCountResponseAminoMsg): QueryDlcEventCountResponse {
+    return QueryDlcEventCountResponse.fromAmino(object.value);
   },
-  fromProtoMsg(message: QueryLiquidationEventResponseProtoMsg): QueryLiquidationEventResponse {
-    return QueryLiquidationEventResponse.decode(message.value);
+  fromProtoMsg(message: QueryDlcEventCountResponseProtoMsg): QueryDlcEventCountResponse {
+    return QueryDlcEventCountResponse.decode(message.value);
   },
-  toProto(message: QueryLiquidationEventResponse): Uint8Array {
-    return QueryLiquidationEventResponse.encode(message).finish();
+  toProto(message: QueryDlcEventCountResponse): Uint8Array {
+    return QueryDlcEventCountResponse.encode(message).finish();
   },
-  toProtoMsg(message: QueryLiquidationEventResponse): QueryLiquidationEventResponseProtoMsg {
+  toProtoMsg(message: QueryDlcEventCountResponse): QueryDlcEventCountResponseProtoMsg {
     return {
-      typeUrl: "/side.lending.QueryLiquidationEventResponse",
-      value: QueryLiquidationEventResponse.encode(message).finish()
+      typeUrl: "/side.lending.QueryDlcEventCountResponse",
+      value: QueryDlcEventCountResponse.encode(message).finish()
     };
   }
 };
 function createBaseQueryLoanCetInfosRequest(): QueryLoanCetInfosRequest {
   return {
-    loanId: "",
-    collateralAmount: ""
+    loanId: ""
   };
 }
 export const QueryLoanCetInfosRequest = {
@@ -1244,9 +1150,6 @@ export const QueryLoanCetInfosRequest = {
   encode(message: QueryLoanCetInfosRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.loanId !== "") {
       writer.uint32(10).string(message.loanId);
-    }
-    if (message.collateralAmount !== "") {
-      writer.uint32(18).string(message.collateralAmount);
     }
     return writer;
   },
@@ -1260,9 +1163,6 @@ export const QueryLoanCetInfosRequest = {
         case 1:
           message.loanId = reader.string();
           break;
-        case 2:
-          message.collateralAmount = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1273,7 +1173,6 @@ export const QueryLoanCetInfosRequest = {
   fromPartial(object: Partial<QueryLoanCetInfosRequest>): QueryLoanCetInfosRequest {
     const message = createBaseQueryLoanCetInfosRequest();
     message.loanId = object.loanId ?? "";
-    message.collateralAmount = object.collateralAmount ?? "";
     return message;
   },
   fromAmino(object: QueryLoanCetInfosRequestAmino): QueryLoanCetInfosRequest {
@@ -1281,15 +1180,11 @@ export const QueryLoanCetInfosRequest = {
     if (object.loan_id !== undefined && object.loan_id !== null) {
       message.loanId = object.loan_id;
     }
-    if (object.collateral_amount !== undefined && object.collateral_amount !== null) {
-      message.collateralAmount = object.collateral_amount;
-    }
     return message;
   },
   toAmino(message: QueryLoanCetInfosRequest): QueryLoanCetInfosRequestAmino {
     const obj: any = {};
     obj.loan_id = message.loanId === "" ? undefined : message.loanId;
-    obj.collateral_amount = message.collateralAmount === "" ? undefined : message.collateralAmount;
     return obj;
   },
   fromAminoMsg(object: QueryLoanCetInfosRequestAminoMsg): QueryLoanCetInfosRequest {
@@ -2387,6 +2282,134 @@ export const QueryLoanAuthorizationResponse = {
     return {
       typeUrl: "/side.lending.QueryLoanAuthorizationResponse",
       value: QueryLoanAuthorizationResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryLoanDepositsRequest(): QueryLoanDepositsRequest {
+  return {
+    loanId: ""
+  };
+}
+export const QueryLoanDepositsRequest = {
+  typeUrl: "/side.lending.QueryLoanDepositsRequest",
+  encode(message: QueryLoanDepositsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.loanId !== "") {
+      writer.uint32(10).string(message.loanId);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryLoanDepositsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryLoanDepositsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.loanId = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryLoanDepositsRequest>): QueryLoanDepositsRequest {
+    const message = createBaseQueryLoanDepositsRequest();
+    message.loanId = object.loanId ?? "";
+    return message;
+  },
+  fromAmino(object: QueryLoanDepositsRequestAmino): QueryLoanDepositsRequest {
+    const message = createBaseQueryLoanDepositsRequest();
+    if (object.loan_id !== undefined && object.loan_id !== null) {
+      message.loanId = object.loan_id;
+    }
+    return message;
+  },
+  toAmino(message: QueryLoanDepositsRequest): QueryLoanDepositsRequestAmino {
+    const obj: any = {};
+    obj.loan_id = message.loanId === "" ? undefined : message.loanId;
+    return obj;
+  },
+  fromAminoMsg(object: QueryLoanDepositsRequestAminoMsg): QueryLoanDepositsRequest {
+    return QueryLoanDepositsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryLoanDepositsRequestProtoMsg): QueryLoanDepositsRequest {
+    return QueryLoanDepositsRequest.decode(message.value);
+  },
+  toProto(message: QueryLoanDepositsRequest): Uint8Array {
+    return QueryLoanDepositsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryLoanDepositsRequest): QueryLoanDepositsRequestProtoMsg {
+    return {
+      typeUrl: "/side.lending.QueryLoanDepositsRequest",
+      value: QueryLoanDepositsRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryLoanDepositsResponse(): QueryLoanDepositsResponse {
+  return {
+    deposits: []
+  };
+}
+export const QueryLoanDepositsResponse = {
+  typeUrl: "/side.lending.QueryLoanDepositsResponse",
+  encode(message: QueryLoanDepositsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.deposits) {
+      DepositLog.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryLoanDepositsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryLoanDepositsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.deposits.push(DepositLog.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryLoanDepositsResponse>): QueryLoanDepositsResponse {
+    const message = createBaseQueryLoanDepositsResponse();
+    message.deposits = object.deposits?.map(e => DepositLog.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: QueryLoanDepositsResponseAmino): QueryLoanDepositsResponse {
+    const message = createBaseQueryLoanDepositsResponse();
+    message.deposits = object.deposits?.map(e => DepositLog.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryLoanDepositsResponse): QueryLoanDepositsResponseAmino {
+    const obj: any = {};
+    if (message.deposits) {
+      obj.deposits = message.deposits.map(e => e ? DepositLog.toAmino(e) : undefined);
+    } else {
+      obj.deposits = message.deposits;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryLoanDepositsResponseAminoMsg): QueryLoanDepositsResponse {
+    return QueryLoanDepositsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryLoanDepositsResponseProtoMsg): QueryLoanDepositsResponse {
+    return QueryLoanDepositsResponse.decode(message.value);
+  },
+  toProto(message: QueryLoanDepositsResponse): Uint8Array {
+    return QueryLoanDepositsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryLoanDepositsResponse): QueryLoanDepositsResponseProtoMsg {
+    return {
+      typeUrl: "/side.lending.QueryLoanDepositsResponse",
+      value: QueryLoanDepositsResponse.encode(message).finish()
     };
   }
 };

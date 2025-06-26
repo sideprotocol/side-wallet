@@ -44,7 +44,8 @@ export default function RepayLoanScreen() {
   const { repay, tx, loading } = useRepay();
   if (!loan) return null;
 
-  const noEnabled = new BigNumber(dayjs().unix()).minus(dayjs(loan.create_at).unix()).lt(loan.min_maturity);
+  // const noEnabled = new BigNumber(dayjs().unix()).minus(dayjs(loan.create_at).unix()).lt(loan.min_maturity);
+  const noEnabled = false;
   const earliestRepayTime = new BigNumber(dayjs(loan.create_at).unix())
     .plus(loan.min_maturity)
     .multipliedBy(1000)

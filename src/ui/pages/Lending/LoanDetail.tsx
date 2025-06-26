@@ -19,8 +19,8 @@ import {
   useGetBitcoinTxsConfirms,
   useGetDepositTx,
   useGetLiquidationById,
-  useGetLiquidationEvent,
   useGetLiquidationParams,
+  useGetLiquidationPrice,
   useGetLoanAuthorization,
   useGetLoanCurrentInterest,
   useGetPoolDataById
@@ -96,7 +96,7 @@ export default function LoanDetailScreen() {
   const collateralAmount = formatUnitAmount(loan?.collateral_amount || '0', collateralToken?.asset.exponent || 8);
   const borrowTokenAmount = formatUnitAmount(loan?.borrow_amount.amount || '0', borrowToken?.asset.exponent || 6);
 
-  const { liquidationEvent } = useGetLiquidationEvent({
+  const { liquidationPrice } = useGetLiquidationPrice({
     bitcoinAmount: collateralAmount,
     borrowToken,
     borrowTokenAmount,
@@ -364,19 +364,9 @@ export default function LoanDetailScreen() {
     }
   ];
 
-  const liquidationPriceSymbol = `${
-    lendingPool?.pool?.config.lending_asset.is_base_price_asset
-      ? lendingPool?.pool?.config.lending_asset.price_symbol
-      : lendingPool?.pool?.config.collateral_asset.price_symbol
-  }/${
-    lendingPool?.pool?.config.lending_asset.is_base_price_asset
-      ? lendingPool?.pool?.config.collateral_asset.price_symbol
-      : lendingPool?.pool?.config.lending_asset.price_symbol
-  }`;
-
   const dataLiquidation = [
     {
-      label: `Liquidation Price (${liquidationPriceSymbol})`,
+      label: `Liquidation Price (${liquidationPrice?.pair})`,
       value: (
         <Text
           style={{
@@ -384,7 +374,7 @@ export default function LoanDetailScreen() {
             fontWeight: 500,
             color: colors.main
           }}>
-          {loan.status === 'Requested' ? '-' : getTruncate(loan.liquidation_price || liquidationEvent?.price || '0', 8)}
+          {loan.status === 'Requested' ? '-' : getTruncate(loan.liquidation_price || liquidationPrice?.price || '0', 8)}
         </Text>
       ),
       tip: 'The collateral price at which liquidation would be triggered'
@@ -768,7 +758,6 @@ export default function LoanDetailScreen() {
             navigate('LoanDepositScreen', {
               borrowAmount: loan.borrow_amount.amount,
               collateralAmount: loan.collateral_amount || '0',
-              liquidationEvent,
               loanId: loan.vault_address
             });
           }}>
@@ -782,7 +771,6 @@ export default function LoanDetailScreen() {
               disabled={claimLoading}
               style={{ flex: 1 }}
               onClick={() => {
-                if (!liquidationEvent) return;
                 claim({
                   loanId: loan.vault_address,
                   borrowAmount: loan.borrow_amount,
@@ -790,7 +778,6 @@ export default function LoanDetailScreen() {
                     amount: loan.collateral_amount,
                     denom: 'sat'
                   },
-                  liquidationEvent: liquidationEvent,
                   feeRate
                 });
               }}>
@@ -805,9 +792,7 @@ export default function LoanDetailScreen() {
                 loanId: loan.vault_address,
                 borrowAmount: loan.borrow_amount.amount,
                 collateralAmount: loan.collateral_amount || '0',
-                feeRate,
-                liquidationEvent,
-                isWalletDeposit: true
+                feeRate
               });
             }}>
             Authorize
@@ -828,7 +813,6 @@ export default function LoanDetailScreen() {
           disabled={claimLoading}
           style={{ display: tx ? 'none' : 'flex', position: 'fixed', bottom: 16, left: 16, right: 16 }}
           onClick={() => {
-            if (!liquidationEvent) return;
             claim({
               loanId: loan.vault_address,
               borrowAmount: loan.borrow_amount,
@@ -836,7 +820,6 @@ export default function LoanDetailScreen() {
                 amount: loan.collateral_amount,
                 denom: 'sat'
               },
-              liquidationEvent: liquidationEvent,
               feeRate
             });
           }}>

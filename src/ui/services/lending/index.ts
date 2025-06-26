@@ -37,6 +37,7 @@ import {
   GetLiquidationDlcMetaResponse,
   GetLiquidationEventRequest,
   GetLiquidationParamsResponse,
+  GetLiquidationPriceRequest,
   GetLiquidationRecordsRequest,
   GetLiquidationRecordsResponse,
   GetLiquidationsRequest,
@@ -138,6 +139,18 @@ export default class LendingService {
   async getLiquidationEvent(data: GetLiquidationEventRequest, config: AxiosRequestConfig) {
     const queryParams = getQueryParams(data as any);
     return this.apiClient.get<LiquidationEvent>(`/side/lending/liquidation/event?${queryParams}`, config);
+  }
+
+  async getLiquidationPrice(data: GetLiquidationPriceRequest, config: AxiosRequestConfig) {
+    const queryParams = getQueryParams(data as any);
+    return this.apiClient.get<{ price: string; pair: string }>(
+      `/side/lending/liquidation/price?${queryParams}`,
+      config
+    );
+  }
+
+  async getDlcEventCount(config: AxiosRequestConfig) {
+    return this.apiClient.get<{ count: string }>('/side/lending/dlc/event/count', config);
   }
 
   async getCetInfo(data: GetCetInfoRequest, config: AxiosRequestConfig) {

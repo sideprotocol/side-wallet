@@ -13,7 +13,6 @@ import ToastView from '@/ui/components/ToastView';
 import { useGetDepositTx } from '@/ui/hooks/lending';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useNavigate } from '@/ui/pages/MainRoute';
-import { LiquidationEvent } from '@/ui/services/lending/types';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useBTCUnit } from '@/ui/state/settings/hooks';
 import {
@@ -31,7 +30,6 @@ import { Box, Stack, Typography } from '@mui/material';
 interface LoanDepositLocationState {
   borrowAmount: string;
   collateralAmount: string;
-  liquidationEvent: LiquidationEvent;
   loanId: string;
   from?: string;
 }
@@ -39,8 +37,7 @@ interface LoanDepositLocationState {
 export default function LoanDepositScreen() {
   const { SIDE_BTC_EXPLORER } = useEnvironment();
   const setUiState = useUpdateUiTxCreateScreen();
-  const { borrowAmount, collateralAmount, liquidationEvent, loanId, from } =
-    useLocationState<LoanDepositLocationState>();
+  const { borrowAmount, collateralAmount, loanId, from } = useLocationState<LoanDepositLocationState>();
 
   const safeBalance = useSafeBalance();
   const navigate = useNavigate();
@@ -86,8 +83,7 @@ export default function LoanDepositScreen() {
         loanId: toInfo.address,
         borrowAmount,
         collateralAmount,
-        feeRate,
-        liquidationEvent
+        feeRate
       });
     }
   }, [depositTxs, loanId]);
@@ -352,7 +348,6 @@ export default function LoanDepositScreen() {
                     borrowAmount,
                     collateralAmount,
                     feeRate,
-                    liquidationEvent,
                     from
                   }
                 });

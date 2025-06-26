@@ -7,13 +7,12 @@ import { NavTabBar } from '@/ui/components/NavTabBar';
 import {
   useApproveLoan,
   useGetDepositTx,
-  useGetLiquidationEvent,
+  useGetLiquidationPrice,
   useGetLoanById,
   useGetPoolsData
 } from '@/ui/hooks/lending';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
-import { LiquidationEvent } from '@/ui/services/lending/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useLendingState } from '@/ui/state/lending/hook';
 import { useNetworkType } from '@/ui/state/settings/hooks';
@@ -29,21 +28,11 @@ export interface LoanAuthorizeLocationState {
   borrowAmount: string;
   collateralAmount: string;
   feeRate: number;
-  liquidationEvent: LiquidationEvent;
-  isWalletDeposit?: boolean;
   from?: string;
 }
 
 export default function LoanAuthorizeScreen() {
-  const {
-    loanId,
-    feeRate,
-    borrowAmount,
-    collateralAmount,
-    isWalletDeposit,
-    liquidationEvent: LiquidationEventExact,
-    from
-  } = useLocationState<LoanAuthorizeLocationState>();
+  const { loanId, feeRate, borrowAmount, collateralAmount, from } = useLocationState<LoanAuthorizeLocationState>();
   const currentAccount = useCurrentAccount();
   const networkType = useNetworkType();
   const navigate = useNavigate();
@@ -68,7 +57,7 @@ export default function LoanAuthorizeScreen() {
 
   const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
 
-  const { liquidationEvent: liquidationEventCalc } = useGetLiquidationEvent({
+  const { liquidationPrice } = useGetLiquidationPrice({
     bitcoinAmount: value ? satoshisToAmount(value) : '',
     borrowToken: poolData?.token,
     borrowTokenAmount: toReadableAmount(borrowAmount, poolData?.token.asset.exponent || 6),
@@ -76,22 +65,10 @@ export default function LoanAuthorizeScreen() {
     maturity: loan?.loan.maturity
   });
 
-  const liquidationEvent = isWalletDeposit ? LiquidationEventExact : liquidationEventCalc;
-
-  const liquidationPriceSymbol = `${
-    poolData?.baseData.config.lending_asset.is_base_price_asset
-      ? poolData?.baseData.config.lending_asset.price_symbol
-      : poolData?.baseData.config.collateral_asset.price_symbol
-  }/${
-    poolData?.baseData.config.lending_asset.is_base_price_asset
-      ? poolData?.baseData.config.collateral_asset.price_symbol
-      : poolData?.baseData.config.lending_asset.price_symbol
-  }`;
-
   const data = [
     {
-      label: `Liquidation Price (${liquidationPriceSymbol})`,
-      value: liquidationEvent ? getTruncate(liquidationEvent?.price || '0', 8) : '-',
+      label: `Liquidation Price (${liquidationPrice?.pair})`,
+      value: liquidationPrice ? getTruncate(liquidationPrice?.price || '0', 8) : '-',
       tip: 'The collateral price at which liquidation would be triggered',
       valueTip: 'Price will update if multiple deposits are detected. Please wait.'
     },
@@ -102,7 +79,7 @@ export default function LoanAuthorizeScreen() {
     }
   ];
 
-  const disabled = loading || !loanId || !borrowAmount || !collateralAmount || !liquidationEvent || isEditRefundAddress;
+  const disabled = loading || !loanId || !borrowAmount || !collateralAmount || isEditRefundAddress;
 
   return (
     <Layout>
@@ -394,8 +371,6 @@ export default function LoanAuthorizeScreen() {
                 <Button
                   disabled={disabled}
                   onClick={async () => {
-                    if (!liquidationEvent) return;
-
                     await approveLoan({
                       loanId,
                       borrowAmount: {
@@ -406,7 +381,6 @@ export default function LoanAuthorizeScreen() {
                         amount: collateralAmount,
                         denom: 'sat'
                       },
-                      liquidationEvent: liquidationEvent,
                       feeRate,
                       refundAddress: refundAddress || currentAccount.address
                     });

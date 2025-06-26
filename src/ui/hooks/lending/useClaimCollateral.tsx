@@ -3,7 +3,6 @@ import { useState } from 'react';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
 import services from '@/ui/services';
-import { LiquidationEvent } from '@/ui/services/lending/types';
 import { GetTxByHashResponse } from '@/ui/services/tx/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useEnvironment } from '@/ui/state/environment/hooks';
@@ -29,14 +28,12 @@ export function useClaimCollateral(loan_id?: string) {
     feeRate,
     borrowAmount,
     collateralAmount,
-    loanId,
-    liquidationEvent
+    loanId
   }: {
     feeRate: number;
     borrowAmount: Coin;
     collateralAmount: Coin;
     loanId: string;
-    liquidationEvent: LiquidationEvent;
   }) => {
     try {
       setLoading(true);
@@ -53,10 +50,6 @@ export function useClaimCollateral(loan_id?: string) {
         } catch (err) {
           await new Promise((r) => setTimeout(r, 1000));
         }
-      }
-
-      if (!liquidationEvent.event_id) {
-        throw new Error('No liquidation event found.');
       }
 
       const { getRepaymentSignatureParams } = await prepareApply({

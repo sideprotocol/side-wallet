@@ -4,9 +4,7 @@ import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
 import ToastView from '@/ui/components/ToastView';
-import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
-import { LiquidationEvent } from '@/ui/services/lending/types';
 import { GetTxByHashResponse } from '@/ui/services/tx/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useEnvironment } from '@/ui/state/environment/hooks';
@@ -24,8 +22,6 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
 
   const currentAccount = useCurrentAccount();
 
-  const navigate = useNavigate();
-
   const { depositTxs, refetch } = useGetDepositTx(loan_id, collateralAmount);
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
@@ -39,14 +35,12 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
     borrowAmount,
     collateralAmount,
     loanId,
-    liquidationEvent,
     refundAddress
   }: {
     feeRate: number;
     borrowAmount: Coin;
     collateralAmount: Coin;
     loanId: string;
-    liquidationEvent: LiquidationEvent;
     refundAddress: string;
   }) => {
     try {
@@ -76,10 +70,6 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
         senderAddress: currentAccount.address,
         networkType
       });
-
-      if (!liquidationEvent?.event_id) {
-        throw new Error('No liquidation event found.');
-      }
 
       const { sigHashHexs, cetInfos } = await getLiquidationAdaptorSignatureParams();
 

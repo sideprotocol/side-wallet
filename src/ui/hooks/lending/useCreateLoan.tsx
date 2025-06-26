@@ -5,7 +5,6 @@ import { sideLendingMessageComposer } from '@/codegen/src';
 import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
-import { LiquidationEvent } from '@/ui/services/lending/types';
 import { GetTxByHashResponse } from '@/ui/services/tx/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useEnvironment } from '@/ui/state/environment/hooks';
@@ -32,14 +31,12 @@ export function useCreateLoan() {
     borrowAmount,
     maturityTime,
     poolId,
-    btcUnitAmount,
-    liquidationEvent
+    btcUnitAmount
   }: {
     borrowAmount: Coin;
     maturityTime: string;
     poolId: string;
     btcUnitAmount: string;
-    liquidationEvent: LiquidationEvent;
   }) => {
     try {
       if (!currentAccount.address) return;
@@ -107,7 +104,6 @@ export function useCreateLoan() {
         navigate('LoanDepositScreen', {
           borrowAmount: borrowAmount.amount,
           collateralAmount: btcUnitAmount,
-          liquidationEvent,
           loanId,
           from: 'createLoan'
         });

@@ -126,8 +126,7 @@ export async function prepareApply({
 
     const cetInfos = await services.lending.getCetInfo(
       {
-        loan_id: collateralAddress!,
-        collateral_amount: `${outputValue}sat`
+        loan_id: collateralAddress!
       },
       {
         baseURL: restUrl
@@ -143,7 +142,14 @@ export async function prepareApply({
           witnessUtxo: {
             script: depositTxPsbt.txOutputs[0].script,
             value: depositTxPsbt.txOutputs[0].value
-          }
+          },
+          tapLeafScript: [
+            {
+              leafVersion: bip341.LEAF_VERSION_TAPSCRIPT,
+              controlBlock: Buffer.from(cetInfos.repayment_cet_info.script.control_block, 'hex'),
+              script: Buffer.from(cetInfos.repayment_cet_info.script.script, 'hex')
+            }
+          ]
         });
       });
     }
@@ -153,7 +159,7 @@ export async function prepareApply({
       value: outputValue - feeAmount
     });
 
-    const script = Buffer.from(cetInfos.repayment_cet_info.script, 'hex');
+    const script = Buffer.from(cetInfos.repayment_cet_info.script.script, 'hex');
 
     const leafHash = bip341.tapleafHash({
       output: script
@@ -177,6 +183,7 @@ export async function prepareApply({
     return {
       sigHashHexs,
       repaymentCet: repaymentPsbt.toBase64(),
+      repaymentPsbtHex: repaymentPsbt.toHex(),
       cetInfos
     };
   };
@@ -184,15 +191,14 @@ export async function prepareApply({
   const getLiquidationAdaptorSignatureParams = async () => {
     const cetInfos = await services.lending.getCetInfo(
       {
-        loan_id: collateralAddress!,
-        collateral_amount: `${outputValue}sat`
+        loan_id: collateralAddress!
       },
       {
         baseURL: restUrl
       }
     );
 
-    const script = Buffer.from(cetInfos.liquidation_cet_info.script, 'hex');
+    const script = Buffer.from(cetInfos.liquidation_cet_info.script.script, 'hex');
 
     const leafHash = bip341.tapleafHash({
       output: script

@@ -455,6 +455,13 @@ export interface GetLiquidationEventRequest {
   maturity: string;
 }
 
+export interface GetLiquidationPriceRequest {
+  borrow_amount: string;
+  collateral_amount: string;
+  pool_id: string;
+  maturity: string;
+}
+
 export interface GetLiquidationDlcMetaResponse {
   dlc_meta: {
     default_liquidation_cet: {
@@ -472,7 +479,14 @@ export interface GetLiquidationDlcMetaResponse {
       signed_tx_hex: string;
       tx: string;
     };
-    multisig_script: string;
+    repayment_script: {
+      control_block: string;
+      script: string;
+    };
+    liquidation_script: {
+      control_block: string;
+      script: string;
+    };
     repayment_cet: {
       borrower_signatures: string[];
       dcm_adapted_signatures: string[];
@@ -480,7 +494,10 @@ export interface GetLiquidationDlcMetaResponse {
       signed_tx_hex: string;
       tx: string;
     };
-    timeout_refund_script: string;
+    timeout_refund_script: {
+      control_block: string;
+      script: string;
+    };
     timeout_refund_tx: string;
     vault_utxos: [
       {
@@ -763,26 +780,34 @@ export interface GetLiquidationByIdResponse {
 
 export interface GetCetInfoRequest {
   loan_id: string;
-  collateral_amount: string;
 }
 
 export interface GetCetInfoResponse {
   default_liquidation_cet_info: {
     event_id: string;
     outcome_index: number;
-    script: string;
+    script: {
+      control_block: string;
+      script: string;
+    };
     signature_point: string;
   };
   liquidation_cet_info: {
     event_id: string;
     outcome_index: number;
-    script: string;
+    script: {
+      control_block: string;
+      script: string;
+    };
     signature_point: string;
   };
   repayment_cet_info: {
     event_id: string;
     outcome_index: number;
-    script: string;
+    script: {
+      control_block: string;
+      script: string;
+    };
     signature_point: string;
   };
 }
