@@ -282,7 +282,7 @@ export default function BridgeDetail() {
 
   const routingData = [
     {
-      label: 'Origin Chain',
+      label: data.direction === 'IN' ? 'Target Chain' : 'Origin Chain',
       value: (
         <Text
           style={{
@@ -290,13 +290,20 @@ export default function BridgeDetail() {
             fontWeight: 500,
             color: colors.white
           }}>
-          -
+          {data.oppositeChainName}
+          <small
+            style={{
+              fontSize: '100%',
+              color: colors.grey12
+            }}>
+            /{data.oppositeChannelId}
+          </small>
         </Text>
       ),
       tip: 'xxx'
     },
     {
-      label: 'Origin Address',
+      label: data.direction === 'IN' ? 'Target Address' : 'Origin Address',
       value: (
         <Text
           style={{
@@ -304,7 +311,7 @@ export default function BridgeDetail() {
             fontWeight: 500,
             color: colors.white
           }}>
-          -
+          {formatAddress(data.oppositeAddress, 6)}
         </Text>
       ),
       tip: 'xxx'
@@ -318,13 +325,13 @@ export default function BridgeDetail() {
             fontWeight: 500,
             color: colors.white
           }}>
-          -
+          {data.ibcStatus}
         </Text>
       ),
       tip: 'xxx'
     },
     {
-      label: 'Transaction (Origin Chain)',
+      label: data.direction === 'IN' ? 'Tx (Target Chain)' : 'Tx (Origin Chain)',
       value: (
         <Text
           style={{
@@ -332,7 +339,7 @@ export default function BridgeDetail() {
             fontWeight: 500,
             color: colors.white
           }}>
-          -
+          {data.oppositeTxHash ? formatAddress(data.oppositeTxHash, 6) : '-'}
         </Text>
       ),
       tip: 'xxx'
@@ -346,7 +353,7 @@ export default function BridgeDetail() {
             fontWeight: 500,
             color: colors.white
           }}>
-          -
+          {data.oppositeTxTime ? formatTimeWithUTC(data.oppositeTxTime) : '-'}
         </Text>
       ),
       tip: 'xxx'
@@ -360,7 +367,7 @@ export default function BridgeDetail() {
             fontWeight: 500,
             color: colors.white
           }}>
-          -
+          {data.oppositeTxFeeAmount ? `${data.oppositeTxFeeAmount} ${data.oppositeTxFeeDenom}` : '-'}
         </Text>
       ),
       tip: 'xxx'
@@ -424,47 +431,50 @@ export default function BridgeDetail() {
               my: '16px'
             }}
           />
-          <Row itemsCenter justifyBetween style={{ display: 'none' }}>
-            <Text
-              style={{
-                fontSize: '18px',
-                fontWeight: 600,
-                color: colors.white
-              }}>
-              Routing Info
-            </Text>
-          </Row>
-          {routingData.map((item, index) => {
-            return (
-              <Row key={index} full justifyBetween itemsCenter style={{ display: 'none' }}>
-                <LightTooltip title={item.tip} arrow placement="top">
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      color: colors.grey12
-                    }}>
-                    {item.label}
-                  </Typography>
-                </LightTooltip>
-                <Row
-                  justifyEnd
-                  itemsCenter
+          {data.forIbc && (
+            <>
+              <Row itemsCenter justifyBetween>
+                <Text
                   style={{
-                    gap: '2px'
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: colors.white
                   }}>
-                  {item.value}
-                </Row>
+                  Routing Info
+                </Text>
               </Row>
-            );
-          })}
-          <Box
-            sx={{
-              display: 'none',
-              height: '1px',
-              backgroundColor: colors.black_dark,
-              my: '16px'
-            }}
-          />
+              {routingData.map((item, index) => {
+                return (
+                  <Row key={index} full justifyBetween itemsCenter>
+                    <LightTooltip title={item.tip} arrow placement="top">
+                      <Typography
+                        sx={{
+                          fontSize: '12px',
+                          color: colors.grey12
+                        }}>
+                        {item.label}
+                      </Typography>
+                    </LightTooltip>
+                    <Row
+                      justifyEnd
+                      itemsCenter
+                      style={{
+                        gap: '2px'
+                      }}>
+                      {item.value}
+                    </Row>
+                  </Row>
+                );
+              })}
+              <Box
+                sx={{
+                  height: '1px',
+                  backgroundColor: colors.black_dark,
+                  my: '16px'
+                }}
+              />
+            </>
+          )}
         </Column>
       </Content>
     </Layout>

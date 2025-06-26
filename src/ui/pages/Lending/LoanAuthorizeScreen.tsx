@@ -73,8 +73,8 @@ export default function LoanAuthorizeScreen() {
       valueTip: 'Price will update if multiple deposits are detected. Please wait.'
     },
     {
-      label: 'Maturity Date',
-      tip: 'The date when your loan term ends and repayment is due. If not repaid by this date, your collateral will be liquidated',
+      label: 'Maturity Time',
+      tip: 'The time when your loan term ends and repayment is due. If not repaid by this date, your collateral will be liquidated',
       value: !loan ? '-' : formatTimeWithUTC(+loan.loan.maturity_time * 1000)
     }
   ];

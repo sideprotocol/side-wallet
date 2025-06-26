@@ -1,5 +1,4 @@
 import { RawTxInfo, TxType } from '@/shared/types';
-import { LiquidationEvent } from '@/ui/services/lending/types';
 import { useLocationState } from '@/ui/utils';
 
 import BitcoinTxConfirmScreen from './BitcoinTxConfirmScreen';
@@ -14,7 +13,6 @@ export interface TxConfirmLocationState {
     borrowAmount: string;
     collateralAmount: string;
     feeRate: number;
-    liquidationEvent: LiquidationEvent;
     from?: string;
   };
 }

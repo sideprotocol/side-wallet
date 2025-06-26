@@ -456,6 +456,16 @@ export interface IGetBridgeActivity {
   sideTxFeeAmount: string;
   sideTxFeeDenom: string;
   btcTxFeeAmount: string;
+  forIbc: boolean;
+  ibcStatus: 'Pending' | 'Completed' | 'Failed';
+  oppositeAddress: string;
+  oppositeChainId: string;
+  oppositeChainName: string;
+  oppositeChannelId: string;
+  oppositeTxFeeAmount: string;
+  oppositeTxFeeDenom: string;
+  oppositeTxHash: string;
+  oppositeTxTime: string;
 }
 
 export interface IGetBridgeActivitiesResponse extends IPoolTranscationResponse {
