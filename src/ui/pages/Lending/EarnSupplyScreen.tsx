@@ -22,7 +22,7 @@ import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import useSupply from '@/ui/hooks/useSupply';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { colors } from '@/ui/theme/colors';
-import { formatUnitAmount, getTruncate, useLocationState } from '@/ui/utils';
+import { getTruncate, useLocationState } from '@/ui/utils';
 import { toUnitAmount } from '@/ui/utils/formatter';
 import { Box, Stack, Typography } from '@mui/material';
 
@@ -43,18 +43,7 @@ export default function EarnSupplyScreen() {
   const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: poolData?.baseData?.id || '' });
 
   const { receiveShare, expectedInterestDay } = useMemo(() => {
-    if (!poolData) {
-      return {
-        receiveShare: '0',
-        expectedInterestDay: '0'
-      };
-    }
-
-    const receiveShare = new BigNumber(poolData.baseData.total_stokens.amount)
-      .div(formatUnitAmount(poolData.baseData.supply.amount || '0', poolData.token.asset.precision))
-      .multipliedBy(supplyAmount || '0')
-      .multipliedBy(exchangeRate || 1)
-      .toFixed(poolData.token.asset.precision);
+    const receiveShare = new BigNumber(supplyAmount || '0').div(exchangeRate || 1).toFixed(18, BigNumber.ROUND_DOWN);
     const expectedInterestDay = new BigNumber(supplyAmount || '0')
       .multipliedBy(poolData.supplyApy)
       .div(100)
@@ -104,7 +93,7 @@ export default function EarnSupplyScreen() {
             fontSize: '12px',
             color: colors.white
           }}>
-          {getTruncate(formatUnitAmount(receiveShare, 6), 6)}&nbsp;
+          {getTruncate(receiveShare, 6)}&nbsp;
           <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
             s{poolData?.token.asset.symbol}
           </small>
