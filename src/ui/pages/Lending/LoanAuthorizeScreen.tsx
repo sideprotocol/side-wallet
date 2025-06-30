@@ -372,15 +372,6 @@ export default function LoanAuthorizeScreen() {
                   disabled={disabled}
                   onClick={async () => {
                     await approveLoan({
-                      loanId,
-                      borrowAmount: {
-                        amount: borrowAmount,
-                        denom: poolTokenDenom
-                      },
-                      collateralAmount: {
-                        amount: collateralAmount,
-                        denom: 'sat'
-                      },
                       feeRate,
                       refundAddress: refundAddress || currentAccount.address
                     });

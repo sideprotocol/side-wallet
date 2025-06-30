@@ -1,4 +1,3 @@
-import { Coin } from 'cosmwasm';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -14,7 +13,9 @@ import { useWallet } from '@/ui/utils';
 import { prepareApply } from '@/ui/utils/lending';
 import { Box } from '@mui/material';
 
+import { useGetCetInfo } from './useGetCetInfo';
 import { useGetDepositTx } from './useGetDepositTx';
+import { useGetDlcDcms } from './useGetDlcDcms';
 
 export function useApproveLoan(loan_id: string, collateralAmount: string) {
   const [loading, setLoading] = useState(false);
@@ -29,20 +30,10 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
   const wallet = useWallet();
   const networkType = useNetworkType();
   const { sideChain } = useEnvironment();
+  const { cetInfos } = useGetCetInfo({ loanId: loan_id });
+  const { activeDcms } = useGetDlcDcms();
 
-  const approveLoan = async ({
-    feeRate,
-    borrowAmount,
-    collateralAmount,
-    loanId,
-    refundAddress
-  }: {
-    feeRate: number;
-    borrowAmount: Coin;
-    collateralAmount: Coin;
-    loanId: string;
-    refundAddress: string;
-  }) => {
+  const approveLoan = async ({ feeRate, refundAddress }: { feeRate: number; refundAddress: string }) => {
     try {
       setLoading(true);
 
@@ -57,21 +48,23 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
         txids = data?.txids;
       }
 
-      const { liquidationCet, getRepaymentSignatureParams, getLiquidationAdaptorSignatureParams } = await prepareApply({
+      if (!cetInfos) {
+        throw new Error('Cet info not found');
+      }
+
+      const { getRepaymentSignatureParams, getLiquidationAdaptorSignatureParams } = await prepareApply({
         params: {
-          collateralAddress: loanId,
-          collateralAmount: collateralAmount,
-          borrowAmount,
-          restUrl: sideChain.restUrl,
-          feeRate
+          feeRate,
+          cetInfos: cetInfos,
+          activeDcms: activeDcms
         },
         depositTxIds: txids || [],
         depositTxs: depositTxs || [],
-        senderAddress: currentAccount.address,
         networkType
       });
 
-      const { sigHashHexs, cetInfos } = await getLiquidationAdaptorSignatureParams();
+      const { sigHashHexs, liquidationCet } = await getLiquidationAdaptorSignatureParams();
+      const { sigHashHexs: repaymentSigHashHexs, repaymentCet } = await getRepaymentSignatureParams(refundAddress);
 
       const liquidationAdaptorSignatures = await Promise.all(
         sigHashHexs.map((sigHashHex) => wallet.signAdaptor(sigHashHex, cetInfos.liquidation_cet_info.signature_point))
@@ -83,8 +76,6 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
         )
       );
 
-      const { sigHashHexs: repaymentSigHashHexs, repaymentCet } = await getRepaymentSignatureParams(refundAddress);
-
       const repaymentSignatures = await wallet.signSnorr(repaymentSigHashHexs);
 
       const msg = sideLendingMessageComposer.withTypeUrl.submitCets({
@@ -93,9 +84,9 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
         depositTxs: depositTxs || [],
         liquidationCet: liquidationCet,
         liquidationAdaptorSignatures: liquidationAdaptorSignatures,
-        defaultLiquidationAdaptorSignatures: defaultLiquidationAdaptorSignatures, //
-        repaymentCet: repaymentCet, // sign psbt
-        repaymentSignatures: repaymentSignatures // sighash,
+        defaultLiquidationAdaptorSignatures: defaultLiquidationAdaptorSignatures,
+        repaymentCet: repaymentCet,
+        repaymentSignatures: repaymentSignatures
       });
 
       const result = await signAndBroadcastTxRaw({

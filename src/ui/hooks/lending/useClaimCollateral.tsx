@@ -1,4 +1,3 @@
-import { Coin } from 'cosmwasm';
 import { useState } from 'react';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
@@ -11,7 +10,9 @@ import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { useWallet } from '@/ui/utils';
 import { prepareApply } from '@/ui/utils/lending';
 
+import { useGetCetInfo } from './useGetCetInfo';
 import { useGetDepositTx } from './useGetDepositTx';
+import { useGetDlcDcms } from './useGetDlcDcms';
 
 export function useClaimCollateral(loan_id?: string) {
   const currentAccount = useCurrentAccount();
@@ -24,17 +25,10 @@ export function useClaimCollateral(loan_id?: string) {
 
   const { refetch } = useGetDepositTx(loan_id);
 
-  const claim = async ({
-    feeRate,
-    borrowAmount,
-    collateralAmount,
-    loanId
-  }: {
-    feeRate: number;
-    borrowAmount: Coin;
-    collateralAmount: Coin;
-    loanId: string;
-  }) => {
+  const { cetInfos } = useGetCetInfo({ loanId: loan_id });
+  const { activeDcms } = useGetDlcDcms();
+
+  const claim = async ({ feeRate }: { feeRate: number }) => {
     try {
       setLoading(true);
       let depositTxs: string[] = [];
@@ -51,18 +45,18 @@ export function useClaimCollateral(loan_id?: string) {
           await new Promise((r) => setTimeout(r, 1000));
         }
       }
+      if (!cetInfos) {
+        throw new Error('Cet info not found');
+      }
 
       const { getRepaymentSignatureParams } = await prepareApply({
         params: {
-          collateralAddress: loanId,
-          collateralAmount: collateralAmount,
-          borrowAmount,
-          restUrl: sideChain.restUrl,
-          feeRate
+          feeRate,
+          cetInfos,
+          activeDcms
         },
         depositTxIds: txids || [],
         depositTxs: depositTxs || [],
-        senderAddress: currentAccount.address,
         networkType
       });
 

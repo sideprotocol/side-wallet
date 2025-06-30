@@ -1,20 +1,16 @@
-import { Psbt } from 'bitcoinjs-lib';
 import * as bip341 from 'bitcoinjs-lib/src/payments/bip341';
 import { Buffer } from 'buffer';
-import { Coin } from 'cosmwasm';
 
 import { NetworkType } from '@/shared/types';
 import { bitcoin } from '@unisat/wallet-sdk/lib/bitcoin-core';
 import { toXOnly } from '@unisat/wallet-sdk/lib/utils';
 
-import services from '../services';
+import { Dcm, GetCetInfoResponse } from '../services/lending/types';
 
 export interface DepositToLendingAgency {
-  borrowAmount: Coin;
-  collateralAmount: Coin;
-  collateralAddress: string;
-  restUrl: string;
   feeRate: number;
+  cetInfos: GetCetInfoResponse;
+  activeDcms: Dcm[];
 }
 
 export function hexPubKeyToTaprootAddress(pubkeyHex: string, networkType: NetworkType): string {
@@ -34,33 +30,24 @@ export function hexPubKeyToTaprootAddress(pubkeyHex: string, networkType: Networ
 
 export async function prepareApply({
   params,
-  senderAddress,
   depositTxIds,
   depositTxs,
   networkType
 }: {
   params: DepositToLendingAgency;
-  senderAddress: string;
   depositTxIds?: string[];
   depositTxs?: string[];
   networkType: NetworkType;
 }) {
-  const { restUrl, feeRate, collateralAddress } = params;
-
-  const activeAgencies = await services.lending.getDlcDcms({ status: 0 }, { baseURL: restUrl });
-
-  const dcm = activeAgencies?.dcms?.[0];
+  const { feeRate, cetInfos, activeDcms } = params;
+  const dcm = activeDcms?.[0];
+  const network = networkType === NetworkType.MAINNET ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
 
   if (!dcm) {
     throw new Error('No active dcm found.');
   }
 
   // send btc to collateral address
-  const network = networkType === NetworkType.MAINNET ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
-
-  const agencyPsbtToFee = new Psbt({ network });
-
-  const agencyPsbt = new Psbt({ network });
 
   const outputValue =
     depositTxs?.reduce((pre, cur) => {
@@ -68,70 +55,10 @@ export async function prepareApply({
       return pre + depositTxPsbt.txOutputs[0].value;
     }, 0) || 0;
 
-  //   generate liquidation cet
-  if (depositTxs?.length && depositTxIds) {
-    depositTxs.forEach((depositTx, index) => {
-      const depositTxPsbt = bitcoin.Psbt.fromBase64(depositTx);
-      agencyPsbtToFee.addInput({
-        hash: depositTxIds[index],
-        index: 0,
-        witnessUtxo: {
-          script: depositTxPsbt.txOutputs[0].script,
-          value: depositTxPsbt.txOutputs[0].value
-        }
-      });
-    });
-  }
-
-  if (depositTxs?.length && depositTxIds) {
-    depositTxs.forEach((depositTx, index) => {
-      const depositTxPsbt = bitcoin.Psbt.fromBase64(depositTx);
-
-      agencyPsbt.addInput({
-        hash: depositTxIds[index],
-        index: 0,
-        witnessUtxo: {
-          script: depositTxPsbt.txOutputs[0].script,
-          value: depositTxPsbt.txOutputs[0].value
-        }
-      });
-    });
-  }
-
-  const agencyAddress = hexPubKeyToTaprootAddress(dcm.pubkey, networkType);
-
-  agencyPsbtToFee.addOutput({
-    address: agencyAddress,
-    value: outputValue
-  });
-
-  const agencyTxTemp = bitcoin.Transaction.fromBuffer(agencyPsbtToFee.data.getTransaction());
-
-  agencyTxTemp.ins.forEach((_, index) => {
-    agencyTxTemp.ins[index].witness = [Buffer.alloc(64), Buffer.alloc(64), Buffer.alloc(70), Buffer.alloc(65)];
-  });
-
-  const vsize = agencyTxTemp.virtualSize();
-  const feeAmount = Math.ceil(vsize * feeRate);
-
-  agencyPsbt.addOutput({
-    address: agencyAddress,
-    value: outputValue - feeAmount
-  });
-
   // generate repayment cet
-
   const getRepaymentSignatureParams = async (refundAddress: string) => {
     const repaymentPsbt = new bitcoin.Psbt({ network });
-
-    const cetInfos = await services.lending.getCetInfo(
-      {
-        loan_id: collateralAddress!
-      },
-      {
-        baseURL: restUrl
-      }
-    );
+    const repaymentPsbtToFee = new bitcoin.Psbt({ network });
 
     if (depositTxs?.length && depositTxIds) {
       depositTxs.forEach((depositTx, index) => {
@@ -151,14 +78,37 @@ export async function prepareApply({
             }
           ]
         });
+        repaymentPsbtToFee.addInput({
+          hash: depositTxIds[index],
+          index: 0,
+          witnessUtxo: {
+            script: depositTxPsbt.txOutputs[0].script,
+            value: depositTxPsbt.txOutputs[0].value
+          }
+        });
       });
     }
 
-    repaymentPsbt.addOutput({
-      address: refundAddress || senderAddress,
-      value: outputValue - feeAmount
+    repaymentPsbtToFee.addOutput({
+      address: refundAddress,
+      value: outputValue
     });
 
+    const repaymentTxTemp = bitcoin.Transaction.fromBuffer(repaymentPsbtToFee.data.getTransaction());
+    repaymentTxTemp.ins.forEach((_, index) => {
+      repaymentTxTemp.ins[index].witness = [
+        Buffer.alloc(64),
+        Buffer.alloc(64),
+        Buffer.alloc(Buffer.from(cetInfos.repayment_cet_info.script.script, 'hex').length),
+        Buffer.alloc(Buffer.from(cetInfos.repayment_cet_info.script.control_block, 'hex').length)
+      ];
+    });
+    const vsize = repaymentTxTemp.virtualSize();
+    const feeAmount = Math.ceil(vsize * feeRate);
+    repaymentPsbt.addOutput({
+      address: refundAddress,
+      value: outputValue - feeAmount
+    });
     const script = Buffer.from(cetInfos.repayment_cet_info.script.script, 'hex');
 
     const leafHash = bip341.tapleafHash({
@@ -178,58 +128,95 @@ export async function prepareApply({
       return repaymentTx.hashForWitnessV1(index, prevOutScripts, prevOutValues, sighashType, leafHash);
     });
 
-    const sigHashHexs = sighashes.map((sighash) => sighash.toString('hex'));
+    const sigHashHexs = sighashes.map((sigHash) => sigHash.toString('hex'));
 
     return {
       sigHashHexs,
       repaymentCet: repaymentPsbt.toBase64(),
       repaymentPsbtHex: repaymentPsbt.toHex(),
-      cetInfos
+      repaymentPsbt
     };
   };
 
   const getLiquidationAdaptorSignatureParams = async () => {
-    const cetInfos = await services.lending.getCetInfo(
-      {
-        loan_id: collateralAddress!
-      },
-      {
-        baseURL: restUrl
-      }
-    );
-
-    const script = Buffer.from(cetInfos.liquidation_cet_info.script.script, 'hex');
-
     const leafHash = bip341.tapleafHash({
-      output: script
+      output: Buffer.from(cetInfos.liquidation_cet_info.script.script, 'hex')
+    });
+    const dcmPsbtToFee = new bitcoin.Psbt({ network });
+    const dcmPsbt = new bitcoin.Psbt({ network });
+    const dcmAddress = hexPubKeyToTaprootAddress(dcm.pubkey, networkType);
+
+    if (depositTxs?.length && depositTxIds) {
+      depositTxs.forEach((depositTx, index) => {
+        const depositTxPsbt = bitcoin.Psbt.fromBase64(depositTx);
+
+        dcmPsbt.addInput({
+          hash: depositTxIds[index],
+          index: 0,
+          witnessUtxo: {
+            script: depositTxPsbt.txOutputs[0].script,
+            value: depositTxPsbt.txOutputs[0].value
+          }
+        });
+
+        dcmPsbtToFee.addInput({
+          hash: depositTxIds[index],
+          index: 0,
+          witnessUtxo: {
+            script: depositTxPsbt.txOutputs[0].script,
+            value: depositTxPsbt.txOutputs[0].value
+          }
+        });
+      });
+    }
+
+    dcmPsbtToFee.addOutput({
+      address: dcmAddress,
+      value: outputValue
     });
 
-    const agencyTx = bitcoin.Transaction.fromBuffer(agencyPsbt.data.getTransaction());
+    const dcmTxTemp = bitcoin.Transaction.fromBuffer(dcmPsbtToFee.data.getTransaction());
 
-    const sighashes = agencyPsbt.data.inputs.map((_, index) => {
-      const sighashType = agencyPsbt.data.inputs[index].sighashType || bitcoin.Transaction.SIGHASH_DEFAULT;
+    dcmTxTemp.ins.forEach((_, index) => {
+      dcmTxTemp.ins[index].witness = [
+        Buffer.alloc(64),
+        Buffer.alloc(64),
+        Buffer.alloc(Buffer.from(cetInfos.liquidation_cet_info.script.script, 'hex').length),
+        Buffer.alloc(Buffer.from(cetInfos.liquidation_cet_info.script.control_block, 'hex').length)
+      ];
+    });
 
-      const prevOutScripts = agencyPsbt.data.inputs.map((input) =>
+    const vsize = dcmTxTemp.virtualSize();
+    const feeAmount = Math.ceil(vsize * feeRate);
+
+    dcmPsbt.addOutput({
+      address: dcmAddress,
+      value: outputValue - feeAmount
+    });
+
+    const dcmTx = bitcoin.Transaction.fromBuffer(dcmPsbt.data.getTransaction());
+
+    const sighashes = dcmPsbt.data.inputs.map((_, index) => {
+      const sighashType = dcmPsbt.data.inputs[index].sighashType || bitcoin.Transaction.SIGHASH_DEFAULT;
+
+      const prevOutScripts = dcmPsbt.data.inputs.map((input) =>
         input.witnessUtxo ? input.witnessUtxo.script : Buffer.alloc(0)
       );
-      const prevOutValues = agencyPsbt.data.inputs.map((input) => (input.witnessUtxo ? input.witnessUtxo.value : 0));
+      const prevOutValues = dcmPsbt.data.inputs.map((input) => (input.witnessUtxo ? input.witnessUtxo.value : 0));
 
-      return agencyTx.hashForWitnessV1(index, prevOutScripts, prevOutValues, sighashType, leafHash);
+      return dcmTx.hashForWitnessV1(index, prevOutScripts, prevOutValues, sighashType, leafHash);
     });
 
-    const sigHashHexs = sighashes.map((sighash) => sighash.toString('hex'));
+    const sigHashHexs = sighashes.map((sigHash) => sigHash.toString('hex'));
 
     return {
       sigHashHexs,
-      cetInfos
+      liquidationCet: dcmPsbt.toBase64()
     };
   };
 
   return {
     getLiquidationAdaptorSignatureParams,
-    getRepaymentSignatureParams,
-    liquidationCet: agencyPsbt.toBase64(),
-    agencyId: dcm.id,
-    agencyAddress
+    getRepaymentSignatureParams
   };
 }

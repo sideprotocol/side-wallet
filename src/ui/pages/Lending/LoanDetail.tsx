@@ -772,12 +772,6 @@ export default function LoanDetailScreen() {
               style={{ flex: 1 }}
               onClick={() => {
                 claim({
-                  loanId: loan.vault_address,
-                  borrowAmount: loan.borrow_amount,
-                  collateralAmount: {
-                    amount: loan.collateral_amount,
-                    denom: 'sat'
-                  },
                   feeRate
                 });
               }}>
@@ -814,12 +808,6 @@ export default function LoanDetailScreen() {
           style={{ display: tx ? 'none' : 'flex', position: 'fixed', bottom: 16, left: 16, right: 16 }}
           onClick={() => {
             claim({
-              loanId: loan.vault_address,
-              borrowAmount: loan.borrow_amount,
-              collateralAmount: {
-                amount: loan.collateral_amount,
-                denom: 'sat'
-              },
               feeRate
             });
           }}>
