@@ -299,7 +299,10 @@ export default function LendingTanScreen() {
   const { isDisabled, buttonText } = useMemo(() => {
     let isDisabled = false,
       buttonText = 'Request Loan';
-    if (loading) {
+    if (!currentAccount.address.startsWith('tb1p')) {
+      isDisabled = true;
+      buttonText = 'Switch to taproot address type';
+    } else if (loading) {
       isDisabled = true;
     } else if (!+collateralAmount || !+borrowAmount) {
       isDisabled = true;

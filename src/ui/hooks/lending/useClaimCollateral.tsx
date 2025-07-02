@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useQueryClient } from 'react-query';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
 import services from '@/ui/services';
@@ -15,6 +16,7 @@ import { useGetDepositTx } from './useGetDepositTx';
 import { useGetDlcDcms } from './useGetDlcDcms';
 
 export function useClaimCollateral(loan_id?: string) {
+  const queryClient = useQueryClient();
   const currentAccount = useCurrentAccount();
   const [loading, setLoading] = useState(false);
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
@@ -22,7 +24,6 @@ export function useClaimCollateral(loan_id?: string) {
   const [tx, setTx] = useState('');
   const wallet = useWallet();
   const networkType = useNetworkType();
-
   const { refetch } = useGetDepositTx(loan_id);
 
   const { cetInfos } = useGetCetInfo({ loanId: loan_id });
@@ -91,6 +92,10 @@ export function useClaimCollateral(loan_id?: string) {
         }
       }
       if (hashResponse.tx_response.code === 0) {
+        queryClient.invalidateQueries({ queryKey: ['getDlcMeta'] });
+        queryClient.invalidateQueries({ queryKey: ['getLoanById'] });
+        queryClient.invalidateQueries({ queryKey: ['getLoanAuthorization'] });
+        queryClient.invalidateQueries({ queryKey: ['getLoanDeposits'] });
         setTx(result.tx_response.txhash);
       }
     } catch (err) {

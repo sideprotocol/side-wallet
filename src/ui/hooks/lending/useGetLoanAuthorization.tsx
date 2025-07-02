@@ -27,9 +27,10 @@ export function useGetLoanAuthorization(loan?: Loan) {
     enabled: loan && loan.status === 'Requested'
   });
 
-  const { hasAuthorizedCanClaim, noAuthorizeCanClaim } = useMemo(() => {
-    let hasAuthorizedCanClaim = false;
-    let noAuthorizeCanClaim = false;
+  const { hasAuthorizedCanClaim, noAuthorizeCanClaim, isRedeeming } = useMemo(() => {
+    let hasAuthorizedCanClaim = false,
+      noAuthorizeCanClaim = false,
+      isRedeeming = false;
     if (
       loanAuthorization &&
       loanAuthorization.status === 'AUTHORIZATION_STATUS_REJECTED' &&
@@ -42,10 +43,17 @@ export function useGetLoanAuthorization(loan?: Loan) {
       loanDeposits.deposits.every((deposit) => deposit.status == 'DEPOSIT_STATUS_VERIFIED')
     ) {
       noAuthorizeCanClaim = true;
+    } else if (
+      loanDeposits &&
+      loanDeposits.deposits.length &&
+      loanDeposits.deposits.some((deposit) => deposit.status == 'DEPOSIT_STATUS_REDEEMING')
+    ) {
+      isRedeeming = true;
     }
     return {
       hasAuthorizedCanClaim,
-      noAuthorizeCanClaim
+      noAuthorizeCanClaim,
+      isRedeeming
     };
   }, [loanAuthorization, loanDeposits]);
 
@@ -53,6 +61,7 @@ export function useGetLoanAuthorization(loan?: Loan) {
     loading,
     loanAuthorization,
     hasAuthorizedCanClaim,
-    noAuthorizeCanClaim
+    noAuthorizeCanClaim,
+    isRedeeming
   };
 }
