@@ -117,7 +117,6 @@ export interface Loan {
   collateral_amount: string;
   create_at: number;
   dcm: string;
-  default_liquidation_event_id: string;
   authorizations: {
     deposit_txs: string[];
     id: string;
@@ -126,7 +125,7 @@ export interface Loan {
   disburse_at: number;
   final_timeout: string;
   interest: string;
-  liquidation_event_id: string;
+  dlc_event_id: string;
   liquidation_id: string;
   liquidation_price: string;
   maturity: string;
@@ -136,7 +135,6 @@ export interface Loan {
   pool_id: string;
   protocol_fee: string;
   referrer: string;
-  repayment_event_id: string;
   request_fee: {
     amount: string;
     denom: string;
@@ -204,7 +202,6 @@ export interface LoanBaseData {
 }
 
 export interface LeadingPool {
-  available_amount: string;
   borrowed_amount: string;
   config: {
     borrow_cap: string;
@@ -243,7 +240,7 @@ export interface LeadingPool {
   status: 'INACTIVE' | 'ACTIVE';
   supply: Coin;
   total_borrowed: string;
-  total_stokens: Coin;
+  total_ytokens: Coin;
   tranches: Array<{
     maturity: string;
     total_borrowed: string;
@@ -780,6 +777,7 @@ export interface GetLiquidationByIdResponse {
 
 export interface GetCetInfoRequest {
   loan_id: string;
+  collateral_amount: string;
 }
 
 export interface GetCetInfoResponse {

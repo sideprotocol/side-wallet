@@ -271,7 +271,7 @@ export default function EarnTabScreen() {
                 }
               }}
               onClick={() => {
-                window.open('https://go.skip.build/');
+                navigate('BridgeTabScreen');
               }}>
               Bridge Here
             </Stack>

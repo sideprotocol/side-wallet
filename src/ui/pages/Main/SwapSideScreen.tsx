@@ -146,7 +146,7 @@ export default function SwapSideScreen() {
         onBack={() => {
           window.history.go(-1);
         }}
-        title="Swap SIDE"
+        title="Buy $SIDE"
       />
       <Content gap="lg" mt="lg">
         <Column
@@ -337,14 +337,14 @@ export default function SwapSideScreen() {
                 navigate('TxConfirmScreen', { rawTxInfo, type: TxType.SWAP_SIDE });
               }}
               disabled={disabledBuy}
-              text="Swap Now"
+              text="Buy Now"
               preset="primary"
               full></Button>
           </Row>
         </Column>
       </Content>
       <Footer px="zero" py="zero">
-        <NavTabBar tab="swap" />
+        <NavTabBar tab="home" />
       </Footer>
     </Layout>
   );

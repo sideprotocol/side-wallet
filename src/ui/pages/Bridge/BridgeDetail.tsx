@@ -17,7 +17,7 @@ export default function BridgeDetail() {
   const currentAccount = useCurrentAccount();
   const { state } = useLocation();
   const { txHash } = state as { txHash: string };
-  const { sideChain, SERVICE_BASE_URL, SIDE_BTC_EXPLORER, UNISAT_IO_API } = useEnvironment();
+  const { sideChain, chains, SERVICE_BASE_URL, SIDE_BTC_EXPLORER, UNISAT_IO_API } = useEnvironment();
 
   const { balanceList: sideBalanceList } = useGetSideBalanceList(currentAccount?.address);
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
@@ -305,14 +305,24 @@ export default function BridgeDetail() {
     {
       label: data.direction === 'IN' ? 'Target Address' : 'Origin Address',
       value: (
-        <Text
-          style={{
+        <Typography
+          sx={{
             fontSize: '12px',
             fontWeight: 500,
-            color: colors.white
+            color: colors.white,
+            cursor: 'pointer',
+            ':hover': {
+              color: colors.main
+            }
+          }}
+          onClick={() => {
+            const chain = chains.find((item) => item.chainID === data.oppositeChainId);
+            if (chain) {
+              window.open(`${chain.explorerUrl}/address/${data.oppositeAddress}`, '_blank');
+            }
           }}>
           {formatAddress(data.oppositeAddress, 6)}
-        </Text>
+        </Typography>
       ),
       tip: 'xxx'
     },
@@ -333,14 +343,24 @@ export default function BridgeDetail() {
     {
       label: data.direction === 'IN' ? 'Tx (Target Chain)' : 'Tx (Origin Chain)',
       value: (
-        <Text
-          style={{
+        <Typography
+          sx={{
             fontSize: '12px',
             fontWeight: 500,
-            color: colors.white
+            color: colors.white,
+            cursor: 'pointer',
+            ':hover': {
+              color: colors.main
+            }
+          }}
+          onClick={() => {
+            const chain = chains.find((item) => item.chainID === data.oppositeChainId);
+            if (chain) {
+              window.open(`${chain.explorerUrl}/tx/${data.oppositeTxHash}`, '_blank');
+            }
           }}>
           {data.oppositeTxHash ? formatAddress(data.oppositeTxHash, 6) : '-'}
-        </Text>
+        </Typography>
       ),
       tip: 'xxx'
     },

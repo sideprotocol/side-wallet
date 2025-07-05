@@ -18,7 +18,7 @@ export default function MyEarnsScreen() {
 
   const data = useMemo(() => {
     return allPoolsData.filter((item) => {
-      const token = sideBalanceList.find((o) => o.denom === item.baseData.total_stokens.denom);
+      const token = sideBalanceList.find((o) => o.denom === item.baseData.total_ytokens.denom);
       return token?.amount && +token.amount > 0;
     });
   }, [currentAccount.address, allPoolsData, sideBalanceList]);
@@ -70,7 +70,7 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
   const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
   const { balanceList } = useGetSideBalanceList(currentAccount.address);
-  const stokenBalance = balanceList.find((o) => o.denom === item.baseData.total_stokens.denom);
+  const stokenBalance = balanceList.find((o) => o.denom === item.baseData.total_ytokens.denom);
   const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: item.baseData.id || '' });
   const { depositedAmount } = useMemo(() => {
     const depositedAmount = new BigNumber(stokenBalance?.formatAmount || '0')

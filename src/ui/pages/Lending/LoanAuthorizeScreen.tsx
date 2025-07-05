@@ -4,21 +4,15 @@ import 'swiper/css';
 import { NetworkType } from '@/shared/types';
 import { Button, Column, Content, Footer, Layout, LightTooltip, Row, SuccessAnimation, Text } from '@/ui/components';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import {
-  useApproveLoan,
-  useGetDepositTx,
-  useGetLiquidationPrice,
-  useGetLoanById,
-  useGetPoolsData
-} from '@/ui/hooks/lending';
+import { useApproveLoan, useGetLiquidationPrice, useGetLoanById, useGetPoolsData } from '@/ui/hooks/lending';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useLendingState } from '@/ui/state/lending/hook';
 import { useNetworkType } from '@/ui/state/settings/hooks';
 import { colors } from '@/ui/theme/colors';
-import { getTruncate, satoshisToAmount, useLocationState } from '@/ui/utils';
-import { formatTimeWithUTC, toReadableAmount } from '@/ui/utils/formatter';
+import { formatUnitAmount, getTruncate, useLocationState } from '@/ui/utils';
+import { formatTimeWithUTC } from '@/ui/utils/formatter';
 import { Input, Stack, Typography } from '@mui/material';
 
 import { useNavigate } from '../MainRoute';
@@ -42,8 +36,6 @@ export default function LoanAuthorizeScreen() {
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
-  const { value } = useGetDepositTx(loanId, collateralAmount);
-
   const { approveLoan, loading, tx } = useApproveLoan(loanId, collateralAmount);
 
   const { poolTokenDenom } = useLendingState();
@@ -58,9 +50,9 @@ export default function LoanAuthorizeScreen() {
   const poolData = poolsData.find((p) => p.token.denom === poolTokenBalance?.denom);
 
   const { liquidationPrice } = useGetLiquidationPrice({
-    bitcoinAmount: value ? satoshisToAmount(value) : '',
+    bitcoinAmount: formatUnitAmount(collateralAmount, 8),
     borrowToken: poolData?.token,
-    borrowTokenAmount: toReadableAmount(borrowAmount, poolData?.token.asset.exponent || 6),
+    borrowTokenAmount: formatUnitAmount(borrowAmount, poolData?.token.asset.exponent || 6),
     poolId: poolData?.baseData.id || '',
     maturity: loan?.loan.maturity
   });

@@ -9,10 +9,12 @@ import ImageIcon from '@/ui/components/ImageIcon';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { colors } from '@/ui/theme/colors';
-import { Box, Skeleton } from '@mui/material';
+import { Box, Skeleton, Stack } from '@mui/material';
 
 export function TokenItem({ token, balanceVisible }: { token: BalanceItem; balanceVisible: boolean }) {
+  const { SIDE_STATION_URL } = useEnvironment();
   const isIbc = token.asset.denom.includes('ibc/');
 
   const isSide = token.asset.denom === 'uside';
@@ -28,18 +30,23 @@ export function TokenItem({ token, balanceVisible }: { token: BalanceItem; balan
   const isBitcoinChain = token.asset.chain === CHAINS_ENUM.BTC;
 
   return (
-    <Column
-      classname={'bg-item-hover-v2'}
-      style={{
-        cursor: 'pointer',
-        backgroundColor: colors.card_bgColor,
-        padding: '10px 16px',
-        borderRadius: 10,
-        paddingBottom: isSide ? '29px' : '10px',
-        position: 'relative',
-        transition: 'padding-bottom 0.1s ease-in-out'
+    <Stack
+      sx={{
+        borderRadius: '10px',
+        overflow: 'hidden'
       }}>
-      <Row fullX justifyBetween>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        sx={{
+          cursor: 'pointer',
+          padding: '10px 16px',
+          backgroundColor: colors.card_bgColor,
+          transition: '.4s',
+          ':hover': {
+            backgroundColor: colors.grey_dark
+          }
+        }}>
         <Row>
           <Row
             style={{
@@ -111,47 +118,61 @@ export function TokenItem({ token, balanceVisible }: { token: BalanceItem; balan
             textEnd
           />
         </Column>
-      </Row>
+      </Stack>
       {isSide && (
-        <Row
-          style={{
-            position: 'absolute',
-            width: '328px',
-            bottom: 0,
-            left: 0,
-            borderBottomLeftRadius: 10,
-            borderBottomRightRadius: 10
-          }}
-          onMouseOver={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          onClick={() => {
-            navigate('/swap-side');
-          }}
-          fullX
-          py="xs"
-          bg={hover ? 'green_success40' : 'green_success15'}
-          itemsCenter
-          justifyCenter>
-          <Text
-            color={'green_light2'}
-            size="xs"
-            style={{
-              fontWeight: 500
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            width: '100%',
+            cursor: 'pointer',
+            borderTop: `1px solid ${colors.white20}`
+          }}>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            sx={{
+              flex: 1,
+              py: '4px',
+              fontSize: '12px',
+              fontWeight: 500,
+              color: colors.grey12,
+              bgcolor: colors.card_bgColor,
+              transition: '.4s',
+              ':hover': {
+                bgcolor: colors.grey_dark
+              }
             }}
-            text="Swap BTC to SIDE"></Text>
-
-          <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M1.5 11L6.5 6L1.5 1"
-              stroke="#58E593"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </Row>
+            onClick={() => {
+              window.open(`${SIDE_STATION_URL}/staking`, '_blank');
+            }}>
+            Stake
+          </Stack>
+          <Stack
+            direction="row"
+            justifyContent="center"
+            sx={{
+              flex: 1,
+              py: '4px',
+              fontSize: '12px',
+              fontWeight: 500,
+              color: colors.grey12,
+              borderLeft: `1px solid ${colors.white20}`,
+              bgcolor: colors.card_bgColor,
+              transition: '.4s',
+              ':hover': {
+                bgcolor: colors.grey_dark
+              }
+            }}
+            onClick={() => {
+              navigate('/swap-side');
+            }}>
+            Buy
+          </Stack>
+        </Stack>
       )}
-    </Column>
+    </Stack>
   );
 }
 

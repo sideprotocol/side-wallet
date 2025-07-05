@@ -109,7 +109,11 @@ export default function LoanDetailScreen() {
   const feeRate = uiState.feeRate;
 
   const { hasAuthorizedCanClaim, noAuthorizeCanClaim } = useGetLoanAuthorization(loan);
-  const { claim, loading: claimLoading, tx } = useClaimCollateral(loan?.vault_address);
+  const {
+    claim,
+    loading: claimLoading,
+    tx
+  } = useClaimCollateral(loan?.vault_address || '', loan?.collateral_amount || '0');
 
   const { txsConfirms } = useGetBitcoinTxsConfirms(txids);
 

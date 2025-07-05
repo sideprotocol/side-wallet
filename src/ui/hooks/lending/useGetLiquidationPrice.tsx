@@ -38,7 +38,7 @@ export function useGetLiquidationPrice({
         { baseURL: sideChain.restUrl }
       );
     },
-    enabled: !!bitcoinToken && !!borrowToken && !!maturity
+    enabled: !!bitcoinToken && !!borrowToken && !!maturity && !!bitcoinAmount && !!borrowTokenAmount
   });
 
   return {

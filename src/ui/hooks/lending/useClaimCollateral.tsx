@@ -15,7 +15,7 @@ import { useGetCetInfo } from './useGetCetInfo';
 import { useGetDepositTx } from './useGetDepositTx';
 import { useGetDlcDcms } from './useGetDlcDcms';
 
-export function useClaimCollateral(loan_id?: string) {
+export function useClaimCollateral(loan_id: string, collateralAmount: string) {
   const queryClient = useQueryClient();
   const currentAccount = useCurrentAccount();
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ export function useClaimCollateral(loan_id?: string) {
   const networkType = useNetworkType();
   const { refetch } = useGetDepositTx(loan_id);
 
-  const { cetInfos } = useGetCetInfo({ loanId: loan_id });
+  const { cetInfos } = useGetCetInfo({ loanId: loan_id || '', collateral_amount: `${collateralAmount}sat` });
   const { activeDcms } = useGetDlcDcms();
 
   const claim = async ({ feeRate }: { feeRate: number }) => {

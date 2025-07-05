@@ -223,7 +223,7 @@ export default function WalletTabScreen() {
               </svg>
 
               <div className="text-[#fff]/80 group-hover:text-[#fff] text-[12px] leading-[17px] font-[Saira]">
-                Station
+                Explorer
               </div>
             </div>
           </div>

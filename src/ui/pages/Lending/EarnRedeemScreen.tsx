@@ -38,7 +38,7 @@ export default function EarnRedeemScreen() {
   const { balanceList } = useGetSideBalanceList(currentAccount.address);
 
   const { data: exchangeRate } = useGetPoolExchangeRate({ poolId: poolData?.baseData?.id || '' });
-  const stokenBalance = balanceList.find((b) => b.denom == poolData?.baseData.total_stokens.denom);
+  const stokenBalance = balanceList.find((b) => b.denom == poolData?.baseData.total_ytokens.denom);
   const poolTokenBalance = balanceList.find((b) => b.denom == poolData?.baseData.supply.denom);
 
   const maxWithdrawAmount = useMemo(() => {
@@ -57,7 +57,7 @@ export default function EarnRedeemScreen() {
 
     withdraw({
       shares: {
-        denom: poolData.baseData.total_stokens.denom,
+        denom: poolData.baseData.total_ytokens.denom,
         amount: toUnitAmount(withdrawAmount, poolData.token.asset.exponent)
       }
     });

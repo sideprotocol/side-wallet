@@ -30,7 +30,7 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
   const wallet = useWallet();
   const networkType = useNetworkType();
   const { sideChain } = useEnvironment();
-  const { cetInfos } = useGetCetInfo({ loanId: loan_id });
+  const { cetInfos } = useGetCetInfo({ loanId: loan_id, collateral_amount: `${collateralAmount}sat` });
   const { activeDcms } = useGetDlcDcms();
 
   const approveLoan = async ({ feeRate, refundAddress }: { feeRate: number; refundAddress: string }) => {
