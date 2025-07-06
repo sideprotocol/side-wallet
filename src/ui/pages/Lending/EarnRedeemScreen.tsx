@@ -266,25 +266,25 @@ export default function EarnRedeemScreen() {
               )}
             </Column>
           </Content>
+          <Row mt="md" mb="lg">
+            <Button
+              onClick={() => {
+                if (tx) {
+                  window.history.go(-1);
+                } else {
+                  onWithdraw();
+                }
+              }}
+              loading={loading}
+              disabled={isDisabled}
+              preset="primary"
+              text={'Redeem'}
+              full
+              style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
+            />
+          </Row>
         </>
       )}
-      <Row mt="md" mb="lg">
-        <Button
-          onClick={() => {
-            if (tx) {
-              window.history.go(-1);
-            } else {
-              onWithdraw();
-            }
-          }}
-          loading={loading}
-          disabled={isDisabled}
-          preset="primary"
-          text={tx ? 'Close' : 'Redeem'}
-          full
-          style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
-        />
-      </Row>
     </Layout>
   );
 }

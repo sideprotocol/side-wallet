@@ -1,6 +1,8 @@
 //@ts-nocheck
-import { BinaryReader, BinaryWriter } from "../../binary";
-import { Decimal } from "@cosmjs/math";
+import { Decimal } from '@cosmjs/math';
+
+import { BinaryReader, BinaryWriter } from '../../binary';
+
 /** Oracle Price from Price Extention */
 export interface OraclePrice {
   /** id */
@@ -8,7 +10,7 @@ export interface OraclePrice {
   price: string;
 }
 export interface OraclePriceProtoMsg {
-  typeUrl: "/side.oracle.OraclePrice";
+  typeUrl: '/side.oracle.OraclePrice';
   value: Uint8Array;
 }
 /** Oracle Price from Price Extention */
@@ -18,7 +20,7 @@ export interface OraclePriceAmino {
   price?: string;
 }
 export interface OraclePriceAminoMsg {
-  type: "/side.oracle.OraclePrice";
+  type: '/side.oracle.OraclePrice';
   value: OraclePriceAmino;
 }
 /** Oracle Price from Price Extention */
@@ -39,7 +41,7 @@ export interface BlockHeader {
   ntx: number;
 }
 export interface BlockHeaderProtoMsg {
-  typeUrl: "/side.oracle.BlockHeader";
+  typeUrl: '/side.oracle.BlockHeader';
   value: Uint8Array;
 }
 /** Bitcoin Block Header From Price Extention */
@@ -55,7 +57,7 @@ export interface BlockHeaderAmino {
   ntx?: number;
 }
 export interface BlockHeaderAminoMsg {
-  type: "/side.oracle.BlockHeader";
+  type: '/side.oracle.BlockHeader';
   value: BlockHeaderAmino;
 }
 /** Bitcoin Block Header From Price Extention */
@@ -100,7 +102,7 @@ export interface OracleVoteExtension {
   hasError: boolean;
 }
 export interface OracleVoteExtensionProtoMsg {
-  typeUrl: "/side.oracle.OracleVoteExtension";
+  typeUrl: '/side.oracle.OracleVoteExtension';
   value: Uint8Array;
 }
 /** Oracle Vote Extenstion */
@@ -113,7 +115,7 @@ export interface OracleVoteExtensionAmino {
   has_error?: boolean;
 }
 export interface OracleVoteExtensionAminoMsg {
-  type: "/side.oracle.OracleVoteExtension";
+  type: '/side.oracle.OracleVoteExtension';
   value: OracleVoteExtensionAmino;
 }
 /** Oracle Vote Extenstion */
@@ -127,17 +129,17 @@ export interface OracleVoteExtensionSDKType {
 }
 function createBaseOraclePrice(): OraclePrice {
   return {
-    symbol: "",
-    price: ""
+    symbol: '',
+    price: ''
   };
 }
 export const OraclePrice = {
-  typeUrl: "/side.oracle.OraclePrice",
+  typeUrl: '/side.oracle.OraclePrice',
   encode(message: OraclePrice, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.symbol !== "") {
+    if (message.symbol !== '') {
       writer.uint32(10).string(message.symbol);
     }
-    if (message.price !== "") {
+    if (message.price !== '') {
       writer.uint32(18).string(Decimal.fromUserInput(message.price, 18).atomics);
     }
     return writer;
@@ -164,8 +166,8 @@ export const OraclePrice = {
   },
   fromPartial(object: Partial<OraclePrice>): OraclePrice {
     const message = createBaseOraclePrice();
-    message.symbol = object.symbol ?? "";
-    message.price = object.price ?? "";
+    message.symbol = object.symbol ?? '';
+    message.price = object.price ?? '';
     return message;
   },
   fromAmino(object: OraclePriceAmino): OraclePrice {
@@ -180,8 +182,8 @@ export const OraclePrice = {
   },
   toAmino(message: OraclePrice): OraclePriceAmino {
     const obj: any = {};
-    obj.symbol = message.symbol === "" ? undefined : message.symbol;
-    obj.price = message.price === "" ? undefined : message.price;
+    obj.symbol = message.symbol === '' ? undefined : message.symbol;
+    obj.price = message.price === '' ? undefined : message.price;
     return obj;
   },
   fromAminoMsg(object: OraclePriceAminoMsg): OraclePrice {
@@ -195,7 +197,7 @@ export const OraclePrice = {
   },
   toProtoMsg(message: OraclePrice): OraclePriceProtoMsg {
     return {
-      typeUrl: "/side.oracle.OraclePrice",
+      typeUrl: '/side.oracle.OraclePrice',
       value: OraclePrice.encode(message).finish()
     };
   }
@@ -203,38 +205,38 @@ export const OraclePrice = {
 function createBaseBlockHeader(): BlockHeader {
   return {
     version: 0,
-    hash: "",
+    hash: '',
     height: 0,
-    previousBlockHash: "",
-    merkleRoot: "",
+    previousBlockHash: '',
+    merkleRoot: '',
     nonce: BigInt(0),
-    bits: "",
+    bits: '',
     time: BigInt(0),
     ntx: 0
   };
 }
 export const BlockHeader = {
-  typeUrl: "/side.oracle.BlockHeader",
+  typeUrl: '/side.oracle.BlockHeader',
   encode(message: BlockHeader, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.version !== 0) {
       writer.uint32(8).int32(message.version);
     }
-    if (message.hash !== "") {
+    if (message.hash !== '') {
       writer.uint32(18).string(message.hash);
     }
     if (message.height !== 0) {
       writer.uint32(24).int32(message.height);
     }
-    if (message.previousBlockHash !== "") {
+    if (message.previousBlockHash !== '') {
       writer.uint32(34).string(message.previousBlockHash);
     }
-    if (message.merkleRoot !== "") {
+    if (message.merkleRoot !== '') {
       writer.uint32(42).string(message.merkleRoot);
     }
     if (message.nonce !== BigInt(0)) {
       writer.uint32(48).uint64(message.nonce);
     }
-    if (message.bits !== "") {
+    if (message.bits !== '') {
       writer.uint32(58).string(message.bits);
     }
     if (message.time !== BigInt(0)) {
@@ -289,12 +291,12 @@ export const BlockHeader = {
   fromPartial(object: Partial<BlockHeader>): BlockHeader {
     const message = createBaseBlockHeader();
     message.version = object.version ?? 0;
-    message.hash = object.hash ?? "";
+    message.hash = object.hash ?? '';
     message.height = object.height ?? 0;
-    message.previousBlockHash = object.previousBlockHash ?? "";
-    message.merkleRoot = object.merkleRoot ?? "";
+    message.previousBlockHash = object.previousBlockHash ?? '';
+    message.merkleRoot = object.merkleRoot ?? '';
     message.nonce = object.nonce !== undefined && object.nonce !== null ? BigInt(object.nonce.toString()) : BigInt(0);
-    message.bits = object.bits ?? "";
+    message.bits = object.bits ?? '';
     message.time = object.time !== undefined && object.time !== null ? BigInt(object.time.toString()) : BigInt(0);
     message.ntx = object.ntx ?? 0;
     return message;
@@ -333,12 +335,12 @@ export const BlockHeader = {
   toAmino(message: BlockHeader): BlockHeaderAmino {
     const obj: any = {};
     obj.version = message.version === 0 ? undefined : message.version;
-    obj.hash = message.hash === "" ? undefined : message.hash;
+    obj.hash = message.hash === '' ? undefined : message.hash;
     obj.height = message.height === 0 ? undefined : message.height;
-    obj.previous_block_hash = message.previousBlockHash === "" ? undefined : message.previousBlockHash;
-    obj.merkle_root = message.merkleRoot === "" ? undefined : message.merkleRoot;
+    obj.previous_block_hash = message.previousBlockHash === '' ? undefined : message.previousBlockHash;
+    obj.merkle_root = message.merkleRoot === '' ? undefined : message.merkleRoot;
     obj.nonce = message.nonce !== BigInt(0) ? message.nonce.toString() : undefined;
-    obj.bits = message.bits === "" ? undefined : message.bits;
+    obj.bits = message.bits === '' ? undefined : message.bits;
     obj.time = message.time !== BigInt(0) ? message.time.toString() : undefined;
     obj.ntx = message.ntx === 0 ? undefined : message.ntx;
     return obj;
@@ -354,23 +356,23 @@ export const BlockHeader = {
   },
   toProtoMsg(message: BlockHeader): BlockHeaderProtoMsg {
     return {
-      typeUrl: "/side.oracle.BlockHeader",
+      typeUrl: '/side.oracle.BlockHeader',
       value: BlockHeader.encode(message).finish()
     };
   }
 };
 function createBaseOracleVoteExtension_PricesEntry(): OracleVoteExtension_PricesEntry {
   return {
-    key: "",
-    value: ""
+    key: '',
+    value: ''
   };
 }
 export const OracleVoteExtension_PricesEntry = {
   encode(message: OracleVoteExtension_PricesEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.key !== "") {
+    if (message.key !== '') {
       writer.uint32(10).string(message.key);
     }
-    if (message.value !== "") {
+    if (message.value !== '') {
       writer.uint32(18).string(message.value);
     }
     return writer;
@@ -397,8 +399,8 @@ export const OracleVoteExtension_PricesEntry = {
   },
   fromPartial(object: Partial<OracleVoteExtension_PricesEntry>): OracleVoteExtension_PricesEntry {
     const message = createBaseOracleVoteExtension_PricesEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? "";
+    message.key = object.key ?? '';
+    message.value = object.value ?? '';
     return message;
   },
   fromAmino(object: OracleVoteExtension_PricesEntryAmino): OracleVoteExtension_PricesEntry {
@@ -413,8 +415,8 @@ export const OracleVoteExtension_PricesEntry = {
   },
   toAmino(message: OracleVoteExtension_PricesEntry): OracleVoteExtension_PricesEntryAmino {
     const obj: any = {};
-    obj.key = message.key === "" ? undefined : message.key;
-    obj.value = message.value === "" ? undefined : message.value;
+    obj.key = message.key === '' ? undefined : message.key;
+    obj.value = message.value === '' ? undefined : message.value;
     return obj;
   },
   fromAminoMsg(object: OracleVoteExtension_PricesEntryAminoMsg): OracleVoteExtension_PricesEntry {
@@ -436,16 +438,19 @@ function createBaseOracleVoteExtension(): OracleVoteExtension {
   };
 }
 export const OracleVoteExtension = {
-  typeUrl: "/side.oracle.OracleVoteExtension",
+  typeUrl: '/side.oracle.OracleVoteExtension',
   encode(message: OracleVoteExtension, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.height !== BigInt(0)) {
       writer.uint32(8).int64(message.height);
     }
     Object.entries(message.prices).forEach(([key, value]) => {
-      OracleVoteExtension_PricesEntry.encode({
-        key: key as any,
-        value
-      }, writer.uint32(18).fork()).ldelim();
+      OracleVoteExtension_PricesEntry.encode(
+        {
+          key: key as any,
+          value
+        },
+        writer.uint32(18).fork()
+      ).ldelim();
     });
     for (const v of message.blocks) {
       BlockHeader.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -465,12 +470,13 @@ export const OracleVoteExtension = {
         case 1:
           message.height = reader.int64();
           break;
-        case 2:
+        case 2: {
           const entry2 = OracleVoteExtension_PricesEntry.decode(reader, reader.uint32());
           if (entry2.value !== undefined) {
             message.prices[entry2.key] = entry2.value;
           }
           break;
+        }
         case 3:
           message.blocks.push(BlockHeader.decode(reader, reader.uint32()));
           break;
@@ -486,7 +492,8 @@ export const OracleVoteExtension = {
   },
   fromPartial(object: Partial<OracleVoteExtension>): OracleVoteExtension {
     const message = createBaseOracleVoteExtension();
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
+    message.height =
+      object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.prices = Object.entries(object.prices ?? {}).reduce<{
       [key: string]: string;
     }>((acc, [key, value]) => {
@@ -495,7 +502,7 @@ export const OracleVoteExtension = {
       }
       return acc;
     }, {});
-    message.blocks = object.blocks?.map(e => BlockHeader.fromPartial(e)) || [];
+    message.blocks = object.blocks?.map((e) => BlockHeader.fromPartial(e)) || [];
     message.hasError = object.hasError ?? false;
     return message;
   },
@@ -512,7 +519,7 @@ export const OracleVoteExtension = {
       }
       return acc;
     }, {});
-    message.blocks = object.blocks?.map(e => BlockHeader.fromAmino(e)) || [];
+    message.blocks = object.blocks?.map((e) => BlockHeader.fromAmino(e)) || [];
     if (object.has_error !== undefined && object.has_error !== null) {
       message.hasError = object.has_error;
     }
@@ -528,7 +535,7 @@ export const OracleVoteExtension = {
       });
     }
     if (message.blocks) {
-      obj.blocks = message.blocks.map(e => e ? BlockHeader.toAmino(e) : undefined);
+      obj.blocks = message.blocks.map((e) => (e ? BlockHeader.toAmino(e) : undefined));
     } else {
       obj.blocks = message.blocks;
     }
@@ -546,7 +553,7 @@ export const OracleVoteExtension = {
   },
   toProtoMsg(message: OracleVoteExtension): OracleVoteExtensionProtoMsg {
     return {
-      typeUrl: "/side.oracle.OracleVoteExtension",
+      typeUrl: '/side.oracle.OracleVoteExtension',
       value: OracleVoteExtension.encode(message).finish()
     };
   }
