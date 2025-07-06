@@ -335,8 +335,6 @@ export interface PoolTrancheConfig {
   maturity: bigint;
   /** borrow apr permille */
   borrowApr: number;
-  /** minimum maturity factor permille */
-  minMaturityFactor: number;
 }
 export interface PoolTrancheConfigProtoMsg {
   typeUrl: "/side.lending.PoolTrancheConfig";
@@ -348,8 +346,6 @@ export interface PoolTrancheConfigAmino {
   maturity?: string;
   /** borrow apr permille */
   borrow_apr?: number;
-  /** minimum maturity factor permille */
-  min_maturity_factor?: number;
 }
 export interface PoolTrancheConfigAminoMsg {
   type: "/side.lending.PoolTrancheConfig";
@@ -359,7 +355,6 @@ export interface PoolTrancheConfigAminoMsg {
 export interface PoolTrancheConfigSDKType {
   maturity: bigint;
   borrow_apr: number;
-  min_maturity_factor: number;
 }
 /** Pool config */
 export interface PoolConfig {
@@ -493,7 +488,7 @@ export interface LendingPool {
   totalBorrowed: string;
   reserveAmount: string;
   totalReserve: string;
-  totalStokens: Coin;
+  totalYtokens: Coin;
   tranches: PoolTranche[];
   config: PoolConfig;
   status: PoolStatus;
@@ -510,7 +505,7 @@ export interface LendingPoolAmino {
   total_borrowed?: string;
   reserve_amount?: string;
   total_reserve?: string;
-  total_stokens?: CoinAmino;
+  total_ytokens?: CoinAmino;
   tranches?: PoolTrancheAmino[];
   config?: PoolConfigAmino;
   status?: PoolStatus;
@@ -527,7 +522,7 @@ export interface LendingPoolSDKType {
   total_borrowed: string;
   reserve_amount: string;
   total_reserve: string;
-  total_stokens: CoinSDKType;
+  total_ytokens: CoinSDKType;
   tranches: PoolTrancheSDKType[];
   config: PoolConfigSDKType;
   status: PoolStatus;
@@ -575,7 +570,6 @@ export interface Loan {
   protocolFee: string;
   maturity: bigint;
   borrowApr: number;
-  minMaturity: bigint;
   startBorrowIndex: string;
   liquidationPrice: string;
   dlcEventId: bigint;
@@ -608,7 +602,6 @@ export interface LoanAmino {
   protocol_fee?: string;
   maturity?: string;
   borrow_apr?: number;
-  min_maturity?: string;
   start_borrow_index?: string;
   liquidation_price?: string;
   dlc_event_id?: string;
@@ -640,7 +633,6 @@ export interface LoanSDKType {
   protocol_fee: string;
   maturity: bigint;
   borrow_apr: number;
-  min_maturity: bigint;
   start_borrow_index: string;
   liquidation_price: string;
   dlc_event_id: bigint;
@@ -1001,8 +993,7 @@ export const AssetMetadata = {
 function createBasePoolTrancheConfig(): PoolTrancheConfig {
   return {
     maturity: BigInt(0),
-    borrowApr: 0,
-    minMaturityFactor: 0
+    borrowApr: 0
   };
 }
 export const PoolTrancheConfig = {
@@ -1013,9 +1004,6 @@ export const PoolTrancheConfig = {
     }
     if (message.borrowApr !== 0) {
       writer.uint32(16).uint32(message.borrowApr);
-    }
-    if (message.minMaturityFactor !== 0) {
-      writer.uint32(24).uint32(message.minMaturityFactor);
     }
     return writer;
   },
@@ -1032,9 +1020,6 @@ export const PoolTrancheConfig = {
         case 2:
           message.borrowApr = reader.uint32();
           break;
-        case 3:
-          message.minMaturityFactor = reader.uint32();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1046,7 +1031,6 @@ export const PoolTrancheConfig = {
     const message = createBasePoolTrancheConfig();
     message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
     message.borrowApr = object.borrowApr ?? 0;
-    message.minMaturityFactor = object.minMaturityFactor ?? 0;
     return message;
   },
   fromAmino(object: PoolTrancheConfigAmino): PoolTrancheConfig {
@@ -1057,16 +1041,12 @@ export const PoolTrancheConfig = {
     if (object.borrow_apr !== undefined && object.borrow_apr !== null) {
       message.borrowApr = object.borrow_apr;
     }
-    if (object.min_maturity_factor !== undefined && object.min_maturity_factor !== null) {
-      message.minMaturityFactor = object.min_maturity_factor;
-    }
     return message;
   },
   toAmino(message: PoolTrancheConfig): PoolTrancheConfigAmino {
     const obj: any = {};
     obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
     obj.borrow_apr = message.borrowApr === 0 ? undefined : message.borrowApr;
-    obj.min_maturity_factor = message.minMaturityFactor === 0 ? undefined : message.minMaturityFactor;
     return obj;
   },
   fromAminoMsg(object: PoolTrancheConfigAminoMsg): PoolTrancheConfig {
@@ -1414,7 +1394,7 @@ function createBaseLendingPool(): LendingPool {
     totalBorrowed: "",
     reserveAmount: "",
     totalReserve: "",
-    totalStokens: Coin.fromPartial({}),
+    totalYtokens: Coin.fromPartial({}),
     tranches: [],
     config: PoolConfig.fromPartial({}),
     status: 0
@@ -1444,8 +1424,8 @@ export const LendingPool = {
     if (message.totalReserve !== "") {
       writer.uint32(58).string(message.totalReserve);
     }
-    if (message.totalStokens !== undefined) {
-      Coin.encode(message.totalStokens, writer.uint32(66).fork()).ldelim();
+    if (message.totalYtokens !== undefined) {
+      Coin.encode(message.totalYtokens, writer.uint32(66).fork()).ldelim();
     }
     for (const v of message.tranches) {
       PoolTranche.encode(v!, writer.uint32(74).fork()).ldelim();
@@ -1487,7 +1467,7 @@ export const LendingPool = {
           message.totalReserve = reader.string();
           break;
         case 8:
-          message.totalStokens = Coin.decode(reader, reader.uint32());
+          message.totalYtokens = Coin.decode(reader, reader.uint32());
           break;
         case 9:
           message.tranches.push(PoolTranche.decode(reader, reader.uint32()));
@@ -1514,7 +1494,7 @@ export const LendingPool = {
     message.totalBorrowed = object.totalBorrowed ?? "";
     message.reserveAmount = object.reserveAmount ?? "";
     message.totalReserve = object.totalReserve ?? "";
-    message.totalStokens = object.totalStokens !== undefined && object.totalStokens !== null ? Coin.fromPartial(object.totalStokens) : undefined;
+    message.totalYtokens = object.totalYtokens !== undefined && object.totalYtokens !== null ? Coin.fromPartial(object.totalYtokens) : undefined;
     message.tranches = object.tranches?.map(e => PoolTranche.fromPartial(e)) || [];
     message.config = object.config !== undefined && object.config !== null ? PoolConfig.fromPartial(object.config) : undefined;
     message.status = object.status ?? 0;
@@ -1543,8 +1523,8 @@ export const LendingPool = {
     if (object.total_reserve !== undefined && object.total_reserve !== null) {
       message.totalReserve = object.total_reserve;
     }
-    if (object.total_stokens !== undefined && object.total_stokens !== null) {
-      message.totalStokens = Coin.fromAmino(object.total_stokens);
+    if (object.total_ytokens !== undefined && object.total_ytokens !== null) {
+      message.totalYtokens = Coin.fromAmino(object.total_ytokens);
     }
     message.tranches = object.tranches?.map(e => PoolTranche.fromAmino(e)) || [];
     if (object.config !== undefined && object.config !== null) {
@@ -1564,7 +1544,7 @@ export const LendingPool = {
     obj.total_borrowed = message.totalBorrowed === "" ? undefined : message.totalBorrowed;
     obj.reserve_amount = message.reserveAmount === "" ? undefined : message.reserveAmount;
     obj.total_reserve = message.totalReserve === "" ? undefined : message.totalReserve;
-    obj.total_stokens = message.totalStokens ? Coin.toAmino(message.totalStokens) : undefined;
+    obj.total_ytokens = message.totalYtokens ? Coin.toAmino(message.totalYtokens) : undefined;
     if (message.tranches) {
       obj.tranches = message.tranches.map(e => e ? PoolTranche.toAmino(e) : undefined);
     } else {
@@ -1696,7 +1676,6 @@ function createBaseLoan(): Loan {
     protocolFee: "",
     maturity: BigInt(0),
     borrowApr: 0,
-    minMaturity: BigInt(0),
     startBorrowIndex: "",
     liquidationPrice: "",
     dlcEventId: BigInt(0),
@@ -1757,38 +1736,35 @@ export const Loan = {
     if (message.borrowApr !== 0) {
       writer.uint32(120).uint32(message.borrowApr);
     }
-    if (message.minMaturity !== BigInt(0)) {
-      writer.uint32(128).int64(message.minMaturity);
-    }
     if (message.startBorrowIndex !== "") {
-      writer.uint32(138).string(Decimal.fromUserInput(message.startBorrowIndex, 18).atomics);
+      writer.uint32(130).string(Decimal.fromUserInput(message.startBorrowIndex, 18).atomics);
     }
     if (message.liquidationPrice !== "") {
-      writer.uint32(146).string(Decimal.fromUserInput(message.liquidationPrice, 18).atomics);
+      writer.uint32(138).string(Decimal.fromUserInput(message.liquidationPrice, 18).atomics);
     }
     if (message.dlcEventId !== BigInt(0)) {
-      writer.uint32(152).uint64(message.dlcEventId);
+      writer.uint32(144).uint64(message.dlcEventId);
     }
     for (const v of message.authorizations) {
-      Authorization.encode(v!, writer.uint32(162).fork()).ldelim();
+      Authorization.encode(v!, writer.uint32(154).fork()).ldelim();
     }
     if (message.collateralAmount !== "") {
-      writer.uint32(170).string(message.collateralAmount);
+      writer.uint32(162).string(message.collateralAmount);
     }
     if (message.liquidationId !== BigInt(0)) {
-      writer.uint32(176).uint64(message.liquidationId);
+      writer.uint32(168).uint64(message.liquidationId);
     }
     if (message.referrer !== "") {
-      writer.uint32(186).string(message.referrer);
+      writer.uint32(178).string(message.referrer);
     }
     if (message.createAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.createAt), writer.uint32(194).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.createAt), writer.uint32(186).fork()).ldelim();
     }
     if (message.disburseAt !== undefined) {
-      Timestamp.encode(toTimestamp(message.disburseAt), writer.uint32(202).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.disburseAt), writer.uint32(194).fork()).ldelim();
     }
     if (message.status !== 0) {
-      writer.uint32(208).int32(message.status);
+      writer.uint32(200).int32(message.status);
     }
     return writer;
   },
@@ -1845,36 +1821,33 @@ export const Loan = {
           message.borrowApr = reader.uint32();
           break;
         case 16:
-          message.minMaturity = reader.int64();
-          break;
-        case 17:
           message.startBorrowIndex = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 18:
+        case 17:
           message.liquidationPrice = Decimal.fromAtomics(reader.string(), 18).toString();
           break;
-        case 19:
+        case 18:
           message.dlcEventId = reader.uint64();
           break;
-        case 20:
+        case 19:
           message.authorizations.push(Authorization.decode(reader, reader.uint32()));
           break;
-        case 21:
+        case 20:
           message.collateralAmount = reader.string();
           break;
-        case 22:
+        case 21:
           message.liquidationId = reader.uint64();
           break;
-        case 23:
+        case 22:
           message.referrer = reader.string();
           break;
-        case 24:
+        case 23:
           message.createAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
-        case 25:
+        case 24:
           message.disburseAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
-        case 26:
+        case 25:
           message.status = reader.int32() as any;
           break;
         default:
@@ -1901,7 +1874,6 @@ export const Loan = {
     message.protocolFee = object.protocolFee ?? "";
     message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
     message.borrowApr = object.borrowApr ?? 0;
-    message.minMaturity = object.minMaturity !== undefined && object.minMaturity !== null ? BigInt(object.minMaturity.toString()) : BigInt(0);
     message.startBorrowIndex = object.startBorrowIndex ?? "";
     message.liquidationPrice = object.liquidationPrice ?? "";
     message.dlcEventId = object.dlcEventId !== undefined && object.dlcEventId !== null ? BigInt(object.dlcEventId.toString()) : BigInt(0);
@@ -1961,9 +1933,6 @@ export const Loan = {
     if (object.borrow_apr !== undefined && object.borrow_apr !== null) {
       message.borrowApr = object.borrow_apr;
     }
-    if (object.min_maturity !== undefined && object.min_maturity !== null) {
-      message.minMaturity = BigInt(object.min_maturity);
-    }
     if (object.start_borrow_index !== undefined && object.start_borrow_index !== null) {
       message.startBorrowIndex = object.start_borrow_index;
     }
@@ -2011,7 +1980,6 @@ export const Loan = {
     obj.protocol_fee = message.protocolFee === "" ? undefined : message.protocolFee;
     obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
     obj.borrow_apr = message.borrowApr === 0 ? undefined : message.borrowApr;
-    obj.min_maturity = message.minMaturity !== BigInt(0) ? message.minMaturity.toString() : undefined;
     obj.start_borrow_index = message.startBorrowIndex === "" ? undefined : message.startBorrowIndex;
     obj.liquidation_price = message.liquidationPrice === "" ? undefined : message.liquidationPrice;
     obj.dlc_event_id = message.dlcEventId !== BigInt(0) ? message.dlcEventId.toString() : undefined;

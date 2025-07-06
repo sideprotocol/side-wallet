@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
-import { DLCOracleStatus, DCMStatus, DLCAttestation, DLCAttestationAmino, DLCAttestationSDKType, DCM, DCMAmino, DCMSDKType, DLCOracle, DLCOracleAmino, DLCOracleSDKType, DLCNonce, DLCNonceAmino, DLCNonceSDKType, DLCEvent, DLCEventAmino, DLCEventSDKType } from "./dlc";
+import { DLCOracleStatus, DCMStatus, DLCAttestation, DLCAttestationAmino, DLCAttestationSDKType, DCM, DCMAmino, DCMSDKType, DLCOracle, DLCOracleAmino, DLCOracleSDKType, DLCNonce, DLCNonceAmino, DLCNonceSDKType, DLCEvent, DLCEventAmino, DLCEventSDKType, OracleParticipantLiveness, OracleParticipantLivenessAmino, OracleParticipantLivenessSDKType } from "./dlc";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../binary";
 export interface QueryAttestationRequest {
@@ -392,6 +392,43 @@ export interface QueryEventsResponseAminoMsg {
 export interface QueryEventsResponseSDKType {
   events: DLCEventSDKType[];
   pagination?: PageResponseSDKType;
+}
+export interface QueryOracleParticipantLivenessRequest {
+  consensusPubkey: string;
+  alive: boolean;
+}
+export interface QueryOracleParticipantLivenessRequestProtoMsg {
+  typeUrl: "/side.dlc.QueryOracleParticipantLivenessRequest";
+  value: Uint8Array;
+}
+export interface QueryOracleParticipantLivenessRequestAmino {
+  consensus_pubkey?: string;
+  alive?: boolean;
+}
+export interface QueryOracleParticipantLivenessRequestAminoMsg {
+  type: "/side.dlc.QueryOracleParticipantLivenessRequest";
+  value: QueryOracleParticipantLivenessRequestAmino;
+}
+export interface QueryOracleParticipantLivenessRequestSDKType {
+  consensus_pubkey: string;
+  alive: boolean;
+}
+export interface QueryOracleParticipantLivenessResponse {
+  participantLivenesses: OracleParticipantLiveness[];
+}
+export interface QueryOracleParticipantLivenessResponseProtoMsg {
+  typeUrl: "/side.dlc.QueryOracleParticipantLivenessResponse";
+  value: Uint8Array;
+}
+export interface QueryOracleParticipantLivenessResponseAmino {
+  participant_livenesses?: OracleParticipantLivenessAmino[];
+}
+export interface QueryOracleParticipantLivenessResponseAminoMsg {
+  type: "/side.dlc.QueryOracleParticipantLivenessResponse";
+  value: QueryOracleParticipantLivenessResponseAmino;
+}
+export interface QueryOracleParticipantLivenessResponseSDKType {
+  participant_livenesses: OracleParticipantLivenessSDKType[];
 }
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
@@ -1812,6 +1849,146 @@ export const QueryEventsResponse = {
     return {
       typeUrl: "/side.dlc.QueryEventsResponse",
       value: QueryEventsResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryOracleParticipantLivenessRequest(): QueryOracleParticipantLivenessRequest {
+  return {
+    consensusPubkey: "",
+    alive: false
+  };
+}
+export const QueryOracleParticipantLivenessRequest = {
+  typeUrl: "/side.dlc.QueryOracleParticipantLivenessRequest",
+  encode(message: QueryOracleParticipantLivenessRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.consensusPubkey !== "") {
+      writer.uint32(10).string(message.consensusPubkey);
+    }
+    if (message.alive === true) {
+      writer.uint32(16).bool(message.alive);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryOracleParticipantLivenessRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryOracleParticipantLivenessRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.consensusPubkey = reader.string();
+          break;
+        case 2:
+          message.alive = reader.bool();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryOracleParticipantLivenessRequest>): QueryOracleParticipantLivenessRequest {
+    const message = createBaseQueryOracleParticipantLivenessRequest();
+    message.consensusPubkey = object.consensusPubkey ?? "";
+    message.alive = object.alive ?? false;
+    return message;
+  },
+  fromAmino(object: QueryOracleParticipantLivenessRequestAmino): QueryOracleParticipantLivenessRequest {
+    const message = createBaseQueryOracleParticipantLivenessRequest();
+    if (object.consensus_pubkey !== undefined && object.consensus_pubkey !== null) {
+      message.consensusPubkey = object.consensus_pubkey;
+    }
+    if (object.alive !== undefined && object.alive !== null) {
+      message.alive = object.alive;
+    }
+    return message;
+  },
+  toAmino(message: QueryOracleParticipantLivenessRequest): QueryOracleParticipantLivenessRequestAmino {
+    const obj: any = {};
+    obj.consensus_pubkey = message.consensusPubkey === "" ? undefined : message.consensusPubkey;
+    obj.alive = message.alive === false ? undefined : message.alive;
+    return obj;
+  },
+  fromAminoMsg(object: QueryOracleParticipantLivenessRequestAminoMsg): QueryOracleParticipantLivenessRequest {
+    return QueryOracleParticipantLivenessRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryOracleParticipantLivenessRequestProtoMsg): QueryOracleParticipantLivenessRequest {
+    return QueryOracleParticipantLivenessRequest.decode(message.value);
+  },
+  toProto(message: QueryOracleParticipantLivenessRequest): Uint8Array {
+    return QueryOracleParticipantLivenessRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryOracleParticipantLivenessRequest): QueryOracleParticipantLivenessRequestProtoMsg {
+    return {
+      typeUrl: "/side.dlc.QueryOracleParticipantLivenessRequest",
+      value: QueryOracleParticipantLivenessRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryOracleParticipantLivenessResponse(): QueryOracleParticipantLivenessResponse {
+  return {
+    participantLivenesses: []
+  };
+}
+export const QueryOracleParticipantLivenessResponse = {
+  typeUrl: "/side.dlc.QueryOracleParticipantLivenessResponse",
+  encode(message: QueryOracleParticipantLivenessResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.participantLivenesses) {
+      OracleParticipantLiveness.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryOracleParticipantLivenessResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryOracleParticipantLivenessResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.participantLivenesses.push(OracleParticipantLiveness.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryOracleParticipantLivenessResponse>): QueryOracleParticipantLivenessResponse {
+    const message = createBaseQueryOracleParticipantLivenessResponse();
+    message.participantLivenesses = object.participantLivenesses?.map(e => OracleParticipantLiveness.fromPartial(e)) || [];
+    return message;
+  },
+  fromAmino(object: QueryOracleParticipantLivenessResponseAmino): QueryOracleParticipantLivenessResponse {
+    const message = createBaseQueryOracleParticipantLivenessResponse();
+    message.participantLivenesses = object.participant_livenesses?.map(e => OracleParticipantLiveness.fromAmino(e)) || [];
+    return message;
+  },
+  toAmino(message: QueryOracleParticipantLivenessResponse): QueryOracleParticipantLivenessResponseAmino {
+    const obj: any = {};
+    if (message.participantLivenesses) {
+      obj.participant_livenesses = message.participantLivenesses.map(e => e ? OracleParticipantLiveness.toAmino(e) : undefined);
+    } else {
+      obj.participant_livenesses = message.participantLivenesses;
+    }
+    return obj;
+  },
+  fromAminoMsg(object: QueryOracleParticipantLivenessResponseAminoMsg): QueryOracleParticipantLivenessResponse {
+    return QueryOracleParticipantLivenessResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryOracleParticipantLivenessResponseProtoMsg): QueryOracleParticipantLivenessResponse {
+    return QueryOracleParticipantLivenessResponse.decode(message.value);
+  },
+  toProto(message: QueryOracleParticipantLivenessResponse): Uint8Array {
+    return QueryOracleParticipantLivenessResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryOracleParticipantLivenessResponse): QueryOracleParticipantLivenessResponseProtoMsg {
+    return {
+      typeUrl: "/side.dlc.QueryOracleParticipantLivenessResponse",
+      value: QueryOracleParticipantLivenessResponse.encode(message).finish()
     };
   }
 };

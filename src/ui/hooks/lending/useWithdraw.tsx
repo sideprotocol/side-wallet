@@ -24,7 +24,7 @@ export function useWithdraw() {
     try {
       setLoading(true);
       const msg = sideLendingMessageComposer.withTypeUrl.removeLiquidity({
-        stokens: shares,
+        ytokens: shares,
         lender: currentAccount.address
       });
       const result = await signAndBroadcastTxRaw({

@@ -2,7 +2,7 @@
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryPoolRequest, QueryPoolResponse, QueryPoolsRequest, QueryPoolsResponse, QueryPoolExchangeRateRequest, QueryPoolExchangeRateResponse, QueryCollateralAddressRequest, QueryCollateralAddressResponse, QueryDlcEventCountRequest, QueryDlcEventCountResponse, QueryLoanRequest, QueryLoanResponse, QueryLoansRequest, QueryLoansResponse, QueryLoansByAddressRequest, QueryLoansByAddressResponse, QueryLoanCetInfosRequest, QueryLoanCetInfosResponse, QueryLoanDlcMetaRequest, QueryLoanDlcMetaResponse, QueryLoanAuthorizationRequest, QueryLoanAuthorizationResponse, QueryLoanDepositsRequest, QueryLoanDepositsResponse, QueryRedemptionRequest, QueryRedemptionResponse, QueryRepaymentRequest, QueryRepaymentResponse, QueryCurrentInterestRequest, QueryCurrentInterestResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryPoolRequest, QueryPoolResponse, QueryPoolsRequest, QueryPoolsResponse, QueryPoolExchangeRateRequest, QueryPoolExchangeRateResponse, QueryCollateralAddressRequest, QueryCollateralAddressResponse, QueryLiquidationPriceRequest, QueryLiquidationPriceResponse, QueryDlcEventCountRequest, QueryDlcEventCountResponse, QueryLoanRequest, QueryLoanResponse, QueryLoansRequest, QueryLoansResponse, QueryLoansByAddressRequest, QueryLoansByAddressResponse, QueryLoanCetInfosRequest, QueryLoanCetInfosResponse, QueryLoanDlcMetaRequest, QueryLoanDlcMetaResponse, QueryLoanAuthorizationRequest, QueryLoanAuthorizationResponse, QueryLoanDepositsRequest, QueryLoanDepositsResponse, QueryRedemptionRequest, QueryRedemptionResponse, QueryRepaymentRequest, QueryRepaymentResponse, QueryCurrentInterestRequest, QueryCurrentInterestResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Params queries the parameters of the module. */
@@ -11,6 +11,7 @@ export interface Query {
   pools(request?: QueryPoolsRequest): Promise<QueryPoolsResponse>;
   poolExchangeRate(request: QueryPoolExchangeRateRequest): Promise<QueryPoolExchangeRateResponse>;
   collateralAddress(request: QueryCollateralAddressRequest): Promise<QueryCollateralAddressResponse>;
+  liquidationPrice(request: QueryLiquidationPriceRequest): Promise<QueryLiquidationPriceResponse>;
   dlcEventCount(request?: QueryDlcEventCountRequest): Promise<QueryDlcEventCountResponse>;
   loan(request: QueryLoanRequest): Promise<QueryLoanResponse>;
   loans(request: QueryLoansRequest): Promise<QueryLoansResponse>;
@@ -32,6 +33,7 @@ export class QueryClientImpl implements Query {
     this.pools = this.pools.bind(this);
     this.poolExchangeRate = this.poolExchangeRate.bind(this);
     this.collateralAddress = this.collateralAddress.bind(this);
+    this.liquidationPrice = this.liquidationPrice.bind(this);
     this.dlcEventCount = this.dlcEventCount.bind(this);
     this.loan = this.loan.bind(this);
     this.loans = this.loans.bind(this);
@@ -70,6 +72,11 @@ export class QueryClientImpl implements Query {
     const data = QueryCollateralAddressRequest.encode(request).finish();
     const promise = this.rpc.request("side.lending.Query", "CollateralAddress", data);
     return promise.then(data => QueryCollateralAddressResponse.decode(new BinaryReader(data)));
+  }
+  liquidationPrice(request: QueryLiquidationPriceRequest): Promise<QueryLiquidationPriceResponse> {
+    const data = QueryLiquidationPriceRequest.encode(request).finish();
+    const promise = this.rpc.request("side.lending.Query", "LiquidationPrice", data);
+    return promise.then(data => QueryLiquidationPriceResponse.decode(new BinaryReader(data)));
   }
   dlcEventCount(request: QueryDlcEventCountRequest = {}): Promise<QueryDlcEventCountResponse> {
     const data = QueryDlcEventCountRequest.encode(request).finish();
@@ -145,6 +152,9 @@ export const createRpcQueryExtension = (base: QueryClient) => {
     },
     collateralAddress(request: QueryCollateralAddressRequest): Promise<QueryCollateralAddressResponse> {
       return queryService.collateralAddress(request);
+    },
+    liquidationPrice(request: QueryLiquidationPriceRequest): Promise<QueryLiquidationPriceResponse> {
+      return queryService.liquidationPrice(request);
     },
     dlcEventCount(request?: QueryDlcEventCountRequest): Promise<QueryDlcEventCountResponse> {
       return queryService.dlcEventCount(request);

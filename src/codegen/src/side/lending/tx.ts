@@ -150,7 +150,7 @@ export interface MsgAddLiquidityResponseAminoMsg {
 export interface MsgAddLiquidityResponseSDKType {}
 export interface MsgRemoveLiquidity {
   lender: string;
-  stokens: Coin;
+  ytokens: Coin;
 }
 export interface MsgRemoveLiquidityProtoMsg {
   typeUrl: "/side.lending.MsgRemoveLiquidity";
@@ -158,7 +158,7 @@ export interface MsgRemoveLiquidityProtoMsg {
 }
 export interface MsgRemoveLiquidityAmino {
   lender?: string;
-  stokens?: CoinAmino;
+  ytokens?: CoinAmino;
 }
 export interface MsgRemoveLiquidityAminoMsg {
   type: "/side.lending.MsgRemoveLiquidity";
@@ -166,7 +166,7 @@ export interface MsgRemoveLiquidityAminoMsg {
 }
 export interface MsgRemoveLiquiditySDKType {
   lender: string;
-  stokens: CoinSDKType;
+  ytokens: CoinSDKType;
 }
 export interface MsgRemoveLiquidityResponse {}
 export interface MsgRemoveLiquidityResponseProtoMsg {
@@ -966,7 +966,7 @@ export const MsgAddLiquidityResponse = {
 function createBaseMsgRemoveLiquidity(): MsgRemoveLiquidity {
   return {
     lender: "",
-    stokens: Coin.fromPartial({})
+    ytokens: Coin.fromPartial({})
   };
 }
 export const MsgRemoveLiquidity = {
@@ -975,8 +975,8 @@ export const MsgRemoveLiquidity = {
     if (message.lender !== "") {
       writer.uint32(10).string(message.lender);
     }
-    if (message.stokens !== undefined) {
-      Coin.encode(message.stokens, writer.uint32(18).fork()).ldelim();
+    if (message.ytokens !== undefined) {
+      Coin.encode(message.ytokens, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -991,7 +991,7 @@ export const MsgRemoveLiquidity = {
           message.lender = reader.string();
           break;
         case 2:
-          message.stokens = Coin.decode(reader, reader.uint32());
+          message.ytokens = Coin.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1003,7 +1003,7 @@ export const MsgRemoveLiquidity = {
   fromPartial(object: Partial<MsgRemoveLiquidity>): MsgRemoveLiquidity {
     const message = createBaseMsgRemoveLiquidity();
     message.lender = object.lender ?? "";
-    message.stokens = object.stokens !== undefined && object.stokens !== null ? Coin.fromPartial(object.stokens) : undefined;
+    message.ytokens = object.ytokens !== undefined && object.ytokens !== null ? Coin.fromPartial(object.ytokens) : undefined;
     return message;
   },
   fromAmino(object: MsgRemoveLiquidityAmino): MsgRemoveLiquidity {
@@ -1011,15 +1011,15 @@ export const MsgRemoveLiquidity = {
     if (object.lender !== undefined && object.lender !== null) {
       message.lender = object.lender;
     }
-    if (object.stokens !== undefined && object.stokens !== null) {
-      message.stokens = Coin.fromAmino(object.stokens);
+    if (object.ytokens !== undefined && object.ytokens !== null) {
+      message.ytokens = Coin.fromAmino(object.ytokens);
     }
     return message;
   },
   toAmino(message: MsgRemoveLiquidity): MsgRemoveLiquidityAmino {
     const obj: any = {};
     obj.lender = message.lender === "" ? undefined : message.lender;
-    obj.stokens = message.stokens ? Coin.toAmino(message.stokens) : undefined;
+    obj.ytokens = message.ytokens ? Coin.toAmino(message.ytokens) : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgRemoveLiquidityAminoMsg): MsgRemoveLiquidity {

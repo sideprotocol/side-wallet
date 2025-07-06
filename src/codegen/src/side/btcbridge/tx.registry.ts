@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgSubmitDepositTransaction, MsgSubmitWithdrawTransaction, MsgSubmitFeeRate, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedFeeProviders, MsgWithdrawToBitcoin, MsgSubmitSignatures, MsgConsolidateVaults, MsgInitiateDKG, MsgCompleteDKG, MsgTransferVault, MsgUpdateParams } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/side.btcbridge.MsgSubmitDepositTransaction", MsgSubmitDepositTransaction], ["/side.btcbridge.MsgSubmitWithdrawTransaction", MsgSubmitWithdrawTransaction], ["/side.btcbridge.MsgSubmitFeeRate", MsgSubmitFeeRate], ["/side.btcbridge.MsgUpdateTrustedNonBtcRelayers", MsgUpdateTrustedNonBtcRelayers], ["/side.btcbridge.MsgUpdateTrustedFeeProviders", MsgUpdateTrustedFeeProviders], ["/side.btcbridge.MsgWithdrawToBitcoin", MsgWithdrawToBitcoin], ["/side.btcbridge.MsgSubmitSignatures", MsgSubmitSignatures], ["/side.btcbridge.MsgConsolidateVaults", MsgConsolidateVaults], ["/side.btcbridge.MsgInitiateDKG", MsgInitiateDKG], ["/side.btcbridge.MsgCompleteDKG", MsgCompleteDKG], ["/side.btcbridge.MsgTransferVault", MsgTransferVault], ["/side.btcbridge.MsgUpdateParams", MsgUpdateParams]];
+import { MsgSubmitDepositTransaction, MsgSubmitWithdrawTransaction, MsgSubmitFeeRate, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedFeeProviders, MsgWithdrawToBitcoin, MsgSubmitSignatures, MsgConsolidateVaults, MsgInitiateDKG, MsgCompleteDKG, MsgRefresh, MsgCompleteRefreshing, MsgTransferVault, MsgUpdateParams } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/side.btcbridge.MsgSubmitDepositTransaction", MsgSubmitDepositTransaction], ["/side.btcbridge.MsgSubmitWithdrawTransaction", MsgSubmitWithdrawTransaction], ["/side.btcbridge.MsgSubmitFeeRate", MsgSubmitFeeRate], ["/side.btcbridge.MsgUpdateTrustedNonBtcRelayers", MsgUpdateTrustedNonBtcRelayers], ["/side.btcbridge.MsgUpdateTrustedFeeProviders", MsgUpdateTrustedFeeProviders], ["/side.btcbridge.MsgWithdrawToBitcoin", MsgWithdrawToBitcoin], ["/side.btcbridge.MsgSubmitSignatures", MsgSubmitSignatures], ["/side.btcbridge.MsgConsolidateVaults", MsgConsolidateVaults], ["/side.btcbridge.MsgInitiateDKG", MsgInitiateDKG], ["/side.btcbridge.MsgCompleteDKG", MsgCompleteDKG], ["/side.btcbridge.MsgRefresh", MsgRefresh], ["/side.btcbridge.MsgCompleteRefreshing", MsgCompleteRefreshing], ["/side.btcbridge.MsgTransferVault", MsgTransferVault], ["/side.btcbridge.MsgUpdateParams", MsgUpdateParams]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -67,6 +67,18 @@ export const MessageComposer = {
       return {
         typeUrl: "/side.btcbridge.MsgCompleteDKG",
         value: MsgCompleteDKG.encode(value).finish()
+      };
+    },
+    refresh(value: MsgRefresh) {
+      return {
+        typeUrl: "/side.btcbridge.MsgRefresh",
+        value: MsgRefresh.encode(value).finish()
+      };
+    },
+    completeRefreshing(value: MsgCompleteRefreshing) {
+      return {
+        typeUrl: "/side.btcbridge.MsgCompleteRefreshing",
+        value: MsgCompleteRefreshing.encode(value).finish()
       };
     },
     transferVault(value: MsgTransferVault) {
@@ -143,6 +155,18 @@ export const MessageComposer = {
         value
       };
     },
+    refresh(value: MsgRefresh) {
+      return {
+        typeUrl: "/side.btcbridge.MsgRefresh",
+        value
+      };
+    },
+    completeRefreshing(value: MsgCompleteRefreshing) {
+      return {
+        typeUrl: "/side.btcbridge.MsgCompleteRefreshing",
+        value
+      };
+    },
     transferVault(value: MsgTransferVault) {
       return {
         typeUrl: "/side.btcbridge.MsgTransferVault",
@@ -215,6 +239,18 @@ export const MessageComposer = {
       return {
         typeUrl: "/side.btcbridge.MsgCompleteDKG",
         value: MsgCompleteDKG.fromPartial(value)
+      };
+    },
+    refresh(value: MsgRefresh) {
+      return {
+        typeUrl: "/side.btcbridge.MsgRefresh",
+        value: MsgRefresh.fromPartial(value)
+      };
+    },
+    completeRefreshing(value: MsgCompleteRefreshing) {
+      return {
+        typeUrl: "/side.btcbridge.MsgCompleteRefreshing",
+        value: MsgCompleteRefreshing.fromPartial(value)
       };
     },
     transferVault(value: MsgTransferVault) {

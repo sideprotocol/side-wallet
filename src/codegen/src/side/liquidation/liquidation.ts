@@ -84,8 +84,9 @@ export function signingIntentToJSON(object: SigningIntent): string {
 export interface AssetMetadata {
   denom: string;
   symbol: string;
-  priceSymbol: string;
   decimals: number;
+  priceSymbol: string;
+  isBasePriceAsset: boolean;
 }
 export interface AssetMetadataProtoMsg {
   typeUrl: "/side.liquidation.AssetMetadata";
@@ -94,8 +95,9 @@ export interface AssetMetadataProtoMsg {
 export interface AssetMetadataAmino {
   denom?: string;
   symbol?: string;
-  price_symbol?: string;
   decimals?: number;
+  price_symbol?: string;
+  is_base_price_asset?: boolean;
 }
 export interface AssetMetadataAminoMsg {
   type: "/side.liquidation.AssetMetadata";
@@ -104,8 +106,9 @@ export interface AssetMetadataAminoMsg {
 export interface AssetMetadataSDKType {
   denom: string;
   symbol: string;
-  price_symbol: string;
   decimals: number;
+  price_symbol: string;
+  is_base_price_asset: boolean;
 }
 export interface Liquidation {
   id: bigint;
@@ -220,8 +223,9 @@ function createBaseAssetMetadata(): AssetMetadata {
   return {
     denom: "",
     symbol: "",
+    decimals: 0,
     priceSymbol: "",
-    decimals: 0
+    isBasePriceAsset: false
   };
 }
 export const AssetMetadata = {
@@ -233,11 +237,14 @@ export const AssetMetadata = {
     if (message.symbol !== "") {
       writer.uint32(18).string(message.symbol);
     }
-    if (message.priceSymbol !== "") {
-      writer.uint32(26).string(message.priceSymbol);
-    }
     if (message.decimals !== 0) {
-      writer.uint32(32).int32(message.decimals);
+      writer.uint32(24).int32(message.decimals);
+    }
+    if (message.priceSymbol !== "") {
+      writer.uint32(34).string(message.priceSymbol);
+    }
+    if (message.isBasePriceAsset === true) {
+      writer.uint32(40).bool(message.isBasePriceAsset);
     }
     return writer;
   },
@@ -255,10 +262,13 @@ export const AssetMetadata = {
           message.symbol = reader.string();
           break;
         case 3:
-          message.priceSymbol = reader.string();
+          message.decimals = reader.int32();
           break;
         case 4:
-          message.decimals = reader.int32();
+          message.priceSymbol = reader.string();
+          break;
+        case 5:
+          message.isBasePriceAsset = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -271,8 +281,9 @@ export const AssetMetadata = {
     const message = createBaseAssetMetadata();
     message.denom = object.denom ?? "";
     message.symbol = object.symbol ?? "";
-    message.priceSymbol = object.priceSymbol ?? "";
     message.decimals = object.decimals ?? 0;
+    message.priceSymbol = object.priceSymbol ?? "";
+    message.isBasePriceAsset = object.isBasePriceAsset ?? false;
     return message;
   },
   fromAmino(object: AssetMetadataAmino): AssetMetadata {
@@ -283,11 +294,14 @@ export const AssetMetadata = {
     if (object.symbol !== undefined && object.symbol !== null) {
       message.symbol = object.symbol;
     }
+    if (object.decimals !== undefined && object.decimals !== null) {
+      message.decimals = object.decimals;
+    }
     if (object.price_symbol !== undefined && object.price_symbol !== null) {
       message.priceSymbol = object.price_symbol;
     }
-    if (object.decimals !== undefined && object.decimals !== null) {
-      message.decimals = object.decimals;
+    if (object.is_base_price_asset !== undefined && object.is_base_price_asset !== null) {
+      message.isBasePriceAsset = object.is_base_price_asset;
     }
     return message;
   },
@@ -295,8 +309,9 @@ export const AssetMetadata = {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.symbol = message.symbol === "" ? undefined : message.symbol;
-    obj.price_symbol = message.priceSymbol === "" ? undefined : message.priceSymbol;
     obj.decimals = message.decimals === 0 ? undefined : message.decimals;
+    obj.price_symbol = message.priceSymbol === "" ? undefined : message.priceSymbol;
+    obj.is_base_price_asset = message.isBasePriceAsset === false ? undefined : message.isBasePriceAsset;
     return obj;
   },
   fromAminoMsg(object: AssetMetadataAminoMsg): AssetMetadata {

@@ -345,6 +345,43 @@ export interface DLCAttestationSDKType {
   signature: string;
   time: Date;
 }
+/** Oracle participant liveness */
+export interface OracleParticipantLiveness {
+  /** consensus pub key */
+  consensusPubkey: string;
+  /** Indicates if the participant is alive */
+  isAlive: boolean;
+  /** Id of the last participating DKG */
+  lastDkgId: bigint;
+  /** last block height at which the participant was active */
+  lastBlockHeight: bigint;
+}
+export interface OracleParticipantLivenessProtoMsg {
+  typeUrl: "/side.dlc.OracleParticipantLiveness";
+  value: Uint8Array;
+}
+/** Oracle participant liveness */
+export interface OracleParticipantLivenessAmino {
+  /** consensus pub key */
+  consensus_pubkey?: string;
+  /** Indicates if the participant is alive */
+  is_alive?: boolean;
+  /** Id of the last participating DKG */
+  last_dkg_id?: string;
+  /** last block height at which the participant was active */
+  last_block_height?: string;
+}
+export interface OracleParticipantLivenessAminoMsg {
+  type: "/side.dlc.OracleParticipantLiveness";
+  value: OracleParticipantLivenessAmino;
+}
+/** Oracle participant liveness */
+export interface OracleParticipantLivenessSDKType {
+  consensus_pubkey: string;
+  is_alive: boolean;
+  last_dkg_id: bigint;
+  last_block_height: bigint;
+}
 function createBaseDLCOracle(): DLCOracle {
   return {
     id: BigInt(0),
@@ -971,6 +1008,105 @@ export const DLCAttestation = {
     return {
       typeUrl: "/side.dlc.DLCAttestation",
       value: DLCAttestation.encode(message).finish()
+    };
+  }
+};
+function createBaseOracleParticipantLiveness(): OracleParticipantLiveness {
+  return {
+    consensusPubkey: "",
+    isAlive: false,
+    lastDkgId: BigInt(0),
+    lastBlockHeight: BigInt(0)
+  };
+}
+export const OracleParticipantLiveness = {
+  typeUrl: "/side.dlc.OracleParticipantLiveness",
+  encode(message: OracleParticipantLiveness, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.consensusPubkey !== "") {
+      writer.uint32(10).string(message.consensusPubkey);
+    }
+    if (message.isAlive === true) {
+      writer.uint32(16).bool(message.isAlive);
+    }
+    if (message.lastDkgId !== BigInt(0)) {
+      writer.uint32(24).uint64(message.lastDkgId);
+    }
+    if (message.lastBlockHeight !== BigInt(0)) {
+      writer.uint32(32).int64(message.lastBlockHeight);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): OracleParticipantLiveness {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseOracleParticipantLiveness();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.consensusPubkey = reader.string();
+          break;
+        case 2:
+          message.isAlive = reader.bool();
+          break;
+        case 3:
+          message.lastDkgId = reader.uint64();
+          break;
+        case 4:
+          message.lastBlockHeight = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<OracleParticipantLiveness>): OracleParticipantLiveness {
+    const message = createBaseOracleParticipantLiveness();
+    message.consensusPubkey = object.consensusPubkey ?? "";
+    message.isAlive = object.isAlive ?? false;
+    message.lastDkgId = object.lastDkgId !== undefined && object.lastDkgId !== null ? BigInt(object.lastDkgId.toString()) : BigInt(0);
+    message.lastBlockHeight = object.lastBlockHeight !== undefined && object.lastBlockHeight !== null ? BigInt(object.lastBlockHeight.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: OracleParticipantLivenessAmino): OracleParticipantLiveness {
+    const message = createBaseOracleParticipantLiveness();
+    if (object.consensus_pubkey !== undefined && object.consensus_pubkey !== null) {
+      message.consensusPubkey = object.consensus_pubkey;
+    }
+    if (object.is_alive !== undefined && object.is_alive !== null) {
+      message.isAlive = object.is_alive;
+    }
+    if (object.last_dkg_id !== undefined && object.last_dkg_id !== null) {
+      message.lastDkgId = BigInt(object.last_dkg_id);
+    }
+    if (object.last_block_height !== undefined && object.last_block_height !== null) {
+      message.lastBlockHeight = BigInt(object.last_block_height);
+    }
+    return message;
+  },
+  toAmino(message: OracleParticipantLiveness): OracleParticipantLivenessAmino {
+    const obj: any = {};
+    obj.consensus_pubkey = message.consensusPubkey === "" ? undefined : message.consensusPubkey;
+    obj.is_alive = message.isAlive === false ? undefined : message.isAlive;
+    obj.last_dkg_id = message.lastDkgId !== BigInt(0) ? message.lastDkgId.toString() : undefined;
+    obj.last_block_height = message.lastBlockHeight !== BigInt(0) ? message.lastBlockHeight.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: OracleParticipantLivenessAminoMsg): OracleParticipantLiveness {
+    return OracleParticipantLiveness.fromAmino(object.value);
+  },
+  fromProtoMsg(message: OracleParticipantLivenessProtoMsg): OracleParticipantLiveness {
+    return OracleParticipantLiveness.decode(message.value);
+  },
+  toProto(message: OracleParticipantLiveness): Uint8Array {
+    return OracleParticipantLiveness.encode(message).finish();
+  },
+  toProtoMsg(message: OracleParticipantLiveness): OracleParticipantLivenessProtoMsg {
+    return {
+      typeUrl: "/side.dlc.OracleParticipantLiveness",
+      value: OracleParticipantLiveness.encode(message).finish()
     };
   }
 };

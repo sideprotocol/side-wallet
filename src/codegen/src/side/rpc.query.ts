@@ -12,8 +12,11 @@ export const createRPCQueryClient = async ({
     side: {
       btcbridge: (await import("./btcbridge/query.rpc.Query")).createRpcQueryExtension(client),
       dlc: (await import("./dlc/query.rpc.Query")).createRpcQueryExtension(client),
+      incentive: (await import("./incentive/query.rpc.Query")).createRpcQueryExtension(client),
       lending: (await import("./lending/query.rpc.Query")).createRpcQueryExtension(client),
-      liquidation: (await import("./liquidation/query.rpc.Query")).createRpcQueryExtension(client)
+      liquidation: (await import("./liquidation/query.rpc.Query")).createRpcQueryExtension(client),
+      oracle: (await import("./oracle/query.rpc.Query")).createRpcQueryExtension(client),
+      tss: (await import("./tss/query.rpc.Query")).createRpcQueryExtension(client)
     }
   };
 };

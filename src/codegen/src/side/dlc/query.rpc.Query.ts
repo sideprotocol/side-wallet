@@ -2,7 +2,7 @@
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryEventRequest, QueryEventResponse, QueryEventsRequest, QueryEventsResponse, QueryAttestationRequest, QueryAttestationResponse, QueryAttestationByEventRequest, QueryAttestationByEventResponse, QueryAttestationsRequest, QueryAttestationsResponse, QueryNonceRequest, QueryNonceResponse, QueryNoncesRequest, QueryNoncesResponse, QueryCountNoncesRequest, QueryCountNoncesResponse, QueryOraclesRequest, QueryOraclesResponse, QueryDCMsRequest, QueryDCMsResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryEventRequest, QueryEventResponse, QueryEventsRequest, QueryEventsResponse, QueryAttestationRequest, QueryAttestationResponse, QueryAttestationByEventRequest, QueryAttestationByEventResponse, QueryAttestationsRequest, QueryAttestationsResponse, QueryNonceRequest, QueryNonceResponse, QueryNoncesRequest, QueryNoncesResponse, QueryCountNoncesRequest, QueryCountNoncesResponse, QueryOraclesRequest, QueryOraclesResponse, QueryDCMsRequest, QueryDCMsResponse, QueryOracleParticipantLivenessRequest, QueryOracleParticipantLivenessResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Params queries the parameters of the module. */
@@ -27,6 +27,8 @@ export interface Query {
   oracles(request: QueryOraclesRequest): Promise<QueryOraclesResponse>;
   /** DCMs query DCMs by the given status. */
   dCMs(request: QueryDCMsRequest): Promise<QueryDCMsResponse>;
+  /** OracleParticipantLiveness queries the oracle participant liveness */
+  oracleParticipantLiveness(request: QueryOracleParticipantLivenessRequest): Promise<QueryOracleParticipantLivenessResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -43,6 +45,7 @@ export class QueryClientImpl implements Query {
     this.countNonces = this.countNonces.bind(this);
     this.oracles = this.oracles.bind(this);
     this.dCMs = this.dCMs.bind(this);
+    this.oracleParticipantLiveness = this.oracleParticipantLiveness.bind(this);
   }
   params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -101,6 +104,11 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("side.dlc.Query", "DCMs", data);
     return promise.then(data => QueryDCMsResponse.decode(new BinaryReader(data)));
   }
+  oracleParticipantLiveness(request: QueryOracleParticipantLivenessRequest): Promise<QueryOracleParticipantLivenessResponse> {
+    const data = QueryOracleParticipantLivenessRequest.encode(request).finish();
+    const promise = this.rpc.request("side.dlc.Query", "OracleParticipantLiveness", data);
+    return promise.then(data => QueryOracleParticipantLivenessResponse.decode(new BinaryReader(data)));
+  }
 }
 export const createRpcQueryExtension = (base: QueryClient) => {
   const rpc = createProtobufRpcClient(base);
@@ -138,6 +146,9 @@ export const createRpcQueryExtension = (base: QueryClient) => {
     },
     dCMs(request: QueryDCMsRequest): Promise<QueryDCMsResponse> {
       return queryService.dCMs(request);
+    },
+    oracleParticipantLiveness(request: QueryOracleParticipantLivenessRequest): Promise<QueryOracleParticipantLivenessResponse> {
+      return queryService.oracleParticipantLiveness(request);
     }
   };
 };

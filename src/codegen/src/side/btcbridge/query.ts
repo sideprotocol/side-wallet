@@ -1,8 +1,10 @@
 //@ts-nocheck
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
-import { SigningStatus, DKGRequestStatus, WithdrawRequest, WithdrawRequestAmino, WithdrawRequestSDKType, SigningRequest, SigningRequestAmino, SigningRequestSDKType, FeeRate, FeeRateAmino, FeeRateSDKType, UTXO, UTXOAmino, UTXOSDKType, RuneBalance, RuneBalanceAmino, RuneBalanceSDKType, DKGRequest, DKGRequestAmino, DKGRequestSDKType, DKGCompletionRequest, DKGCompletionRequestAmino, DKGCompletionRequestSDKType } from "./btcbridge";
+import { SigningStatus, DKGRequestStatus, RefreshingStatus, WithdrawRequest, WithdrawRequestAmino, WithdrawRequestSDKType, SigningRequest, SigningRequestAmino, SigningRequestSDKType, CompactSigningRequest, CompactSigningRequestAmino, CompactSigningRequestSDKType, FeeRate, FeeRateAmino, FeeRateSDKType, UTXO, UTXOAmino, UTXOSDKType, RuneBalance, RuneBalanceAmino, RuneBalanceSDKType, DKGRequest, DKGRequestAmino, DKGRequestSDKType, DKGCompletionRequest, DKGCompletionRequestAmino, DKGCompletionRequestSDKType, RefreshingRequest, RefreshingRequestAmino, RefreshingRequestSDKType, RefreshingCompletion, RefreshingCompletionAmino, RefreshingCompletionSDKType, RateLimit, RateLimitAmino, RateLimitSDKType } from "./btcbridge";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { Timestamp } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { toTimestamp, fromTimestamp } from "../../helpers";
 /** QueryWithdrawRequestsByAddressRequest is request type for the Query/WithdrawRequestsByAddress RPC method. */
 export interface QueryWithdrawRequestsByAddressRequest {
   address: string;
@@ -303,6 +305,49 @@ export interface QuerySigningRequestByTxHashResponseAminoMsg {
 /** QuerySigningRequestByTxHashResponse is response type for the Query/SigningRequestByTxHashResponse RPC method. */
 export interface QuerySigningRequestByTxHashResponseSDKType {
   request?: SigningRequestSDKType;
+}
+/** QueryPendingSigningRequestsRequest is request type for the Query/PendingSigningRequests RPC method. */
+export interface QueryPendingSigningRequestsRequest {
+  pagination?: PageRequest;
+}
+export interface QueryPendingSigningRequestsRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryPendingSigningRequestsRequest";
+  value: Uint8Array;
+}
+/** QueryPendingSigningRequestsRequest is request type for the Query/PendingSigningRequests RPC method. */
+export interface QueryPendingSigningRequestsRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryPendingSigningRequestsRequestAminoMsg {
+  type: "/side.btcbridge.QueryPendingSigningRequestsRequest";
+  value: QueryPendingSigningRequestsRequestAmino;
+}
+/** QueryPendingSigningRequestsRequest is request type for the Query/PendingSigningRequests RPC method. */
+export interface QueryPendingSigningRequestsRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+/** QueryPendingSigningRequestsResponse is response type for the Query/PendingSigningRequests RPC method. */
+export interface QueryPendingSigningRequestsResponse {
+  requests: CompactSigningRequest[];
+  pagination?: PageResponse;
+}
+export interface QueryPendingSigningRequestsResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryPendingSigningRequestsResponse";
+  value: Uint8Array;
+}
+/** QueryPendingSigningRequestsResponse is response type for the Query/PendingSigningRequests RPC method. */
+export interface QueryPendingSigningRequestsResponseAmino {
+  requests?: CompactSigningRequestAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryPendingSigningRequestsResponseAminoMsg {
+  type: "/side.btcbridge.QueryPendingSigningRequestsResponse";
+  value: QueryPendingSigningRequestsResponseAmino;
+}
+/** QueryPendingSigningRequestsResponse is response type for the Query/PendingSigningRequests RPC method. */
+export interface QueryPendingSigningRequestsResponseSDKType {
+  requests: CompactSigningRequestSDKType[];
+  pagination?: PageResponseSDKType;
 }
 /** QueryFeeRateRequest is request type for the Query/FeeRate RPC method. */
 export interface QueryFeeRateRequest {}
@@ -696,6 +741,259 @@ export interface QueryDKGCompletionRequestsResponseAminoMsg {
 /** QueryDKGCompletionRequestsResponse is the response type for the Query/DKGCompletionRequests RPC method. */
 export interface QueryDKGCompletionRequestsResponseSDKType {
   requests: DKGCompletionRequestSDKType[];
+}
+export interface QueryRefreshingRequestRequest {
+  id: bigint;
+}
+export interface QueryRefreshingRequestRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryRefreshingRequestRequest";
+  value: Uint8Array;
+}
+export interface QueryRefreshingRequestRequestAmino {
+  id?: string;
+}
+export interface QueryRefreshingRequestRequestAminoMsg {
+  type: "/side.btcbridge.QueryRefreshingRequestRequest";
+  value: QueryRefreshingRequestRequestAmino;
+}
+export interface QueryRefreshingRequestRequestSDKType {
+  id: bigint;
+}
+export interface QueryRefreshingRequestResponse {
+  request?: RefreshingRequest;
+}
+export interface QueryRefreshingRequestResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryRefreshingRequestResponse";
+  value: Uint8Array;
+}
+export interface QueryRefreshingRequestResponseAmino {
+  request?: RefreshingRequestAmino;
+}
+export interface QueryRefreshingRequestResponseAminoMsg {
+  type: "/side.btcbridge.QueryRefreshingRequestResponse";
+  value: QueryRefreshingRequestResponseAmino;
+}
+export interface QueryRefreshingRequestResponseSDKType {
+  request?: RefreshingRequestSDKType;
+}
+export interface QueryRefreshingRequestsRequest {
+  status: RefreshingStatus;
+  pagination?: PageRequest;
+}
+export interface QueryRefreshingRequestsRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryRefreshingRequestsRequest";
+  value: Uint8Array;
+}
+export interface QueryRefreshingRequestsRequestAmino {
+  status?: RefreshingStatus;
+  pagination?: PageRequestAmino;
+}
+export interface QueryRefreshingRequestsRequestAminoMsg {
+  type: "/side.btcbridge.QueryRefreshingRequestsRequest";
+  value: QueryRefreshingRequestsRequestAmino;
+}
+export interface QueryRefreshingRequestsRequestSDKType {
+  status: RefreshingStatus;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryRefreshingRequestsResponse {
+  requests: RefreshingRequest[];
+  pagination?: PageResponse;
+}
+export interface QueryRefreshingRequestsResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryRefreshingRequestsResponse";
+  value: Uint8Array;
+}
+export interface QueryRefreshingRequestsResponseAmino {
+  requests?: RefreshingRequestAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryRefreshingRequestsResponseAminoMsg {
+  type: "/side.btcbridge.QueryRefreshingRequestsResponse";
+  value: QueryRefreshingRequestsResponseAmino;
+}
+export interface QueryRefreshingRequestsResponseSDKType {
+  requests: RefreshingRequestSDKType[];
+  pagination?: PageResponseSDKType;
+}
+export interface QueryRefreshingCompletionsRequest {
+  id: bigint;
+  pagination?: PageRequest;
+}
+export interface QueryRefreshingCompletionsRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryRefreshingCompletionsRequest";
+  value: Uint8Array;
+}
+export interface QueryRefreshingCompletionsRequestAmino {
+  id?: string;
+  pagination?: PageRequestAmino;
+}
+export interface QueryRefreshingCompletionsRequestAminoMsg {
+  type: "/side.btcbridge.QueryRefreshingCompletionsRequest";
+  value: QueryRefreshingCompletionsRequestAmino;
+}
+export interface QueryRefreshingCompletionsRequestSDKType {
+  id: bigint;
+  pagination?: PageRequestSDKType;
+}
+export interface QueryRefreshingCompletionsResponse {
+  completions: RefreshingCompletion[];
+  pagination?: PageResponse;
+}
+export interface QueryRefreshingCompletionsResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryRefreshingCompletionsResponse";
+  value: Uint8Array;
+}
+export interface QueryRefreshingCompletionsResponseAmino {
+  completions?: RefreshingCompletionAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryRefreshingCompletionsResponseAminoMsg {
+  type: "/side.btcbridge.QueryRefreshingCompletionsResponse";
+  value: QueryRefreshingCompletionsResponseAmino;
+}
+export interface QueryRefreshingCompletionsResponseSDKType {
+  completions: RefreshingCompletionSDKType[];
+  pagination?: PageResponseSDKType;
+}
+/** QueryIBCDepositScriptRequest is the request type for the Query/IBCDepositScript RPC method. */
+export interface QueryIBCDepositScriptRequest {
+  channelId: string;
+  recipientAddress: string;
+}
+export interface QueryIBCDepositScriptRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryIBCDepositScriptRequest";
+  value: Uint8Array;
+}
+/** QueryIBCDepositScriptRequest is the request type for the Query/IBCDepositScript RPC method. */
+export interface QueryIBCDepositScriptRequestAmino {
+  channel_id?: string;
+  recipient_address?: string;
+}
+export interface QueryIBCDepositScriptRequestAminoMsg {
+  type: "/side.btcbridge.QueryIBCDepositScriptRequest";
+  value: QueryIBCDepositScriptRequestAmino;
+}
+/** QueryIBCDepositScriptRequest is the request type for the Query/IBCDepositScript RPC method. */
+export interface QueryIBCDepositScriptRequestSDKType {
+  channel_id: string;
+  recipient_address: string;
+}
+/** QueryIBCDepositScriptResponse is the response type for the Query/IBCDepositScript RPC method. */
+export interface QueryIBCDepositScriptResponse {
+  script: string;
+}
+export interface QueryIBCDepositScriptResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryIBCDepositScriptResponse";
+  value: Uint8Array;
+}
+/** QueryIBCDepositScriptResponse is the response type for the Query/IBCDepositScript RPC method. */
+export interface QueryIBCDepositScriptResponseAmino {
+  script?: string;
+}
+export interface QueryIBCDepositScriptResponseAminoMsg {
+  type: "/side.btcbridge.QueryIBCDepositScriptResponse";
+  value: QueryIBCDepositScriptResponseAmino;
+}
+/** QueryIBCDepositScriptResponse is the response type for the Query/IBCDepositScript RPC method. */
+export interface QueryIBCDepositScriptResponseSDKType {
+  script: string;
+}
+/** QueryRateLimitRequest is the request type for the Query/RateLimit RPC method. */
+export interface QueryRateLimitRequest {}
+export interface QueryRateLimitRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryRateLimitRequest";
+  value: Uint8Array;
+}
+/** QueryRateLimitRequest is the request type for the Query/RateLimit RPC method. */
+export interface QueryRateLimitRequestAmino {}
+export interface QueryRateLimitRequestAminoMsg {
+  type: "/side.btcbridge.QueryRateLimitRequest";
+  value: QueryRateLimitRequestAmino;
+}
+/** QueryRateLimitRequest is the request type for the Query/RateLimit RPC method. */
+export interface QueryRateLimitRequestSDKType {}
+/** QueryRateLimitResponse is the response type for the Query/RateLimit RPC method. */
+export interface QueryRateLimitResponse {
+  rateLimit?: RateLimit;
+}
+export interface QueryRateLimitResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryRateLimitResponse";
+  value: Uint8Array;
+}
+/** QueryRateLimitResponse is the response type for the Query/RateLimit RPC method. */
+export interface QueryRateLimitResponseAmino {
+  rate_limit?: RateLimitAmino;
+}
+export interface QueryRateLimitResponseAminoMsg {
+  type: "/side.btcbridge.QueryRateLimitResponse";
+  value: QueryRateLimitResponseAmino;
+}
+/** QueryRateLimitResponse is the response type for the Query/RateLimit RPC method. */
+export interface QueryRateLimitResponseSDKType {
+  rate_limit?: RateLimitSDKType;
+}
+/** QueryRateLimitByAddressRequest is the request type for the Query/RateLimitByAddress RPC method. */
+export interface QueryRateLimitByAddressRequest {
+  address: string;
+}
+export interface QueryRateLimitByAddressRequestProtoMsg {
+  typeUrl: "/side.btcbridge.QueryRateLimitByAddressRequest";
+  value: Uint8Array;
+}
+/** QueryRateLimitByAddressRequest is the request type for the Query/RateLimitByAddress RPC method. */
+export interface QueryRateLimitByAddressRequestAmino {
+  address?: string;
+}
+export interface QueryRateLimitByAddressRequestAminoMsg {
+  type: "/side.btcbridge.QueryRateLimitByAddressRequest";
+  value: QueryRateLimitByAddressRequestAmino;
+}
+/** QueryRateLimitByAddressRequest is the request type for the Query/RateLimitByAddress RPC method. */
+export interface QueryRateLimitByAddressRequestSDKType {
+  address: string;
+}
+/** QueryRateLimitByAddressResponse is the response type for the Query/RateLimitByAddress RPC method. */
+export interface QueryRateLimitByAddressResponse {
+  /** Address */
+  address: string;
+  /** Starting time for the current epoch */
+  startTime: Date;
+  /** End time for the current epoch */
+  endTime: Date;
+  /** Maximum withdrawable amount for the current epoch; 0 means no limit */
+  quota: bigint;
+  /** Used quota currently */
+  used: bigint;
+}
+export interface QueryRateLimitByAddressResponseProtoMsg {
+  typeUrl: "/side.btcbridge.QueryRateLimitByAddressResponse";
+  value: Uint8Array;
+}
+/** QueryRateLimitByAddressResponse is the response type for the Query/RateLimitByAddress RPC method. */
+export interface QueryRateLimitByAddressResponseAmino {
+  /** Address */
+  address?: string;
+  /** Starting time for the current epoch */
+  start_time?: string;
+  /** End time for the current epoch */
+  end_time?: string;
+  /** Maximum withdrawable amount for the current epoch; 0 means no limit */
+  quota?: string;
+  /** Used quota currently */
+  used?: string;
+}
+export interface QueryRateLimitByAddressResponseAminoMsg {
+  type: "/side.btcbridge.QueryRateLimitByAddressResponse";
+  value: QueryRateLimitByAddressResponseAmino;
+}
+/** QueryRateLimitByAddressResponse is the response type for the Query/RateLimitByAddress RPC method. */
+export interface QueryRateLimitByAddressResponseSDKType {
+  address: string;
+  start_time: Date;
+  end_time: Date;
+  quota: bigint;
+  used: bigint;
 }
 function createBaseQueryWithdrawRequestsByAddressRequest(): QueryWithdrawRequestsByAddressRequest {
   return {
@@ -1670,6 +1968,146 @@ export const QuerySigningRequestByTxHashResponse = {
     return {
       typeUrl: "/side.btcbridge.QuerySigningRequestByTxHashResponse",
       value: QuerySigningRequestByTxHashResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPendingSigningRequestsRequest(): QueryPendingSigningRequestsRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryPendingSigningRequestsRequest = {
+  typeUrl: "/side.btcbridge.QueryPendingSigningRequestsRequest",
+  encode(message: QueryPendingSigningRequestsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPendingSigningRequestsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPendingSigningRequestsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPendingSigningRequestsRequest>): QueryPendingSigningRequestsRequest {
+    const message = createBaseQueryPendingSigningRequestsRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryPendingSigningRequestsRequestAmino): QueryPendingSigningRequestsRequest {
+    const message = createBaseQueryPendingSigningRequestsRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPendingSigningRequestsRequest): QueryPendingSigningRequestsRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPendingSigningRequestsRequestAminoMsg): QueryPendingSigningRequestsRequest {
+    return QueryPendingSigningRequestsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPendingSigningRequestsRequestProtoMsg): QueryPendingSigningRequestsRequest {
+    return QueryPendingSigningRequestsRequest.decode(message.value);
+  },
+  toProto(message: QueryPendingSigningRequestsRequest): Uint8Array {
+    return QueryPendingSigningRequestsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPendingSigningRequestsRequest): QueryPendingSigningRequestsRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryPendingSigningRequestsRequest",
+      value: QueryPendingSigningRequestsRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryPendingSigningRequestsResponse(): QueryPendingSigningRequestsResponse {
+  return {
+    requests: [],
+    pagination: undefined
+  };
+}
+export const QueryPendingSigningRequestsResponse = {
+  typeUrl: "/side.btcbridge.QueryPendingSigningRequestsResponse",
+  encode(message: QueryPendingSigningRequestsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.requests) {
+      CompactSigningRequest.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryPendingSigningRequestsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryPendingSigningRequestsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.requests.push(CompactSigningRequest.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryPendingSigningRequestsResponse>): QueryPendingSigningRequestsResponse {
+    const message = createBaseQueryPendingSigningRequestsResponse();
+    message.requests = object.requests?.map(e => CompactSigningRequest.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryPendingSigningRequestsResponseAmino): QueryPendingSigningRequestsResponse {
+    const message = createBaseQueryPendingSigningRequestsResponse();
+    message.requests = object.requests?.map(e => CompactSigningRequest.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryPendingSigningRequestsResponse): QueryPendingSigningRequestsResponseAmino {
+    const obj: any = {};
+    if (message.requests) {
+      obj.requests = message.requests.map(e => e ? CompactSigningRequest.toAmino(e) : undefined);
+    } else {
+      obj.requests = message.requests;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryPendingSigningRequestsResponseAminoMsg): QueryPendingSigningRequestsResponse {
+    return QueryPendingSigningRequestsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryPendingSigningRequestsResponseProtoMsg): QueryPendingSigningRequestsResponse {
+    return QueryPendingSigningRequestsResponse.decode(message.value);
+  },
+  toProto(message: QueryPendingSigningRequestsResponse): Uint8Array {
+    return QueryPendingSigningRequestsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryPendingSigningRequestsResponse): QueryPendingSigningRequestsResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryPendingSigningRequestsResponse",
+      value: QueryPendingSigningRequestsResponse.encode(message).finish()
     };
   }
 };
@@ -2950,6 +3388,861 @@ export const QueryDKGCompletionRequestsResponse = {
     return {
       typeUrl: "/side.btcbridge.QueryDKGCompletionRequestsResponse",
       value: QueryDKGCompletionRequestsResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRefreshingRequestRequest(): QueryRefreshingRequestRequest {
+  return {
+    id: BigInt(0)
+  };
+}
+export const QueryRefreshingRequestRequest = {
+  typeUrl: "/side.btcbridge.QueryRefreshingRequestRequest",
+  encode(message: QueryRefreshingRequestRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
+      writer.uint32(8).uint64(message.id);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRefreshingRequestRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRefreshingRequestRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.uint64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRefreshingRequestRequest>): QueryRefreshingRequestRequest {
+    const message = createBaseQueryRefreshingRequestRequest();
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: QueryRefreshingRequestRequestAmino): QueryRefreshingRequestRequest {
+    const message = createBaseQueryRefreshingRequestRequest();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    return message;
+  },
+  toAmino(message: QueryRefreshingRequestRequest): QueryRefreshingRequestRequestAmino {
+    const obj: any = {};
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRefreshingRequestRequestAminoMsg): QueryRefreshingRequestRequest {
+    return QueryRefreshingRequestRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRefreshingRequestRequestProtoMsg): QueryRefreshingRequestRequest {
+    return QueryRefreshingRequestRequest.decode(message.value);
+  },
+  toProto(message: QueryRefreshingRequestRequest): Uint8Array {
+    return QueryRefreshingRequestRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRefreshingRequestRequest): QueryRefreshingRequestRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryRefreshingRequestRequest",
+      value: QueryRefreshingRequestRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRefreshingRequestResponse(): QueryRefreshingRequestResponse {
+  return {
+    request: undefined
+  };
+}
+export const QueryRefreshingRequestResponse = {
+  typeUrl: "/side.btcbridge.QueryRefreshingRequestResponse",
+  encode(message: QueryRefreshingRequestResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.request !== undefined) {
+      RefreshingRequest.encode(message.request, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRefreshingRequestResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRefreshingRequestResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.request = RefreshingRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRefreshingRequestResponse>): QueryRefreshingRequestResponse {
+    const message = createBaseQueryRefreshingRequestResponse();
+    message.request = object.request !== undefined && object.request !== null ? RefreshingRequest.fromPartial(object.request) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryRefreshingRequestResponseAmino): QueryRefreshingRequestResponse {
+    const message = createBaseQueryRefreshingRequestResponse();
+    if (object.request !== undefined && object.request !== null) {
+      message.request = RefreshingRequest.fromAmino(object.request);
+    }
+    return message;
+  },
+  toAmino(message: QueryRefreshingRequestResponse): QueryRefreshingRequestResponseAmino {
+    const obj: any = {};
+    obj.request = message.request ? RefreshingRequest.toAmino(message.request) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRefreshingRequestResponseAminoMsg): QueryRefreshingRequestResponse {
+    return QueryRefreshingRequestResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRefreshingRequestResponseProtoMsg): QueryRefreshingRequestResponse {
+    return QueryRefreshingRequestResponse.decode(message.value);
+  },
+  toProto(message: QueryRefreshingRequestResponse): Uint8Array {
+    return QueryRefreshingRequestResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRefreshingRequestResponse): QueryRefreshingRequestResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryRefreshingRequestResponse",
+      value: QueryRefreshingRequestResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRefreshingRequestsRequest(): QueryRefreshingRequestsRequest {
+  return {
+    status: 0,
+    pagination: undefined
+  };
+}
+export const QueryRefreshingRequestsRequest = {
+  typeUrl: "/side.btcbridge.QueryRefreshingRequestsRequest",
+  encode(message: QueryRefreshingRequestsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.status !== 0) {
+      writer.uint32(8).int32(message.status);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRefreshingRequestsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRefreshingRequestsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.status = reader.int32() as any;
+          break;
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRefreshingRequestsRequest>): QueryRefreshingRequestsRequest {
+    const message = createBaseQueryRefreshingRequestsRequest();
+    message.status = object.status ?? 0;
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryRefreshingRequestsRequestAmino): QueryRefreshingRequestsRequest {
+    const message = createBaseQueryRefreshingRequestsRequest();
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryRefreshingRequestsRequest): QueryRefreshingRequestsRequestAmino {
+    const obj: any = {};
+    obj.status = message.status === 0 ? undefined : message.status;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRefreshingRequestsRequestAminoMsg): QueryRefreshingRequestsRequest {
+    return QueryRefreshingRequestsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRefreshingRequestsRequestProtoMsg): QueryRefreshingRequestsRequest {
+    return QueryRefreshingRequestsRequest.decode(message.value);
+  },
+  toProto(message: QueryRefreshingRequestsRequest): Uint8Array {
+    return QueryRefreshingRequestsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRefreshingRequestsRequest): QueryRefreshingRequestsRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryRefreshingRequestsRequest",
+      value: QueryRefreshingRequestsRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRefreshingRequestsResponse(): QueryRefreshingRequestsResponse {
+  return {
+    requests: [],
+    pagination: undefined
+  };
+}
+export const QueryRefreshingRequestsResponse = {
+  typeUrl: "/side.btcbridge.QueryRefreshingRequestsResponse",
+  encode(message: QueryRefreshingRequestsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.requests) {
+      RefreshingRequest.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRefreshingRequestsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRefreshingRequestsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.requests.push(RefreshingRequest.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRefreshingRequestsResponse>): QueryRefreshingRequestsResponse {
+    const message = createBaseQueryRefreshingRequestsResponse();
+    message.requests = object.requests?.map(e => RefreshingRequest.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryRefreshingRequestsResponseAmino): QueryRefreshingRequestsResponse {
+    const message = createBaseQueryRefreshingRequestsResponse();
+    message.requests = object.requests?.map(e => RefreshingRequest.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryRefreshingRequestsResponse): QueryRefreshingRequestsResponseAmino {
+    const obj: any = {};
+    if (message.requests) {
+      obj.requests = message.requests.map(e => e ? RefreshingRequest.toAmino(e) : undefined);
+    } else {
+      obj.requests = message.requests;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRefreshingRequestsResponseAminoMsg): QueryRefreshingRequestsResponse {
+    return QueryRefreshingRequestsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRefreshingRequestsResponseProtoMsg): QueryRefreshingRequestsResponse {
+    return QueryRefreshingRequestsResponse.decode(message.value);
+  },
+  toProto(message: QueryRefreshingRequestsResponse): Uint8Array {
+    return QueryRefreshingRequestsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRefreshingRequestsResponse): QueryRefreshingRequestsResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryRefreshingRequestsResponse",
+      value: QueryRefreshingRequestsResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRefreshingCompletionsRequest(): QueryRefreshingCompletionsRequest {
+  return {
+    id: BigInt(0),
+    pagination: undefined
+  };
+}
+export const QueryRefreshingCompletionsRequest = {
+  typeUrl: "/side.btcbridge.QueryRefreshingCompletionsRequest",
+  encode(message: QueryRefreshingCompletionsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
+      writer.uint32(8).uint64(message.id);
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRefreshingCompletionsRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRefreshingCompletionsRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.uint64();
+          break;
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRefreshingCompletionsRequest>): QueryRefreshingCompletionsRequest {
+    const message = createBaseQueryRefreshingCompletionsRequest();
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryRefreshingCompletionsRequestAmino): QueryRefreshingCompletionsRequest {
+    const message = createBaseQueryRefreshingCompletionsRequest();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryRefreshingCompletionsRequest): QueryRefreshingCompletionsRequestAmino {
+    const obj: any = {};
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRefreshingCompletionsRequestAminoMsg): QueryRefreshingCompletionsRequest {
+    return QueryRefreshingCompletionsRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRefreshingCompletionsRequestProtoMsg): QueryRefreshingCompletionsRequest {
+    return QueryRefreshingCompletionsRequest.decode(message.value);
+  },
+  toProto(message: QueryRefreshingCompletionsRequest): Uint8Array {
+    return QueryRefreshingCompletionsRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRefreshingCompletionsRequest): QueryRefreshingCompletionsRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryRefreshingCompletionsRequest",
+      value: QueryRefreshingCompletionsRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRefreshingCompletionsResponse(): QueryRefreshingCompletionsResponse {
+  return {
+    completions: [],
+    pagination: undefined
+  };
+}
+export const QueryRefreshingCompletionsResponse = {
+  typeUrl: "/side.btcbridge.QueryRefreshingCompletionsResponse",
+  encode(message: QueryRefreshingCompletionsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.completions) {
+      RefreshingCompletion.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRefreshingCompletionsResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRefreshingCompletionsResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.completions.push(RefreshingCompletion.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRefreshingCompletionsResponse>): QueryRefreshingCompletionsResponse {
+    const message = createBaseQueryRefreshingCompletionsResponse();
+    message.completions = object.completions?.map(e => RefreshingCompletion.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryRefreshingCompletionsResponseAmino): QueryRefreshingCompletionsResponse {
+    const message = createBaseQueryRefreshingCompletionsResponse();
+    message.completions = object.completions?.map(e => RefreshingCompletion.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryRefreshingCompletionsResponse): QueryRefreshingCompletionsResponseAmino {
+    const obj: any = {};
+    if (message.completions) {
+      obj.completions = message.completions.map(e => e ? RefreshingCompletion.toAmino(e) : undefined);
+    } else {
+      obj.completions = message.completions;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRefreshingCompletionsResponseAminoMsg): QueryRefreshingCompletionsResponse {
+    return QueryRefreshingCompletionsResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRefreshingCompletionsResponseProtoMsg): QueryRefreshingCompletionsResponse {
+    return QueryRefreshingCompletionsResponse.decode(message.value);
+  },
+  toProto(message: QueryRefreshingCompletionsResponse): Uint8Array {
+    return QueryRefreshingCompletionsResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRefreshingCompletionsResponse): QueryRefreshingCompletionsResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryRefreshingCompletionsResponse",
+      value: QueryRefreshingCompletionsResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryIBCDepositScriptRequest(): QueryIBCDepositScriptRequest {
+  return {
+    channelId: "",
+    recipientAddress: ""
+  };
+}
+export const QueryIBCDepositScriptRequest = {
+  typeUrl: "/side.btcbridge.QueryIBCDepositScriptRequest",
+  encode(message: QueryIBCDepositScriptRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.channelId !== "") {
+      writer.uint32(10).string(message.channelId);
+    }
+    if (message.recipientAddress !== "") {
+      writer.uint32(18).string(message.recipientAddress);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryIBCDepositScriptRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryIBCDepositScriptRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.channelId = reader.string();
+          break;
+        case 2:
+          message.recipientAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryIBCDepositScriptRequest>): QueryIBCDepositScriptRequest {
+    const message = createBaseQueryIBCDepositScriptRequest();
+    message.channelId = object.channelId ?? "";
+    message.recipientAddress = object.recipientAddress ?? "";
+    return message;
+  },
+  fromAmino(object: QueryIBCDepositScriptRequestAmino): QueryIBCDepositScriptRequest {
+    const message = createBaseQueryIBCDepositScriptRequest();
+    if (object.channel_id !== undefined && object.channel_id !== null) {
+      message.channelId = object.channel_id;
+    }
+    if (object.recipient_address !== undefined && object.recipient_address !== null) {
+      message.recipientAddress = object.recipient_address;
+    }
+    return message;
+  },
+  toAmino(message: QueryIBCDepositScriptRequest): QueryIBCDepositScriptRequestAmino {
+    const obj: any = {};
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
+    obj.recipient_address = message.recipientAddress === "" ? undefined : message.recipientAddress;
+    return obj;
+  },
+  fromAminoMsg(object: QueryIBCDepositScriptRequestAminoMsg): QueryIBCDepositScriptRequest {
+    return QueryIBCDepositScriptRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryIBCDepositScriptRequestProtoMsg): QueryIBCDepositScriptRequest {
+    return QueryIBCDepositScriptRequest.decode(message.value);
+  },
+  toProto(message: QueryIBCDepositScriptRequest): Uint8Array {
+    return QueryIBCDepositScriptRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryIBCDepositScriptRequest): QueryIBCDepositScriptRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryIBCDepositScriptRequest",
+      value: QueryIBCDepositScriptRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryIBCDepositScriptResponse(): QueryIBCDepositScriptResponse {
+  return {
+    script: ""
+  };
+}
+export const QueryIBCDepositScriptResponse = {
+  typeUrl: "/side.btcbridge.QueryIBCDepositScriptResponse",
+  encode(message: QueryIBCDepositScriptResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.script !== "") {
+      writer.uint32(10).string(message.script);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryIBCDepositScriptResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryIBCDepositScriptResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.script = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryIBCDepositScriptResponse>): QueryIBCDepositScriptResponse {
+    const message = createBaseQueryIBCDepositScriptResponse();
+    message.script = object.script ?? "";
+    return message;
+  },
+  fromAmino(object: QueryIBCDepositScriptResponseAmino): QueryIBCDepositScriptResponse {
+    const message = createBaseQueryIBCDepositScriptResponse();
+    if (object.script !== undefined && object.script !== null) {
+      message.script = object.script;
+    }
+    return message;
+  },
+  toAmino(message: QueryIBCDepositScriptResponse): QueryIBCDepositScriptResponseAmino {
+    const obj: any = {};
+    obj.script = message.script === "" ? undefined : message.script;
+    return obj;
+  },
+  fromAminoMsg(object: QueryIBCDepositScriptResponseAminoMsg): QueryIBCDepositScriptResponse {
+    return QueryIBCDepositScriptResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryIBCDepositScriptResponseProtoMsg): QueryIBCDepositScriptResponse {
+    return QueryIBCDepositScriptResponse.decode(message.value);
+  },
+  toProto(message: QueryIBCDepositScriptResponse): Uint8Array {
+    return QueryIBCDepositScriptResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryIBCDepositScriptResponse): QueryIBCDepositScriptResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryIBCDepositScriptResponse",
+      value: QueryIBCDepositScriptResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRateLimitRequest(): QueryRateLimitRequest {
+  return {};
+}
+export const QueryRateLimitRequest = {
+  typeUrl: "/side.btcbridge.QueryRateLimitRequest",
+  encode(_: QueryRateLimitRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRateLimitRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRateLimitRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(_: Partial<QueryRateLimitRequest>): QueryRateLimitRequest {
+    const message = createBaseQueryRateLimitRequest();
+    return message;
+  },
+  fromAmino(_: QueryRateLimitRequestAmino): QueryRateLimitRequest {
+    const message = createBaseQueryRateLimitRequest();
+    return message;
+  },
+  toAmino(_: QueryRateLimitRequest): QueryRateLimitRequestAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: QueryRateLimitRequestAminoMsg): QueryRateLimitRequest {
+    return QueryRateLimitRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRateLimitRequestProtoMsg): QueryRateLimitRequest {
+    return QueryRateLimitRequest.decode(message.value);
+  },
+  toProto(message: QueryRateLimitRequest): Uint8Array {
+    return QueryRateLimitRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRateLimitRequest): QueryRateLimitRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryRateLimitRequest",
+      value: QueryRateLimitRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRateLimitResponse(): QueryRateLimitResponse {
+  return {
+    rateLimit: undefined
+  };
+}
+export const QueryRateLimitResponse = {
+  typeUrl: "/side.btcbridge.QueryRateLimitResponse",
+  encode(message: QueryRateLimitResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.rateLimit !== undefined) {
+      RateLimit.encode(message.rateLimit, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRateLimitResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRateLimitResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.rateLimit = RateLimit.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRateLimitResponse>): QueryRateLimitResponse {
+    const message = createBaseQueryRateLimitResponse();
+    message.rateLimit = object.rateLimit !== undefined && object.rateLimit !== null ? RateLimit.fromPartial(object.rateLimit) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryRateLimitResponseAmino): QueryRateLimitResponse {
+    const message = createBaseQueryRateLimitResponse();
+    if (object.rate_limit !== undefined && object.rate_limit !== null) {
+      message.rateLimit = RateLimit.fromAmino(object.rate_limit);
+    }
+    return message;
+  },
+  toAmino(message: QueryRateLimitResponse): QueryRateLimitResponseAmino {
+    const obj: any = {};
+    obj.rate_limit = message.rateLimit ? RateLimit.toAmino(message.rateLimit) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRateLimitResponseAminoMsg): QueryRateLimitResponse {
+    return QueryRateLimitResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRateLimitResponseProtoMsg): QueryRateLimitResponse {
+    return QueryRateLimitResponse.decode(message.value);
+  },
+  toProto(message: QueryRateLimitResponse): Uint8Array {
+    return QueryRateLimitResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRateLimitResponse): QueryRateLimitResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryRateLimitResponse",
+      value: QueryRateLimitResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRateLimitByAddressRequest(): QueryRateLimitByAddressRequest {
+  return {
+    address: ""
+  };
+}
+export const QueryRateLimitByAddressRequest = {
+  typeUrl: "/side.btcbridge.QueryRateLimitByAddressRequest",
+  encode(message: QueryRateLimitByAddressRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRateLimitByAddressRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRateLimitByAddressRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRateLimitByAddressRequest>): QueryRateLimitByAddressRequest {
+    const message = createBaseQueryRateLimitByAddressRequest();
+    message.address = object.address ?? "";
+    return message;
+  },
+  fromAmino(object: QueryRateLimitByAddressRequestAmino): QueryRateLimitByAddressRequest {
+    const message = createBaseQueryRateLimitByAddressRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    return message;
+  },
+  toAmino(message: QueryRateLimitByAddressRequest): QueryRateLimitByAddressRequestAmino {
+    const obj: any = {};
+    obj.address = message.address === "" ? undefined : message.address;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRateLimitByAddressRequestAminoMsg): QueryRateLimitByAddressRequest {
+    return QueryRateLimitByAddressRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRateLimitByAddressRequestProtoMsg): QueryRateLimitByAddressRequest {
+    return QueryRateLimitByAddressRequest.decode(message.value);
+  },
+  toProto(message: QueryRateLimitByAddressRequest): Uint8Array {
+    return QueryRateLimitByAddressRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRateLimitByAddressRequest): QueryRateLimitByAddressRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryRateLimitByAddressRequest",
+      value: QueryRateLimitByAddressRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryRateLimitByAddressResponse(): QueryRateLimitByAddressResponse {
+  return {
+    address: "",
+    startTime: new Date(),
+    endTime: new Date(),
+    quota: BigInt(0),
+    used: BigInt(0)
+  };
+}
+export const QueryRateLimitByAddressResponse = {
+  typeUrl: "/side.btcbridge.QueryRateLimitByAddressResponse",
+  encode(message: QueryRateLimitByAddressResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    if (message.startTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.startTime), writer.uint32(18).fork()).ldelim();
+    }
+    if (message.endTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.endTime), writer.uint32(26).fork()).ldelim();
+    }
+    if (message.quota !== BigInt(0)) {
+      writer.uint32(32).int64(message.quota);
+    }
+    if (message.used !== BigInt(0)) {
+      writer.uint32(40).int64(message.used);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryRateLimitByAddressResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryRateLimitByAddressResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.startTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.endTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.quota = reader.int64();
+          break;
+        case 5:
+          message.used = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryRateLimitByAddressResponse>): QueryRateLimitByAddressResponse {
+    const message = createBaseQueryRateLimitByAddressResponse();
+    message.address = object.address ?? "";
+    message.startTime = object.startTime ?? undefined;
+    message.endTime = object.endTime ?? undefined;
+    message.quota = object.quota !== undefined && object.quota !== null ? BigInt(object.quota.toString()) : BigInt(0);
+    message.used = object.used !== undefined && object.used !== null ? BigInt(object.used.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: QueryRateLimitByAddressResponseAmino): QueryRateLimitByAddressResponse {
+    const message = createBaseQueryRateLimitByAddressResponse();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.start_time !== undefined && object.start_time !== null) {
+      message.startTime = fromTimestamp(Timestamp.fromAmino(object.start_time));
+    }
+    if (object.end_time !== undefined && object.end_time !== null) {
+      message.endTime = fromTimestamp(Timestamp.fromAmino(object.end_time));
+    }
+    if (object.quota !== undefined && object.quota !== null) {
+      message.quota = BigInt(object.quota);
+    }
+    if (object.used !== undefined && object.used !== null) {
+      message.used = BigInt(object.used);
+    }
+    return message;
+  },
+  toAmino(message: QueryRateLimitByAddressResponse): QueryRateLimitByAddressResponseAmino {
+    const obj: any = {};
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.start_time = message.startTime ? Timestamp.toAmino(toTimestamp(message.startTime)) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(toTimestamp(message.endTime)) : undefined;
+    obj.quota = message.quota !== BigInt(0) ? message.quota.toString() : undefined;
+    obj.used = message.used !== BigInt(0) ? message.used.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryRateLimitByAddressResponseAminoMsg): QueryRateLimitByAddressResponse {
+    return QueryRateLimitByAddressResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryRateLimitByAddressResponseProtoMsg): QueryRateLimitByAddressResponse {
+    return QueryRateLimitByAddressResponse.decode(message.value);
+  },
+  toProto(message: QueryRateLimitByAddressResponse): Uint8Array {
+    return QueryRateLimitByAddressResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryRateLimitByAddressResponse): QueryRateLimitByAddressResponseProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.QueryRateLimitByAddressResponse",
+      value: QueryRateLimitByAddressResponse.encode(message).finish()
     };
   }
 };

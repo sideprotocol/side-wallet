@@ -127,6 +127,52 @@ export interface QueryPoolExchangeRateResponseAminoMsg {
 export interface QueryPoolExchangeRateResponseSDKType {
   exchange_rate: string;
 }
+export interface QueryLiquidationPriceRequest {
+  poolId: string;
+  collateralAmount: string;
+  borrowAmount: string;
+  maturity: bigint;
+}
+export interface QueryLiquidationPriceRequestProtoMsg {
+  typeUrl: "/side.lending.QueryLiquidationPriceRequest";
+  value: Uint8Array;
+}
+export interface QueryLiquidationPriceRequestAmino {
+  pool_id?: string;
+  collateral_amount?: string;
+  borrow_amount?: string;
+  maturity?: string;
+}
+export interface QueryLiquidationPriceRequestAminoMsg {
+  type: "/side.lending.QueryLiquidationPriceRequest";
+  value: QueryLiquidationPriceRequestAmino;
+}
+export interface QueryLiquidationPriceRequestSDKType {
+  pool_id: string;
+  collateral_amount: string;
+  borrow_amount: string;
+  maturity: bigint;
+}
+export interface QueryLiquidationPriceResponse {
+  price: string;
+  pair: string;
+}
+export interface QueryLiquidationPriceResponseProtoMsg {
+  typeUrl: "/side.lending.QueryLiquidationPriceResponse";
+  value: Uint8Array;
+}
+export interface QueryLiquidationPriceResponseAmino {
+  price?: string;
+  pair?: string;
+}
+export interface QueryLiquidationPriceResponseAminoMsg {
+  type: "/side.lending.QueryLiquidationPriceResponse";
+  value: QueryLiquidationPriceResponseAmino;
+}
+export interface QueryLiquidationPriceResponseSDKType {
+  price: string;
+  pair: string;
+}
 export interface QueryDlcEventCountRequest {}
 export interface QueryDlcEventCountRequestProtoMsg {
   typeUrl: "/side.lending.QueryDlcEventCountRequest";
@@ -157,6 +203,7 @@ export interface QueryDlcEventCountResponseSDKType {
 }
 export interface QueryLoanCetInfosRequest {
   loanId: string;
+  collateralAmount: string;
 }
 export interface QueryLoanCetInfosRequestProtoMsg {
   typeUrl: "/side.lending.QueryLoanCetInfosRequest";
@@ -164,6 +211,7 @@ export interface QueryLoanCetInfosRequestProtoMsg {
 }
 export interface QueryLoanCetInfosRequestAmino {
   loan_id?: string;
+  collateral_amount?: string;
 }
 export interface QueryLoanCetInfosRequestAminoMsg {
   type: "/side.lending.QueryLoanCetInfosRequest";
@@ -171,6 +219,7 @@ export interface QueryLoanCetInfosRequestAminoMsg {
 }
 export interface QueryLoanCetInfosRequestSDKType {
   loan_id: string;
+  collateral_amount: string;
 }
 export interface QueryLoanCetInfosResponse {
   liquidationCetInfo?: CetInfo;
@@ -1027,6 +1076,180 @@ export const QueryPoolExchangeRateResponse = {
     };
   }
 };
+function createBaseQueryLiquidationPriceRequest(): QueryLiquidationPriceRequest {
+  return {
+    poolId: "",
+    collateralAmount: "",
+    borrowAmount: "",
+    maturity: BigInt(0)
+  };
+}
+export const QueryLiquidationPriceRequest = {
+  typeUrl: "/side.lending.QueryLiquidationPriceRequest",
+  encode(message: QueryLiquidationPriceRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.poolId !== "") {
+      writer.uint32(10).string(message.poolId);
+    }
+    if (message.collateralAmount !== "") {
+      writer.uint32(18).string(message.collateralAmount);
+    }
+    if (message.borrowAmount !== "") {
+      writer.uint32(26).string(message.borrowAmount);
+    }
+    if (message.maturity !== BigInt(0)) {
+      writer.uint32(32).int64(message.maturity);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryLiquidationPriceRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryLiquidationPriceRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.poolId = reader.string();
+          break;
+        case 2:
+          message.collateralAmount = reader.string();
+          break;
+        case 3:
+          message.borrowAmount = reader.string();
+          break;
+        case 4:
+          message.maturity = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryLiquidationPriceRequest>): QueryLiquidationPriceRequest {
+    const message = createBaseQueryLiquidationPriceRequest();
+    message.poolId = object.poolId ?? "";
+    message.collateralAmount = object.collateralAmount ?? "";
+    message.borrowAmount = object.borrowAmount ?? "";
+    message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: QueryLiquidationPriceRequestAmino): QueryLiquidationPriceRequest {
+    const message = createBaseQueryLiquidationPriceRequest();
+    if (object.pool_id !== undefined && object.pool_id !== null) {
+      message.poolId = object.pool_id;
+    }
+    if (object.collateral_amount !== undefined && object.collateral_amount !== null) {
+      message.collateralAmount = object.collateral_amount;
+    }
+    if (object.borrow_amount !== undefined && object.borrow_amount !== null) {
+      message.borrowAmount = object.borrow_amount;
+    }
+    if (object.maturity !== undefined && object.maturity !== null) {
+      message.maturity = BigInt(object.maturity);
+    }
+    return message;
+  },
+  toAmino(message: QueryLiquidationPriceRequest): QueryLiquidationPriceRequestAmino {
+    const obj: any = {};
+    obj.pool_id = message.poolId === "" ? undefined : message.poolId;
+    obj.collateral_amount = message.collateralAmount === "" ? undefined : message.collateralAmount;
+    obj.borrow_amount = message.borrowAmount === "" ? undefined : message.borrowAmount;
+    obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryLiquidationPriceRequestAminoMsg): QueryLiquidationPriceRequest {
+    return QueryLiquidationPriceRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryLiquidationPriceRequestProtoMsg): QueryLiquidationPriceRequest {
+    return QueryLiquidationPriceRequest.decode(message.value);
+  },
+  toProto(message: QueryLiquidationPriceRequest): Uint8Array {
+    return QueryLiquidationPriceRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryLiquidationPriceRequest): QueryLiquidationPriceRequestProtoMsg {
+    return {
+      typeUrl: "/side.lending.QueryLiquidationPriceRequest",
+      value: QueryLiquidationPriceRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryLiquidationPriceResponse(): QueryLiquidationPriceResponse {
+  return {
+    price: "",
+    pair: ""
+  };
+}
+export const QueryLiquidationPriceResponse = {
+  typeUrl: "/side.lending.QueryLiquidationPriceResponse",
+  encode(message: QueryLiquidationPriceResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.price !== "") {
+      writer.uint32(10).string(message.price);
+    }
+    if (message.pair !== "") {
+      writer.uint32(18).string(message.pair);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryLiquidationPriceResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryLiquidationPriceResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.price = reader.string();
+          break;
+        case 2:
+          message.pair = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryLiquidationPriceResponse>): QueryLiquidationPriceResponse {
+    const message = createBaseQueryLiquidationPriceResponse();
+    message.price = object.price ?? "";
+    message.pair = object.pair ?? "";
+    return message;
+  },
+  fromAmino(object: QueryLiquidationPriceResponseAmino): QueryLiquidationPriceResponse {
+    const message = createBaseQueryLiquidationPriceResponse();
+    if (object.price !== undefined && object.price !== null) {
+      message.price = object.price;
+    }
+    if (object.pair !== undefined && object.pair !== null) {
+      message.pair = object.pair;
+    }
+    return message;
+  },
+  toAmino(message: QueryLiquidationPriceResponse): QueryLiquidationPriceResponseAmino {
+    const obj: any = {};
+    obj.price = message.price === "" ? undefined : message.price;
+    obj.pair = message.pair === "" ? undefined : message.pair;
+    return obj;
+  },
+  fromAminoMsg(object: QueryLiquidationPriceResponseAminoMsg): QueryLiquidationPriceResponse {
+    return QueryLiquidationPriceResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryLiquidationPriceResponseProtoMsg): QueryLiquidationPriceResponse {
+    return QueryLiquidationPriceResponse.decode(message.value);
+  },
+  toProto(message: QueryLiquidationPriceResponse): Uint8Array {
+    return QueryLiquidationPriceResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryLiquidationPriceResponse): QueryLiquidationPriceResponseProtoMsg {
+    return {
+      typeUrl: "/side.lending.QueryLiquidationPriceResponse",
+      value: QueryLiquidationPriceResponse.encode(message).finish()
+    };
+  }
+};
 function createBaseQueryDlcEventCountRequest(): QueryDlcEventCountRequest {
   return {};
 }
@@ -1142,7 +1365,8 @@ export const QueryDlcEventCountResponse = {
 };
 function createBaseQueryLoanCetInfosRequest(): QueryLoanCetInfosRequest {
   return {
-    loanId: ""
+    loanId: "",
+    collateralAmount: ""
   };
 }
 export const QueryLoanCetInfosRequest = {
@@ -1150,6 +1374,9 @@ export const QueryLoanCetInfosRequest = {
   encode(message: QueryLoanCetInfosRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.loanId !== "") {
       writer.uint32(10).string(message.loanId);
+    }
+    if (message.collateralAmount !== "") {
+      writer.uint32(18).string(message.collateralAmount);
     }
     return writer;
   },
@@ -1163,6 +1390,9 @@ export const QueryLoanCetInfosRequest = {
         case 1:
           message.loanId = reader.string();
           break;
+        case 2:
+          message.collateralAmount = reader.string();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1173,6 +1403,7 @@ export const QueryLoanCetInfosRequest = {
   fromPartial(object: Partial<QueryLoanCetInfosRequest>): QueryLoanCetInfosRequest {
     const message = createBaseQueryLoanCetInfosRequest();
     message.loanId = object.loanId ?? "";
+    message.collateralAmount = object.collateralAmount ?? "";
     return message;
   },
   fromAmino(object: QueryLoanCetInfosRequestAmino): QueryLoanCetInfosRequest {
@@ -1180,11 +1411,15 @@ export const QueryLoanCetInfosRequest = {
     if (object.loan_id !== undefined && object.loan_id !== null) {
       message.loanId = object.loan_id;
     }
+    if (object.collateral_amount !== undefined && object.collateral_amount !== null) {
+      message.collateralAmount = object.collateral_amount;
+    }
     return message;
   },
   toAmino(message: QueryLoanCetInfosRequest): QueryLoanCetInfosRequestAmino {
     const obj: any = {};
     obj.loan_id = message.loanId === "" ? undefined : message.loanId;
+    obj.collateral_amount = message.collateralAmount === "" ? undefined : message.collateralAmount;
     return obj;
   },
   fromAminoMsg(object: QueryLoanCetInfosRequestAminoMsg): QueryLoanCetInfosRequest {

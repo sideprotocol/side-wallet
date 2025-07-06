@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
-import { MsgSubmitDepositTransaction, MsgSubmitDepositTransactionResponse, MsgSubmitWithdrawTransaction, MsgSubmitWithdrawTransactionResponse, MsgSubmitFeeRate, MsgSubmitFeeRateResponse, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedNonBtcRelayersResponse, MsgUpdateTrustedFeeProviders, MsgUpdateTrustedFeeProvidersResponse, MsgWithdrawToBitcoin, MsgWithdrawToBitcoinResponse, MsgSubmitSignatures, MsgSubmitSignaturesResponse, MsgConsolidateVaults, MsgConsolidateVaultsResponse, MsgInitiateDKG, MsgInitiateDKGResponse, MsgCompleteDKG, MsgCompleteDKGResponse, MsgTransferVault, MsgTransferVaultResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
+import { MsgSubmitDepositTransaction, MsgSubmitDepositTransactionResponse, MsgSubmitWithdrawTransaction, MsgSubmitWithdrawTransactionResponse, MsgSubmitFeeRate, MsgSubmitFeeRateResponse, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedNonBtcRelayersResponse, MsgUpdateTrustedFeeProviders, MsgUpdateTrustedFeeProvidersResponse, MsgWithdrawToBitcoin, MsgWithdrawToBitcoinResponse, MsgSubmitSignatures, MsgSubmitSignaturesResponse, MsgConsolidateVaults, MsgConsolidateVaultsResponse, MsgInitiateDKG, MsgInitiateDKGResponse, MsgCompleteDKG, MsgCompleteDKGResponse, MsgRefresh, MsgRefreshResponse, MsgCompleteRefreshing, MsgCompleteRefreshingResponse, MsgTransferVault, MsgTransferVaultResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   submitDepositTransaction(request: MsgSubmitDepositTransaction): Promise<MsgSubmitDepositTransactionResponse>;
@@ -23,6 +23,10 @@ export interface Msg {
   initiateDKG(request: MsgInitiateDKG): Promise<MsgInitiateDKGResponse>;
   /** CompleteDKG completes the given DKG request. */
   completeDKG(request: MsgCompleteDKG): Promise<MsgCompleteDKGResponse>;
+  /** Refresh refreshes key shares. */
+  refresh(request: MsgRefresh): Promise<MsgRefreshResponse>;
+  /** CompleteRefreshing completes the given refreshing request by the participant. */
+  completeRefreshing(request: MsgCompleteRefreshing): Promise<MsgCompleteRefreshingResponse>;
   /** TransferVault transfers the vault asset from the source version to the destination version. */
   transferVault(request: MsgTransferVault): Promise<MsgTransferVaultResponse>;
   /**
@@ -47,6 +51,8 @@ export class MsgClientImpl implements Msg {
     this.consolidateVaults = this.consolidateVaults.bind(this);
     this.initiateDKG = this.initiateDKG.bind(this);
     this.completeDKG = this.completeDKG.bind(this);
+    this.refresh = this.refresh.bind(this);
+    this.completeRefreshing = this.completeRefreshing.bind(this);
     this.transferVault = this.transferVault.bind(this);
     this.updateParams = this.updateParams.bind(this);
   }
@@ -99,6 +105,16 @@ export class MsgClientImpl implements Msg {
     const data = MsgCompleteDKG.encode(request).finish();
     const promise = this.rpc.request("side.btcbridge.Msg", "CompleteDKG", data);
     return promise.then(data => MsgCompleteDKGResponse.decode(new BinaryReader(data)));
+  }
+  refresh(request: MsgRefresh): Promise<MsgRefreshResponse> {
+    const data = MsgRefresh.encode(request).finish();
+    const promise = this.rpc.request("side.btcbridge.Msg", "Refresh", data);
+    return promise.then(data => MsgRefreshResponse.decode(new BinaryReader(data)));
+  }
+  completeRefreshing(request: MsgCompleteRefreshing): Promise<MsgCompleteRefreshingResponse> {
+    const data = MsgCompleteRefreshing.encode(request).finish();
+    const promise = this.rpc.request("side.btcbridge.Msg", "CompleteRefreshing", data);
+    return promise.then(data => MsgCompleteRefreshingResponse.decode(new BinaryReader(data)));
   }
   transferVault(request: MsgTransferVault): Promise<MsgTransferVaultResponse> {
     const data = MsgTransferVault.encode(request).finish();

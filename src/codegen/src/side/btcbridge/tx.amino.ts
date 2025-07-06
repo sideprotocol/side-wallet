@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { MsgSubmitDepositTransaction, MsgSubmitWithdrawTransaction, MsgSubmitFeeRate, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedFeeProviders, MsgWithdrawToBitcoin, MsgSubmitSignatures, MsgConsolidateVaults, MsgInitiateDKG, MsgCompleteDKG, MsgTransferVault, MsgUpdateParams } from "./tx";
+import { MsgSubmitDepositTransaction, MsgSubmitWithdrawTransaction, MsgSubmitFeeRate, MsgUpdateTrustedNonBtcRelayers, MsgUpdateTrustedFeeProviders, MsgWithdrawToBitcoin, MsgSubmitSignatures, MsgConsolidateVaults, MsgInitiateDKG, MsgCompleteDKG, MsgRefresh, MsgCompleteRefreshing, MsgTransferVault, MsgUpdateParams } from "./tx";
 export const AminoConverter = {
   "/side.btcbridge.MsgSubmitDepositTransaction": {
     aminoType: "/side.btcbridge.MsgSubmitDepositTransaction",
@@ -50,6 +50,16 @@ export const AminoConverter = {
     aminoType: "/side.btcbridge.MsgCompleteDKG",
     toAmino: MsgCompleteDKG.toAmino,
     fromAmino: MsgCompleteDKG.fromAmino
+  },
+  "/side.btcbridge.MsgRefresh": {
+    aminoType: "/side.btcbridge.MsgRefresh",
+    toAmino: MsgRefresh.toAmino,
+    fromAmino: MsgRefresh.fromAmino
+  },
+  "/side.btcbridge.MsgCompleteRefreshing": {
+    aminoType: "/side.btcbridge.MsgCompleteRefreshing",
+    toAmino: MsgCompleteRefreshing.toAmino,
+    fromAmino: MsgCompleteRefreshing.fromAmino
   },
   "/side.btcbridge.MsgTransferVault": {
     aminoType: "/side.btcbridge.MsgTransferVault",

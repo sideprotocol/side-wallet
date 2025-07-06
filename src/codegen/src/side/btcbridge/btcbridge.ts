@@ -114,6 +114,55 @@ export function dKGRequestStatusToJSON(object: DKGRequestStatus): string {
       return "UNRECOGNIZED";
   }
 }
+/** Refreshing Status */
+export enum RefreshingStatus {
+  /** REFRESHING_STATUS_UNSPECIFIED - REFRESHING_STATUS_UNSPECIFIED defines the unknown refreshing status */
+  REFRESHING_STATUS_UNSPECIFIED = 0,
+  /** REFRESHING_STATUS_PENDING - REFRESHING_STATUS_PENDING defines the status of the refreshing request which is pending */
+  REFRESHING_STATUS_PENDING = 1,
+  /** REFRESHING_STATUS_COMPLETED - REFRESHING_STATUS_COMPLETED defines the status of the refreshing request which is completed */
+  REFRESHING_STATUS_COMPLETED = 2,
+  /** REFRESHING_STATUS_TIMEDOUT - REFRESHING_STATUS_TIMEDOUT defines the status of the refreshing request which timed out */
+  REFRESHING_STATUS_TIMEDOUT = 3,
+  UNRECOGNIZED = -1,
+}
+export const RefreshingStatusSDKType = RefreshingStatus;
+export const RefreshingStatusAmino = RefreshingStatus;
+export function refreshingStatusFromJSON(object: any): RefreshingStatus {
+  switch (object) {
+    case 0:
+    case "REFRESHING_STATUS_UNSPECIFIED":
+      return RefreshingStatus.REFRESHING_STATUS_UNSPECIFIED;
+    case 1:
+    case "REFRESHING_STATUS_PENDING":
+      return RefreshingStatus.REFRESHING_STATUS_PENDING;
+    case 2:
+    case "REFRESHING_STATUS_COMPLETED":
+      return RefreshingStatus.REFRESHING_STATUS_COMPLETED;
+    case 3:
+    case "REFRESHING_STATUS_TIMEDOUT":
+      return RefreshingStatus.REFRESHING_STATUS_TIMEDOUT;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return RefreshingStatus.UNRECOGNIZED;
+  }
+}
+export function refreshingStatusToJSON(object: RefreshingStatus): string {
+  switch (object) {
+    case RefreshingStatus.REFRESHING_STATUS_UNSPECIFIED:
+      return "REFRESHING_STATUS_UNSPECIFIED";
+    case RefreshingStatus.REFRESHING_STATUS_PENDING:
+      return "REFRESHING_STATUS_PENDING";
+    case RefreshingStatus.REFRESHING_STATUS_COMPLETED:
+      return "REFRESHING_STATUS_COMPLETED";
+    case RefreshingStatus.REFRESHING_STATUS_TIMEDOUT:
+      return "REFRESHING_STATUS_TIMEDOUT";
+    case RefreshingStatus.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 /** Fee rate */
 export interface FeeRate {
   /** fee rate */
@@ -179,6 +228,47 @@ export interface SigningRequestSDKType {
   creation_time: Date;
   status: SigningStatus;
 }
+/** Compact Signing Request */
+export interface CompactSigningRequest {
+  address: string;
+  sequence: bigint;
+  type: AssetType;
+  txid: string;
+  signers: string[];
+  sigHashes: string[];
+  creationTime: Date;
+  status: SigningStatus;
+}
+export interface CompactSigningRequestProtoMsg {
+  typeUrl: "/side.btcbridge.CompactSigningRequest";
+  value: Uint8Array;
+}
+/** Compact Signing Request */
+export interface CompactSigningRequestAmino {
+  address?: string;
+  sequence?: string;
+  type?: AssetType;
+  txid?: string;
+  signers?: string[];
+  sig_hashes?: string[];
+  creation_time?: string;
+  status?: SigningStatus;
+}
+export interface CompactSigningRequestAminoMsg {
+  type: "/side.btcbridge.CompactSigningRequest";
+  value: CompactSigningRequestAmino;
+}
+/** Compact Signing Request */
+export interface CompactSigningRequestSDKType {
+  address: string;
+  sequence: bigint;
+  type: AssetType;
+  txid: string;
+  signers: string[];
+  sig_hashes: string[];
+  creation_time: Date;
+  status: SigningStatus;
+}
 /** Withdrawal Request */
 export interface WithdrawRequest {
   address: string;
@@ -207,6 +297,154 @@ export interface WithdrawRequestSDKType {
   amount: string;
   sequence: bigint;
   txid: string;
+}
+/** Withdrawal request via IBC */
+export interface IBCWithdrawRequest {
+  channelId: string;
+  sequence: bigint;
+  address: string;
+  amount: string;
+}
+export interface IBCWithdrawRequestProtoMsg {
+  typeUrl: "/side.btcbridge.IBCWithdrawRequest";
+  value: Uint8Array;
+}
+/** Withdrawal request via IBC */
+export interface IBCWithdrawRequestAmino {
+  channel_id?: string;
+  sequence?: string;
+  address?: string;
+  amount?: string;
+}
+export interface IBCWithdrawRequestAminoMsg {
+  type: "/side.btcbridge.IBCWithdrawRequest";
+  value: IBCWithdrawRequestAmino;
+}
+/** Withdrawal request via IBC */
+export interface IBCWithdrawRequestSDKType {
+  channel_id: string;
+  sequence: bigint;
+  address: string;
+  amount: string;
+}
+/** Rate limit for BTC withdrawal */
+export interface RateLimit {
+  globalRateLimit: GlobalRateLimit;
+  addressRateLimit: AddressRateLimit;
+}
+export interface RateLimitProtoMsg {
+  typeUrl: "/side.btcbridge.RateLimit";
+  value: Uint8Array;
+}
+/** Rate limit for BTC withdrawal */
+export interface RateLimitAmino {
+  global_rate_limit?: GlobalRateLimitAmino;
+  address_rate_limit?: AddressRateLimitAmino;
+}
+export interface RateLimitAminoMsg {
+  type: "/side.btcbridge.RateLimit";
+  value: RateLimitAmino;
+}
+/** Rate limit for BTC withdrawal */
+export interface RateLimitSDKType {
+  global_rate_limit: GlobalRateLimitSDKType;
+  address_rate_limit: AddressRateLimitSDKType;
+}
+/** Global rate limit for BTC withdrawal */
+export interface GlobalRateLimit {
+  /** Starting time for the current epoch */
+  startTime: Date;
+  /** End time for the current epoch */
+  endTime: Date;
+  /** Maximum withdrawable amount for the current epoch; 0 means no limit */
+  quota: bigint;
+  /** Used quota currently */
+  used: bigint;
+}
+export interface GlobalRateLimitProtoMsg {
+  typeUrl: "/side.btcbridge.GlobalRateLimit";
+  value: Uint8Array;
+}
+/** Global rate limit for BTC withdrawal */
+export interface GlobalRateLimitAmino {
+  /** Starting time for the current epoch */
+  start_time?: string;
+  /** End time for the current epoch */
+  end_time?: string;
+  /** Maximum withdrawable amount for the current epoch; 0 means no limit */
+  quota?: string;
+  /** Used quota currently */
+  used?: string;
+}
+export interface GlobalRateLimitAminoMsg {
+  type: "/side.btcbridge.GlobalRateLimit";
+  value: GlobalRateLimitAmino;
+}
+/** Global rate limit for BTC withdrawal */
+export interface GlobalRateLimitSDKType {
+  start_time: Date;
+  end_time: Date;
+  quota: bigint;
+  used: bigint;
+}
+/** Per address rate limit for BTC withdrawal */
+export interface AddressRateLimit {
+  /** Starting time for the current epoch */
+  startTime: Date;
+  /** End time for the current epoch */
+  endTime: Date;
+  /** Maximum withdrawable amount for the current epoch; 0 means no limit */
+  quota: bigint;
+}
+export interface AddressRateLimitProtoMsg {
+  typeUrl: "/side.btcbridge.AddressRateLimit";
+  value: Uint8Array;
+}
+/** Per address rate limit for BTC withdrawal */
+export interface AddressRateLimitAmino {
+  /** Starting time for the current epoch */
+  start_time?: string;
+  /** End time for the current epoch */
+  end_time?: string;
+  /** Maximum withdrawable amount for the current epoch; 0 means no limit */
+  quota?: string;
+}
+export interface AddressRateLimitAminoMsg {
+  type: "/side.btcbridge.AddressRateLimit";
+  value: AddressRateLimitAmino;
+}
+/** Per address rate limit for BTC withdrawal */
+export interface AddressRateLimitSDKType {
+  start_time: Date;
+  end_time: Date;
+  quota: bigint;
+}
+/** Per address rate limit details */
+export interface AddressRateLimitDetails {
+  /** Address */
+  address: string;
+  /** Used quota currently */
+  used: bigint;
+}
+export interface AddressRateLimitDetailsProtoMsg {
+  typeUrl: "/side.btcbridge.AddressRateLimitDetails";
+  value: Uint8Array;
+}
+/** Per address rate limit details */
+export interface AddressRateLimitDetailsAmino {
+  /** Address */
+  address?: string;
+  /** Used quota currently */
+  used?: string;
+}
+export interface AddressRateLimitDetailsAminoMsg {
+  type: "/side.btcbridge.AddressRateLimitDetails";
+  value: AddressRateLimitDetailsAmino;
+}
+/** Per address rate limit details */
+export interface AddressRateLimitDetailsSDKType {
+  address: string;
+  used: bigint;
 }
 /** Bitcoin UTXO */
 export interface UTXO {
@@ -392,11 +630,11 @@ export interface RunesConsolidationSDKType {
 }
 /** DKG Participant */
 export interface DKGParticipant {
-  /** the moniker of the corresponding validator */
+  /** the optional moniker */
   moniker: string;
-  /** the operator address of the corresponding validator */
+  /** the optional operator address */
   operatorAddress: string;
-  /** the consensus public key of the corresponding validator */
+  /** participant consensus pub key */
   consensusPubkey: string;
 }
 export interface DKGParticipantProtoMsg {
@@ -405,11 +643,11 @@ export interface DKGParticipantProtoMsg {
 }
 /** DKG Participant */
 export interface DKGParticipantAmino {
-  /** the moniker of the corresponding validator */
+  /** the optional moniker */
   moniker?: string;
-  /** the operator address of the corresponding validator */
+  /** the optional operator address */
   operator_address?: string;
-  /** the consensus public key of the corresponding validator */
+  /** participant consensus pub key */
   consensus_pubkey?: string;
 }
 export interface DKGParticipantAminoMsg {
@@ -487,9 +725,9 @@ export interface DKGCompletionRequest {
   sender: string;
   /** new vaults generated by DKG */
   vaults: string[];
-  /** consensus address of the corresponding validator */
-  consensusAddress: string;
-  /** hex encoded validator signature */
+  /** participant consensus pub key */
+  consensusPubkey: string;
+  /** hex encoded participant signature */
   signature: string;
 }
 export interface DKGCompletionRequestProtoMsg {
@@ -504,9 +742,9 @@ export interface DKGCompletionRequestAmino {
   sender?: string;
   /** new vaults generated by DKG */
   vaults?: string[];
-  /** consensus address of the corresponding validator */
-  consensus_address?: string;
-  /** hex encoded validator signature */
+  /** participant consensus pub key */
+  consensus_pubkey?: string;
+  /** hex encoded participant signature */
   signature?: string;
 }
 export interface DKGCompletionRequestAminoMsg {
@@ -518,7 +756,91 @@ export interface DKGCompletionRequestSDKType {
   id: bigint;
   sender: string;
   vaults: string[];
-  consensus_address: string;
+  consensus_pubkey: string;
+  signature: string;
+}
+/** Refreshing Request */
+export interface RefreshingRequest {
+  /** request id */
+  id: bigint;
+  /** request id of the DKG corresponding to the key shares to be refreshed */
+  dkgId: bigint;
+  /** removed participant set */
+  removedParticipants: string[];
+  /** new threshold */
+  threshold: number;
+  /** expiration time */
+  expirationTime: Date;
+  /** status */
+  status: RefreshingStatus;
+}
+export interface RefreshingRequestProtoMsg {
+  typeUrl: "/side.btcbridge.RefreshingRequest";
+  value: Uint8Array;
+}
+/** Refreshing Request */
+export interface RefreshingRequestAmino {
+  /** request id */
+  id?: string;
+  /** request id of the DKG corresponding to the key shares to be refreshed */
+  dkg_id?: string;
+  /** removed participant set */
+  removed_participants?: string[];
+  /** new threshold */
+  threshold?: number;
+  /** expiration time */
+  expiration_time?: string;
+  /** status */
+  status?: RefreshingStatus;
+}
+export interface RefreshingRequestAminoMsg {
+  type: "/side.btcbridge.RefreshingRequest";
+  value: RefreshingRequestAmino;
+}
+/** Refreshing Request */
+export interface RefreshingRequestSDKType {
+  id: bigint;
+  dkg_id: bigint;
+  removed_participants: string[];
+  threshold: number;
+  expiration_time: Date;
+  status: RefreshingStatus;
+}
+/** Refreshing Completion */
+export interface RefreshingCompletion {
+  /** request id */
+  id: bigint;
+  /** sender */
+  sender: string;
+  /** participant consensus pub key */
+  consensusPubkey: string;
+  /** hex encoded participant signature */
+  signature: string;
+}
+export interface RefreshingCompletionProtoMsg {
+  typeUrl: "/side.btcbridge.RefreshingCompletion";
+  value: Uint8Array;
+}
+/** Refreshing Completion */
+export interface RefreshingCompletionAmino {
+  /** request id */
+  id?: string;
+  /** sender */
+  sender?: string;
+  /** participant consensus pub key */
+  consensus_pubkey?: string;
+  /** hex encoded participant signature */
+  signature?: string;
+}
+export interface RefreshingCompletionAminoMsg {
+  type: "/side.btcbridge.RefreshingCompletion";
+  value: RefreshingCompletionAmino;
+}
+/** Refreshing Completion */
+export interface RefreshingCompletionSDKType {
+  id: bigint;
+  sender: string;
+  consensus_pubkey: string;
   signature: string;
 }
 function createBaseFeeRate(): FeeRate {
@@ -731,6 +1053,157 @@ export const SigningRequest = {
     };
   }
 };
+function createBaseCompactSigningRequest(): CompactSigningRequest {
+  return {
+    address: "",
+    sequence: BigInt(0),
+    type: 0,
+    txid: "",
+    signers: [],
+    sigHashes: [],
+    creationTime: new Date(),
+    status: 0
+  };
+}
+export const CompactSigningRequest = {
+  typeUrl: "/side.btcbridge.CompactSigningRequest",
+  encode(message: CompactSigningRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    if (message.sequence !== BigInt(0)) {
+      writer.uint32(16).uint64(message.sequence);
+    }
+    if (message.type !== 0) {
+      writer.uint32(24).int32(message.type);
+    }
+    if (message.txid !== "") {
+      writer.uint32(34).string(message.txid);
+    }
+    for (const v of message.signers) {
+      writer.uint32(42).string(v!);
+    }
+    for (const v of message.sigHashes) {
+      writer.uint32(50).string(v!);
+    }
+    if (message.creationTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.creationTime), writer.uint32(58).fork()).ldelim();
+    }
+    if (message.status !== 0) {
+      writer.uint32(64).int32(message.status);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): CompactSigningRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCompactSigningRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.sequence = reader.uint64();
+          break;
+        case 3:
+          message.type = reader.int32() as any;
+          break;
+        case 4:
+          message.txid = reader.string();
+          break;
+        case 5:
+          message.signers.push(reader.string());
+          break;
+        case 6:
+          message.sigHashes.push(reader.string());
+          break;
+        case 7:
+          message.creationTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 8:
+          message.status = reader.int32() as any;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<CompactSigningRequest>): CompactSigningRequest {
+    const message = createBaseCompactSigningRequest();
+    message.address = object.address ?? "";
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
+    message.type = object.type ?? 0;
+    message.txid = object.txid ?? "";
+    message.signers = object.signers?.map(e => e) || [];
+    message.sigHashes = object.sigHashes?.map(e => e) || [];
+    message.creationTime = object.creationTime ?? undefined;
+    message.status = object.status ?? 0;
+    return message;
+  },
+  fromAmino(object: CompactSigningRequestAmino): CompactSigningRequest {
+    const message = createBaseCompactSigningRequest();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = BigInt(object.sequence);
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    }
+    if (object.txid !== undefined && object.txid !== null) {
+      message.txid = object.txid;
+    }
+    message.signers = object.signers?.map(e => e) || [];
+    message.sigHashes = object.sig_hashes?.map(e => e) || [];
+    if (object.creation_time !== undefined && object.creation_time !== null) {
+      message.creationTime = fromTimestamp(Timestamp.fromAmino(object.creation_time));
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
+    }
+    return message;
+  },
+  toAmino(message: CompactSigningRequest): CompactSigningRequestAmino {
+    const obj: any = {};
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.type = message.type === 0 ? undefined : message.type;
+    obj.txid = message.txid === "" ? undefined : message.txid;
+    if (message.signers) {
+      obj.signers = message.signers.map(e => e);
+    } else {
+      obj.signers = message.signers;
+    }
+    if (message.sigHashes) {
+      obj.sig_hashes = message.sigHashes.map(e => e);
+    } else {
+      obj.sig_hashes = message.sigHashes;
+    }
+    obj.creation_time = message.creationTime ? Timestamp.toAmino(toTimestamp(message.creationTime)) : undefined;
+    obj.status = message.status === 0 ? undefined : message.status;
+    return obj;
+  },
+  fromAminoMsg(object: CompactSigningRequestAminoMsg): CompactSigningRequest {
+    return CompactSigningRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: CompactSigningRequestProtoMsg): CompactSigningRequest {
+    return CompactSigningRequest.decode(message.value);
+  },
+  toProto(message: CompactSigningRequest): Uint8Array {
+    return CompactSigningRequest.encode(message).finish();
+  },
+  toProtoMsg(message: CompactSigningRequest): CompactSigningRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.CompactSigningRequest",
+      value: CompactSigningRequest.encode(message).finish()
+    };
+  }
+};
 function createBaseWithdrawRequest(): WithdrawRequest {
   return {
     address: "",
@@ -827,6 +1300,441 @@ export const WithdrawRequest = {
     return {
       typeUrl: "/side.btcbridge.WithdrawRequest",
       value: WithdrawRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseIBCWithdrawRequest(): IBCWithdrawRequest {
+  return {
+    channelId: "",
+    sequence: BigInt(0),
+    address: "",
+    amount: ""
+  };
+}
+export const IBCWithdrawRequest = {
+  typeUrl: "/side.btcbridge.IBCWithdrawRequest",
+  encode(message: IBCWithdrawRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.channelId !== "") {
+      writer.uint32(10).string(message.channelId);
+    }
+    if (message.sequence !== BigInt(0)) {
+      writer.uint32(16).uint64(message.sequence);
+    }
+    if (message.address !== "") {
+      writer.uint32(26).string(message.address);
+    }
+    if (message.amount !== "") {
+      writer.uint32(34).string(message.amount);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): IBCWithdrawRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseIBCWithdrawRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.channelId = reader.string();
+          break;
+        case 2:
+          message.sequence = reader.uint64();
+          break;
+        case 3:
+          message.address = reader.string();
+          break;
+        case 4:
+          message.amount = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<IBCWithdrawRequest>): IBCWithdrawRequest {
+    const message = createBaseIBCWithdrawRequest();
+    message.channelId = object.channelId ?? "";
+    message.sequence = object.sequence !== undefined && object.sequence !== null ? BigInt(object.sequence.toString()) : BigInt(0);
+    message.address = object.address ?? "";
+    message.amount = object.amount ?? "";
+    return message;
+  },
+  fromAmino(object: IBCWithdrawRequestAmino): IBCWithdrawRequest {
+    const message = createBaseIBCWithdrawRequest();
+    if (object.channel_id !== undefined && object.channel_id !== null) {
+      message.channelId = object.channel_id;
+    }
+    if (object.sequence !== undefined && object.sequence !== null) {
+      message.sequence = BigInt(object.sequence);
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    }
+    return message;
+  },
+  toAmino(message: IBCWithdrawRequest): IBCWithdrawRequestAmino {
+    const obj: any = {};
+    obj.channel_id = message.channelId === "" ? undefined : message.channelId;
+    obj.sequence = message.sequence !== BigInt(0) ? message.sequence.toString() : undefined;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.amount = message.amount === "" ? undefined : message.amount;
+    return obj;
+  },
+  fromAminoMsg(object: IBCWithdrawRequestAminoMsg): IBCWithdrawRequest {
+    return IBCWithdrawRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: IBCWithdrawRequestProtoMsg): IBCWithdrawRequest {
+    return IBCWithdrawRequest.decode(message.value);
+  },
+  toProto(message: IBCWithdrawRequest): Uint8Array {
+    return IBCWithdrawRequest.encode(message).finish();
+  },
+  toProtoMsg(message: IBCWithdrawRequest): IBCWithdrawRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.IBCWithdrawRequest",
+      value: IBCWithdrawRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseRateLimit(): RateLimit {
+  return {
+    globalRateLimit: GlobalRateLimit.fromPartial({}),
+    addressRateLimit: AddressRateLimit.fromPartial({})
+  };
+}
+export const RateLimit = {
+  typeUrl: "/side.btcbridge.RateLimit",
+  encode(message: RateLimit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.globalRateLimit !== undefined) {
+      GlobalRateLimit.encode(message.globalRateLimit, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.addressRateLimit !== undefined) {
+      AddressRateLimit.encode(message.addressRateLimit, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RateLimit {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRateLimit();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.globalRateLimit = GlobalRateLimit.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.addressRateLimit = AddressRateLimit.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<RateLimit>): RateLimit {
+    const message = createBaseRateLimit();
+    message.globalRateLimit = object.globalRateLimit !== undefined && object.globalRateLimit !== null ? GlobalRateLimit.fromPartial(object.globalRateLimit) : undefined;
+    message.addressRateLimit = object.addressRateLimit !== undefined && object.addressRateLimit !== null ? AddressRateLimit.fromPartial(object.addressRateLimit) : undefined;
+    return message;
+  },
+  fromAmino(object: RateLimitAmino): RateLimit {
+    const message = createBaseRateLimit();
+    if (object.global_rate_limit !== undefined && object.global_rate_limit !== null) {
+      message.globalRateLimit = GlobalRateLimit.fromAmino(object.global_rate_limit);
+    }
+    if (object.address_rate_limit !== undefined && object.address_rate_limit !== null) {
+      message.addressRateLimit = AddressRateLimit.fromAmino(object.address_rate_limit);
+    }
+    return message;
+  },
+  toAmino(message: RateLimit): RateLimitAmino {
+    const obj: any = {};
+    obj.global_rate_limit = message.globalRateLimit ? GlobalRateLimit.toAmino(message.globalRateLimit) : undefined;
+    obj.address_rate_limit = message.addressRateLimit ? AddressRateLimit.toAmino(message.addressRateLimit) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: RateLimitAminoMsg): RateLimit {
+    return RateLimit.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RateLimitProtoMsg): RateLimit {
+    return RateLimit.decode(message.value);
+  },
+  toProto(message: RateLimit): Uint8Array {
+    return RateLimit.encode(message).finish();
+  },
+  toProtoMsg(message: RateLimit): RateLimitProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.RateLimit",
+      value: RateLimit.encode(message).finish()
+    };
+  }
+};
+function createBaseGlobalRateLimit(): GlobalRateLimit {
+  return {
+    startTime: new Date(),
+    endTime: new Date(),
+    quota: BigInt(0),
+    used: BigInt(0)
+  };
+}
+export const GlobalRateLimit = {
+  typeUrl: "/side.btcbridge.GlobalRateLimit",
+  encode(message: GlobalRateLimit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.startTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.startTime), writer.uint32(10).fork()).ldelim();
+    }
+    if (message.endTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.endTime), writer.uint32(18).fork()).ldelim();
+    }
+    if (message.quota !== BigInt(0)) {
+      writer.uint32(24).int64(message.quota);
+    }
+    if (message.used !== BigInt(0)) {
+      writer.uint32(32).int64(message.used);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): GlobalRateLimit {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGlobalRateLimit();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.startTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.endTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.quota = reader.int64();
+          break;
+        case 4:
+          message.used = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<GlobalRateLimit>): GlobalRateLimit {
+    const message = createBaseGlobalRateLimit();
+    message.startTime = object.startTime ?? undefined;
+    message.endTime = object.endTime ?? undefined;
+    message.quota = object.quota !== undefined && object.quota !== null ? BigInt(object.quota.toString()) : BigInt(0);
+    message.used = object.used !== undefined && object.used !== null ? BigInt(object.used.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: GlobalRateLimitAmino): GlobalRateLimit {
+    const message = createBaseGlobalRateLimit();
+    if (object.start_time !== undefined && object.start_time !== null) {
+      message.startTime = fromTimestamp(Timestamp.fromAmino(object.start_time));
+    }
+    if (object.end_time !== undefined && object.end_time !== null) {
+      message.endTime = fromTimestamp(Timestamp.fromAmino(object.end_time));
+    }
+    if (object.quota !== undefined && object.quota !== null) {
+      message.quota = BigInt(object.quota);
+    }
+    if (object.used !== undefined && object.used !== null) {
+      message.used = BigInt(object.used);
+    }
+    return message;
+  },
+  toAmino(message: GlobalRateLimit): GlobalRateLimitAmino {
+    const obj: any = {};
+    obj.start_time = message.startTime ? Timestamp.toAmino(toTimestamp(message.startTime)) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(toTimestamp(message.endTime)) : undefined;
+    obj.quota = message.quota !== BigInt(0) ? message.quota.toString() : undefined;
+    obj.used = message.used !== BigInt(0) ? message.used.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: GlobalRateLimitAminoMsg): GlobalRateLimit {
+    return GlobalRateLimit.fromAmino(object.value);
+  },
+  fromProtoMsg(message: GlobalRateLimitProtoMsg): GlobalRateLimit {
+    return GlobalRateLimit.decode(message.value);
+  },
+  toProto(message: GlobalRateLimit): Uint8Array {
+    return GlobalRateLimit.encode(message).finish();
+  },
+  toProtoMsg(message: GlobalRateLimit): GlobalRateLimitProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.GlobalRateLimit",
+      value: GlobalRateLimit.encode(message).finish()
+    };
+  }
+};
+function createBaseAddressRateLimit(): AddressRateLimit {
+  return {
+    startTime: new Date(),
+    endTime: new Date(),
+    quota: BigInt(0)
+  };
+}
+export const AddressRateLimit = {
+  typeUrl: "/side.btcbridge.AddressRateLimit",
+  encode(message: AddressRateLimit, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.startTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.startTime), writer.uint32(10).fork()).ldelim();
+    }
+    if (message.endTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.endTime), writer.uint32(18).fork()).ldelim();
+    }
+    if (message.quota !== BigInt(0)) {
+      writer.uint32(24).int64(message.quota);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): AddressRateLimit {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAddressRateLimit();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.startTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.endTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.quota = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<AddressRateLimit>): AddressRateLimit {
+    const message = createBaseAddressRateLimit();
+    message.startTime = object.startTime ?? undefined;
+    message.endTime = object.endTime ?? undefined;
+    message.quota = object.quota !== undefined && object.quota !== null ? BigInt(object.quota.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: AddressRateLimitAmino): AddressRateLimit {
+    const message = createBaseAddressRateLimit();
+    if (object.start_time !== undefined && object.start_time !== null) {
+      message.startTime = fromTimestamp(Timestamp.fromAmino(object.start_time));
+    }
+    if (object.end_time !== undefined && object.end_time !== null) {
+      message.endTime = fromTimestamp(Timestamp.fromAmino(object.end_time));
+    }
+    if (object.quota !== undefined && object.quota !== null) {
+      message.quota = BigInt(object.quota);
+    }
+    return message;
+  },
+  toAmino(message: AddressRateLimit): AddressRateLimitAmino {
+    const obj: any = {};
+    obj.start_time = message.startTime ? Timestamp.toAmino(toTimestamp(message.startTime)) : undefined;
+    obj.end_time = message.endTime ? Timestamp.toAmino(toTimestamp(message.endTime)) : undefined;
+    obj.quota = message.quota !== BigInt(0) ? message.quota.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: AddressRateLimitAminoMsg): AddressRateLimit {
+    return AddressRateLimit.fromAmino(object.value);
+  },
+  fromProtoMsg(message: AddressRateLimitProtoMsg): AddressRateLimit {
+    return AddressRateLimit.decode(message.value);
+  },
+  toProto(message: AddressRateLimit): Uint8Array {
+    return AddressRateLimit.encode(message).finish();
+  },
+  toProtoMsg(message: AddressRateLimit): AddressRateLimitProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.AddressRateLimit",
+      value: AddressRateLimit.encode(message).finish()
+    };
+  }
+};
+function createBaseAddressRateLimitDetails(): AddressRateLimitDetails {
+  return {
+    address: "",
+    used: BigInt(0)
+  };
+}
+export const AddressRateLimitDetails = {
+  typeUrl: "/side.btcbridge.AddressRateLimitDetails",
+  encode(message: AddressRateLimitDetails, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address !== "") {
+      writer.uint32(10).string(message.address);
+    }
+    if (message.used !== BigInt(0)) {
+      writer.uint32(16).int64(message.used);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): AddressRateLimitDetails {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAddressRateLimitDetails();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string();
+          break;
+        case 2:
+          message.used = reader.int64();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<AddressRateLimitDetails>): AddressRateLimitDetails {
+    const message = createBaseAddressRateLimitDetails();
+    message.address = object.address ?? "";
+    message.used = object.used !== undefined && object.used !== null ? BigInt(object.used.toString()) : BigInt(0);
+    return message;
+  },
+  fromAmino(object: AddressRateLimitDetailsAmino): AddressRateLimitDetails {
+    const message = createBaseAddressRateLimitDetails();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.used !== undefined && object.used !== null) {
+      message.used = BigInt(object.used);
+    }
+    return message;
+  },
+  toAmino(message: AddressRateLimitDetails): AddressRateLimitDetailsAmino {
+    const obj: any = {};
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.used = message.used !== BigInt(0) ? message.used.toString() : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: AddressRateLimitDetailsAminoMsg): AddressRateLimitDetails {
+    return AddressRateLimitDetails.fromAmino(object.value);
+  },
+  fromProtoMsg(message: AddressRateLimitDetailsProtoMsg): AddressRateLimitDetails {
+    return AddressRateLimitDetails.decode(message.value);
+  },
+  toProto(message: AddressRateLimitDetails): Uint8Array {
+    return AddressRateLimitDetails.encode(message).finish();
+  },
+  toProtoMsg(message: AddressRateLimitDetails): AddressRateLimitDetailsProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.AddressRateLimitDetails",
+      value: AddressRateLimitDetails.encode(message).finish()
     };
   }
 };
@@ -1630,7 +2538,7 @@ function createBaseDKGCompletionRequest(): DKGCompletionRequest {
     id: BigInt(0),
     sender: "",
     vaults: [],
-    consensusAddress: "",
+    consensusPubkey: "",
     signature: ""
   };
 }
@@ -1646,8 +2554,8 @@ export const DKGCompletionRequest = {
     for (const v of message.vaults) {
       writer.uint32(26).string(v!);
     }
-    if (message.consensusAddress !== "") {
-      writer.uint32(34).string(message.consensusAddress);
+    if (message.consensusPubkey !== "") {
+      writer.uint32(34).string(message.consensusPubkey);
     }
     if (message.signature !== "") {
       writer.uint32(42).string(message.signature);
@@ -1671,7 +2579,7 @@ export const DKGCompletionRequest = {
           message.vaults.push(reader.string());
           break;
         case 4:
-          message.consensusAddress = reader.string();
+          message.consensusPubkey = reader.string();
           break;
         case 5:
           message.signature = reader.string();
@@ -1688,7 +2596,7 @@ export const DKGCompletionRequest = {
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.sender = object.sender ?? "";
     message.vaults = object.vaults?.map(e => e) || [];
-    message.consensusAddress = object.consensusAddress ?? "";
+    message.consensusPubkey = object.consensusPubkey ?? "";
     message.signature = object.signature ?? "";
     return message;
   },
@@ -1701,8 +2609,8 @@ export const DKGCompletionRequest = {
       message.sender = object.sender;
     }
     message.vaults = object.vaults?.map(e => e) || [];
-    if (object.consensus_address !== undefined && object.consensus_address !== null) {
-      message.consensusAddress = object.consensus_address;
+    if (object.consensus_pubkey !== undefined && object.consensus_pubkey !== null) {
+      message.consensusPubkey = object.consensus_pubkey;
     }
     if (object.signature !== undefined && object.signature !== null) {
       message.signature = object.signature;
@@ -1718,7 +2626,7 @@ export const DKGCompletionRequest = {
     } else {
       obj.vaults = message.vaults;
     }
-    obj.consensus_address = message.consensusAddress === "" ? undefined : message.consensusAddress;
+    obj.consensus_pubkey = message.consensusPubkey === "" ? undefined : message.consensusPubkey;
     obj.signature = message.signature === "" ? undefined : message.signature;
     return obj;
   },
@@ -1735,6 +2643,230 @@ export const DKGCompletionRequest = {
     return {
       typeUrl: "/side.btcbridge.DKGCompletionRequest",
       value: DKGCompletionRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseRefreshingRequest(): RefreshingRequest {
+  return {
+    id: BigInt(0),
+    dkgId: BigInt(0),
+    removedParticipants: [],
+    threshold: 0,
+    expirationTime: new Date(),
+    status: 0
+  };
+}
+export const RefreshingRequest = {
+  typeUrl: "/side.btcbridge.RefreshingRequest",
+  encode(message: RefreshingRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
+      writer.uint32(8).uint64(message.id);
+    }
+    if (message.dkgId !== BigInt(0)) {
+      writer.uint32(16).uint64(message.dkgId);
+    }
+    for (const v of message.removedParticipants) {
+      writer.uint32(26).string(v!);
+    }
+    if (message.threshold !== 0) {
+      writer.uint32(32).uint32(message.threshold);
+    }
+    if (message.expirationTime !== undefined) {
+      Timestamp.encode(toTimestamp(message.expirationTime), writer.uint32(42).fork()).ldelim();
+    }
+    if (message.status !== 0) {
+      writer.uint32(48).int32(message.status);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RefreshingRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRefreshingRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.uint64();
+          break;
+        case 2:
+          message.dkgId = reader.uint64();
+          break;
+        case 3:
+          message.removedParticipants.push(reader.string());
+          break;
+        case 4:
+          message.threshold = reader.uint32();
+          break;
+        case 5:
+          message.expirationTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        case 6:
+          message.status = reader.int32() as any;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<RefreshingRequest>): RefreshingRequest {
+    const message = createBaseRefreshingRequest();
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
+    message.dkgId = object.dkgId !== undefined && object.dkgId !== null ? BigInt(object.dkgId.toString()) : BigInt(0);
+    message.removedParticipants = object.removedParticipants?.map(e => e) || [];
+    message.threshold = object.threshold ?? 0;
+    message.expirationTime = object.expirationTime ?? undefined;
+    message.status = object.status ?? 0;
+    return message;
+  },
+  fromAmino(object: RefreshingRequestAmino): RefreshingRequest {
+    const message = createBaseRefreshingRequest();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.dkg_id !== undefined && object.dkg_id !== null) {
+      message.dkgId = BigInt(object.dkg_id);
+    }
+    message.removedParticipants = object.removed_participants?.map(e => e) || [];
+    if (object.threshold !== undefined && object.threshold !== null) {
+      message.threshold = object.threshold;
+    }
+    if (object.expiration_time !== undefined && object.expiration_time !== null) {
+      message.expirationTime = fromTimestamp(Timestamp.fromAmino(object.expiration_time));
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
+    }
+    return message;
+  },
+  toAmino(message: RefreshingRequest): RefreshingRequestAmino {
+    const obj: any = {};
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.dkg_id = message.dkgId !== BigInt(0) ? message.dkgId.toString() : undefined;
+    if (message.removedParticipants) {
+      obj.removed_participants = message.removedParticipants.map(e => e);
+    } else {
+      obj.removed_participants = message.removedParticipants;
+    }
+    obj.threshold = message.threshold === 0 ? undefined : message.threshold;
+    obj.expiration_time = message.expirationTime ? Timestamp.toAmino(toTimestamp(message.expirationTime)) : undefined;
+    obj.status = message.status === 0 ? undefined : message.status;
+    return obj;
+  },
+  fromAminoMsg(object: RefreshingRequestAminoMsg): RefreshingRequest {
+    return RefreshingRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RefreshingRequestProtoMsg): RefreshingRequest {
+    return RefreshingRequest.decode(message.value);
+  },
+  toProto(message: RefreshingRequest): Uint8Array {
+    return RefreshingRequest.encode(message).finish();
+  },
+  toProtoMsg(message: RefreshingRequest): RefreshingRequestProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.RefreshingRequest",
+      value: RefreshingRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseRefreshingCompletion(): RefreshingCompletion {
+  return {
+    id: BigInt(0),
+    sender: "",
+    consensusPubkey: "",
+    signature: ""
+  };
+}
+export const RefreshingCompletion = {
+  typeUrl: "/side.btcbridge.RefreshingCompletion",
+  encode(message: RefreshingCompletion, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.id !== BigInt(0)) {
+      writer.uint32(8).uint64(message.id);
+    }
+    if (message.sender !== "") {
+      writer.uint32(18).string(message.sender);
+    }
+    if (message.consensusPubkey !== "") {
+      writer.uint32(26).string(message.consensusPubkey);
+    }
+    if (message.signature !== "") {
+      writer.uint32(34).string(message.signature);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RefreshingCompletion {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRefreshingCompletion();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.uint64();
+          break;
+        case 2:
+          message.sender = reader.string();
+          break;
+        case 3:
+          message.consensusPubkey = reader.string();
+          break;
+        case 4:
+          message.signature = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<RefreshingCompletion>): RefreshingCompletion {
+    const message = createBaseRefreshingCompletion();
+    message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
+    message.sender = object.sender ?? "";
+    message.consensusPubkey = object.consensusPubkey ?? "";
+    message.signature = object.signature ?? "";
+    return message;
+  },
+  fromAmino(object: RefreshingCompletionAmino): RefreshingCompletion {
+    const message = createBaseRefreshingCompletion();
+    if (object.id !== undefined && object.id !== null) {
+      message.id = BigInt(object.id);
+    }
+    if (object.sender !== undefined && object.sender !== null) {
+      message.sender = object.sender;
+    }
+    if (object.consensus_pubkey !== undefined && object.consensus_pubkey !== null) {
+      message.consensusPubkey = object.consensus_pubkey;
+    }
+    if (object.signature !== undefined && object.signature !== null) {
+      message.signature = object.signature;
+    }
+    return message;
+  },
+  toAmino(message: RefreshingCompletion): RefreshingCompletionAmino {
+    const obj: any = {};
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
+    obj.sender = message.sender === "" ? undefined : message.sender;
+    obj.consensus_pubkey = message.consensusPubkey === "" ? undefined : message.consensusPubkey;
+    obj.signature = message.signature === "" ? undefined : message.signature;
+    return obj;
+  },
+  fromAminoMsg(object: RefreshingCompletionAminoMsg): RefreshingCompletion {
+    return RefreshingCompletion.fromAmino(object.value);
+  },
+  fromProtoMsg(message: RefreshingCompletionProtoMsg): RefreshingCompletion {
+    return RefreshingCompletion.decode(message.value);
+  },
+  toProto(message: RefreshingCompletion): Uint8Array {
+    return RefreshingCompletion.encode(message).finish();
+  },
+  toProtoMsg(message: RefreshingCompletion): RefreshingCompletionProtoMsg {
+    return {
+      typeUrl: "/side.btcbridge.RefreshingCompletion",
+      value: RefreshingCompletion.encode(message).finish()
     };
   }
 };
