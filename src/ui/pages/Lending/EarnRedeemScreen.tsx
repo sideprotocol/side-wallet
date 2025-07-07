@@ -98,7 +98,7 @@ export default function EarnRedeemScreen() {
           </Typography>
         </>
       ),
-      tip: 'The amount of sToken you’ll receive in exchange for your deposited tokens'
+      tip: ''
     }
   ];
 
