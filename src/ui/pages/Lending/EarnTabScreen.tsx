@@ -271,7 +271,7 @@ export default function EarnTabScreen() {
                 }
               }}
               onClick={() => {
-                navigate('BridgeTabScreen');
+                window.open(`${SIDE_STATION_URL}/skipGo`, '_blank');
               }}>
               Bridge Here
             </Stack>

@@ -449,11 +449,13 @@ export default function LendingTanScreen() {
                   </Text>
                 ) : null}
               </Row>
-              <Text
-                text={`Max Borrowable:
-              ${getTruncate(borrowMaxAmount || '0', poolData?.token.asset.precision || 6)}`}
-                color="white_muted"
-                size="xs"></Text>
+              <Row itemsCenter gap="sm">
+                <Icon icon="wallet-icon" color="white_muted" size={12} />
+                <Text
+                  text={BigNumber(poolTokenBalance?.formatAmount || '0').toFormat()}
+                  color="white_muted"
+                  size="xs"></Text>
+              </Row>
             </Row>
             <Stack
               direction="row"

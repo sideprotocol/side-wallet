@@ -93,11 +93,11 @@ export default function EarnSupplyScreen() {
           }}>
           {getTruncate(receiveShare, 6)}&nbsp;
           <small style={{ fontSize: '100%', color: colors.grey12, fontWeight: 500 }}>
-            s{poolData?.token.asset.symbol}
+            y{poolData?.token.asset.symbol}
           </small>
         </Typography>
       ),
-      tip: 'The amount of sToken you’ll receive in exchange for your deposited tokens'
+      tip: 'The amount of yToken you’ll receive in exchange for your deposited tokens'
     },
     {
       label: 'Expected Interests / day',

@@ -146,7 +146,7 @@ function PoolItemFC({ item }: { item: PoolDataItem }) {
             fontSize: '12px',
             color: colors.grey12
           }}>
-          s{item.token.asset.symbol} Holding
+          y{item.token.asset.symbol} Holding
         </Text>
         <Text
           style={{
