@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
 import ToastView from '@/ui/components/ToastView';
+import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { GetTxByHashResponse } from '@/ui/services/tx/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -18,6 +19,7 @@ import { useGetDepositTx } from './useGetDepositTx';
 import { useGetDlcDcms } from './useGetDlcDcms';
 
 export function useApproveLoan(loan_id: string, collateralAmount: string) {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [tx, setTx] = useState('');
 
@@ -108,6 +110,7 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
       if (hashResponse.tx_response.code === 0) {
         setTx(result.tx_response.txhash);
       } else {
+        navigate('TxFailScreen', { error: hashResponse.tx_response.raw_log });
         toast.custom((t) => (
           <ToastView toaster={t} type="fail">
             <Box
@@ -123,21 +126,7 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
       }
     } catch (err) {
       const error = err as Error;
-
-      console.log({ error });
-
-      toast.custom((t) => (
-        <ToastView toaster={t} type="fail">
-          <Box
-            sx={{
-              mb: '6px',
-              fontSize: '12px',
-              fontWeight: '500'
-            }}>
-            {error.message}
-          </Box>
-        </ToastView>
-      ));
+      navigate('TxFailScreen', { error: error.message });
     } finally {
       setLoading(false);
     }

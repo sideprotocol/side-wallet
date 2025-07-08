@@ -50,20 +50,22 @@ export enum LoanStatus {
   Unspecified = 0,
   /** Requested - Loan Requested */
   Requested = 1,
+  /** Cancelled - Loan Cancelled */
+  Cancelled = 2,
   /** Authorized - Loan Authorized */
-  Authorized = 2,
+  Authorized = 3,
   /** Rejected - Loan Rejected */
-  Rejected = 3,
+  Rejected = 4,
   /** Open - Loan Open */
-  Open = 4,
+  Open = 5,
   /** Repaid - Loan Repaid */
-  Repaid = 5,
+  Repaid = 6,
   /** Defaulted - Loan Defaulted */
-  Defaulted = 6,
+  Defaulted = 7,
   /** Liquidated - Loan Liquidated */
-  Liquidated = 7,
+  Liquidated = 8,
   /** Closed - Loan Closed */
-  Closed = 8,
+  Closed = 9,
   UNRECOGNIZED = -1,
 }
 export const LoanStatusSDKType = LoanStatus;
@@ -77,24 +79,27 @@ export function loanStatusFromJSON(object: any): LoanStatus {
     case "Requested":
       return LoanStatus.Requested;
     case 2:
+    case "Cancelled":
+      return LoanStatus.Cancelled;
+    case 3:
     case "Authorized":
       return LoanStatus.Authorized;
-    case 3:
+    case 4:
     case "Rejected":
       return LoanStatus.Rejected;
-    case 4:
+    case 5:
     case "Open":
       return LoanStatus.Open;
-    case 5:
+    case 6:
     case "Repaid":
       return LoanStatus.Repaid;
-    case 6:
+    case 7:
     case "Defaulted":
       return LoanStatus.Defaulted;
-    case 7:
+    case 8:
     case "Liquidated":
       return LoanStatus.Liquidated;
-    case 8:
+    case 9:
     case "Closed":
       return LoanStatus.Closed;
     case -1:
@@ -109,6 +114,8 @@ export function loanStatusToJSON(object: LoanStatus): string {
       return "Unspecified";
     case LoanStatus.Requested:
       return "Requested";
+    case LoanStatus.Cancelled:
+      return "Cancelled";
     case LoanStatus.Authorized:
       return "Authorized";
     case LoanStatus.Rejected:

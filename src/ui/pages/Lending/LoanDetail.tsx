@@ -18,6 +18,7 @@ import {
   useClaimCollateral,
   useGetBitcoinTxsConfirms,
   useGetDepositTx,
+  useGetDlcMeta,
   useGetLiquidationById,
   useGetLiquidationParams,
   useGetLiquidationPrice,
@@ -108,7 +109,9 @@ export default function LoanDetailScreen() {
 
   const feeRate = uiState.feeRate;
 
-  const { hasAuthorizedCanClaim, noAuthorizeCanClaim } = useGetLoanAuthorization(loan);
+  const { dlcMetaData } = useGetDlcMeta(loan);
+
+  const { canClaim, isRedeeming } = useGetLoanAuthorization(loan);
   const {
     claim,
     loading: claimLoading,
@@ -475,6 +478,13 @@ export default function LoanDetailScreen() {
       tip: 'A unique identifier for the liquidation event'
     }
   ];
+
+  const hasDeposited = depositTxs?.length;
+
+  const hasAuthorized =
+    dlcMetaData?.dlc_meta?.liquidation_cet?.borrower_adaptor_signatures &&
+    dlcMetaData?.dlc_meta?.liquidation_cet?.borrower_adaptor_signatures?.length > 0;
+
   return (
     <Layout>
       {tx ? (
@@ -593,25 +603,45 @@ export default function LoanDetailScreen() {
                   Collateral
                 </Text>
 
-                {loan.status === 'Rejected' ? (
-                  <>
-                    {hasAuthorizedCanClaim || noAuthorizeCanClaim ? (
-                      <></>
-                    ) : loanDetailCex?.returnBtcTxhash ? (
+                <>
+                  {loan.status === 'Authorized' ? (
+                    <StatusWithToExplorer text="Locked" />
+                  ) : loan.status === 'Repaid' ? (
+                    <StatusWithPending text="Unlocking" />
+                  ) : loan.status === 'Open' ? (
+                    <StatusWithToExplorer text="Locked" />
+                  ) : loan.status === 'Closed' ? (
+                    <StatusWithToExplorer text="Unlocked" />
+                  ) : loan.status === 'Liquidated' ? (
+                    <StatusWithToExplorer text="Liquidated" />
+                  ) : loan.status === 'Requested' ? (
+                    <>
+                      {hasAuthorized ? (
+                        <StatusWithToExplorer text="Locked" />
+                      ) : hasDeposited ? (
+                        <>
+                          {isRedeeming ? (
+                            <StatusWithPending text="Unlocking" />
+                          ) : (
+                            <StatusWithToExplorer text="Locked" />
+                          )}
+                        </>
+                      ) : null}
+                    </>
+                  ) : loan.status === 'Cancelled' ? (
+                    loanDetailCex?.returnBtcTxhash ? (
                       <StatusWithToExplorer text="Claimed" />
-                    ) : (
+                    ) : isRedeeming ? (
                       <StatusWithPending text="Unlocking" />
-                    )}
-                  </>
-                ) : loan.status === 'Authorized' || loan.status === 'Open' ? (
-                  <StatusWithToExplorer text="Locked" />
-                ) : loan.status === 'Repaid' ? (
-                  <StatusWithPending text="Unlocking" />
-                ) : loan.status === 'Closed' ? (
-                  <StatusWithToExplorer text="Unlocked" />
-                ) : loan.status === 'Liquidated' ? (
-                  <StatusWithToExplorer text="Liquidated" />
-                ) : null}
+                    ) : null
+                  ) : loan.status === 'Rejected' ? (
+                    loanDetailCex?.returnBtcTxhash ? (
+                      <StatusWithToExplorer text="Claimed" />
+                    ) : isRedeeming ? (
+                      <StatusWithPending text="Unlocking" />
+                    ) : null
+                  ) : null}
+                </>
               </Row>
               {dataCollateral.map((item, index) => {
                 return (
@@ -754,7 +784,7 @@ export default function LoanDetailScreen() {
         </>
       )}
 
-      {!depositTxs?.length && loan.status === 'Requested' ? (
+      {loan.status === 'Requested' && !hasDeposited ? (
         <Button
           preset="primary"
           style={{ position: 'fixed', bottom: 16, left: 16, right: 16 }}
@@ -767,9 +797,9 @@ export default function LoanDetailScreen() {
           }}>
           Lock
         </Button>
-      ) : depositTxs?.length && loan.status === 'Requested' ? (
+      ) : loan.status === 'Requested' && hasDeposited ? (
         <Row style={{ display: tx ? 'none' : 'flex', position: 'fixed', bottom: 16, left: 16, right: 16, gap: '16px' }}>
-          {noAuthorizeCanClaim && (
+          {canClaim && (
             <Button
               preset="primary"
               disabled={claimLoading}
@@ -785,6 +815,7 @@ export default function LoanDetailScreen() {
           <Button
             preset="primary"
             style={{ flex: 1 }}
+            disabled={claimLoading}
             onClick={() => {
               navigate('LoanAuthorizeScreen', {
                 loanId: loan.vault_address,
@@ -805,7 +836,19 @@ export default function LoanDetailScreen() {
           }}>
           Repay
         </Button>
-      ) : hasAuthorizedCanClaim ? (
+      ) : loan.status === 'Rejected' && canClaim ? (
+        <Button
+          preset="primary"
+          disabled={claimLoading}
+          style={{ display: tx ? 'none' : 'flex', position: 'fixed', bottom: 16, left: 16, right: 16 }}
+          onClick={() => {
+            claim({
+              feeRate
+            });
+          }}>
+          Claim
+        </Button>
+      ) : loan.status === 'Cancelled' && canClaim ? (
         <Button
           preset="primary"
           disabled={claimLoading}

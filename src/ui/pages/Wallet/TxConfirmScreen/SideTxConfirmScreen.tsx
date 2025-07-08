@@ -39,7 +39,6 @@ export default function SideTxConfirmScreen() {
   }, [sideTokenList.length, denom, feeDenom]);
 
   const feeTokenInfo = sideTokenList.find((item) => item.denom === feeToken.asset.denom);
-  console.log(uiState.fee);
 
   const feeByUSD = new BigNumber(formatUnitAmount(uiState.fee || '0', feeTokenInfo?.asset.exponent || 6))
     .multipliedBy(feeTokenInfo?.denomPrice || '0')
@@ -70,6 +69,7 @@ export default function SideTxConfirmScreen() {
         feeAmount: fee,
         feeDenom: feeDenom
       });
+      console.log('result', result);
       navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
     } catch (err) {
       const errorString = err instanceof Error ? err.message : typeof err == 'string' ? err : '';

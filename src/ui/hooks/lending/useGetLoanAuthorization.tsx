@@ -5,6 +5,8 @@ import services from '@/ui/services';
 import { Loan } from '@/ui/services/lending/types';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 
+import useGetLoanDeposits from './useGetLoanDeposits';
+
 export function useGetLoanAuthorization(loan?: Loan) {
   const { sideChain } = useEnvironment();
   const { data: loanAuthorization, isLoading: loading } = useQuery({
@@ -16,33 +18,37 @@ export function useGetLoanAuthorization(loan?: Loan) {
       );
     },
 
+    refetchIntervalInBackground: true,
     enabled: loan && loan.status === 'Rejected'
   });
 
-  const { data: loanDeposits } = useQuery({
-    queryKey: ['getLoanDeposits', { loan_id: loan?.vault_address, loan_status: loan?.status }],
-    queryFn: async () => {
-      return services.lending.getLoanDeposits(loan!.vault_address, { baseURL: sideChain.restUrl });
-    },
-    enabled: loan && loan.status === 'Requested'
-  });
+  const { loanDeposits } = useGetLoanDeposits(loan!);
 
-  const { hasAuthorizedCanClaim, noAuthorizeCanClaim, isRedeeming } = useMemo(() => {
-    let hasAuthorizedCanClaim = false,
-      noAuthorizeCanClaim = false,
+  const { isRedeeming, canClaim } = useMemo(() => {
+    let canClaim = false,
       isRedeeming = false;
+
     if (
-      loanAuthorization &&
-      loanAuthorization.status === 'AUTHORIZATION_STATUS_REJECTED' &&
-      loanAuthorization.deposits.every((deposit) => deposit.status == 'DEPOSIT_STATUS_VERIFIED')
-    ) {
-      hasAuthorizedCanClaim = true;
-    } else if (
+      loan?.status === 'Requested' &&
       loanDeposits &&
       loanDeposits.deposits.length &&
       loanDeposits.deposits.every((deposit) => deposit.status == 'DEPOSIT_STATUS_VERIFIED')
     ) {
-      noAuthorizeCanClaim = true;
+      canClaim = true;
+    } else if (
+      loan?.status === 'Cancelled' &&
+      loanDeposits &&
+      loanDeposits.deposits.length &&
+      loanDeposits.deposits.every((deposit) => deposit.status == 'DEPOSIT_STATUS_VERIFIED')
+    ) {
+      canClaim = true;
+    } else if (
+      loan?.status === 'Rejected' &&
+      loanAuthorization &&
+      loanAuthorization.status === 'AUTHORIZATION_STATUS_REJECTED' &&
+      loanAuthorization.deposits.every((deposit) => deposit.status == 'DEPOSIT_STATUS_VERIFIED')
+    ) {
+      canClaim = true;
     } else if (
       loanDeposits &&
       loanDeposits.deposits.length &&
@@ -51,17 +57,14 @@ export function useGetLoanAuthorization(loan?: Loan) {
       isRedeeming = true;
     }
     return {
-      hasAuthorizedCanClaim,
-      noAuthorizeCanClaim,
-      isRedeeming
+      isRedeeming,
+      canClaim
     };
-  }, [loanAuthorization, loanDeposits]);
+  }, [loanAuthorization, loanDeposits, loan?.status]);
 
   return {
     loading,
-    loanAuthorization,
-    hasAuthorizedCanClaim,
-    noAuthorizeCanClaim,
+    canClaim,
     isRedeeming
   };
 }
