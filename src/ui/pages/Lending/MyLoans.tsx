@@ -23,6 +23,7 @@ export const loanStatusStyle: Record<
 > = {
   Unspecified: { bgColor: '', color: '' },
   Requested: { bgColor: colors.card_bgColor, color: colors.grey62 },
+  Cancelled: { bgColor: colors.card_bgColor, color: colors.grey64 },
   Authorized: { bgColor: colors.card_bgColor, color: colors.grey62 },
   Rejected: { bgColor: colors.card_bgColor, color: colors.grey64 },
   Open: { bgColor: colors.green10, color: colors.green },

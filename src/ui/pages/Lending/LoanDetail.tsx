@@ -2,20 +2,8 @@ import BigNumber from 'bignumber.js';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
+import { Button, Column, Content, CopyIcon, Header, Layout, LightTooltip, Row, Text } from '@/ui/components';
 import {
-  Button,
-  Column,
-  Content,
-  CopyIcon,
-  Header,
-  Layout,
-  LightTooltip,
-  Row,
-  SuccessAnimation,
-  Text
-} from '@/ui/components';
-import {
-  useClaimCollateral,
   useGetBitcoinTxsConfirms,
   useGetDepositTx,
   useGetDlcMeta,
@@ -112,12 +100,6 @@ export default function LoanDetailScreen() {
   const { dlcMetaData } = useGetDlcMeta(loan);
 
   const { canClaim, isRedeeming } = useGetLoanAuthorization(loan);
-  const {
-    claim,
-    loading: claimLoading,
-    tx
-  } = useClaimCollateral(loan?.vault_address || '', loan?.collateral_amount || '0');
-
   const { txsConfirms } = useGetBitcoinTxsConfirms(txids);
 
   if (!loan) return null;
@@ -487,302 +469,251 @@ export default function LoanDetailScreen() {
 
   return (
     <Layout>
-      {tx ? (
-        <Content>
-          <Stack
-            alignItems="center"
-            sx={{
-              mt: '100px'
-            }}>
-            <SuccessAnimation />
-            <Typography
+      <Header
+        onBack={() => {
+          if (from === 'createLoan') {
+            window.history.go(-4);
+            return;
+          }
+          window.history.go(-1);
+        }}
+        title="Loan Detail"
+      />
+      <Content
+        style={{
+          padding: '0 16px 70px',
+          marginTop: 16
+        }}>
+        <Column gap={'md'}>
+          <Row justifyCenter>
+            <Stack
+              direction="row"
+              alignItems="center"
+              gap="4px"
               sx={{
-                mt: '15px',
-                fontSize: '20px',
+                bgcolor: colors.card_bgColor,
+                borderRadius: '100px',
+                padding: '4px 10px',
+                p: {}
+              }}>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: colors.grey12
+                }}>
+                Loan ID:&nbsp;
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: colors.grey12,
+                  maxWidth: '160px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer',
+                  transition: '.4s',
+                  ':hover': {
+                    color: colors.main
+                  }
+                }}
+                onClick={() => {
+                  window.open(`${SIDE_STATION_URL}/loan/${loan.vault_address}`);
+                }}>
+                {formatAddress(loan.vault_address, 6)}
+              </Typography>
+              <CopyIcon text={loan.vault_address} onlyIcon size={12} />
+            </Stack>
+          </Row>
+          <Row
+            itemsCenter
+            justifyBetween
+            style={{
+              marginTop: '2px'
+            }}>
+            <Text
+              style={{
+                fontSize: '18px',
                 fontWeight: 600,
-                lineHeight: '23px',
-                color: colors.green
+                color: colors.white
               }}>
-              Completed!
-            </Typography>
-            <Typography
-              sx={{
-                mt: '32px',
-                fontSize: '12px',
-                color: colors.white,
-                maxWidth: '338px',
-                textAlign: 'center',
-                fontWeight: 400
-              }}>
-              You have withdrawn your collateral. Please check your account later.
-            </Typography>
-          </Stack>
-          <Button
-            preset="default"
-            style={{
-              marginTop: '32px'
-            }}
-            onClick={() => {
-              window.history.go(-1);
-            }}>
-            Close
-          </Button>
-        </Content>
-      ) : (
-        <>
-          <Header
-            onBack={() => {
-              if (from === 'createLoan') {
-                window.history.go(-4);
-                return;
-              }
-              window.history.go(-1);
-            }}
-            title="Loan Detail"
-          />
-          <Content
-            style={{
-              padding: '0 16px 70px',
-              marginTop: 16
-            }}>
-            <Column gap={'md'}>
-              <Row justifyCenter>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  gap="4px"
-                  sx={{
-                    bgcolor: colors.card_bgColor,
-                    borderRadius: '100px',
-                    padding: '4px 10px',
-                    p: {}
-                  }}>
+              Collateral
+            </Text>
+
+            <>
+              {loan.status === 'Authorized' ? (
+                <StatusWithToExplorer text="Locked" />
+              ) : loan.status === 'Repaid' ? (
+                <StatusWithPending text="Unlocking" />
+              ) : loan.status === 'Open' ? (
+                <StatusWithToExplorer text="Locked" />
+              ) : loan.status === 'Closed' ? (
+                <StatusWithToExplorer text="Unlocked" />
+              ) : loan.status === 'Liquidated' ? (
+                <StatusWithToExplorer text="Liquidated" />
+              ) : loan.status === 'Requested' ? (
+                <>
+                  {hasAuthorized ? (
+                    <StatusWithToExplorer text="Locked" />
+                  ) : hasDeposited ? (
+                    <>{isRedeeming ? <StatusWithPending text="Unlocking" /> : <StatusWithToExplorer text="Locked" />}</>
+                  ) : null}
+                </>
+              ) : loan.status === 'Cancelled' ? (
+                loanDetailCex?.returnBtcTxhash ? (
+                  <StatusWithToExplorer text="Claimed" />
+                ) : isRedeeming ? (
+                  <StatusWithPending text="Unlocking" />
+                ) : null
+              ) : loan.status === 'Rejected' ? (
+                loanDetailCex?.returnBtcTxhash ? (
+                  <StatusWithToExplorer text="Claimed" />
+                ) : isRedeeming ? (
+                  <StatusWithPending text="Unlocking" />
+                ) : null
+              ) : null}
+            </>
+          </Row>
+          {dataCollateral.map((item, index) => {
+            return (
+              <Row key={index} full justifyBetween itemsCenter>
+                <LightTooltip title={item.tip} arrow placement="top">
                   <Typography
                     sx={{
                       fontSize: '12px',
-                      fontWeight: 500,
-                      color: colors.grey12
-                    }}>
-                    Loan ID:&nbsp;
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: '12px',
-                      fontWeight: 500,
                       color: colors.grey12,
-                      maxWidth: '160px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
+                      textDecoration: 'dotted underline',
+                      textUnderlineOffset: '2px',
                       cursor: 'pointer',
                       transition: '.4s',
                       ':hover': {
-                        color: colors.main
+                        color: colors.white
                       }
-                    }}
-                    onClick={() => {
-                      window.open(`${SIDE_STATION_URL}/loan/${loan.vault_address}`);
                     }}>
-                    {formatAddress(loan.vault_address, 6)}
+                    {item.label}
                   </Typography>
-                  <CopyIcon text={loan.vault_address} onlyIcon size={12} />
-                </Stack>
-              </Row>
-              <Row
-                itemsCenter
-                justifyBetween
-                style={{
-                  marginTop: '2px'
-                }}>
-                <Text
+                </LightTooltip>
+                <Row
+                  justifyEnd
+                  itemsCenter
                   style={{
-                    fontSize: '18px',
-                    fontWeight: 600,
-                    color: colors.white
+                    gap: '2px'
                   }}>
-                  Collateral
-                </Text>
-
-                <>
-                  {loan.status === 'Authorized' ? (
-                    <StatusWithToExplorer text="Locked" />
-                  ) : loan.status === 'Repaid' ? (
-                    <StatusWithPending text="Unlocking" />
-                  ) : loan.status === 'Open' ? (
-                    <StatusWithToExplorer text="Locked" />
-                  ) : loan.status === 'Closed' ? (
-                    <StatusWithToExplorer text="Unlocked" />
-                  ) : loan.status === 'Liquidated' ? (
-                    <StatusWithToExplorer text="Liquidated" />
-                  ) : loan.status === 'Requested' ? (
-                    <>
-                      {hasAuthorized ? (
-                        <StatusWithToExplorer text="Locked" />
-                      ) : hasDeposited ? (
-                        <>
-                          {isRedeeming ? (
-                            <StatusWithPending text="Unlocking" />
-                          ) : (
-                            <StatusWithToExplorer text="Locked" />
-                          )}
-                        </>
-                      ) : null}
-                    </>
-                  ) : loan.status === 'Cancelled' ? (
-                    loanDetailCex?.returnBtcTxhash ? (
-                      <StatusWithToExplorer text="Claimed" />
-                    ) : isRedeeming ? (
-                      <StatusWithPending text="Unlocking" />
-                    ) : null
-                  ) : loan.status === 'Rejected' ? (
-                    loanDetailCex?.returnBtcTxhash ? (
-                      <StatusWithToExplorer text="Claimed" />
-                    ) : isRedeeming ? (
-                      <StatusWithPending text="Unlocking" />
-                    ) : null
-                  ) : null}
-                </>
+                  {item.value}
+                </Row>
               </Row>
-              {dataCollateral.map((item, index) => {
-                return (
-                  <Row key={index} full justifyBetween itemsCenter>
-                    <LightTooltip title={item.tip} arrow placement="top">
-                      <Typography
-                        sx={{
-                          fontSize: '12px',
-                          color: colors.grey12,
-                          textDecoration: 'dotted underline',
-                          textUnderlineOffset: '2px',
-                          cursor: 'pointer',
-                          transition: '.4s',
-                          ':hover': {
-                            color: colors.white
-                          }
-                        }}>
-                        {item.label}
-                      </Typography>
-                    </LightTooltip>
-                    <Row
-                      justifyEnd
-                      itemsCenter
-                      style={{
-                        gap: '2px'
-                      }}>
-                      {item.value}
-                    </Row>
-                  </Row>
-                );
-              })}
-              <Box
-                sx={{
-                  height: '1px',
-                  backgroundColor: colors.black_dark,
-                  my: '16px'
-                }}
-              />
-              <Row itemsCenter justifyBetween>
-                <Text
+            );
+          })}
+          <Box
+            sx={{
+              height: '1px',
+              backgroundColor: colors.black_dark,
+              my: '16px'
+            }}
+          />
+          <Row itemsCenter justifyBetween>
+            <Text
+              style={{
+                fontSize: '18px',
+                fontWeight: 600,
+                color: colors.white
+              }}>
+              Loan
+            </Text>
+            {loan.status === 'Authorized' ? (
+              <StatusWithPending text="Pending" />
+            ) : ['Repaid', 'Closed'].includes(loan.status) ? (
+              <StatusWithToExplorer text="Repaid" />
+            ) : null}
+          </Row>
+          {dataLoan.map((item, index) => {
+            return (
+              <Row key={index} full justifyBetween itemsCenter>
+                <LightTooltip title={item.tip} arrow placement="top">
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      color: colors.grey12,
+                      textDecoration: 'dotted underline',
+                      textUnderlineOffset: '2px',
+                      cursor: 'pointer',
+                      transition: '.4s',
+                      ':hover': {
+                        color: colors.white
+                      }
+                    }}>
+                    {item.label}
+                  </Typography>
+                </LightTooltip>
+                <Row
+                  justifyEnd
+                  itemsCenter
                   style={{
-                    fontSize: '18px',
-                    fontWeight: 600,
-                    color: colors.white
+                    gap: '2px'
                   }}>
-                  Loan
-                </Text>
-                {loan.status === 'Authorized' ? (
-                  <StatusWithPending text="Pending" />
-                ) : ['Repaid', 'Closed'].includes(loan.status) ? (
-                  <StatusWithToExplorer text="Repaid" />
-                ) : null}
+                  {item.value}
+                </Row>
               </Row>
-              {dataLoan.map((item, index) => {
-                return (
-                  <Row key={index} full justifyBetween itemsCenter>
-                    <LightTooltip title={item.tip} arrow placement="top">
-                      <Typography
-                        sx={{
-                          fontSize: '12px',
-                          color: colors.grey12,
-                          textDecoration: 'dotted underline',
-                          textUnderlineOffset: '2px',
-                          cursor: 'pointer',
-                          transition: '.4s',
-                          ':hover': {
-                            color: colors.white
-                          }
-                        }}>
-                        {item.label}
-                      </Typography>
-                    </LightTooltip>
-                    <Row
-                      justifyEnd
-                      itemsCenter
-                      style={{
-                        gap: '2px'
-                      }}>
-                      {item.value}
-                    </Row>
-                  </Row>
-                );
-              })}
-              <Box
-                sx={{
-                  height: '1px',
-                  backgroundColor: colors.black_dark,
-                  my: '16px'
-                }}
-              />
-              <Row itemsCenter>
-                <Text
+            );
+          })}
+          <Box
+            sx={{
+              height: '1px',
+              backgroundColor: colors.black_dark,
+              my: '16px'
+            }}
+          />
+          <Row itemsCenter>
+            <Text
+              style={{
+                fontSize: '18px',
+                fontWeight: 600,
+                color: colors.white
+              }}>
+              Liquidation
+            </Text>
+          </Row>
+          {dataLiquidation.map((item, index) => {
+            return (
+              <Row key={index} full justifyBetween itemsCenter>
+                <LightTooltip title={item.tip} arrow placement="top">
+                  <Typography
+                    sx={{
+                      fontSize: '12px',
+                      color: colors.grey12,
+                      textDecoration: 'dotted underline',
+                      textUnderlineOffset: '2px',
+                      cursor: 'pointer',
+                      transition: '.4s',
+                      ':hover': {
+                        color: colors.white
+                      }
+                    }}>
+                    {item.label}
+                  </Typography>
+                </LightTooltip>
+                <Row
+                  justifyEnd
+                  itemsCenter
                   style={{
-                    fontSize: '18px',
-                    fontWeight: 600,
-                    color: colors.white
+                    gap: '2px'
                   }}>
-                  Liquidation
-                </Text>
+                  {item.value}
+                </Row>
               </Row>
-              {dataLiquidation.map((item, index) => {
-                return (
-                  <Row key={index} full justifyBetween itemsCenter>
-                    <LightTooltip title={item.tip} arrow placement="top">
-                      <Typography
-                        sx={{
-                          fontSize: '12px',
-                          color: colors.grey12,
-                          textDecoration: 'dotted underline',
-                          textUnderlineOffset: '2px',
-                          cursor: 'pointer',
-                          transition: '.4s',
-                          ':hover': {
-                            color: colors.white
-                          }
-                        }}>
-                        {item.label}
-                      </Typography>
-                    </LightTooltip>
-                    <Row
-                      justifyEnd
-                      itemsCenter
-                      style={{
-                        gap: '2px'
-                      }}>
-                      {item.value}
-                    </Row>
-                  </Row>
-                );
-              })}
-              <Box
-                sx={{
-                  height: '1px',
-                  backgroundColor: colors.black_dark,
-                  my: '16px'
-                }}
-              />
-            </Column>
-          </Content>
-        </>
-      )}
+            );
+          })}
+          <Box
+            sx={{
+              height: '1px',
+              backgroundColor: colors.black_dark,
+              my: '16px'
+            }}
+          />
+        </Column>
+      </Content>
 
       {loan.status === 'Requested' && !hasDeposited ? (
         <Button
@@ -798,24 +729,21 @@ export default function LoanDetailScreen() {
           Lock
         </Button>
       ) : loan.status === 'Requested' && hasDeposited ? (
-        <Row style={{ display: tx ? 'none' : 'flex', position: 'fixed', bottom: 16, left: 16, right: 16, gap: '16px' }}>
-          {canClaim && (
-            <Button
-              preset="primary"
-              disabled={claimLoading}
-              style={{ flex: 1 }}
-              onClick={() => {
-                claim({
-                  feeRate
-                });
-              }}>
-              Claim
-            </Button>
-          )}
+        <Row style={{ display: 'flex', position: 'fixed', bottom: 16, left: 16, right: 16, gap: '16px' }}>
+          <Button
+            preset="default"
+            style={{ flex: 1 }}
+            onClick={() => {
+              navigate('LoanClaimScreen', {
+                loan_id: loan.vault_address,
+                collateralUnitAmount: loan.collateral_amount || '0'
+              });
+            }}>
+            Claim
+          </Button>
           <Button
             preset="primary"
             style={{ flex: 1 }}
-            disabled={claimLoading}
             onClick={() => {
               navigate('LoanAuthorizeScreen', {
                 loanId: loan.vault_address,
@@ -839,11 +767,11 @@ export default function LoanDetailScreen() {
       ) : loan.status === 'Rejected' && canClaim ? (
         <Button
           preset="primary"
-          disabled={claimLoading}
-          style={{ display: tx ? 'none' : 'flex', position: 'fixed', bottom: 16, left: 16, right: 16 }}
+          style={{ display: 'flex', position: 'fixed', bottom: 16, left: 16, right: 16 }}
           onClick={() => {
-            claim({
-              feeRate
+            navigate('LoanClaimScreen', {
+              loan_id: loan.vault_address,
+              collateralUnitAmount: loan.collateral_amount || '0'
             });
           }}>
           Claim
@@ -851,11 +779,11 @@ export default function LoanDetailScreen() {
       ) : loan.status === 'Cancelled' && canClaim ? (
         <Button
           preset="primary"
-          disabled={claimLoading}
-          style={{ display: tx ? 'none' : 'flex', position: 'fixed', bottom: 16, left: 16, right: 16 }}
+          style={{ display: 'flex', position: 'fixed', bottom: 16, left: 16, right: 16 }}
           onClick={() => {
-            claim({
-              feeRate
+            navigate('LoanClaimScreen', {
+              loan_id: loan.vault_address,
+              collateralUnitAmount: loan.collateral_amount || '0'
             });
           }}>
           Claim

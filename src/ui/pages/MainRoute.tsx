@@ -43,6 +43,7 @@ import EarnTabScreen from './Lending/EarnTabScreen';
 import LendingSelectTokenScreen from './Lending/LendingSelectToken';
 import LendingTabScreen from './Lending/LendingTabScreen';
 import LoanAuthorizeScreen from './Lending/LoanAuthorizeScreen';
+import LoanClaimScreen from './Lending/LoanClaimScreen';
 import LoanDepositScreen from './Lending/LoanDepositScreen';
 import LoanDetailScreen from './Lending/LoanDetail';
 import LoanRepayScreen from './Lending/LoanRepayScreen';
@@ -159,6 +160,11 @@ export const routes = {
   LoanRepayScreen: {
     path: '/loan-repay',
     element: <LoanRepayScreen />
+  },
+
+  LoanClaimScreen: {
+    path: '/loan-claim',
+    element: <LoanClaimScreen />
   },
 
   MyEarnsScreen: {

@@ -92,11 +92,11 @@ export function useClaimCollateral(loan_id: string, collateralAmount: string) {
         }
       }
       if (hashResponse.tx_response.code === 0) {
+        setTx(result.tx_response.txhash);
         queryClient.invalidateQueries({ queryKey: ['getDlcMeta'] });
         queryClient.invalidateQueries({ queryKey: ['getLoanById'] });
         queryClient.invalidateQueries({ queryKey: ['getLoanAuthorization'] });
         queryClient.invalidateQueries({ queryKey: ['getLoanDeposits'] });
-        setTx(result.tx_response.txhash);
       }
     } catch (err) {
       const error = err as Error;

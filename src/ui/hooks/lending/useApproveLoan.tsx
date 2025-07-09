@@ -126,7 +126,14 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
       }
     } catch (err) {
       const error = err as Error;
-      navigate('TxFailScreen', { error: error.message });
+      if (error.message.includes('invalid liquidation cet: invalid adaptor signature: invalid cet')) {
+        navigate('TxFailScreen', {
+          error:
+            'This loan is no longer available, possibly due to using a different device. Please cancel the request and reclaim your collateral. Next time, try to complete Step 2 promptly on the same device.'
+        });
+      } else {
+        navigate('TxFailScreen', { error: error.message });
+      }
     } finally {
       setLoading(false);
     }
