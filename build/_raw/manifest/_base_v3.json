@@ -26,7 +26,7 @@
   },
   "host_permissions": ["<all_urls>"],
   "homepage_url": "https://side.one/",
-  "permissions": ["storage", "unlimitedStorage", "sidePanel", "tabs", "activeTab", "webRequest"],
+  "permissions": ["storage", "unlimitedStorage", "sidePanel", "tabs", "activeTab"],
   "short_name": "__MSG_appName__",
   "content_scripts": [
     {
