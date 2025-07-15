@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
+import { useEnvironment } from '@/ui/state/environment/hooks';
 import { formatUnitAmount } from '@/ui/utils';
 import { calcToTime, toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
@@ -17,6 +18,7 @@ import { useGetBridgeRateLimitByAddress } from './useGetBridgeRateLimitByAddress
 
 export function useGetBridgeButtonTips() {
   const { balance, bridgeAmount, fromAsset, fee, fromChain, params } = useBridgeState();
+  const { isProduction } = useEnvironment();
 
   const currentAccount = useCurrentAccount();
   const networkType = useNetworkType();
@@ -69,11 +71,20 @@ export function useGetBridgeButtonTips() {
   }, [fromAsset, debouncedBridgeAmount, params, balance, fee]);
 
   const { transferBtcDisabled, transferBtcButtonTips } = useMemo(() => {
-    if (!bridgeAmount || !params || !userRateLimit || !globalRateLimit) {
+    if (!bridgeAmount || !params) {
       return {
         transferBtcDisabled: true,
         transferBtcButtonTips: ''
       };
+    }
+
+    if (!isProduction) {
+      if (!userRateLimit || !globalRateLimit) {
+        return {
+          transferBtcDisabled: true,
+          transferBtcButtonTips: ''
+        };
+      }
     }
 
     if (btcTransferGasError) {
@@ -169,30 +180,33 @@ export function useGetBridgeButtonTips() {
         transferBtcButtonTips: 'Please reserve sufficient funds for network and bridge fees.'
       };
     }
-    // rate limit
-    if (!isDeposit) {
-      const userMaxCanTransfer = formatUnitAmount(
-        BigNumber(userRateLimit.quota).minus(userRateLimit.used).toFixed(BigNumber.ROUND_FLOOR),
-        8
-      );
-      const globalMaxCanTransfer = formatUnitAmount(
-        BigNumber(globalRateLimit.rate_limit.global_rate_limit.quota)
-          .minus(globalRateLimit.rate_limit.global_rate_limit.used)
-          .toFixed(BigNumber.ROUND_FLOOR),
-        8
-      );
-      if (+bridgeAmount > +userMaxCanTransfer) {
-        return {
-          transferBtcDisabled: true,
-          transferBtcButtonTips: `The requested amount exceeds your individual peg-out limit for this cycle. You can peg out up to [${userMaxCanTransfer}] sBTC before the cycle resets.`
-        };
-      }
-      if (+bridgeAmount > +globalMaxCanTransfer) {
-        const { hours, minutes } = calcToTime(globalRateLimit.rate_limit.global_rate_limit.end_time);
-        return {
-          transferBtcDisabled: true,
-          transferBtcButtonTips: `The requested amount exceeds the remaining global peg-out quota for the current cycle. Please try again after the next cycle starts in [${hours} hr ${minutes} min].`
-        };
+
+    if (!isProduction) {
+      // rate limit
+      if (!isDeposit) {
+        const userMaxCanTransfer = formatUnitAmount(
+          BigNumber(userRateLimit!.quota).minus(userRateLimit!.used).toFixed(BigNumber.ROUND_FLOOR),
+          8
+        );
+        const globalMaxCanTransfer = formatUnitAmount(
+          BigNumber(globalRateLimit!.rate_limit.global_rate_limit.quota)
+            .minus(globalRateLimit!.rate_limit.global_rate_limit.used)
+            .toFixed(BigNumber.ROUND_FLOOR),
+          8
+        );
+        if (+bridgeAmount > +userMaxCanTransfer) {
+          return {
+            transferBtcDisabled: true,
+            transferBtcButtonTips: `The requested amount exceeds your individual peg-out limit for this cycle. You can peg out up to [${userMaxCanTransfer}] sBTC before the cycle resets.`
+          };
+        }
+        if (+bridgeAmount > +globalMaxCanTransfer) {
+          const { hours, minutes } = calcToTime(globalRateLimit.rate_limit.global_rate_limit.end_time);
+          return {
+            transferBtcDisabled: true,
+            transferBtcButtonTips: `The requested amount exceeds the remaining global peg-out quota for the current cycle. Please try again after the next cycle starts in [${hours} hr ${minutes} min].`
+          };
+        }
       }
     }
     return {
