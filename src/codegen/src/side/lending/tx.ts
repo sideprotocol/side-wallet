@@ -3,6 +3,7 @@ import { PoolConfig, PoolConfigAmino, PoolConfigSDKType } from "./lending";
 import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { Decimal } from "@cosmjs/math";
 export interface MsgCreatePool {
   /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
   authority: string;
@@ -187,7 +188,7 @@ export interface MsgApply {
   borrowAmount: Coin;
   maturity: bigint;
   dcmId: bigint;
-  referrer: string;
+  referralCode: string;
 }
 export interface MsgApplyProtoMsg {
   typeUrl: "/side.lending.MsgApply";
@@ -201,7 +202,7 @@ export interface MsgApplyAmino {
   borrow_amount?: CoinAmino;
   maturity?: string;
   dcm_id?: string;
-  referrer?: string;
+  referral_code?: string;
 }
 export interface MsgApplyAminoMsg {
   type: "/side.lending.MsgApply";
@@ -215,7 +216,7 @@ export interface MsgApplySDKType {
   borrow_amount: CoinSDKType;
   maturity: bigint;
   dcm_id: bigint;
-  referrer: string;
+  referral_code: string;
 }
 export interface MsgApplyResponse {}
 export interface MsgApplyResponseProtoMsg {
@@ -354,6 +355,118 @@ export interface MsgRedeemResponseAminoMsg {
   value: MsgRedeemResponseAmino;
 }
 export interface MsgRedeemResponseSDKType {}
+/** MsgRegisterReferrer is the Msg/RegisterReferrer request type. */
+export interface MsgRegisterReferrer {
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+  authority: string;
+  /** Optional referrer name */
+  name: string;
+  /** Unique referral code with 8 alphanumeric characters */
+  referralCode: string;
+  /** Referrer address */
+  address: string;
+  /** Referral fee factor */
+  referralFeeFactor: string;
+}
+export interface MsgRegisterReferrerProtoMsg {
+  typeUrl: "/side.lending.MsgRegisterReferrer";
+  value: Uint8Array;
+}
+/** MsgRegisterReferrer is the Msg/RegisterReferrer request type. */
+export interface MsgRegisterReferrerAmino {
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+  authority?: string;
+  /** Optional referrer name */
+  name?: string;
+  /** Unique referral code with 8 alphanumeric characters */
+  referral_code?: string;
+  /** Referrer address */
+  address?: string;
+  /** Referral fee factor */
+  referral_fee_factor?: string;
+}
+export interface MsgRegisterReferrerAminoMsg {
+  type: "/side.lending.MsgRegisterReferrer";
+  value: MsgRegisterReferrerAmino;
+}
+/** MsgRegisterReferrer is the Msg/RegisterReferrer request type. */
+export interface MsgRegisterReferrerSDKType {
+  authority: string;
+  name: string;
+  referral_code: string;
+  address: string;
+  referral_fee_factor: string;
+}
+/** MsgRegisterReferrerResponse defines the Msg/RegisterReferrer response type. */
+export interface MsgRegisterReferrerResponse {}
+export interface MsgRegisterReferrerResponseProtoMsg {
+  typeUrl: "/side.lending.MsgRegisterReferrerResponse";
+  value: Uint8Array;
+}
+/** MsgRegisterReferrerResponse defines the Msg/RegisterReferrer response type. */
+export interface MsgRegisterReferrerResponseAmino {}
+export interface MsgRegisterReferrerResponseAminoMsg {
+  type: "/side.lending.MsgRegisterReferrerResponse";
+  value: MsgRegisterReferrerResponseAmino;
+}
+/** MsgRegisterReferrerResponse defines the Msg/RegisterReferrer response type. */
+export interface MsgRegisterReferrerResponseSDKType {}
+/** MsgUpdateReferrer is the Msg/UpdateReferrer request type. */
+export interface MsgUpdateReferrer {
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+  authority: string;
+  /** new referrer name */
+  name: string;
+  /** Unique referral code with 8 alphanumeric characters */
+  referralCode: string;
+  /** new referrer address */
+  address: string;
+  /** new referral fee factor */
+  referralFeeFactor: string;
+}
+export interface MsgUpdateReferrerProtoMsg {
+  typeUrl: "/side.lending.MsgUpdateReferrer";
+  value: Uint8Array;
+}
+/** MsgUpdateReferrer is the Msg/UpdateReferrer request type. */
+export interface MsgUpdateReferrerAmino {
+  /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
+  authority?: string;
+  /** new referrer name */
+  name?: string;
+  /** Unique referral code with 8 alphanumeric characters */
+  referral_code?: string;
+  /** new referrer address */
+  address?: string;
+  /** new referral fee factor */
+  referral_fee_factor?: string;
+}
+export interface MsgUpdateReferrerAminoMsg {
+  type: "/side.lending.MsgUpdateReferrer";
+  value: MsgUpdateReferrerAmino;
+}
+/** MsgUpdateReferrer is the Msg/UpdateReferrer request type. */
+export interface MsgUpdateReferrerSDKType {
+  authority: string;
+  name: string;
+  referral_code: string;
+  address: string;
+  referral_fee_factor: string;
+}
+/** MsgUpdateReferrerResponse defines the Msg/UpdateReferrer response type. */
+export interface MsgUpdateReferrerResponse {}
+export interface MsgUpdateReferrerResponseProtoMsg {
+  typeUrl: "/side.lending.MsgUpdateReferrerResponse";
+  value: Uint8Array;
+}
+/** MsgUpdateReferrerResponse defines the Msg/UpdateReferrer response type. */
+export interface MsgUpdateReferrerResponseAmino {}
+export interface MsgUpdateReferrerResponseAminoMsg {
+  type: "/side.lending.MsgUpdateReferrerResponse";
+  value: MsgUpdateReferrerResponseAmino;
+}
+/** MsgUpdateReferrerResponse defines the Msg/UpdateReferrer response type. */
+export interface MsgUpdateReferrerResponseSDKType {}
 /**
  * MsgUpdateParams is the Msg/UpdateParams request type.
  * 
@@ -1097,7 +1210,7 @@ function createBaseMsgApply(): MsgApply {
     borrowAmount: Coin.fromPartial({}),
     maturity: BigInt(0),
     dcmId: BigInt(0),
-    referrer: ""
+    referralCode: ""
   };
 }
 export const MsgApply = {
@@ -1124,8 +1237,8 @@ export const MsgApply = {
     if (message.dcmId !== BigInt(0)) {
       writer.uint32(56).uint64(message.dcmId);
     }
-    if (message.referrer !== "") {
-      writer.uint32(66).string(message.referrer);
+    if (message.referralCode !== "") {
+      writer.uint32(66).string(message.referralCode);
     }
     return writer;
   },
@@ -1158,7 +1271,7 @@ export const MsgApply = {
           message.dcmId = reader.uint64();
           break;
         case 8:
-          message.referrer = reader.string();
+          message.referralCode = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1176,7 +1289,7 @@ export const MsgApply = {
     message.borrowAmount = object.borrowAmount !== undefined && object.borrowAmount !== null ? Coin.fromPartial(object.borrowAmount) : undefined;
     message.maturity = object.maturity !== undefined && object.maturity !== null ? BigInt(object.maturity.toString()) : BigInt(0);
     message.dcmId = object.dcmId !== undefined && object.dcmId !== null ? BigInt(object.dcmId.toString()) : BigInt(0);
-    message.referrer = object.referrer ?? "";
+    message.referralCode = object.referralCode ?? "";
     return message;
   },
   fromAmino(object: MsgApplyAmino): MsgApply {
@@ -1202,8 +1315,8 @@ export const MsgApply = {
     if (object.dcm_id !== undefined && object.dcm_id !== null) {
       message.dcmId = BigInt(object.dcm_id);
     }
-    if (object.referrer !== undefined && object.referrer !== null) {
-      message.referrer = object.referrer;
+    if (object.referral_code !== undefined && object.referral_code !== null) {
+      message.referralCode = object.referral_code;
     }
     return message;
   },
@@ -1216,7 +1329,7 @@ export const MsgApply = {
     obj.borrow_amount = message.borrowAmount ? Coin.toAmino(message.borrowAmount) : undefined;
     obj.maturity = message.maturity !== BigInt(0) ? message.maturity.toString() : undefined;
     obj.dcm_id = message.dcmId !== BigInt(0) ? message.dcmId.toString() : undefined;
-    obj.referrer = message.referrer === "" ? undefined : message.referrer;
+    obj.referral_code = message.referralCode === "" ? undefined : message.referralCode;
     return obj;
   },
   fromAminoMsg(object: MsgApplyAminoMsg): MsgApply {
@@ -1801,6 +1914,328 @@ export const MsgRedeemResponse = {
     return {
       typeUrl: "/side.lending.MsgRedeemResponse",
       value: MsgRedeemResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgRegisterReferrer(): MsgRegisterReferrer {
+  return {
+    authority: "",
+    name: "",
+    referralCode: "",
+    address: "",
+    referralFeeFactor: ""
+  };
+}
+export const MsgRegisterReferrer = {
+  typeUrl: "/side.lending.MsgRegisterReferrer",
+  encode(message: MsgRegisterReferrer, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.referralCode !== "") {
+      writer.uint32(26).string(message.referralCode);
+    }
+    if (message.address !== "") {
+      writer.uint32(34).string(message.address);
+    }
+    if (message.referralFeeFactor !== "") {
+      writer.uint32(42).string(Decimal.fromUserInput(message.referralFeeFactor, 18).atomics);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterReferrer {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRegisterReferrer();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        case 3:
+          message.referralCode = reader.string();
+          break;
+        case 4:
+          message.address = reader.string();
+          break;
+        case 5:
+          message.referralFeeFactor = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<MsgRegisterReferrer>): MsgRegisterReferrer {
+    const message = createBaseMsgRegisterReferrer();
+    message.authority = object.authority ?? "";
+    message.name = object.name ?? "";
+    message.referralCode = object.referralCode ?? "";
+    message.address = object.address ?? "";
+    message.referralFeeFactor = object.referralFeeFactor ?? "";
+    return message;
+  },
+  fromAmino(object: MsgRegisterReferrerAmino): MsgRegisterReferrer {
+    const message = createBaseMsgRegisterReferrer();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    }
+    if (object.referral_code !== undefined && object.referral_code !== null) {
+      message.referralCode = object.referral_code;
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.referral_fee_factor !== undefined && object.referral_fee_factor !== null) {
+      message.referralFeeFactor = object.referral_fee_factor;
+    }
+    return message;
+  },
+  toAmino(message: MsgRegisterReferrer): MsgRegisterReferrerAmino {
+    const obj: any = {};
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.referral_code = message.referralCode === "" ? undefined : message.referralCode;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.referral_fee_factor = message.referralFeeFactor === "" ? undefined : message.referralFeeFactor;
+    return obj;
+  },
+  fromAminoMsg(object: MsgRegisterReferrerAminoMsg): MsgRegisterReferrer {
+    return MsgRegisterReferrer.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgRegisterReferrerProtoMsg): MsgRegisterReferrer {
+    return MsgRegisterReferrer.decode(message.value);
+  },
+  toProto(message: MsgRegisterReferrer): Uint8Array {
+    return MsgRegisterReferrer.encode(message).finish();
+  },
+  toProtoMsg(message: MsgRegisterReferrer): MsgRegisterReferrerProtoMsg {
+    return {
+      typeUrl: "/side.lending.MsgRegisterReferrer",
+      value: MsgRegisterReferrer.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgRegisterReferrerResponse(): MsgRegisterReferrerResponse {
+  return {};
+}
+export const MsgRegisterReferrerResponse = {
+  typeUrl: "/side.lending.MsgRegisterReferrerResponse",
+  encode(_: MsgRegisterReferrerResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgRegisterReferrerResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgRegisterReferrerResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(_: Partial<MsgRegisterReferrerResponse>): MsgRegisterReferrerResponse {
+    const message = createBaseMsgRegisterReferrerResponse();
+    return message;
+  },
+  fromAmino(_: MsgRegisterReferrerResponseAmino): MsgRegisterReferrerResponse {
+    const message = createBaseMsgRegisterReferrerResponse();
+    return message;
+  },
+  toAmino(_: MsgRegisterReferrerResponse): MsgRegisterReferrerResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgRegisterReferrerResponseAminoMsg): MsgRegisterReferrerResponse {
+    return MsgRegisterReferrerResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgRegisterReferrerResponseProtoMsg): MsgRegisterReferrerResponse {
+    return MsgRegisterReferrerResponse.decode(message.value);
+  },
+  toProto(message: MsgRegisterReferrerResponse): Uint8Array {
+    return MsgRegisterReferrerResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgRegisterReferrerResponse): MsgRegisterReferrerResponseProtoMsg {
+    return {
+      typeUrl: "/side.lending.MsgRegisterReferrerResponse",
+      value: MsgRegisterReferrerResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgUpdateReferrer(): MsgUpdateReferrer {
+  return {
+    authority: "",
+    name: "",
+    referralCode: "",
+    address: "",
+    referralFeeFactor: ""
+  };
+}
+export const MsgUpdateReferrer = {
+  typeUrl: "/side.lending.MsgUpdateReferrer",
+  encode(message: MsgUpdateReferrer, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.authority !== "") {
+      writer.uint32(10).string(message.authority);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.referralCode !== "") {
+      writer.uint32(26).string(message.referralCode);
+    }
+    if (message.address !== "") {
+      writer.uint32(34).string(message.address);
+    }
+    if (message.referralFeeFactor !== "") {
+      writer.uint32(42).string(Decimal.fromUserInput(message.referralFeeFactor, 18).atomics);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateReferrer {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateReferrer();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.authority = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        case 3:
+          message.referralCode = reader.string();
+          break;
+        case 4:
+          message.address = reader.string();
+          break;
+        case 5:
+          message.referralFeeFactor = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<MsgUpdateReferrer>): MsgUpdateReferrer {
+    const message = createBaseMsgUpdateReferrer();
+    message.authority = object.authority ?? "";
+    message.name = object.name ?? "";
+    message.referralCode = object.referralCode ?? "";
+    message.address = object.address ?? "";
+    message.referralFeeFactor = object.referralFeeFactor ?? "";
+    return message;
+  },
+  fromAmino(object: MsgUpdateReferrerAmino): MsgUpdateReferrer {
+    const message = createBaseMsgUpdateReferrer();
+    if (object.authority !== undefined && object.authority !== null) {
+      message.authority = object.authority;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    }
+    if (object.referral_code !== undefined && object.referral_code !== null) {
+      message.referralCode = object.referral_code;
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.referral_fee_factor !== undefined && object.referral_fee_factor !== null) {
+      message.referralFeeFactor = object.referral_fee_factor;
+    }
+    return message;
+  },
+  toAmino(message: MsgUpdateReferrer): MsgUpdateReferrerAmino {
+    const obj: any = {};
+    obj.authority = message.authority === "" ? undefined : message.authority;
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.referral_code = message.referralCode === "" ? undefined : message.referralCode;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.referral_fee_factor = message.referralFeeFactor === "" ? undefined : message.referralFeeFactor;
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateReferrerAminoMsg): MsgUpdateReferrer {
+    return MsgUpdateReferrer.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateReferrerProtoMsg): MsgUpdateReferrer {
+    return MsgUpdateReferrer.decode(message.value);
+  },
+  toProto(message: MsgUpdateReferrer): Uint8Array {
+    return MsgUpdateReferrer.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateReferrer): MsgUpdateReferrerProtoMsg {
+    return {
+      typeUrl: "/side.lending.MsgUpdateReferrer",
+      value: MsgUpdateReferrer.encode(message).finish()
+    };
+  }
+};
+function createBaseMsgUpdateReferrerResponse(): MsgUpdateReferrerResponse {
+  return {};
+}
+export const MsgUpdateReferrerResponse = {
+  typeUrl: "/side.lending.MsgUpdateReferrerResponse",
+  encode(_: MsgUpdateReferrerResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): MsgUpdateReferrerResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgUpdateReferrerResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(_: Partial<MsgUpdateReferrerResponse>): MsgUpdateReferrerResponse {
+    const message = createBaseMsgUpdateReferrerResponse();
+    return message;
+  },
+  fromAmino(_: MsgUpdateReferrerResponseAmino): MsgUpdateReferrerResponse {
+    const message = createBaseMsgUpdateReferrerResponse();
+    return message;
+  },
+  toAmino(_: MsgUpdateReferrerResponse): MsgUpdateReferrerResponseAmino {
+    const obj: any = {};
+    return obj;
+  },
+  fromAminoMsg(object: MsgUpdateReferrerResponseAminoMsg): MsgUpdateReferrerResponse {
+    return MsgUpdateReferrerResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: MsgUpdateReferrerResponseProtoMsg): MsgUpdateReferrerResponse {
+    return MsgUpdateReferrerResponse.decode(message.value);
+  },
+  toProto(message: MsgUpdateReferrerResponse): Uint8Array {
+    return MsgUpdateReferrerResponse.encode(message).finish();
+  },
+  toProtoMsg(message: MsgUpdateReferrerResponse): MsgUpdateReferrerResponseProtoMsg {
+    return {
+      typeUrl: "/side.lending.MsgUpdateReferrerResponse",
+      value: MsgUpdateReferrerResponse.encode(message).finish()
     };
   }
 };

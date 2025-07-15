@@ -36,13 +36,13 @@ export default function LoanAuthorizeScreen() {
 
   const { balanceList } = useGetSideBalanceList(currentAccount?.address);
 
-  const { approveLoan, loading, tx } = useApproveLoan(loanId, collateralAmount);
+  const { loan } = useGetLoanById({ loanId });
+
+  const { approveLoan, loading, tx } = useApproveLoan(loan?.loan);
 
   const { poolTokenDenom } = useLendingState();
 
   const [refundAddress, setRefundAddress] = useState(currentAccount.address);
-
-  const { loan } = useGetLoanById({ loanId });
 
   const { data: poolsData } = useGetPoolsData();
   const poolTokenBalance = balanceList.find((b) => b.denom == poolTokenDenom);

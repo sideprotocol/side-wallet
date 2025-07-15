@@ -3,6 +3,7 @@ import { useQueryClient } from 'react-query';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
 import services from '@/ui/services';
+import { Loan } from '@/ui/services/lending/types';
 import { GetTxByHashResponse } from '@/ui/services/tx/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useEnvironment } from '@/ui/state/environment/hooks';
@@ -12,10 +13,11 @@ import { useWallet } from '@/ui/utils';
 import { prepareApply } from '@/ui/utils/lending';
 
 import { useGetCetInfo } from './useGetCetInfo';
-import { useGetDepositTx } from './useGetDepositTx';
+import { useGetDepositInfo } from './useGetDepositInfo';
 import { useGetDlcDcms } from './useGetDlcDcms';
+import useGetLoanDeposits from './useGetLoanDeposits';
 
-export function useClaimCollateral(loan_id: string, collateralAmount: string) {
+export function useClaimCollateral(loan?: Loan) {
   const queryClient = useQueryClient();
   const currentAccount = useCurrentAccount();
   const [loading, setLoading] = useState(false);
@@ -24,27 +26,55 @@ export function useClaimCollateral(loan_id: string, collateralAmount: string) {
   const [tx, setTx] = useState('');
   const wallet = useWallet();
   const networkType = useNetworkType();
-  const { refetch } = useGetDepositTx(loan_id);
+  const { refetch } = useGetDepositInfo(loan);
 
-  const { cetInfos } = useGetCetInfo({ loanId: loan_id || '', collateral_amount: `${collateralAmount}sat` });
+  const { cetInfos } = useGetCetInfo({
+    loanId: loan?.vault_address || '',
+    collateral_amount: `${loan?.collateral_amount}sat`
+  });
   const { activeDcms } = useGetDlcDcms();
+
+  const { loanDeposits } = useGetLoanDeposits(loan);
 
   const claim = async ({ feeRate }: { feeRate: number }) => {
     try {
+      if (!loan) {
+        throw new Error('Loan not found');
+      }
+
       setLoading(true);
-      let depositTxs: string[] = [];
-      let txids: string[] | undefined = undefined;
-      while (!depositTxs.length) {
+      let allDepositTxs: string[] = [],
+        depositTxs: string[] = [],
+        allTxids: string[] = [],
+        txids: string[] = [];
+
+      while (!allDepositTxs.length) {
         try {
           const { data } = await refetch();
           if (data) {
-            depositTxs = data.txBase64s;
-
-            txids = data?.txids;
+            allDepositTxs = data.txBase64s;
+            allTxids = data.txids;
           }
         } catch (err) {
           await new Promise((r) => setTimeout(r, 1000));
         }
+      }
+
+      // 筛选未提取的txs
+      if (loanDeposits?.deposits.length) {
+        loanDeposits.deposits.forEach((deposit) => {
+          if (deposit.status === 'DEPOSIT_STATUS_VERIFIED') {
+            const index = allTxids.findIndex((txid) => txid === deposit.txid);
+            if (index !== -1) {
+              depositTxs.push(allDepositTxs[index]);
+              txids.push(allTxids[index]);
+            }
+          }
+        });
+      }
+
+      if (!depositTxs.length) {
+        throw new Error('The vault has not yet received your collateral funding.');
       }
       if (!cetInfos) {
         throw new Error('Cet info not found');
@@ -71,7 +101,7 @@ export function useClaimCollateral(loan_id: string, collateralAmount: string) {
 
       const msg = sideLendingMessageComposer.withTypeUrl.redeem({
         borrower: currentAccount.address,
-        loanId: loan_id!,
+        loanId: loan.vault_address,
         tx: repaymentCet,
         signatures: signatures
       });

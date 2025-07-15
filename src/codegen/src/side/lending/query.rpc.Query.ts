@@ -2,7 +2,7 @@
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { QueryParamsRequest, QueryParamsResponse, QueryPoolRequest, QueryPoolResponse, QueryPoolsRequest, QueryPoolsResponse, QueryPoolExchangeRateRequest, QueryPoolExchangeRateResponse, QueryCollateralAddressRequest, QueryCollateralAddressResponse, QueryLiquidationPriceRequest, QueryLiquidationPriceResponse, QueryDlcEventCountRequest, QueryDlcEventCountResponse, QueryLoanRequest, QueryLoanResponse, QueryLoansRequest, QueryLoansResponse, QueryLoansByAddressRequest, QueryLoansByAddressResponse, QueryLoanCetInfosRequest, QueryLoanCetInfosResponse, QueryLoanDlcMetaRequest, QueryLoanDlcMetaResponse, QueryLoanAuthorizationRequest, QueryLoanAuthorizationResponse, QueryLoanDepositsRequest, QueryLoanDepositsResponse, QueryRedemptionRequest, QueryRedemptionResponse, QueryRepaymentRequest, QueryRepaymentResponse, QueryCurrentInterestRequest, QueryCurrentInterestResponse } from "./query";
+import { QueryParamsRequest, QueryParamsResponse, QueryPoolRequest, QueryPoolResponse, QueryPoolsRequest, QueryPoolsResponse, QueryPoolExchangeRateRequest, QueryPoolExchangeRateResponse, QueryCollateralAddressRequest, QueryCollateralAddressResponse, QueryLiquidationPriceRequest, QueryLiquidationPriceResponse, QueryDlcEventCountRequest, QueryDlcEventCountResponse, QueryLoanRequest, QueryLoanResponse, QueryLoansRequest, QueryLoansResponse, QueryLoansByAddressRequest, QueryLoansByAddressResponse, QueryLoanCetInfosRequest, QueryLoanCetInfosResponse, QueryLoanDlcMetaRequest, QueryLoanDlcMetaResponse, QueryLoanAuthorizationRequest, QueryLoanAuthorizationResponse, QueryLoanDepositsRequest, QueryLoanDepositsResponse, QueryRedemptionRequest, QueryRedemptionResponse, QueryRepaymentRequest, QueryRepaymentResponse, QueryCurrentInterestRequest, QueryCurrentInterestResponse, QueryReferrersRequest, QueryReferrersResponse } from "./query";
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Params queries the parameters of the module. */
@@ -23,6 +23,7 @@ export interface Query {
   redemption(request: QueryRedemptionRequest): Promise<QueryRedemptionResponse>;
   repayment(request: QueryRepaymentRequest): Promise<QueryRepaymentResponse>;
   currentInterest(request: QueryCurrentInterestRequest): Promise<QueryCurrentInterestResponse>;
+  referrers(request?: QueryReferrersRequest): Promise<QueryReferrersResponse>;
 }
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
@@ -45,6 +46,7 @@ export class QueryClientImpl implements Query {
     this.redemption = this.redemption.bind(this);
     this.repayment = this.repayment.bind(this);
     this.currentInterest = this.currentInterest.bind(this);
+    this.referrers = this.referrers.bind(this);
   }
   params(request: QueryParamsRequest = {}): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
@@ -133,6 +135,13 @@ export class QueryClientImpl implements Query {
     const promise = this.rpc.request("side.lending.Query", "CurrentInterest", data);
     return promise.then(data => QueryCurrentInterestResponse.decode(new BinaryReader(data)));
   }
+  referrers(request: QueryReferrersRequest = {
+    pagination: undefined
+  }): Promise<QueryReferrersResponse> {
+    const data = QueryReferrersRequest.encode(request).finish();
+    const promise = this.rpc.request("side.lending.Query", "Referrers", data);
+    return promise.then(data => QueryReferrersResponse.decode(new BinaryReader(data)));
+  }
 }
 export const createRpcQueryExtension = (base: QueryClient) => {
   const rpc = createProtobufRpcClient(base);
@@ -188,6 +197,9 @@ export const createRpcQueryExtension = (base: QueryClient) => {
     },
     currentInterest(request: QueryCurrentInterestRequest): Promise<QueryCurrentInterestResponse> {
       return queryService.currentInterest(request);
+    },
+    referrers(request?: QueryReferrersRequest): Promise<QueryReferrersResponse> {
+      return queryService.referrers(request);
     }
   };
 };

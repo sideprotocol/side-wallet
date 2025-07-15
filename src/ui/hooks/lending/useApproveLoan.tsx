@@ -5,6 +5,7 @@ import { sideLendingMessageComposer } from '@/codegen/src';
 import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
+import { Loan } from '@/ui/services/lending/types';
 import { GetTxByHashResponse } from '@/ui/services/tx/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useEnvironment } from '@/ui/state/environment/hooks';
@@ -14,41 +15,59 @@ import { useWallet } from '@/ui/utils';
 import { prepareApply } from '@/ui/utils/lending';
 import { Box } from '@mui/material';
 
-import { useGetCetInfo } from './useGetCetInfo';
-import { useGetDepositTx } from './useGetDepositTx';
+import { useGetDepositInfo } from './useGetDepositInfo';
 import { useGetDlcDcms } from './useGetDlcDcms';
 
-export function useApproveLoan(loan_id: string, collateralAmount: string) {
+export function useApproveLoan(loan?: Loan) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [tx, setTx] = useState('');
+  const { sideChain } = useEnvironment();
 
   const currentAccount = useCurrentAccount();
 
-  const { depositTxs, refetch } = useGetDepositTx(loan_id, collateralAmount);
+  const { refetch } = useGetDepositInfo(loan);
 
   const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
 
   const wallet = useWallet();
   const networkType = useNetworkType();
-  const { sideChain } = useEnvironment();
-  const { cetInfos } = useGetCetInfo({ loanId: loan_id, collateral_amount: `${collateralAmount}sat` });
   const { activeDcms } = useGetDlcDcms();
 
   const approveLoan = async ({ feeRate, refundAddress }: { feeRate: number; refundAddress: string }) => {
     try {
+      if (!loan) {
+        throw new Error('Loan not found');
+      }
+
       setLoading(true);
 
-      let depositTxs: string[] | undefined = undefined;
-      let txids: string[] | undefined = undefined;
+      let depositTxs: string[] = [],
+        txids: string[] = [],
+        realCollateralAmount = '0';
 
-      while (!depositTxs || !txids) {
-        await new Promise((r) => setTimeout(r, 1000));
-        const { data } = await refetch();
-
-        depositTxs = data?.txBase64s;
-        txids = data?.txids;
+      while (!depositTxs.length) {
+        try {
+          const { data } = await refetch();
+          if (data) {
+            if (data.depositEnough) {
+              depositTxs = data.txBase64s;
+              txids = data.txids;
+              realCollateralAmount = `${data.realCollateralAmount}`;
+            }
+          }
+        } catch (err) {
+          await new Promise((r) => setTimeout(r, 1000));
+        }
       }
+
+      const cetInfos = await services.lending.getCetInfo(
+        {
+          loan_id: loan.vault_address,
+          collateral_amount: `${realCollateralAmount}${'sat'}`
+        },
+        { baseURL: sideChain.restUrl }
+      );
 
       if (!cetInfos) {
         throw new Error('Cet info not found');
@@ -82,7 +101,7 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
 
       const msg = sideLendingMessageComposer.withTypeUrl.submitCets({
         borrower: currentAccount.address,
-        loanId: loan_id,
+        loanId: loan.vault_address,
         depositTxs: depositTxs || [],
         liquidationCet: liquidationCet,
         liquidationAdaptorSignatures: liquidationAdaptorSignatures,
@@ -142,7 +161,6 @@ export function useApproveLoan(loan_id: string, collateralAmount: string) {
   return {
     approveLoan,
     loading,
-    depositTxs,
     tx
   };
 }

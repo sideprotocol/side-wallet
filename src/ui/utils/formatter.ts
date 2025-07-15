@@ -107,3 +107,40 @@ export function formatTimeWithUTC(time: string | number) {
   // return `${timeFormat} UTC${timeZone > 0 ? "+" : ""}${timeZone !== 0 ? timeZone + ":00" : ""}`;
   return `${timeFormat}`;
 }
+
+export function calcToTime(timestamp: number | string) {
+  timestamp = dayjs(timestamp).valueOf();
+  const now = dayjs().valueOf();
+  const diff = timestamp - now; // 差距（毫秒）
+  let days = 0,
+    hours = 0,
+    minutes = 0,
+    seconds = 0,
+    text = '';
+  if (diff > 0) {
+    days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    if (days > 0) {
+      text = `${days}d`;
+    }
+    hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    if (hours > 0) {
+      text = `${text} ${hours}h`;
+    }
+    minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    if (minutes > 0) {
+      text = `${text} ${minutes}m`;
+    }
+    seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    if (seconds > 0) {
+      text = `${text} ${seconds}s`;
+    }
+  }
+
+  return {
+    days,
+    hours,
+    minutes,
+    seconds,
+    text
+  };
+}

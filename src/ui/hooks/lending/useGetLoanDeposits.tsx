@@ -14,7 +14,7 @@ export default function useGetLoanDeposits(loan?: Loan) {
     },
     refetchIntervalInBackground: true,
     refetchInterval: 6000,
-    enabled: loan && (loan.status === 'Requested' || loan.status === 'Cancelled')
+    enabled: !!loan && (loan?.status === 'Requested' || loan?.status === 'Cancelled')
   });
 
   return {

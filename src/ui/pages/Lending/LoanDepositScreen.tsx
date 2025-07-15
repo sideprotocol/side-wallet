@@ -1,6 +1,5 @@
 import { QRCodeSVG } from 'qrcode.react';
 import { useEffect, useMemo, useState } from 'react';
-import toast from 'react-hot-toast';
 import 'swiper/css';
 
 import { COIN_DUST } from '@/shared/constant';
@@ -9,8 +8,7 @@ import { Button, Column, Content, CopyIcon, Footer, Layout, LightTooltip, Row, T
 import { useTools } from '@/ui/components/ActionComponent';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { NavTabBar } from '@/ui/components/NavTabBar';
-import ToastView from '@/ui/components/ToastView';
-import { useGetDepositTx } from '@/ui/hooks/lending';
+import { useGetDepositInfo, useGetLoanById } from '@/ui/hooks/lending';
 import MainHeader from '@/ui/pages/Main/MainHeader';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import { useEnvironment } from '@/ui/state/environment/hooks';
@@ -50,6 +48,7 @@ export default function LoanDepositScreen() {
   const inputAmount = uiState.inputAmount;
   const enableRBF = uiState.enableRBF;
   const feeRate = uiState.feeRate;
+  const { loan } = useGetLoanById({ loanId });
 
   const [error, setError] = useState('');
   const fetchUtxos = useFetchUtxosCallback();
@@ -75,18 +74,7 @@ export default function LoanDepositScreen() {
   const [errorMsg, setErrorMsg] = useState('');
   const [temporaryLoading, setTemporaryLoading] = useState(false);
 
-  const { refetch, depositTxs, address } = useGetDepositTx(loanId, collateralAmount);
-
-  useEffect(() => {
-    if (address === loanId && depositTxs?.length) {
-      navigate('LoanAuthorizeScreen', {
-        loanId: toInfo.address,
-        borrowAmount,
-        collateralAmount,
-        feeRate
-      });
-    }
-  }, [depositTxs, loanId]);
+  const { refetch } = useGetDepositInfo(loan?.loan);
 
   const avaiableSatoshis = useMemo(() => {
     return amountToSatoshis(safeBalance);
@@ -402,23 +390,9 @@ export default function LoanDepositScreen() {
               onClick={async () => {
                 try {
                   setTemporaryLoading(true);
-                  const { error: err } = await refetch();
-
-                  const error = err as Error;
-                  if (error) {
-                    setErrorMsg(error.message);
-                    toast.custom((t) => (
-                      <ToastView toaster={t} type="fail">
-                        <Box
-                          sx={{
-                            mb: '6px',
-                            fontSize: '12px',
-                            fontWeight: '500'
-                          }}>
-                          {error.message}
-                        </Box>
-                      </ToastView>
-                    ));
+                  const { data } = await refetch();
+                  if (!data?.depositEnough) {
+                    setErrorMsg(data?.errorMessage || '');
                   } else {
                     setErrorMsg('');
                   }

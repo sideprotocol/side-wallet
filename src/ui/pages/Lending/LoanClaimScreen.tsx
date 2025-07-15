@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
 import { Button, Column, Content, Header, Image, Layout, SuccessAnimation } from '@/ui/components';
-import { useClaimCollateral, useGetLoanAuthorization } from '@/ui/hooks/lending';
+import { useClaimCollateral } from '@/ui/hooks/lending';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import services from '@/ui/services';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
@@ -15,7 +15,12 @@ import { Box, Stack, Typography } from '@mui/material';
 export default function LoanClaimScreen() {
   const currentAccount = useCurrentAccount();
   const { state } = useLocation();
-  const { loan_id, collateralUnitAmount } = state as { loan_id: string; collateralUnitAmount: string };
+  const { loan_id, canRedeemUnitAmount, realCollateralAmount, redeemEnable } = state as {
+    loan_id: string;
+    canRedeemUnitAmount: string;
+    redeemEnable: 'true' | 'false';
+    realCollateralAmount: string;
+  };
 
   const { sideChain } = useEnvironment();
   const { balanceList: bitcoinBalanceList } = useGetBitcoinBalanceList(currentAccount?.address);
@@ -33,8 +38,7 @@ export default function LoanClaimScreen() {
   });
   const loan = data?.loan;
 
-  const { canClaim } = useGetLoanAuthorization(loan);
-  const { claim, loading, tx } = useClaimCollateral(loan?.vault_address || '', loan?.collateral_amount || '0');
+  const { claim, loading, tx } = useClaimCollateral(loan);
 
   const uiState = useUiTxCreateScreen();
 
@@ -60,7 +64,7 @@ export default function LoanClaimScreen() {
               <Stack
                 alignItems="center"
                 sx={{
-                  mt: '100px'
+                  mt: '20px'
                 }}>
                 <SuccessAnimation />
                 <Typography
@@ -91,7 +95,7 @@ export default function LoanClaimScreen() {
               <Stack
                 alignItems="center"
                 sx={{
-                  mt: '100px'
+                  mt: '20px'
                 }}>
                 <Box
                   sx={{ position: 'relative', width: '80px', height: '80px', borderRadius: '50%', overflow: 'hidden' }}>
@@ -166,7 +170,7 @@ export default function LoanClaimScreen() {
                     lineHeight: '23px',
                     color: colors.white
                   }}>
-                  {formatUnitAmount(collateralUnitAmount, collateralToken?.asset.exponent || 8)}
+                  {formatUnitAmount(realCollateralAmount, collateralToken?.asset.exponent || 8)}
                 </Typography>
               </Stack>
               <Box
@@ -182,6 +186,37 @@ export default function LoanClaimScreen() {
                 collateral after 6 confirmations from the time it was locked. Please note that the request fee is
                 non-refundable.
               </Box>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{
+                  p: '16px',
+                  fontSize: '12px',
+                  color: colors.grey12,
+                  bgcolor: colors.card_bgColor,
+                  borderRadius: '10px'
+                }}>
+                <Stack
+                  direction="row"
+                  sx={{
+                    fontSize: '14px',
+                    color: colors.grey12
+                  }}>
+                  Claimable
+                </Stack>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  sx={{
+                    fontSize: '14px',
+                    color: colors.white
+                  }}>
+                  {formatUnitAmount(canRedeemUnitAmount, collateralToken?.asset.exponent || 8)}
+                  &nbsp;
+                  {collateralToken?.asset.symbol}
+                </Stack>
+              </Stack>
             </>
           )}
           {tx ? (
@@ -198,7 +233,7 @@ export default function LoanClaimScreen() {
           ) : (
             <Button
               preset="primary"
-              disabled={loading || !canClaim}
+              disabled={loading || !redeemEnable || +canRedeemUnitAmount === 0}
               onClick={() => {
                 claim({
                   feeRate

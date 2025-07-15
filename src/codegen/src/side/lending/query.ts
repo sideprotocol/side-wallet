@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../cosmos/base/query/v1beta1/pagination";
-import { LoanStatus, LendingPool, LendingPoolAmino, LendingPoolSDKType, CetInfo, CetInfoAmino, CetInfoSDKType, Loan, LoanAmino, LoanSDKType, DLCMeta, DLCMetaAmino, DLCMetaSDKType, DepositLog, DepositLogAmino, DepositLogSDKType, AuthorizationStatus, Redemption, RedemptionAmino, RedemptionSDKType, Repayment, RepaymentAmino, RepaymentSDKType } from "./lending";
+import { LoanStatus, LendingPool, LendingPoolAmino, LendingPoolSDKType, CetInfo, CetInfoAmino, CetInfoSDKType, Loan, LoanAmino, LoanSDKType, DLCMeta, DLCMetaAmino, DLCMetaSDKType, DepositLog, DepositLogAmino, DepositLogSDKType, AuthorizationStatus, Redemption, RedemptionAmino, RedemptionSDKType, Repayment, RepaymentAmino, RepaymentSDKType, Referrer, ReferrerAmino, ReferrerSDKType } from "./lending";
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { Coin, CoinAmino, CoinSDKType } from "../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../binary";
@@ -683,6 +683,43 @@ export interface QueryCurrentInterestResponseAminoMsg {
 }
 export interface QueryCurrentInterestResponseSDKType {
   interest: CoinSDKType;
+}
+export interface QueryReferrersRequest {
+  pagination?: PageRequest;
+}
+export interface QueryReferrersRequestProtoMsg {
+  typeUrl: "/side.lending.QueryReferrersRequest";
+  value: Uint8Array;
+}
+export interface QueryReferrersRequestAmino {
+  pagination?: PageRequestAmino;
+}
+export interface QueryReferrersRequestAminoMsg {
+  type: "/side.lending.QueryReferrersRequest";
+  value: QueryReferrersRequestAmino;
+}
+export interface QueryReferrersRequestSDKType {
+  pagination?: PageRequestSDKType;
+}
+export interface QueryReferrersResponse {
+  referrers: Referrer[];
+  pagination?: PageResponse;
+}
+export interface QueryReferrersResponseProtoMsg {
+  typeUrl: "/side.lending.QueryReferrersResponse";
+  value: Uint8Array;
+}
+export interface QueryReferrersResponseAmino {
+  referrers?: ReferrerAmino[];
+  pagination?: PageResponseAmino;
+}
+export interface QueryReferrersResponseAminoMsg {
+  type: "/side.lending.QueryReferrersResponse";
+  value: QueryReferrersResponseAmino;
+}
+export interface QueryReferrersResponseSDKType {
+  referrers: ReferrerSDKType[];
+  pagination?: PageResponseSDKType;
 }
 function createBaseQueryPoolRequest(): QueryPoolRequest {
   return {
@@ -3023,6 +3060,146 @@ export const QueryCurrentInterestResponse = {
     return {
       typeUrl: "/side.lending.QueryCurrentInterestResponse",
       value: QueryCurrentInterestResponse.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryReferrersRequest(): QueryReferrersRequest {
+  return {
+    pagination: undefined
+  };
+}
+export const QueryReferrersRequest = {
+  typeUrl: "/side.lending.QueryReferrersRequest",
+  encode(message: QueryReferrersRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryReferrersRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryReferrersRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryReferrersRequest>): QueryReferrersRequest {
+    const message = createBaseQueryReferrersRequest();
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryReferrersRequestAmino): QueryReferrersRequest {
+    const message = createBaseQueryReferrersRequest();
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryReferrersRequest): QueryReferrersRequestAmino {
+    const obj: any = {};
+    obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryReferrersRequestAminoMsg): QueryReferrersRequest {
+    return QueryReferrersRequest.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryReferrersRequestProtoMsg): QueryReferrersRequest {
+    return QueryReferrersRequest.decode(message.value);
+  },
+  toProto(message: QueryReferrersRequest): Uint8Array {
+    return QueryReferrersRequest.encode(message).finish();
+  },
+  toProtoMsg(message: QueryReferrersRequest): QueryReferrersRequestProtoMsg {
+    return {
+      typeUrl: "/side.lending.QueryReferrersRequest",
+      value: QueryReferrersRequest.encode(message).finish()
+    };
+  }
+};
+function createBaseQueryReferrersResponse(): QueryReferrersResponse {
+  return {
+    referrers: [],
+    pagination: undefined
+  };
+}
+export const QueryReferrersResponse = {
+  typeUrl: "/side.lending.QueryReferrersResponse",
+  encode(message: QueryReferrersResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    for (const v of message.referrers) {
+      Referrer.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): QueryReferrersResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryReferrersResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.referrers.push(Referrer.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<QueryReferrersResponse>): QueryReferrersResponse {
+    const message = createBaseQueryReferrersResponse();
+    message.referrers = object.referrers?.map(e => Referrer.fromPartial(e)) || [];
+    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    return message;
+  },
+  fromAmino(object: QueryReferrersResponseAmino): QueryReferrersResponse {
+    const message = createBaseQueryReferrersResponse();
+    message.referrers = object.referrers?.map(e => Referrer.fromAmino(e)) || [];
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromAmino(object.pagination);
+    }
+    return message;
+  },
+  toAmino(message: QueryReferrersResponse): QueryReferrersResponseAmino {
+    const obj: any = {};
+    if (message.referrers) {
+      obj.referrers = message.referrers.map(e => e ? Referrer.toAmino(e) : undefined);
+    } else {
+      obj.referrers = message.referrers;
+    }
+    obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: QueryReferrersResponseAminoMsg): QueryReferrersResponse {
+    return QueryReferrersResponse.fromAmino(object.value);
+  },
+  fromProtoMsg(message: QueryReferrersResponseProtoMsg): QueryReferrersResponse {
+    return QueryReferrersResponse.decode(message.value);
+  },
+  toProto(message: QueryReferrersResponse): Uint8Array {
+    return QueryReferrersResponse.encode(message).finish();
+  },
+  toProtoMsg(message: QueryReferrersResponse): QueryReferrersResponseProtoMsg {
+    return {
+      typeUrl: "/side.lending.QueryReferrersResponse",
+      value: QueryReferrersResponse.encode(message).finish()
     };
   }
 };

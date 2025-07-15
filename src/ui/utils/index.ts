@@ -170,14 +170,13 @@ export function useLocationState<T>() {
   return state as T;
 }
 
-export function formatUnitAmount(amount: string, exp: string | number) {
-  if (BigNumber(amount).isZero()) {
-    return '0';
-  }
-  return BigNumber(amount)
-    .div(BigNumber(10).pow(exp))
-    .toFixed(Number(exp), BigNumber.ROUND_DOWN)
-    .replace(/\.?0*$/, '');
+export function formatUnitAmount(tokenAmount: string | number, exponent: string | number) {
+  tokenAmount = tokenAmount || '0';
+  exponent = exponent || 6;
+  const exp = BigNumber(10).exponentiatedBy(exponent);
+
+  const amount = BigNumber(tokenAmount).div(exp).toFixed(Number(exponent));
+  return amount.replace(/\.?0+$/, '') || '0';
 }
 
 export function parseUnitAmount(tokenAmount: string, exponent: string | number) {

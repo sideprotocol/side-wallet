@@ -313,3 +313,27 @@ export interface IGetBtcBridgeDepositIbcScriptRequest {
 export interface IGetBtcBridgeDepositIbcScriptResponse {
   script: string;
 }
+
+export interface IGetRateLimitResponse {
+  rate_limit: {
+    address_rate_limit: {
+      end_time: string;
+      quota: string;
+      start_time: string;
+    };
+    global_rate_limit: {
+      end_time: string;
+      quota: string;
+      start_time: string;
+      used: string;
+    };
+  };
+}
+
+export interface IGetRateLimitByAddressResponse {
+  address: string;
+  end_time: string;
+  quota: string;
+  start_time: string;
+  used: string;
+}

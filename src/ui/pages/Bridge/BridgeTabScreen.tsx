@@ -304,10 +304,21 @@ export default function BridgeTabScreen() {
                 }}
                 disabled={isDisabled}
                 full
-                text={buttonTips || 'Next'}
+                text={'Next'}
                 preset="primary"
               />
             </Row>
+            {isDisabled && buttonTips && (
+              <Row justifyCenter mt="md">
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.red
+                  }}>
+                  {buttonTips}
+                </Typography>
+              </Row>
+            )}
 
             <Row justifyCenter mt="md">
               <Typography

@@ -381,12 +381,10 @@ export interface PoolConfig {
   tranches: PoolTrancheConfig[];
   /** request fee */
   requestFee: Coin;
-  /** origination fee */
-  originationFee: string;
+  /** origination fee factor permille */
+  originationFeeFactor: number;
   /** reserve factor permille */
   reserveFactor: number;
-  /** referral fee factor permille */
-  referralFeeFactor: number;
   /** maximum ltv percent */
   maxLtv: number;
   /** liquidation ltv percent */
@@ -416,12 +414,10 @@ export interface PoolConfigAmino {
   tranches?: PoolTrancheConfigAmino[];
   /** request fee */
   request_fee?: CoinAmino;
-  /** origination fee */
-  origination_fee?: string;
+  /** origination fee factor permille */
+  origination_fee_factor?: number;
   /** reserve factor permille */
   reserve_factor?: number;
-  /** referral fee factor permille */
-  referral_fee_factor?: number;
   /** maximum ltv percent */
   max_ltv?: number;
   /** liquidation ltv percent */
@@ -443,9 +439,8 @@ export interface PoolConfigSDKType {
   max_borrow_amount: string;
   tranches: PoolTrancheConfigSDKType[];
   request_fee: CoinSDKType;
-  origination_fee: string;
+  origination_fee_factor: number;
   reserve_factor: number;
-  referral_fee_factor: number;
   max_ltv: number;
   liquidation_threshold: number;
   paused: boolean;
@@ -583,7 +578,7 @@ export interface Loan {
   authorizations: Authorization[];
   collateralAmount: string;
   liquidationId: bigint;
-  referrer: string;
+  referralCode: string;
   createAt: Date;
   disburseAt: Date;
   status: LoanStatus;
@@ -615,7 +610,7 @@ export interface LoanAmino {
   authorizations?: AuthorizationAmino[];
   collateral_amount?: string;
   liquidation_id?: string;
-  referrer?: string;
+  referral_code?: string;
   create_at?: string;
   disburse_at?: string;
   status?: LoanStatus;
@@ -646,10 +641,47 @@ export interface LoanSDKType {
   authorizations: AuthorizationSDKType[];
   collateral_amount: string;
   liquidation_id: bigint;
-  referrer: string;
+  referral_code: string;
   create_at: Date;
   disburse_at: Date;
   status: LoanStatus;
+}
+/** Referrer defines the referrer */
+export interface Referrer {
+  /** Optional name */
+  name: string;
+  /** Unique referral code with 8 alphanumeric characters */
+  referralCode: string;
+  /** Referrer address */
+  address: string;
+  /** Referral fee factor */
+  referralFeeFactor: string;
+}
+export interface ReferrerProtoMsg {
+  typeUrl: "/side.lending.Referrer";
+  value: Uint8Array;
+}
+/** Referrer defines the referrer */
+export interface ReferrerAmino {
+  /** Optional name */
+  name?: string;
+  /** Unique referral code with 8 alphanumeric characters */
+  referral_code?: string;
+  /** Referrer address */
+  address?: string;
+  /** Referral fee factor */
+  referral_fee_factor?: string;
+}
+export interface ReferrerAminoMsg {
+  type: "/side.lending.Referrer";
+  value: ReferrerAmino;
+}
+/** Referrer defines the referrer */
+export interface ReferrerSDKType {
+  name: string;
+  referral_code: string;
+  address: string;
+  referral_fee_factor: string;
 }
 /** LeafScript defines the tap leaf script */
 export interface LeafScript {
@@ -1082,9 +1114,8 @@ function createBasePoolConfig(): PoolConfig {
     maxBorrowAmount: "",
     tranches: [],
     requestFee: Coin.fromPartial({}),
-    originationFee: "",
+    originationFeeFactor: 0,
     reserveFactor: 0,
-    referralFeeFactor: 0,
     maxLtv: 0,
     liquidationThreshold: 0,
     paused: false
@@ -1117,23 +1148,20 @@ export const PoolConfig = {
     if (message.requestFee !== undefined) {
       Coin.encode(message.requestFee, writer.uint32(66).fork()).ldelim();
     }
-    if (message.originationFee !== "") {
-      writer.uint32(74).string(message.originationFee);
+    if (message.originationFeeFactor !== 0) {
+      writer.uint32(72).uint32(message.originationFeeFactor);
     }
     if (message.reserveFactor !== 0) {
       writer.uint32(80).uint32(message.reserveFactor);
     }
-    if (message.referralFeeFactor !== 0) {
-      writer.uint32(88).uint32(message.referralFeeFactor);
-    }
     if (message.maxLtv !== 0) {
-      writer.uint32(96).uint32(message.maxLtv);
+      writer.uint32(88).uint32(message.maxLtv);
     }
     if (message.liquidationThreshold !== 0) {
-      writer.uint32(104).uint32(message.liquidationThreshold);
+      writer.uint32(96).uint32(message.liquidationThreshold);
     }
     if (message.paused === true) {
-      writer.uint32(112).bool(message.paused);
+      writer.uint32(104).bool(message.paused);
     }
     return writer;
   },
@@ -1169,21 +1197,18 @@ export const PoolConfig = {
           message.requestFee = Coin.decode(reader, reader.uint32());
           break;
         case 9:
-          message.originationFee = reader.string();
+          message.originationFeeFactor = reader.uint32();
           break;
         case 10:
           message.reserveFactor = reader.uint32();
           break;
         case 11:
-          message.referralFeeFactor = reader.uint32();
-          break;
-        case 12:
           message.maxLtv = reader.uint32();
           break;
-        case 13:
+        case 12:
           message.liquidationThreshold = reader.uint32();
           break;
-        case 14:
+        case 13:
           message.paused = reader.bool();
           break;
         default:
@@ -1203,9 +1228,8 @@ export const PoolConfig = {
     message.maxBorrowAmount = object.maxBorrowAmount ?? "";
     message.tranches = object.tranches?.map(e => PoolTrancheConfig.fromPartial(e)) || [];
     message.requestFee = object.requestFee !== undefined && object.requestFee !== null ? Coin.fromPartial(object.requestFee) : undefined;
-    message.originationFee = object.originationFee ?? "";
+    message.originationFeeFactor = object.originationFeeFactor ?? 0;
     message.reserveFactor = object.reserveFactor ?? 0;
-    message.referralFeeFactor = object.referralFeeFactor ?? 0;
     message.maxLtv = object.maxLtv ?? 0;
     message.liquidationThreshold = object.liquidationThreshold ?? 0;
     message.paused = object.paused ?? false;
@@ -1235,14 +1259,11 @@ export const PoolConfig = {
     if (object.request_fee !== undefined && object.request_fee !== null) {
       message.requestFee = Coin.fromAmino(object.request_fee);
     }
-    if (object.origination_fee !== undefined && object.origination_fee !== null) {
-      message.originationFee = object.origination_fee;
+    if (object.origination_fee_factor !== undefined && object.origination_fee_factor !== null) {
+      message.originationFeeFactor = object.origination_fee_factor;
     }
     if (object.reserve_factor !== undefined && object.reserve_factor !== null) {
       message.reserveFactor = object.reserve_factor;
-    }
-    if (object.referral_fee_factor !== undefined && object.referral_fee_factor !== null) {
-      message.referralFeeFactor = object.referral_fee_factor;
     }
     if (object.max_ltv !== undefined && object.max_ltv !== null) {
       message.maxLtv = object.max_ltv;
@@ -1269,9 +1290,8 @@ export const PoolConfig = {
       obj.tranches = message.tranches;
     }
     obj.request_fee = message.requestFee ? Coin.toAmino(message.requestFee) : undefined;
-    obj.origination_fee = message.originationFee === "" ? undefined : message.originationFee;
+    obj.origination_fee_factor = message.originationFeeFactor === 0 ? undefined : message.originationFeeFactor;
     obj.reserve_factor = message.reserveFactor === 0 ? undefined : message.reserveFactor;
-    obj.referral_fee_factor = message.referralFeeFactor === 0 ? undefined : message.referralFeeFactor;
     obj.max_ltv = message.maxLtv === 0 ? undefined : message.maxLtv;
     obj.liquidation_threshold = message.liquidationThreshold === 0 ? undefined : message.liquidationThreshold;
     obj.paused = message.paused === false ? undefined : message.paused;
@@ -1689,7 +1709,7 @@ function createBaseLoan(): Loan {
     authorizations: [],
     collateralAmount: "",
     liquidationId: BigInt(0),
-    referrer: "",
+    referralCode: "",
     createAt: new Date(),
     disburseAt: new Date(),
     status: 0
@@ -1761,8 +1781,8 @@ export const Loan = {
     if (message.liquidationId !== BigInt(0)) {
       writer.uint32(168).uint64(message.liquidationId);
     }
-    if (message.referrer !== "") {
-      writer.uint32(178).string(message.referrer);
+    if (message.referralCode !== "") {
+      writer.uint32(178).string(message.referralCode);
     }
     if (message.createAt !== undefined) {
       Timestamp.encode(toTimestamp(message.createAt), writer.uint32(186).fork()).ldelim();
@@ -1846,7 +1866,7 @@ export const Loan = {
           message.liquidationId = reader.uint64();
           break;
         case 22:
-          message.referrer = reader.string();
+          message.referralCode = reader.string();
           break;
         case 23:
           message.createAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
@@ -1887,7 +1907,7 @@ export const Loan = {
     message.authorizations = object.authorizations?.map(e => Authorization.fromPartial(e)) || [];
     message.collateralAmount = object.collateralAmount ?? "";
     message.liquidationId = object.liquidationId !== undefined && object.liquidationId !== null ? BigInt(object.liquidationId.toString()) : BigInt(0);
-    message.referrer = object.referrer ?? "";
+    message.referralCode = object.referralCode ?? "";
     message.createAt = object.createAt ?? undefined;
     message.disburseAt = object.disburseAt ?? undefined;
     message.status = object.status ?? 0;
@@ -1956,8 +1976,8 @@ export const Loan = {
     if (object.liquidation_id !== undefined && object.liquidation_id !== null) {
       message.liquidationId = BigInt(object.liquidation_id);
     }
-    if (object.referrer !== undefined && object.referrer !== null) {
-      message.referrer = object.referrer;
+    if (object.referral_code !== undefined && object.referral_code !== null) {
+      message.referralCode = object.referral_code;
     }
     if (object.create_at !== undefined && object.create_at !== null) {
       message.createAt = fromTimestamp(Timestamp.fromAmino(object.create_at));
@@ -1997,7 +2017,7 @@ export const Loan = {
     }
     obj.collateral_amount = message.collateralAmount === "" ? undefined : message.collateralAmount;
     obj.liquidation_id = message.liquidationId !== BigInt(0) ? message.liquidationId.toString() : undefined;
-    obj.referrer = message.referrer === "" ? undefined : message.referrer;
+    obj.referral_code = message.referralCode === "" ? undefined : message.referralCode;
     obj.create_at = message.createAt ? Timestamp.toAmino(toTimestamp(message.createAt)) : undefined;
     obj.disburse_at = message.disburseAt ? Timestamp.toAmino(toTimestamp(message.disburseAt)) : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
@@ -2016,6 +2036,105 @@ export const Loan = {
     return {
       typeUrl: "/side.lending.Loan",
       value: Loan.encode(message).finish()
+    };
+  }
+};
+function createBaseReferrer(): Referrer {
+  return {
+    name: "",
+    referralCode: "",
+    address: "",
+    referralFeeFactor: ""
+  };
+}
+export const Referrer = {
+  typeUrl: "/side.lending.Referrer",
+  encode(message: Referrer, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.referralCode !== "") {
+      writer.uint32(18).string(message.referralCode);
+    }
+    if (message.address !== "") {
+      writer.uint32(26).string(message.address);
+    }
+    if (message.referralFeeFactor !== "") {
+      writer.uint32(34).string(Decimal.fromUserInput(message.referralFeeFactor, 18).atomics);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): Referrer {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseReferrer();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.name = reader.string();
+          break;
+        case 2:
+          message.referralCode = reader.string();
+          break;
+        case 3:
+          message.address = reader.string();
+          break;
+        case 4:
+          message.referralFeeFactor = Decimal.fromAtomics(reader.string(), 18).toString();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<Referrer>): Referrer {
+    const message = createBaseReferrer();
+    message.name = object.name ?? "";
+    message.referralCode = object.referralCode ?? "";
+    message.address = object.address ?? "";
+    message.referralFeeFactor = object.referralFeeFactor ?? "";
+    return message;
+  },
+  fromAmino(object: ReferrerAmino): Referrer {
+    const message = createBaseReferrer();
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    }
+    if (object.referral_code !== undefined && object.referral_code !== null) {
+      message.referralCode = object.referral_code;
+    }
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address;
+    }
+    if (object.referral_fee_factor !== undefined && object.referral_fee_factor !== null) {
+      message.referralFeeFactor = object.referral_fee_factor;
+    }
+    return message;
+  },
+  toAmino(message: Referrer): ReferrerAmino {
+    const obj: any = {};
+    obj.name = message.name === "" ? undefined : message.name;
+    obj.referral_code = message.referralCode === "" ? undefined : message.referralCode;
+    obj.address = message.address === "" ? undefined : message.address;
+    obj.referral_fee_factor = message.referralFeeFactor === "" ? undefined : message.referralFeeFactor;
+    return obj;
+  },
+  fromAminoMsg(object: ReferrerAminoMsg): Referrer {
+    return Referrer.fromAmino(object.value);
+  },
+  fromProtoMsg(message: ReferrerProtoMsg): Referrer {
+    return Referrer.decode(message.value);
+  },
+  toProto(message: Referrer): Uint8Array {
+    return Referrer.encode(message).finish();
+  },
+  toProtoMsg(message: Referrer): ReferrerProtoMsg {
+    return {
+      typeUrl: "/side.lending.Referrer",
+      value: Referrer.encode(message).finish()
     };
   }
 };

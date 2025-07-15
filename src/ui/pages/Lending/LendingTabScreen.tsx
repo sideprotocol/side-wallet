@@ -137,6 +137,11 @@ export default function LendingTanScreen() {
 
   const data = [
     {
+      label: 'Referral Code',
+      value: '-',
+      tips: ''
+    },
+    {
       label: 'Health Factor',
       value: (
         <Typography
@@ -266,6 +271,38 @@ export default function LendingTanScreen() {
         </>
       ),
       tip: 'Upfront fees required to initiate the loan'
+    },
+    {
+      label: 'Origination Fee',
+      value: (
+        <>
+          {`${new BigNumber(poolData?.baseData.config.origination_fee_factor || '0').div(10).toFixed(2)}%`}
+          &nbsp;
+          <small
+            style={{
+              fontSize: '100%',
+              color: colors.grey12,
+              marginRight: '2px'
+            }}>
+            (
+            {getTruncate(
+              new BigNumber(borrowAmount)
+                .multipliedBy(poolData?.baseData.config.origination_fee_factor || '0')
+                .div(1000)
+                .toFixed(poolData?.token.asset.precision || 6),
+              poolData?.token.asset.precision || 6
+            )}
+          </small>
+          <small
+            style={{
+              fontSize: '100%',
+              color: colors.grey12
+            }}>
+            {poolData?.token.asset.symbol})
+          </small>
+        </>
+      ),
+      tips: 'Upfront fees required to initiate the loan'
     }
   ];
 

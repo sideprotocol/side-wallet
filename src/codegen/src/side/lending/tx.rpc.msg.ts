@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Rpc } from "../../helpers";
 import { BinaryReader } from "../../binary";
-import { MsgCreatePool, MsgCreatePoolResponse, MsgAddLiquidity, MsgAddLiquidityResponse, MsgRemoveLiquidity, MsgRemoveLiquidityResponse, MsgUpdatePoolConfig, MsgUpdatePoolConfigResponse, MsgApply, MsgApplyResponse, MsgSubmitCets, MsgSubmitCetsResponse, MsgSubmitDepositTransaction, MsgSubmitDepositTransactionResponse, MsgRedeem, MsgRedeemResponse, MsgRepay, MsgRepayResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
+import { MsgCreatePool, MsgCreatePoolResponse, MsgAddLiquidity, MsgAddLiquidityResponse, MsgRemoveLiquidity, MsgRemoveLiquidityResponse, MsgUpdatePoolConfig, MsgUpdatePoolConfigResponse, MsgApply, MsgApplyResponse, MsgSubmitCets, MsgSubmitCetsResponse, MsgSubmitDepositTransaction, MsgSubmitDepositTransactionResponse, MsgRedeem, MsgRedeemResponse, MsgRepay, MsgRepayResponse, MsgRegisterReferrer, MsgRegisterReferrerResponse, MsgUpdateReferrer, MsgUpdateReferrerResponse, MsgUpdateParams, MsgUpdateParamsResponse } from "./tx";
 /** Msg defines the Msg service. */
 export interface Msg {
   createPool(request: MsgCreatePool): Promise<MsgCreatePoolResponse>;
@@ -13,6 +13,8 @@ export interface Msg {
   submitDepositTransaction(request: MsgSubmitDepositTransaction): Promise<MsgSubmitDepositTransactionResponse>;
   redeem(request: MsgRedeem): Promise<MsgRedeemResponse>;
   repay(request: MsgRepay): Promise<MsgRepayResponse>;
+  registerReferrer(request: MsgRegisterReferrer): Promise<MsgRegisterReferrerResponse>;
+  updateReferrer(request: MsgUpdateReferrer): Promise<MsgUpdateReferrerResponse>;
   /**
    * UpdateParams defines a governance operation for updating the x/lending module
    * parameters. The authority defaults to the x/gov module account.
@@ -34,6 +36,8 @@ export class MsgClientImpl implements Msg {
     this.submitDepositTransaction = this.submitDepositTransaction.bind(this);
     this.redeem = this.redeem.bind(this);
     this.repay = this.repay.bind(this);
+    this.registerReferrer = this.registerReferrer.bind(this);
+    this.updateReferrer = this.updateReferrer.bind(this);
     this.updateParams = this.updateParams.bind(this);
   }
   createPool(request: MsgCreatePool): Promise<MsgCreatePoolResponse> {
@@ -80,6 +84,16 @@ export class MsgClientImpl implements Msg {
     const data = MsgRepay.encode(request).finish();
     const promise = this.rpc.request("side.lending.Msg", "Repay", data);
     return promise.then(data => MsgRepayResponse.decode(new BinaryReader(data)));
+  }
+  registerReferrer(request: MsgRegisterReferrer): Promise<MsgRegisterReferrerResponse> {
+    const data = MsgRegisterReferrer.encode(request).finish();
+    const promise = this.rpc.request("side.lending.Msg", "RegisterReferrer", data);
+    return promise.then(data => MsgRegisterReferrerResponse.decode(new BinaryReader(data)));
+  }
+  updateReferrer(request: MsgUpdateReferrer): Promise<MsgUpdateReferrerResponse> {
+    const data = MsgUpdateReferrer.encode(request).finish();
+    const promise = this.rpc.request("side.lending.Msg", "UpdateReferrer", data);
+    return promise.then(data => MsgUpdateReferrerResponse.decode(new BinaryReader(data)));
   }
   updateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();

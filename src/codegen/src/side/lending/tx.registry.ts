@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgCreatePool, MsgAddLiquidity, MsgRemoveLiquidity, MsgUpdatePoolConfig, MsgApply, MsgSubmitCets, MsgSubmitDepositTransaction, MsgRedeem, MsgRepay, MsgUpdateParams } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/side.lending.MsgCreatePool", MsgCreatePool], ["/side.lending.MsgAddLiquidity", MsgAddLiquidity], ["/side.lending.MsgRemoveLiquidity", MsgRemoveLiquidity], ["/side.lending.MsgUpdatePoolConfig", MsgUpdatePoolConfig], ["/side.lending.MsgApply", MsgApply], ["/side.lending.MsgSubmitCets", MsgSubmitCets], ["/side.lending.MsgSubmitDepositTransaction", MsgSubmitDepositTransaction], ["/side.lending.MsgRedeem", MsgRedeem], ["/side.lending.MsgRepay", MsgRepay], ["/side.lending.MsgUpdateParams", MsgUpdateParams]];
+import { MsgCreatePool, MsgAddLiquidity, MsgRemoveLiquidity, MsgUpdatePoolConfig, MsgApply, MsgSubmitCets, MsgSubmitDepositTransaction, MsgRedeem, MsgRepay, MsgRegisterReferrer, MsgUpdateReferrer, MsgUpdateParams } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/side.lending.MsgCreatePool", MsgCreatePool], ["/side.lending.MsgAddLiquidity", MsgAddLiquidity], ["/side.lending.MsgRemoveLiquidity", MsgRemoveLiquidity], ["/side.lending.MsgUpdatePoolConfig", MsgUpdatePoolConfig], ["/side.lending.MsgApply", MsgApply], ["/side.lending.MsgSubmitCets", MsgSubmitCets], ["/side.lending.MsgSubmitDepositTransaction", MsgSubmitDepositTransaction], ["/side.lending.MsgRedeem", MsgRedeem], ["/side.lending.MsgRepay", MsgRepay], ["/side.lending.MsgRegisterReferrer", MsgRegisterReferrer], ["/side.lending.MsgUpdateReferrer", MsgUpdateReferrer], ["/side.lending.MsgUpdateParams", MsgUpdateParams]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -61,6 +61,18 @@ export const MessageComposer = {
       return {
         typeUrl: "/side.lending.MsgRepay",
         value: MsgRepay.encode(value).finish()
+      };
+    },
+    registerReferrer(value: MsgRegisterReferrer) {
+      return {
+        typeUrl: "/side.lending.MsgRegisterReferrer",
+        value: MsgRegisterReferrer.encode(value).finish()
+      };
+    },
+    updateReferrer(value: MsgUpdateReferrer) {
+      return {
+        typeUrl: "/side.lending.MsgUpdateReferrer",
+        value: MsgUpdateReferrer.encode(value).finish()
       };
     },
     updateParams(value: MsgUpdateParams) {
@@ -125,6 +137,18 @@ export const MessageComposer = {
         value
       };
     },
+    registerReferrer(value: MsgRegisterReferrer) {
+      return {
+        typeUrl: "/side.lending.MsgRegisterReferrer",
+        value
+      };
+    },
+    updateReferrer(value: MsgUpdateReferrer) {
+      return {
+        typeUrl: "/side.lending.MsgUpdateReferrer",
+        value
+      };
+    },
     updateParams(value: MsgUpdateParams) {
       return {
         typeUrl: "/side.lending.MsgUpdateParams",
@@ -185,6 +209,18 @@ export const MessageComposer = {
       return {
         typeUrl: "/side.lending.MsgRepay",
         value: MsgRepay.fromPartial(value)
+      };
+    },
+    registerReferrer(value: MsgRegisterReferrer) {
+      return {
+        typeUrl: "/side.lending.MsgRegisterReferrer",
+        value: MsgRegisterReferrer.fromPartial(value)
+      };
+    },
+    updateReferrer(value: MsgUpdateReferrer) {
+      return {
+        typeUrl: "/side.lending.MsgUpdateReferrer",
+        value: MsgUpdateReferrer.fromPartial(value)
       };
     },
     updateParams(value: MsgUpdateParams) {

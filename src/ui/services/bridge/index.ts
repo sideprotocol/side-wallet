@@ -7,6 +7,8 @@ import {
   GetBridgeWithdrawFeeReponse,
   IGetBtcBridgeDepositIbcScriptRequest,
   IGetBtcBridgeDepositIbcScriptResponse,
+  IGetRateLimitByAddressResponse,
+  IGetRateLimitResponse,
   Params,
   UTXOAddress,
   UTXOBridge,
@@ -123,6 +125,18 @@ export default class BridgeService {
   async getBlockHeight(baseURL: string): Promise<number> {
     return this.apiClient.get<number>('/api/blocks/tip/height', {
       baseURL
+    });
+  }
+
+  async getRateLimit(restUrl: string): Promise<IGetRateLimitResponse> {
+    return this.apiClient.get<IGetRateLimitResponse>('/side/btcbridge/rate_limit', {
+      baseURL: restUrl
+    });
+  }
+
+  async getRateLimitByAddress(address: string, restUrl: string): Promise<IGetRateLimitByAddressResponse> {
+    return this.apiClient.get<IGetRateLimitByAddressResponse>(`/side/btcbridge/rate_limit/address/${address}`, {
+      baseURL: restUrl
     });
   }
 }

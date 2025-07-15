@@ -2,7 +2,8 @@ import BigNumber from 'bignumber.js';
 import { useEffect, useMemo, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
-import { toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
+import { formatUnitAmount } from '@/ui/utils';
+import { calcToTime, toReadableAmount, toUnitAmount } from '@/ui/utils/formatter';
 
 import { useCurrentAccount } from '../../state/accounts/hooks';
 import { useBridgeState } from '../../state/bridge/hook';
@@ -11,6 +12,8 @@ import { useUtxos } from '../../state/transactions/hooks';
 import { estimateNetworkFeeHelper } from '../../wallet-sdk/utils';
 import useGetBitcoinBalanceList from '../useGetBitcoinBalanceList';
 import { useGetSideBalanceList } from '../useGetSideBalanceList';
+import { useGetBridgeRateLimit } from './useGetBridgeRateLimit';
+import { useGetBridgeRateLimitByAddress } from './useGetBridgeRateLimitByAddress';
 
 export function useGetBridgeButtonTips() {
   const { balance, bridgeAmount, fromAsset, fee, fromChain, params } = useBridgeState();
@@ -24,6 +27,9 @@ export function useGetBridgeButtonTips() {
 
   const [btcTransferGasError, setBtcTransferGasError] = useState<string | undefined>(undefined);
   const [debouncedBridgeAmount] = useDebounce(bridgeAmount, 300);
+
+  const { data: userRateLimit } = useGetBridgeRateLimitByAddress();
+  const { data: globalRateLimit } = useGetBridgeRateLimit();
 
   const _utxos = useUtxos();
   const isDeposit = fromChain?.isBitcoin;
@@ -63,7 +69,7 @@ export function useGetBridgeButtonTips() {
   }, [fromAsset, debouncedBridgeAmount, params, balance, fee]);
 
   const { transferBtcDisabled, transferBtcButtonTips } = useMemo(() => {
-    if (!bridgeAmount || !params) {
+    if (!bridgeAmount || !params || !userRateLimit || !globalRateLimit) {
       return {
         transferBtcDisabled: true,
         transferBtcButtonTips: ''
@@ -163,11 +169,47 @@ export function useGetBridgeButtonTips() {
         transferBtcButtonTips: 'Please reserve sufficient funds for network and bridge fees.'
       };
     }
+    // rate limit
+    if (!isDeposit) {
+      const userMaxCanTransfer = formatUnitAmount(
+        BigNumber(userRateLimit.quota).minus(userRateLimit.used).toFixed(BigNumber.ROUND_FLOOR),
+        8
+      );
+      const globalMaxCanTransfer = formatUnitAmount(
+        BigNumber(globalRateLimit.rate_limit.global_rate_limit.quota)
+          .minus(globalRateLimit.rate_limit.global_rate_limit.used)
+          .toFixed(BigNumber.ROUND_FLOOR),
+        8
+      );
+      if (+bridgeAmount > +userMaxCanTransfer) {
+        return {
+          transferBtcDisabled: true,
+          transferBtcButtonTips: `The requested amount exceeds your individual peg-out limit for this cycle. You can peg out up to [${userMaxCanTransfer}] sBTC before the cycle resets.`
+        };
+      }
+      if (+bridgeAmount > +globalMaxCanTransfer) {
+        const { hours, minutes } = calcToTime(globalRateLimit.rate_limit.global_rate_limit.end_time);
+        return {
+          transferBtcDisabled: true,
+          transferBtcButtonTips: `The requested amount exceeds the remaining global peg-out quota for the current cycle. Please try again after the next cycle starts in [${hours} hr ${minutes} min].`
+        };
+      }
+    }
     return {
       transferBtcDisabled: false,
       transferBtcButtonTips: 'Next'
     };
-  }, [params, bridgeAmount, fromAsset, bitcoinBalanceList, sideBalanceList, balance, btcTransferGasError]);
+  }, [
+    params,
+    bridgeAmount,
+    fromAsset,
+    bitcoinBalanceList,
+    sideBalanceList,
+    balance,
+    btcTransferGasError,
+    userRateLimit,
+    globalRateLimit
+  ]);
 
   return {
     isDisabled: transferBtcDisabled,

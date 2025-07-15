@@ -203,6 +203,7 @@ export interface LoanBaseData {
 }
 
 export interface LeadingPool {
+  available_amount: string;
   borrowed_amount: string;
   config: {
     borrow_cap: string;
@@ -210,7 +211,7 @@ export interface LeadingPool {
     max_borrow_amount: string;
     max_ltv: number;
     min_borrow_amount: string;
-    origination_fee: string;
+    origination_fee_factor: string;
     paused: true;
     referral_fee_factor: number;
     request_fee: Coin;
@@ -678,6 +679,7 @@ export interface GetLoanByIdCexResponse {
     volume: string;
   };
   returnBtcTxhash: string;
+  returnBtcStatus: string;
 }
 
 export interface GetLeadingParamsResponse {
