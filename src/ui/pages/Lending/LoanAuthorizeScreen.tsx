@@ -61,7 +61,7 @@ export default function LoanAuthorizeScreen() {
     {
       label: `Liquidation Price (${liquidationPrice?.pair})`,
       value: liquidationPrice ? getTruncate(liquidationPrice?.price || '0', 8) : '-',
-      tip: 'The collateral price at which liquidation would be triggered',
+      tip: 'Liquidation price is calculated based on your total collateral deposited before Step 2 (Authorization). Additional deposits made after Step 2 will not change your liquidation price.',
       valueTip: 'Price will update if multiple deposits are detected. Please wait.'
     },
     {

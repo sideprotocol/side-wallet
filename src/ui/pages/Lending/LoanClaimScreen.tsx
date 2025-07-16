@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
-import { Button, Column, Content, Header, Image, Layout, SuccessAnimation } from '@/ui/components';
+import { Button, Column, Content, Header, Image, Layout, LightTooltip, SuccessAnimation } from '@/ui/components';
 import { useClaimCollateral } from '@/ui/hooks/lending';
 import useGetBitcoinBalanceList from '@/ui/hooks/useGetBitcoinBalanceList';
 import services from '@/ui/services';
@@ -197,14 +197,22 @@ export default function LoanClaimScreen() {
                   bgcolor: colors.card_bgColor,
                   borderRadius: '10px'
                 }}>
-                <Stack
-                  direction="row"
-                  sx={{
-                    fontSize: '14px',
-                    color: colors.grey12
-                  }}>
-                  Claimable
-                </Stack>
+                <LightTooltip title={'Only deposits with 6+ confirmations can be withdrawn.'} arrow placement="top">
+                  <Typography
+                    sx={{
+                      fontSize: '14px',
+                      color: colors.grey12,
+                      textDecoration: 'dotted underline',
+                      textUnderlineOffset: '2px',
+                      cursor: 'pointer',
+                      transition: '.4s',
+                      ':hover': {
+                        color: colors.white
+                      }
+                    }}>
+                    Claimable
+                  </Typography>
+                </LightTooltip>
                 <Stack
                   direction="row"
                   alignItems="center"
