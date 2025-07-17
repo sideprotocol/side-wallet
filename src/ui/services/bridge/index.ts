@@ -1,5 +1,6 @@
 import '@/shared/constant';
 import ApiClient from '@/ui/services/network/ApiClient';
+import { filterBTCTransactions } from '@/ui/utils/mempool';
 
 import { getQueryParams } from '../getQueryParams';
 import {
@@ -89,9 +90,10 @@ export default class BridgeService {
   }
 
   async getMemPoolTxs(address: string, SIDE_BTC_EXPLORER: string): Promise<UTXOBridge[]> {
-    return this.apiClient.get<UTXOBridge[]>(`/api/address/${address}/txs`, {
+    const txs = await this.apiClient.get<UTXOBridge[]>(`/api/address/${address}/txs`, {
       baseURL: SIDE_BTC_EXPLORER
     });
+    return filterBTCTransactions(txs);
   }
   async getMemPoolAddress(address: string, SIDE_BTC_EXPLORER: string): Promise<AddressInfo> {
     return this.apiClient.get<AddressInfo>(`/api/address/${address}`, {

@@ -13,9 +13,11 @@ export function useGetLoanClaimLogic(loan?: Loan) {
 
   const { depositInfo, isSuccess: getDepositInfoSuccess } = useGetDepositInfo(loan);
 
-  const { isRedeeming, redeemEnable, canRedeemUnitAmount } = useMemo(() => {
+  const { isRedeeming, redeemEnable, canRedeemUnitAmount, totalDepositUnitAmount, claimedUnitAmount } = useMemo(() => {
     let redeemEnable = false,
+      totalDepositUnitAmount = '0',
       canRedeemUnitAmount = '0',
+      claimedUnitAmount = '0',
       isRedeeming = false;
 
     if (
@@ -46,6 +48,22 @@ export function useGetLoanClaimLogic(loan?: Loan) {
           }
           return pre;
         }, '0');
+
+        totalDepositUnitAmount = depositInfo.txDatas.reduce((pre, cur) => {
+          if (cur.type === 'deposit') {
+            const amount = depositInfo.txDatas.find((item) => item.txid === cur.txid)?.change || 0;
+            return `${+pre + +amount}`;
+          }
+          return pre;
+        }, '0');
+
+        claimedUnitAmount = depositInfo.txDatas.reduce((pre, cur) => {
+          if (cur.type === 'withdraw') {
+            const amount = depositInfo.txDatas.find((item) => item.txid === cur.txid)?.change || 0;
+            return `${+pre + +amount}`;
+          }
+          return pre;
+        }, '0');
       }
     }
 
@@ -60,13 +78,17 @@ export function useGetLoanClaimLogic(loan?: Loan) {
     return {
       isRedeeming,
       redeemEnable,
-      canRedeemUnitAmount
+      canRedeemUnitAmount,
+      totalDepositUnitAmount,
+      claimedUnitAmount
     };
   }, [loanAuthorization, loanDeposits, loan?.status, depositInfo]);
 
   return {
     redeemEnable,
     canRedeemUnitAmount,
+    totalDepositUnitAmount,
+    claimedUnitAmount,
     isRedeeming,
     depositInfo,
     getDepositInfoSuccess

@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { useQuery } from 'react-query';
 import { useLocation } from 'react-router-dom';
 
@@ -15,11 +16,20 @@ import { Box, Stack, Typography } from '@mui/material';
 export default function LoanClaimScreen() {
   const currentAccount = useCurrentAccount();
   const { state } = useLocation();
-  const { loan_id, canRedeemUnitAmount, realCollateralAmount, redeemEnable } = state as {
+  const {
+    loan_id,
+    canRedeemUnitAmount,
+    realCollateralAmount,
+    redeemEnable,
+    totalDepositUnitAmount,
+    claimedUnitAmount
+  } = state as {
     loan_id: string;
     canRedeemUnitAmount: string;
     redeemEnable: 'true' | 'false';
     realCollateralAmount: string;
+    totalDepositUnitAmount: string;
+    claimedUnitAmount: string;
   };
 
   const { sideChain } = useEnvironment();
@@ -43,6 +53,30 @@ export default function LoanClaimScreen() {
   const uiState = useUiTxCreateScreen();
 
   const feeRate = uiState.feeRate;
+
+  const claimData = [
+    {
+      label: 'Unclaimable',
+      value: `${formatUnitAmount(
+        new BigNumber(realCollateralAmount).minus(canRedeemUnitAmount).toString(),
+        collateralToken?.asset.exponent || 8
+      )} ${collateralToken?.asset.symbol}`
+    },
+    {
+      label: 'Claimable',
+      value: `${formatUnitAmount(canRedeemUnitAmount, collateralToken?.asset.exponent || 8)} ${
+        collateralToken?.asset.symbol
+      }`,
+      tips: 'Only deposits with 6+ confirmations can be withdrawn.'
+    },
+    {
+      label: 'Claimed',
+      value: `${formatUnitAmount(claimedUnitAmount, collateralToken?.asset.exponent || 8)} ${
+        collateralToken?.asset.symbol
+      }`
+    }
+  ];
+
   if (!loan) return null;
 
   return (
@@ -160,9 +194,8 @@ export default function LoanClaimScreen() {
                     fontSize: '12px',
                     fontWeight: 600,
                     color: colors.grey12
-                  }}>
-                  Total Due
-                </Typography>
+                  }}></Typography>
+                Your Total Deposits
                 <Typography
                   sx={{
                     fontSize: '20px',
@@ -170,7 +203,7 @@ export default function LoanClaimScreen() {
                     lineHeight: '23px',
                     color: colors.white
                   }}>
-                  {formatUnitAmount(realCollateralAmount, collateralToken?.asset.exponent || 8)}
+                  {formatUnitAmount(totalDepositUnitAmount, collateralToken?.asset.exponent || 8)}
                 </Typography>
               </Stack>
               <Box
@@ -187,43 +220,41 @@ export default function LoanClaimScreen() {
                 non-refundable.
               </Box>
               <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
+                gap="8px"
                 sx={{
                   p: '16px',
-                  fontSize: '12px',
-                  color: colors.grey12,
                   bgcolor: colors.card_bgColor,
                   borderRadius: '10px'
                 }}>
-                <LightTooltip title={'Only deposits with 6+ confirmations can be withdrawn.'} arrow placement="top">
-                  <Typography
-                    sx={{
-                      fontSize: '14px',
-                      color: colors.grey12,
-                      textDecoration: 'dotted underline',
-                      textUnderlineOffset: '2px',
-                      cursor: 'pointer',
-                      transition: '.4s',
-                      ':hover': {
+                {claimData.map((item, index) => (
+                  <Stack key={index} direction="row" justifyContent="space-between" alignItems="center">
+                    <LightTooltip title={'Only deposits with 6+ confirmations can be withdrawn.'} arrow placement="top">
+                      <Typography
+                        sx={{
+                          fontSize: '14px',
+                          color: colors.grey12,
+                          textDecoration: 'dotted underline',
+                          textUnderlineOffset: '2px',
+                          cursor: 'pointer',
+                          transition: '.4s',
+                          ':hover': {
+                            color: colors.white
+                          }
+                        }}>
+                        {item.label}
+                      </Typography>
+                    </LightTooltip>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      sx={{
+                        fontSize: '14px',
                         color: colors.white
-                      }
-                    }}>
-                    Claimable
-                  </Typography>
-                </LightTooltip>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  sx={{
-                    fontSize: '14px',
-                    color: colors.white
-                  }}>
-                  {formatUnitAmount(canRedeemUnitAmount, collateralToken?.asset.exponent || 8)}
-                  &nbsp;
-                  {collateralToken?.asset.symbol}
-                </Stack>
+                      }}>
+                      {item.value}
+                    </Stack>
+                  </Stack>
+                ))}
               </Stack>
             </>
           )}

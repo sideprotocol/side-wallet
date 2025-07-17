@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 
 import services from '@/ui/services';
+import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 
 export function useGetLoansData() {
+  const currentAccount = useCurrentAccount();
   const [pageSize, setPageSize] = useState(10);
   const [pageNum, setPageNum] = useState(0);
   const { sideChain, SERVICE_BASE_URL } = useEnvironment();
@@ -17,19 +19,20 @@ export function useGetLoansData() {
         { 'pagination.limit': `${pageSize}`, 'pagination.offset': `${pageNum}` },
         { baseURL: sideChain.restUrl }
       );
+      const loans = result.loans.filter((item) => item.borrower === currentAccount.address);
 
-      for (let i = 0; i < result.loans.length; i++) {
-        if (!+result.loans[i].collateral_amount) {
+      for (let i = 0; i < loans.length; i++) {
+        if (!+loans[i].collateral_amount) {
           const loanCex = await services.lending.getLoanByIdCex(
-            { vaultAddress: result.loans[i].vault_address },
+            { vaultAddress: loans[i].vault_address },
             { baseURL: SERVICE_BASE_URL }
           );
           const collateralAmount = +loanCex.collateralAmount || +loanCex.expectedCollateralAmount;
-          result.loans[i].collateral_amount = `${collateralAmount}`;
+          loans[i].collateral_amount = `${collateralAmount}`;
         }
       }
-      result.loans.sort((a, b) => dayjs(b.create_at).unix() - dayjs(a.create_at).unix());
-      return result.loans;
+      loans.sort((a, b) => dayjs(b.create_at).unix() - dayjs(a.create_at).unix());
+      return loans;
     }
   });
 

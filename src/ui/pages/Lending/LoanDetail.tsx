@@ -96,8 +96,15 @@ export default function LoanDetailScreen() {
   const feeRate = uiState.feeRate;
 
   const { dlcMetaData } = useGetDlcMeta(loan);
-  const { isRedeeming, redeemEnable, canRedeemUnitAmount, getDepositInfoSuccess, depositInfo } =
-    useGetLoanClaimLogic(loan);
+  const {
+    isRedeeming,
+    redeemEnable,
+    canRedeemUnitAmount,
+    getDepositInfoSuccess,
+    depositInfo,
+    totalDepositUnitAmount,
+    claimedUnitAmount
+  } = useGetLoanClaimLogic(loan);
   const { txsConfirms } = useGetBitcoinTxsConfirms(depositInfo?.txids || []);
 
   const { isReturning } = useMemo(() => {
@@ -752,7 +759,9 @@ export default function LoanDetailScreen() {
                     loan_id: loan.vault_address,
                     canRedeemUnitAmount,
                     redeemEnable,
-                    realCollateralAmount: depositInfo?.realCollateralAmount || '0'
+                    realCollateralAmount: depositInfo?.realCollateralAmount || '0',
+                    totalDepositUnitAmount,
+                    claimedUnitAmount
                   });
                 }}>
                 Claim
@@ -779,7 +788,9 @@ export default function LoanDetailScreen() {
                     loan_id: loan.vault_address,
                     canRedeemUnitAmount,
                     redeemEnable,
-                    realCollateralAmount: depositInfo?.realCollateralAmount || '0'
+                    realCollateralAmount: depositInfo?.realCollateralAmount || '0',
+                    totalDepositUnitAmount,
+                    claimedUnitAmount
                   });
                 }}>
                 Claim
@@ -816,7 +827,9 @@ export default function LoanDetailScreen() {
                   loan_id: loan.vault_address,
                   canRedeemUnitAmount,
                   redeemEnable,
-                  realCollateralAmount: depositInfo?.realCollateralAmount || '0'
+                  realCollateralAmount: depositInfo?.realCollateralAmount || '0',
+                  totalDepositUnitAmount,
+                  claimedUnitAmount
                 });
               }}>
               Claim
@@ -830,7 +843,9 @@ export default function LoanDetailScreen() {
                   loan_id: loan.vault_address,
                   canRedeemUnitAmount,
                   redeemEnable,
-                  realCollateralAmount: depositInfo?.realCollateralAmount || '0'
+                  realCollateralAmount: depositInfo?.realCollateralAmount || '0',
+                  totalDepositUnitAmount,
+                  claimedUnitAmount
                 });
               }}>
               Claim
