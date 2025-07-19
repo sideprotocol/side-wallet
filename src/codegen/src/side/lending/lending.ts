@@ -578,7 +578,7 @@ export interface Loan {
   authorizations: Authorization[];
   collateralAmount: string;
   liquidationId: bigint;
-  referralCode: string;
+  referrer?: Referrer;
   createAt: Date;
   disburseAt: Date;
   status: LoanStatus;
@@ -610,7 +610,7 @@ export interface LoanAmino {
   authorizations?: AuthorizationAmino[];
   collateral_amount?: string;
   liquidation_id?: string;
-  referral_code?: string;
+  referrer?: ReferrerAmino;
   create_at?: string;
   disburse_at?: string;
   status?: LoanStatus;
@@ -641,7 +641,7 @@ export interface LoanSDKType {
   authorizations: AuthorizationSDKType[];
   collateral_amount: string;
   liquidation_id: bigint;
-  referral_code: string;
+  referrer?: ReferrerSDKType;
   create_at: Date;
   disburse_at: Date;
   status: LoanStatus;
@@ -1709,7 +1709,7 @@ function createBaseLoan(): Loan {
     authorizations: [],
     collateralAmount: "",
     liquidationId: BigInt(0),
-    referralCode: "",
+    referrer: undefined,
     createAt: new Date(),
     disburseAt: new Date(),
     status: 0
@@ -1781,8 +1781,8 @@ export const Loan = {
     if (message.liquidationId !== BigInt(0)) {
       writer.uint32(168).uint64(message.liquidationId);
     }
-    if (message.referralCode !== "") {
-      writer.uint32(178).string(message.referralCode);
+    if (message.referrer !== undefined) {
+      Referrer.encode(message.referrer, writer.uint32(178).fork()).ldelim();
     }
     if (message.createAt !== undefined) {
       Timestamp.encode(toTimestamp(message.createAt), writer.uint32(186).fork()).ldelim();
@@ -1866,7 +1866,7 @@ export const Loan = {
           message.liquidationId = reader.uint64();
           break;
         case 22:
-          message.referralCode = reader.string();
+          message.referrer = Referrer.decode(reader, reader.uint32());
           break;
         case 23:
           message.createAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
@@ -1907,7 +1907,7 @@ export const Loan = {
     message.authorizations = object.authorizations?.map(e => Authorization.fromPartial(e)) || [];
     message.collateralAmount = object.collateralAmount ?? "";
     message.liquidationId = object.liquidationId !== undefined && object.liquidationId !== null ? BigInt(object.liquidationId.toString()) : BigInt(0);
-    message.referralCode = object.referralCode ?? "";
+    message.referrer = object.referrer !== undefined && object.referrer !== null ? Referrer.fromPartial(object.referrer) : undefined;
     message.createAt = object.createAt ?? undefined;
     message.disburseAt = object.disburseAt ?? undefined;
     message.status = object.status ?? 0;
@@ -1976,8 +1976,8 @@ export const Loan = {
     if (object.liquidation_id !== undefined && object.liquidation_id !== null) {
       message.liquidationId = BigInt(object.liquidation_id);
     }
-    if (object.referral_code !== undefined && object.referral_code !== null) {
-      message.referralCode = object.referral_code;
+    if (object.referrer !== undefined && object.referrer !== null) {
+      message.referrer = Referrer.fromAmino(object.referrer);
     }
     if (object.create_at !== undefined && object.create_at !== null) {
       message.createAt = fromTimestamp(Timestamp.fromAmino(object.create_at));
@@ -2017,7 +2017,7 @@ export const Loan = {
     }
     obj.collateral_amount = message.collateralAmount === "" ? undefined : message.collateralAmount;
     obj.liquidation_id = message.liquidationId !== BigInt(0) ? message.liquidationId.toString() : undefined;
-    obj.referral_code = message.referralCode === "" ? undefined : message.referralCode;
+    obj.referrer = message.referrer ? Referrer.toAmino(message.referrer) : undefined;
     obj.create_at = message.createAt ? Timestamp.toAmino(toTimestamp(message.createAt)) : undefined;
     obj.disburse_at = message.disburseAt ? Timestamp.toAmino(toTimestamp(message.disburseAt)) : undefined;
     obj.status = message.status === 0 ? undefined : message.status;

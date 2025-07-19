@@ -4,6 +4,7 @@ import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
 import * as sideBtcbridgeTxRegistry from "./btcbridge/tx.registry";
 import * as sideDlcTxRegistry from "./dlc/tx.registry";
+import * as sideFarmingTxRegistry from "./farming/tx.registry";
 import * as sideIncentiveTxRegistry from "./incentive/tx.registry";
 import * as sideLendingTxRegistry from "./lending/tx.registry";
 import * as sideLiquidationTxRegistry from "./liquidation/tx.registry";
@@ -11,6 +12,7 @@ import * as sideOracleTxRegistry from "./oracle/tx.registry";
 import * as sideTssTxRegistry from "./tss/tx.registry";
 import * as sideBtcbridgeTxAmino from "./btcbridge/tx.amino";
 import * as sideDlcTxAmino from "./dlc/tx.amino";
+import * as sideFarmingTxAmino from "./farming/tx.amino";
 import * as sideIncentiveTxAmino from "./incentive/tx.amino";
 import * as sideLendingTxAmino from "./lending/tx.amino";
 import * as sideLiquidationTxAmino from "./liquidation/tx.amino";
@@ -19,13 +21,14 @@ import * as sideTssTxAmino from "./tss/tx.amino";
 export const sideAminoConverters = {
   ...sideBtcbridgeTxAmino.AminoConverter,
   ...sideDlcTxAmino.AminoConverter,
+  ...sideFarmingTxAmino.AminoConverter,
   ...sideIncentiveTxAmino.AminoConverter,
   ...sideLendingTxAmino.AminoConverter,
   ...sideLiquidationTxAmino.AminoConverter,
   ...sideOracleTxAmino.AminoConverter,
   ...sideTssTxAmino.AminoConverter
 };
-export const sideProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...sideBtcbridgeTxRegistry.registry, ...sideDlcTxRegistry.registry, ...sideIncentiveTxRegistry.registry, ...sideLendingTxRegistry.registry, ...sideLiquidationTxRegistry.registry, ...sideOracleTxRegistry.registry, ...sideTssTxRegistry.registry];
+export const sideProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...sideBtcbridgeTxRegistry.registry, ...sideDlcTxRegistry.registry, ...sideFarmingTxRegistry.registry, ...sideIncentiveTxRegistry.registry, ...sideLendingTxRegistry.registry, ...sideLiquidationTxRegistry.registry, ...sideOracleTxRegistry.registry, ...sideTssTxRegistry.registry];
 export const getSigningSideClientOptions = ({
   defaultTypes = defaultRegistryTypes
 } = {}): {

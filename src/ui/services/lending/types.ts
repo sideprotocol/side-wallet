@@ -135,7 +135,12 @@ export interface Loan {
   origination_fee: string;
   pool_id: string;
   protocol_fee: string;
-  referrer: string;
+  referrer: {
+    address: string;
+    name: string;
+    referral_code: string;
+    referral_fee_factor: string;
+  };
   request_fee: {
     amount: string;
     denom: string;
