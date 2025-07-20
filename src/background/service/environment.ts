@@ -123,6 +123,7 @@ class EnvironmentService {
       UNISAT_IO_API: this.store.UNISAT_IO_API,
       SIDE_STATION_URL: this.store.SIDE_STATION_URL,
       SIDE_BRIDGEEXPLORER_URL: this.store.SIDE_BRIDGEEXPLORER_URL,
+      EVM_COLLECTOR: this.store.EVM_COLLECTOR,
       sideChain: this.store.sideChain,
       chains: this.store.chains
     };

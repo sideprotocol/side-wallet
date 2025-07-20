@@ -171,7 +171,7 @@ export default function SideTxConfirmScreen() {
             />
           </Row>
         </Row>
-        <Button preset="primary" text="Confirm" onClick={handleSubmit} />
+        <Button preset="primary" text="Confirm" onClick={() => handleSubmit()} />
       </Column>
     </Layout>
   );
