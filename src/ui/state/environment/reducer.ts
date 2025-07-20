@@ -14,6 +14,7 @@ export interface EnvironmentState {
   UNISAT_IO_API: string;
   SIDE_STATION_URL: string;
   SIDE_BRIDGEEXPLORER_URL: string;
+  EVM_COLLECTOR: string;
   sideChain: IChain;
   chains: IChain[];
 }
@@ -28,6 +29,7 @@ export const initialState: EnvironmentState = {
   UNISAT_IO_API: '',
   SIDE_STATION_URL: '',
   SIDE_BRIDGEEXPLORER_URL: '',
+  EVM_COLLECTOR: '',
   sideChain: SIDE_CHAIN_MAINNET,
   chains: []
 };
@@ -52,6 +54,7 @@ const slice = createSlice({
           UNISAT_IO_API?: string;
           SIDE_STATION_URL?: string;
           SIDE_BRIDGEEXPLORER_URL?: string;
+          EVM_COLLECTOR?: string;
           sideChain?: IChain;
           chains?: IChain[];
         };

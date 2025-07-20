@@ -54,6 +54,7 @@ import AppTabScrren from './Main/AppTabScreen';
 import BoostScreen from './Main/BoostScreen';
 import DiscoverTabScreen from './Main/DiscoverTabScreen';
 import ExploreTabScreen from './Main/ExploreTabScreen';
+import RegisterEvmAddress from './Main/RegisterEvmAddress';
 import SettingsTabScreen from './Main/SettingsTabScreen';
 import SwapSideScreen from './Main/SwapSideScreen';
 import SwapSideSuccessScreen from './Main/SwapSideSuccessScreen';
@@ -488,6 +489,10 @@ export const routes = {
   DeleteWalletScreen: {
     path: '/keyring/delete',
     element: <DeleteWalletScreen />
+  },
+  RegisterEvmAddress: {
+    path: '/register-evm-address',
+    element: <RegisterEvmAddress />
   }
 };
 

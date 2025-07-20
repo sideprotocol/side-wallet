@@ -13,6 +13,7 @@ export type EnvironmentStore = {
   UNISAT_IO_API: string;
   SIDE_STATION_URL: string;
   SIDE_BRIDGEEXPLORER_URL: string;
+  EVM_COLLECTOR: string;
   sideChain: IChain;
   chains: IChain[];
 };
@@ -33,6 +34,7 @@ class EnvironmentService {
         UNISAT_IO_API: '',
         SIDE_STATION_URL: '',
         SIDE_BRIDGEEXPLORER_URL: '',
+        EVM_COLLECTOR: '',
         sideChain: SIDE_CHAIN_MAINNET,
         chains: []
       }
@@ -64,6 +66,9 @@ class EnvironmentService {
       }
       if (this.store.SIDE_BRIDGEEXPLORER_URL !== config.SIDE_BRIDGEEXPLORER_URL) {
         this.store.SIDE_BRIDGEEXPLORER_URL = config.SIDE_BRIDGEEXPLORER_URL;
+      }
+      if (this.store.EVM_COLLECTOR !== config.EVM_COLLECTOR) {
+        this.store.EVM_COLLECTOR = config.EVM_COLLECTOR;
       }
       this.store.sideChain = config.SIDE_CHAIN;
       this.store.chains = chains;
@@ -102,6 +107,7 @@ class EnvironmentService {
       this.store.UNISAT_IO_API = config.UNISAT_IO_API;
       this.store.SIDE_STATION_URL = config.SIDE_STATION_URL;
       this.store.SIDE_BRIDGEEXPLORER_URL = config.SIDE_BRIDGEEXPLORER_URL;
+      this.store.EVM_COLLECTOR = config.EVM_COLLECTOR;
       this.store.sideChain = config.SIDE_CHAIN;
       this.store.chains = chains;
     } catch (err) {

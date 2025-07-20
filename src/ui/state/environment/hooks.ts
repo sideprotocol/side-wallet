@@ -37,6 +37,7 @@ export function useChangeEnvironmentCallback() {
           UNISAT_IO_API: config.UNISAT_IO_API,
           SIDE_STATION_URL: config.SIDE_STATION_URL,
           SIDE_BRIDGEEXPLORER_URL: config.SIDE_BRIDGEEXPLORER_URL,
+          EVM_COLLECTOR: config.EVM_COLLECTOR,
           sideChain: config.SIDE_CHAIN,
           chains,
           SERVICE_BASE_URL: baseURL

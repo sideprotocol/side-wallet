@@ -5,92 +5,25 @@ import { useLocation } from 'react-router-dom';
 import { BalanceItem, TxType } from '@/shared/types';
 import { Button, Column, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
+import { useSend } from '@/ui/hooks/useSend';
 import { useNavigate } from '@/ui/pages/MainRoute';
-import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
-import { useUiTxCreateSendSideScreen, useUpdateUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
+import { useUpdateUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
 import { colors } from '@/ui/theme/colors';
-import { formatUnitAmount, isValidAddress, parseUnitAmount } from '@/ui/utils';
-import { toReadableAmount } from '@/ui/utils/formatter';
+import { formatUnitAmount, isValidAddress } from '@/ui/utils';
 
 export default function CreateSendSide() {
   const navigate = useNavigate();
   const { state } = useLocation();
-  // const { base } = state as {
+  const setUiState = useUpdateUiTxCreateSendSideScreen();
   const { token } = state as {
-    // base: string;
     token: BalanceItem;
   };
-  const uiState = useUiTxCreateSendSideScreen();
-  const setUiState = useUpdateUiTxCreateSendSideScreen();
-
-  const { estimateGasFee } = useSignAndBroadcastTxRaw();
-
-  // const { data: sideTokenList } = useGetSideTokenList();
-  // const { balanceAmount } = useGetSideTokenBalance(denom);
-
-  const currentAccount = useCurrentAccount();
-  let { balanceList: sideTokenList } = useGetSideBalanceList(currentAccount?.address);
-  const toInfo = uiState.toInfo;
-  const inputAmount = uiState.inputAmount;
-  const feeDenom = uiState.feeDenom;
-  const memo = uiState.memo;
-  const { curToken, feeToken } = useMemo(() => {
-    const curToken = sideTokenList.find((item) => item.denom === token.denom)!;
-    const feeToken = sideTokenList.find((item) => item.denom === feeDenom)!;
-    return {
-      curToken,
-      feeToken
-    };
-  }, [sideTokenList]);
-
-  async function estimateFee() {
-    const msg = {
-      typeUrl: '/cosmos.bank.v1beta1.MsgSend',
-      value: {
-        fromAddress: currentAccount.address,
-        toAddress: currentAccount.address,
-        amount: [
-          {
-            amount: parseUnitAmount('1', 6),
-            denom: 'uside'
-          }
-        ]
-      }
-    };
-
-    const { tx } = await estimateGasFee({
-      messages: [msg],
-      feeAmount: uiState.fee,
-      feeDenom: feeDenom
-    });
-
-    const coin = tx.fee.amount[0];
-
-    const feeEstimate = coin.amount;
-
-    setUiState({
-      fee: feeEstimate
-    });
-  }
-
-  useEffect(() => {
-    if (!token) return;
-    estimateFee();
-  }, [token]);
 
   useEffect(() => {
     setUiState({ base: token.denom });
   }, [token.denom]);
 
-  const feeTokenInfo = sideTokenList.find((item) => item.denom === feeToken.asset.denom);
-
-  const feeByUSD = new BigNumber(formatUnitAmount(uiState.fee || '0', feeTokenInfo?.asset.exponent || 6))
-    .multipliedBy(feeTokenInfo?.denomPrice || '0')
-    .toFixed(2);
-
-  const available = curToken?.formatAmount || '0';
+  const { curToken, feeToken, memo, inputAmount, toInfo, fee } = useSend();
 
   const disabled = useMemo(() => {
     let _disabled = false;
@@ -100,11 +33,17 @@ export default function CreateSendSide() {
       _disabled = true;
     }
     return _disabled;
-  }, [toInfo, inputAmount]);
+  }, [toInfo.address, inputAmount]);
 
   if (!curToken) {
     return <Layout />;
   }
+
+  const feeByUSD = new BigNumber(formatUnitAmount(fee || '0', feeToken?.asset.exponent || 6))
+    .multipliedBy(feeToken?.denomPrice || '0')
+    .toFixed(2);
+
+  const available = curToken?.formatAmount || '0';
 
   return (
     <Layout>
@@ -248,8 +187,7 @@ export default function CreateSendSide() {
           />
           <Row>
             <Text
-              // text={`${disabled ? '-' : toReadableAmount(uiState.fee, feeToken.exponent)} ${feeToken.symbol}`}
-              text={`${disabled ? '-' : toReadableAmount(uiState.fee, feeToken?.asset?.exponent)} ${
+              text={`${disabled ? '-' : formatUnitAmount(fee, feeToken?.asset?.exponent || 6)} ${
                 feeToken?.asset?.symbol
               }`}
               style={{

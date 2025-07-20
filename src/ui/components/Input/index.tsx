@@ -45,6 +45,7 @@ export interface InputProps {
   runesDecimal?: number;
   enableMax?: boolean;
   onMaxClick?: () => void;
+  rightElement?: React.ReactNode;
 }
 
 type Presets = keyof typeof $inputPresets;
@@ -141,6 +142,7 @@ function AmountInput(props: InputProps) {
     runesDecimal,
     enableMax,
     onMaxClick,
+    rightElement,
     ...rest
   } = props;
   const $style = Object.assign({}, $baseInputStyle, $inputStyleOverride, disabled ? { color: colors.textDim } : {});
@@ -200,7 +202,9 @@ function AmountInput(props: InputProps) {
         onBlur={() => setIsFocus(false)}
         {...rest}
       />
-      {enableMax ? (
+      {rightElement ? (
+        rightElement
+      ) : enableMax ? (
         <Typography
           onClick={() => {
             if (onMaxClick) onMaxClick();

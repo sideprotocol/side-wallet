@@ -12,6 +12,7 @@ export interface GetConstantsResponse {
     SIDE_BRIDGEEXPLORER_URL: string;
     SIDE_CHAIN: IChain;
     UNISAT_IO_API: string;
+    EVM_COLLECTOR: string;
   };
   version: string;
   chains: IChain[];

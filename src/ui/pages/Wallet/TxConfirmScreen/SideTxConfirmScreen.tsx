@@ -1,84 +1,22 @@
 import BigNumber from 'bignumber.js';
-import { useMemo, useState } from 'react';
 
-import { CHAINS_ENUM } from '@/shared/constant';
 import { Button, Column, Content, Header, Icon, Layout, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
-import { useGetSideBalanceList } from '@/ui/hooks/useGetSideBalanceList';
-import { useCurrentAccount } from '@/ui/state/accounts/hooks';
-import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
-import { useUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
+import { useSend } from '@/ui/hooks/useSend';
 import { fontSizes } from '@/ui/theme/font';
-import { formatUnitAmount, parseUnitAmount } from '@/ui/utils';
-import { toReadableAmount } from '@/ui/utils/formatter';
+import { formatUnitAmount } from '@/ui/utils';
 import { LoadingOutlined } from '@ant-design/icons';
 
-import { useNavigate } from '../../MainRoute';
-
 export default function SideTxConfirmScreen() {
-  const navigate = useNavigate();
-  const { signAndBroadcastTxRaw } = useSignAndBroadcastTxRaw();
-  const currentAccount = useCurrentAccount();
-  const uiState = useUiTxCreateSendSideScreen();
-  const [loading, setLoading] = useState(false);
-  const { balanceList: sideTokenList } = useGetSideBalanceList(currentAccount.address);
-  const toInfo = uiState.toInfo;
-  const denom = uiState.base;
-  const inputAmount = uiState.inputAmount;
-  const fee = uiState.fee;
-  const feeDenom = uiState.feeDenom;
-  const memo = uiState.memo;
+  const { handleSubmit, loading, curToken, feeToken, memo, inputAmount, toInfo, fee } = useSend();
 
-  const { curToken, feeToken } = useMemo(() => {
-    const curToken = sideTokenList.find((item) => item.denom === denom)!;
-    const feeToken = sideTokenList.find((item) => item.denom === feeDenom)!;
-    return {
-      curToken,
-      feeToken
-    };
-  }, [sideTokenList.length, denom, feeDenom]);
-
-  const feeTokenInfo = sideTokenList.find((item) => item.denom === feeToken.asset.denom);
-
-  const feeByUSD = new BigNumber(formatUnitAmount(uiState.fee || '0', feeTokenInfo?.asset.exponent || 6))
-    .multipliedBy(feeTokenInfo?.denomPrice || '0')
+  const feeByUSD = new BigNumber(formatUnitAmount(fee, feeToken?.asset.exponent || 6))
+    .multipliedBy(feeToken?.denomPrice || '0')
     .toFixed(2);
 
   if (!curToken) {
     return <Layout />;
   }
-
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      const msg = {
-        typeUrl: '/cosmos.bank.v1beta1.MsgSend',
-        value: {
-          fromAddress: currentAccount.address,
-          toAddress: toInfo.address,
-          amount: [
-            {
-              amount: parseUnitAmount(inputAmount, curToken.asset.exponent),
-              denom: curToken.denom
-            }
-          ]
-        }
-      };
-      const result = await signAndBroadcastTxRaw({
-        messages: [msg],
-        feeAmount: fee,
-        feeDenom: feeDenom
-      });
-      console.log('result', result);
-      navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE });
-    } catch (err) {
-      const errorString = err instanceof Error ? err.message : typeof err == 'string' ? err : '';
-
-      navigate('TxFailScreen', { error: errorString });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -216,7 +154,7 @@ export default function SideTxConfirmScreen() {
           />
           <Row>
             <Text
-              text={`${toReadableAmount(uiState.fee, feeToken.asset.exponent)} ${feeToken.asset.symbol}`}
+              text={`${formatUnitAmount(fee, feeToken?.asset.exponent || 6)} ${feeToken?.asset.symbol}`}
               style={{
                 fontSize: '16px',
                 fontWeight: 600,

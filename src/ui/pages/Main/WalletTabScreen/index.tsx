@@ -12,7 +12,9 @@ import { accountActions } from '@/ui/state/accounts/reducer';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useAppDispatch } from '@/ui/state/hooks';
 import { useBlockstreamUrl } from '@/ui/state/settings/hooks';
+import { colors } from '@/ui/theme/colors';
 import { getTruncate, useWallet } from '@/ui/utils';
+import { Stack } from '@mui/material';
 
 import { BuyBTCModal } from '../../BuyBTC/BuyBTCModal';
 import { useNavigate } from '../../MainRoute';
@@ -257,7 +259,29 @@ export default function WalletTabScreen() {
           </div>
         </Row>
 
-        <Column my="xl" px="lg">
+        <Stack
+          direction="row"
+          justifyContent="center"
+          sx={{
+            m: '12px',
+            py: '4px',
+            fontSize: '12px',
+            fontWeight: 500,
+            color: colors.grey12,
+            bgcolor: colors.card_bgColor,
+            borderRadius: '10px',
+            transition: '.4s',
+            ':hover': {
+              bgcolor: colors.grey_dark
+            }
+          }}
+          onClick={() => {
+            navigate('RegisterEvmAddress');
+          }}>
+          Register for TGE
+        </Stack>
+
+        <Column mb="xl" px="lg">
           <SideTokenList balanceVisible={balanceVisible} />
         </Column>
       </Column>
