@@ -135,10 +135,12 @@ export default function LendingTanScreen() {
     [borrowAmount, collateralAmount, dlcPrice]
   );
 
+  const { loading, createLoan, referralCode } = useCreateLoan();
+
   const data = [
     {
       label: 'Referral Code',
-      value: '-',
+      value: referralCode,
       tips: ''
     },
     {
@@ -306,8 +308,6 @@ export default function LendingTanScreen() {
     }
   ];
 
-  const { loading, createLoan } = useCreateLoan();
-
   const [isChecked, setIsChecked] = useState(false);
   const [isHoverMaturity, setIsHoverMaturity] = useState(false);
 
@@ -343,7 +343,7 @@ export default function LendingTanScreen() {
       )}`;
     } else if (+(requestFeeToken?.amount || '0') < +(poolData?.baseData.config.request_fee.amount || '0')) {
       isDisabled = true;
-      buttonText = 'No enough balance';
+      buttonText = 'Insufficient SIDE Balance';
     }
     return {
       isDisabled,

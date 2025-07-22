@@ -436,7 +436,6 @@ export class WalletController extends BaseController {
       ADDRESS_TYPES.filter((v) => v.displayIndex >= 0).forEach((v) => {
         let pubkey = pathPubkey[v.hdPath];
         if (!pubkey && _keyring.getAccountByHdPath) {
-          console.log(1111);
           pubkey = _keyring.getAccountByHdPath(v.hdPath, index);
         }
         const address = publicKeyToAddress(pubkey, v.value, networkType);

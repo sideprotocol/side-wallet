@@ -15,10 +15,11 @@ interface LocationState {
   chain: CHAINS_ENUM;
   type?: 'bridge' | 'send';
   text?: string;
+  title?: string;
 }
 
 export default function TxSuccessScreen() {
-  const { txid, chain, type, text } = useLocationState<LocationState>();
+  const { txid, chain, type, text, title } = useLocationState<LocationState>();
   const navigate = useNavigate();
   const { SIDE_BRIDGEEXPLORER_URL } = useEnvironment();
   const blockstream = useBlockstreamUrl(chain);
@@ -34,7 +35,7 @@ export default function TxSuccessScreen() {
 
           <Text
             preset="title"
-            text="Transaction completed!"
+            text={title || 'Transaction completed!'}
             textCenter
             style={{
               color: colors.green,

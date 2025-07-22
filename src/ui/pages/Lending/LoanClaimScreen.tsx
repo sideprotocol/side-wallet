@@ -82,7 +82,7 @@ export default function LoanClaimScreen() {
   return (
     <Layout>
       <Header
-        title="Claim BTC"
+        title="Claim & Cancel"
         onBack={() => {
           window.history.go(-1);
         }}

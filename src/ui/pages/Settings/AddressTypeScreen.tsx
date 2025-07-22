@@ -124,7 +124,6 @@ export default function AddressTypeScreen() {
                   if (item.value === currentKeyring.addressType) {
                     return;
                   }
-                  console.log('changeAddressType: ', item.value);
                   await wallet.changeAddressType(item.value);
                   reloadAccounts();
                   navigate('MainScreen');

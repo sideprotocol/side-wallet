@@ -2,19 +2,19 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { useEffect, useMemo } from 'react';
 
-import { Button, Column, Content, Footer, Header, Icon, Input, Layout, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Footer, Header, Icon, Input, Layout, LightTooltip, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useSend } from '@/ui/hooks/useSend';
-import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useEnvironment } from '@/ui/state/environment/hooks';
 import { useResetUiTxCreateScreen, useUpdateUiTxCreateSendSideScreen } from '@/ui/state/ui/hooks';
+import { colors } from '@/ui/theme/colors';
 import { isValidAddress } from '@/ui/utils';
+import { Stack, Typography } from '@mui/material';
 
 export default function RegisterEvmAddress() {
-  const currentAccount = useCurrentAccount();
   const setUiState = useUpdateUiTxCreateSendSideScreen();
   const reset = useResetUiTxCreateScreen();
-  const { EVM_COLLECTOR } = useEnvironment();
+  const { EVM_COLLECTOR, sideChain } = useEnvironment();
 
   useEffect(() => {
     setUiState({ base: 'uside', toInfo: { address: EVM_COLLECTOR, domain: '' } });
@@ -62,16 +62,48 @@ export default function RegisterEvmAddress() {
               borderRadius: '10px',
               padding: '16px'
             }}>
-            <Text text="Burn Address" color="white" size="xs" />
-            <Text
-              text={currentAccount.address}
-              color="white"
-              size="sm"
-              style={{
-                fontWeight: 500,
-                overflowWrap: 'break-word'
+            <Stack direction="row">
+              <LightTooltip
+                title={
+                  'Any SIDE sent to this address will be reserved for future token burns and cannot be recovered. This is a permanent and irreversible action. '
+                }
+                arrow
+                placement="top">
+                <Typography
+                  sx={{
+                    fontSize: '12px',
+                    color: colors.grey12,
+                    textDecoration: 'dotted underline',
+                    textUnderlineOffset: '2px',
+                    cursor: 'pointer',
+                    transition: '.4s',
+                    ':hover': {
+                      color: colors.white
+                    }
+                  }}>
+                  Burn Address
+                </Typography>
+              </LightTooltip>
+            </Stack>
+            <Typography
+              sx={{
+                fontSize: '12px',
+                fontWeight: 400,
+                color: colors.white,
+                overflowWrap: 'break-word',
+                textDecoration: 'dotted underline',
+                textUnderlineOffset: '2px',
+                cursor: 'pointer',
+                transition: '.4s',
+                ':hover': {
+                  color: colors.main
+                }
               }}
-            />
+              onClick={() => {
+                window.open(`${sideChain.explorerUrl}/address/${toInfo.address}`, '_blank');
+              }}>
+              {toInfo.address}
+            </Typography>
           </Column>
 
           <Row
@@ -152,10 +184,13 @@ export default function RegisterEvmAddress() {
       <Footer px="zero" py="zero">
         <Button
           preset="primary"
-          text={+inputAmount > +available ? 'Insufficient Balance' : 'Next'}
+          text={+inputAmount > +available ? 'Insufficient Balance' : 'Confirm'}
           disabled={disabled}
           onClick={() => {
-            handleSubmit('Please follow us on X and stay tuned for further announcements regarding the TGE.');
+            handleSubmit({
+              text: 'Please follow us on X and stay tuned for further announcements regarding the TGE.',
+              title: 'Registration completed!'
+            });
           }}
         />
       </Footer>

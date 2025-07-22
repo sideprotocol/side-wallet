@@ -62,7 +62,7 @@ export function useSend() {
     });
   }
 
-  const handleSubmit = async (successText?: string) => {
+  const handleSubmit = async (options?: { text?: string; title?: string }) => {
     try {
       if (!curToken) {
         throw new Error('Token not found');
@@ -88,7 +88,12 @@ export function useSend() {
         feeDenom: feeDenom,
         memo
       });
-      navigate('TxSuccessScreen', { txid: result.tx_response.txhash, chain: CHAINS_ENUM.SIDE, text: successText });
+      navigate('TxSuccessScreen', {
+        txid: result.tx_response.txhash,
+        chain: CHAINS_ENUM.SIDE,
+        text: options?.text,
+        title: options?.title
+      });
     } catch (err) {
       const errorString = err instanceof Error ? err.message : typeof err == 'string' ? err : '';
 

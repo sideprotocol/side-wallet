@@ -346,7 +346,7 @@ export default function EarnTabScreen() {
                 }}
                 onClick={(event) => {
                   event.stopPropagation();
-                  window.open(`${SIDE_STATION_URL}/lendingPool/${item.baseData.id}`, '_blank');
+                  window.open(`${SIDE_STATION_URL}/markets/pool/${item.baseData.id}`, '_blank');
                 }}>
                 Details
               </Typography>

@@ -2,12 +2,14 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { sideLendingMessageComposer } from '@/codegen/src';
+import { NetworkType } from '@/shared/types';
 import ToastView from '@/ui/components/ToastView';
 import { useNavigate } from '@/ui/pages/MainRoute';
 import services from '@/ui/services';
 import { GetTxByHashResponse } from '@/ui/services/tx/types';
 import { useCurrentAccount } from '@/ui/state/accounts/hooks';
 import { useEnvironment } from '@/ui/state/environment/hooks';
+import { useNetworkType } from '@/ui/state/settings/hooks';
 import { useSignAndBroadcastTxRaw } from '@/ui/state/transactions/hooks/cosmos';
 import { toXOnly } from '@/ui/wallet-sdk/utils';
 import { Coin } from '@cosmjs/amino';
@@ -16,6 +18,7 @@ import { Box } from '@mui/material';
 
 export function useCreateLoan() {
   const { sideChain, SERVICE_BASE_URL } = useEnvironment();
+  const networkType = useNetworkType();
 
   const [loading, setLoading] = useState(false);
 
@@ -26,6 +29,8 @@ export function useCreateLoan() {
   const currentAccount = useCurrentAccount();
 
   const navigate = useNavigate();
+
+  const referralCode = networkType === NetworkType.TESTNET ? 'SIDE1234' : '';
 
   const createLoan = async ({
     borrowAmount,
@@ -53,7 +58,7 @@ export function useCreateLoan() {
         borrowerPubkey: toXOnly(Buffer.from(fromHex(currentAccount.pubkey))).toString('hex'),
         maturity: BigInt(maturityTime),
         poolId: poolId,
-        referralCode: '',
+        referralCode,
         borrowerAuthPubkey: toXOnly(Buffer.from(fromHex(currentAccount.pubkey))).toString('hex')
       });
       const result = await signAndBroadcastTxRaw({
@@ -145,6 +150,7 @@ export function useCreateLoan() {
     createLoan,
     loading,
     visible,
-    setVisible
+    setVisible,
+    referralCode
   };
 }
