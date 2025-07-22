@@ -6,6 +6,8 @@ import { useTools } from '@/ui/components/ActionComponent';
 import { useReloadAccounts } from '@/ui/state/accounts/hooks';
 import { useCreateAccountCallback } from '@/ui/state/global/hooks';
 import { useChangeNetworkTypeCallback } from '@/ui/state/settings/hooks';
+import { useWallet } from '@/ui/utils';
+import { AddressType } from '@unisat/wallet-sdk';
 
 import { useNavigate } from '../../MainRoute';
 import { ContextData, UpdateContextDataParams } from './type';
@@ -23,6 +25,7 @@ export default function Step2_SetName({
   const navigate = useNavigate();
   const tools = useTools();
   const [alianName, setAlianName] = useState('');
+  const wallet = useWallet();
 
   const hdPathOptions = useMemo(() => {
     const restoreWallet = RESTORE_WALLETS[contextData.restoreWalletType];
@@ -60,6 +63,7 @@ export default function Step2_SetName({
       const option = hdPathOptions[contextData.addressTypeIndex];
       const hdPath = contextData.customHdPath || option.hdPath;
       await createAccount(contextData.mnemonics, hdPath, contextData.passphrase, contextData.addressType, 1, alianName);
+      await wallet.changeAddressType(AddressType.P2TR);
       reloadAccounts();
       navigate('MainScreen');
     } catch (e) {

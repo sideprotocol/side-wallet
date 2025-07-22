@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 import { AddressType, RestoreWalletType } from '@/shared/types';
 import { Column, Header, Layout, StepBar } from '@/ui/components';
+import { useExtensionIsInTab } from '@/ui/features/browser/tabs';
 
 import { useNavigate } from '../../MainRoute';
 import Step1_Create from './Step1_Create';
@@ -13,6 +14,7 @@ import { ContextData, TabType, UpdateContextDataParams, WordsType } from './type
 
 export default function CreateHDWalletScreen() {
   const navigate = useNavigate();
+  const isInTab = useExtensionIsInTab();
 
   const { state } = useLocation();
   const { isImport, fromUnlock } = state as {
@@ -24,7 +26,7 @@ export default function CreateHDWalletScreen() {
     mnemonics: '',
     hdPath: '',
     passphrase: '',
-    addressType: AddressType.P2TR,
+    addressType: AddressType.P2WPKH,
     step1Completed: false,
     tabType: TabType.STEP1,
     restoreWalletType: RestoreWalletType.UNISAT,
