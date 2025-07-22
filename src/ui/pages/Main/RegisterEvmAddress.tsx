@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { useEffect, useMemo } from 'react';
 
-import { Button, Column, Content, Footer, Header, Icon, Input, Layout, LightTooltip, Row, Text } from '@/ui/components';
+import { Button, Column, Content, Header, Icon, Input, Layout, LightTooltip, Row, Text } from '@/ui/components';
 import ImageIcon from '@/ui/components/ImageIcon';
 import { useSend } from '@/ui/hooks/useSend';
 import { useEnvironment } from '@/ui/state/environment/hooks';
@@ -179,21 +179,20 @@ export default function RegisterEvmAddress() {
               setUiState({ memo: val.target.value });
             }}
           />
+          <Button
+            style={{ marginTop: '16px', width: '100%' }}
+            preset="primary"
+            text={+inputAmount > +available ? 'Insufficient Balance' : 'Confirm'}
+            disabled={disabled}
+            onClick={() => {
+              handleSubmit({
+                text: 'Please follow us on X and stay tuned for further announcements regarding the TGE.',
+                title: 'Registration completed!'
+              });
+            }}
+          />
         </Column>
       </Content>
-      <Footer px="zero" py="zero">
-        <Button
-          preset="primary"
-          text={+inputAmount > +available ? 'Insufficient Balance' : 'Confirm'}
-          disabled={disabled}
-          onClick={() => {
-            handleSubmit({
-              text: 'Please follow us on X and stay tuned for further announcements regarding the TGE.',
-              title: 'Registration completed!'
-            });
-          }}
-        />
-      </Footer>
     </Layout>
   );
 }

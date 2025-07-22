@@ -768,6 +768,7 @@ export default function LoanDetailScreen() {
               </Button>
               <Button
                 preset="primary"
+                style={{ flex: 1 }}
                 onClick={() => {
                   navigate('LoanDepositScreen', {
                     borrowAmount: loan.borrow_amount.amount,
