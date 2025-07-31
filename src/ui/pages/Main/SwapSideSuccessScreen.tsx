@@ -9,13 +9,15 @@ import { useTxIdUrl } from '@/ui/state/settings/hooks';
 import { useLocationState } from '@/ui/utils';
 import { Box } from '@mui/material';
 
+import { useNavigate } from '../MainRoute';
+
 interface SwapSideSuccessLocationState {
   txid: string;
 }
 
 export default function SwapSideSuccessScreen() {
   const state = useLocationState<SwapSideSuccessLocationState>();
-
+  const navigate = useNavigate();
   const txid = state?.txid;
 
   const txIdUrl = useTxIdUrl(txid || '');
@@ -52,6 +54,15 @@ export default function SwapSideSuccessScreen() {
             }}
             preset="primary"
             text="View Tx"
+            full></Button>
+        </Row>
+        <Row fullX mt="sm">
+          <Button
+            onClick={() => {
+              navigate('MainScreen');
+            }}
+            preset="default"
+            text="Close"
             full></Button>
         </Row>
       </Content>

@@ -296,10 +296,10 @@ export default function BridgeTabScreen() {
                 onClick={() => {
                   if (fromAsset?.asset.rune) {
                     navigate('BridgeRuneConfirmScreen');
-                  } else if (fromChain?.isBitcoin && toChain?.isCosmos) {
-                    navigate('BridgeBtcConfirmScreen');
                   } else if (!fromChain?.isBitcoin && toChain?.isCosmos) {
                     navigate('BridgeIbcConfirmScreen');
+                  } else {
+                    navigate('BridgeBtcConfirmScreen');
                   }
                 }}
                 disabled={isDisabled}

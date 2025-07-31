@@ -11,7 +11,8 @@ export const AppDimensions = (props) => {
         minHeight: '600px',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#000'
       }}
       {...props}
     />
@@ -28,7 +29,8 @@ export const AppSideDimensions = (props) => {
         minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#000'
       }}
       {...props}
     />

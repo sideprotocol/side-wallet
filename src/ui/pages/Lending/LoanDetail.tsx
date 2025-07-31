@@ -550,7 +550,7 @@ export default function LoanDetailScreen() {
                   }
                 }}
                 onClick={() => {
-                  window.open(`${SIDE_STATION_URL}/loan/${loan.vault_address}`);
+                  window.open(`${SIDE_STATION_URL}/markets/loan/${loan.vault_address}`);
                 }}>
                 {formatAddress(loan.vault_address, 6)}
               </Typography>

@@ -67,7 +67,7 @@ export default function TxSuccessScreen() {
                 transition: '.4s',
                 color: isHover ? colors.white : colors.grey12
               }}>
-              {type === 'bridge' ? 'View on Side Station' : 'View on Block Explorer'}
+              View on Explorer
             </Typography>
 
             <Icon icon="link" color={isHover ? 'white' : 'white_muted'} size={14} />
